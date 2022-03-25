@@ -1,0 +1,8 @@
+/.idea
+/.vscode
+/target/
+/like-admin.iml
+/src/main/resources/application.yml
+/src/main/resources/application-pro.yml
+/src/main/resources/application-dev.yml
+/src/main/resources/application-test.yml

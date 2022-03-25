@@ -5,7 +5,7 @@
 
     <!-- 模块信息 -->
     <groupId>org.hxkj</groupId>
-    <artifactId>like-framework</artifactId>
+    <artifactId>likeadmin-java</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
