@@ -1,7 +1,7 @@
 /.idea
 /.vscode
 /target/
-/like-front
+/like-front.iml
 /src/main/resources/application.yml
 /src/main/resources/application-pro.yml
 /src/main/resources/application-dev.yml
