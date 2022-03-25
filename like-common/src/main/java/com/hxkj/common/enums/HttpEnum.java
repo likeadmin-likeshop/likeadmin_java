@@ -1,0 +1,48 @@
+package com.hxkj.common.enums;
+
+public enum HttpEnum {
+
+    SUCCESS(200, "成功"),
+    FAILED(300, "失败"),
+    PARAMS_VALID_ERROR(310, "参数校验错误"),
+    PARAMS_TYPE_ERROR(320, "参数类型错误"),
+    REQUEST_METHOD_ERROR(330, "请求方法错误"),
+    ASSERT_ARGUMENT_ERROR(340, "断言参数错误"),
+    ASSERT_MYBATIS_ERROR(350, "断言Mybatis错误"),
+    NO_TOKEN(401, "token参数为空"),
+    NO_LOGIN(402, "token参数无效"),
+    NO_PERMISSION(403, "无相关权限"),
+    NOT_DATA(404, "无相关数据"),
+    SYSTEM_ERROR(500, "系统错误");
+
+    /**
+     * 构造方法
+     */
+    private final int code;
+    private final String msg;
+    HttpEnum(int code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
+
+    /**
+     * 获取状态码
+     *
+     * @author fzr
+     * @return Long
+     */
+    public int getCode() {
+        return this.code;
+    }
+
+    /**
+     * 获取提示
+     *
+     * @author fzr
+     * @return String
+     */
+    public String getMsg() {
+        return this.msg;
+    }
+
+}

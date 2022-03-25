@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- 父工程 -->
+    <parent>
+        <artifactId>like-framework</artifactId>
+        <groupId>org.hxkj</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <!-- 模块信息 -->
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>like-admin</artifactId>
+    <packaging>jar</packaging>
+
+    <!-- 特性信息 -->
+    <properties>
+        <like-common>1.0-SNAPSHOT</like-common>
+    </properties>
+
+    <!-- 项目管理 -->
+    <dependencies>
+        <!-- 公共依赖 -->
+        <dependency>
+            <groupId>org.hxkj</groupId>
+            <artifactId>like-common</artifactId>
+            <version>${like-common}</version>
+        </dependency>
+        <!-- Shiro鉴权依赖 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!-- 插件管理 -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
