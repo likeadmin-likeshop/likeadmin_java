@@ -30,7 +30,7 @@ public class SysRoleParam {
     private Integer sort;
 
     @NotNull(message = "请选择状态", groups = {create.class, update.class})
-    private Boolean isDisable;
+    private Integer isDisable;
 
     private String menuIds = "";
 

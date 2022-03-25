@@ -1,20 +1,28 @@
 package com.hxkj.admin.validate;
 
 import com.hxkj.common.validator.annotation.IDMust;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
 import lombok.Data;
 import javax.validation.constraints.*;
+import java.io.Serializable;
 
 /**
  * 系统管理员参数
  */
 @Data
-public class SysAdminParam {
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+public class SysAdminParam implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public interface create{}
     public interface update{}
     public interface delete{}
+
 
     @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
     private Integer id;
@@ -36,7 +44,7 @@ public class SysAdminParam {
     private String password;
 
     @NotNull(message = "请选择状态", groups = {create.class, update.class})
-    private Boolean isDisable;
+    private Integer isDisable;
 
     @NotNull(message = "排序号不能为空", groups = {create.class, update.class})
     @DecimalMin(value = "0", message = "排序号值不能少于0", groups = {create.class, update.class})

@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/system/admin")
@@ -27,8 +28,9 @@ public class SysAdminController {
      * @return Object
      */
     @GetMapping("/lists")
-    public Object lists(@Validated PageParam pageParam) {
-        PageResult<SysAdminListVo> list = iSysAdminService.lists(pageParam);
+    public Object lists(@Validated PageParam pageParam,
+                        @RequestParam Map<String, String> params) {
+        PageResult<SysAdminListVo> list = iSysAdminService.lists(pageParam, params);
         return AjaxResult.success(list);
     }
 

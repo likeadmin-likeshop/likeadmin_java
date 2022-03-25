@@ -22,8 +22,8 @@ public class SysMenu implements Serializable {
     private String menuIcon;
     private Integer menuSort;
     private String perms;
-    private Boolean isDisable;
-    private Boolean isDelete;
+    private Integer isDisable;
+    private Integer isDelete;
     private Long createTime;
     private Long updateTime;
     private Long deleteTime;

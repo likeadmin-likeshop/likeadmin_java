@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.SysAdminParam;
 import com.hxkj.admin.vo.system.SysAdminListVo;
+import com.hxkj.common.core.BaseService;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SysAdmin;
 
-public interface ISysAdminService extends IService<SysAdmin> {
+import java.util.Map;
+
+public interface ISysAdminService extends BaseService<SysAdmin> {
 
     /**
      * 获取管理员列表
@@ -16,7 +19,7 @@ public interface ISysAdminService extends IService<SysAdmin> {
      * @param pageParam 分页参数
      * @return PageResult<SysAdminListVo>
      */
-    PageResult<SysAdminListVo> lists(PageParam pageParam);
+    PageResult<SysAdminListVo> lists(PageParam pageParam, Map<String, String> params);
 
     /**
      * 获取管理员详情

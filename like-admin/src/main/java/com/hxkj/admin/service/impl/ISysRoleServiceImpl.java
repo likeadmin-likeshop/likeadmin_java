@@ -171,7 +171,7 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
         Assert.notNull(sysRole, "角色已不存在!");
 
         sysRole.setId(id);
-        sysRole.setIsDelete(true);
+        sysRole.setIsDelete(1);
         sysRole.setDeleteTime(System.currentTimeMillis() / 1000);
         this.updateById(sysRole);
     }

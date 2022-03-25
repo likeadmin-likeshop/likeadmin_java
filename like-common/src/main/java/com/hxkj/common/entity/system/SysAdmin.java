@@ -23,8 +23,8 @@ public class SysAdmin implements Serializable {
     private String salt;
     private Integer role;
     private Integer sort;
-    private Boolean isDisable;
-    private Boolean isDelete;
+    private Integer isDisable;
+    private Integer isDelete;
     private String lastLoginIp;
     private Long lastLoginTime;
     private Long createTime;

@@ -6,7 +6,7 @@
     <!-- 父工程 -->
     <parent>
         <groupId>org.hxkj</groupId>
-        <artifactId>like-framework</artifactId>
+        <artifactId>likeadmin-java</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 

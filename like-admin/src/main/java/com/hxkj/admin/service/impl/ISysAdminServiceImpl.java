@@ -36,7 +36,7 @@ public class ISysAdminServiceImpl extends MPJBaseServiceImpl<SysAdminMapper, Sys
      * @return PageResult<SysAdminListVo>
      */
     @Override
-    public PageResult<SysAdminListVo> lists(PageParam pageParam) {
+    public PageResult<SysAdminListVo> lists(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
@@ -48,6 +48,12 @@ public class ISysAdminServiceImpl extends MPJBaseServiceImpl<SysAdminMapper, Sys
                 !info.getColumn().equals("delete_time"))
         .eq("is_delete", 0)
         .orderByDesc("sort");
+
+        this.setSearch(queryWrapper, params, new String[]{
+                "eq:username"
+        });
+
+//        String[] a = {"str:username:=", ""};
 
         IPage<SysAdmin> iPage = this.page(new Page<>(page, limit), queryWrapper);
 
@@ -187,7 +193,7 @@ public class ISysAdminServiceImpl extends MPJBaseServiceImpl<SysAdminMapper, Sys
 
         SysAdmin model = new SysAdmin();
         model.setId(id);
-        model.setIsDelete(true);
+        model.setIsDelete(1);
         model.setDeleteTime(System.currentTimeMillis() / 1000);
         this.updateById(model);
     }

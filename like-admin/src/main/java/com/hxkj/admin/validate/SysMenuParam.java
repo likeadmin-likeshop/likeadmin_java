@@ -45,6 +45,6 @@ public class SysMenuParam {
     private String perms;
 
     @NotNull(message = "请选择状态", groups = {create.class, update.class})
-    private Boolean isDisable;
+    private Integer isDisable;
 
 }

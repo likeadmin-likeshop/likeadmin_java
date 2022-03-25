@@ -131,7 +131,7 @@ public class ISysMenuServiceImpl extends MPJBaseServiceImpl<SysMenuMapper, SysMe
         Assert.notNull(model, "菜单已不存在!");
 
         model.setId(id);
-        model.setIsDelete(true);
+        model.setIsDelete(1);
         model.setDeleteTime(System.currentTimeMillis() / 1000);
         this.updateById(model);
     }
