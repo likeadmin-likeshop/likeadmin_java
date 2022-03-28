@@ -13,9 +13,8 @@ public class SysRoleParam {
 
     public interface create{}
     public interface update{}
-    public interface delete{}
 
-    @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
+    @IDMust(message = "id参数必传且需大于0", groups = {update.class})
     private Integer id;
 
     @NotNull(message = "缺少参数name", groups = {create.class, update.class})

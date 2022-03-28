@@ -1,6 +1,6 @@
 package com.hxkj.common.mapper.system;
 
-import com.github.yulichang.base.MPJBaseMapper;
+import com.hxkj.common.basics.BaseMapper;
 import com.hxkj.common.entity.system.SysRole;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -8,5 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
  * 系统角色
  */
 @Mapper
-public interface SysRoleMapper extends MPJBaseMapper<SysRole> {
+public interface SysRoleMapper extends BaseMapper<SysRole> {
 }

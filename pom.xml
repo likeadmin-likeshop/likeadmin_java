@@ -29,6 +29,7 @@
         <shiro-spring.version>1.8.0</shiro-spring.version>
         <lombok.version>1.18.22</lombok.version>
         <fastJson.version>1.2.78</fastJson.version>
+        <java-jwt.version>3.18.2</java-jwt.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -83,6 +84,12 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastJson.version}</version>
+            </dependency>
+            <!-- Jwt -->
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${java-jwt.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

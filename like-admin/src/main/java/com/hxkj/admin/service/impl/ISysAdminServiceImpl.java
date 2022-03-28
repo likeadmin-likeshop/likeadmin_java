@@ -9,6 +9,7 @@ import com.hxkj.admin.service.ISysAdminService;
 import com.hxkj.admin.service.ISysRoleService;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.SysAdminParam;
+import com.hxkj.admin.vo.system.SysAdminDetailVo;
 import com.hxkj.admin.vo.system.SysAdminListVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SysAdmin;
@@ -27,6 +28,20 @@ public class ISysAdminServiceImpl extends MPJBaseServiceImpl<SysAdminMapper, Sys
 
     @Resource
     ISysRoleService iSysRoleService;
+
+    /**
+     * 根据账号查找管理员
+     *
+     * @author fzr
+     * @param username 主键ID
+     * @return SysAdmin
+     */
+    @Override
+    public SysAdmin findByUsername(String username) {
+        return this.getOne(new QueryWrapper<SysAdmin>()
+                .eq("username", username)
+                .last("limit 1"));
+    }
 
     /**
      * 获取管理员列表
@@ -50,10 +65,10 @@ public class ISysAdminServiceImpl extends MPJBaseServiceImpl<SysAdminMapper, Sys
         .orderByDesc("sort");
 
         this.setSearch(queryWrapper, params, new String[]{
-                "eq:username"
+                "like:username:str",
+                "like:nickname:str",
+                "=:role:int"
         });
-
-//        String[] a = {"str:username:=", ""};
 
         IPage<SysAdmin> iPage = this.page(new Page<>(page, limit), queryWrapper);
 
@@ -80,7 +95,7 @@ public class ISysAdminServiceImpl extends MPJBaseServiceImpl<SysAdminMapper, Sys
      * @return SysAdmin
      */
     @Override
-    public SysAdmin detail(Integer id) {
+    public SysAdminDetailVo detail(Integer id) {
         SysAdmin sysAdmin = this.getOne(new QueryWrapper<SysAdmin>()
                 .select(SysAdmin.class, info->
                         !info.getColumn().equals("salt") &&
@@ -93,7 +108,12 @@ public class ISysAdminServiceImpl extends MPJBaseServiceImpl<SysAdminMapper, Sys
 
         Assert.notNull(sysAdmin, "账号已不存在！");
 
-        return sysAdmin;
+        SysAdminDetailVo vo = new SysAdminDetailVo();
+        BeanUtils.copyProperties(sysAdmin, vo);
+
+        vo.setAvatar(UrlUtil.toAbsoluteUrl(sysAdmin.getAvatar()));
+
+        return vo;
     }
 
     /**

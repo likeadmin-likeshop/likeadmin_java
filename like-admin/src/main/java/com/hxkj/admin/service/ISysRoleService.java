@@ -1,14 +1,14 @@
 package com.hxkj.admin.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.SysRoleParam;
 import com.hxkj.admin.vo.system.SysRoleListVo;
+import com.hxkj.common.basics.BaseService;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SysRole;
 import org.springframework.validation.annotation.Validated;
 
-public interface ISysRoleService extends IService<SysRole> {
+public interface ISysRoleService extends BaseService<SysRole> {
 
     /**
      * 根据id获取角色名称

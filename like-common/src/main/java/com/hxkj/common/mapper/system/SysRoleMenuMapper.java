@@ -1,12 +1,12 @@
 package com.hxkj.common.mapper.system;
 
 import com.hxkj.common.basics.BaseMapper;
-import com.hxkj.common.entity.system.SysMenu;
+import com.hxkj.common.entity.system.SysRoleMenu;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 系统菜单
+ * 角色菜单
  */
 @Mapper
-public interface SysMenuMapper extends BaseMapper<SysMenu> {
+public interface SysRoleMenuMapper extends BaseMapper<SysRoleMenu> {
 }

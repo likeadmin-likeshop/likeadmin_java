@@ -19,11 +19,8 @@ public class SysRole implements Serializable {
     private String name;
     private String remark;
     private Integer sort;
-    private String menuIds;
     private Integer isDisable;
-    private Integer isDelete;
     private Long createTime;
     private Long updateTime;
-    private Long deleteTime;
 
 }

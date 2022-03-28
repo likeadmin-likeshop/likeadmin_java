@@ -3,10 +3,10 @@ package com.hxkj.admin.controller.system;
 import com.hxkj.admin.service.ISysAdminService;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.SysAdminParam;
+import com.hxkj.admin.vo.system.SysAdminDetailVo;
 import com.hxkj.admin.vo.system.SysAdminListVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
-import com.hxkj.common.entity.system.SysAdmin;
 import com.hxkj.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,8 +42,8 @@ public class SysAdminController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        SysAdmin sysAdmin = iSysAdminService.detail(id);
-        return AjaxResult.success(sysAdmin);
+        SysAdminDetailVo vo = iSysAdminService.detail(id);
+        return AjaxResult.success(vo);
     }
 
     /**

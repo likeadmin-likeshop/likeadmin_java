@@ -34,7 +34,6 @@ public class ISysMenuServiceImpl extends MPJBaseServiceImpl<SysMenuMapper, SysMe
                 !info.getColumn().equals("salt") &&
                         !info.getColumn().equals("is_delete") &&
                         !info.getColumn().equals("delete_time"))
-                .eq("is_delete", 0)
                 .orderByDesc(Arrays.asList("menu_sort", "id"));
 
         List<SysMenu> sysMenus = this.list( queryWrapper);
@@ -56,17 +55,14 @@ public class ISysMenuServiceImpl extends MPJBaseServiceImpl<SysMenuMapper, SysMe
     /**
      * 菜单详情
      *
+     * @author fzr
      * @param id 主键参数
      * @return SysMenu
      */
     @Override
     public SysMenu detail(Integer id) {
-        SysMenu model = this.getOne(new QueryWrapper<SysMenu>()
-                .eq("id", id)
-                .eq("is_delete", 0));
-
+        SysMenu model = this.getOne(new QueryWrapper<SysMenu>().eq("id", id));
         Assert.notNull(model, "菜单已不存在!");
-
         return model;
     }
 
@@ -99,10 +95,7 @@ public class ISysMenuServiceImpl extends MPJBaseServiceImpl<SysMenuMapper, SysMe
      */
     @Override
     public void edit(SysMenuParam sysMenuParam) {
-        SysMenu model = this.getOne(new QueryWrapper<SysMenu>()
-                .eq("id", sysMenuParam.getId())
-                .eq("is_delete", 0));
-
+        SysMenu model = this.getOne(new QueryWrapper<SysMenu>().eq("id", sysMenuParam.getId()));
         Assert.notNull(model, "菜单已不存在!");
 
         model.setMenuType(sysMenuParam.getMenuType());
@@ -124,16 +117,9 @@ public class ISysMenuServiceImpl extends MPJBaseServiceImpl<SysMenuMapper, SysMe
      */
     @Override
     public void del(Integer id) {
-        SysMenu model = this.getOne(new QueryWrapper<SysMenu>()
-                .eq("id", id)
-                .eq("is_delete", 0));
-
+        SysMenu model = this.getOne(new QueryWrapper<SysMenu>().eq("id", id));
         Assert.notNull(model, "菜单已不存在!");
-
-        model.setId(id);
-        model.setIsDelete(1);
-        model.setDeleteTime(System.currentTimeMillis() / 1000);
-        this.updateById(model);
+        this.removeById(id);
     }
 
 }
