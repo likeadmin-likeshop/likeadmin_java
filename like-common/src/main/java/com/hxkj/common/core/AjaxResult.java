@@ -95,6 +95,18 @@ public class AjaxResult {
      * 成功返回结果
      *
      * @author fzr
+     * @param msg 提示信息
+     * @param data 响应数据
+     * @return AjaxResult
+     */
+    public static AjaxResult success(String msg, Object data) {
+        return new AjaxResult(HttpEnum.SUCCESS.getCode(), msg, data);
+    }
+
+    /**
+     * 成功返回结果
+     *
+     * @author fzr
      * @param code 状态码
      * @param msg 提示信息
      * @param data 响应数据
