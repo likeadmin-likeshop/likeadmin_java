@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.base.MPJBaseServiceImpl;
+import com.hxkj.admin.config.SystemConfig;
 import com.hxkj.admin.service.ISysRoleMenuService;
 import com.hxkj.admin.service.ISysRoleService;
 import com.hxkj.admin.validate.PageParam;
@@ -13,6 +14,7 @@ import com.hxkj.admin.vo.system.SysRoleListVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SysRole;
 import com.hxkj.common.mapper.system.SysRoleMapper;
+import com.hxkj.common.utils.RedisUtil;
 import com.hxkj.common.utils.TimeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -156,6 +158,9 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         this.updateById(model);
 
+        RedisUtil.hDel(SystemConfig.backstageRolesKey, String.valueOf(sysRoleParam.getId()));
+        iSysRoleMenuService.cacheRoleMenusByRoleId(sysRoleParam.getId());
+
         iSysRoleMenuService.batchDeleteByRoleId(sysRoleParam.getId());
         iSysRoleMenuService.batchSaveByMenuIds(sysRoleParam.getId(), sysRoleParam.getMenuIds());
     }
@@ -177,6 +182,7 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
                 "角色已不存在!");
 
         this.removeById(id);
+        RedisUtil.hDel(SystemConfig.backstageRolesKey, String.valueOf(id));
         iSysRoleMenuService.batchDeleteByRoleId(id);
     }
 
