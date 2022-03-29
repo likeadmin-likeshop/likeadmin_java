@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.base.MPJBaseServiceImpl;
-import com.hxkj.admin.service.ISysMenuService;
 import com.hxkj.admin.service.ISysRoleMenuService;
 import com.hxkj.admin.service.ISysRoleService;
 import com.hxkj.admin.validate.PageParam;
@@ -13,7 +12,6 @@ import com.hxkj.admin.validate.SysRoleParam;
 import com.hxkj.admin.vo.system.SysRoleListVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SysRole;
-import com.hxkj.common.mapper.system.SysMenuMapper;
 import com.hxkj.common.mapper.system.SysRoleMapper;
 import com.hxkj.common.utils.TimeUtil;
 import org.springframework.beans.BeanUtils;
@@ -79,8 +77,8 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
             SysRoleListVo vo = new SysRoleListVo();
             BeanUtils.copyProperties(sysRole, vo);
 
-            vo.setCreateTime(TimeUtil.timeToDate(sysRole.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timeToDate(sysRole.getUpdateTime()));
+            vo.setCreateTime(TimeUtil.timestampToDate(sysRole.getCreateTime()));
+            vo.setUpdateTime(TimeUtil.timestampToDate(sysRole.getUpdateTime()));
             roleVoArrayList.add(vo);
         }
 

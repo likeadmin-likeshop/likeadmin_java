@@ -28,6 +28,19 @@ spring:
       max-file-size: 100MB    # 文件上传大小限制
       max-request-size: 100MB # 文件最大请求限制
       enabled: true
+  # Redis配置
+  redis:
+    host: localhost   # Redis服务地址
+    port: 6379        # Redis端口
+    password:         # Redis密码
+    database: 0       # 数据库索引
+    timeout: 5000     # 连接超时
+    lettuce:
+      pool:
+        max-wait: 30000 # 连接池最大阻塞等待时间(使用负数表示没有限制,默认-1)
+        max-active: 100 # 连接池最大连接数(使用负数表示没有限制,默认8)
+        max-idle: 20    # 连接池中的最大空闲连接(默认8)
+        min-idle: 0     # 连接池中的最小空闲连接(默认0)
 
 # Mybatis-plus配置
 mybatis-plus:

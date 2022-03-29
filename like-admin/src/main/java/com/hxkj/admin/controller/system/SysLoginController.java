@@ -1,13 +1,10 @@
 package com.hxkj.admin.controller.system;
 
-import com.hxkj.admin.config.shiro.JwtToken;
-import com.hxkj.admin.service.ISysAdminService;
+import com.hxkj.admin.service.ISysLoginService;
 import com.hxkj.admin.validate.SysLoginParam;
 import com.hxkj.common.core.AjaxResult;
-import com.hxkj.common.entity.system.SysAdmin;
-import com.hxkj.common.utils.JwtUtil;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
+import com.hxkj.common.exception.LoginException;
+import com.hxkj.common.exception.OperateException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -23,7 +20,7 @@ import java.util.Map;
 public class SysLoginController {
 
     @Resource
-    ISysAdminService iSysAdminService;
+    ISysLoginService iSysLoginService;
 
     /**
      * 登录系统
@@ -34,24 +31,31 @@ public class SysLoginController {
      */
     @PostMapping("/login")
     public Object login(@Validated() @RequestBody SysLoginParam sysLoginParam) {
-        String username = sysLoginParam.getUsername();
-        String password = sysLoginParam.getPassword();
-
-        // 查询用户
-        SysAdmin sysAdmin = iSysAdminService.findByUsername(username);
-        if (sysAdmin == null || sysAdmin.getIsDelete() == 1) {
-            return AjaxResult.failed("账号或密码错误");
+        try {
+            Map<String, Object> map = iSysLoginService.login(sysLoginParam);
+            return AjaxResult.success(map);
+        } catch (LoginException e) {
+            return AjaxResult.failed(e.getCode(), e.getMsg());
+        } catch (OperateException e) {
+            return AjaxResult.failed(e.getMsg());
         }
+    }
 
-        // 生成令牌
-        String tokenStr = JwtUtil.createToken(sysAdmin.getId());
-        JwtToken token = new JwtToken(tokenStr);
-
-        // 登录用户
-        Subject subject = SecurityUtils.getSubject();
-        subject.login(token);
-
-        return AjaxResult.success("登录成功", tokenStr);
+    /**
+     * 退出登录
+     *
+     * @author fzr
+     * @param request 请求接口
+     * @return Object
+     */
+    @PostMapping("/logout")
+    public Object logout(HttpServletRequest request) {
+        try {
+            iSysLoginService.logout(request.getHeader("token"));
+            return AjaxResult.success();
+        } catch (Exception e) {
+            return AjaxResult.failed(e.getMessage());
+        }
     }
 
 }

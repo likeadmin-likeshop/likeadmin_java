@@ -3,6 +3,9 @@ package com.hxkj.common.utils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+/**
+ * 数组工具类
+ */
 public class ArrayUtil {
 
     /**

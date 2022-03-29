@@ -42,6 +42,20 @@ public class HttpUtil {
     }
 
     /**
+     * 获取请求路由
+     *
+     * @author fzr
+     * @return String
+     */
+    public static String route() {
+        HttpServletRequest request = HttpUtil.obj();
+        if (request != null) {
+            return request.getRequestURI();
+        }
+        return null;
+    }
+
+    /**
      * 获取请求域名
      *
      * @author fzr

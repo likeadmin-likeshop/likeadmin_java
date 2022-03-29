@@ -11,19 +11,23 @@ public class TimeUtil {
 
     /**
      * 时间戳转日期(默认格式)
+     *
      * @author fzr
+     * @param time 时间戳
      * @return String
      */
-    public static String timeToDate(long time) {
+    public static String timestampToDate(Long time) {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time * 1000));
     }
 
     /**
      * 时间戳转日期(默认格式)
+     *
      * @author fzr
+     * @param time 时间戳
      * @return String
      */
-    public static String timeToDate(String time) {
+    public static String timestampToDate(String time) {
         if (time == null) {
             time = "0";
         }
@@ -33,36 +37,45 @@ public class TimeUtil {
 
     /**
      * 时间戳转日期(指定格式)
+     *
      * @author fzr
+     * @param time 时间戳
+     * @param format 格式串
      * @return String
      */
-    public static String timeToDate(long time, String format) {
+    public static String timestampToDate(Long time, String format) {
         return new SimpleDateFormat(format).format(new Date(time * 1000));
     }
 
     /**
      * 时间戳转日期(指定格式)
+     *
      * @author fzr
+     * @param time 时间戳
+     * @param format 格式串
      * @return String
      */
-    public static String timeToDate(String time, String format) {
+    public static String timestampToDate(String time, String format) {
         long longTime = Long.parseLong(time);
         return new SimpleDateFormat(format).format(new Date(longTime * 1000));
     }
 
     /**
      * 日期转时间戳
+     *
      * @author fzr
      * @param date 日期
      * @return Long
      */
-    public static Long dateToTime(String date) {
+    public static Long dateToTimestamp(String date) {
         String dateTime = TimeUtil.formatDate(date);
         return (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(dateTime, new ParsePosition(0)).getTime() / 1000;
     }
 
     /**
      * 毫秒转日期时间
+     *
+     * @author fzr
      * @param time 毫秒
      * @return String
      */
@@ -74,6 +87,8 @@ public class TimeUtil {
 
     /**
      * 毫秒转日期时间
+     *
+     * @author fzr
      * @param time 毫秒
      * @return String
      */
@@ -85,7 +100,10 @@ public class TimeUtil {
 
     /**
      * 毫秒转日期时间
+     *
+     * @author fzr
      * @param time 毫秒
+     * @param format 格式串
      * @return String
      */
     public static String millisecondToDate(Long time, String format) {
@@ -96,7 +114,10 @@ public class TimeUtil {
 
     /**
      * 毫秒转日期时间
+     *
+     * @author fzr
      * @param time 毫秒
+     * @param format 格式串
      * @return String
      */
     public static String millisecondToDate(String time, String format) {
@@ -107,6 +128,7 @@ public class TimeUtil {
 
     /**
      * 日期转固定格式 yyyy-MM-dd HH:mm:ss
+     *
      * @author fzr
      * @param dateStr 日期时间
      * @return String
@@ -159,15 +181,17 @@ public class TimeUtil {
 
     /**
      * 返回当前时间戳
+     *
      * @author fzr
      * @return Long
      */
-    public static Long time() {
+    public static Long timestamp() {
         return System.currentTimeMillis() / 1000;
     }
 
     /**
      * 返回今日开始和结束的时间戳
+     *
      * @author fzr
      * @return List
      */
@@ -194,6 +218,7 @@ public class TimeUtil {
 
     /**
      * 返回昨日开始和结束的时间戳
+     *
      * @author fzr
      * @return List
      */
@@ -207,6 +232,7 @@ public class TimeUtil {
 
     /**
      * 返回本周开始和结束的时间戳
+     *
      * @author fzr
      * @return List
      */
@@ -224,6 +250,7 @@ public class TimeUtil {
 
     /**
      * 返回上周开始和结束的时间戳
+     *
      * @author fzr
      * @return List
      */
@@ -237,6 +264,7 @@ public class TimeUtil {
 
     /**
      * 返回今天是周几
+     *
      * @author fzr
      * @return Long
      */
@@ -254,6 +282,7 @@ public class TimeUtil {
 
     /**
      * 返回本月开始和结束的时间戳
+     *
      * @author fzr
      * @return List
      */
@@ -276,6 +305,7 @@ public class TimeUtil {
 
     /**
      * 返回上个月开始和结束的时间戳
+     *
      * @author fzr
      * @return List
      */
@@ -301,6 +331,7 @@ public class TimeUtil {
 
     /**
      * 返回今年开始和结束的时间戳
+     *
      * @author fzr
      * @return List
      */
@@ -334,6 +365,7 @@ public class TimeUtil {
 
     /**
      * 返回去年开始和结束的时间戳
+     *
      * @author fzr
      * @return List
      */
@@ -364,6 +396,7 @@ public class TimeUtil {
 
     /**
      * 获取几天前零点到现在/昨日结束的时间戳
+     *
      * @author fzr
      * @return List
      */
@@ -377,6 +410,7 @@ public class TimeUtil {
 
     /**
      * 返回几天前的时间戳
+     *
      * @author fzr
      * @param day (天)
      * @return Long
@@ -388,6 +422,7 @@ public class TimeUtil {
 
     /**
      * 返回几天后的时间戳
+     *
      * @author fzr
      * @param day (天)
      * @return Long
@@ -399,6 +434,7 @@ public class TimeUtil {
 
     /**
      * 返回月份第几天
+     *
      * @author fzr
      * @return int
      */

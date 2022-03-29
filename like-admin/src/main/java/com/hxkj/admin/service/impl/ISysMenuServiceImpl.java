@@ -43,8 +43,8 @@ public class ISysMenuServiceImpl extends MPJBaseServiceImpl<SysMenuMapper, SysMe
             SysMenuListVo vo = new SysMenuListVo();
             BeanUtils.copyProperties(sysMenu, vo);
 
-            vo.setCreateTime(TimeUtil.timeToDate(sysMenu.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timeToDate(sysMenu.getUpdateTime()));
+            vo.setCreateTime(TimeUtil.timestampToDate(sysMenu.getCreateTime()));
+            vo.setUpdateTime(TimeUtil.timestampToDate(sysMenu.getUpdateTime()));
             lists.add(vo);
         }
 

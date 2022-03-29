@@ -5,6 +5,9 @@ import com.hxkj.admin.validate.SysMenuParam;
 import com.hxkj.common.basics.BaseService;
 import com.hxkj.common.entity.system.SysMenu;
 
+/**
+ * 系统菜单服务
+ */
 public interface ISysMenuService extends BaseService<SysMenu> {
 
     /**

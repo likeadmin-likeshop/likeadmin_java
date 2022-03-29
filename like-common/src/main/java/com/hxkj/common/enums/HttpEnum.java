@@ -5,14 +5,19 @@ public enum HttpEnum {
     SUCCESS(200, "成功"),
     FAILED(300, "失败"),
     PARAMS_VALID_ERROR(310, "参数校验错误"),
-    PARAMS_TYPE_ERROR(320, "参数类型错误"),
-    REQUEST_METHOD_ERROR(330, "请求方法错误"),
-    ASSERT_ARGUMENT_ERROR(340, "断言参数错误"),
-    ASSERT_MYBATIS_ERROR(350, "断言Mybatis错误"),
-    NO_TOKEN(401, "token参数为空"),
-    NO_LOGIN(402, "token参数无效"),
+    PARAMS_TYPE_ERROR(311, "参数类型错误"),
+    REQUEST_METHOD_ERROR(312, "请求方法错误"),
+    ASSERT_ARGUMENT_ERROR(313, "断言参数错误"),
+    ASSERT_MYBATIS_ERROR(314, "断言Mybatis错误"),
+
+    LOGIN_ACCOUNT_ERROR(330, "登录账号或密码错误"),
+    LOGIN_DISABLE_ERROR(331, "登录账号已被禁用了"),
+    TOKEN_EMPTY(332, "token参数为空"),
+    TOKEN_INVALID(333, "token参数无效"),
+
     NO_PERMISSION(403, "无相关权限"),
     NOT_DATA(404, "无相关数据"),
+
     SYSTEM_ERROR(500, "系统错误");
 
     /**

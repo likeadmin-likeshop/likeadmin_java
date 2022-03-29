@@ -3,6 +3,9 @@ package com.hxkj.admin.service;
 import com.hxkj.common.basics.BaseService;
 import com.hxkj.common.entity.system.SysRoleMenu;
 
+/**
+ * 系统角色菜单服务
+ */
 public interface ISysRoleMenuService extends BaseService<SysRoleMenu> {
 
     /**
@@ -22,5 +25,13 @@ public interface ISysRoleMenuService extends BaseService<SysRoleMenu> {
      * @param roleId 角色ID
      */
     void batchDeleteByRoleId(Integer roleId);
+
+    /**
+     * 缓存角色菜单
+     *
+     * @author fzr
+     * @param roleId 角色ID
+     */
+    void cacheRoleMenusByRoleId(Integer roleId);
 
 }

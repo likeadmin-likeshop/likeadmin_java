@@ -3,7 +3,6 @@ package com.hxkj.common.exception;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.enums.HttpEnum;
-import com.hxkj.common.utils.ThrowableUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;

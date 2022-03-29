@@ -30,6 +30,8 @@
         <lombok.version>1.18.22</lombok.version>
         <fastJson.version>1.2.78</fastJson.version>
         <java-jwt.version>3.18.2</java-jwt.version>
+        <apache-commons.version>2.10.0</apache-commons.version>
+        <gson.version>2.9.0</gson.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -85,11 +87,17 @@
                 <artifactId>fastjson</artifactId>
                 <version>${fastJson.version}</version>
             </dependency>
-            <!-- Jwt -->
+            <!-- 通用池 -->
             <dependency>
-                <groupId>com.auth0</groupId>
-                <artifactId>java-jwt</artifactId>
-                <version>${java-jwt.version}</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${apache-commons.version}</version>
+            </dependency>
+            <!-- gson -->
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

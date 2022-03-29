@@ -1,10 +1,12 @@
 package com.hxkj.admin.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.base.MPJBaseServiceImpl;
+import com.hxkj.admin.config.SystemConfig;
 import com.hxkj.admin.service.ISysAdminService;
 import com.hxkj.admin.service.ISysRoleService;
 import com.hxkj.admin.validate.PageParam;
@@ -14,6 +16,7 @@ import com.hxkj.admin.vo.system.SysAdminListVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SysAdmin;
 import com.hxkj.common.mapper.system.SysAdminMapper;
+import com.hxkj.common.utils.RedisUtil;
 import com.hxkj.common.utils.TimeUtil;
 import com.hxkj.common.utils.ToolsUtil;
 import com.hxkj.common.utils.UrlUtil;
@@ -78,9 +81,9 @@ public class ISysAdminServiceImpl extends MPJBaseServiceImpl<SysAdminMapper, Sys
             BeanUtils.copyProperties(sysAdmin, vo);
 
             vo.setRole(iSysRoleService.getRoleNameById(sysAdmin.getRole()));
-            vo.setCreateTime(TimeUtil.timeToDate(sysAdmin.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timeToDate(sysAdmin.getUpdateTime()));
-            vo.setLastLoginTime(TimeUtil.timeToDate(sysAdmin.getLastLoginTime()));
+            vo.setCreateTime(TimeUtil.timestampToDate(sysAdmin.getCreateTime()));
+            vo.setUpdateTime(TimeUtil.timestampToDate(sysAdmin.getUpdateTime()));
+            vo.setLastLoginTime(TimeUtil.timestampToDate(sysAdmin.getLastLoginTime()));
             adminVoArrayList.add(vo);
         }
 
@@ -216,6 +219,31 @@ public class ISysAdminServiceImpl extends MPJBaseServiceImpl<SysAdminMapper, Sys
         model.setIsDelete(1);
         model.setDeleteTime(System.currentTimeMillis() / 1000);
         this.updateById(model);
+    }
+
+    /**
+     * 缓存管理员
+     */
+    @Override
+    public void cacheAdminUserByUid(Integer id) {
+        SysAdmin sysAdmin = this.getById(id);
+
+        Map<String, Object> user = new LinkedHashMap<>();
+        Map<String, Object> map  = new LinkedHashMap<>();
+
+        user.put("id", sysAdmin.getId());
+        user.put("role", sysAdmin.getRole());
+        user.put("username", sysAdmin.getUsername());
+        user.put("nickname", sysAdmin.getNickname());
+        user.put("avatar", sysAdmin.getAvatar());
+        user.put("isDisable", sysAdmin.getIsDisable());
+        user.put("isDelete", sysAdmin.getIsDelete());
+        user.put("lastLoginIp", sysAdmin.getLastLoginIp());
+        user.put("lastLoginTime", TimeUtil.timestampToDate(sysAdmin.getLastLoginTime()));
+        user.put("createTime", TimeUtil.timestampToDate(sysAdmin.getCreateTime()));
+        user.put("updateTime", TimeUtil.timestampToDate(sysAdmin.getUpdateTime()));
+        map.put(String.valueOf(sysAdmin.getId()), JSON.toJSONString(user));
+        RedisUtil.hmSet(SystemConfig.backstageManageKey, map);
     }
 
 }

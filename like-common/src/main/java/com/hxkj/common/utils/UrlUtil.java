@@ -1,5 +1,8 @@
 package com.hxkj.common.utils;
 
+/**
+ * 文件路径处理工具
+ */
 public class UrlUtil {
 
     /**

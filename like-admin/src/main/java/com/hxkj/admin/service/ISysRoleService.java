@@ -8,6 +8,9 @@ import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SysRole;
 import org.springframework.validation.annotation.Validated;
 
+/**
+ * 系统角色服务
+ */
 public interface ISysRoleService extends BaseService<SysRole> {
 
     /**

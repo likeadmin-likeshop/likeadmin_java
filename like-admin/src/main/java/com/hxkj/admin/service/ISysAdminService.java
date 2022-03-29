@@ -10,6 +10,9 @@ import com.hxkj.common.entity.system.SysAdmin;
 
 import java.util.Map;
 
+/**
+ * 系统管理员服务
+ */
 public interface ISysAdminService extends BaseService<SysAdmin> {
 
     /**
@@ -62,5 +65,10 @@ public interface ISysAdminService extends BaseService<SysAdmin> {
      * @param id 主键参数
      */
     void del(Integer id);
+
+    /**
+     * 缓存管理员
+     */
+    void cacheAdminUserByUid(Integer id);
 
 }
