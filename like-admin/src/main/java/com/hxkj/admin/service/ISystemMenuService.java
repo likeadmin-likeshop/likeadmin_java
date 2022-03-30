@@ -2,18 +2,27 @@ package com.hxkj.admin.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.validate.SysMenuParam;
-import com.hxkj.admin.vo.system.SysMenuVo;
+import com.hxkj.admin.vo.system.SystemMenuVo;
 import com.hxkj.common.basics.BaseService;
-import com.hxkj.common.entity.system.SysMenu;
+import com.hxkj.common.entity.system.SystemMenu;
 
 /**
  * 系统菜单服务
  */
-public interface ISysMenuService extends BaseService<SysMenu> {
+public interface ISystemMenuService extends BaseService<SystemMenu> {
+
+    /**
+     * 根据角色获取菜单
+     *
+     * @author fzr
+     * @return JSONArray
+     */
+    JSONArray selectMenuByRoleId(Integer roleId);
 
     /**
      * 菜单列表
      *
+     * @author fzr
      * @return JSONArray
      */
     JSONArray lists();
@@ -25,7 +34,7 @@ public interface ISysMenuService extends BaseService<SysMenu> {
      * @param id 主键
      * @return SysMenu
      */
-    SysMenuVo detail(Integer id);
+    SystemMenuVo detail(Integer id);
 
     /**
      * 新增菜单

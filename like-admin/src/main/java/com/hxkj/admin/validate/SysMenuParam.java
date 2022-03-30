@@ -3,17 +3,22 @@ package com.hxkj.admin.validate;
 import com.hxkj.common.validator.annotation.IDMust;
 import com.hxkj.common.validator.annotation.StringContains;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * 系统菜单参数
  */
 @Data
-public class SysMenuParam {
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+public class SysMenuParam implements Serializable {
 
     public interface create{}
     public interface update{}

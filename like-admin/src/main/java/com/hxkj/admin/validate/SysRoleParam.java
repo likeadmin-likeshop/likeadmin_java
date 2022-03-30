@@ -2,19 +2,25 @@ package com.hxkj.admin.validate;
 
 import com.hxkj.common.validator.annotation.IDMust;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Data
-public class SysRoleParam {
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+public class SysRoleParam implements Serializable {
 
     public interface create{}
     public interface update{}
+    public interface delete{}
 
-    @IDMust(message = "id参数必传且需大于0", groups = {update.class})
+    @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
     private Integer id;
 
     @NotNull(message = "缺少参数name", groups = {create.class, update.class})

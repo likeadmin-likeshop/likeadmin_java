@@ -1,11 +1,11 @@
 package com.hxkj.admin.controller.system;
 
 import com.alibaba.fastjson.JSONArray;
-import com.hxkj.admin.service.ISysMenuService;
+import com.hxkj.admin.LikeAdminThreadLocal;
+import com.hxkj.admin.service.ISystemMenuService;
 import com.hxkj.admin.validate.SysMenuParam;
-import com.hxkj.admin.vo.system.SysMenuVo;
+import com.hxkj.admin.vo.system.SystemMenuVo;
 import com.hxkj.common.core.AjaxResult;
-import com.hxkj.common.entity.system.SysMenu;
 import com.hxkj.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +14,23 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/api/system/menu")
-public class SysMenuController {
+public class SystemMenuController {
 
     @Resource
-    ISysMenuService iSysMenuService;
+    ISystemMenuService iSystemMenuService;
+
+    /**
+     * 获取系统菜单
+     *
+     * @author fzr
+     * @return Object
+     */
+    @GetMapping("/menus")
+    public Object menus() {
+        Integer roleId = LikeAdminThreadLocal.getRoleId();
+        JSONArray lists = iSystemMenuService.selectMenuByRoleId(roleId);
+        return AjaxResult.success(lists);
+    }
 
     /**
      * 获取菜单列表
@@ -27,7 +40,7 @@ public class SysMenuController {
      */
     @GetMapping("/lists")
     public Object lists() {
-        JSONArray lists = iSysMenuService.lists();
+        JSONArray lists = iSystemMenuService.lists();
         return AjaxResult.success(lists);
     }
 
@@ -39,7 +52,7 @@ public class SysMenuController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        SysMenuVo vo = iSysMenuService.detail(id);
+        SystemMenuVo vo = iSystemMenuService.detail(id);
         return AjaxResult.success(vo);
     }
 
@@ -51,7 +64,7 @@ public class SysMenuController {
      */
     @PostMapping("/add")
     public Object add(@Validated(value = SysMenuParam.create.class) @RequestBody SysMenuParam sysMenuParam) {
-        iSysMenuService.add(sysMenuParam);
+        iSystemMenuService.add(sysMenuParam);
         return AjaxResult.success();
     }
 
@@ -63,7 +76,7 @@ public class SysMenuController {
      */
     @PostMapping("/edit")
     public Object edit(@Validated(value = SysMenuParam.update.class) @RequestBody SysMenuParam sysMenuParam) {
-        iSysMenuService.edit(sysMenuParam);
+        iSystemMenuService.edit(sysMenuParam);
         return AjaxResult.success();
     }
 
@@ -75,7 +88,7 @@ public class SysMenuController {
      */
     @PostMapping("/del")
     public Object del(@Validated(value = SysMenuParam.delete.class) @RequestBody SysMenuParam sysMenuParam) {
-        iSysMenuService.del(sysMenuParam.getId());
+        iSystemMenuService.del(sysMenuParam.getId());
         return AjaxResult.success();
     }
 

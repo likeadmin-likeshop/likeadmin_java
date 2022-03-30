@@ -1,10 +1,7 @@
 package com.hxkj.common.basics;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hxkj.common.core.PageResult;
-import com.hxkj.common.entity.system.SysAdmin;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class SysMenuVo implements Serializable {
+public class SystemMenuVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

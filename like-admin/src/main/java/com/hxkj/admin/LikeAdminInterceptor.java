@@ -3,8 +3,8 @@ package com.hxkj.admin;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.hxkj.admin.config.SystemConfig;
-import com.hxkj.admin.service.ISysAdminService;
-import com.hxkj.admin.service.ISysRoleMenuService;
+import com.hxkj.admin.service.ISystemAdminService;
+import com.hxkj.admin.service.ISystemRoleMenuService;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.enums.HttpEnum;
 import com.hxkj.common.utils.RedisUtil;
@@ -27,10 +27,10 @@ import java.util.Map;
 public class LikeAdminInterceptor implements HandlerInterceptor {
 
     @Resource
-    ISysAdminService iSysAdminService;
+    ISystemAdminService iSystemAdminService;
 
     @Resource
-    ISysRoleMenuService iSysRoleMenuService;
+    ISystemRoleMenuService iSystemRoleMenuService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -65,23 +65,36 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         // 用户信息缓存
         String uid = RedisUtil.get(token).toString();
         if (!RedisUtil.hExists(SystemConfig.backstageManageKey, uid)) {
-            iSysAdminService.cacheAdminUserByUid(Integer.parseInt(uid));
+            iSystemAdminService.cacheAdminUserByUid(Integer.parseInt(uid));
         }
 
-        // 校验用户是否被删除
+        // 校验用户被删除
         Map<String, Object> map = ToolsUtil.jsonToMap(RedisUtil.hGet(SystemConfig.backstageManageKey, uid).toString());
         if (map == null || map.get("isDelete").toString().equals("1")) {
+            RedisUtil.del(token);
+            RedisUtil.hDel(SystemConfig.backstageManageKey, uid);
             AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
 
-        // 校验用户是否被禁用
+        // 校验用户被禁用
         if (map.get("isDisable").toString().equals("1")) {
             AjaxResult result = AjaxResult.failed(HttpEnum.LOGIN_DISABLE_ERROR.getCode(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
+
+        // 令牌剩余30分钟自动续签
+        if (RedisUtil.ttl(token) < 1800) {
+            RedisUtil.expire(token, 7200L);
+        }
+
+        // 写入本地线程
+        LikeAdminThreadLocal.put("adminId", uid);
+        LikeAdminThreadLocal.put("roleId", map.get("role").toString());
+        LikeAdminThreadLocal.put("username", map.get("username").toString());
+        LikeAdminThreadLocal.put("nickname", map.get("nickname").toString());
 
         // 免权限验证接口
         List<String> notAuthUri = Arrays.asList(SystemConfig.notLoginUri);
@@ -92,7 +105,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         // 校验角色权限是否存在
         String roleId = map.get("role").toString();
         if (!RedisUtil.hExists(SystemConfig.backstageRolesKey, roleId)) {
-            iSysRoleMenuService.cacheRoleMenusByRoleId(Integer.parseInt(roleId));
+            iSystemRoleMenuService.cacheRoleMenusByRoleId(Integer.parseInt(roleId));
         }
 
         // 验证是否有权限操作
@@ -102,9 +115,6 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
-
-        // 写入本地线程
-        LikeAdminThreadLocal.put("adminId", uid);
 
         // 验证通过继续操作
         return HandlerInterceptor.super.preHandle(request, response, handler);

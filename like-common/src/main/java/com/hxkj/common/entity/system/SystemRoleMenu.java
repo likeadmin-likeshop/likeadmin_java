@@ -14,12 +14,12 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SysRoleMenu implements Serializable {
+public class SystemRoleMenu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(type = IdType.NONE)
-    private Integer id;
+    @TableId(type = IdType.ASSIGN_UUID)
+    private String id;
     private Integer roleId;
     private Integer menuId;
 

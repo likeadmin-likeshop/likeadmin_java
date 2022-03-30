@@ -7,28 +7,20 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 系统管理员实体
+ * 系统角色实体
  */
 @Data
-public class SysAdmin implements Serializable {
+public class SystemRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value="id", type=IdType.AUTO)
+    @TableId(value="id", type= IdType.AUTO)
     private Integer id;
-    private String nickname;
-    private String username;
-    private String password;
-    private String avatar;
-    private String salt;
-    private Integer role;
+    private String name;
+    private String remark;
     private Integer sort;
     private Integer isDisable;
-    private Integer isDelete;
-    private String lastLoginIp;
-    private Long lastLoginTime;
     private Long createTime;
     private Long updateTime;
-    private Long deleteTime;
 
 }

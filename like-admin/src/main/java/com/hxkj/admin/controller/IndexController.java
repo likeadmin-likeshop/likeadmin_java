@@ -1,11 +1,7 @@
 package com.hxkj.admin.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-
-import com.hxkj.common.entity.system.SysAdmin;
 import com.hxkj.common.utils.YmlUtil;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

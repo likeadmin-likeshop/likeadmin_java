@@ -6,16 +6,16 @@ import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.hxkj.admin.config.SystemConfig;
-import com.hxkj.admin.service.ISysAdminService;
-import com.hxkj.admin.service.ISysRoleMenuService;
-import com.hxkj.admin.service.ISysRoleService;
+import com.hxkj.admin.service.ISystemAdminService;
+import com.hxkj.admin.service.ISystemRoleMenuService;
+import com.hxkj.admin.service.ISystemRoleService;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.SysRoleParam;
-import com.hxkj.admin.vo.system.SysRoleVo;
+import com.hxkj.admin.vo.system.SystemRoleVo;
 import com.hxkj.common.core.PageResult;
-import com.hxkj.common.entity.system.SysAdmin;
-import com.hxkj.common.entity.system.SysRole;
-import com.hxkj.common.mapper.system.SysRoleMapper;
+import com.hxkj.common.entity.system.SystemAdmin;
+import com.hxkj.common.entity.system.SystemRole;
+import com.hxkj.common.mapper.system.SystemRoleMapper;
 import com.hxkj.common.utils.RedisUtil;
 import com.hxkj.common.utils.TimeUtil;
 import org.springframework.beans.BeanUtils;
@@ -29,13 +29,13 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRole> implements ISysRoleService {
+public class ISystemRoleServiceImpl extends MPJBaseServiceImpl<SystemRoleMapper, SystemRole> implements ISystemRoleService {
 
     @Resource
-    ISysAdminService iSysAdminService;
+    ISystemAdminService iSystemAdminService;
 
     @Resource
-    ISysRoleMenuService iSysRoleMenuService;
+    ISystemRoleMenuService iSystemRoleMenuService;
 
 
     /**
@@ -47,16 +47,16 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
      */
     @Override
     public String getRoleNameById(Integer id) {
-        QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<SystemRole> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id", "name")
                 .eq("id", id)
                 .last("limit 1");
 
-        SysRole sysRole = this.getOne(queryWrapper, false);
-        if (sysRole == null) {
+        SystemRole systemRole = this.getOne(queryWrapper, false);
+        if (systemRole == null) {
             return "";
         }
-        return sysRole.getName();
+        return systemRole.getName();
     }
 
     /**
@@ -67,22 +67,23 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
      * @return PageResult<SysRoleListVo>
      */
     @Override
-    public PageResult<SysRoleVo> lists(@Validated PageParam pageParam) {
+    public PageResult<SystemRoleVo> lists(@Validated PageParam pageParam) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
-        QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<SystemRole> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
 
-        IPage<SysRole> iPage = this.page(new Page<>(page, limit), queryWrapper);
+        IPage<SystemRole> iPage = this.page(new Page<>(page, limit), queryWrapper);
 
-        List<SysRoleVo> roleVoArrayList = new ArrayList<>();
-        for (SysRole sysRole : iPage.getRecords()) {
-            SysRoleVo vo = new SysRoleVo();
-            BeanUtils.copyProperties(sysRole, vo);
+        List<SystemRoleVo> roleVoArrayList = new ArrayList<>();
+        for (SystemRole systemRole : iPage.getRecords()) {
+            SystemRoleVo vo = new SystemRoleVo();
+            BeanUtils.copyProperties(systemRole, vo);
 
-            vo.setCreateTime(TimeUtil.timestampToDate(sysRole.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(sysRole.getUpdateTime()));
+            vo.setMenus(new ArrayList<>());
+            vo.setCreateTime(TimeUtil.timestampToDate(systemRole.getCreateTime()));
+            vo.setUpdateTime(TimeUtil.timestampToDate(systemRole.getUpdateTime()));
             roleVoArrayList.add(vo);
         }
 
@@ -97,14 +98,21 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
      * @return SysRole
      */
     @Override
-    public SysRole detail(Integer id) {
-        SysRole sysRole = this.getOne(new QueryWrapper<SysRole>()
+    public SystemRoleVo detail(Integer id) {
+        SystemRole systemRole = this.getOne(new QueryWrapper<SystemRole>()
                 .eq("id", id)
                 .last("limit 1"));
 
-        Assert.notNull(sysRole, "角色已不存在!");
+        Assert.notNull(systemRole, "角色已不存在!");
 
-        return sysRole;
+        SystemRoleVo vo = new SystemRoleVo();
+        BeanUtils.copyProperties(systemRole, vo);
+
+        vo.setMenus(iSystemRoleMenuService.selectMenuIdsByRoleId(systemRole.getId()));
+        vo.setCreateTime(TimeUtil.timestampToDate(systemRole.getCreateTime()));
+        vo.setUpdateTime(TimeUtil.timestampToDate(systemRole.getUpdateTime()));
+
+        return vo;
     }
 
     /**
@@ -116,12 +124,12 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
     @Override
     @Transactional
     public void add(SysRoleParam sysRoleParam) {
-        Assert.isNull(this.getOne(new QueryWrapper<SysRole>()
+        Assert.isNull(this.getOne(new QueryWrapper<SystemRole>()
                 .select("id,name")
                 .eq("name", sysRoleParam.getName().trim())
                 .last("limit 1")), "角色名称已存在!");
 
-        SysRole model = new SysRole();
+        SystemRole model = new SystemRole();
         model.setName(sysRoleParam.getName().trim());
         model.setRemark(sysRoleParam.getRemark());
         model.setIsDisable(sysRoleParam.getIsDisable());
@@ -129,7 +137,7 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         this.save(model);
 
-        iSysRoleMenuService.batchSaveByMenuIds(sysRoleParam.getId(), sysRoleParam.getMenuIds());
+        iSystemRoleMenuService.batchSaveByMenuIds(model.getId(), sysRoleParam.getMenuIds());
     }
 
     /**
@@ -141,18 +149,18 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
     @Override
     @Transactional
     public void edit(SysRoleParam sysRoleParam) {
-        Assert.notNull(this.getOne(new QueryWrapper<SysRole>()
+        Assert.notNull(this.getOne(new QueryWrapper<SystemRole>()
                 .select("id,name")
                 .eq("id", sysRoleParam.getId())
                 .last("limit 1")), "角色已不存在!");
 
-        Assert.isNull(this.getOne(new QueryWrapper<SysRole>()
+        Assert.isNull(this.getOne(new QueryWrapper<SystemRole>()
                 .select("id,name")
                 .ne("id", sysRoleParam.getId())
                 .eq("name", sysRoleParam.getName().trim())
                 .last("limit 1")), "角色名称已存在!");
 
-        SysRole model = new SysRole();
+        SystemRole model = new SystemRole();
         model.setId(sysRoleParam.getId());
         model.setName(sysRoleParam.getName().trim());
         model.setRemark(sysRoleParam.getRemark());
@@ -160,9 +168,9 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         this.updateById(model);
 
-        iSysRoleMenuService.batchDeleteByRoleId(sysRoleParam.getId());
-        iSysRoleMenuService.batchSaveByMenuIds(sysRoleParam.getId(), sysRoleParam.getMenuIds());
-        iSysRoleMenuService.cacheRoleMenusByRoleId(sysRoleParam.getId());
+        iSystemRoleMenuService.batchDeleteByRoleId(sysRoleParam.getId());
+        iSystemRoleMenuService.batchSaveByMenuIds(sysRoleParam.getId(), sysRoleParam.getMenuIds());
+        iSystemRoleMenuService.cacheRoleMenusByRoleId(sysRoleParam.getId());
     }
 
     /**
@@ -175,21 +183,21 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
     @Transactional
     public void del(Integer id) {
         Assert.notNull(
-                this.getOne(new QueryWrapper<SysRole>()
+                this.getOne(new QueryWrapper<SystemRole>()
                     .select("id", "name")
                     .eq("id", id)
                     .last("limit 1")),
                 "角色已不存在!");
 
-        Assert.isNull(iSysAdminService.getOne(new QueryWrapper<SysAdmin>()
+        Assert.isNull(iSystemAdminService.getOne(new QueryWrapper<SystemAdmin>()
                 .select("id", "role", "nickname")
                 .eq("role", id)
                 .eq("is_delete", 0)),
                 "角色已被管理员使用,请先移除");
 
         this.removeById(id);
-        iSysRoleMenuService.batchDeleteByRoleId(id);
-        RedisUtil.hDel(SystemConfig.backstageRolesKey, id);
+        iSystemRoleMenuService.batchDeleteByRoleId(id);
+        RedisUtil.hDel(SystemConfig.backstageRolesKey, String.valueOf(id));
     }
 
 }

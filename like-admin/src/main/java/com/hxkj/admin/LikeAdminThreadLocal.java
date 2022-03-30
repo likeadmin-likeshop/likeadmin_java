@@ -2,6 +2,9 @@ package com.hxkj.admin;
 
 import java.util.LinkedHashMap;
 
+/**
+ * 本地线程
+ */
 public class LikeAdminThreadLocal {
 
     /**
@@ -18,8 +21,12 @@ public class LikeAdminThreadLocal {
     /**
      * 写入本地线程
      */
-    public static void put(String key, String val) {
+    public static void put(String key, Object val) {
         LinkedHashMap<String, Object> map = MY_LOCAL.get();
+        if (map == null) {
+            map = new LinkedHashMap<>();
+        }
+
         map.put(key, val);
         MY_LOCAL.set(map);
     }
@@ -40,6 +47,17 @@ public class LikeAdminThreadLocal {
             return 0;
         }
         return Integer.parseInt(adminId);
+    }
+
+    /**
+     * 获取角色ID
+     */
+    public static Integer getRoleId() {
+        String roleId = LikeAdminThreadLocal.get("roleId").toString();
+        if (roleId.equals("")) {
+            return 0;
+        }
+        return Integer.parseInt(roleId);
     }
 
     /**

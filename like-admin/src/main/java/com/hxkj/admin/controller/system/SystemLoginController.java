@@ -1,6 +1,6 @@
 package com.hxkj.admin.controller.system;
 
-import com.hxkj.admin.service.ISysLoginService;
+import com.hxkj.admin.service.ISystemLoginService;
 import com.hxkj.admin.validate.SysLoginParam;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.exception.LoginException;
@@ -17,10 +17,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/system")
-public class SysLoginController {
+public class SystemLoginController {
 
     @Resource
-    ISysLoginService iSysLoginService;
+    ISystemLoginService iSystemLoginService;
 
     /**
      * 登录系统
@@ -32,7 +32,7 @@ public class SysLoginController {
     @PostMapping("/login")
     public Object login(@Validated() @RequestBody SysLoginParam sysLoginParam) {
         try {
-            Map<String, Object> map = iSysLoginService.login(sysLoginParam);
+            Map<String, Object> map = iSystemLoginService.login(sysLoginParam);
             return AjaxResult.success(map);
         } catch (LoginException e) {
             return AjaxResult.failed(e.getCode(), e.getMsg());
@@ -51,7 +51,7 @@ public class SysLoginController {
     @PostMapping("/logout")
     public Object logout(HttpServletRequest request) {
         try {
-            iSysLoginService.logout(request.getHeader("token"));
+            iSystemLoginService.logout(request.getHeader("token"));
             return AjaxResult.success();
         } catch (Exception e) {
             return AjaxResult.failed(e.getMessage());

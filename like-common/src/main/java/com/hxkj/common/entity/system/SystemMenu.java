@@ -7,18 +7,21 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 系统角色实体
+ * 系统菜单实体
  */
 @Data
-public class SysRole implements Serializable {
+public class SystemMenu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value="id", type= IdType.AUTO)
     private Integer id;
-    private String name;
-    private String remark;
-    private Integer sort;
+    private Integer pid;
+    private String menuType;
+    private String menuName;
+    private String menuIcon;
+    private Integer menuSort;
+    private String perms;
     private Integer isDisable;
     private Long createTime;
     private Long updateTime;

@@ -1,14 +1,13 @@
 package com.hxkj.admin.service.impl;
 
 import com.hxkj.admin.config.SystemConfig;
-import com.hxkj.admin.service.ISysAdminService;
-import com.hxkj.admin.service.ISysLoginService;
+import com.hxkj.admin.service.ISystemAdminService;
+import com.hxkj.admin.service.ISystemLoginService;
 import com.hxkj.admin.validate.SysLoginParam;
-import com.hxkj.common.entity.system.SysAdmin;
+import com.hxkj.common.entity.system.SystemAdmin;
 import com.hxkj.common.enums.HttpEnum;
 import com.hxkj.common.exception.LoginException;
 import com.hxkj.common.exception.OperateException;
-import com.hxkj.common.mapper.system.SysAdminMapper;
 import com.hxkj.common.utils.HttpUtil;
 import com.hxkj.common.utils.RedisUtil;
 import com.hxkj.common.utils.ToolsUtil;
@@ -19,13 +18,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
-public class ISysLoginServiceImpl implements ISysLoginService {
+public class ISystemLoginServiceImpl implements ISystemLoginService {
 
     @Resource
-    SysAdminMapper sysAdminMapper;
-
-    @Resource
-    ISysAdminService iSysAdminService;
+    ISystemAdminService iSystemAdminService;
 
     /**
      * 登录
@@ -39,7 +35,7 @@ public class ISysLoginServiceImpl implements ISysLoginService {
         String username = sysLoginParam.getUsername();
         String password = sysLoginParam.getPassword();
 
-        SysAdmin sysAdmin = iSysAdminService.findByUsername(username);
+        SystemAdmin sysAdmin = iSystemAdminService.findByUsername(username);
         if (sysAdmin == null || sysAdmin.getIsDelete() == 1) {
             throw new LoginException(HttpEnum.LOGIN_ACCOUNT_ERROR.getCode(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
         }
@@ -57,11 +53,11 @@ public class ISysLoginServiceImpl implements ISysLoginService {
         try {
             sysAdmin.setLastLoginIp(HttpUtil.ip());
             sysAdmin.setLastLoginTime(System.currentTimeMillis() / 1000);
-            sysAdminMapper.updateById(sysAdmin);
+            iSystemAdminService.updateById(sysAdmin);
 
             String token = ToolsUtil.makeToken();
             RedisUtil.set(SystemConfig.backstageTokenKey+token, sysAdmin.getId(), 7200);
-            iSysAdminService.cacheAdminUserByUid(sysAdmin.getId());
+            iSystemAdminService.cacheAdminUserByUid(sysAdmin.getId());
 
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("token", token);

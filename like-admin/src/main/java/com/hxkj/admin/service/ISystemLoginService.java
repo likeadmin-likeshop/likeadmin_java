@@ -2,13 +2,12 @@ package com.hxkj.admin.service;
 
 import com.hxkj.admin.validate.SysLoginParam;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
  * 系统登录服务
  */
-public interface ISysLoginService {
+public interface ISystemLoginService {
 
     /**
      * 登录

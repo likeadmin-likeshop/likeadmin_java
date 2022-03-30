@@ -2,17 +2,17 @@ package com.hxkj.admin.service;
 
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.SysAdminParam;
-import com.hxkj.admin.vo.system.SysAdminVo;
+import com.hxkj.admin.vo.system.SystemAdminVo;
 import com.hxkj.common.basics.BaseService;
 import com.hxkj.common.core.PageResult;
-import com.hxkj.common.entity.system.SysAdmin;
+import com.hxkj.common.entity.system.SystemAdmin;
 
 import java.util.Map;
 
 /**
  * 系统管理员服务
  */
-public interface ISysAdminService extends BaseService<SysAdmin> {
+public interface ISystemAdminService extends BaseService<SystemAdmin> {
 
     /**
      * 根据账号查找管理员
@@ -21,7 +21,7 @@ public interface ISysAdminService extends BaseService<SysAdmin> {
      * @param username 主键ID
      * @return SysAdmin
      */
-    SysAdmin findByUsername(String username);
+    SystemAdmin findByUsername(String username);
 
     /**
      * 管理员列表
@@ -30,7 +30,7 @@ public interface ISysAdminService extends BaseService<SysAdmin> {
      * @param pageParam 分页参数
      * @return PageResult<SysAdminListVo>
      */
-    PageResult<SysAdminVo> lists(PageParam pageParam, Map<String, String> params);
+    PageResult<SystemAdminVo> lists(PageParam pageParam, Map<String, String> params);
 
     /**
      * 管理员详情
@@ -39,7 +39,7 @@ public interface ISysAdminService extends BaseService<SysAdmin> {
      * @param id 主键参数
      * @return SysAdmin
      */
-    SysAdminVo detail(Integer id);
+    SystemAdminVo detail(Integer id);
 
     /**
      * 新增管理员

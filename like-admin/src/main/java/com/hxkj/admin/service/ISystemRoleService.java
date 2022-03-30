@@ -2,16 +2,16 @@ package com.hxkj.admin.service;
 
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.SysRoleParam;
-import com.hxkj.admin.vo.system.SysRoleVo;
+import com.hxkj.admin.vo.system.SystemRoleVo;
 import com.hxkj.common.basics.BaseService;
 import com.hxkj.common.core.PageResult;
-import com.hxkj.common.entity.system.SysRole;
+import com.hxkj.common.entity.system.SystemRole;
 import org.springframework.validation.annotation.Validated;
 
 /**
  * 系统角色服务
  */
-public interface ISysRoleService extends BaseService<SysRole> {
+public interface ISystemRoleService extends BaseService<SystemRole> {
 
     /**
      * 根据id获取角色名称
@@ -27,7 +27,7 @@ public interface ISysRoleService extends BaseService<SysRole> {
      * @param pageParam 参数
      * @return PageResult<SysRoleListVo>
      */
-    PageResult<SysRoleVo> lists(@Validated PageParam pageParam);
+    PageResult<SystemRoleVo> lists(@Validated PageParam pageParam);
 
     /**
      * 角色详情
@@ -36,7 +36,7 @@ public interface ISysRoleService extends BaseService<SysRole> {
      * @param id 主键参数
      * @return SysRole
      */
-    SysRole detail(Integer id);
+    SystemRoleVo detail(Integer id);
 
     /**
      * 新增角色

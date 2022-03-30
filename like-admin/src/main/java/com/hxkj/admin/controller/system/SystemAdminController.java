@@ -1,9 +1,9 @@
 package com.hxkj.admin.controller.system;
 
-import com.hxkj.admin.service.ISysAdminService;
+import com.hxkj.admin.service.ISystemAdminService;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.SysAdminParam;
-import com.hxkj.admin.vo.system.SysAdminVo;
+import com.hxkj.admin.vo.system.SystemAdminVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.validator.annotation.IDMust;
@@ -15,10 +15,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/system/admin")
-public class SysAdminController {
+public class SystemAdminController {
 
     @Resource
-    ISysAdminService iSysAdminService;
+    ISystemAdminService iSystemAdminService;
 
     /**
      * 管理员列表
@@ -29,7 +29,7 @@ public class SysAdminController {
     @GetMapping("/lists")
     public Object lists(@Validated PageParam pageParam,
                         @RequestParam Map<String, String> params) {
-        PageResult<SysAdminVo> list = iSysAdminService.lists(pageParam, params);
+        PageResult<SystemAdminVo> list = iSystemAdminService.lists(pageParam, params);
         return AjaxResult.success(list);
     }
 
@@ -41,7 +41,7 @@ public class SysAdminController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        SysAdminVo vo = iSysAdminService.detail(id);
+        SystemAdminVo vo = iSystemAdminService.detail(id);
         return AjaxResult.success(vo);
     }
 
@@ -54,7 +54,7 @@ public class SysAdminController {
      */
     @PostMapping("/add")
     public Object add(@Validated(value = SysAdminParam.create.class) @RequestBody SysAdminParam sysAdminParam) {
-        iSysAdminService.add(sysAdminParam);
+        iSystemAdminService.add(sysAdminParam);
         return AjaxResult.success();
     }
 
@@ -67,7 +67,7 @@ public class SysAdminController {
      */
     @PostMapping("/edit")
     public Object edit(@Validated(value = SysAdminParam.update.class) @RequestBody SysAdminParam sysAdminParam) {
-        iSysAdminService.edit(sysAdminParam);
+        iSystemAdminService.edit(sysAdminParam);
         return AjaxResult.success();
     }
 
@@ -79,7 +79,7 @@ public class SysAdminController {
      */
     @PostMapping("/del")
     public Object del(@Validated(value = SysAdminParam.delete.class) @RequestBody SysAdminParam sysAdminParam) {
-        iSysAdminService.del(sysAdminParam.getId());
+        iSystemAdminService.del(sysAdminParam.getId());
         return AjaxResult.success();
     }
 

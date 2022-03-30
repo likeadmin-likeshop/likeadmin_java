@@ -5,15 +5,18 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class SysRoleVo implements Serializable {
+public class SystemAdminVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Integer id;
-    private String name;
-    private String remark;
-    private Integer sort;
+    private String username;
+    private String nickname;
+    private String avatar;
+    private String role;
     private Integer isDisable;
+    private String lastLoginIp;
+    private String lastLoginTime;
     private String createTime;
     private String updateTime;
 
