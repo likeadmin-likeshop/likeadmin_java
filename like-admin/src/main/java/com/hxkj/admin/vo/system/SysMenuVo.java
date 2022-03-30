@@ -2,8 +2,12 @@ package com.hxkj.admin.vo.system;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class SysMenuListVo {
+public class SysMenuVo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Integer id;
     private Integer pid;
@@ -12,7 +16,7 @@ public class SysMenuListVo {
     private String menuIcon;
     private Integer menuSort;
     private String perms;
-    private Boolean isDisable;
+    private Integer isDisable;
     private String createTime;
     private String updateTime;
 

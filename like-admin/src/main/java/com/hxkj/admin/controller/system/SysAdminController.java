@@ -3,8 +3,7 @@ package com.hxkj.admin.controller.system;
 import com.hxkj.admin.service.ISysAdminService;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.SysAdminParam;
-import com.hxkj.admin.vo.system.SysAdminDetailVo;
-import com.hxkj.admin.vo.system.SysAdminListVo;
+import com.hxkj.admin.vo.system.SysAdminVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.validator.annotation.IDMust;
@@ -30,7 +29,7 @@ public class SysAdminController {
     @GetMapping("/lists")
     public Object lists(@Validated PageParam pageParam,
                         @RequestParam Map<String, String> params) {
-        PageResult<SysAdminListVo> list = iSysAdminService.lists(pageParam, params);
+        PageResult<SysAdminVo> list = iSysAdminService.lists(pageParam, params);
         return AjaxResult.success(list);
     }
 
@@ -42,7 +41,7 @@ public class SysAdminController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        SysAdminDetailVo vo = iSysAdminService.detail(id);
+        SysAdminVo vo = iSysAdminService.detail(id);
         return AjaxResult.success(vo);
     }
 

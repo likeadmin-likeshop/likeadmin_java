@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class SysAdminListVo implements Serializable {
+public class SysAdminVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -1,7 +1,5 @@
 package com.hxkj.admin.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.config.SystemConfig;
 import com.hxkj.admin.service.ISysAdminService;
 import com.hxkj.admin.service.ISysLoginService;
@@ -13,13 +11,10 @@ import com.hxkj.common.exception.OperateException;
 import com.hxkj.common.mapper.system.SysAdminMapper;
 import com.hxkj.common.utils.HttpUtil;
 import com.hxkj.common.utils.RedisUtil;
-import com.hxkj.common.utils.TimeUtil;
 import com.hxkj.common.utils.ToolsUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

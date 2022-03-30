@@ -2,7 +2,7 @@ package com.hxkj.admin.service;
 
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.SysRoleParam;
-import com.hxkj.admin.vo.system.SysRoleListVo;
+import com.hxkj.admin.vo.system.SysRoleVo;
 import com.hxkj.common.basics.BaseService;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SysRole;
@@ -27,7 +27,7 @@ public interface ISysRoleService extends BaseService<SysRole> {
      * @param pageParam 参数
      * @return PageResult<SysRoleListVo>
      */
-    PageResult<SysRoleListVo> lists(@Validated PageParam pageParam);
+    PageResult<SysRoleVo> lists(@Validated PageParam pageParam);
 
     /**
      * 角色详情

@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.github.yulichang.base.MPJBaseServiceImpl;
+import com.hxkj.admin.config.SystemConfig;
 import com.hxkj.admin.service.ISysMenuService;
 import com.hxkj.admin.validate.SysMenuParam;
-import com.hxkj.admin.vo.system.SysMenuListVo;
+import com.hxkj.admin.vo.system.SysMenuVo;
 import com.hxkj.common.entity.system.SysMenu;
 import com.hxkj.common.mapper.system.SysMenuMapper;
 import com.hxkj.common.utils.ArrayUtil;
+import com.hxkj.common.utils.RedisUtil;
 import com.hxkj.common.utils.TimeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -30,17 +32,13 @@ public class ISysMenuServiceImpl extends MPJBaseServiceImpl<SysMenuMapper, SysMe
     @Override
     public JSONArray lists() {
         QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select(SysMenu.class, info->
-                !info.getColumn().equals("salt") &&
-                        !info.getColumn().equals("is_delete") &&
-                        !info.getColumn().equals("delete_time"))
-                .orderByDesc(Arrays.asList("menu_sort", "id"));
+        queryWrapper.orderByDesc(Arrays.asList("menu_sort", "id"));
 
         List<SysMenu> sysMenus = this.list( queryWrapper);
 
-        List<SysMenuListVo> lists = new ArrayList<>();
+        List<SysMenuVo> lists = new ArrayList<>();
         for (SysMenu sysMenu : sysMenus) {
-            SysMenuListVo vo = new SysMenuListVo();
+            SysMenuVo vo = new SysMenuVo();
             BeanUtils.copyProperties(sysMenu, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(sysMenu.getCreateTime()));
@@ -60,10 +58,16 @@ public class ISysMenuServiceImpl extends MPJBaseServiceImpl<SysMenuMapper, SysMe
      * @return SysMenu
      */
     @Override
-    public SysMenu detail(Integer id) {
-        SysMenu model = this.getOne(new QueryWrapper<SysMenu>().eq("id", id));
-        Assert.notNull(model, "菜单已不存在!");
-        return model;
+    public SysMenuVo detail(Integer id) {
+        SysMenu sysMenu = this.getOne(new QueryWrapper<SysMenu>().eq("id", id));
+        Assert.notNull(sysMenu, "菜单已不存在!");
+
+        SysMenuVo vo  = new SysMenuVo();
+        BeanUtils.copyProperties(sysMenu, vo);
+        vo.setCreateTime(TimeUtil.timestampToDate(sysMenu.getCreateTime()));
+        vo.setUpdateTime(TimeUtil.timestampToDate(sysMenu.getUpdateTime()));
+
+        return vo;
     }
 
     /**
@@ -107,6 +111,8 @@ public class ISysMenuServiceImpl extends MPJBaseServiceImpl<SysMenuMapper, SysMe
         model.setIsDisable(sysMenuParam.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         this.updateById(model);
+
+        RedisUtil.del(SystemConfig.backstageRolesKey);
     }
 
     /**
@@ -119,7 +125,10 @@ public class ISysMenuServiceImpl extends MPJBaseServiceImpl<SysMenuMapper, SysMe
     public void del(Integer id) {
         SysMenu model = this.getOne(new QueryWrapper<SysMenu>().eq("id", id));
         Assert.notNull(model, "菜单已不存在!");
+
         this.removeById(id);
+
+        RedisUtil.del(SystemConfig.backstageRolesKey);
     }
 
 }

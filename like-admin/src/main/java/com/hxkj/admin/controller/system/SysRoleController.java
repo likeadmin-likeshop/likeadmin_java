@@ -3,7 +3,7 @@ package com.hxkj.admin.controller.system;
 import com.hxkj.admin.service.ISysRoleService;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.SysRoleParam;
-import com.hxkj.admin.vo.system.SysRoleListVo;
+import com.hxkj.admin.vo.system.SysRoleVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.validator.annotation.IDMust;
@@ -28,7 +28,7 @@ public class SysRoleController {
      */
     @GetMapping("/lists")
     public Object lists(@Validated PageParam pageParam) {
-        PageResult<SysRoleListVo> lists = iSysRoleService.lists(pageParam);
+        PageResult<SysRoleVo> lists = iSysRoleService.lists(pageParam);
         return AjaxResult.success(lists);
     }
 

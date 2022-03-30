@@ -2,6 +2,7 @@ package com.hxkj.admin.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.validate.SysMenuParam;
+import com.hxkj.admin.vo.system.SysMenuVo;
 import com.hxkj.common.basics.BaseService;
 import com.hxkj.common.entity.system.SysMenu;
 
@@ -24,7 +25,7 @@ public interface ISysMenuService extends BaseService<SysMenu> {
      * @param id 主键
      * @return SysMenu
      */
-    SysMenu detail(Integer id);
+    SysMenuVo detail(Integer id);
 
     /**
      * 新增菜单

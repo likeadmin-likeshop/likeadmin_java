@@ -85,7 +85,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
 
         // 免权限验证接口
         List<String> notAuthUri = Arrays.asList(SystemConfig.notLoginUri);
-        if (notAuthUri.contains(request.getRequestURI())) {
+        if (notAuthUri.contains(request.getRequestURI()) || Integer.parseInt(uid) == 1) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
 

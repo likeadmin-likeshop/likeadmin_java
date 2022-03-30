@@ -3,6 +3,7 @@ package com.hxkj.admin.controller.system;
 import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.service.ISysMenuService;
 import com.hxkj.admin.validate.SysMenuParam;
+import com.hxkj.admin.vo.system.SysMenuVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.entity.system.SysMenu;
 import com.hxkj.common.validator.annotation.IDMust;
@@ -38,8 +39,8 @@ public class SysMenuController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        SysMenu sysMenu = iSysMenuService.detail(id);
-        return AjaxResult.success(sysMenu);
+        SysMenuVo vo = iSysMenuService.detail(id);
+        return AjaxResult.success(vo);
     }
 
     /**

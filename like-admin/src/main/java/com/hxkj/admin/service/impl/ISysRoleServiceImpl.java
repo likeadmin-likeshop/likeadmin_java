@@ -6,12 +6,14 @@ import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.hxkj.admin.config.SystemConfig;
+import com.hxkj.admin.service.ISysAdminService;
 import com.hxkj.admin.service.ISysRoleMenuService;
 import com.hxkj.admin.service.ISysRoleService;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.SysRoleParam;
-import com.hxkj.admin.vo.system.SysRoleListVo;
+import com.hxkj.admin.vo.system.SysRoleVo;
 import com.hxkj.common.core.PageResult;
+import com.hxkj.common.entity.system.SysAdmin;
 import com.hxkj.common.entity.system.SysRole;
 import com.hxkj.common.mapper.system.SysRoleMapper;
 import com.hxkj.common.utils.RedisUtil;
@@ -28,6 +30,9 @@ import java.util.List;
 
 @Service
 public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRole> implements ISysRoleService {
+
+    @Resource
+    ISysAdminService iSysAdminService;
 
     @Resource
     ISysRoleMenuService iSysRoleMenuService;
@@ -62,21 +67,18 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
      * @return PageResult<SysRoleListVo>
      */
     @Override
-    public PageResult<SysRoleListVo> lists(@Validated PageParam pageParam) {
+    public PageResult<SysRoleVo> lists(@Validated PageParam pageParam) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
         QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select(SysRole.class, info->
-                !info.getColumn().equals("is_delete") &&
-                !info.getColumn().equals("delete_time"))
-           .orderByDesc(Arrays.asList("sort", "id"));
+        queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
 
         IPage<SysRole> iPage = this.page(new Page<>(page, limit), queryWrapper);
 
-        List<SysRoleListVo> roleVoArrayList = new ArrayList<>();
+        List<SysRoleVo> roleVoArrayList = new ArrayList<>();
         for (SysRole sysRole : iPage.getRecords()) {
-            SysRoleListVo vo = new SysRoleListVo();
+            SysRoleVo vo = new SysRoleVo();
             BeanUtils.copyProperties(sysRole, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(sysRole.getCreateTime()));
@@ -158,11 +160,9 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         this.updateById(model);
 
-        RedisUtil.hDel(SystemConfig.backstageRolesKey, String.valueOf(sysRoleParam.getId()));
-        iSysRoleMenuService.cacheRoleMenusByRoleId(sysRoleParam.getId());
-
         iSysRoleMenuService.batchDeleteByRoleId(sysRoleParam.getId());
         iSysRoleMenuService.batchSaveByMenuIds(sysRoleParam.getId(), sysRoleParam.getMenuIds());
+        iSysRoleMenuService.cacheRoleMenusByRoleId(sysRoleParam.getId());
     }
 
     /**
@@ -176,14 +176,20 @@ public class ISysRoleServiceImpl extends MPJBaseServiceImpl<SysRoleMapper, SysRo
     public void del(Integer id) {
         Assert.notNull(
                 this.getOne(new QueryWrapper<SysRole>()
-                    .select("id,name")
+                    .select("id", "name")
                     .eq("id", id)
                     .last("limit 1")),
                 "角色已不存在!");
 
+        Assert.isNull(iSysAdminService.getOne(new QueryWrapper<SysAdmin>()
+                .select("id", "role", "nickname")
+                .eq("role", id)
+                .eq("is_delete", 0)),
+                "角色已被管理员使用,请先移除");
+
         this.removeById(id);
-        RedisUtil.hDel(SystemConfig.backstageRolesKey, String.valueOf(id));
         iSysRoleMenuService.batchDeleteByRoleId(id);
+        RedisUtil.hDel(SystemConfig.backstageRolesKey, id);
     }
 
 }
