@@ -104,6 +104,35 @@ public class ToolsUtil {
     }
 
     /**
+     * 转换存储单位: KB MB GB TB
+     *
+     * @author fzr
+     * @return String
+     */
+    public static String toStorageUnit(Long size) {
+        if (size == null) {
+            return "0B";
+        }
+        if (size < 1024) {
+            return size + "B";
+        } else {
+            size = size / 1024;
+        }
+        if (size < 1024) {
+            return size + "KB";
+        } else {
+            size = size / 1024;
+        }
+        if (size < 1024) {
+            size = size * 100;
+            return (size / 100) + "." + (size % 100) + "MB";
+        } else {
+            size = size * 100 / 1024;
+            return (size / 100) + "." + (size % 100) + "GB";
+        }
+    }
+
+    /**
      * JSON转map
      *
      * @author fzr
@@ -112,6 +141,18 @@ public class ToolsUtil {
      */
     public static Map<String, Object> jsonToMap(String json){
         Type type = new TypeToken<Map<String, Object>>() {}.getType();
+        return JSON.parseObject(json, type);
+    }
+
+    /**
+     * JSON转map
+     *
+     * @author fzr
+     * @param json 对象
+     * @return Map
+     */
+    public static Map<String, String> jsonToStrMap(String json){
+        Type type = new TypeToken<Map<String, String>>() {}.getType();
         return JSON.parseObject(json, type);
     }
 

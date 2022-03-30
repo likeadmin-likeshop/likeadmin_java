@@ -23,18 +23,15 @@ import java.util.Objects;
 @ControllerAdvice
 public class GlobalException {
 
-//    /**
-//     * 处理所有不可知异常
-//     *
-//     * @param e 异常
-//     * @return AjaxResult
-//     */
-//    @ResponseStatus(HttpStatus.OK)
-//    @ExceptionHandler(Throwable.class)
-//    public AjaxResult handleException(Throwable e) {
-//        log.error(ThrowableUtil.getStackTrace(e));
-//        return AjaxResult.failed(HttpEnum.SYSTEM_ERROR.getCode(), HttpEnum.SUCCESS.getMsg());
-//    }
+    /**
+     * 处理所有不可知异常
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(Throwable.class)
+    public AjaxResult handleException(Throwable e) {
+        log.error(e.getMessage());
+        return AjaxResult.failed(HttpEnum.SYSTEM_ERROR.getCode(), HttpEnum.SYSTEM_ERROR.getMsg());
+    }
 
     /**
      * 拦截表单参数校验FROM

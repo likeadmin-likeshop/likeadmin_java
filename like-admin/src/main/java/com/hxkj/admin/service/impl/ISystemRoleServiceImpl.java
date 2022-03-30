@@ -10,7 +10,7 @@ import com.hxkj.admin.service.ISystemAdminService;
 import com.hxkj.admin.service.ISystemRoleMenuService;
 import com.hxkj.admin.service.ISystemRoleService;
 import com.hxkj.admin.validate.PageParam;
-import com.hxkj.admin.validate.SysRoleParam;
+import com.hxkj.admin.validate.system.SystemRoleParam;
 import com.hxkj.admin.vo.system.SystemRoleVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SystemAdmin;
@@ -119,58 +119,58 @@ public class ISystemRoleServiceImpl extends MPJBaseServiceImpl<SystemRoleMapper,
      * 新增角色
      *
      * @author fzr
-     * @param sysRoleParam 参数
+     * @param systemRoleParam 参数
      */
     @Override
     @Transactional
-    public void add(SysRoleParam sysRoleParam) {
+    public void add(SystemRoleParam systemRoleParam) {
         Assert.isNull(this.getOne(new QueryWrapper<SystemRole>()
                 .select("id,name")
-                .eq("name", sysRoleParam.getName().trim())
+                .eq("name", systemRoleParam.getName().trim())
                 .last("limit 1")), "角色名称已存在!");
 
         SystemRole model = new SystemRole();
-        model.setName(sysRoleParam.getName().trim());
-        model.setRemark(sysRoleParam.getRemark());
-        model.setIsDisable(sysRoleParam.getIsDisable());
+        model.setName(systemRoleParam.getName().trim());
+        model.setRemark(systemRoleParam.getRemark());
+        model.setIsDisable(systemRoleParam.getIsDisable());
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         this.save(model);
 
-        iSystemRoleMenuService.batchSaveByMenuIds(model.getId(), sysRoleParam.getMenuIds());
+        iSystemRoleMenuService.batchSaveByMenuIds(model.getId(), systemRoleParam.getMenuIds());
     }
 
     /**
      * 编辑角色
      *
      * @author fzr
-     * @param sysRoleParam 参数
+     * @param systemRoleParam 参数
      */
     @Override
     @Transactional
-    public void edit(SysRoleParam sysRoleParam) {
+    public void edit(SystemRoleParam systemRoleParam) {
         Assert.notNull(this.getOne(new QueryWrapper<SystemRole>()
                 .select("id,name")
-                .eq("id", sysRoleParam.getId())
+                .eq("id", systemRoleParam.getId())
                 .last("limit 1")), "角色已不存在!");
 
         Assert.isNull(this.getOne(new QueryWrapper<SystemRole>()
                 .select("id,name")
-                .ne("id", sysRoleParam.getId())
-                .eq("name", sysRoleParam.getName().trim())
+                .ne("id", systemRoleParam.getId())
+                .eq("name", systemRoleParam.getName().trim())
                 .last("limit 1")), "角色名称已存在!");
 
         SystemRole model = new SystemRole();
-        model.setId(sysRoleParam.getId());
-        model.setName(sysRoleParam.getName().trim());
-        model.setRemark(sysRoleParam.getRemark());
-        model.setIsDisable(sysRoleParam.getIsDisable());
+        model.setId(systemRoleParam.getId());
+        model.setName(systemRoleParam.getName().trim());
+        model.setRemark(systemRoleParam.getRemark());
+        model.setIsDisable(systemRoleParam.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         this.updateById(model);
 
-        iSystemRoleMenuService.batchDeleteByRoleId(sysRoleParam.getId());
-        iSystemRoleMenuService.batchSaveByMenuIds(sysRoleParam.getId(), sysRoleParam.getMenuIds());
-        iSystemRoleMenuService.cacheRoleMenusByRoleId(sysRoleParam.getId());
+        iSystemRoleMenuService.batchDeleteByRoleId(systemRoleParam.getId());
+        iSystemRoleMenuService.batchSaveByMenuIds(systemRoleParam.getId(), systemRoleParam.getMenuIds());
+        iSystemRoleMenuService.cacheRoleMenusByRoleId(systemRoleParam.getId());
     }
 
     /**

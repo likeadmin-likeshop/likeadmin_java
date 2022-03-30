@@ -10,7 +10,7 @@ import com.hxkj.admin.config.SystemConfig;
 import com.hxkj.admin.service.ISystemAdminService;
 import com.hxkj.admin.service.ISystemRoleService;
 import com.hxkj.admin.validate.PageParam;
-import com.hxkj.admin.validate.SysAdminParam;
+import com.hxkj.admin.validate.system.SystemAdminParam;
 import com.hxkj.admin.vo.system.SystemAdminVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SystemAdmin;
@@ -124,38 +124,38 @@ public class ISystemAdminServiceImpl extends MPJBaseServiceImpl<SystemAdminMappe
      * 新增管理员
      *
      * @author fzr
-     * @param sysAdminParam 参数
+     * @param systemAdminParam 参数
      */
     @Override
-    public void add(SysAdminParam sysAdminParam) {
+    public void add(SystemAdminParam systemAdminParam) {
         String[] field = {"id", "username", "nickname"};
         Assert.isNull(this.getOne(new QueryWrapper<SystemAdmin>()
                 .select(field)
                 .eq("is_delete", 0)
-                .eq("username", sysAdminParam.getUsername())
+                .eq("username", systemAdminParam.getUsername())
                 .last("limit 1")), "账号已存在换一个吧！");
 
         Assert.isNull(this.getOne(new QueryWrapper<SystemAdmin>()
                 .select(field)
                 .eq("is_delete", 0)
-                .eq("nickname", sysAdminParam.getNickname())
+                .eq("nickname", systemAdminParam.getNickname())
                 .last("limit 1")), "昵称已存在换一个吧！");
 
-        Assert.notNull(iSystemRoleService.getById(sysAdminParam.getRole()), "角色不存在!");
+        Assert.notNull(iSystemRoleService.getById(systemAdminParam.getRole()), "角色不存在!");
 
         String salt   = ToolsUtil.randomString(5);
-        String pwd    = ToolsUtil.makeMd5(sysAdminParam.getPassword().trim() + salt);
-        String avatar = UrlUtil.toRelativeUrl(sysAdminParam.getAvatar());
+        String pwd    = ToolsUtil.makeMd5(systemAdminParam.getPassword().trim() + salt);
+        String avatar = UrlUtil.toRelativeUrl(systemAdminParam.getAvatar());
 
         SystemAdmin model = new SystemAdmin();
-        model.setUsername(sysAdminParam.getUsername());
-        model.setNickname(sysAdminParam.getNickname());
-        model.setRole(sysAdminParam.getRole());
+        model.setUsername(systemAdminParam.getUsername());
+        model.setNickname(systemAdminParam.getNickname());
+        model.setRole(systemAdminParam.getRole());
         model.setAvatar(avatar);
         model.setPassword(pwd);
         model.setSalt(salt);
-        model.setSort(sysAdminParam.getSort());
-        model.setIsDisable(sysAdminParam.getIsDisable());
+        model.setSort(systemAdminParam.getSort());
+        model.setIsDisable(systemAdminParam.getIsDisable());
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         this.save(model);
@@ -165,54 +165,54 @@ public class ISystemAdminServiceImpl extends MPJBaseServiceImpl<SystemAdminMappe
      * 更新管理员
      *
      * @author fzr
-     * @param sysAdminParam 参数
+     * @param systemAdminParam 参数
      */
     @Override
-    public void edit(SysAdminParam sysAdminParam) {
+    public void edit(SystemAdminParam systemAdminParam) {
         String[] field = {"id", "username", "nickname"};
         Assert.notNull(this.getOne(new QueryWrapper<SystemAdmin>()
                 .select(field)
-                .eq("id", sysAdminParam.getId())
+                .eq("id", systemAdminParam.getId())
                 .eq("is_delete", 0)
                 .last("limit 1")), "账号不存在了!");
 
         Assert.isNull(this.getOne(new QueryWrapper<SystemAdmin>()
                 .select(field)
                 .eq("is_delete", 0)
-                .eq("username", sysAdminParam.getUsername())
-                .ne("id", sysAdminParam.getId())
+                .eq("username", systemAdminParam.getUsername())
+                .ne("id", systemAdminParam.getId())
                 .last("limit 1")), "账号已存在换一个吧！");
 
         Assert.isNull(this.getOne(new QueryWrapper<SystemAdmin>()
                 .select(field)
                 .eq("is_delete", 0)
-                .eq("nickname", sysAdminParam.getNickname())
-                .ne("id", sysAdminParam.getId())
+                .eq("nickname", systemAdminParam.getNickname())
+                .ne("id", systemAdminParam.getId())
                 .last("limit 1")), "昵称已存在换一个吧！");
 
-        Assert.notNull(iSystemRoleService.getById(sysAdminParam.getRole()), "角色不存在!");
+        Assert.notNull(iSystemRoleService.getById(systemAdminParam.getRole()), "角色不存在!");
 
         SystemAdmin model = new SystemAdmin();
-        model.setId(sysAdminParam.getId());
-        model.setNickname(sysAdminParam.getNickname());
-        model.setUsername(sysAdminParam.getUsername());
-        model.setAvatar( UrlUtil.toRelativeUrl(sysAdminParam.getAvatar()));
-        model.setRole(sysAdminParam.getId() == 1 ? 0 : sysAdminParam.getRole());
-        model.setSort(sysAdminParam.getSort());
-        model.setIsDisable(sysAdminParam.getIsDisable());
+        model.setId(systemAdminParam.getId());
+        model.setNickname(systemAdminParam.getNickname());
+        model.setUsername(systemAdminParam.getUsername());
+        model.setAvatar( UrlUtil.toRelativeUrl(systemAdminParam.getAvatar()));
+        model.setRole(systemAdminParam.getId() == 1 ? 0 : systemAdminParam.getRole());
+        model.setSort(systemAdminParam.getSort());
+        model.setIsDisable(systemAdminParam.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
 
-        if (sysAdminParam.getPassword() != null) {
+        if (systemAdminParam.getPassword() != null) {
             String salt   = ToolsUtil.randomString(5);
-            String pwd    = ToolsUtil.makeMd5( sysAdminParam.getPassword().trim() + salt);
+            String pwd    = ToolsUtil.makeMd5( systemAdminParam.getPassword().trim() + salt);
             model.setPassword(pwd);
             model.setSalt(salt);
         }
 
         this.updateById(model);
-        this.cacheAdminUserByUid(sysAdminParam.getId());
+        this.cacheAdminUserByUid(systemAdminParam.getId());
 
-        if (sysAdminParam.getPassword() != null) {
+        if (systemAdminParam.getPassword() != null) {
             RedisUtil.del(Objects.requireNonNull(HttpUtil.obj()).getHeader("token"));
         }
     }

@@ -1,7 +1,7 @@
 package com.hxkj.admin.service;
 
 import com.alibaba.fastjson.JSONArray;
-import com.hxkj.admin.validate.SysMenuParam;
+import com.hxkj.admin.validate.system.SystemMenuParam;
 import com.hxkj.admin.vo.system.SystemMenuVo;
 import com.hxkj.common.basics.BaseService;
 import com.hxkj.common.entity.system.SystemMenu;
@@ -40,17 +40,17 @@ public interface ISystemMenuService extends BaseService<SystemMenu> {
      * 新增菜单
      *
      * @author fzr
-     * @param sysMenuParam 参数
+     * @param systemMenuParam 参数
      */
-    void add(SysMenuParam sysMenuParam);
+    void add(SystemMenuParam systemMenuParam);
 
     /**
      * 编辑菜单
      *
      * @author fzr
-     * @param sysMenuParam 参数
+     * @param systemMenuParam 参数
      */
-    void edit(SysMenuParam sysMenuParam);
+    void edit(SystemMenuParam systemMenuParam);
 
     /**
      * 删除菜单

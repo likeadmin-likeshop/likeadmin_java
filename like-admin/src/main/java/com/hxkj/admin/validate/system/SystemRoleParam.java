@@ -1,4 +1,4 @@
-package com.hxkj.admin.validate;
+package com.hxkj.admin.validate.system;
 
 import com.hxkj.common.validator.annotation.IDMust;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SysRoleParam implements Serializable {
+public class SystemRoleParam implements Serializable {
 
     public interface create{}
     public interface update{}

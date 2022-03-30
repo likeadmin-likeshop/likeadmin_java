@@ -26,12 +26,12 @@
         <mybatis-plus.version>3.4.3.1</mybatis-plus.version>
         <mybatis-plus-join.version>1.2.2</mybatis-plus-join.version>
         <pagehelper.version>1.4.0</pagehelper.version>
-        <shiro-spring.version>1.8.0</shiro-spring.version>
         <lombok.version>1.18.22</lombok.version>
         <fastJson.version>1.2.78</fastJson.version>
-        <java-jwt.version>3.18.2</java-jwt.version>
         <apache-commons.version>2.10.0</apache-commons.version>
         <gson.version>2.9.0</gson.version>
+        <qiniu-oss.version>7.9.5</qiniu-oss.version>
+        <aliyun-oss.version>3.10.2</aliyun-oss.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -69,19 +69,13 @@
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.version}</version>
             </dependency>
-            <!-- Shiro鉴权依赖 -->
-            <dependency>
-                <groupId>org.apache.shiro</groupId>
-                <artifactId>shiro-spring</artifactId>
-                <version>${shiro-spring.version}</version>
-            </dependency>
             <!-- Lombok依赖 -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
-            <!-- fastjson -->
+            <!-- Fastjson -->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
@@ -93,11 +87,23 @@
                 <artifactId>commons-pool2</artifactId>
                 <version>${apache-commons.version}</version>
             </dependency>
-            <!-- gson -->
+            <!-- Gson -->
             <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${gson.version}</version>
+            </dependency>
+            <!-- 七牛云OSS -->
+            <dependency>
+                <groupId>com.qiniu</groupId>
+                <artifactId>qiniu-java-sdk</artifactId>
+                <version>${qiniu-oss.version}</version>
+            </dependency>
+            <!-- 阿里云OSS -->
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${aliyun-oss.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

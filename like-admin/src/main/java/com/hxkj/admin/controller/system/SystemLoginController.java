@@ -1,7 +1,7 @@
 package com.hxkj.admin.controller.system;
 
 import com.hxkj.admin.service.ISystemLoginService;
-import com.hxkj.admin.validate.SysLoginParam;
+import com.hxkj.admin.validate.system.SystemLoginParam;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.exception.LoginException;
 import com.hxkj.common.exception.OperateException;
@@ -26,13 +26,13 @@ public class SystemLoginController {
      * 登录系统
      *
      * @author fzr
-     * @param sysLoginParam 登录参数
+     * @param systemLoginParam 登录参数
      * @return Object
      */
     @PostMapping("/login")
-    public Object login(@Validated() @RequestBody SysLoginParam sysLoginParam) {
+    public Object login(@Validated() @RequestBody SystemLoginParam systemLoginParam) {
         try {
-            Map<String, Object> map = iSystemLoginService.login(sysLoginParam);
+            Map<String, Object> map = iSystemLoginService.login(systemLoginParam);
             return AjaxResult.success(map);
         } catch (LoginException e) {
             return AjaxResult.failed(e.getCode(), e.getMsg());

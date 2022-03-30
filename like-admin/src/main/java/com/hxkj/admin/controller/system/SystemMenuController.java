@@ -3,7 +3,7 @@ package com.hxkj.admin.controller.system;
 import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.LikeAdminThreadLocal;
 import com.hxkj.admin.service.ISystemMenuService;
-import com.hxkj.admin.validate.SysMenuParam;
+import com.hxkj.admin.validate.system.SystemMenuParam;
 import com.hxkj.admin.vo.system.SystemMenuVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.validator.annotation.IDMust;
@@ -63,8 +63,8 @@ public class SystemMenuController {
      * @return Object
      */
     @PostMapping("/add")
-    public Object add(@Validated(value = SysMenuParam.create.class) @RequestBody SysMenuParam sysMenuParam) {
-        iSystemMenuService.add(sysMenuParam);
+    public Object add(@Validated(value = SystemMenuParam.create.class) @RequestBody SystemMenuParam systemMenuParam) {
+        iSystemMenuService.add(systemMenuParam);
         return AjaxResult.success();
     }
 
@@ -75,8 +75,8 @@ public class SystemMenuController {
      * @return Object
      */
     @PostMapping("/edit")
-    public Object edit(@Validated(value = SysMenuParam.update.class) @RequestBody SysMenuParam sysMenuParam) {
-        iSystemMenuService.edit(sysMenuParam);
+    public Object edit(@Validated(value = SystemMenuParam.update.class) @RequestBody SystemMenuParam systemMenuParam) {
+        iSystemMenuService.edit(systemMenuParam);
         return AjaxResult.success();
     }
 
@@ -87,8 +87,8 @@ public class SystemMenuController {
      * @return Object
      */
     @PostMapping("/del")
-    public Object del(@Validated(value = SysMenuParam.delete.class) @RequestBody SysMenuParam sysMenuParam) {
-        iSystemMenuService.del(sysMenuParam.getId());
+    public Object del(@Validated(value = SystemMenuParam.delete.class) @RequestBody SystemMenuParam systemMenuParam) {
+        iSystemMenuService.del(systemMenuParam.getId());
         return AjaxResult.success();
     }
 

@@ -1,7 +1,7 @@
 package com.hxkj.admin.service;
 
 import com.hxkj.admin.validate.PageParam;
-import com.hxkj.admin.validate.SysRoleParam;
+import com.hxkj.admin.validate.system.SystemRoleParam;
 import com.hxkj.admin.vo.system.SystemRoleVo;
 import com.hxkj.common.basics.BaseService;
 import com.hxkj.common.core.PageResult;
@@ -42,17 +42,17 @@ public interface ISystemRoleService extends BaseService<SystemRole> {
      * 新增角色
      *
      * @author fzr
-     * @param sysRoleParam 参数
+     * @param systemRoleParam 参数
      */
-    void add(SysRoleParam sysRoleParam);
+    void add(SystemRoleParam systemRoleParam);
 
     /**
      * 更新角色
      *
      * @author fzr
-     * @param sysRoleParam 参数
+     * @param systemRoleParam 参数
      */
-    void edit(SysRoleParam sysRoleParam);
+    void edit(SystemRoleParam systemRoleParam);
 
     /**
      * 删除角色

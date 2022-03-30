@@ -88,7 +88,7 @@ public class ConfigUtil {
      * @param name 名称
      * @return String
      */
-    public static Map<String, Object> getMap(String type, String name) {
+    public static Map<String, String> getMap(String type, String name) {
         SystemConfigMapper model = SpringUtil.getBean(SystemConfigMapper.class);
 
         SystemConfig config = model.selectOne(
@@ -97,7 +97,7 @@ public class ConfigUtil {
                         .eq("type", type)
                         .eq("name", name));
 
-        return ToolsUtil.jsonToMap(config.getValue());
+        return ToolsUtil.jsonToStrMap(config.getValue());
     }
 
     /**

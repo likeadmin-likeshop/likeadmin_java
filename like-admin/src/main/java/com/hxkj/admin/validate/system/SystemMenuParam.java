@@ -1,4 +1,4 @@
-package com.hxkj.admin.validate;
+package com.hxkj.admin.validate.system;
 
 import com.hxkj.common.validator.annotation.IDMust;
 import com.hxkj.common.validator.annotation.StringContains;
@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SysMenuParam implements Serializable {
+public class SystemMenuParam implements Serializable {
 
     public interface create{}
     public interface update{}

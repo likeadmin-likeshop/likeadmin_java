@@ -2,7 +2,7 @@ package com.hxkj.admin.controller.system;
 
 import com.hxkj.admin.service.ISystemAdminService;
 import com.hxkj.admin.validate.PageParam;
-import com.hxkj.admin.validate.SysAdminParam;
+import com.hxkj.admin.validate.system.SystemAdminParam;
 import com.hxkj.admin.vo.system.SystemAdminVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
@@ -49,12 +49,12 @@ public class SystemAdminController {
      * 新增管理员
      *
      * @author fzr
-     * @param sysAdminParam 参数
+     * @param systemAdminParam 参数
      * @return Object
      */
     @PostMapping("/add")
-    public Object add(@Validated(value = SysAdminParam.create.class) @RequestBody SysAdminParam sysAdminParam) {
-        iSystemAdminService.add(sysAdminParam);
+    public Object add(@Validated(value = SystemAdminParam.create.class) @RequestBody SystemAdminParam systemAdminParam) {
+        iSystemAdminService.add(systemAdminParam);
         return AjaxResult.success();
     }
 
@@ -62,12 +62,12 @@ public class SystemAdminController {
      * 编辑管理员
      *
      * @author fzr
-     * @param sysAdminParam 参数
+     * @param systemAdminParam 参数
      * @return Object
      */
     @PostMapping("/edit")
-    public Object edit(@Validated(value = SysAdminParam.update.class) @RequestBody SysAdminParam sysAdminParam) {
-        iSystemAdminService.edit(sysAdminParam);
+    public Object edit(@Validated(value = SystemAdminParam.update.class) @RequestBody SystemAdminParam systemAdminParam) {
+        iSystemAdminService.edit(systemAdminParam);
         return AjaxResult.success();
     }
 
@@ -78,8 +78,8 @@ public class SystemAdminController {
      * @return Object
      */
     @PostMapping("/del")
-    public Object del(@Validated(value = SysAdminParam.delete.class) @RequestBody SysAdminParam sysAdminParam) {
-        iSystemAdminService.del(sysAdminParam.getId());
+    public Object del(@Validated(value = SystemAdminParam.delete.class) @RequestBody SystemAdminParam systemAdminParam) {
+        iSystemAdminService.del(systemAdminParam.getId());
         return AjaxResult.success();
     }
 

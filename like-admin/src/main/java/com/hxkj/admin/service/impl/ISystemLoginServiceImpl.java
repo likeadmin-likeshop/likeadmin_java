@@ -3,7 +3,7 @@ package com.hxkj.admin.service.impl;
 import com.hxkj.admin.config.SystemConfig;
 import com.hxkj.admin.service.ISystemAdminService;
 import com.hxkj.admin.service.ISystemLoginService;
-import com.hxkj.admin.validate.SysLoginParam;
+import com.hxkj.admin.validate.system.SystemLoginParam;
 import com.hxkj.common.entity.system.SystemAdmin;
 import com.hxkj.common.enums.HttpEnum;
 import com.hxkj.common.exception.LoginException;
@@ -27,13 +27,13 @@ public class ISystemLoginServiceImpl implements ISystemLoginService {
      * 登录
      *
      * @author fzr
-     * @param sysLoginParam 登录参数
+     * @param systemLoginParam 登录参数
      * @return token
      */
     @Override
-    public Map<String, Object> login(SysLoginParam sysLoginParam) {
-        String username = sysLoginParam.getUsername();
-        String password = sysLoginParam.getPassword();
+    public Map<String, Object> login(SystemLoginParam systemLoginParam) {
+        String username = systemLoginParam.getUsername();
+        String password = systemLoginParam.getPassword();
 
         SystemAdmin sysAdmin = iSystemAdminService.findByUsername(username);
         if (sysAdmin == null || sysAdmin.getIsDelete() == 1) {

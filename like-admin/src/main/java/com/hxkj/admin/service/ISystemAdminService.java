@@ -1,7 +1,7 @@
 package com.hxkj.admin.service;
 
 import com.hxkj.admin.validate.PageParam;
-import com.hxkj.admin.validate.SysAdminParam;
+import com.hxkj.admin.validate.system.SystemAdminParam;
 import com.hxkj.admin.vo.system.SystemAdminVo;
 import com.hxkj.common.basics.BaseService;
 import com.hxkj.common.core.PageResult;
@@ -45,17 +45,17 @@ public interface ISystemAdminService extends BaseService<SystemAdmin> {
      * 新增管理员
      *
      * @author fzr
-     * @param sysAdminParam 参数
+     * @param systemAdminParam 参数
      */
-    void add(SysAdminParam sysAdminParam);
+    void add(SystemAdminParam systemAdminParam);
 
     /**
      * 编辑管理员
      *
      * @author fzr
-     * @param sysAdminParam 参数
+     * @param systemAdminParam 参数
      */
-    void edit(SysAdminParam sysAdminParam);
+    void edit(SystemAdminParam systemAdminParam);
 
     /**
      * 删除管理员

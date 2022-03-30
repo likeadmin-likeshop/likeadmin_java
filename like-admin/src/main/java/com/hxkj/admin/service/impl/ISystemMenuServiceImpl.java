@@ -8,7 +8,7 @@ import com.hxkj.admin.LikeAdminThreadLocal;
 import com.hxkj.admin.config.SystemConfig;
 import com.hxkj.admin.service.ISystemMenuService;
 import com.hxkj.admin.service.ISystemRoleMenuService;
-import com.hxkj.admin.validate.SysMenuParam;
+import com.hxkj.admin.validate.system.SystemMenuParam;
 import com.hxkj.admin.vo.system.SystemMenuVo;
 import com.hxkj.common.entity.system.SystemMenu;
 import com.hxkj.common.mapper.system.SystemMenuMapper;
@@ -114,18 +114,18 @@ public class ISystemMenuServiceImpl extends MPJBaseServiceImpl<SystemMenuMapper,
      * 新增菜单
      *
      * @author fzr
-     * @param sysMenuParam 参数
+     * @param systemMenuParam 参数
      */
     @Override
-    public void add(SysMenuParam sysMenuParam) {
+    public void add(SystemMenuParam systemMenuParam) {
         SystemMenu model = new SystemMenu();
-        model.setPid(sysMenuParam.getPid());
-        model.setMenuType(sysMenuParam.getMenuType());
-        model.setMenuName(sysMenuParam.getMenuName());
-        model.setMenuIcon(sysMenuParam.getMenuIcon());
-        model.setMenuSort(sysMenuParam.getMenuSort());
-        model.setPerms(sysMenuParam.getPerms());
-        model.setIsDisable(sysMenuParam.getIsDisable());
+        model.setPid(systemMenuParam.getPid());
+        model.setMenuType(systemMenuParam.getMenuType());
+        model.setMenuName(systemMenuParam.getMenuName());
+        model.setMenuIcon(systemMenuParam.getMenuIcon());
+        model.setMenuSort(systemMenuParam.getMenuSort());
+        model.setPerms(systemMenuParam.getPerms());
+        model.setIsDisable(systemMenuParam.getIsDisable());
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         this.save(model);
@@ -135,20 +135,20 @@ public class ISystemMenuServiceImpl extends MPJBaseServiceImpl<SystemMenuMapper,
      * 编辑菜单
      *
      * @author fzr
-     * @param sysMenuParam 菜单
+     * @param systemMenuParam 菜单
      */
     @Override
-    public void edit(SysMenuParam sysMenuParam) {
-        SystemMenu model = this.getOne(new QueryWrapper<SystemMenu>().eq("id", sysMenuParam.getId()));
+    public void edit(SystemMenuParam systemMenuParam) {
+        SystemMenu model = this.getOne(new QueryWrapper<SystemMenu>().eq("id", systemMenuParam.getId()));
         Assert.notNull(model, "菜单已不存在!");
 
-        model.setMenuType(sysMenuParam.getMenuType());
-        model.setMenuName(sysMenuParam.getMenuName());
-        model.setMenuIcon(sysMenuParam.getMenuIcon());
-        model.setMenuSort(sysMenuParam.getMenuSort());
-        model.setPerms(sysMenuParam.getPerms());
-        model.setPid(sysMenuParam.getPid());
-        model.setIsDisable(sysMenuParam.getIsDisable());
+        model.setMenuType(systemMenuParam.getMenuType());
+        model.setMenuName(systemMenuParam.getMenuName());
+        model.setMenuIcon(systemMenuParam.getMenuIcon());
+        model.setMenuSort(systemMenuParam.getMenuSort());
+        model.setPerms(systemMenuParam.getPerms());
+        model.setPid(systemMenuParam.getPid());
+        model.setIsDisable(systemMenuParam.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         this.updateById(model);
 
