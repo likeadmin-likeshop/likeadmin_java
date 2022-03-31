@@ -48,7 +48,7 @@ public interface IAlbumService extends BaseService<Album> {
      * @author fzr
      * @param params 文件信息参数
      */
-    void albumAdd(Map<String, String> params);
+    Integer albumAdd(Map<String, String> params);
 
     /**
      * 文件删除

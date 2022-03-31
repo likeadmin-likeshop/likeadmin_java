@@ -27,9 +27,10 @@ public class GlobalException {
      * 处理所有不可知异常
      */
     @ResponseStatus(HttpStatus.OK)
-    @ExceptionHandler(Throwable.class)
-    public AjaxResult handleException(Throwable e) {
-        log.error(e.getMessage());
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    public AjaxResult handleException(Exception e) {
+        System.out.println(e.getMessage());
         return AjaxResult.failed(HttpEnum.SYSTEM_ERROR.getCode(), HttpEnum.SYSTEM_ERROR.getMsg());
     }
 

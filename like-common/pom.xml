@@ -87,10 +87,15 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
-        <!-- 七牛云OSS -->
+        <!-- 七牛云 -->
         <dependency>
             <groupId>com.qiniu</groupId>
             <artifactId>qiniu-java-sdk</artifactId>
+        </dependency>
+        <!-- 腾讯云COS -->
+        <dependency>
+            <groupId>com.qcloud</groupId>
+            <artifactId>cos_api</artifactId>
         </dependency>
         <!-- 阿里云OSS -->
         <dependency>

@@ -136,18 +136,20 @@ public class IAlbumServiceImpl extends MPJBaseServiceImpl<AlbumMapper, Album> im
      * @param params 文件信息参数
      */
     @Override
-    public void albumAdd(Map<String, String> params) {
+    public Integer albumAdd(Map<String, String> params) {
         Album album = new Album();
+        album.setCid(Integer.parseInt(params.getOrDefault("cid", "0")));
         album.setAid(Integer.parseInt(params.getOrDefault("aid", "0")));
         album.setUid(Integer.parseInt(params.getOrDefault("uid", "0")));
         album.setType(Integer.parseInt(params.get("type")));
         album.setName(params.get("name"));
         album.setExt(params.get("ext"));
-        album.setUri(params.get("uri"));
+        album.setUri(params.get("url"));
         album.setSize(Long.parseLong(params.get("size")));
         album.setCreateTime(System.currentTimeMillis() / 1000);
         album.setUpdateTime(System.currentTimeMillis() / 1000);
         this.save(album);
+        return album.getId();
     }
 
     /**

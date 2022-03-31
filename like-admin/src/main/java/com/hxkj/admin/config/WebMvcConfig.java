@@ -1,6 +1,8 @@
 package com.hxkj.admin.config;
 
 import com.hxkj.admin.LikeAdminInterceptor;
+import com.hxkj.common.config.GlobalConfig;
+import com.hxkj.common.utils.YmlUtil;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -40,8 +42,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:" + "");
+        String directory = YmlUtil.get("like.upload-directory");
+        if (directory == null || directory.equals("")) {
+            directory = GlobalConfig.uploadDirectory;
+        }
+
+        registry.addResourceHandler("/"+ GlobalConfig.publicPrefix +"/**")
+                .addResourceLocations("file:" + directory);
     }
 
 }

@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "like.debug",
+      "type": "java.lang.String",
+      "description": "Description for like.debug."
+    },
+    {
+      "name": "like.upload-directory",
+      "type": "java.lang.String",
+      "description": "Description for like.upload-directory."
+    }
+  ]
+}

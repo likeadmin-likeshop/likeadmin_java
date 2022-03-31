@@ -5,31 +5,61 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.PutObjectRequest;
+import com.hxkj.common.exception.OperateException;
+import com.qiniu.util.Auth;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Map;
 
 public class Aliyun {
 
-    public void upload() {
-        String endpoint = "https://oss-cn-hangzhou.aliyuncs.com";
-        String accessKeyId = "LTAI4G9XZP9MKQ2AmeZJGRTE";
-        String accessKeySecret = "qbA9DoJ41jnmpoKhiZqmU1dfHFcpvN";
+    /**
+     * 存储配置
+     */
+    private final Map<String, String> config;
 
-        String bucketName = "yixiangonline";
-        String objectName = "exampleobject.txt";
-        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+    /**
+     * 构造方法
+     */
+    public Aliyun(Map<String, String> config) {
+        this.config = config;
+    }
 
+    /**
+     * 鉴权令牌
+     *
+     * @author fzr
+     * @return String
+     */
+    public OSS ossClient() {
+        String endpoint        = "https://oss-cn-shenzhen.aliyuncs.com";
+        String accessKeyId     = this.config.get("access_key");
+        String accessKeySecret = this.config.get("secret_key");
+       return new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param multipartFile 文件对象
+     * @param key 文件名称 20220331/11.png
+     */
+    public void upload(MultipartFile multipartFile, String key) {
         try {
-            String content = "Hello OSS";
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, new ByteArrayInputStream(content.getBytes()));
-            ossClient.putObject(putObjectRequest);
+            PutObjectRequest putObjectRequest = new PutObjectRequest(
+                    this.config.get("bucket"), key,
+                    new ByteArrayInputStream(multipartFile.getBytes())
+            );
+            this.ossClient().putObject(putObjectRequest);
         } catch (OSSException oe) {
-            System.out.println("Error Message:" + oe.getErrorMessage());
-        } catch (ClientException ce) {
-            System.out.println("Error Message:" + ce.getMessage());
+            throw new OperateException(oe.getMessage());
+        } catch (Exception ce) {
+            throw new OperateException(ce.getMessage());
         } finally {
-            if (ossClient != null) {
-                ossClient.shutdown();
+            if (this.ossClient() != null) {
+                this.ossClient().shutdown();
             }
         }
     }

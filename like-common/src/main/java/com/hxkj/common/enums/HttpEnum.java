@@ -16,7 +16,6 @@ public enum HttpEnum {
     TOKEN_INVALID(333, "token参数无效"),
 
     NO_PERMISSION(403, "无相关权限"),
-    NOT_DATA(404, "无相关数据"),
 
     SYSTEM_ERROR(500, "系统错误");
 

@@ -2,8 +2,6 @@ package com.hxkj.common.plugin.storage.engine;
 
 import com.google.gson.Gson;
 import com.hxkj.common.exception.OperateException;
-import com.hxkj.common.utils.TimeUtil;
-import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.Region;
@@ -14,8 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
 
 public class Qiniu {
 

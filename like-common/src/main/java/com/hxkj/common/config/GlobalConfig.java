@@ -20,4 +20,19 @@ public class GlobalConfig {
     // 资源访问前缀
     public static String publicPrefix = "uploads";
 
+    // 上传映射目录
+    public static String uploadDirectory = "/www/wwwroot/uploads/";
+
+    // 上传图片限制
+    public static Integer uploadImageSize = 1024 * 1024 * 10;
+
+    // 上传视频限制
+    public static Integer uploadVideoSize = 1024 * 1024 * 10;
+
+    // 上传图片扩展
+    public static String[] uploadImageExt = new String[] {"png", "jpg", "jpeg", "gif", "ico", "bmp"};
+
+    // 上传视频扩展
+    public static String[] uploadVideoExt = new String[] {"mp4", "mp3", "avi", "flv", "rmvb", "mov"};
+
 }
