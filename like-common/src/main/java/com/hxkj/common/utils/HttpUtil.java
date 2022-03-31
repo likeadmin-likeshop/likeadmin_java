@@ -125,5 +125,19 @@ public class HttpUtil {
         return "";
     }
 
+    /**
+     * 判断是否是GET请求
+     *
+     * @author fzr
+     * @return Boolean
+     */
+    public static Boolean isGet() {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (servletRequestAttributes != null) {
+            HttpServletRequest request = servletRequestAttributes.getRequest();
+            return request.getMethod().equals("GET");
+        }
+        return false;
+    }
 
 }

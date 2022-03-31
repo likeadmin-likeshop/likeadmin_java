@@ -22,6 +22,10 @@ public class UrlUtil {
      * @return String
      */
     public static String toAbsoluteUrl(String url) {
+        if (url == null || url.equals("")) {
+            return "";
+        }
+
         if(url.indexOf("/") != 0) {
             url = "/" + url;
         }
