@@ -2,13 +2,12 @@ package com.hxkj.common.plugin.storage;
 
 import com.hxkj.common.config.GlobalConfig;
 import com.hxkj.common.exception.OperateException;
-import com.hxkj.common.plugin.storage.engine.Aliyun;
-import com.hxkj.common.plugin.storage.engine.Local;
-import com.hxkj.common.plugin.storage.engine.Qcloud;
-import com.hxkj.common.plugin.storage.engine.Qiniu;
+import com.hxkj.common.plugin.storage.engine.AliyunStorage;
+import com.hxkj.common.plugin.storage.engine.LocalStorage;
+import com.hxkj.common.plugin.storage.engine.QcloudStorage;
+import com.hxkj.common.plugin.storage.engine.QiniuStorage;
 import com.hxkj.common.utils.ConfigUtil;
 import com.hxkj.common.utils.TimeUtil;
-import com.hxkj.common.utils.ToolsUtil;
 import com.hxkj.common.utils.UrlUtil;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,22 +43,22 @@ public class StorageDriver {
      */
     public Map<String, Object> upload(MultipartFile multipartFile, String folder, Integer type) {
         this.checkFile(multipartFile, type);
-        String key  = this.buildSaveName(multipartFile);
+        String key = this.buildSaveName(multipartFile);
         switch (this.engine) {
             case "local":
-                Local local = new Local();
+                LocalStorage local = new LocalStorage();
                 local.upload(multipartFile, key, folder);
                 break;
             case "qiniu":
-                Qiniu qiniu = new Qiniu(this.config);
+                QiniuStorage qiniu = new QiniuStorage(this.config);
                 qiniu.upload(multipartFile, folder + "/" + key);
                 break;
             case "aliyun":
-                Aliyun aliyun = new Aliyun(this.config);
+                AliyunStorage aliyun = new AliyunStorage(this.config);
                 aliyun.upload(multipartFile, folder + "/" + key);
                 break;
             case "qcloud":
-                Qcloud qcloud = new Qcloud(this.config);
+                QcloudStorage qcloud = new QcloudStorage(this.config);
                 qcloud.upload(multipartFile, folder + "/" + key);
                 break;
         }

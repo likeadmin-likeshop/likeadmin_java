@@ -32,7 +32,9 @@
         <gson.version>2.9.0</gson.version>
         <qiniu.version>7.9.5</qiniu.version>
         <qcloud-version>5.6.54</qcloud-version>
+        <tencentcloudapi.version>3.1.411</tencentcloudapi.version>
         <aliyun-oss.version>3.10.2</aliyun-oss.version>
+        <aliyun-java.version>4.5.16</aliyun-java.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -111,6 +113,18 @@
                 <groupId>com.aliyun.oss</groupId>
                 <artifactId>aliyun-sdk-oss</artifactId>
                 <version>${aliyun-oss.version}</version>
+            </dependency>
+            <!--腾讯云短信-->
+            <dependency>
+                <groupId>com.tencentcloudapi</groupId>
+                <artifactId>tencentcloud-sdk-java</artifactId>
+                <version>${tencentcloudapi.version}</version>
+            </dependency>
+            <!--阿里云短信-->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>${aliyun-java.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

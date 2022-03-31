@@ -13,7 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Map;
 
-public class Qiniu {
+/**
+ * 七牛云存储
+ */
+public class QiniuStorage {
 
     /**
      * 存储配置
@@ -23,7 +26,7 @@ public class Qiniu {
     /**
      * 构造方法
      */
-    public Qiniu(Map<String, String> config) {
+    public QiniuStorage(Map<String, String> config) {
         this.config = config;
     }
 

@@ -1,19 +1,19 @@
 package com.hxkj.common.plugin.storage.engine;
 
-import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.hxkj.common.exception.OperateException;
-import com.qiniu.util.Auth;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.Map;
 
-public class Aliyun {
+/**
+ * 阿里云存储
+ */
+public class AliyunStorage {
 
     /**
      * 存储配置
@@ -23,7 +23,7 @@ public class Aliyun {
     /**
      * 构造方法
      */
-    public Aliyun(Map<String, String> config) {
+    public AliyunStorage(Map<String, String> config) {
         this.config = config;
     }
 

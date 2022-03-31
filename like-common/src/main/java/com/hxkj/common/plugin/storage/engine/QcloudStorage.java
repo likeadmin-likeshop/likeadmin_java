@@ -15,7 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.util.Map;
 
-public class Qcloud {
+/**
+ * 腾讯云存储
+ */
+public class QcloudStorage {
 
     /**
      * 存储配置
@@ -25,7 +28,7 @@ public class Qcloud {
     /**
      * 构造方法
      */
-    public Qcloud(Map<String, String> config) {
+    public QcloudStorage(Map<String, String> config) {
         this.config = config;
     }
 

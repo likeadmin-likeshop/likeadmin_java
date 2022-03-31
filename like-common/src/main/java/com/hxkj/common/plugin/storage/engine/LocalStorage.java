@@ -6,9 +6,11 @@ import com.hxkj.common.utils.YmlUtil;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 
-public class Local {
+/**
+ * 本地存储
+ */
+public class LocalStorage {
 
     /**
      * 本地上传
