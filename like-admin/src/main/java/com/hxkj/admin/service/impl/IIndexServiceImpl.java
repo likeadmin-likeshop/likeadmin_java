@@ -4,14 +4,21 @@ import com.hxkj.admin.service.IIndexService;
 import com.hxkj.common.utils.TimeUtil;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
 public class IIndexServiceImpl implements IIndexService {
 
+    /**
+     * 控制台数据
+     *
+     * @author fzr
+     * @return Map<String, Object>
+     */
     @Override
-    public void console() {
+    public Map<String, Object> console() {
         Map<String, Object> console = new LinkedHashMap<>();
 
         // 账号信息
@@ -32,8 +39,11 @@ public class IIndexServiceImpl implements IIndexService {
 
         // 访客图表
         Map<String, Object> visitor = new LinkedHashMap<>();
-        System.out.println(TimeUtil.daysAgoTime(8));
+        visitor.put("date", TimeUtil.daysAgoDate(8));
+        visitor.put("list", new ArrayList<>());
+        console.put("visitor", visitor);
 
+        return console;
     }
 
 }
