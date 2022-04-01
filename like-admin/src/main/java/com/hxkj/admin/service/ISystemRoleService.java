@@ -3,15 +3,13 @@ package com.hxkj.admin.service;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.system.SystemRoleParam;
 import com.hxkj.admin.vo.system.SystemRoleVo;
-import com.hxkj.common.basics.BaseService;
 import com.hxkj.common.core.PageResult;
-import com.hxkj.common.entity.system.SystemRole;
 import org.springframework.validation.annotation.Validated;
 
 /**
  * 系统角色服务
  */
-public interface ISystemRoleService extends BaseService<SystemRole> {
+public interface ISystemRoleService {
 
     /**
      * 根据id获取角色名称

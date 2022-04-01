@@ -137,7 +137,7 @@ public class ToolsUtil {
      *
      * @author fzr
      * @param json 对象
-     * @return Map
+     * @return Map<String, Object>
      */
     public static Map<String, Object> jsonToMap(String json){
         Type type = new TypeToken<Map<String, Object>>() {}.getType();
@@ -149,7 +149,7 @@ public class ToolsUtil {
      *
      * @author fzr
      * @param json 对象
-     * @return Map
+     * @return Map<String, String>
      */
     public static Map<String, String> jsonToStrMap(String json){
         Type type = new TypeToken<Map<String, String>>() {}.getType();
@@ -160,7 +160,7 @@ public class ToolsUtil {
      * 列表转字符串
      *
      * @author fzr
-     * @param list 列表
+     * @param list 列表 [1, 2, 4] -> 1,2,3
      * @param separator 分割符号
      * @return String
      */
@@ -176,7 +176,7 @@ public class ToolsUtil {
      * 列表转字符串
      *
      * @author fzr
-     * @param list 列表
+     * @param list 列表 ["1", "2", "3"] -> 1,2,3
      * @param separator 分割符号
      * @return String
      */

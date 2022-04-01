@@ -6,7 +6,6 @@ import com.hxkj.admin.config.SystemConfig;
 import com.hxkj.admin.service.ISystemAdminService;
 import com.hxkj.admin.service.ISystemRoleMenuService;
 import com.hxkj.common.core.AjaxResult;
-import com.hxkj.common.entity.log.LogOperate;
 import com.hxkj.common.enums.HttpEnum;
 import com.hxkj.common.utils.RedisUtil;
 import com.hxkj.common.utils.ToolsUtil;

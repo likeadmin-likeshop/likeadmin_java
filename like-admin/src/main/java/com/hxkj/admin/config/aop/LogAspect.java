@@ -2,11 +2,13 @@ package com.hxkj.admin.config.aop;
 
 import com.alibaba.fastjson.JSON;
 import com.hxkj.admin.LikeAdminThreadLocal;
-import com.hxkj.common.entity.log.LogOperate;
-import com.hxkj.common.mapper.log.LogOperateMapper;
+import com.hxkj.common.entity.system.SystemLogOperate;
+import com.hxkj.common.mapper.system.SystemLogOperateMapper;
 import com.hxkj.common.utils.HttpUtil;
 import com.hxkj.common.utils.IpUtil;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -19,23 +21,22 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
 
 @Aspect
 @Component
 public class LogAspect {
 
     @Resource
-    LogOperateMapper logOperateMapper;
+    SystemLogOperateMapper systemLogOperateMapper;
 
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
+    private Long beginTime = 0L;
 
     /**
      * 声明切面点拦截那些类
      */
-    @Pointcut("@annotation(com.hxkj.admin.config.aop.LogAnnotation)")
+    @Pointcut("@annotation(com.hxkj.admin.config.aop.Log)")
     private void pointCutMethodController() {}
 
     /**
@@ -44,31 +45,37 @@ public class LogAspect {
     @Around(value = "pointCutMethodController()")
     public Object doAroundService(ProceedingJoinPoint joinPoint) throws Throwable {
         // 开始时间
-        long beginTime = System.currentTimeMillis();
+        this.beginTime = System.currentTimeMillis();
         // 执行方法
         Object result = joinPoint.proceed();
-        // 执行结束
-        long endTime = System.currentTimeMillis();
-        // 执行时长
-        long takeTime = endTime - beginTime;
         // 保存日志
-        recordLog(joinPoint, beginTime, endTime, takeTime);
+        recordLog(joinPoint, null);
         // 返回结果
         return result;
     }
 
     /**
-     * 记录日志信息
-     * @param joinPoint joinPoint
-     * @param startTime 开始时间(毫秒)
-     * @param endTime 结束时间(毫秒)
-     * @param takeTime 执行时长(毫秒)
+     * 拦截异常操作
+     *
+     * @param joinPoint 切点
+     * @param e 异常
      */
-    private void recordLog(ProceedingJoinPoint joinPoint, long startTime, long endTime, long takeTime) {
+    @AfterThrowing(value = "@annotation(controllerLog)", throwing = "e")
+    public void doAfterThrowing(JoinPoint joinPoint, Log controllerLog, Exception e) {
+        recordLog(joinPoint, e);
+    }
+
+    /**
+     * 记录日志信息
+     *
+     * @param joinPointObj joinPoint
+     * @param e Exception 错误异常
+     */
+    private void recordLog(Object joinPointObj, final Exception e) {
         try {
+            long endTime = System.currentTimeMillis();
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (requestAttributes != null) {
-
                 // 取得请求对象
                 HttpServletRequest request = requestAttributes.getRequest();
 
@@ -76,9 +83,10 @@ public class LogAspect {
                 Integer adminId = LikeAdminThreadLocal.getAdminId();
 
                 // 获取日志注解
+                ProceedingJoinPoint joinPoint = (ProceedingJoinPoint) joinPointObj;
                 MethodSignature signature = (MethodSignature) joinPoint.getSignature();
                 Method method = signature.getMethod();
-                LogAnnotation logAnnotation = method.getAnnotation(LogAnnotation.class);
+                Log logAnnotation = method.getAnnotation(Log.class);
 
                 // 方法名称
                 String className = joinPoint.getTarget().getClass().getName();
@@ -96,8 +104,16 @@ public class LogAspect {
                     }
                 }
 
+                // 错误信息
+                String error = "";
+                int status = 1;
+                if (e != null) {
+                    error = e.getMessage();
+                    status = 2; // 1=成功, 2=失败
+                }
+
                 // 数据库日志
-                LogOperate model = new LogOperate();
+                SystemLogOperate model = new SystemLogOperate();
                 model.setAdminId(adminId);
                 model.setTitle(logAnnotation.title());
                 model.setIp(IpUtil.getIpAddress(request));
@@ -105,14 +121,17 @@ public class LogAspect {
                 model.setMethod(className + "." + methodName + "()");
                 model.setUrl(HttpUtil.route());
                 model.setArgs(params);
-                model.setStartTime(startTime / 1000);
+                model.setError(error);
+                model.setAddress(IpUtil.getRealAddressByIP(IpUtil.getIpAddress(request)));
+                model.setStatus(status);
+                model.setStartTime(this.beginTime / 1000);
                 model.setEndTime(endTime / 1000);
-                model.setTaskTime(takeTime);
+                model.setTaskTime(endTime - this.beginTime);
                 model.setCreateTime(System.currentTimeMillis() / 1000);
-                logOperateMapper.insert(model);
+                systemLogOperateMapper.insert(model);
             }
-        } catch (Exception e) {
-            log.error("异常信息:{}", e.getMessage());
+        } catch (Exception ex) {
+            log.error("异常信息:{}", ex.getMessage());
         }
     }
 

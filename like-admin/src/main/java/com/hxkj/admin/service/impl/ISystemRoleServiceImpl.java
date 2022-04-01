@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.hxkj.admin.config.SystemConfig;
 import com.hxkj.admin.service.ISystemAdminService;
 import com.hxkj.admin.service.ISystemRoleMenuService;
@@ -15,6 +14,7 @@ import com.hxkj.admin.vo.system.SystemRoleVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SystemAdmin;
 import com.hxkj.common.entity.system.SystemRole;
+import com.hxkj.common.mapper.system.SystemAdminMapper;
 import com.hxkj.common.mapper.system.SystemRoleMapper;
 import com.hxkj.common.utils.RedisUtil;
 import com.hxkj.common.utils.TimeUtil;
@@ -29,14 +29,16 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class ISystemRoleServiceImpl extends MPJBaseServiceImpl<SystemRoleMapper, SystemRole> implements ISystemRoleService {
+public class ISystemRoleServiceImpl implements ISystemRoleService {
 
     @Resource
-    ISystemAdminService iSystemAdminService;
+    SystemAdminMapper systemAdminMapper;
+
+    @Resource
+    SystemRoleMapper systemRoleMapper;
 
     @Resource
     ISystemRoleMenuService iSystemRoleMenuService;
-
 
     /**
      * 根据ID获取角色名称
@@ -52,7 +54,7 @@ public class ISystemRoleServiceImpl extends MPJBaseServiceImpl<SystemRoleMapper,
                 .eq("id", id)
                 .last("limit 1");
 
-        SystemRole systemRole = this.getOne(queryWrapper, false);
+        SystemRole systemRole = systemRoleMapper.selectOne(queryWrapper);
         if (systemRole == null) {
             return "";
         }
@@ -74,7 +76,7 @@ public class ISystemRoleServiceImpl extends MPJBaseServiceImpl<SystemRoleMapper,
         QueryWrapper<SystemRole> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
 
-        IPage<SystemRole> iPage = this.page(new Page<>(page, limit), queryWrapper);
+        IPage<SystemRole> iPage = systemRoleMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
         List<SystemRoleVo> roleVoArrayList = new ArrayList<>();
         for (SystemRole systemRole : iPage.getRecords()) {
@@ -99,7 +101,7 @@ public class ISystemRoleServiceImpl extends MPJBaseServiceImpl<SystemRoleMapper,
      */
     @Override
     public SystemRoleVo detail(Integer id) {
-        SystemRole systemRole = this.getOne(new QueryWrapper<SystemRole>()
+        SystemRole systemRole = systemRoleMapper.selectOne(new QueryWrapper<SystemRole>()
                 .eq("id", id)
                 .last("limit 1"));
 
@@ -124,7 +126,7 @@ public class ISystemRoleServiceImpl extends MPJBaseServiceImpl<SystemRoleMapper,
     @Override
     @Transactional
     public void add(SystemRoleParam systemRoleParam) {
-        Assert.isNull(this.getOne(new QueryWrapper<SystemRole>()
+        Assert.isNull(systemRoleMapper.selectOne(new QueryWrapper<SystemRole>()
                 .select("id,name")
                 .eq("name", systemRoleParam.getName().trim())
                 .last("limit 1")), "角色名称已存在!");
@@ -135,7 +137,7 @@ public class ISystemRoleServiceImpl extends MPJBaseServiceImpl<SystemRoleMapper,
         model.setIsDisable(systemRoleParam.getIsDisable());
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
-        this.save(model);
+        systemRoleMapper.insert(model);
 
         iSystemRoleMenuService.batchSaveByMenuIds(model.getId(), systemRoleParam.getMenuIds());
     }
@@ -149,12 +151,12 @@ public class ISystemRoleServiceImpl extends MPJBaseServiceImpl<SystemRoleMapper,
     @Override
     @Transactional
     public void edit(SystemRoleParam systemRoleParam) {
-        Assert.notNull(this.getOne(new QueryWrapper<SystemRole>()
+        Assert.notNull(systemRoleMapper.selectOne(new QueryWrapper<SystemRole>()
                 .select("id,name")
                 .eq("id", systemRoleParam.getId())
                 .last("limit 1")), "角色已不存在!");
 
-        Assert.isNull(this.getOne(new QueryWrapper<SystemRole>()
+        Assert.isNull(systemRoleMapper.selectOne(new QueryWrapper<SystemRole>()
                 .select("id,name")
                 .ne("id", systemRoleParam.getId())
                 .eq("name", systemRoleParam.getName().trim())
@@ -166,7 +168,7 @@ public class ISystemRoleServiceImpl extends MPJBaseServiceImpl<SystemRoleMapper,
         model.setRemark(systemRoleParam.getRemark());
         model.setIsDisable(systemRoleParam.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
-        this.updateById(model);
+        systemRoleMapper.updateById(model);
 
         iSystemRoleMenuService.batchDeleteByRoleId(systemRoleParam.getId());
         iSystemRoleMenuService.batchSaveByMenuIds(systemRoleParam.getId(), systemRoleParam.getMenuIds());
@@ -183,19 +185,19 @@ public class ISystemRoleServiceImpl extends MPJBaseServiceImpl<SystemRoleMapper,
     @Transactional
     public void del(Integer id) {
         Assert.notNull(
-                this.getOne(new QueryWrapper<SystemRole>()
+                systemRoleMapper.selectOne(new QueryWrapper<SystemRole>()
                     .select("id", "name")
                     .eq("id", id)
                     .last("limit 1")),
                 "角色已不存在!");
 
-        Assert.isNull(iSystemAdminService.getOne(new QueryWrapper<SystemAdmin>()
+        Assert.isNull(systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
                 .select("id", "role", "nickname")
                 .eq("role", id)
                 .eq("is_delete", 0)),
                 "角色已被管理员使用,请先移除");
 
-        this.removeById(id);
+        systemRoleMapper.deleteById(id);
         iSystemRoleMenuService.batchDeleteByRoleId(id);
         RedisUtil.hDel(SystemConfig.backstageRolesKey, String.valueOf(id));
     }

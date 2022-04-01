@@ -6,10 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 服务监控管理
+ */
 @RestController
 @RequestMapping("/api/monitor")
-public class ServerController
-{
+public class ServerController {
     /**
      * 服务器信息
      *
@@ -17,8 +19,7 @@ public class ServerController
      * @return Object
      */
     @GetMapping("/server")
-    public Object info()
-    {
+    public Object info() {
         ServerResult server = new ServerResult();
         return AjaxResult.success(server.copyTo());
     }

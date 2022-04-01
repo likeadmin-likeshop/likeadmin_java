@@ -1,6 +1,9 @@
 package com.hxkj.common.utils;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -443,6 +446,52 @@ public class TimeUtil {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.get(Calendar.DAY_OF_MONTH);
+    }
+
+    /**
+     * 获取几天前的日期列表
+     *
+     * @author fzr
+     * @param day 获取多少天
+     * @return [2022-03-29, 2022-03-30, 2022-03-31, 2022-04-01]
+     */
+    public static List<String> daysAgoDate(Integer day) {
+        long time = TimeUtil.today().get(0);
+
+        List<String> data = new ArrayList<>();
+        for (int i=0; i<day; i++) {
+            if (i != 0) {
+                time -= 86400;
+            }
+
+            data.add(TimeUtil.timestampToDate(time, "yyyy-MM-dd"));
+        }
+
+        Collections.reverse(data);
+        return data;
+    }
+
+    /**
+     * 获取几天前的日期列表
+     *
+     * @author fzr
+     * @param day 获取多少天
+     * @return [1648483200, 1648569600, 1648656000, 1648742400]
+     */
+    public static List<Long> daysAgoTime(Integer day) {
+        long time = TimeUtil.today().get(0);
+
+        List<Long> data = new ArrayList<>();
+        for (int i=0; i<day; i++) {
+            if (i != 0) {
+                time -= 86400;
+            }
+
+            data.add(time);
+        }
+
+        Collections.reverse(data);
+        return data;
     }
 
 }

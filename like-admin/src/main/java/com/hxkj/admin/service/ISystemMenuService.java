@@ -3,13 +3,11 @@ package com.hxkj.admin.service;
 import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.validate.system.SystemMenuParam;
 import com.hxkj.admin.vo.system.SystemMenuVo;
-import com.hxkj.common.basics.BaseService;
-import com.hxkj.common.entity.system.SystemMenu;
 
 /**
  * 系统菜单服务
  */
-public interface ISystemMenuService extends BaseService<SystemMenu> {
+public interface ISystemMenuService {
 
     /**
      * 根据角色获取菜单

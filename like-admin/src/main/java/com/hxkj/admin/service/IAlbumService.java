@@ -4,16 +4,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.validate.AlbumParam;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.vo.album.AlbumVo;
-import com.hxkj.common.basics.BaseService;
 import com.hxkj.common.core.PageResult;
-import com.hxkj.common.entity.Album;
 
 import java.util.Map;
 
 /**
  * 相册服务类
  */
-public interface IAlbumService extends BaseService<Album> {
+public interface IAlbumService {
 
     /**
      * 文件列表

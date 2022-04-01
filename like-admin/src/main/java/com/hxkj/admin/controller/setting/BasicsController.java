@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * 基础设置管理
+ */
 @RestController
 @RequestMapping("/api/setting")
 public class BasicsController {

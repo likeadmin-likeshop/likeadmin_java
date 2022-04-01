@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.hxkj.admin.config.SystemConfig;
 import com.hxkj.admin.service.ISystemAdminService;
 import com.hxkj.admin.service.ISystemRoleService;
@@ -23,7 +22,10 @@ import javax.annotation.Resource;
 import java.util.*;
 
 @Service
-public class ISystemAdminServiceImpl extends MPJBaseServiceImpl<SystemAdminMapper, SystemAdmin> implements ISystemAdminService {
+public class ISystemAdminServiceImpl implements ISystemAdminService {
+
+    @Resource
+    SystemAdminMapper systemAdminMapper;
 
     @Resource
     ISystemRoleService iSystemRoleService;
@@ -37,7 +39,7 @@ public class ISystemAdminServiceImpl extends MPJBaseServiceImpl<SystemAdminMappe
      */
     @Override
     public SystemAdmin findByUsername(String username) {
-        return this.getOne(new QueryWrapper<SystemAdmin>()
+        return systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
                 .eq("username", username)
                 .last("limit 1"));
     }
@@ -63,13 +65,13 @@ public class ISystemAdminServiceImpl extends MPJBaseServiceImpl<SystemAdminMappe
         .eq("is_delete", 0)
         .orderByDesc("sort");
 
-        this.setSearch(queryWrapper, params, new String[]{
+        systemAdminMapper.setSearch(queryWrapper, params, new String[]{
                 "like:username:str",
                 "like:nickname:str",
                 "=:role:int"
         });
 
-        IPage<SystemAdmin> iPage = this.page(new Page<>(page, limit), queryWrapper);
+        IPage<SystemAdmin> iPage = systemAdminMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
         List<SystemAdminVo> adminVoArrayList = new ArrayList<>();
         for (SystemAdmin sysAdmin : iPage.getRecords()) {
@@ -96,7 +98,7 @@ public class ISystemAdminServiceImpl extends MPJBaseServiceImpl<SystemAdminMappe
      */
     @Override
     public SystemAdminVo detail(Integer id) {
-        SystemAdmin sysAdmin = this.getOne(new QueryWrapper<SystemAdmin>()
+        SystemAdmin sysAdmin = systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
                 .select(SystemAdmin.class, info->
                         !info.getColumn().equals("salt") &&
                         !info.getColumn().equals("password") &&
@@ -129,19 +131,19 @@ public class ISystemAdminServiceImpl extends MPJBaseServiceImpl<SystemAdminMappe
     @Override
     public void add(SystemAdminParam systemAdminParam) {
         String[] field = {"id", "username", "nickname"};
-        Assert.isNull(this.getOne(new QueryWrapper<SystemAdmin>()
+        Assert.isNull(systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
                 .select(field)
                 .eq("is_delete", 0)
                 .eq("username", systemAdminParam.getUsername())
                 .last("limit 1")), "账号已存在换一个吧！");
 
-        Assert.isNull(this.getOne(new QueryWrapper<SystemAdmin>()
+        Assert.isNull(systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
                 .select(field)
                 .eq("is_delete", 0)
                 .eq("nickname", systemAdminParam.getNickname())
                 .last("limit 1")), "昵称已存在换一个吧！");
 
-        Assert.notNull(iSystemRoleService.getById(systemAdminParam.getRole()), "角色不存在!");
+        Assert.notNull(iSystemRoleService.detail(systemAdminParam.getRole()), "角色不存在!");
 
         String salt   = ToolsUtil.randomString(5);
         String pwd    = ToolsUtil.makeMd5(systemAdminParam.getPassword().trim() + salt);
@@ -158,7 +160,7 @@ public class ISystemAdminServiceImpl extends MPJBaseServiceImpl<SystemAdminMappe
         model.setIsDisable(systemAdminParam.getIsDisable());
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
-        this.save(model);
+        systemAdminMapper.insert(model);
     }
 
     /**
@@ -170,27 +172,27 @@ public class ISystemAdminServiceImpl extends MPJBaseServiceImpl<SystemAdminMappe
     @Override
     public void edit(SystemAdminParam systemAdminParam) {
         String[] field = {"id", "username", "nickname"};
-        Assert.notNull(this.getOne(new QueryWrapper<SystemAdmin>()
+        Assert.notNull(systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
                 .select(field)
                 .eq("id", systemAdminParam.getId())
                 .eq("is_delete", 0)
                 .last("limit 1")), "账号不存在了!");
 
-        Assert.isNull(this.getOne(new QueryWrapper<SystemAdmin>()
+        Assert.isNull(systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
                 .select(field)
                 .eq("is_delete", 0)
                 .eq("username", systemAdminParam.getUsername())
                 .ne("id", systemAdminParam.getId())
                 .last("limit 1")), "账号已存在换一个吧！");
 
-        Assert.isNull(this.getOne(new QueryWrapper<SystemAdmin>()
+        Assert.isNull(systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
                 .select(field)
                 .eq("is_delete", 0)
                 .eq("nickname", systemAdminParam.getNickname())
                 .ne("id", systemAdminParam.getId())
                 .last("limit 1")), "昵称已存在换一个吧！");
 
-        Assert.notNull(iSystemRoleService.getById(systemAdminParam.getRole()), "角色不存在!");
+        Assert.notNull(iSystemRoleService.detail(systemAdminParam.getRole()), "角色不存在!");
 
         SystemAdmin model = new SystemAdmin();
         model.setId(systemAdminParam.getId());
@@ -209,7 +211,7 @@ public class ISystemAdminServiceImpl extends MPJBaseServiceImpl<SystemAdminMappe
             model.setSalt(salt);
         }
 
-        this.updateById(model);
+        systemAdminMapper.updateById(model);
         this.cacheAdminUserByUid(systemAdminParam.getId());
 
         if (systemAdminParam.getPassword() != null) {
@@ -226,7 +228,7 @@ public class ISystemAdminServiceImpl extends MPJBaseServiceImpl<SystemAdminMappe
     @Override
     public void del(Integer id) {
         String[] field = {"id", "username", "nickname"};
-        Assert.notNull(this.getOne(new QueryWrapper<SystemAdmin>()
+        Assert.notNull(systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
                 .select(field)
                 .eq("id", id)
                 .eq("is_delete", 0)
@@ -238,7 +240,7 @@ public class ISystemAdminServiceImpl extends MPJBaseServiceImpl<SystemAdminMappe
         model.setId(id);
         model.setIsDelete(1);
         model.setDeleteTime(System.currentTimeMillis() / 1000);
-        this.updateById(model);
+        systemAdminMapper.updateById(model);
         this.cacheAdminUserByUid(id);
     }
 
@@ -247,7 +249,7 @@ public class ISystemAdminServiceImpl extends MPJBaseServiceImpl<SystemAdminMappe
      */
     @Override
     public void cacheAdminUserByUid(Integer id) {
-        SystemAdmin sysAdmin = this.getById(id);
+        SystemAdmin sysAdmin = systemAdminMapper.selectById(id);
 
         Map<String, Object> user = new LinkedHashMap<>();
         Map<String, Object> map  = new LinkedHashMap<>();

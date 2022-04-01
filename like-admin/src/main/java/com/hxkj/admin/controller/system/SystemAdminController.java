@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * 系统管理员管理
+ */
 @RestController
 @RequestMapping("/api/system/admin")
 public class SystemAdminController {

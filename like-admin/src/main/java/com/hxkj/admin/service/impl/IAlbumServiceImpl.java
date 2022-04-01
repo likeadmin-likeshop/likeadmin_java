@@ -5,14 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.yulichang.base.MPJBaseServiceImpl;
-import com.hxkj.admin.LikeAdminThreadLocal;
 import com.hxkj.admin.service.IAlbumService;
 import com.hxkj.admin.validate.AlbumParam;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.vo.album.AlbumCateVo;
 import com.hxkj.admin.vo.album.AlbumVo;
-import com.hxkj.admin.vo.system.SystemMenuVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.Album;
 import com.hxkj.common.entity.AlbumCate;
@@ -27,11 +24,15 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class IAlbumServiceImpl extends MPJBaseServiceImpl<AlbumMapper, Album> implements IAlbumService {
+public class IAlbumServiceImpl implements IAlbumService {
+
+    @Resource
+    AlbumMapper albumMapper;
 
     @Resource
     AlbumCateMapper albumCateMapper;
@@ -58,12 +59,12 @@ public class IAlbumServiceImpl extends MPJBaseServiceImpl<AlbumMapper, Album> im
                 .eq("is_delete", 0)
                 .orderByDesc("id");
 
-        this.setSearch(queryWrapper, params, new String[]{
+        albumMapper.setSearch(queryWrapper, params, new String[]{
                 "like:keyword:str",
                 "=:type:int"
         });
 
-        IPage<Album> iPage = this.page(new Page<>(page, limit), queryWrapper);
+        IPage<Album> iPage = albumMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
         List<AlbumVo> albumVoArrayList = new ArrayList<>();
         for (Album album : iPage.getRecords()) {
@@ -89,7 +90,7 @@ public class IAlbumServiceImpl extends MPJBaseServiceImpl<AlbumMapper, Album> im
      */
     @Override
     public void albumRename(Integer id, String name) {
-        Album album = this.getOne(new QueryWrapper<Album>()
+        Album album = albumMapper.selectOne(new QueryWrapper<Album>()
                 .select("id", "name")
                 .eq("id", id)
                 .eq("is_delete", 0));
@@ -98,7 +99,7 @@ public class IAlbumServiceImpl extends MPJBaseServiceImpl<AlbumMapper, Album> im
 
         album.setName(name);
         album.setUpdateTime(System.currentTimeMillis() / 1000);
-        this.updateById(album);
+        albumMapper.updateById(album);
     }
 
     /**
@@ -110,7 +111,7 @@ public class IAlbumServiceImpl extends MPJBaseServiceImpl<AlbumMapper, Album> im
      */
     @Override
     public void albumMove(Integer id, Integer cid) {
-        Album album = this.getOne(new QueryWrapper<Album>()
+        Album album = albumMapper.selectOne(new QueryWrapper<Album>()
                 .select("id", "name")
                 .eq("id", id)
                 .eq("is_delete", 0)
@@ -126,7 +127,7 @@ public class IAlbumServiceImpl extends MPJBaseServiceImpl<AlbumMapper, Album> im
 
         album.setCid(cid);
         album.setUpdateTime(System.currentTimeMillis() / 1000);
-        this.updateById(album);
+        albumMapper.updateById(album);
     }
 
     /**
@@ -138,9 +139,9 @@ public class IAlbumServiceImpl extends MPJBaseServiceImpl<AlbumMapper, Album> im
     @Override
     public Integer albumAdd(Map<String, String> params) {
         Album album = new Album();
-        album.setCid(Integer.parseInt(params.getOrDefault("cid", "0")));
-        album.setAid(Integer.parseInt(params.getOrDefault("aid", "0")));
-        album.setUid(Integer.parseInt(params.getOrDefault("uid", "0")));
+        album.setCid(Integer.parseInt(params.get("cid") == null ? "0" :  params.get("cid")));
+        album.setAid(Integer.parseInt(params.get("aid") == null ? "0" :  params.get("aid")));
+        album.setUid(Integer.parseInt(params.get("uid") == null ? "0" :  params.get("uid")));
         album.setType(Integer.parseInt(params.get("type")));
         album.setName(params.get("name"));
         album.setExt(params.get("ext"));
@@ -148,7 +149,7 @@ public class IAlbumServiceImpl extends MPJBaseServiceImpl<AlbumMapper, Album> im
         album.setSize(Long.parseLong(params.get("size")));
         album.setCreateTime(System.currentTimeMillis() / 1000);
         album.setUpdateTime(System.currentTimeMillis() / 1000);
-        this.save(album);
+        albumMapper.insert(album);
         return album.getId();
     }
 
@@ -160,7 +161,7 @@ public class IAlbumServiceImpl extends MPJBaseServiceImpl<AlbumMapper, Album> im
      */
     @Override
     public void albumDel(Integer id) {
-        Album album = this.getOne(new QueryWrapper<Album>()
+        Album album = albumMapper.selectOne(new QueryWrapper<Album>()
                 .select("id", "name")
                 .eq("id", id)
                 .eq("is_delete", 0)
@@ -170,7 +171,7 @@ public class IAlbumServiceImpl extends MPJBaseServiceImpl<AlbumMapper, Album> im
 
         album.setIsDelete(1);
         album.setDeleteTime(System.currentTimeMillis() / 1000);
-        this.updateById(album);
+        albumMapper.updateById(album);
     }
 
     /**
@@ -200,13 +201,14 @@ public class IAlbumServiceImpl extends MPJBaseServiceImpl<AlbumMapper, Album> im
 
         List<AlbumCate> albumCateList = albumCateMapper.selectList(queryWrapper);
 
-        List<AlbumCateVo> lists = new ArrayList<>();
+        List<AlbumCateVo> lists = new LinkedList<>();
         for (AlbumCate albumCate : albumCateList) {
             AlbumCateVo vo = new AlbumCateVo();
             BeanUtils.copyProperties(albumCate, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(albumCate.getCreateTime()));
             vo.setUpdateTime(TimeUtil.timestampToDate(albumCate.getUpdateTime()));
+            lists.add(vo);
         }
 
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(lists));
@@ -268,7 +270,7 @@ public class IAlbumServiceImpl extends MPJBaseServiceImpl<AlbumMapper, Album> im
 
         Assert.notNull(albumCate, "分类已不存在！");
 
-        Assert.isNull(this.getOne(new QueryWrapper<Album>()
+        Assert.isNull(albumMapper.selectOne(new QueryWrapper<Album>()
                 .select("id", "cid", "name")
                 .eq("cid", id)
                 .eq("is_delete", 0)

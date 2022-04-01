@@ -3,7 +3,6 @@ package com.hxkj.admin.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
-import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.hxkj.admin.LikeAdminThreadLocal;
 import com.hxkj.admin.config.SystemConfig;
 import com.hxkj.admin.service.ISystemMenuService;
@@ -24,7 +23,10 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class ISystemMenuServiceImpl extends MPJBaseServiceImpl<SystemMenuMapper, SystemMenu> implements ISystemMenuService {
+public class ISystemMenuServiceImpl implements ISystemMenuService {
+
+    @Resource
+    SystemMenuMapper systemMenuMapper;
 
     @Resource
     ISystemRoleMenuService iSystemRoleMenuService;
@@ -48,7 +50,7 @@ public class ISystemMenuServiceImpl extends MPJBaseServiceImpl<SystemMenuMapper,
             queryWrapper.in("id", menuIds);
         }
 
-        List<SystemMenu> systemMenus = this.list(queryWrapper);
+        List<SystemMenu> systemMenus = systemMenuMapper.selectList(queryWrapper);
         List<SystemMenuVo> lists = new ArrayList<>();
         for (SystemMenu systemMenu : systemMenus) {
             SystemMenuVo vo = new SystemMenuVo();
@@ -74,7 +76,7 @@ public class ISystemMenuServiceImpl extends MPJBaseServiceImpl<SystemMenuMapper,
         QueryWrapper<SystemMenu> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc(Arrays.asList("menu_sort", "id"));
 
-        List<SystemMenu> systemMenus = this.list(queryWrapper);
+        List<SystemMenu> systemMenus = systemMenuMapper.selectList(queryWrapper);
 
         List<SystemMenuVo> lists = new ArrayList<>();
         for (SystemMenu systemMenu : systemMenus) {
@@ -99,7 +101,7 @@ public class ISystemMenuServiceImpl extends MPJBaseServiceImpl<SystemMenuMapper,
      */
     @Override
     public SystemMenuVo detail(Integer id) {
-        SystemMenu systemMenu = this.getOne(new QueryWrapper<SystemMenu>().eq("id", id));
+        SystemMenu systemMenu = systemMenuMapper.selectOne(new QueryWrapper<SystemMenu>().eq("id", id));
         Assert.notNull(systemMenu, "菜单已不存在!");
 
         SystemMenuVo vo  = new SystemMenuVo();
@@ -128,7 +130,7 @@ public class ISystemMenuServiceImpl extends MPJBaseServiceImpl<SystemMenuMapper,
         model.setIsDisable(systemMenuParam.getIsDisable());
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
-        this.save(model);
+        systemMenuMapper.insert(model);
     }
 
     /**
@@ -139,7 +141,7 @@ public class ISystemMenuServiceImpl extends MPJBaseServiceImpl<SystemMenuMapper,
      */
     @Override
     public void edit(SystemMenuParam systemMenuParam) {
-        SystemMenu model = this.getOne(new QueryWrapper<SystemMenu>().eq("id", systemMenuParam.getId()));
+        SystemMenu model = systemMenuMapper.selectOne(new QueryWrapper<SystemMenu>().eq("id", systemMenuParam.getId()));
         Assert.notNull(model, "菜单已不存在!");
 
         model.setMenuType(systemMenuParam.getMenuType());
@@ -150,7 +152,7 @@ public class ISystemMenuServiceImpl extends MPJBaseServiceImpl<SystemMenuMapper,
         model.setPid(systemMenuParam.getPid());
         model.setIsDisable(systemMenuParam.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
-        this.updateById(model);
+        systemMenuMapper.updateById(model);
 
         RedisUtil.del(SystemConfig.backstageRolesKey);
     }
@@ -163,10 +165,10 @@ public class ISystemMenuServiceImpl extends MPJBaseServiceImpl<SystemMenuMapper,
      */
     @Override
     public void del(Integer id) {
-        SystemMenu model = this.getOne(new QueryWrapper<SystemMenu>().eq("id", id));
+        SystemMenu model = systemMenuMapper.selectOne(new QueryWrapper<SystemMenu>().eq("id", id));
         Assert.notNull(model, "菜单已不存在!");
 
-        this.removeById(id);
+        systemMenuMapper.deleteById(id);
 
         iSystemRoleMenuService.batchDeleteByMenuId(id);
         RedisUtil.del(SystemConfig.backstageRolesKey);

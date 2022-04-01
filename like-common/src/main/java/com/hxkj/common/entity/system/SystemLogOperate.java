@@ -1,4 +1,4 @@
-package com.hxkj.common.entity.log;
+package com.hxkj.common.entity.system;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 系统操作日志实体
  */
 @Data
-public class LogOperate implements Serializable
+public class SystemLogOperate implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
@@ -23,6 +23,9 @@ public class LogOperate implements Serializable
     private String ip;
     private String url;
     private String args;
+    private String error;
+    private String address;
+    private Integer status;
     private Long startTime;
     private Long endTime;
     private Long taskTime;

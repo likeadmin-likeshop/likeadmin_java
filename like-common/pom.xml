@@ -92,6 +92,11 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
+        <!-- UserAgent -->
+        <dependency>
+            <groupId>nl.bitwalker</groupId>
+            <artifactId>UserAgentUtils</artifactId>
+        </dependency>
         <!-- 七牛云 -->
         <dependency>
             <groupId>com.qiniu</groupId>

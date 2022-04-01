@@ -15,6 +15,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+/**
+ * 系统登录管理
+ */
 @RestController
 @RequestMapping("/api/system")
 public class SystemLoginController {

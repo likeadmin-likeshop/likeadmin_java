@@ -8,6 +8,9 @@ public class GlobalConfig {
     // 开启调试模式
     public static Boolean debug = true;
 
+    // 获取地址开关
+    public static Boolean isAddressEnabled = true;
+
     // 当前代码版本
     public static String version = "v1.1.0";
 

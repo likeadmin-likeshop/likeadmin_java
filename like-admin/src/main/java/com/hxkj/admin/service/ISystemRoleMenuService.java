@@ -1,14 +1,11 @@
 package com.hxkj.admin.service;
 
-import com.hxkj.common.basics.BaseService;
-import com.hxkj.common.entity.system.SystemRoleMenu;
-
 import java.util.List;
 
 /**
  * 系统角色菜单服务
  */
-public interface ISystemRoleMenuService extends BaseService<SystemRoleMenu> {
+public interface ISystemRoleMenuService {
 
     /**
      * 根据角色ID获取菜单ID

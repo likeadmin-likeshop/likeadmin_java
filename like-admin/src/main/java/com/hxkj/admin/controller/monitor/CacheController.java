@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.*;
 
+/**
+ * 缓存监控管理
+ */
 @RestController
 @RequestMapping("/api/monitor")
 public class CacheController {
@@ -27,8 +30,7 @@ public class CacheController {
      * @return Object
      */
     @GetMapping("/cache")
-    public Object info()
-    {
+    public Object info() {
         Properties info = (Properties) redisTemplate.execute((RedisCallback<Object>) RedisServerCommands::info);
         Properties commandStats = (Properties) redisTemplate.execute((RedisCallback<Object>) connection -> connection.info("commandstats"));
         Object dbSize = redisTemplate.execute((RedisCallback<Object>) RedisServerCommands::dbSize);

@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * 上传管理
+ */
 @RestController
 @RequestMapping("/api/upload")
 public class UploadController {
@@ -28,7 +31,7 @@ public class UploadController {
      * 上传图片
      *
      * @author fzr
-     * @param request 请求 对象
+     * @param request 请求对象
      * @return Object
      */
     @PostMapping("/image")
@@ -75,7 +78,7 @@ public class UploadController {
 
         try {
             StorageDriver storageDriver = new StorageDriver();
-            Map<String, Object> map = storageDriver.upload(multipartFile, "video", AlbumEnum.IMAGE.getCode());
+            Map<String, Object> map = storageDriver.upload(multipartFile, "video", AlbumEnum.Video.getCode());
 
             Map<String, String> album = new LinkedHashMap<>();
             album.put("cid", request.getParameter("cid"));

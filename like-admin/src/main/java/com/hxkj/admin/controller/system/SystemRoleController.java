@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+/**
+ * 系统角色管理
+ */
 @RestController
 @RequestMapping("/api/system/role")
 public class SystemRoleController {

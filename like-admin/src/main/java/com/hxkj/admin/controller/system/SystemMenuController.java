@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+/**
+ * 系统菜单管理
+ */
 @RestController
 @RequestMapping("/api/system/menu")
 public class SystemMenuController {

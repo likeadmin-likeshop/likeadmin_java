@@ -1,9 +1,9 @@
 package com.hxkj.admin.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.service.IAlbumService;
 import com.hxkj.admin.validate.AlbumParam;
 import com.hxkj.admin.validate.PageParam;
-import com.hxkj.admin.validate.system.SystemAdminParam;
 import com.hxkj.admin.vo.album.AlbumVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * 相册管理
+ */
 @RestController
 @RequestMapping("/api/album")
 public class AlbumController {
@@ -75,10 +78,10 @@ public class AlbumController {
      * @author fzr
      * @return Object
      */
-    @PostMapping("/cateList")
+    @GetMapping("/cateList")
     public Object cateList(@RequestParam Map<String, String> params) {
-        iAlbumService.cateList(params);
-        return AjaxResult.success();
+        JSONArray jsonArray = iAlbumService.cateList(params);
+        return AjaxResult.success(jsonArray);
     }
 
     /**

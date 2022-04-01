@@ -1,40 +1,32 @@
 package com.hxkj.admin.controller;
 
-import com.hxkj.admin.config.aop.LogAnnotation;
-import com.hxkj.common.core.AjaxResult;
-
-import com.hxkj.common.exception.OperateException;
-import com.hxkj.common.plugin.sms.SmsDriver;
+import com.hxkj.admin.service.IIndexService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import javax.annotation.Resource;
 
-
+/**
+ * 主页管理
+ */
 @RestController
+@RequestMapping("/api/index")
 public class IndexController {
 
+    @Resource
+    IIndexService iIndexService;
 
-
-    @PostMapping("/aa")
-    @LogAnnotation(title = "小河")
-    public AjaxResult aa(@RequestBody Map<String, String> map) {
-        System.out.println("急急急");
-        System.out.println(map);
-//        try {
-//            Map<String, String> params = new LinkedHashMap<>();
-//            (new SmsDriver())
-//                    .setMobile("15627119239")
-//                    .setParam(params)
-//                    .sendSms();
-//
-//            return AjaxResult.success();
-//        } catch (OperateException e) {
-//            return AjaxResult.failed(e.getMsg());
-//        }
+    /**
+     * 控制台
+     *
+     * @author fzr
+     * @return Object
+     */
+    @GetMapping("/console")
+    public Object console() {
+        iIndexService.console();
         return null;
     }
 

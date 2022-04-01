@@ -3,7 +3,6 @@ package com.hxkj.admin.service;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.system.SystemAdminParam;
 import com.hxkj.admin.vo.system.SystemAdminVo;
-import com.hxkj.common.basics.BaseService;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SystemAdmin;
 
@@ -12,7 +11,7 @@ import java.util.Map;
 /**
  * 系统管理员服务
  */
-public interface ISystemAdminService extends BaseService<SystemAdmin> {
+public interface ISystemAdminService {
 
     /**
      * 根据账号查找管理员

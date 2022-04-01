@@ -1,6 +1,5 @@
 package com.hxkj.admin.validate;
 
-import com.hxkj.admin.validate.system.SystemAdminParam;
 import com.hxkj.common.validator.annotation.IDMust;
 import com.hxkj.common.validator.annotation.IntegerContains;
 import lombok.Data;
@@ -22,8 +21,8 @@ public class AlbumParam implements Serializable {
 
     public interface delete{}
     public interface rename{}
-    public interface albumMove{}
     public interface cateAdd{}
+    public interface albumMove{}
 
     @IDMust(message = "id参数必传且需大于0", groups = {rename.class, albumMove.class, delete.class})
     private Integer id;
