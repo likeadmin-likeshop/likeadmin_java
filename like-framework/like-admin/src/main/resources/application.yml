@@ -9,7 +9,7 @@ server:
 # 框架配置
 spring:
   profiles:
-    active: hikari
+    active: pro
   # 数据源配置
   datasource:
     url: jdbc:mysql://localhost:3306/local_frame?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
