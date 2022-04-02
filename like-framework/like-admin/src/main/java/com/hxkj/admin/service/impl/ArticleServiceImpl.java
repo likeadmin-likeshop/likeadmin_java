@@ -58,6 +58,13 @@ public class ArticleServiceImpl implements IArticleService {
                 .eq("t.is_delete", 0)
                 .orderByDesc(Arrays.asList("t.sort", "t.id"));
 
+        articleMapper.setSearch(mpjQueryWrapper, params, new String[]{
+                "like:title@t.title:str",
+                "=:cid@t.cid:int",
+                "=:isShow@t.is_show:int",
+                "datetime:startTime-endTime@t.create_time:str"
+        });
+
         IPage<ArticleListVo> iPage = articleMapper.selectJoinPage(
                 new Page<>(pageNo, pageSize),
                 ArticleListVo.class,
@@ -188,6 +195,11 @@ public class ArticleServiceImpl implements IArticleService {
         QueryWrapper<ArticleCategory> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id", "name", "sort", "is_show", "create_time", "update_time")
                 .eq("is_delete", 0);
+
+        articleCategoryMapper.setSearch(queryWrapper, params, new String[]{
+                "like:name:str",
+                "=:isShow@is_show:int"
+        });
 
         IPage<ArticleCategory> iPage = articleCategoryMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
 
