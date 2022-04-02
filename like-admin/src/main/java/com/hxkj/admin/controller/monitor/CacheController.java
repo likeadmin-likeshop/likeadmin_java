@@ -1,6 +1,7 @@
 package com.hxkj.admin.controller.monitor;
 
 
+import com.hxkj.admin.config.aop.Log;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.utils.StringUtil;
 import org.springframework.data.redis.connection.RedisServerCommands;
@@ -29,6 +30,7 @@ public class CacheController {
      * @author fzr
      * @return Object
      */
+    @Log(title = "缓存监控")
     @GetMapping("/cache")
     public Object info() {
         Properties info = (Properties) redisTemplate.execute((RedisCallback<Object>) RedisServerCommands::info);

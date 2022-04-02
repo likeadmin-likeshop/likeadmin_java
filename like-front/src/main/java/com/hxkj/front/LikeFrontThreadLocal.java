@@ -1,16 +1,13 @@
-package com.hxkj.admin;
+package com.hxkj.front;
 
 import java.util.LinkedHashMap;
 
-/**
- * 本地线程
- */
-public class LikeAdminThreadLocal {
+public class LikeFrontThreadLocal {
 
     /**
      * 构造方法
      */
-    public LikeAdminThreadLocal() {}
+    public LikeFrontThreadLocal() {}
 
     /**
      * 取得本地线程对象
@@ -38,25 +35,14 @@ public class LikeAdminThreadLocal {
     }
 
     /**
-     * 获取管理员ID
+     * 获取用户ID
      */
-    public static Integer getAdminId() {
-        String adminId = LikeAdminThreadLocal.get("adminId").toString();
+    public static Integer getUserId() {
+        String adminId = LikeFrontThreadLocal.get("userId").toString();
         if (adminId.equals("")) {
             return 0;
         }
         return Integer.parseInt(adminId);
-    }
-
-    /**
-     * 获取角色ID
-     */
-    public static Integer getRoleId() {
-        String roleId = LikeAdminThreadLocal.get("roleId").toString();
-        if (roleId.equals("")) {
-            return 0;
-        }
-        return Integer.parseInt(roleId);
     }
 
     /**

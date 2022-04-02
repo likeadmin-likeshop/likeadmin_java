@@ -5,7 +5,7 @@ import com.hxkj.admin.validate.system.SystemMenuParam;
 import com.hxkj.admin.vo.system.SystemMenuVo;
 
 /**
- * 系统菜单服务
+ * 系统菜单服务接口类
  */
 public interface ISystemMenuService {
 

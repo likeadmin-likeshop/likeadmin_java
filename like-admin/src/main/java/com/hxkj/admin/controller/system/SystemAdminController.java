@@ -1,5 +1,6 @@
 package com.hxkj.admin.controller.system;
 
+import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.ISystemAdminService;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.system.SystemAdminParam;
@@ -55,6 +56,7 @@ public class SystemAdminController {
      * @param systemAdminParam 参数
      * @return Object
      */
+    @Log(title = "管理员新增")
     @PostMapping("/add")
     public Object add(@Validated(value = SystemAdminParam.create.class) @RequestBody SystemAdminParam systemAdminParam) {
         iSystemAdminService.add(systemAdminParam);
@@ -68,6 +70,7 @@ public class SystemAdminController {
      * @param systemAdminParam 参数
      * @return Object
      */
+    @Log(title = "管理员编辑")
     @PostMapping("/edit")
     public Object edit(@Validated(value = SystemAdminParam.update.class) @RequestBody SystemAdminParam systemAdminParam) {
         iSystemAdminService.edit(systemAdminParam);
@@ -80,6 +83,7 @@ public class SystemAdminController {
      * @author fzr
      * @return Object
      */
+    @Log(title = "管理员删除")
     @PostMapping("/del")
     public Object del(@Validated(value = SystemAdminParam.delete.class) @RequestBody SystemAdminParam systemAdminParam) {
         iSystemAdminService.del(systemAdminParam.getId());

@@ -10,8 +10,8 @@ import java.io.Serializable;
  * 系统操作日志实体
  */
 @Data
-public class SystemLogOperate implements Serializable
-{
+public class SystemLogOperate implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     @TableId(value="id", type= IdType.AUTO)

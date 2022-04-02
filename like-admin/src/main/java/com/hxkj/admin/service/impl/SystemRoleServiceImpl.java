@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hxkj.admin.config.SystemConfig;
-import com.hxkj.admin.service.ISystemAdminService;
+import com.hxkj.admin.config.AdminConfig;
 import com.hxkj.admin.service.ISystemRoleMenuService;
 import com.hxkj.admin.service.ISystemRoleService;
 import com.hxkj.admin.validate.PageParam;
@@ -28,8 +27,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 系统角色服务实现类
+ */
 @Service
-public class ISystemRoleServiceImpl implements ISystemRoleService {
+public class SystemRoleServiceImpl implements ISystemRoleService {
 
     @Resource
     SystemAdminMapper systemAdminMapper;
@@ -199,7 +201,7 @@ public class ISystemRoleServiceImpl implements ISystemRoleService {
 
         systemRoleMapper.deleteById(id);
         iSystemRoleMenuService.batchDeleteByRoleId(id);
-        RedisUtil.hDel(SystemConfig.backstageRolesKey, String.valueOf(id));
+        RedisUtil.hDel(AdminConfig.backstageRolesKey, String.valueOf(id));
     }
 
 }

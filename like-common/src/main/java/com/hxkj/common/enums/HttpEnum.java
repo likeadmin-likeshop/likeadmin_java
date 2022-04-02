@@ -16,6 +16,7 @@ public enum HttpEnum {
     TOKEN_INVALID(333, "token参数无效"),
 
     NO_PERMISSION(403, "无相关权限"),
+    REQUEST_404_ERROR(404, "请求接口不存在"),
 
     SYSTEM_ERROR(500, "系统错误");
 

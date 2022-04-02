@@ -3,7 +3,7 @@ package com.hxkj.admin.service;
 import java.util.Map;
 
 /**
- * 主页服务类
+ * 主页服务接口类
  */
 public interface IIndexService {
 

@@ -23,8 +23,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 系统日志服务实现类
+ */
 @Service
-public class ISystemLogServerImpl implements ISystemLogServer {
+public class SystemLogServerImpl implements ISystemLogServer {
 
     @Resource
     SystemLogOperateMapper logOperateMapper;

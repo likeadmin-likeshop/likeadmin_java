@@ -8,7 +8,7 @@ import com.hxkj.common.core.PageResult;
 import java.util.Map;
 
 /**
- * 系统日志服务类
+ * 系统日志服务类接口类
  */
 public interface ISystemLogServer {
 

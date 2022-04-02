@@ -3,7 +3,7 @@ package com.hxkj.admin.service;
 import java.util.List;
 
 /**
- * 系统角色菜单服务
+ * 系统角色菜单服务接口类
  */
 public interface ISystemRoleMenuService {
 

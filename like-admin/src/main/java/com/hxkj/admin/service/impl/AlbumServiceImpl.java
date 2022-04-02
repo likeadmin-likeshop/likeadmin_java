@@ -28,8 +28,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 相册服务实现类
+ */
 @Service
-public class IAlbumServiceImpl implements IAlbumService {
+public class AlbumServiceImpl implements IAlbumService {
 
     @Resource
     AlbumMapper albumMapper;

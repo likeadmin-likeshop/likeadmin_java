@@ -5,7 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hxkj.admin.config.SystemConfig;
+import com.hxkj.admin.LikeAdminThreadLocal;
+import com.hxkj.admin.config.AdminConfig;
 import com.hxkj.admin.service.ISystemAdminService;
 import com.hxkj.admin.service.ISystemRoleService;
 import com.hxkj.admin.validate.PageParam;
@@ -21,8 +22,11 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.*;
 
+/**
+ * 系统管理员实现类
+ */
 @Service
-public class ISystemAdminServiceImpl implements ISystemAdminService {
+public class SystemAdminServiceImpl implements ISystemAdminService {
 
     @Resource
     SystemAdminMapper systemAdminMapper;
@@ -78,8 +82,13 @@ public class ISystemAdminServiceImpl implements ISystemAdminService {
             SystemAdminVo vo = new SystemAdminVo();
             BeanUtils.copyProperties(sysAdmin, vo);
 
+            if (sysAdmin.getId() == 1) {
+                vo.setRole("超级管理员");
+            } else {
+                vo.setRole(iSystemRoleService.getRoleNameById(sysAdmin.getRole()));
+            }
+
             vo.setAvatar(UrlUtil.toAbsoluteUrl(sysAdmin.getAvatar()));
-            vo.setRole(iSystemRoleService.getRoleNameById(sysAdmin.getRole()));
             vo.setCreateTime(TimeUtil.timestampToDate(sysAdmin.getCreateTime()));
             vo.setUpdateTime(TimeUtil.timestampToDate(sysAdmin.getUpdateTime()));
             vo.setLastLoginTime(TimeUtil.timestampToDate(sysAdmin.getLastLoginTime()));
@@ -236,6 +245,9 @@ public class ISystemAdminServiceImpl implements ISystemAdminService {
 
         Assert.isFalse(id == 1, "系统管理员不允许删除");
 
+        int adminId = Integer.parseInt(LikeAdminThreadLocal.getAdminId().toString());
+        Assert.isFalse(id == adminId, "不能删除自己");
+
         SystemAdmin model = new SystemAdmin();
         model.setId(id);
         model.setIsDelete(1);
@@ -266,7 +278,7 @@ public class ISystemAdminServiceImpl implements ISystemAdminService {
         user.put("createTime", TimeUtil.timestampToDate(sysAdmin.getCreateTime()));
         user.put("updateTime", TimeUtil.timestampToDate(sysAdmin.getUpdateTime()));
         map.put(String.valueOf(sysAdmin.getId()), JSON.toJSONString(user));
-        RedisUtil.hmSet(SystemConfig.backstageManageKey, map);
+        RedisUtil.hmSet(AdminConfig.backstageManageKey, map);
     }
 
 }

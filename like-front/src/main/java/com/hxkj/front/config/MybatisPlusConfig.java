@@ -1,13 +1,10 @@
-package com.hxkj.admin.config;
+package com.hxkj.front.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * MybatisPlus配置
- */
 @Configuration
 public class MybatisPlusConfig {
 

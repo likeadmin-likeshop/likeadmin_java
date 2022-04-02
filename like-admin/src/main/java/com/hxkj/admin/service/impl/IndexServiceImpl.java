@@ -1,15 +1,23 @@
 package com.hxkj.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hxkj.admin.service.IIndexService;
+import com.hxkj.common.entity.Article;
+import com.hxkj.common.mapper.ArticleMapper;
 import com.hxkj.common.utils.TimeUtil;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import javax.annotation.Resource;
+import java.util.*;
 
+/**
+ * 主页服务实现类
+ */
 @Service
-public class IIndexServiceImpl implements IIndexService {
+public class IndexServiceImpl implements IIndexService {
+
+    @Resource
+    ArticleMapper articleMapper;
 
     /**
      * 控制台数据
@@ -42,6 +50,14 @@ public class IIndexServiceImpl implements IIndexService {
         visitor.put("date", TimeUtil.daysAgoDate(8));
         visitor.put("list", new ArrayList<>());
         console.put("visitor", visitor);
+
+        // 文章排名
+        List<Map<String, Object>> articles = articleMapper.selectMaps(new QueryWrapper<Article>()
+                        .select("id", "title", "visit")
+                        .eq("is_delete", 0)
+                        .orderByDesc(Arrays.asList("visit", "id"))
+                        .last("limit 10"));
+        console.put("article", articles);
 
         return console;
     }

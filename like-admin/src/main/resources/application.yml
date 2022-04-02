@@ -1,6 +1,5 @@
 # 项目配置
 like:
-  debug: true
   upload-directory: D:\www\frame\
 
 # 服务配置

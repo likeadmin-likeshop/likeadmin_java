@@ -3,7 +3,7 @@ package com.hxkj.admin.service;
 import java.util.Map;
 
 /**
- * 基础配置服务类
+ * 基础配置服务接口类
  */
 public interface IBasicsService {
 

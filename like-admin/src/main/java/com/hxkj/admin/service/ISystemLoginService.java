@@ -5,7 +5,7 @@ import com.hxkj.admin.validate.system.SystemLoginParam;
 import java.util.Map;
 
 /**
- * 系统登录服务
+ * 系统登录服务接口类
  */
 public interface ISystemLoginService {
 

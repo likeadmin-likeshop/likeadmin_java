@@ -1,7 +1,7 @@
 package com.hxkj.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.hxkj.admin.config.SystemConfig;
+import com.hxkj.admin.config.AdminConfig;
 import com.hxkj.admin.service.ISystemRoleMenuService;
 import com.hxkj.common.entity.system.SystemMenu;
 import com.hxkj.common.entity.system.SystemRoleMenu;
@@ -9,17 +9,18 @@ import com.hxkj.common.mapper.system.SystemMenuMapper;
 import com.hxkj.common.mapper.system.SystemRoleMenuMapper;
 import com.hxkj.common.utils.ArrayUtil;
 import com.hxkj.common.utils.RedisUtil;
-import com.hxkj.common.utils.ToolsUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 系统菜单服务实现类
+ */
 @Service
-public class ISystemRoleMenuServiceImpl implements ISystemRoleMenuService {
+public class SystemRoleMenuServiceImpl implements ISystemRoleMenuService {
 
     @Resource
     SystemRoleMenuMapper systemRoleMenuMapper;
@@ -114,7 +115,7 @@ public class ISystemRoleMenuServiceImpl implements ISystemRoleMenuService {
             }
         }
 
-        RedisUtil.hSet(SystemConfig.backstageRolesKey, String.valueOf(roleId), ArrayUtil.listStrToString(menuArray, ","));
+        RedisUtil.hSet(AdminConfig.backstageRolesKey, String.valueOf(roleId), ArrayUtil.listStrToString(menuArray, ","));
     }
 
 }

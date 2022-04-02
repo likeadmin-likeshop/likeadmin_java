@@ -3,10 +3,13 @@ package com.hxkj.common.core;
 import com.hxkj.common.enums.HttpEnum;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 @Data
-public class AjaxResult {
+public class AjaxResult implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /** 状态码 **/
     private Integer code;

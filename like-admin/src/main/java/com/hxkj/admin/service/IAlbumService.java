@@ -9,7 +9,7 @@ import com.hxkj.common.core.PageResult;
 import java.util.Map;
 
 /**
- * 相册服务类
+ * 相册服务接口类
  */
 public interface IAlbumService {
 

@@ -1,5 +1,6 @@
 package com.hxkj.admin.controller.setting;
 
+import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.IBasicsService;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.utils.HttpUtil;
@@ -26,6 +27,7 @@ public class BasicsController {
      * @author fzr
      * @return Object
      */
+    @Log(title = "网站信息")
     @RequestMapping("/website")
     public Object website(@RequestBody Map<String, String> params) {
         if (HttpUtil.isGet()) {
@@ -47,6 +49,7 @@ public class BasicsController {
      * @author fzr
      * @return Object
      */
+    @Log(title = "备案信息")
     @RequestMapping("/copyright")
     public Object copyright(@RequestBody Map<String, String> params) {
         if (HttpUtil.isGet()) {

@@ -1,6 +1,6 @@
 package com.hxkj.admin.service.impl;
 
-import com.hxkj.admin.config.SystemConfig;
+import com.hxkj.admin.config.AdminConfig;
 import com.hxkj.admin.service.ISystemAdminService;
 import com.hxkj.admin.service.ISystemLoginService;
 import com.hxkj.admin.validate.system.SystemLoginParam;
@@ -23,8 +23,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * 系统登录服务实现类
+ */
 @Service
-public class ISystemLoginServiceImpl implements ISystemLoginService {
+public class SystemLoginServiceImpl implements ISystemLoginService {
 
     @Resource
     SystemLogLoginMapper systemLogLoginMapper;
@@ -36,7 +39,7 @@ public class ISystemLoginServiceImpl implements ISystemLoginService {
     ISystemAdminService iSystemAdminService;
 
 
-    private static final Logger log = LoggerFactory.getLogger(ISystemLoginServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(SystemLoginServiceImpl.class);
 
     /**
      * 登录
@@ -61,8 +64,9 @@ public class ISystemLoginServiceImpl implements ISystemLoginService {
             throw new LoginException(HttpEnum.LOGIN_DISABLE_ERROR.getCode(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
         }
 
-        String newPWd = password + sysAdmin.getId() + sysAdmin.getSalt();
+        String newPWd = password + sysAdmin.getSalt();
         String md5Pwd = ToolsUtil.makeMd5(newPWd);
+        System.out.println(md5Pwd);
         if (!md5Pwd.equals(sysAdmin.getPassword())) {
             this.recordLoginLog(sysAdmin.getId(), systemLoginParam.getUsername(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
             throw new LoginException(HttpEnum.LOGIN_ACCOUNT_ERROR.getCode(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
@@ -74,7 +78,7 @@ public class ISystemLoginServiceImpl implements ISystemLoginService {
             systemAdminMapper.updateById(sysAdmin);
 
             String token = ToolsUtil.makeToken();
-            RedisUtil.set(SystemConfig.backstageTokenKey+token, sysAdmin.getId(), 7200);
+            RedisUtil.set(AdminConfig.backstageTokenKey+token, sysAdmin.getId(), 7200);
             iSystemAdminService.cacheAdminUserByUid(sysAdmin.getId());
 
             Map<String, Object> response = new LinkedHashMap<>();
@@ -99,7 +103,7 @@ public class ISystemLoginServiceImpl implements ISystemLoginService {
      */
     @Override
     public void logout(String token) {
-        RedisUtil.del(SystemConfig.backstageTokenKey + token);
+        RedisUtil.del(AdminConfig.backstageTokenKey + token);
     }
 
     /**

@@ -2,6 +2,7 @@ package com.hxkj.admin.controller.system;
 
 import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.LikeAdminThreadLocal;
+import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.ISystemMenuService;
 import com.hxkj.admin.validate.system.SystemMenuParam;
 import com.hxkj.admin.vo.system.SystemMenuVo;
@@ -65,6 +66,7 @@ public class SystemMenuController {
      * @author fzr
      * @return Object
      */
+    @Log(title = "菜单新增")
     @PostMapping("/add")
     public Object add(@Validated(value = SystemMenuParam.create.class) @RequestBody SystemMenuParam systemMenuParam) {
         iSystemMenuService.add(systemMenuParam);
@@ -77,6 +79,7 @@ public class SystemMenuController {
      * @author fzr
      * @return Object
      */
+    @Log(title = "菜单编辑")
     @PostMapping("/edit")
     public Object edit(@Validated(value = SystemMenuParam.update.class) @RequestBody SystemMenuParam systemMenuParam) {
         iSystemMenuService.edit(systemMenuParam);
@@ -89,6 +92,7 @@ public class SystemMenuController {
      * @author fzr
      * @return Object
      */
+    @Log(title = "菜单删除")
     @PostMapping("/del")
     public Object del(@Validated(value = SystemMenuParam.delete.class) @RequestBody SystemMenuParam systemMenuParam) {
         iSystemMenuService.del(systemMenuParam.getId());

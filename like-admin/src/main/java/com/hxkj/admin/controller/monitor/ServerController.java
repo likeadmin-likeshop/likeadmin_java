@@ -1,5 +1,6 @@
 package com.hxkj.admin.controller.monitor;
 
+import com.hxkj.admin.config.aop.Log;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.ServerResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ public class ServerController {
      * @author fzr
      * @return Object
      */
+    @Log(title = "服务监控")
     @GetMapping("/server")
     public Object info() {
         ServerResult server = new ServerResult();

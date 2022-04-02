@@ -1,8 +1,8 @@
-package com.hxkj.admin.config;
+package com.hxkj.front.config;
 
-import com.hxkj.admin.LikeAdminInterceptor;
 import com.hxkj.common.config.GlobalConfig;
 import com.hxkj.common.utils.YmlUtil;
+import com.hxkj.front.LikeFrontInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -11,14 +11,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
 
-/**
- * Web配置
- */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Resource
-    LikeAdminInterceptor likeAdminInterceptor;
+    LikeFrontInterceptor likeFrontInterceptor;
 
     /**
      * 配置允许跨域
@@ -37,7 +34,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(likeAdminInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(likeFrontInterceptor).addPathPatterns("/**");
     }
 
     /**

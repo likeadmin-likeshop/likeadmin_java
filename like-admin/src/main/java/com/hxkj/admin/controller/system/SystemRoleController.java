@@ -1,5 +1,6 @@
 package com.hxkj.admin.controller.system;
 
+import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.ISystemRoleService;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.system.SystemRoleParam;
@@ -29,6 +30,7 @@ public class SystemRoleController {
      * @param pageParam 分页参数
      * @return Object
      */
+    @Log(title = "角色列表")
     @GetMapping("/lists")
     public Object lists(@Validated PageParam pageParam) {
         PageResult<SystemRoleVo> lists = iSystemRoleService.lists(pageParam);
@@ -41,6 +43,7 @@ public class SystemRoleController {
      * @author fzr
      * @return Object
      */
+    @Log(title = "角色详情")
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         SystemRoleVo vo = iSystemRoleService.detail(id);
@@ -54,6 +57,7 @@ public class SystemRoleController {
      * @param systemRoleParam 角色参数
      * @return Object
      */
+    @Log(title = "角色新增")
     @PostMapping("/add")
     public Object add(@Validated(value = SystemRoleParam.create.class) @RequestBody SystemRoleParam systemRoleParam) {
         iSystemRoleService.add(systemRoleParam);
@@ -67,6 +71,7 @@ public class SystemRoleController {
      * @param systemRoleParam 角色参数
      * @return Object
      */
+    @Log(title = "角色编辑")
     @PostMapping("/edit")
     public Object edit(@Validated(value = SystemRoleParam.create.class) @RequestBody SystemRoleParam systemRoleParam) {
         iSystemRoleService.edit(systemRoleParam);
@@ -80,6 +85,7 @@ public class SystemRoleController {
      * @param systemRoleParam 角色参数
      * @return Object
      */
+    @Log(title = "角色删除")
     @PostMapping("/del")
     public Object del(@Validated(value = SystemRoleParam.delete.class) @RequestBody SystemRoleParam systemRoleParam) {
         iSystemRoleService.del(systemRoleParam.getId());

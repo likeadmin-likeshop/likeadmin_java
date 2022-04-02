@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * 基础配置服务实现类
+ */
 @Service
 public class BasicsServiceImpl implements IBasicsService {
 

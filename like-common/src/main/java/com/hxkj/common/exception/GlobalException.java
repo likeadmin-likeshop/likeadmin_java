@@ -1,6 +1,7 @@
 package com.hxkj.common.exception;
 
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
+import com.hxkj.common.config.GlobalConfig;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.enums.HttpEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -30,7 +30,11 @@ public class GlobalException {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public AjaxResult handleException(Exception e) {
-        System.out.println(e.getMessage());
+        if (GlobalConfig.debug) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+        log.error("系统异常 {}", e.getMessage());
         return AjaxResult.failed(HttpEnum.SYSTEM_ERROR.getCode(), HttpEnum.SYSTEM_ERROR.getMsg());
     }
 

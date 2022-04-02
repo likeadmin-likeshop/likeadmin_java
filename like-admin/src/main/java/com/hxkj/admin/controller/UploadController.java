@@ -1,6 +1,7 @@
 package com.hxkj.admin.controller;
 
 import com.hxkj.admin.LikeAdminThreadLocal;
+import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.IAlbumService;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.enums.AlbumEnum;
@@ -34,6 +35,7 @@ public class UploadController {
      * @param request 请求对象
      * @return Object
      */
+    @Log(title = "上传图片")
     @PostMapping("/image")
     public Object image(HttpServletRequest request) {
         MultipartFile multipartFile = ((MultipartRequest) request).getFile("file");
@@ -69,6 +71,7 @@ public class UploadController {
      * @param request 请求对象
      * @return Object
      */
+    @Log(title = "上传视频")
     @PostMapping("/video")
     public Object video(HttpServletRequest request) {
         MultipartFile multipartFile = ((MultipartRequest) request).getFile("file");

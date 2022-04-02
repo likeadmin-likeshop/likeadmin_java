@@ -1,9 +1,9 @@
 package com.hxkj.admin.config;
 
 /**
- * 系统配置
+ * 后台公共配置
  */
-public class SystemConfig {
+public class AdminConfig {
 
     // 管理缓存键
     public static final String backstageManageKey = "backstage:manage";

@@ -9,7 +9,7 @@ import com.hxkj.common.entity.system.SystemAdmin;
 import java.util.Map;
 
 /**
- * 系统管理员服务
+ * 系统管理员服务接口类
  */
 public interface ISystemAdminService {
 

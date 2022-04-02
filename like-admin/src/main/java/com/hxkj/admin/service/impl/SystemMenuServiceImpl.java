@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.hxkj.admin.LikeAdminThreadLocal;
-import com.hxkj.admin.config.SystemConfig;
+import com.hxkj.admin.config.AdminConfig;
 import com.hxkj.admin.service.ISystemMenuService;
 import com.hxkj.admin.service.ISystemRoleMenuService;
 import com.hxkj.admin.validate.system.SystemMenuParam;
@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class ISystemMenuServiceImpl implements ISystemMenuService {
+public class SystemMenuServiceImpl implements ISystemMenuService {
 
     @Resource
     SystemMenuMapper systemMenuMapper;
@@ -154,7 +154,7 @@ public class ISystemMenuServiceImpl implements ISystemMenuService {
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         systemMenuMapper.updateById(model);
 
-        RedisUtil.del(SystemConfig.backstageRolesKey);
+        RedisUtil.del(AdminConfig.backstageRolesKey);
     }
 
     /**
@@ -171,7 +171,7 @@ public class ISystemMenuServiceImpl implements ISystemMenuService {
         systemMenuMapper.deleteById(id);
 
         iSystemRoleMenuService.batchDeleteByMenuId(id);
-        RedisUtil.del(SystemConfig.backstageRolesKey);
+        RedisUtil.del(AdminConfig.backstageRolesKey);
     }
 
 }

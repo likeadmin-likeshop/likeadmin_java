@@ -7,7 +7,7 @@ import com.hxkj.common.core.PageResult;
 import org.springframework.validation.annotation.Validated;
 
 /**
- * 系统角色服务
+ * 系统角色服务接口类
  */
 public interface ISystemRoleService {
 

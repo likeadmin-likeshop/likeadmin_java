@@ -2,7 +2,7 @@ package com.hxkj.admin;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.hxkj.admin.config.SystemConfig;
+import com.hxkj.admin.config.AdminConfig;
 import com.hxkj.admin.service.ISystemAdminService;
 import com.hxkj.admin.service.ISystemRoleMenuService;
 import com.hxkj.common.core.AjaxResult;
@@ -34,19 +34,26 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // 404拦截
+        response.setContentType("application/json;charset=utf-8");
+        if (response.getStatus() == 404) {
+            AjaxResult result = AjaxResult.failed(HttpEnum.REQUEST_404_ERROR.getCode(), HttpEnum.REQUEST_404_ERROR.getMsg());
+            response.getWriter().print(JSON.toJSONString(result));
+            return false;
+        }
+
         // 判断请求接口
         if (!(handler instanceof HandlerMethod)) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
 
         // 免登录接口
-        List<String> notLoginUri = Arrays.asList(SystemConfig.notLoginUri);
+        List<String> notLoginUri = Arrays.asList(AdminConfig.notLoginUri);
         if (notLoginUri.contains(request.getRequestURI())) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
 
         // Token是否为空
-        response.setContentType("application/json;charset=utf-8");
         String token = request.getHeader("token");
         if (StringUtils.isBlank(token)) {
             AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_EMPTY.getCode(), HttpEnum.TOKEN_EMPTY.getMsg());
@@ -55,7 +62,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         }
 
         // Token是否过期
-        token = SystemConfig.backstageTokenKey + token;
+        token = AdminConfig.backstageTokenKey + token;
         if (!RedisUtil.exists(token)) {
             AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
@@ -64,15 +71,15 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
 
         // 用户信息缓存
         String uid = RedisUtil.get(token).toString();
-        if (!RedisUtil.hExists(SystemConfig.backstageManageKey, uid)) {
+        if (!RedisUtil.hExists(AdminConfig.backstageManageKey, uid)) {
             iSystemAdminService.cacheAdminUserByUid(Integer.parseInt(uid));
         }
 
         // 校验用户被删除
-        Map<String, Object> map = ToolsUtil.jsonToMap(RedisUtil.hGet(SystemConfig.backstageManageKey, uid).toString());
+        Map<String, Object> map = ToolsUtil.jsonToMap(RedisUtil.hGet(AdminConfig.backstageManageKey, uid).toString());
         if (map == null || map.get("isDelete").toString().equals("1")) {
             RedisUtil.del(token);
-            RedisUtil.hDel(SystemConfig.backstageManageKey, uid);
+            RedisUtil.hDel(AdminConfig.backstageManageKey, uid);
             AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
@@ -97,19 +104,19 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         LikeAdminThreadLocal.put("nickname", map.get("nickname").toString());
 
         // 免权限验证接口
-        List<String> notAuthUri = Arrays.asList(SystemConfig.notLoginUri);
+        List<String> notAuthUri = Arrays.asList(AdminConfig.notLoginUri);
         if (notAuthUri.contains(request.getRequestURI()) || Integer.parseInt(uid) == 1) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
 
         // 校验角色权限是否存在
         String roleId = map.get("role").toString();
-        if (!RedisUtil.hExists(SystemConfig.backstageRolesKey, roleId)) {
+        if (!RedisUtil.hExists(AdminConfig.backstageRolesKey, roleId)) {
             iSystemRoleMenuService.cacheRoleMenusByRoleId(Integer.parseInt(roleId));
         }
 
         // 验证是否有权限操作
-        String menus = RedisUtil.hGet(SystemConfig.backstageRolesKey, roleId).toString();
+        String menus = RedisUtil.hGet(AdminConfig.backstageRolesKey, roleId).toString();
         if (menus.equals("") || !Arrays.asList(menus.split(",")).contains(request.getRequestURI())) {
             AjaxResult result = AjaxResult.failed(HttpEnum.NO_PERMISSION.getCode(), HttpEnum.NO_PERMISSION.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
