@@ -7,6 +7,7 @@ import com.hxkj.common.entity.system.SystemMenu;
 import com.hxkj.common.entity.system.SystemRoleMenu;
 import com.hxkj.common.mapper.system.SystemMenuMapper;
 import com.hxkj.common.mapper.system.SystemRoleMenuMapper;
+import com.hxkj.common.utils.ArrayUtil;
 import com.hxkj.common.utils.RedisUtil;
 import com.hxkj.common.utils.ToolsUtil;
 import org.springframework.stereotype.Service;
@@ -113,7 +114,7 @@ public class ISystemRoleMenuServiceImpl implements ISystemRoleMenuService {
             }
         }
 
-        RedisUtil.hSet(SystemConfig.backstageRolesKey, String.valueOf(roleId), ToolsUtil.listStrToString(menuArray, ","));
+        RedisUtil.hSet(SystemConfig.backstageRolesKey, String.valueOf(roleId), ArrayUtil.listStrToString(menuArray, ","));
     }
 
 }

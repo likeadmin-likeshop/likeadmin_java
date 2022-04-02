@@ -3,6 +3,11 @@ package com.hxkj.common.utils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * 数组工具类
  */
@@ -53,5 +58,140 @@ public class ArrayUtil {
         return r;
     }
 
+    /**
+     * List去重,不打乱原来顺序,泛型list对象
+     * 对象重写hashCode和equals
+     *
+     * @author fzr
+     * @param <T> 泛型
+     * @param list 列表
+     * @return List
+     */
+    public static <T> List<T> uniqueBySetOrder(List<T> list){
+        Set<T> set = new HashSet<T>();
+        List<T> newList = new ArrayList<T>();
+        for(T t: list){
+            if(set.add(t)){
+                newList.add(t);
+            }
+        }
+        return newList;
+    }
+
+    /**
+     * List去重,可能打乱原来顺序,泛型list对象
+     * 对象重写hashCode和equals
+     *
+     * @author fzr
+     * @param list 列表
+     * @return List
+     */
+    public static <T> List<T> uniqueBySet(List<T> list){
+        return new ArrayList<T>(new HashSet<T>(list));
+    }
+
+    /**
+     * 列表转字符串
+     *
+     * @author fzr
+     * @param list 列表 [1, 2, 4] -> 1,2,3
+     * @param separator 分割符号
+     * @return String
+     */
+    public static String listToString(List<Long> list, String separator) {
+        StringBuilder sb = new StringBuilder();
+        for (Object o : list) {
+            sb.append(o).append(separator);
+        }
+        return list.isEmpty() ? "" : sb.substring(0, sb.toString().length() - 1);
+    }
+
+    /**
+     * 列表转字符串
+     *
+     * @author fzr
+     * @param list 列表 ["1", "2", "3"] -> 1,2,3
+     * @param separator 分割符号
+     * @return String
+     */
+    public static String listStrToString(List<String> list, String separator) {
+        StringBuilder sb = new StringBuilder();
+        for (Object o : list) {
+            sb.append(o).append(separator);
+        }
+        return list.isEmpty() ? "" : sb.substring(0, sb.toString().length() - 1);
+    }
+
+    /**
+     * 字符串分割,转化为数组
+     *
+     * @author fzr
+     * @param str 字符串
+     * @return List<Integer>
+     */
+    public static List<Integer> stringToArray(String str){
+        return stringToArrayByRegex(str, ",");
+    }
+
+    /**
+     * 字符串分割，转化为数组
+     *
+     * @author fzr
+     * @param str 字符串
+     * @return List<String>
+     */
+    public static List<String> stringToArrayStr(String str){
+        return stringToArrayStrRegex(str, ",");
+    }
+
+    /**
+     * 字符串分割,转化为数组
+     *
+     * @author fzr
+     * @param str 字符串
+     * @param regex 分隔符
+     * @return List<Integer>
+     */
+    public static List<Integer> stringToArrayByRegex(String str, String regex){
+        List<Integer> list = new ArrayList<>();
+        if (str.contains(regex)){
+
+            String[] split = str.split(regex);
+
+            for (String value : split) {
+                if(!StringUtil.isBlank(value)){
+                    list.add(Integer.parseInt(value.trim()));
+                }
+            }
+        }else {
+            list.add(Integer.parseInt(str));
+        }
+        return list;
+    }
+
+    /**
+     * 字符串分割，转化为数组
+     *
+     * @author fzr
+     * @param str 字符串
+     * @param regex 分隔符
+     * @return List<String>
+     */
+    public static List<String> stringToArrayStrRegex(String str, String regex ){
+        List<String> list = new ArrayList<>();
+        if (str.contains(regex)){
+
+            String[] split = str.split(regex);
+
+            for (String value : split) {
+                if(!StringUtil.isBlank(value)){
+                    list.add(value);
+                }
+            }
+        }else {
+            list.add(str);
+        }
+        return list;
+    }
 
 }

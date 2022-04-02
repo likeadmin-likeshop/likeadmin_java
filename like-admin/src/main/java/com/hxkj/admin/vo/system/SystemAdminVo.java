@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * 管理员Vo
+ */
 @Data
 public class SystemAdminVo implements Serializable {
 

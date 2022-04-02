@@ -157,35 +157,17 @@ public class ToolsUtil {
     }
 
     /**
-     * 列表转字符串
+     * map合并
      *
      * @author fzr
-     * @param list 列表 [1, 2, 4] -> 1,2,3
-     * @param separator 分割符号
-     * @return String
+     * @param map 对象
+     * @return Object
      */
-    public static String listToString(List<Long> list, String separator) {
-        StringBuilder sb = new StringBuilder();
-        for (Object o : list) {
-            sb.append(o).append(separator);
-        }
-        return list.isEmpty() ? "" : sb.substring(0, sb.toString().length() - 1);
-    }
-
-    /**
-     * 列表转字符串
-     *
-     * @author fzr
-     * @param list 列表 ["1", "2", "3"] -> 1,2,3
-     * @param separator 分割符号
-     * @return String
-     */
-    public static String listStrToString(List<String> list, String separator) {
-        StringBuilder sb = new StringBuilder();
-        for (Object o : list) {
-            sb.append(o).append(separator);
-        }
-        return list.isEmpty() ? "" : sb.substring(0, sb.toString().length() - 1);
+    public static Map<String, Object> mergeMap(Map<String, Object> map, Map<String, Object> map1){
+        HashMap<String, Object> map2 = new HashMap<>();
+        map2.putAll(map);
+        map2.putAll(map1);
+        return map2;
     }
 
 }

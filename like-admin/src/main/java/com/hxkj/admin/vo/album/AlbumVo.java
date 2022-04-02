@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * 相册Vo
+ */
 @Data
 public class AlbumVo implements Serializable {
 

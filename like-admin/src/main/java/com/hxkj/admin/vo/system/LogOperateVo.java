@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * 操作日志Vo
+ */
 @Data
 public class LogOperateVo implements Serializable {
 

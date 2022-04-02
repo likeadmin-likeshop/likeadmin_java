@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * 系统菜单Vo
+ */
 @Data
 public class SystemMenuVo implements Serializable {
 
