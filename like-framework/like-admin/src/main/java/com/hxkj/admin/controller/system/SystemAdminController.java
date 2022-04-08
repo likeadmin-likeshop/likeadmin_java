@@ -1,5 +1,6 @@
 package com.hxkj.admin.controller.system;
 
+import com.hxkj.admin.LikeAdminThreadLocal;
 import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.ISystemAdminService;
 import com.hxkj.admin.validate.PageParam;
@@ -38,8 +39,22 @@ public class SystemAdminController {
     }
 
     /**
+     * 管理员信息
+     *
+     * @author fzr
+     * @return Object
+     */
+    @GetMapping("/self")
+    public Object self() {
+        Integer adminId = LikeAdminThreadLocal.getAdminId();
+        SystemAdminVo vo = iSystemAdminService.detail(adminId);
+        return AjaxResult.success(vo);
+    }
+
+    /**
      * 管理员详情
      *
+     * @author fzr
      * @param id 主键ID
      * @return Object
      */
