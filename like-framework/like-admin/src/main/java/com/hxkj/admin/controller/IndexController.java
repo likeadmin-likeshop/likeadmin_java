@@ -33,4 +33,16 @@ public class IndexController {
         return AjaxResult.success(map);
     }
 
+    /**
+     * 公共配置
+     *
+     * @author fzr
+     * @return Object
+     */
+    @GetMapping("/config")
+    public Object config() {
+        Map<String, Object> map = iIndexService.config();
+        return AjaxResult.success(map);
+    }
+
 }

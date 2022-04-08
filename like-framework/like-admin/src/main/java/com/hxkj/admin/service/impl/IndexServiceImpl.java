@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hxkj.admin.service.IIndexService;
 import com.hxkj.common.entity.Article;
 import com.hxkj.common.mapper.ArticleMapper;
+import com.hxkj.common.utils.ConfigUtil;
 import com.hxkj.common.utils.TimeUtil;
+import com.hxkj.common.utils.UrlUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -60,6 +62,34 @@ public class IndexServiceImpl implements IIndexService {
         console.put("article", articles);
 
         return console;
+    }
+
+    /**
+     * 公共配置
+     *
+     * @author fzr
+     * @return Map<String, Object>
+     */
+    @Override
+    public Map<String, Object> config() {
+        Map<String, String> website   = ConfigUtil.get("website");
+        Map<String, String> copyright = ConfigUtil.get("copyright");
+
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("lawPrivilege", copyright.getOrDefault("privilege", ""));
+        map.put("lawIcpNumber", copyright.getOrDefault("icpNumber", ""));
+        map.put("lawIcpLink", copyright.getOrDefault("icpLink", ""));
+        map.put("lawGaNumber", copyright.getOrDefault("gaNumber", ""));
+        map.put("lawGaLink", copyright.getOrDefault("gaLink", ""));
+
+        map.put("webName", website.getOrDefault("name", ""));
+        map.put("webLogo", UrlUtil.toAbsoluteUrl(website.getOrDefault("logo", "")));
+        map.put("webFavicon", UrlUtil.toAbsoluteUrl(website.getOrDefault("favicon", "")));
+        map.put("webBackdrop", UrlUtil.toAbsoluteUrl(website.getOrDefault("backdrop", "")));
+
+        map.put("ossDomain", UrlUtil.domain());
+
+        return map;
     }
 
 }

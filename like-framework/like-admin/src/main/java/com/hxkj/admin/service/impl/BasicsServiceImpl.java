@@ -27,6 +27,7 @@ public class BasicsServiceImpl implements IBasicsService {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("name", config.getOrDefault("name", ""));
         map.put("logo", UrlUtil.toAbsoluteUrl(config.getOrDefault("logo", "")));
+        map.put("favicon", UrlUtil.toAbsoluteUrl(config.getOrDefault("favicon", "")));
         map.put("backdrop", UrlUtil.toAbsoluteUrl(config.getOrDefault("backdrop", "")));
         return map;
     }
@@ -43,10 +44,10 @@ public class BasicsServiceImpl implements IBasicsService {
 
         Map<String, String> map = new LinkedHashMap<>();
         map.put("privilege", config.getOrDefault("privilege", ""));
-        map.put("icp_number", UrlUtil.toAbsoluteUrl(config.getOrDefault("icp_number", "")));
-        map.put("icp_link", UrlUtil.toAbsoluteUrl(config.getOrDefault("icp_link", "")));
-        map.put("ga_number", UrlUtil.toAbsoluteUrl(config.getOrDefault("ga_number", "")));
-        map.put("ga_link", UrlUtil.toAbsoluteUrl(config.getOrDefault("ga_link", "")));
+        map.put("icp_number", UrlUtil.toAbsoluteUrl(config.getOrDefault("icpNumber", "")));
+        map.put("icp_link", UrlUtil.toAbsoluteUrl(config.getOrDefault("icpLink", "")));
+        map.put("ga_number", UrlUtil.toAbsoluteUrl(config.getOrDefault("gaNumber", "")));
+        map.put("ga_link", UrlUtil.toAbsoluteUrl(config.getOrDefault("gaLink", "")));
         return map;
     }
 
@@ -60,6 +61,7 @@ public class BasicsServiceImpl implements IBasicsService {
     public void setWebsite(Map<String, String> params) {
         ConfigUtil.set("website", "name", params.getOrDefault("name", ""));
         ConfigUtil.set("website", "logo", UrlUtil.toRelativeUrl(params.getOrDefault("logo", "")));
+        ConfigUtil.set("website", "favicon", UrlUtil.toRelativeUrl(params.getOrDefault("favicon", "")));
         ConfigUtil.set("website", "backdrop", UrlUtil.toRelativeUrl(params.getOrDefault("backdrop", "")));
     }
 
@@ -72,10 +74,10 @@ public class BasicsServiceImpl implements IBasicsService {
     @Override
     public void setCopyright(Map<String, String> params) {
         ConfigUtil.set("copyright", "privilege", params.getOrDefault("privilege", ""));
-        ConfigUtil.set("copyright", "icp_number", params.getOrDefault("icp_number", ""));
-        ConfigUtil.set("copyright", "icp_link", params.getOrDefault("icp_link", ""));
-        ConfigUtil.set("copyright", "ga_number", params.getOrDefault("ga_number", ""));
-        ConfigUtil.set("copyright", "ga_link", params.getOrDefault("ga_link", ""));
+        ConfigUtil.set("copyright", "icpNumber", params.getOrDefault("icpNumber", ""));
+        ConfigUtil.set("copyright", "icpLink", params.getOrDefault("icpLink", ""));
+        ConfigUtil.set("copyright", "gaNumber", params.getOrDefault("gaNumber", ""));
+        ConfigUtil.set("copyright", "gaLink", params.getOrDefault("gaLink", ""));
     }
 
 }

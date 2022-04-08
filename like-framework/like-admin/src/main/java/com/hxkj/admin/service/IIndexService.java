@@ -15,4 +15,9 @@ public interface IIndexService {
      */
     Map<String, Object> console();
 
+    /**
+     * 公共配置
+     */
+    Map<String, Object> config();
+
 }

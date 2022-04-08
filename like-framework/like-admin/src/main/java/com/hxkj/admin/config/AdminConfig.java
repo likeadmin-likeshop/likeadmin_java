@@ -16,7 +16,8 @@ public class AdminConfig {
 
     // 免登录验证
     public static String[] notLoginUri = new String[]{
-            "/api/system/login"
+            "/api/system/login",
+            "/api/index/config",
     };
 
     // 免权限验证

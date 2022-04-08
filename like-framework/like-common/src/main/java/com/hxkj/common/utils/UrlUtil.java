@@ -60,4 +60,20 @@ public class UrlUtil {
         return url.replace(config.get("domain") + "/" + uploadPrefix + "/", "");
     }
 
+    /**
+     * 获取存储域名
+     *
+     * @author fzr
+     * @return String
+     */
+    public static String domain() {
+        String engine = ConfigUtil.get("storage", "default", "local");
+        if (engine.equals("local")) {
+            return HttpUtil.domain() + "/";
+        }
+
+        Map<String, String> config = ConfigUtil.getMap("storage", engine);
+        return config.get("domain") + "/";
+    }
+
 }
