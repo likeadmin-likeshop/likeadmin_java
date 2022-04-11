@@ -40,7 +40,7 @@ const eventResponse = {
 }
 
 const request = axios.create({
-    baseURL: `${import.meta.env.VITE_APP_BASE_URL}/adminapi`,
+    baseURL: `${import.meta.env.VITE_APP_BASE_URL}/api`,
     timeout: 60 * 1000,
     headers: {
         'Content-Type': 'application/json',

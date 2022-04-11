@@ -2,27 +2,28 @@ import request from '@/utils/request'
 import { terminal } from '@/config/app'
 
 export function adminLists(params: any) {
-    return request.get('/auth.admin/lists', { params })
+    return request.get('/admin/lists', { params })
 }
 
 // 管理员添加
 export function apiAdminAdd(params: any) {
-    return request.post('/auth.admin/add', params)
+    return request.post('/admin/add', params)
 }
 
 export function apiAdminEdit(params: any) {
-    return request.post('/auth.admin/edit', params)
+    return request.post('/admin/edit', params)
 }
 
 // 管理员删除
 export function apiAdminDelete(params: { id: number }) {
-    return request.post('/auth.admin/delete', params)
+    return request.post('/admin/del', params)
 }
 
 // 管理员详情
 export function apiAdminDetail(params: any) {
-    return request.get('/auth.admin/detail', { params })
+    return request.get('/admin/detail', { params })
 }
+
 // 角色列表
 export function apiRoleLists(params: any) {
     return request.get('/auth.role/lists', { params })
@@ -50,6 +51,6 @@ export function apiConfigGetMenu() {
 }
 
 // 角色权限
-export function apiConfigGetAuth() {
-    return request.get('/config/getAuth')
-}
+// export function apiConfigGetAuth() {
+//     return request.get('/config/getAuth')
+// }

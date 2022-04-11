@@ -19,6 +19,8 @@ const app: Module<AppModule, any> = {
             return new Promise((resolve, reject) => {
                 apiConfig().then(data => {
                     commit('setConfig', data)
+                    console.log(data, '==============================')
+
                     resolve(data)
                 })
             })
