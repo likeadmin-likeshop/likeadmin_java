@@ -8,12 +8,11 @@ import com.hxkj.admin.config.AdminConfig;
 import com.hxkj.admin.service.ISystemMenuService;
 import com.hxkj.admin.service.ISystemRoleMenuService;
 import com.hxkj.admin.validate.system.SystemMenuParam;
+import com.hxkj.admin.vo.system.SystemAuthVo;
 import com.hxkj.admin.vo.system.SystemMenuVo;
 import com.hxkj.common.entity.system.SystemMenu;
 import com.hxkj.common.mapper.system.SystemMenuMapper;
-import com.hxkj.common.utils.ArrayUtil;
-import com.hxkj.common.utils.RedisUtil;
-import com.hxkj.common.utils.TimeUtil;
+import com.hxkj.common.utils.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +20,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SystemMenuServiceImpl implements ISystemMenuService {
@@ -63,6 +63,64 @@ public class SystemMenuServiceImpl implements ISystemMenuService {
 
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(lists));
         return ArrayUtil.listToTree(jsonArray, "id", "pid", "children");
+    }
+
+    /**
+     * 根据角色ID获取权限
+     *
+     * @param roleId 角色ID
+     * @return JSONArray
+     */
+    @Override
+    public List<SystemAuthVo> selectAuthByRoleId(Integer roleId) {
+        List<Integer> menuIds = iSystemRoleMenuService.selectMenuIdsByRoleId(roleId);
+
+        QueryWrapper<SystemMenu> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("menu_type", Arrays.asList("C", "A"));
+        queryWrapper.orderByDesc(Arrays.asList("menu_sort", "id"));
+        if (menuIds.size() > 0) {
+            queryWrapper.in("id", menuIds);
+        }
+
+        List<SystemMenu> systemMenus = systemMenuMapper.selectList(queryWrapper);
+        JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(systemMenus));
+        JSONArray menuJson = ArrayUtil.listToTree(jsonArray, "id", "pid", "children");
+
+        List<SystemAuthVo> authVos = new ArrayList<>();
+        for (Object object : menuJson.toArray()) {
+            Map<String, String> map = ToolsUtil.objectToMap(object);
+
+            SystemAuthVo systemAuthVo = new SystemAuthVo();
+            systemAuthVo.setPath(map.get("component"));
+
+            List<String> auths = new ArrayList<>();
+            if (StringUtil.isNotEmpty(map.get("children"))) {
+                // 第一层
+                for (Map<String, String> m : ToolsUtil.stringToList(map.get("children"))) {
+                    if (!m.get("perms").equals("")) {
+                        auths.add(m.get("perms"));
+                    }
+
+                    // 第二层
+                    if (!m.get("children").equals("")) {
+                        for (Map<String, String> tow : ToolsUtil.stringToList(m.get("children"))) {
+                            if (!tow.get("perms").equals("")) {
+                                auths.add(tow.get("perms"));
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!map.get("perms").equals("")) {
+                auths.add(map.get("perms"));
+            }
+
+            systemAuthVo.setAuth(auths);
+            authVos.add(systemAuthVo);
+        }
+
+        return authVos;
     }
 
     /**

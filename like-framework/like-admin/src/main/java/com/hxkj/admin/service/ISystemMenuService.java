@@ -2,7 +2,10 @@ package com.hxkj.admin.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.validate.system.SystemMenuParam;
+import com.hxkj.admin.vo.system.SystemAuthVo;
 import com.hxkj.admin.vo.system.SystemMenuVo;
+
+import java.util.List;
 
 /**
  * 系统菜单服务接口类
@@ -16,6 +19,14 @@ public interface ISystemMenuService {
      * @return JSONArray
      */
     JSONArray selectMenuByRoleId(Integer roleId);
+
+    /**
+     * 根据角色获取权限
+     *
+     * @author fzr
+     * @return JSONArray
+     */
+    List<SystemAuthVo> selectAuthByRoleId(Integer roleId);
 
     /**
      * 菜单列表

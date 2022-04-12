@@ -157,6 +157,23 @@ public class ToolsUtil {
     }
 
     /**
+     * JSON转map
+     *
+     * @author fzr
+     * @param object 对象
+     * @return Map<String, String>
+     */
+    public static Map<String, String> objectToMap(Object object){
+        Type type = new TypeToken<Map<String, String>>() {}.getType();
+        return JSON.parseObject(JSONObject.toJSONString(object), type);
+    }
+
+    public static List<Map<String, String>> stringToList(String s) {
+        Type type = new TypeToken<List<Map<String, String>>>() {}.getType();
+        return JSON.parseObject(s, type);
+    }
+
+    /**
      * map合并
      *
      * @author fzr
