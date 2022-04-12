@@ -25,9 +25,11 @@ const user: Module<UserModule, any> = {
         // 登录
         login({ commit }, data) {
             const { account, password } = data
+            console.log(data, '----------------------')
+
             return new Promise((resolve, reject) => {
                 apiLogin({
-                    account: account.trim(),
+                    username: account,
                     password: password
                 })
                     .then((data: any) => {

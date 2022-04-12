@@ -1,14 +1,16 @@
 <template>
-    <div v-if="permission" class="perm">
-        <template v-if="hasPermission">
+    <!-- <div v-if="permission" class="perm"> -->
+    <div class="perm">
+        <!-- <template v-if="hasPermission"> -->
+        <template>
             <router-view></router-view>
         </template>
-        <template v-else>
+        <!-- <template v-else>
             <div class="no-perm flex flex-col flex-center">
                 <img src="@/assets/images/no_perm.png" />
                 <div class="muted">暂无查看权限</div>
             </div>
-        </template>
+        </template> -->
     </div>
 </template>
 

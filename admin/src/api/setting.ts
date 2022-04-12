@@ -11,7 +11,7 @@ export function apiSetCopyright(params: any) {
 
 // 获取网站信息
 export function apiGetWebsite() {
-    return request.get('/setting.web.web_setting/getWebsite')
+    return request.get('/setting/website')
 }
 // 设置网站信息
 export function apiSetWebsite(params: any) {
@@ -63,8 +63,6 @@ export function apiLoginConfigSet(params: any) {
     return request.post('/setting.user.user/setRegisterConfig', params)
 }
 /** E 用户设置 **/
-
-
 
 // 获取系统日志列表
 export function apiSystemLogLists(params: any) {

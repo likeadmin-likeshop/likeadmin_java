@@ -9,9 +9,9 @@
                     <el-table :data="pager.lists" size="medium">
                         <el-table-column prop="id" label="ID"></el-table-column>
                         <el-table-column prop="name" label="名称"></el-table-column>
-                        <el-table-column prop="desc" label="备注"></el-table-column>
+                        <el-table-column prop="remark" label="备注"></el-table-column>
                         <el-table-column prop label="权限"></el-table-column>
-                        <el-table-column prop="create_time" label="创建时间"></el-table-column>
+                        <el-table-column prop="createTime" label="创建时间"></el-table-column>
                         <el-table-column prop label="操作">
                             <template #default="{ row }">
                                 <!-- 编辑 -->
@@ -64,7 +64,7 @@ export default defineComponent({
         const formData = reactive({
             id: 0, // 角色id
             name: '', // 角色名称
-            desc: '', // 备注
+            remark: '', // 备注
             create_time: '', // 创建时间
             num: 0 // 使用该角色的人数
         })

@@ -30,14 +30,16 @@ const permission: Module<PermissionModule, any> = {
     actions: {
         getPermission({ commit }) {
             return new Promise((resolve, reject) => {
-                apiConfigGetAuth()
-                    .then(data => {
-                        commit('setPermission', data)
-                        resolve(data)
-                    })
-                    .catch(err => {
-                        reject(err)
-                    })
+                // apiConfigGetAuth()
+                //     .then(data => {
+                //         commit('setPermission', data)
+                //         resolve(data)
+                //     })
+                //     .catch(err => {
+                //         reject(err)
+                //     })
+
+                resolve({})
             })
         }
     }
