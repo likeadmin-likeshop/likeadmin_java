@@ -66,9 +66,9 @@ request.interceptors.request.use(
 request.interceptors.response.use(
     response => {
         switch (response.data.code) {
-            case 1:
+            case 200:
                 return eventResponse.success(response.data)
-            case 0:
+            case 300:
                 return eventResponse.error(response.data)
             case -1:
                 return eventResponse.redirect()
