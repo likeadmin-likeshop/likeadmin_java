@@ -18,9 +18,9 @@
                     <el-input v-model="formData.name" placeholder="请输入名称"></el-input>
                 </el-form-item>
                 <!-- 备注 -->
-                <el-form-item label="备注" prop="desc">
+                <el-form-item label="备注" prop="remark">
                     <el-input
-                        v-model="formData.desc"
+                        v-model="formData.remark"
                         placeholder="请输入备注"
                         type="textarea"
                         :autosize="{ minRows: 4, maxRows: 6 }"
@@ -85,7 +85,7 @@ export default defineComponent({
             reactive({
                 formData: {
                     name: '', // 角色名称
-                    desc: '', // 备注
+                    remark: '', // 备注
                     auth_keys: [] // 权限
                 },
 

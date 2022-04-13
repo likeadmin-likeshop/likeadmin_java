@@ -2,11 +2,11 @@ import request from '@/utils/request'
 
 // 获取备案信息
 export function apiGetCopyright() {
-    return request.get('/setting.web.web_setting/getCopyright')
+    return request.get('/setting/copyright')
 }
 // 设置备案信息
 export function apiSetCopyright(params: any) {
-    return request.post('/setting.web.web_setting/setCopyright', { ...params })
+    return request.post('/setting/copyright', { ...params })
 }
 
 // 获取网站信息
@@ -15,7 +15,7 @@ export function apiGetWebsite() {
 }
 // 设置网站信息
 export function apiSetWebsite(params: any) {
-    return request.post('/setting.web.web_setting/setWebsite', { ...params })
+    return request.post('/setting/website', { ...params })
 }
 
 // 获取政策协议
@@ -29,7 +29,7 @@ export function apiSetProtocol(params: any) {
 
 // 获取系统环境
 export function apiSystemInfo() {
-    return request.get('/setting.system.system/info')
+    return request.get('/monitor/server')
 }
 
 /** S 在线客服 **/

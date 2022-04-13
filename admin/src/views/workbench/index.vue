@@ -24,25 +24,23 @@
                     <div class="flex-1">
                         <div class="lighter m-b-10">访问量</div>
                         <div class="f-s-32 m-b-10">
-                            {{ workbenchData.today.today_visitor }}
+                            {{ workbenchData.today.todayVisits }}
                         </div>
-                        <div class="lighter">总访问量：{{ workbenchData.today.total_visitor }}</div>
+                        <div class="lighter">总访问量：{{ workbenchData.today.totalVisits }}</div>
                     </div>
                     <div class="flex-1">
                         <div class="lighter m-b-10">销售额</div>
                         <div class="f-s-32 m-b-10">
-                            {{ workbenchData.today.today_sales }}
+                            {{ workbenchData.today.todaySales }}
                         </div>
-                        <div class="lighter">总销售额：{{ workbenchData.today.total_sales }}</div>
+                        <div class="lighter">总销售额：{{ workbenchData.today.totalSales }}</div>
                     </div>
                     <div class="flex-1">
                         <div class="lighter m-b-10">新增用户</div>
                         <div class="f-s-32 m-b-10">
-                            {{ workbenchData.today.today_new_user }}
+                            {{ workbenchData.today.todayUsers }}
                         </div>
-                        <div class="lighter">
-                            总访用户：{{ workbenchData.today.total_new_user }}
-                        </div>
+                        <div class="lighter">总访用户：{{ workbenchData.today.totalUsers }}</div>
                     </div>
                 </div>
             </el-card>
@@ -53,18 +51,46 @@
                     <span class="card-title">常用功能</span>
                 </template>
                 <div class="nav-lists">
-                    <div
+                    <!-- <div
                         v-for="item in workbenchData.menu"
                         :key="item"
                         class="nav-item flex-col m-t-10"
-                    >
-                        <router-link :to="item.url">
+                    > -->
+                    <router-link to="">
+                        <div class="nav-item flex-col m-t-10">
                             <view class="flex flex-center">
-                            	<el-image style="width: 48px; height: 48px" :src="item?.image"></el-image>
+                                <img
+                                    style="width: 48px; height: 48px"
+                                    src="@/assets/images/avatar.png"
+                                />
                             </view>
-                            <div class="m-t-8 normal text-center">{{ item.name }}</div>
-                        </router-link>
-                    </div>
+                            <div class="m-t-8 normal text-center">工作台</div>
+                        </div>
+                    </router-link>
+
+                    <router-link to="/setting/website/information">
+                        <div class="nav-item flex-col m-t-10">
+                            <view class="flex flex-center">
+                                <img
+                                    style="width: 48px; height: 48px"
+                                    src="@/assets/images/avatar.png"
+                                />
+                            </view>
+                            <div class="m-t-8 normal text-center">网站信息</div>
+                        </div>
+                    </router-link>
+
+                    <router-link to="/setting/website/environment">
+                        <div class="nav-item flex-col m-t-10">
+                            <view class="flex flex-center">
+                                <img
+                                    style="width: 48px; height: 48px"
+                                    src="@/assets/images/avatar.png"
+                                />
+                            </view>
+                            <div class="m-t-8 normal text-center">系统环境</div>
+                        </div>
+                    </router-link>
                 </div>
             </el-card>
         </div>
@@ -114,8 +140,8 @@
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="name" label="文章名称"> </el-table-column>
-                        <el-table-column prop="read" label="阅读量"> </el-table-column>
+                        <el-table-column prop="title" label="文章名称"> </el-table-column>
+                        <el-table-column prop="visit" label="阅读量"> </el-table-column>
                     </el-table>
                 </div>
             </el-card>

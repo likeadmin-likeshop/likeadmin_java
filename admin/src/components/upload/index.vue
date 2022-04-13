@@ -76,7 +76,7 @@ export default defineComponent({
     setup(props, { emit }) {
         const store = useStore()
         const uploadRefs: Ref<typeof ElUpload | null> = ref(null)
-        const action = ref(`${import.meta.env.VITE_APP_BASE_URL}/adminapi/upload/${props.type}`)
+        const action = ref(`${import.meta.env.VITE_APP_BASE_URL}/api/upload/${props.type}`)
         const headers = computed(() => ({
             token: store.getters.token,
             version: version

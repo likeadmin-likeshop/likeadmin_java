@@ -1,54 +1,67 @@
 <!-- 系统环境 -->
 <template>
     <div class="system-environment">
-        <el-card shadow="never">
+        <div class="flex">
+            <el-card class="flex-1 m-r-15" shadow="never">
+                <div>CPU</div>
+                <div class="m-t-15">
+                    <el-table :data="info.cpu" size="medium">
+                        <el-table-column prop="cpuNum" label="核心数"> </el-table-column>
+                        <el-table-column prop="value" label="值"> </el-table-column>
+                    </el-table>
+                </div>
+            </el-card>
+
+            <el-card class="flex-1" shadow="never">
+                <div>内存</div>
+                <div class="m-t-15">
+                    <el-table :data="info.mem" size="medium">
+                        <el-table-column prop="param" label="属性"> </el-table-column>
+                        <el-table-column prop="value" label="内存"> </el-table-column>
+                        <el-table-column prop="value" label="JVM"> </el-table-column>
+                    </el-table>
+                </div>
+            </el-card>
+        </div>
+
+        <el-card shadow="never" class="m-t-15">
             <div>服务器信息</div>
             <div class="m-t-15">
                 <el-table :data="info.server" size="medium">
-                    <el-table-column prop="param" label="参数"> </el-table-column>
-                    <el-table-column prop="value" label="值"> </el-table-column>
+                    <el-table-column prop="computerName" label="服务器名称"> </el-table-column>
+                    <el-table-column prop="computerIp" label="服务器IP"> </el-table-column>
+                    <el-table-column prop="osName" label="操作系统"> </el-table-column>
+                    <el-table-column prop="osArch" label="系统架构"> </el-table-column>
                 </el-table>
             </div>
         </el-card>
 
         <el-card shadow="never" class="m-t-15">
-            <div>PHP环境要求</div>
+            <div>Java虚拟机信息</div>
             <div class="m-t-15">
-                <el-table :data="info.env" size="medium">
-                    <el-table-column prop="option" label="选项"> </el-table-column>
-                    <el-table-column prop="require" label="要求"> </el-table-column>
-                    <el-table-column prop="status" label="状态">
-                        <template #default="scope">
-                            <el-icon v-show="scope.row.status" color="#67C23A">
-                                <Select />
-                            </el-icon>
-                            <el-icon v-show="!scope.row.status" color="#DB2828">
-                                <close-bold />
-                            </el-icon>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="remark" label="说明及帮助"> </el-table-column>
+                <el-table :data="info.server" size="medium">
+                    <el-table-column prop="option" label="Java名称"> </el-table-column>
+                    <el-table-column prop="require" label="启动时间"> </el-table-column>
+                    <el-table-column prop="remark" label="安装路径"> </el-table-column>
+                    <el-table-column prop="remark" label="项目路径"> </el-table-column>
+                    <el-table-column prop="remark" label="运行参数"> </el-table-column>
+                    <el-table-column prop="remark" label="Java版本"> </el-table-column>
+                    <el-table-column prop="remark" label="运行时长"> </el-table-column>
                 </el-table>
             </div>
         </el-card>
 
         <el-card shadow="never" class="m-t-15">
-            <div>目录权限</div>
+            <div>硬盘状态</div>
             <div class="m-t-15">
-                <el-table :data="info.auth" size="medium">
-                    <el-table-column prop="dir" label="选项"> </el-table-column>
-                    <el-table-column prop="require" label="要求"> </el-table-column>
-                    <el-table-column prop="status" label="状态">
-                        <template #default="scope">
-                            <el-icon v-show="scope.row.status" color="#67C23A">
-                                <Select />
-                            </el-icon>
-                            <el-icon v-show="!scope.row.status" color="#DB2828">
-                                <close-bold />
-                            </el-icon>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="remark" label="说明及帮助"> </el-table-column>
+                <el-table :data="info.disk" size="medium">
+                    <el-table-column prop="dirName" label="盘符路径"> </el-table-column>
+                    <el-table-column prop="sysTypeName" label="文件系统"> </el-table-column>
+                    <el-table-column prop="typeName" label="盘符类型"> </el-table-column>
+                    <el-table-column prop="total" label="总大小"> </el-table-column>
+                    <el-table-column prop="free" label="可以大小"> </el-table-column>
+                    <el-table-column prop="used" label="已用大小"> </el-table-column>
+                    <el-table-column prop="usage" label="已用百分比"> </el-table-column>
                 </el-table>
             </div>
         </el-card>
@@ -61,17 +74,20 @@ import { apiSystemInfo } from '@/api/setting'
 export default defineComponent({
     setup() {
         const info = reactive({
+            cpu: [], // cpu
+            mem: [], // 内存
             server: [], // 服务器信息
-            env: [], // PHP环境要求
-            auth: [] // 目录权限
+            auth: [], // 目录权限
+            disk: [] // 硬盘
         })
 
         const getSystemInfo = () => {
             apiSystemInfo().then((res: any) => {
                 console.log('res', res)
+                info.cpu = res.cpu
                 info.server = res.server
-                info.env = res.env
                 info.auth = res.auth
+                info.disk = res.disk
             })
         }
 

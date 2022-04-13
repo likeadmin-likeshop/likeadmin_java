@@ -11,23 +11,20 @@
                 size="small"
             >
                 <!-- 版权信息输入框 -->
-                <el-form-item label="版权信息" prop="info">
-                    <el-input v-model="formData.info" placeholder="请输入版权信息"></el-input>
+                <el-form-item label="版权信息" prop="privilege">
+                    <el-input v-model="formData.privilege" placeholder="请输入版权信息"></el-input>
                     <div class="muted xs m-r-16">例如填写，Copyright © 2019-2020 公司名称</div>
                 </el-form-item>
 
                 <!-- ICP备案号输入框 -->
-                <el-form-item label="ICP备案号" prop="icp_number">
-                    <el-input
-                        v-model="formData.icp_number"
-                        placeholder="请输入ICP备案号"
-                    ></el-input>
+                <el-form-item label="ICP备案号" prop="icpNumber">
+                    <el-input v-model="formData.icpNumber" placeholder="请输入ICP备案号"></el-input>
                 </el-form-item>
 
                 <!-- ICP备案号链接输入框 -->
-                <el-form-item label="ICP备案号链接" prop="icp_link">
+                <el-form-item label="ICP备案号链接" prop="icpLink">
                     <el-input
-                        v-model="formData.icp_link"
+                        v-model="formData.icpLink"
                         placeholder="请输入ICP备案号链接"
                     ></el-input>
                     <div class="muted xs m-r-16">
@@ -36,17 +33,14 @@
                 </el-form-item>
 
                 <!--公安备案号输入框 -->
-                <el-form-item label="公安备案号" prop="public_number">
-                    <el-input
-                        v-model="formData.public_number"
-                        placeholder="请输入公安备案号"
-                    ></el-input>
+                <el-form-item label="公安备案号" prop="gaNumber">
+                    <el-input v-model="formData.gaNumber" placeholder="请输入公安备案号"></el-input>
                 </el-form-item>
 
                 <!-- 公安备案号链接输入框 -->
-                <el-form-item label="公安备案号链接" prop="public_link">
+                <el-form-item label="公安备案号链接" prop="gaLink">
                     <el-input
-                        v-model="formData.public_link"
+                        v-model="formData.gaLink"
                         placeholder="请输入公安备案号链接"
                     ></el-input>
                     <div class="muted xs m-r-16">
@@ -73,16 +67,16 @@ export default defineComponent({
     setup() {
         // 表单数据
         const formData = reactive({
-            info: '', // 版权信息
-            icp_number: '', // icp备案号
-            icp_link: '', // icp备案链接
-            public_number: '', // 公安备案号
-            public_link: '' // 公安备案链接
+            privilege: '', // 版权信息
+            icpNumber: '', // icp备案号
+            icpLink: '', // icp备案链接
+            gaNumber: '', // 公安备案号
+            gaLink: '' // 公安备案链接
         })
 
         // 表单验证
         const rules = {
-            // info: [
+            // privilege: [
             //     {
             //         required: true,
             //         message: '请输入版权信息',
@@ -95,22 +89,22 @@ export default defineComponent({
         const getCopyright = () => {
             apiGetCopyright().then((res: any) => {
                 console.log('res', res)
-                formData.info = res.info
-                formData.icp_number = res.icp_number
-                formData.icp_link = res.icp_link
-                formData.public_number = res.public_number
-                formData.public_link = res.public_link
+                formData.privilege = res.privilege
+                formData.icpNumber = res.icpNumber
+                formData.icpLink = res.icpLink
+                formData.gaNumber = res.gaNumber
+                formData.gaLink = res.gaLink
             })
         }
 
         // 设置备案信息
         const setCopyright = () => {
             apiSetCopyright({
-                info: formData.info,
-                icp_number: formData.icp_number,
-                icp_link: formData.icp_link,
-                public_number: formData.public_number,
-                public_link: formData.public_link
+                privilege: formData.privilege,
+                icpNumber: formData.icpNumber,
+                icpLink: formData.icpLink,
+                gaNumber: formData.gaNumber,
+                gaLink: formData.gaLink
             })
                 .then((res: any) => {
                     console.log('res', res)

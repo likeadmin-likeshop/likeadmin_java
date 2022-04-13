@@ -13,8 +13,8 @@
                 size="small"
             >
                 <!-- 账号输入框 -->
-                <el-form-item label="账号：" prop="account">
-                    <el-input v-model="formData.account" placeholder="请输入账号"></el-input>
+                <el-form-item label="账号：" prop="username">
+                    <el-input v-model="formData.username" placeholder="请输入账号"></el-input>
                 </el-form-item>
                 <!-- 管理员头像 -->
                 <el-form-item label="头像：">
@@ -23,13 +23,13 @@
                 </el-form-item>
 
                 <!-- 名称输入框 -->
-                <el-form-item label="名称：" prop="name">
-                    <el-input v-model="formData.name" placeholder="请输入名称"></el-input>
+                <el-form-item label="名称：" prop="nickname">
+                    <el-input v-model="formData.nickname" placeholder="请输入名称"></el-input>
                 </el-form-item>
 
                 <!-- 角色选择框 -->
-                <el-form-item label="角色：" prop="role_id">
-                    <el-select v-model="formData.role_id" placeholder="请选择角色">
+                <el-form-item label="角色：" prop="role">
+                    <el-select v-model="formData.role" placeholder="请选择角色">
                         <el-option
                             v-for="(item, index) in roleList"
                             :key="index"
@@ -59,13 +59,13 @@
 
                 <!-- 管理员状态 -->
                 <el-form-item label="管理员状态">
-                    <el-switch v-model="formData.disable" :active-value="0" :inactive-value="1" />
+                    <el-switch v-model="formData.isDisable" :active-value="0" :inactive-value="1" />
                 </el-form-item>
 
                 <!-- 多处登录 -->
                 <el-form-item label="支持多处登录">
                     <el-switch
-                        v-model="formData.multipoint_login"
+                        v-model="formData.isMultipoint"
                         :active-value="1"
                         :inactive-value="0"
                     />
@@ -100,31 +100,31 @@ export default defineComponent({
         const { formData, rules } = toRefs(
             reactive({
                 formData: {
-                    account: '',
-                    name: '',
-                    role_id: '',
+                    username: '',
+                    nickname: '',
+                    role: '',
                     avatar: '',
                     password: '',
                     password_confirm: '',
-                    disable: 0,
-                    multipoint_login: 0
+                    isDisable: 0,
+                    isMultipoint: 0
                 },
                 rules: {
-                    account: [
+                    username: [
                         {
                             required: true,
                             message: '请输入账号',
                             trigger: ['blur']
                         }
                     ],
-                    name: [
+                    nickname: [
                         {
                             required: true,
                             message: '请输入名称',
                             trigger: ['blur']
                         }
                     ],
-                    role_id: [
+                    role: [
                         {
                             required: true,
                             message: '请选择角色',

@@ -24,25 +24,26 @@ export function apiAdminDetail(params: any) {
     return request.get('/system/admin/detail', { params })
 }
 
+/* 角色 */
 // 角色列表
 export function apiRoleLists(params: any) {
     return request.get('/system/role/lists', { params })
 }
 // 添加角色
 export function apiRoleAdd(params: any) {
-    return request.post('/auth.role/add', { ...params })
+    return request.post('/system/role/add', { ...params })
 }
 // 编辑角色
 export function apiRoleEdit(params: any) {
-    return request.post('/auth.role/edit', { ...params })
+    return request.post('/system/role/edit', { ...params })
 }
 // 删除角色
 export function apiRoleDel(params: any) {
-    return request.post('/auth.role/delete', { ...params })
+    return request.post('/system/role/del', { ...params })
 }
 // 角色详情
 export function apiRoleDetail(params: any) {
-    return request.get('/auth.role/detail', { params })
+    return request.get('/system/role/detail', { params })
 }
 
 // 角色权限菜单
