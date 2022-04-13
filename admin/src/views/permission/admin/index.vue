@@ -3,13 +3,13 @@
         <el-card shadow="never">
             <el-form class="ls-form" :model="formData" label-width="80px" size="small" inline>
                 <el-form-item label="账号：">
-                    <el-input v-model="formData.account" class="ls-input" />
+                    <el-input v-model="formData.username" class="ls-input" />
                 </el-form-item>
                 <el-form-item label="名称：">
-                    <el-input v-model="formData.name" class="ls-input" />
+                    <el-input v-model="formData.nickname" class="ls-input" />
                 </el-form-item>
                 <el-form-item label="角色：">
-                    <el-select v-model="formData.role_id" placeholder="全部">
+                    <el-select v-model="formData.role" placeholder="全部">
                         <el-option
                             v-for="(item, index) in roleList"
                             :key="index"
@@ -38,32 +38,28 @@
                             <el-avatar :size="50" :src="row.avatar"></el-avatar>
                         </template>
                     </el-table-column>
-                    <el-table-column label="账号" prop="account" min-width="100"></el-table-column>
-                    <el-table-column label="名称" prop="name" min-width="100"></el-table-column>
-                    <el-table-column
-                        label="角色"
-                        prop="role_name"
-                        min-width="100"
-                    ></el-table-column>
+                    <el-table-column label="账号" prop="username" min-width="100"></el-table-column>
+                    <el-table-column label="名称" prop="nickname" min-width="100"></el-table-column>
+                    <el-table-column label="角色" prop="role" min-width="100"></el-table-column>
                     <el-table-column
                         label="创建时间"
-                        prop="create_time"
+                        prop="createTime"
                         min-width="150"
                     ></el-table-column>
                     <el-table-column
                         label="最近登录时间"
-                        prop="login_time"
+                        prop="lastLoginTime"
                         min-width="150"
                     ></el-table-column>
                     <el-table-column
                         label="最近登录IP"
-                        prop="login_ip"
+                        prop="lastLoginIp"
                         min-width="100"
                     ></el-table-column>
                     <el-table-column label="状态" min-width="100">
                         <template #default="{ row }">
                             <el-switch
-                                v-model="row.disable"
+                                v-model="row.isDisable"
                                 :active-value="0"
                                 :inactive-value="1"
                                 @change="changeStatus(row)"
@@ -117,9 +113,9 @@ export default defineComponent({
     setup() {
         // 表单数据
         const formData = reactive({
-            account: '',
-            name: '',
-            role_id: ''
+            username: '',
+            nickname: '',
+            role: ''
         })
         const roleList: Ref<any[]> = ref([])
         const { pager, requestApi, resetParams, resetPage } = usePages({
@@ -129,10 +125,10 @@ export default defineComponent({
         const changeStatus = (data: any) => {
             apiAdminEdit({
                 id: data.id,
-                account: data.account,
-                name: data.name,
-                role_id: data.role_id,
-                disable: data.disable,
+                username: data.username,
+                nickname: data.nickname,
+                role: data.role,
+                isDisable: data.isDisable,
                 multipoint_login: data.multipoint_login
             }).finally(() => {
                 requestApi()

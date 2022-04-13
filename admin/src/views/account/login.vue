@@ -5,12 +5,12 @@
                 <div
                     class="login-img"
                     :style="{
-                        'background-image': `url(${config.login_image})`
+                        'background-image': `url(${config.webBackdrop})`
                     }"
                 ></div>
                 <div class="login-form flex flex-col">
                     <div class="f-s-24 f-w-500 text-center m-b-40">
-                        {{ config.web_name }}
+                        {{ config.webName }}
                     </div>
                     <el-form ref="loginFormRefs" :model="loginForm" status-icon :rules="rules">
                         <el-form-item prop="account">

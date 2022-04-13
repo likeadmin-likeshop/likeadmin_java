@@ -40,7 +40,7 @@ const eventResponse = {
 }
 
 const request = axios.create({
-    baseURL: `${import.meta.env.VITE_APP_BASE_URL}/adminapi`,
+    baseURL: `${import.meta.env.VITE_APP_BASE_URL}/api`,
     timeout: 60 * 1000,
     headers: {
         'Content-Type': 'application/json',
@@ -66,11 +66,23 @@ request.interceptors.request.use(
 request.interceptors.response.use(
     response => {
         switch (response.data.code) {
-            case 1:
+            case 200:
                 return eventResponse.success(response.data)
-            case 0:
+            case 300:
+            case 310:
+            case 311:
+            case 312:
+            case 313:
+            case 314:
+            case 403:
+            case 404:
+            case 500:
                 return eventResponse.error(response.data)
             case -1:
+            case 330:
+            case 331:
+            case 332:
+            case 333:
                 return eventResponse.redirect()
             case 2:
                 return eventResponse.page(response.data)
