@@ -273,6 +273,7 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
         user.put("username", sysAdmin.getUsername());
         user.put("nickname", sysAdmin.getNickname());
         user.put("avatar", sysAdmin.getAvatar());
+        user.put("isMultipoint", sysAdmin.getIsDisable());
         user.put("isDisable", sysAdmin.getIsDisable());
         user.put("isDelete", sysAdmin.getIsDelete());
         user.put("lastLoginIp", sysAdmin.getLastLoginIp());
