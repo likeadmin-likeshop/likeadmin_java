@@ -2,9 +2,8 @@
     <!-- <div v-if="permission" class="perm"> -->
     <div class="perm">
         <!-- <template v-if="hasPermission"> -->
-        <template>
-            <router-view></router-view>
-        </template>
+     
+        <router-view></router-view>
         <!-- <template v-else>
             <div class="no-perm flex flex-col flex-center">
                 <img src="@/assets/images/no_perm.png" />
