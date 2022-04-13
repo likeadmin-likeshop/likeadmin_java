@@ -104,9 +104,9 @@ public class ServerResult {
      */
     private void setJvmInfo() {
         Properties props = System.getProperties();
-        jvm.setTotal(Runtime.getRuntime().totalMemory());
-        jvm.setMax(Runtime.getRuntime().maxMemory());
-        jvm.setFree(Runtime.getRuntime().freeMemory());
+        jvm.setTotal(ArithUtil.div(Runtime.getRuntime().totalMemory(), (1024 * 1024), 2));
+        jvm.setMax(ArithUtil.div(Runtime.getRuntime().maxMemory(), (1024 * 1024), 2));
+        jvm.setFree(ArithUtil.div(Runtime.getRuntime().freeMemory(), (1024 * 1024), 2));
         jvm.setUsage(ArithUtil.mul(ArithUtil.div(jvm.getTotal() - jvm.getFree(), jvm.getTotal(), 4), 100));
         jvm.setVersion(props.getProperty("java.version"));
         jvm.setHome(props.getProperty("java.home"));
