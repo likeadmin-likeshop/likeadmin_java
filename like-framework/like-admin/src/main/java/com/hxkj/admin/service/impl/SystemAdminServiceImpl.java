@@ -166,6 +166,7 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
         model.setPassword(pwd);
         model.setSalt(salt);
         model.setSort(systemAdminParam.getSort());
+        model.setIsMultipoint(systemAdminParam.getIsMultipoint());
         model.setIsDisable(systemAdminParam.getIsDisable());
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
@@ -210,6 +211,7 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
         model.setAvatar( UrlUtil.toRelativeUrl(systemAdminParam.getAvatar()));
         model.setRole(systemAdminParam.getId() == 1 ? 0 : systemAdminParam.getRole());
         model.setSort(systemAdminParam.getSort());
+        model.setIsMultipoint(systemAdminParam.getIsMultipoint());
         model.setIsDisable(systemAdminParam.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
 

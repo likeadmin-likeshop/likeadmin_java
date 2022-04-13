@@ -1,6 +1,7 @@
 package com.hxkj.admin.validate.system;
 
 import com.hxkj.common.validator.annotation.IDMust;
+import com.hxkj.common.validator.annotation.IntegerContains;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
@@ -44,11 +45,15 @@ public class SystemAdminParam implements Serializable {
     private String password;
 
     @NotNull(message = "请选择状态", groups = {create.class, update.class})
+    @IntegerContains(values = {0, 1}, message = "isDisable参数不在合法值内", groups = {create.class, update.class})
     private Integer isDisable;
 
-    @NotNull(message = "排序号不能为空", groups = {create.class, update.class})
+    @NotNull(message = "请选择是否支持多端登录", groups = {create.class, update.class})
+    @IntegerContains(values = {0, 1}, message = "isMultipoint参数不在合法值内", groups = {create.class, update.class})
+    private Integer isMultipoint;
+
     @DecimalMin(value = "0", message = "排序号值不能少于0", groups = {create.class, update.class})
-    private Integer sort;
+    private Integer sort = 0;
 
     private String avatar = "";
 

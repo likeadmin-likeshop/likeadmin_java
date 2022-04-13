@@ -17,6 +17,7 @@ public class SystemAdminVo implements Serializable {
     private String nickname;
     private String avatar;
     private String role;
+    private Integer isMultipoint;
     private Integer isDisable;
     private String lastLoginIp;
     private String lastLoginTime;

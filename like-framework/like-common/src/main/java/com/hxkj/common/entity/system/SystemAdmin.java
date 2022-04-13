@@ -23,6 +23,7 @@ public class SystemAdmin implements Serializable {
     private String salt;
     private Integer role;
     private Integer sort;
+    private Integer isMultipoint;
     private Integer isDisable;
     private Integer isDelete;
     private String lastLoginIp;
