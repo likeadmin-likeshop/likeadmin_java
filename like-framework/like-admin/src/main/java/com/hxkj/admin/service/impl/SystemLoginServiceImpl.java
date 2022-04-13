@@ -66,7 +66,6 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
 
         String newPWd = password + sysAdmin.getSalt();
         String md5Pwd = ToolsUtil.makeMd5(newPWd);
-        System.out.println(md5Pwd);
         if (!md5Pwd.equals(sysAdmin.getPassword())) {
             this.recordLoginLog(sysAdmin.getId(), systemLoginParam.getUsername(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
             throw new LoginException(HttpEnum.LOGIN_ACCOUNT_ERROR.getCode(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
@@ -77,13 +76,21 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
             sysAdmin.setLastLoginTime(System.currentTimeMillis() / 1000);
             systemAdminMapper.updateById(sysAdmin);
 
+            // 缓存登录信息
             String token = ToolsUtil.makeToken();
             RedisUtil.set(AdminConfig.backstageTokenKey+token, sysAdmin.getId(), 7200);
             iSystemAdminService.cacheAdminUserByUid(sysAdmin.getId());
 
+            // 返回登录信息
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("token", token);
 
+            // 更新登录信息
+            sysAdmin.setLastLoginIp(HttpUtil.ip());
+            sysAdmin.setLastLoginTime(TimeUtil.timestamp());
+            systemAdminMapper.updateById(sysAdmin);
+
+            // 记录登录日志
             this.recordLoginLog(sysAdmin.getId(), systemLoginParam.getUsername(), "");
 
             return response;

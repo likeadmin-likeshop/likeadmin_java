@@ -45,6 +45,7 @@ public class ServerResult {
         map.put("mem", this.mem);
         map.put("sys", this.sys);
         map.put("disk", this.disk);
+        map.put("jvm", this.jvm);
         return map;
     }
 
