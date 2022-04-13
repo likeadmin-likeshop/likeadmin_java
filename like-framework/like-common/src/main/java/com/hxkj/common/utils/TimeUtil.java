@@ -3,6 +3,7 @@ package com.hxkj.common.utils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
+import java.lang.management.ManagementFactory;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParsePosition;
@@ -190,6 +191,16 @@ public class TimeUtil {
      */
     public static Long timestamp() {
         return System.currentTimeMillis() / 1000;
+    }
+
+    /**
+     * 返回当前Date型日期
+     *
+     *  @author fzr
+     * @return Date() 当前日期
+     */
+    public static Date nowDate() {
+        return new Date();
     }
 
     /**
@@ -494,4 +505,37 @@ public class TimeUtil {
         return data;
     }
 
+    /**
+     * 返回服务器启动时间
+     */
+    public static Date serverStartDate() {
+        long time = ManagementFactory.getRuntimeMXBean().getStartTime();
+        return new Date(time);
+    }
+
+    /**
+     * 计算两个时间差
+     *
+     * @author fzr
+     * @param endDate 结束时间
+     * @param nowDate 开始时间
+     * @return String
+     */
+    public static String datePoor(Date endDate, Date nowDate) {
+        long nd = 1000 * 24 * 60 * 60;
+        long nh = 1000 * 60 * 60;
+        long nm = 1000 * 60;
+        // long ns = 1000;
+        // 获得两个时间的毫秒时间差异
+        long diff = endDate.getTime() - nowDate.getTime();
+        // 计算差多少天
+        long day = diff / nd;
+        // 计算差多少小时
+        long hour = diff % nd / nh;
+        // 计算差多少分钟
+        long min = diff % nd % nh / nm;
+        // 计算差多少秒//输出结果
+        // long sec = diff % nd % nh % nm / ns;
+        return day + "天" + hour + "小时" + min + "分钟";
+    }
 }

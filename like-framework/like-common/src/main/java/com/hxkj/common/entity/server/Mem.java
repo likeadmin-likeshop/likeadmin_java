@@ -27,4 +27,9 @@ public class Mem implements Serializable {
      */
     private double free;
 
+    /**
+     * 使用率
+     */
+    private double usage;
+
 }

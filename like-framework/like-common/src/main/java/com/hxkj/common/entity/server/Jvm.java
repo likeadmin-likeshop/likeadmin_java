@@ -28,6 +28,11 @@ public class Jvm implements Serializable {
     private double free;
 
     /**
+     * JVM内存使用率
+     */
+    private double usage;
+
+    /**
      * JDK版本
      */
     private String version;
@@ -37,4 +42,23 @@ public class Jvm implements Serializable {
      */
     private String home;
 
+    /**
+     * JDK名称
+     */
+    private String name;
+
+    /**
+     * 运行参数
+     */
+    private String inputArgs;
+
+    /**
+     * JDK运行时间
+     */
+    private String runTime;
+
+    /**
+     * JDK启动时间
+     */
+    private String startTime;
 }

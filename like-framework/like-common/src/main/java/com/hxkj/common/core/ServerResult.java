@@ -3,6 +3,7 @@ package com.hxkj.common.core;
 import com.hxkj.common.entity.server.*;
 import com.hxkj.common.utils.ArithUtil;
 import com.hxkj.common.utils.IpUtil;
+import com.hxkj.common.utils.TimeUtil;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.CentralProcessor.TickType;
@@ -13,6 +14,8 @@ import oshi.software.os.OSFileStore;
 import oshi.software.os.OperatingSystem;
 import oshi.util.Util;
 
+import java.lang.management.ManagementFactory;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -81,13 +84,13 @@ public class ServerResult {
         mem.setTotal(ArithUtil.div(memory.getTotal(), number, 2));
         mem.setUsed(ArithUtil.div(memory.getTotal() - memory.getAvailable(), number, 2));
         mem.setFree(ArithUtil.div(memory.getAvailable(), number, 2));
+        mem.setUsage(ArithUtil.mul(ArithUtil.div(mem.getUsed(), memory.getTotal(), 4), 100));
     }
 
     /**
      * 设置服务器信息
      */
-    private void setSysInfo()
-    {
+    private void setSysInfo() {
         Properties props = System.getProperties();
         sys.setComputerName(IpUtil.getHostName());
         sys.setComputerIp(IpUtil.getHostIp());
@@ -104,8 +107,13 @@ public class ServerResult {
         jvm.setTotal(Runtime.getRuntime().totalMemory());
         jvm.setMax(Runtime.getRuntime().maxMemory());
         jvm.setFree(Runtime.getRuntime().freeMemory());
+        jvm.setUsage(ArithUtil.mul(ArithUtil.div(jvm.getTotal() - jvm.getFree(), jvm.getTotal(), 4), 100));
         jvm.setVersion(props.getProperty("java.version"));
         jvm.setHome(props.getProperty("java.home"));
+        jvm.setName(ManagementFactory.getRuntimeMXBean().getVmName());
+        jvm.setInputArgs(ManagementFactory.getRuntimeMXBean().getInputArguments().toString());
+        jvm.setRunTime(TimeUtil.datePoor(TimeUtil.nowDate(), TimeUtil.serverStartDate()));
+        jvm.setStartTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TimeUtil.serverStartDate()));
     }
 
     /**
