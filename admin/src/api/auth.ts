@@ -24,6 +24,11 @@ export function apiAdminDetail(params: any) {
     return request.get('/system/admin/detail', { params })
 }
 
+// 管理员状态
+export function apiAdminStatus(params: any) {
+    return request.post('/system/admin/disable', params)
+}
+
 /* 角色 */
 // 角色列表
 export function apiRoleLists(params: any) {

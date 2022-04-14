@@ -7,7 +7,9 @@
                 <div class="m-t-15">
                     <el-table :data="info.cpu" size="medium">
                         <el-table-column prop="cpuNum" label="核心数"> </el-table-column>
-                        <el-table-column prop="value" label="值"> </el-table-column>
+                        <el-table-column prop="used" label="用户使用率"> </el-table-column>
+                        <el-table-column prop="sys" label="系统使用率"> </el-table-column>
+                        <el-table-column prop="value" label="当前空闲率"> </el-table-column>
                     </el-table>
                 </div>
             </el-card>
@@ -16,9 +18,10 @@
                 <div>内存</div>
                 <div class="m-t-15">
                     <el-table :data="info.mem" size="medium">
-                        <el-table-column prop="param" label="属性"> </el-table-column>
-                        <el-table-column prop="value" label="内存"> </el-table-column>
-                        <el-table-column prop="value" label="JVM"> </el-table-column>
+                        <el-table-column prop="total" label="总内存"> </el-table-column>
+                        <el-table-column prop="used" label="已用内存"> </el-table-column>
+                        <el-table-column prop="free" label="剩余内存"> </el-table-column>
+                        <el-table-column prop="usage" label="使用率"> </el-table-column>
                     </el-table>
                 </div>
             </el-card>
@@ -40,13 +43,13 @@
             <div>Java虚拟机信息</div>
             <div class="m-t-15">
                 <el-table :data="info.server" size="medium">
-                    <el-table-column prop="option" label="Java名称"> </el-table-column>
-                    <el-table-column prop="require" label="启动时间"> </el-table-column>
-                    <el-table-column prop="remark" label="安装路径"> </el-table-column>
-                    <el-table-column prop="remark" label="项目路径"> </el-table-column>
-                    <el-table-column prop="remark" label="运行参数"> </el-table-column>
-                    <el-table-column prop="remark" label="Java版本"> </el-table-column>
-                    <el-table-column prop="remark" label="运行时长"> </el-table-column>
+                    <el-table-column prop="name" label="Java名称"> </el-table-column>
+                    <el-table-column prop="startTime" label="启动时间"> </el-table-column>
+                    <el-table-column prop="home" label="安装路径"> </el-table-column>
+                    <!-- <el-table-column prop="remark" label="项目路径"> </el-table-column> -->
+                    <el-table-column prop="inputArgs" label="运行参数"> </el-table-column>
+                    <el-table-column prop="version" label="Java版本"> </el-table-column>
+                    <el-table-column prop="runTime" label="运行时长"> </el-table-column>
                 </el-table>
             </div>
         </el-card>

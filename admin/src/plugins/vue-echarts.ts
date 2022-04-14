@@ -4,12 +4,16 @@ import { App } from '@vue/runtime-core'
 
 // 手动引入 ECharts 各模块来减小打包体积
 import { CanvasRenderer } from 'echarts/renderers'
-import { BarChart, PieChart, LineChart } from 'echarts/charts'
+import { BarChart, PieChart, LineChart, PieSeriesOption } from 'echarts/charts'
+import { LabelLayout } from 'echarts/features'
 import {
     GridComponent,
     TooltipComponent,
     TitleComponent,
-    LegendComponent
+    LegendComponent,
+    TitleComponentOption,
+    TooltipComponentOption,
+    LegendComponentOption
 } from 'echarts/components'
 
 use([
@@ -20,7 +24,8 @@ use([
     TooltipComponent,
     TitleComponent,
     LegendComponent,
-    LineChart
+    LineChart,
+    LabelLayout
 ])
 
 export default (app: App) => {
