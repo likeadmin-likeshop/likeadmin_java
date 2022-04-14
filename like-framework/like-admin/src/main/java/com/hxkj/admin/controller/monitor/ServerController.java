@@ -28,9 +28,7 @@ public class ServerController {
     @GetMapping("/server")
     public Object info() {
         ServerResult server = new ServerResult();
-        List<Object> list = new LinkedList<>();
-        list.add(server.copyTo());
-        return AjaxResult.success(list);
+        return AjaxResult.success(server.copyTo());
     }
 
 }
