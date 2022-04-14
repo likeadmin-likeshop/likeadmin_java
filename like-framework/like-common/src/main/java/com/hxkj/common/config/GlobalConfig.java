@@ -9,7 +9,7 @@ public class GlobalConfig {
     public static Boolean debug = true;
 
     // 获取地址开关
-    public static Boolean isAddressEnabled = true;
+    public static Boolean isAddressEnabled = false;
 
     // 当前代码版本
     public static String version = "v1.1.0";
