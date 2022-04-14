@@ -17,7 +17,6 @@ public class LogLoginVo implements Serializable {
     private String ip;
     private String os;
     private String browser;
-    private String address;
     private Integer status;
     private String createTime;
 

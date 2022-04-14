@@ -122,7 +122,6 @@ public class LogAspect {
                 model.setUrl(HttpUtil.route());
                 model.setArgs(params);
                 model.setError(error);
-                model.setAddress(IpUtil.getRealAddressByIP(IpUtil.getIpAddress(request)));
                 model.setStatus(status);
                 model.setStartTime(this.beginTime / 1000);
                 model.setEndTime(endTime / 1000);

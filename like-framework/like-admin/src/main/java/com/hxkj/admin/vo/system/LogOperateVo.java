@@ -22,7 +22,6 @@ public class LogOperateVo implements Serializable {
     private String url;
     private String args;
     private String error;
-    private String address;
     private Integer status;
     private String taskTime;
     private String startTime;

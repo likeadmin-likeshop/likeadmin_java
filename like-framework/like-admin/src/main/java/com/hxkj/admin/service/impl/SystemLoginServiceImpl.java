@@ -125,7 +125,6 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
             model.setAdminId(adminId);
             model.setUsername(username);
             model.setIp(HttpUtil.ip());
-            model.setAddress(IpUtil.getRealAddressByIP(HttpUtil.ip()));
             model.setOs(userAgent.getOperatingSystem().getName());
             model.setBrowser(userAgent.getBrowser().getName());
             model.setStatus(StringUtil.isEmpty(error) ? 1 : 0);
