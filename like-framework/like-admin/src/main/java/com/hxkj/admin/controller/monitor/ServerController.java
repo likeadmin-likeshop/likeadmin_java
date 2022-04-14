@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * 服务监控管理
  */
@@ -23,7 +28,9 @@ public class ServerController {
     @GetMapping("/server")
     public Object info() {
         ServerResult server = new ServerResult();
-        return AjaxResult.success(server.copyTo());
+        List<Object> list = new LinkedList<>();
+        list.add(server.copyTo());
+        return AjaxResult.success(list);
     }
 
 }

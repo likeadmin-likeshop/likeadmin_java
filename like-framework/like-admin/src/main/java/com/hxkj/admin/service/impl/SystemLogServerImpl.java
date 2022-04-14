@@ -64,6 +64,8 @@ public class SystemLogServerImpl implements ISystemLogServer {
                 "like:username:str",
                 "=:type:int",
                 "=:status:int",
+                "=:url:str",
+                "=:ip:str",
                 "datetime:startTime-endTime@create_time:str"
         });
 
