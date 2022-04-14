@@ -2,20 +2,20 @@ import request from '@/utils/request'
 
 // 获取备案信息
 export function apiGetCopyright() {
-    return request.get('/setting/copyright')
+    return request.get('/setting/getCopyright')
 }
 // 设置备案信息
 export function apiSetCopyright(params: any) {
-    return request.post('/setting/copyright', { ...params })
+    return request.post('/setting/setCopyright', { ...params })
 }
 
 // 获取网站信息
 export function apiGetWebsite() {
-    return request.get('/setting/website')
+    return request.get('/setting/getWebsite')
 }
 // 设置网站信息
 export function apiSetWebsite(params: any) {
-    return request.post('/setting/website', { ...params })
+    return request.post('/setting/setWebsite', { ...params })
 }
 
 // 获取政策协议
@@ -66,7 +66,7 @@ export function apiLoginConfigSet(params: any) {
 
 // 获取系统日志列表
 export function apiSystemLogLists(params: any) {
-    return request.get('/setting.system.log/lists', { params })
+    return request.get('/system/log/operate', { params })
 }
 
 // 清除系统缓存

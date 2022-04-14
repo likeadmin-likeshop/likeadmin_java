@@ -57,12 +57,12 @@
                         min-width="100"
                     ></el-table-column>
                     <el-table-column label="状态" min-width="100">
-                        <template #default="{ row }">
+                        <template #default="scope">
                             <el-switch
-                                v-model="row.isDisable"
+                                v-model="scope.row.isDisable"
                                 :active-value="0"
                                 :inactive-value="1"
-                                @change="changeStatus(row)"
+                                @change="handleStatusChange($event, scope.row.id)"
                             />
                         </template>
                     </el-table-column>
@@ -103,7 +103,7 @@
 import { defineComponent, onMounted, reactive, Ref, ref } from 'vue'
 import Pagination from '@/components/pagination/index.vue'
 import Popup from '@/components/popup/index.vue'
-import { apiAdminEdit, adminLists, apiAdminDelete, apiRoleLists } from '@/api/auth'
+import { apiAdminEdit, adminLists, apiAdminDelete, apiRoleLists, apiAdminStatus } from '@/api/auth'
 import { usePages } from '@/core/hooks/pages'
 export default defineComponent({
     components: {
@@ -135,6 +135,11 @@ export default defineComponent({
             })
         }
 
+        const handleStatusChange = async (event: Event, id: number) => {
+            await apiAdminStatus({ isDisable: event, id })
+            requestApi()
+        }
+
         const handleDelete = (id: number) => {
             apiAdminDelete({ id }).then(() => {
                 requestApi()
@@ -161,7 +166,8 @@ export default defineComponent({
             resetPage,
             adminLists,
             changeStatus,
-            handleDelete
+            handleDelete,
+            handleStatusChange
         }
     }
 })

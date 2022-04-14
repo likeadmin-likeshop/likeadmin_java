@@ -99,6 +99,8 @@ export default defineComponent({
 
         // 设置备案信息
         const setCopyright = () => {
+            console.log(formData.privilege, '==')
+
             apiSetCopyright({
                 privilege: formData.privilege,
                 icpNumber: formData.icpNumber,

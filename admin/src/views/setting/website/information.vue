@@ -18,7 +18,7 @@
                         show-word-limit
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="网站图标" prop="favicon" required>
+                <el-form-item label="网站图标" prop="favicon">
                     <material-select v-model="formData.favicon" :limit="1" />
                     <div class="flex">
                         <div class="muted xs m-r-16">
@@ -32,7 +32,7 @@
                         </el-popover>
                     </div>
                 </el-form-item>
-                <el-form-item label="网站LOGO" prop="logo" required>
+                <el-form-item label="网站LOGO" prop="logo">
                     <material-select v-model="formData.logo" :limit="1" />
                     <div class="flex">
                         <div class="muted xs m-r-16">
@@ -46,7 +46,7 @@
                         </el-popover>
                     </div>
                 </el-form-item>
-                <el-form-item label="登录页广告图" prop="backdrop" required>
+                <el-form-item label="登录页广告图" prop="backdrop">
                     <material-select v-model="formData.backdrop" :limit="1" />
                     <div class="flex">
                         <div class="muted xs m-r-16">
@@ -93,13 +93,10 @@ export default defineComponent({
 
         // 表单验证
         const rules = {
-            name: [
-                {
-                    required: true,
-                    message: '请输入网站名称',
-                    trigger: ['blur']
-                }
-            ]
+            name: [{ required: true, message: '请输入网站名称', trigger: ['blur'] }],
+            favicon: [{ required: true, message: '上传网站图标', trigger: ['blur'] }],
+            logo: [{ required: true, message: '上传网站logo', trigger: ['blur'] }],
+            backdrop: [{ required: true, message: '上传登录页广告图', trigger: ['blur'] }]
         }
 
         // 获取备案信息
