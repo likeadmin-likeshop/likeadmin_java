@@ -44,10 +44,10 @@ public class BasicsServiceImpl implements IBasicsService {
 
         Map<String, String> map = new LinkedHashMap<>();
         map.put("privilege", config.getOrDefault("privilege", ""));
-        map.put("icp_number", UrlUtil.toAbsoluteUrl(config.getOrDefault("icpNumber", "")));
-        map.put("icp_link", UrlUtil.toAbsoluteUrl(config.getOrDefault("icpLink", "")));
-        map.put("ga_number", UrlUtil.toAbsoluteUrl(config.getOrDefault("gaNumber", "")));
-        map.put("ga_link", UrlUtil.toAbsoluteUrl(config.getOrDefault("gaLink", "")));
+        map.put("icpNumber", UrlUtil.toAbsoluteUrl(config.getOrDefault("icpNumber", "")));
+        map.put("icpLink", UrlUtil.toAbsoluteUrl(config.getOrDefault("icpLink", "")));
+        map.put("gaNumber", UrlUtil.toAbsoluteUrl(config.getOrDefault("gaNumber", "")));
+        map.put("gaLink", UrlUtil.toAbsoluteUrl(config.getOrDefault("gaLink", "")));
         return map;
     }
 
