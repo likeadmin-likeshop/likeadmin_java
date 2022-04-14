@@ -49,7 +49,7 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
     }
 
     /**
-     * 获取管理员列表
+     * 管理员列表
      *
      * @author fzr
      * @param pageParam 分页参数
@@ -99,7 +99,7 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
     }
 
     /**
-     * 获取管理员详细
+     * 管理员详细
      *
      * @author fzr
      * @param id 主键
@@ -132,7 +132,7 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
     }
 
     /**
-     * 新增管理员
+     * 管理员新增
      *
      * @author fzr
      * @param systemAdminParam 参数
@@ -174,7 +174,7 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
     }
 
     /**
-     * 更新管理员
+     * 管理员更新
      *
      * @author fzr
      * @param systemAdminParam 参数
@@ -231,7 +231,7 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
     }
 
     /**
-     * 删除管理员
+     * 管理员删除
      *
      * @author fzr
      * @param id 主键
@@ -256,6 +256,29 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
         model.setDeleteTime(System.currentTimeMillis() / 1000);
         systemAdminMapper.updateById(model);
         this.cacheAdminUserByUid(id);
+    }
+
+    /**
+     * 管理员状态切换
+     *
+     * @author fzr
+     * @param id 主键参数
+     */
+    @Override
+    public void disable(Integer id) {
+        String[] field = {"id", "username", "nickname", "is_disable"};
+        SystemAdmin systemAdmin = systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
+                .select(field)
+                .eq("id", id)
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        Assert.notNull(systemAdmin, "账号已不存在！");
+
+        Integer disable = systemAdmin.getIsDisable() == 1 ? 0 : 1;
+        systemAdmin.setIsDisable(disable);
+        systemAdmin.setUpdateTime(TimeUtil.timestamp());
+        systemAdminMapper.updateById(systemAdmin);
     }
 
     /**

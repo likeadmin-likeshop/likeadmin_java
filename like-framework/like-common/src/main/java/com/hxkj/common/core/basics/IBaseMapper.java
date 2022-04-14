@@ -77,6 +77,7 @@ public interface IBaseMapper<T> extends MPJBaseMapper<T> {
                     } else if (type.equals("long")) {
                         val = Long.parseLong(value);
                     }
+                    break;
                 case "notIn":
                 case "in":
                     if (type.equals("long")){
@@ -92,6 +93,7 @@ public interface IBaseMapper<T> extends MPJBaseMapper<T> {
                         }
                         val = intData;
                     }
+                    break;
             }
 
             switch (where) {
@@ -212,6 +214,7 @@ public interface IBaseMapper<T> extends MPJBaseMapper<T> {
                     } else if (type.equals("long")) {
                         val = Long.parseLong(value);
                     }
+                    break;
                 case "in":
                 case "notIn":
                     if (type.equals("int")) {
@@ -227,6 +230,7 @@ public interface IBaseMapper<T> extends MPJBaseMapper<T> {
                         }
                         val = longData;
                     }
+                    break;
             }
 
             switch (where) {

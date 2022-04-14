@@ -105,4 +105,17 @@ public class SystemAdminController {
         return AjaxResult.success();
     }
 
+    /**
+     * 管理员状态切换
+     *
+     * @author fzr
+     * @return Object
+     */
+    @Log(title = "管理员状态切换")
+    @PostMapping("/disable")
+    public Object disable(@Validated(value = SystemAdminParam.delete.class) @RequestBody SystemAdminParam systemAdminParam) {
+        iSystemAdminService.disable(systemAdminParam.getId());
+        return AjaxResult.success();
+    }
+
 }

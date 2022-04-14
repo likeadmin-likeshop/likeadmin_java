@@ -41,7 +41,7 @@ public interface ISystemAdminService {
     SystemAdminVo detail(Integer id);
 
     /**
-     * 新增管理员
+     * 管理员新增
      *
      * @author fzr
      * @param systemAdminParam 参数
@@ -49,7 +49,7 @@ public interface ISystemAdminService {
     void add(SystemAdminParam systemAdminParam);
 
     /**
-     * 编辑管理员
+     * 管理员编辑
      *
      * @author fzr
      * @param systemAdminParam 参数
@@ -57,12 +57,20 @@ public interface ISystemAdminService {
     void edit(SystemAdminParam systemAdminParam);
 
     /**
-     * 删除管理员
+     * 管理员删除
      *
      * @author fzr
      * @param id 主键参数
      */
     void del(Integer id);
+
+    /**
+     * 管理员状态切换
+     *
+     * @author fzr
+     * @param id 主键参数
+     */
+    void disable(Integer id);
 
     /**
      * 缓存管理员
