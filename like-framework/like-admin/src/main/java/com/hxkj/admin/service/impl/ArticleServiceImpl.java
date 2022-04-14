@@ -181,6 +181,33 @@ public class ArticleServiceImpl implements IArticleService {
     }
 
     /**
+     * 分类所有
+     *
+     * @author fzr
+     * @return List<CategoryVo>
+     */
+    @Override
+    public List<CategoryVo> cateAll() {
+        QueryWrapper<ArticleCategory> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("id", "name", "sort", "is_show", "create_time", "update_time")
+                .eq("is_delete", 0);
+
+        List<ArticleCategory> lists = articleCategoryMapper.selectList(queryWrapper);
+
+        List<CategoryVo> vos = new ArrayList<>();
+        for (ArticleCategory category : lists) {
+            CategoryVo vo = new CategoryVo();
+            BeanUtils.copyProperties(category, vo);
+
+            vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
+            vo.setUpdateTime(TimeUtil.timestampToDate(vo.getUpdateTime()));
+            vos.add(vo);
+        }
+
+        return vos;
+    }
+
+    /**
      * 分类列表
      *
      * @param pageParam 分页参数

@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -112,6 +113,18 @@ public class ArticleController {
         } catch (Exception e) {
             return AjaxResult.failed(e.getMessage());
         }
+    }
+
+    /**
+     * 分类所有
+     *
+     * @author fzr
+     * @return Object
+     */
+    @GetMapping("/cateAll")
+    public Object cateAll() {
+        List<CategoryVo> voPageResult = iArticleService.cateAll();
+        return AjaxResult.success(voPageResult);
     }
 
     /**

@@ -8,6 +8,7 @@ import com.hxkj.admin.vo.article.ArticleListVo;
 import com.hxkj.admin.vo.article.CategoryVo;
 import com.hxkj.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,6 +57,14 @@ public interface IArticleService {
      * @param id 文章主键
      */
     void articleDel(Integer id);
+
+    /**
+     * 分类所有
+     *
+     * @author fzr
+     * @return List<CategoryVo>
+     */
+    List<CategoryVo> cateAll();
 
     /**
      * 分类列表
