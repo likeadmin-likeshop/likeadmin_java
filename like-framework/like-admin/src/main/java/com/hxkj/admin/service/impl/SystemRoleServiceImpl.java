@@ -168,6 +168,7 @@ public class SystemRoleServiceImpl implements ISystemRoleService {
         model.setId(systemRoleParam.getId());
         model.setName(systemRoleParam.getName().trim());
         model.setRemark(systemRoleParam.getRemark());
+        model.setSort(systemRoleParam.getSort());
         model.setIsDisable(systemRoleParam.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         systemRoleMapper.updateById(model);
