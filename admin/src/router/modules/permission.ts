@@ -33,6 +33,20 @@ const routes: RouteRecordRaw = {
                 parent: '/permission/role',
                 hidden: true
             }
+        },
+        {
+            path: '/permission/menu',
+            component: () => import('@/views/permission/menu/index.vue'),
+            meta: { title: '菜单', permission: ['view'] }
+        },
+        {
+            path: '/permission/menu/edit',
+            component: () => import('@/views/permission/menu/edit.vue'),
+            meta: {
+                title: '菜单',
+                parent: '/permission/menu',
+                hidden: true
+            }
         }
     ]
 }

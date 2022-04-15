@@ -60,3 +60,24 @@ export function apiConfigGetMenu() {
 export function apiConfigGetAuth() {
     return request.get('/config/getAuth')
 }
+
+/* 菜单 */
+// 菜单详情
+export function apiMenuDetail(params: any) {
+    return request.get('/system/menu/detail', { params })
+}
+
+// 新增菜单
+export function apiMenuAdd(params: any) {
+    return request.post('/system/menu/add', params)
+}
+
+// 编辑菜单
+export function apiMenuEdit(params: any) {
+    return request.post('/system/menu/edit', params)
+}
+
+// 删除菜单
+export function apiMenuDelete(params: { id: number }) {
+    return request.post('/system/menu/del', params)
+}

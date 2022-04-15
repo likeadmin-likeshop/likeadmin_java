@@ -102,8 +102,8 @@ const rules = reactive<object>({
 
 // 获取个人设置
 const getAuthAdminMySelf = async (): Promise<void> => {
-    formData.value = await apiUserInfo()
-    console.log(formData.value, 'formData')
+    let res = await apiUserInfo()
+    formData.value = res?.user
 }
 
 // 设置个人设置
