@@ -111,19 +111,19 @@ const visitType = ref<Array<any>>([
     {
         label: 'post',
         value: 'post'
-    },
-    {
-        label: 'put',
-        value: 'put'
-    },
-    {
-        label: 'delete',
-        value: 'delete'
-    },
-    {
-        label: 'option',
-        value: 'option'
     }
+    // {
+    //     label: 'put',
+    //     value: 'put'
+    // },
+    // {
+    //     label: 'delete',
+    //     value: 'delete'
+    // },
+    // {
+    //     label: 'option',
+    //     value: 'option'
+    // }
 ])
 
 const { pager, requestApi, resetParams, resetPage } = usePages({

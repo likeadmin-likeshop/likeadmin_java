@@ -26,6 +26,13 @@
                         :autosize="{ minRows: 4, maxRows: 6 }"
                     ></el-input>
                 </el-form-item>
+                <!-- 排序 -->
+                <el-form-item label="排序">
+                    <el-input v-model="formData.sort" placeholder="请输入" type="number"></el-input>
+                </el-form-item>
+                <el-form-item label="状态">
+                    <el-switch v-model="formData.isDisable" :active-value="0" :inactive-value="1" />
+                </el-form-item>
                 <!-- 权限 -->
                 <el-form-item label="权限" prop="auth_keys">
                     <div class="flex" style="margin-top: 3px">
@@ -40,8 +47,8 @@
                         default-expand-all
                         icon="ArrowRight"
                         :props="{
-                            children: 'sons',
-                            label: 'name'
+                            children: 'children',
+                            label: 'menuName'
                         }"
                         empty-text=""
                         show-checkbox
@@ -86,7 +93,9 @@ export default defineComponent({
                 formData: {
                     name: '', // 角色名称
                     remark: '', // 备注
-                    auth_keys: [] // 权限
+                    auth_keys: [], // 权限
+                    isDisable: 0,
+                    sort: ''
                 },
 
                 menu: {

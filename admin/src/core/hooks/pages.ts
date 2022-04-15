@@ -31,8 +31,8 @@ export function usePages(options: Options) {
         }
         pager.loading = true
         return callback({
-            page_no: pager.page,
-            page_size: pager.size,
+            pageNo: pager.page,
+            pageSize: pager.size,
             ...params
         })
             .then((res: any) => {

@@ -15,3 +15,6 @@ export function apiLogout() {
 export function apiUserInfo() {
     return request.get('/system/admin/self')
 }
+export function apiAdminUpInfo(params: any) {
+    return request.post('/system/admin/upInfo', params)
+}

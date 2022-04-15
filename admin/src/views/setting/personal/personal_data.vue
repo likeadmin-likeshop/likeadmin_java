@@ -64,7 +64,7 @@ import type { ElForm } from 'element-plus'
 import MaterialSelect from '@/components/material-select/index.vue'
 import FooterBtns from '@/components/footer-btns/index.vue'
 import { apiAdminEdit, apiAdminDetail } from '@/api/auth'
-import { apiUserInfo } from '@/api/user'
+import { apiUserInfo, apiAdminUpInfo } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { useAdmin } from '@/core/hooks/app'
 
@@ -103,6 +103,7 @@ const rules = reactive<object>({
 // 获取个人设置
 const getAuthAdminMySelf = async (): Promise<void> => {
     formData.value = await apiUserInfo()
+    console.log(formData.value, 'formData')
 }
 
 // 设置个人设置
@@ -140,7 +141,7 @@ const setAuthAdminEditSelf = async (): Promise<void> => {
         }
     }
 
-    await apiAdminEdit({ ...formData.value })
+    await apiAdminUpInfo({ ...formData.value })
     getAuthAdminMySelf()
     store.dispatch('user/getUser')
 }

@@ -53,7 +53,7 @@ export function apiRoleDetail(params: any) {
 
 // 角色权限菜单
 export function apiConfigGetMenu() {
-    return request.get('/config/getMenu')
+    return request.get('/system/menu/lists')
 }
 
 // 角色权限

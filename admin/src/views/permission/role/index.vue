@@ -9,7 +9,9 @@
                     <el-table :data="pager.lists" size="medium">
                         <el-table-column prop="id" label="ID"></el-table-column>
                         <el-table-column prop="name" label="名称"></el-table-column>
+                        <el-table-column prop="sort" label="排序"></el-table-column>
                         <el-table-column prop="remark" label="备注"></el-table-column>
+                        <el-table-column prop="isDisable" label="状态"></el-table-column>
                         <el-table-column prop label="权限"></el-table-column>
                         <el-table-column prop="createTime" label="创建时间"></el-table-column>
                         <el-table-column prop label="操作">

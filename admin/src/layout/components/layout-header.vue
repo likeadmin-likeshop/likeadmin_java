@@ -11,6 +11,11 @@
                     </div>
                     <template #dropdown>
                         <el-dropdown-menu>
+                            <router-link to="/setting/personal/personal_data">
+                                <el-dropdown-item>个人设置</el-dropdown-item>
+                            </router-link>
+                        </el-dropdown-menu>
+                        <el-dropdown-menu>
                             <el-dropdown-item command="logout">退出登录</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
