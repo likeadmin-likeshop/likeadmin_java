@@ -45,6 +45,7 @@ public class SystemLogServerImpl implements ISystemLogServer {
      */
     @Override
     public PageResult<LogOperateVo> operate(PageParam pageParam, Map<String, String> params) {
+
         Integer pageNo   = pageParam.getPageNo();
         Integer pageSize = pageParam.getPageSize();
 
@@ -54,20 +55,20 @@ public class SystemLogServerImpl implements ISystemLogServer {
                 .leftJoin("ls_system_admin sa ON sa.id=t.admin_id")
                 .orderByDesc("id");
 
-        IPage<LogOperateVo> iPage = logOperateMapper.selectJoinPage(
-                new Page<>(pageNo, pageSize),
-                LogOperateVo.class,
-                mpjQueryWrapper);
-
         logOperateMapper.setSearch(mpjQueryWrapper, params, new String[]{
                 "like:title:str",
                 "like:username:str",
-                "=:type:int",
+                "=:type:str",
                 "=:status:int",
                 "=:url:str",
                 "=:ip:str",
                 "datetime:startTime-endTime@create_time:str"
         });
+
+        IPage<LogOperateVo> iPage = logOperateMapper.selectJoinPage(
+                new Page<>(pageNo, pageSize),
+                LogOperateVo.class,
+                mpjQueryWrapper);
 
         for (LogOperateVo vo : iPage.getRecords()) {
             vo.setTaskTime(vo.getTaskTime());
@@ -111,8 +112,6 @@ public class SystemLogServerImpl implements ISystemLogServer {
             vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
             voList.add(vo);
         }
-
-
 
         return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), voList);
     }
