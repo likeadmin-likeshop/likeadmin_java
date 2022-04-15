@@ -5,24 +5,40 @@
             <el-card class="flex-1 m-r-15" shadow="never">
                 <div>CPU</div>
                 <div class="m-t-15">
-                    <el-table :data="info.cpu" size="medium">
-                        <el-table-column prop="cpuNum" label="核心数"> </el-table-column>
-                        <el-table-column prop="used" label="用户使用率"> </el-table-column>
-                        <el-table-column prop="sys" label="系统使用率"> </el-table-column>
-                        <el-table-column prop="value" label="当前空闲率"> </el-table-column>
-                    </el-table>
+                    <el-form :inline="true" :model="cpuFormData" label-width="110px" size="small">
+                        <el-form-item label="核心数">
+                            <div>{{ cpuFormData.cpuNum || '-' }}</div>
+                        </el-form-item>
+                        <el-form-item label="用户使用率">
+                            <div>{{ cpuFormData.used || '-' }}%</div>
+                        </el-form-item>
+                        <el-form-item label="系统使用率">
+                            <div>{{ cpuFormData.sys || '-' }}%</div>
+                        </el-form-item>
+                        <el-form-item label="当前空闲率">
+                            <div>{{ cpuFormData.free || '-' }}%</div>
+                        </el-form-item>
+                    </el-form>
                 </div>
             </el-card>
 
             <el-card class="flex-1" shadow="never">
                 <div>内存</div>
                 <div class="m-t-15">
-                    <el-table :data="info.mem" size="medium">
-                        <el-table-column prop="total" label="总内存"> </el-table-column>
-                        <el-table-column prop="used" label="已用内存"> </el-table-column>
-                        <el-table-column prop="free" label="剩余内存"> </el-table-column>
-                        <el-table-column prop="usage" label="使用率"> </el-table-column>
-                    </el-table>
+                    <el-form :inline="true" :model="memFormData" label-width="110px" size="small">
+                        <el-form-item label="总内存">
+                            <div>{{ memFormData.total || '-' }}G</div>
+                        </el-form-item>
+                        <el-form-item label="已用内存">
+                            <div>{{ memFormData.used || '-' }}G</div>
+                        </el-form-item>
+                        <el-form-item label="剩余内存">
+                            <div>{{ memFormData.free || '-' }}G</div>
+                        </el-form-item>
+                        <el-form-item label="使用率">
+                            <div>{{ memFormData.usage || '-' }}%</div>
+                        </el-form-item>
+                    </el-form>
                 </div>
             </el-card>
         </div>
@@ -30,27 +46,49 @@
         <el-card shadow="never" class="m-t-15">
             <div>服务器信息</div>
             <div class="m-t-15">
-                <el-table :data="info.server" size="medium">
-                    <el-table-column prop="computerName" label="服务器名称"> </el-table-column>
-                    <el-table-column prop="computerIp" label="服务器IP"> </el-table-column>
-                    <el-table-column prop="osName" label="操作系统"> </el-table-column>
-                    <el-table-column prop="osArch" label="系统架构"> </el-table-column>
-                </el-table>
+                <el-form :inline="true" :model="serverFormData" label-width="160px" size="small">
+                    <el-form-item label="服务器名称">
+                        <div>{{ serverFormData.computerName || '-' }}</div>
+                    </el-form-item>
+                    <el-form-item label="服务器IP">
+                        <div>{{ serverFormData.computerIp || '-' }}</div>
+                    </el-form-item>
+                    <el-form-item label="操作系统">
+                        <div>{{ serverFormData.osName || '-' }}</div>
+                    </el-form-item>
+                    <el-form-item label="系统架构">
+                        <div>{{ serverFormData.osArch || '-' }}</div>
+                    </el-form-item>
+                    <el-form-item label="项目路径">
+                        <div>{{ serverFormData.userDir || '-' }}</div>
+                    </el-form-item>
+                </el-form>
             </div>
         </el-card>
 
         <el-card shadow="never" class="m-t-15">
             <div>Java虚拟机信息</div>
             <div class="m-t-15">
-                <el-table :data="info.server" size="medium">
-                    <el-table-column prop="name" label="Java名称"> </el-table-column>
-                    <el-table-column prop="startTime" label="启动时间"> </el-table-column>
-                    <el-table-column prop="home" label="安装路径"> </el-table-column>
-                    <!-- <el-table-column prop="remark" label="项目路径"> </el-table-column> -->
-                    <el-table-column prop="inputArgs" label="运行参数"> </el-table-column>
-                    <el-table-column prop="version" label="Java版本"> </el-table-column>
-                    <el-table-column prop="runTime" label="运行时长"> </el-table-column>
-                </el-table>
+                <el-form :inline="true" :model="jvmFormData" label-width="120px" size="small">
+                    <el-form-item label="Java名称">
+                        <div>{{ jvmFormData.name || '-' }}</div>
+                    </el-form-item>
+                    <el-form-item label="启动时间">
+                        <div>{{ jvmFormData.startTime || '-' }}</div>
+                    </el-form-item>
+                    <el-form-item label="安装路径">
+                        <div>{{ jvmFormData.home || '-' }}</div>
+                    </el-form-item>
+                    <el-form-item label="运行参数">
+                        <div>{{ jvmFormData.inputArgs || '-' }}</div>
+                    </el-form-item>
+                    <el-form-item label="Java版本">
+                        <div>{{ jvmFormData.version || '-' }}</div>
+                    </el-form-item>
+                    <el-form-item label="运行时长">
+                        <div>{{ jvmFormData.runTime || '-' }}</div>
+                    </el-form-item>
+                </el-form>
             </div>
         </el-card>
 
@@ -71,38 +109,37 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, onMounted } from 'vue'
+<script setup lang="ts">
+import { defineComponent, reactive, onMounted, ref } from 'vue'
 import { apiSystemInfo } from '@/api/setting'
-export default defineComponent({
-    setup() {
-        const info = reactive({
-            cpu: [], // cpu
-            mem: [], // 内存
-            server: [], // 服务器信息
-            auth: [], // 目录权限
-            disk: [] // 硬盘
+
+const info = reactive({
+    disk: [] // 硬盘
+})
+
+const cpuFormData = ref<any>({})
+const memFormData = ref<any>({})
+const serverFormData = ref<any>({})
+const jvmFormData = ref<any>({})
+
+const getSystemInfo = () => {
+    apiSystemInfo()
+        .then((res: any) => {
+            console.log('res', res)
+            cpuFormData.value = res.cpu
+            memFormData.value = res.mem
+            serverFormData.value = res.sys
+            jvmFormData.value = res.jvm
+
+            info.disk = res.disk
         })
-
-        const getSystemInfo = () => {
-            apiSystemInfo().then((res: any) => {
-                console.log('res', res)
-                info.cpu = res.cpu
-                info.server = res.server
-                info.auth = res.auth
-                info.disk = res.disk
-            })
-        }
-
-        onMounted(() => {
-            getSystemInfo()
+        .catch((err: any) => {
+            console.log('err', err)
         })
+}
 
-        return {
-            info,
-            getSystemInfo
-        }
-    }
+onMounted(() => {
+    getSystemInfo()
 })
 </script>
 
