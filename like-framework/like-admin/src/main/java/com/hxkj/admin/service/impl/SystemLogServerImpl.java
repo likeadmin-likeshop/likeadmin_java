@@ -45,7 +45,6 @@ public class SystemLogServerImpl implements ISystemLogServer {
      */
     @Override
     public PageResult<LogOperateVo> operate(PageParam pageParam, Map<String, String> params) {
-
         Integer pageNo   = pageParam.getPageNo();
         Integer pageSize = pageParam.getPageSize();
 
