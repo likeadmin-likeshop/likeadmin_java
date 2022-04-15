@@ -69,9 +69,9 @@ export function apiSystemLogLists(params: any) {
     return request.get('/system/log/operate', { params })
 }
 
-// 清除系统缓存
-export function apiSystemCacheClear() {
-    return request.post('/setting.system.cache/clear')
+// 系统缓存
+export function apiSystemCache(params: any) {
+    return request.get('/monitor/cache', { params })
 }
 
 // 编辑管理员信息
