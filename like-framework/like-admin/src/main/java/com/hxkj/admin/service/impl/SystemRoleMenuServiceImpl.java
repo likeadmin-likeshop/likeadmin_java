@@ -9,10 +9,12 @@ import com.hxkj.common.mapper.system.SystemMenuMapper;
 import com.hxkj.common.mapper.system.SystemRoleMenuMapper;
 import com.hxkj.common.utils.ArrayUtil;
 import com.hxkj.common.utils.RedisUtil;
+import com.hxkj.common.utils.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -107,11 +109,15 @@ public class SystemRoleMenuServiceImpl implements ISystemRoleMenuService {
         if (menuIds.size() > 0) {
             List<SystemMenu> systemMenus = systemMenuMapper.selectList(new QueryWrapper<SystemMenu>()
                     .select("id,perms")
+                    .eq("is_disable", 0)
                     .in("id", menuIds)
-                    .eq("is_disable", 0));
+                    .in("menu_type", Arrays.asList("C", "A"))
+                    .orderByAsc(Arrays.asList("menu_sort", "id")));
 
-            for (SystemMenu systemMenu : systemMenus) {
-                menuArray.add(systemMenu.getPerms().trim());
+            for (SystemMenu item : systemMenus) {
+                if (StringUtil.isNotNull(item.getPerms()) && StringUtil.isNotEmpty(item.getPerms())) {
+                    menuArray.add(item.getPerms().trim());
+                }
             }
         }
 

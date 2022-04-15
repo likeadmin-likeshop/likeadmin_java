@@ -21,14 +21,6 @@ public interface ISystemMenuService {
     JSONArray selectMenuByRoleId(Integer roleId);
 
     /**
-     * 根据角色获取权限
-     *
-     * @author fzr
-     * @return JSONArray
-     */
-    List<SystemAuthVo> selectAuthByRoleId(Integer roleId);
-
-    /**
      * 菜单列表
      *
      * @author fzr

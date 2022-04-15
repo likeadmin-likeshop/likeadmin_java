@@ -9,6 +9,7 @@ import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.enums.HttpEnum;
 import com.hxkj.common.utils.RedisUtil;
 import com.hxkj.common.utils.ToolsUtil;
+import com.hxkj.common.utils.YmlUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -47,9 +48,14 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
 
+        // 路由转权限
+        String prefix = YmlUtil.get("server.servlet.context-path") + "/";
+        String route = request.getRequestURI().replaceFirst(prefix, "");
+        String auths = route.replace("/", ":");
+
         // 免登录接口
         List<String> notLoginUri = Arrays.asList(AdminConfig.notLoginUri);
-        if (notLoginUri.contains(request.getRequestURI())) {
+        if (notLoginUri.contains(auths)) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
 
@@ -117,7 +123,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
 
         // 验证是否有权限操作
         String menus = RedisUtil.hGet(AdminConfig.backstageRolesKey, roleId).toString();
-        if (menus.equals("") || !Arrays.asList(menus.split(",")).contains(request.getRequestURI())) {
+        if (menus.equals("") || !Arrays.asList(menus.split(",")).contains(auths)) {
             AjaxResult result = AjaxResult.failed(HttpEnum.NO_PERMISSION.getCode(), HttpEnum.NO_PERMISSION.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;

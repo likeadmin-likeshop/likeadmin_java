@@ -16,7 +16,7 @@ import java.util.Map;
  * 服务监控管理
  */
 @RestController
-@RequestMapping("/api/monitor")
+@RequestMapping("/monitor")
 public class ServerController {
     /**
      * 服务器信息

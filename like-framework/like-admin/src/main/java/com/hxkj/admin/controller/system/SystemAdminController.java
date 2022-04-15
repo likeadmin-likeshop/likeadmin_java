@@ -6,6 +6,7 @@ import com.hxkj.admin.service.ISystemAdminService;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.system.SystemAdminParam;
 import com.hxkj.admin.vo.system.SystemAdminVo;
+import com.hxkj.admin.vo.system.SystemSelfVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.validator.annotation.IDMust;
@@ -19,7 +20,7 @@ import java.util.Map;
  * 系统管理员管理
  */
 @RestController
-@RequestMapping("/api/system/admin")
+@RequestMapping("/system/admin")
 public class SystemAdminController {
 
     @Resource
@@ -47,7 +48,7 @@ public class SystemAdminController {
     @GetMapping("/self")
     public Object self() {
         Integer adminId = LikeAdminThreadLocal.getAdminId();
-        SystemAdminVo vo = iSystemAdminService.detail(adminId);
+        SystemSelfVo vo = iSystemAdminService.self(adminId);
         return AjaxResult.success(vo);
     }
 
@@ -65,7 +66,7 @@ public class SystemAdminController {
     }
 
     /**
-     * 新增管理员
+     * 管理员新增
      *
      * @author fzr
      * @param systemAdminParam 参数
@@ -79,7 +80,7 @@ public class SystemAdminController {
     }
 
     /**
-     * 编辑管理员
+     * 管理员编辑
      *
      * @author fzr
      * @param systemAdminParam 参数
@@ -93,7 +94,21 @@ public class SystemAdminController {
     }
 
     /**
-     * 删除管理员
+     * 当前管理员更新
+     *
+     * @author fzr
+     * @return Object
+     */
+    @Log(title = "管理员更新")
+    @PostMapping("/upInfo")
+    public Object upInfo(@Validated(value = SystemAdminParam.upInfo.class) @RequestBody SystemAdminParam systemAdminParam) {
+        Integer adminId = LikeAdminThreadLocal.getAdminId();
+        iSystemAdminService.upInfo(systemAdminParam, adminId);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 管理员删除
      *
      * @author fzr
      * @return Object

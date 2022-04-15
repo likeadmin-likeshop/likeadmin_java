@@ -12,14 +12,14 @@ import java.util.Map;
  * 基础设置管理
  */
 @RestController
-@RequestMapping("/api/setting")
+@RequestMapping("/setting")
 public class BasicsController {
 
     @Resource
     IBasicsService iBasicsService;
 
     /**
-     * 获取网站信息
+     * “获取”网站信息
      *
      * @author fzr
      * @return Object
@@ -32,7 +32,7 @@ public class BasicsController {
     }
 
     /**
-     * 修改网站信息
+     * “修改”网站信息
      *
      * @author fzr
      * @return Object
@@ -49,7 +49,7 @@ public class BasicsController {
     }
 
     /**
-     * 获取备案信息
+     * “获取”备案信息
      *
      * @author fzr
      * @return Object
@@ -62,7 +62,7 @@ public class BasicsController {
     }
 
     /**
-     * 修改备案信息
+     * “修改”备案信息
      *
      * @author fzr
      * @return Object

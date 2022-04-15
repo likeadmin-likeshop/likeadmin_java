@@ -3,6 +3,7 @@ package com.hxkj.admin.service;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.system.SystemAdminParam;
 import com.hxkj.admin.vo.system.SystemAdminVo;
+import com.hxkj.admin.vo.system.SystemSelfVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SystemAdmin;
 
@@ -32,6 +33,14 @@ public interface ISystemAdminService {
     PageResult<SystemAdminVo> lists(PageParam pageParam, Map<String, String> params);
 
     /**
+     * 当前管理员
+     *
+     * @author fzr
+     * @return SystemSelfVo
+     */
+    SystemSelfVo self(Integer adminId);
+
+    /**
      * 管理员详情
      *
      * @author fzr
@@ -55,6 +64,14 @@ public interface ISystemAdminService {
      * @param systemAdminParam 参数
      */
     void edit(SystemAdminParam systemAdminParam);
+
+    /**
+     * 当前管理员更新
+     *
+     * @author fzr
+     * @param systemAdminParam 参数
+     */
+    void upInfo(SystemAdminParam systemAdminParam, Integer adminId);
 
     /**
      * 管理员删除

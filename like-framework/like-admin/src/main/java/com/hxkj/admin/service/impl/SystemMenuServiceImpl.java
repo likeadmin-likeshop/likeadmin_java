@@ -45,7 +45,7 @@ public class SystemMenuServiceImpl implements ISystemMenuService {
 
         QueryWrapper<SystemMenu> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("menu_type", Arrays.asList("M", "C"));
-        queryWrapper.orderByDesc(Arrays.asList("menu_sort", "id"));
+        queryWrapper.orderByAsc(Arrays.asList("menu_sort", "id"));
         if (adminId != 1 && menuIds.size() > 0) {
             queryWrapper.in("id", menuIds);
         }
@@ -66,64 +66,6 @@ public class SystemMenuServiceImpl implements ISystemMenuService {
     }
 
     /**
-     * 根据角色ID获取权限
-     *
-     * @param roleId 角色ID
-     * @return JSONArray
-     */
-    @Override
-    public List<SystemAuthVo> selectAuthByRoleId(Integer roleId) {
-        List<Integer> menuIds = iSystemRoleMenuService.selectMenuIdsByRoleId(roleId);
-
-        QueryWrapper<SystemMenu> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("menu_type", Arrays.asList("C", "A"));
-        queryWrapper.orderByDesc(Arrays.asList("menu_sort", "id"));
-        if (menuIds.size() > 0) {
-            queryWrapper.in("id", menuIds);
-        }
-
-        List<SystemMenu> systemMenus = systemMenuMapper.selectList(queryWrapper);
-        JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(systemMenus));
-        JSONArray menuJson = ArrayUtil.listToTree(jsonArray, "id", "pid", "children");
-
-        List<SystemAuthVo> authVos = new ArrayList<>();
-        for (Object object : menuJson.toArray()) {
-            Map<String, String> map = ToolsUtil.objectToMap(object);
-
-            SystemAuthVo systemAuthVo = new SystemAuthVo();
-            systemAuthVo.setPath(map.get("component"));
-
-            List<String> auths = new ArrayList<>();
-            if (StringUtil.isNotEmpty(map.get("children"))) {
-                // 第一层
-                for (Map<String, String> m : ToolsUtil.stringToList(map.get("children"))) {
-                    if (!m.get("perms").equals("")) {
-                        auths.add(m.get("perms"));
-                    }
-
-                    // 第二层
-                    if (!m.get("children").equals("")) {
-                        for (Map<String, String> tow : ToolsUtil.stringToList(m.get("children"))) {
-                            if (!tow.get("perms").equals("")) {
-                                auths.add(tow.get("perms"));
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (!map.get("perms").equals("")) {
-                auths.add(map.get("perms"));
-            }
-
-            systemAuthVo.setAuth(auths);
-            authVos.add(systemAuthVo);
-        }
-
-        return authVos;
-    }
-
-    /**
      * 菜单列表
      *
      * @author fzr
@@ -132,7 +74,7 @@ public class SystemMenuServiceImpl implements ISystemMenuService {
     @Override
     public JSONArray lists() {
         QueryWrapper<SystemMenu> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc(Arrays.asList("menu_sort", "id"));
+        queryWrapper.orderByAsc(Arrays.asList("menu_sort", "id"));
 
         List<SystemMenu> systemMenus = systemMenuMapper.selectList(queryWrapper);
 
@@ -185,6 +127,8 @@ public class SystemMenuServiceImpl implements ISystemMenuService {
         model.setMenuIcon(systemMenuParam.getMenuIcon());
         model.setMenuSort(systemMenuParam.getMenuSort());
         model.setPerms(systemMenuParam.getPerms());
+        model.setPaths(systemMenuParam.getPaths());
+        model.setComponent(systemMenuParam.getComponent());
         model.setIsDisable(systemMenuParam.getIsDisable());
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
@@ -206,7 +150,9 @@ public class SystemMenuServiceImpl implements ISystemMenuService {
         model.setMenuName(systemMenuParam.getMenuName());
         model.setMenuIcon(systemMenuParam.getMenuIcon());
         model.setMenuSort(systemMenuParam.getMenuSort());
+        model.setPaths(systemMenuParam.getPaths());
         model.setPerms(systemMenuParam.getPerms());
+        model.setComponent(systemMenuParam.getComponent());
         model.setPid(systemMenuParam.getPid());
         model.setIsDisable(systemMenuParam.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);

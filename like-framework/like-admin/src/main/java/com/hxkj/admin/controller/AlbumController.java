@@ -18,7 +18,7 @@ import java.util.Map;
  * 相册管理
  */
 @RestController
-@RequestMapping("/api/album")
+@RequestMapping("/album")
 public class AlbumController {
 
     @Resource

@@ -49,6 +49,12 @@ public class SystemMenuParam implements Serializable {
     @Length(max = 100, message = "权限字符不能超过100个字符", groups = {create.class, update.class})
     private String perms;
 
+    @Length(max = 200, message = "路由地址不能超过200个字符", groups = {create.class, update.class})
+    private String paths;
+
+    @Length(max = 100, message = "前端组件不能超过200个字符", groups = {create.class, update.class})
+    private String component;
+
     @NotNull(message = "请选择状态", groups = {create.class, update.class})
     private Integer isDisable;
 

@@ -19,6 +19,8 @@ public class SystemMenuVo implements Serializable {
     private String menuIcon;
     private Integer menuSort;
     private String perms;
+    private String paths;
+    private String component;
     private Integer isDisable;
     private String createTime;
     private String updateTime;

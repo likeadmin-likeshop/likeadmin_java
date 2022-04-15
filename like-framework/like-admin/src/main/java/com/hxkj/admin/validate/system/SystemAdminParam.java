@@ -22,8 +22,8 @@ public class SystemAdminParam implements Serializable {
 
     public interface create{}
     public interface update{}
+    public interface upInfo{}
     public interface delete{}
-
 
     @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
     private Integer id;
@@ -36,12 +36,12 @@ public class SystemAdminParam implements Serializable {
     @Length(min = 2, max = 20, message = "账号必须在2~20个字符内", groups = {create.class, update.class})
     private String username;
 
-    @NotEmpty(message = "昵称不能为空", groups = {create.class, update.class})
-    @Length(min = 2, max = 30, message = "昵称必须在2~30个字符内", groups = {create.class, update.class})
+    @NotEmpty(message = "昵称不能为空", groups = {create.class, update.class, upInfo.class})
+    @Length(min = 2, max = 30, message = "昵称必须在2~30个字符内", groups = {create.class, update.class, upInfo.class})
     private String nickname;
 
     @NotEmpty(message = "密码不能为空", groups = {create.class})
-    @Length(min = 6, max = 18, message = "密码必须在6~18个字符内", groups = {create.class, update.class})
+    @Length(min = 6, max = 18, message = "密码必须在6~18个字符内", groups = {create.class, update.class, upInfo.class})
     private String password;
 
     @NotNull(message = "请选择状态", groups = {create.class, update.class})

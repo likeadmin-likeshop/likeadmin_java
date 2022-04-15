@@ -8,13 +8,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hxkj.admin.LikeAdminThreadLocal;
 import com.hxkj.admin.config.AdminConfig;
 import com.hxkj.admin.service.ISystemAdminService;
+import com.hxkj.admin.service.ISystemRoleMenuService;
 import com.hxkj.admin.service.ISystemRoleService;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.system.SystemAdminParam;
 import com.hxkj.admin.vo.system.SystemAdminVo;
+import com.hxkj.admin.vo.system.SystemSelfVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SystemAdmin;
+import com.hxkj.common.entity.system.SystemMenu;
+import com.hxkj.common.entity.system.SystemRoleMenu;
 import com.hxkj.common.mapper.system.SystemAdminMapper;
+import com.hxkj.common.mapper.system.SystemMenuMapper;
+import com.hxkj.common.mapper.system.SystemRoleMenuMapper;
 import com.hxkj.common.utils.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -32,7 +38,13 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
     SystemAdminMapper systemAdminMapper;
 
     @Resource
+    SystemMenuMapper systemMenuMapper;
+
+    @Resource
     ISystemRoleService iSystemRoleService;
+
+    @Resource
+    ISystemRoleMenuService iSystemRoleMenuService;
 
     /**
      * 根据账号查找管理员
@@ -96,6 +108,60 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
         }
 
         return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), adminVoArrayList);
+    }
+
+    /**
+     * 当前管理员
+     *
+     * @author fzr
+     * @return SystemSelfVo
+     */
+    @Override
+    public SystemSelfVo self(Integer adminId) {
+        // 管理员信息
+        SystemAdmin sysAdmin = systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
+                .select(SystemAdmin.class, info->
+                        !info.getColumn().equals("salt") &&
+                                !info.getColumn().equals("password") &&
+                                !info.getColumn().equals("is_delete") &&
+                                !info.getColumn().equals("delete_time"))
+                .eq("is_delete", 0)
+                .eq("id", adminId)
+                .last("limit 1"));
+
+        SystemAdminVo systemAdminVo = new SystemAdminVo();
+        BeanUtils.copyProperties(sysAdmin, systemAdminVo);
+        systemAdminVo.setRole(String.valueOf(sysAdmin.getRole()));
+        systemAdminVo.setAvatar(UrlUtil.toAbsoluteUrl(sysAdmin.getAvatar()));
+        systemAdminVo.setUpdateTime(TimeUtil.timestampToDate(sysAdmin.getUpdateTime()));
+        systemAdminVo.setCreateTime(TimeUtil.timestampToDate(sysAdmin.getCreateTime()));
+        systemAdminVo.setLastLoginTime(TimeUtil.timestampToDate(sysAdmin.getLastLoginTime()));
+
+        // 角色权限
+        List<String> auths = new LinkedList<>();
+        if (adminId > 1) {
+            List<Integer> menuIds = iSystemRoleMenuService.selectMenuIdsByRoleId(sysAdmin.getRole());
+            List<SystemMenu> systemMenus = systemMenuMapper.selectList(new QueryWrapper<SystemMenu>()
+                    .eq("is_disable", 0)
+                    .in("id", menuIds)
+                    .in("menu_type", Arrays.asList("C", "A"))
+                    .orderByAsc(Arrays.asList("menu_sort", "id")));
+
+            // 处理权限
+            for (SystemMenu item : systemMenus) {
+                if (StringUtil.isNotNull(item.getPerms()) && StringUtil.isNotEmpty(item.getPerms())) {
+                    auths.add(item.getPerms().trim());
+                }
+            }
+        } else {
+            auths.add("*");
+        }
+
+        // 返回数据
+        SystemSelfVo vo = new SystemSelfVo();
+        vo.setUser(systemAdminVo);
+        vo.setPermissions(auths);
+        return vo;
     }
 
     /**
@@ -224,9 +290,42 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
 
         systemAdminMapper.updateById(model);
         this.cacheAdminUserByUid(systemAdminParam.getId());
+    }
+
+    /**
+     * 当前管理员更新
+     *
+     * @author fzr
+     * @param systemAdminParam 参数
+     */
+    @Override
+    public void upInfo(SystemAdminParam systemAdminParam, Integer adminId) {
+        String[] field = {"id", "username", "nickname"};
+        SystemAdmin model = systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
+                .select(field)
+                .eq("id", adminId)
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        Assert.notNull(model, "账号不存在了!");
+
+        model.setNickname(systemAdminParam.getNickname());
+        model.setAvatar( UrlUtil.toRelativeUrl(systemAdminParam.getAvatar()));
+        model.setUpdateTime(System.currentTimeMillis() / 1000);
+
+        if (systemAdminParam.getPassword() != null && !systemAdminParam.getPassword().equals("")) {
+            String salt   = ToolsUtil.randomString(5);
+            String pwd    = ToolsUtil.makeMd5( systemAdminParam.getPassword().trim() + salt);
+            model.setPassword(pwd);
+            model.setSalt(salt);
+        }
+
+        systemAdminMapper.updateById(model);
+        this.cacheAdminUserByUid(adminId);
 
         if (systemAdminParam.getPassword() != null) {
-            RedisUtil.del(Objects.requireNonNull(HttpUtil.obj()).getHeader("token"));
+            String token = Objects.requireNonNull(HttpUtil.obj()).getHeader("token");
+            RedisUtil.del(AdminConfig.backstageTokenKey + token);
         }
     }
 

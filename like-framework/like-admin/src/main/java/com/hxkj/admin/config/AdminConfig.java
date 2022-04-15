@@ -16,11 +16,13 @@ public class AdminConfig {
 
     // 免登录验证
     public static String[] notLoginUri = new String[]{
-            "/api/system/login",
-            "/api/index/config",
+            "system:login", // 登录接口
+            "index:config"  // 配置接口
     };
 
     // 免权限验证
-    public static String[] notAuthUri = new String[]{};
+    public static String[] notAuthUri = new String[]{
+            "system:admin:upInfo" // 管理员更新接口
+    };
 
 }

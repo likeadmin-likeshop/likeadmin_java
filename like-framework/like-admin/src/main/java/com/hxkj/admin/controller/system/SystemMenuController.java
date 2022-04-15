@@ -19,7 +19,7 @@ import java.util.List;
  * 系统菜单管理
  */
 @RestController
-@RequestMapping("/api/system/menu")
+@RequestMapping("/system/menu")
 public class SystemMenuController {
 
     @Resource
@@ -35,19 +35,6 @@ public class SystemMenuController {
     public Object menus() {
         Integer roleId = LikeAdminThreadLocal.getRoleId();
         JSONArray lists = iSystemMenuService.selectMenuByRoleId(roleId);
-        return AjaxResult.success(lists);
-    }
-
-    /**
-     * 获取权限节点
-     *
-     * @author fzr
-     * @return Object
-     */
-    @GetMapping("/auth")
-    public Object auth() {
-        Integer roleId = LikeAdminThreadLocal.getRoleId();
-        List<SystemAuthVo> lists = iSystemMenuService.selectAuthByRoleId(roleId);
         return AjaxResult.success(lists);
     }
 
