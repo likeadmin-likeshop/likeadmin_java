@@ -1,6 +1,7 @@
 package com.hxkj.admin.validate.system;
 
 import com.hxkj.common.validator.annotation.IDMust;
+import com.hxkj.common.validator.annotation.IntegerContains;
 import com.hxkj.common.validator.annotation.StringContains;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -52,10 +53,25 @@ public class SystemMenuParam implements Serializable {
     @Length(max = 200, message = "路由地址不能超过200个字符", groups = {create.class, update.class})
     private String paths;
 
-    @Length(max = 100, message = "前端组件不能超过200个字符", groups = {create.class, update.class})
+    @Length(max = 200, message = "前端组件不能超过200个字符", groups = {create.class, update.class})
     private String component;
 
-    @NotNull(message = "请选择状态", groups = {create.class, update.class})
+    @Length(max = 200, message = "选中菜单路径不能超过200个字符", groups = {create.class, update.class})
+    private String selected;
+
+    @Length(max = 200, message = "路由参数不能超过200个字符", groups = {create.class, update.class})
+    private String params;
+
+    @NotNull(message = "请选择缓存状态", groups = {create.class, update.class})
+    @IntegerContains(values = {0, 1}, groups = {create.class, update.class})
+    private Integer isCache;
+
+    @NotNull(message = "请选择显示状态", groups = {create.class, update.class})
+    @IntegerContains(values = {0, 1}, groups = {create.class, update.class})
+    private Integer isShow;
+
+    @NotNull(message = "请选择菜单状态", groups = {create.class, update.class})
+    @IntegerContains(values = {0, 1}, groups = {create.class, update.class})
     private Integer isDisable;
 
 }

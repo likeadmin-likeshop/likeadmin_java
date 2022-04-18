@@ -8,7 +8,6 @@ import com.hxkj.admin.config.AdminConfig;
 import com.hxkj.admin.service.ISystemMenuService;
 import com.hxkj.admin.service.ISystemRoleMenuService;
 import com.hxkj.admin.validate.system.SystemMenuParam;
-import com.hxkj.admin.vo.system.SystemAuthVo;
 import com.hxkj.admin.vo.system.SystemMenuVo;
 import com.hxkj.common.entity.system.SystemMenu;
 import com.hxkj.common.mapper.system.SystemMenuMapper;
@@ -20,7 +19,6 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class SystemMenuServiceImpl implements ISystemMenuService {
@@ -45,12 +43,14 @@ public class SystemMenuServiceImpl implements ISystemMenuService {
 
         QueryWrapper<SystemMenu> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("menu_type", Arrays.asList("M", "C"));
+        queryWrapper.eq("is_show", 1);
         queryWrapper.orderByAsc(Arrays.asList("menu_sort", "id"));
         if (adminId != 1 && menuIds.size() > 0) {
             queryWrapper.in("id", menuIds);
         }
 
         List<SystemMenu> systemMenus = systemMenuMapper.selectList(queryWrapper);
+
         List<SystemMenuVo> lists = new ArrayList<>();
         for (SystemMenu systemMenu : systemMenus) {
             SystemMenuVo vo = new SystemMenuVo();
@@ -129,6 +129,10 @@ public class SystemMenuServiceImpl implements ISystemMenuService {
         model.setPerms(systemMenuParam.getPerms());
         model.setPaths(systemMenuParam.getPaths());
         model.setComponent(systemMenuParam.getComponent());
+        model.setSelected(systemMenuParam.getSelected());
+        model.setParams(systemMenuParam.getParams());
+        model.setIsCache(systemMenuParam.getIsCache());
+        model.setIsShow(systemMenuParam.getIsShow());
         model.setIsDisable(systemMenuParam.getIsDisable());
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
@@ -154,6 +158,10 @@ public class SystemMenuServiceImpl implements ISystemMenuService {
         model.setPerms(systemMenuParam.getPerms());
         model.setComponent(systemMenuParam.getComponent());
         model.setPid(systemMenuParam.getPid());
+        model.setSelected(systemMenuParam.getSelected());
+        model.setParams(systemMenuParam.getParams());
+        model.setIsCache(systemMenuParam.getIsCache());
+        model.setIsShow(systemMenuParam.getIsShow());
         model.setIsDisable(systemMenuParam.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         systemMenuMapper.updateById(model);

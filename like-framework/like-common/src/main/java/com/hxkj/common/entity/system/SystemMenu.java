@@ -24,6 +24,10 @@ public class SystemMenu implements Serializable {
     private String perms;
     private String paths;
     private String component;
+    private String selected;
+    private String params;
+    private Integer isCache;
+    private Integer isShow;
     private Integer isDisable;
     private Long createTime;
     private Long updateTime;
