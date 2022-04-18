@@ -6,6 +6,7 @@ import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.vo.album.AlbumVo;
 import com.hxkj.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,10 +36,10 @@ public interface IAlbumService {
      * 文件移动
      *
      * @author fzr
-     * @param id 文件ID
+     * @param ids 文件ID
      * @param cid 类目ID
      */
-    void albumMove(Integer id, Integer cid);
+    void albumMove(List<Integer> ids, Integer cid);
 
     /**
      * 文件新增
@@ -52,9 +53,9 @@ public interface IAlbumService {
      * 文件删除
      *
      * @author fzr
-     * @param id 文件ID
+     * @param ids 文件ID
      */
-    void albumDel(Integer id);
+    void albumDel(List<Integer> ids);
 
     /**
      * 分类列表

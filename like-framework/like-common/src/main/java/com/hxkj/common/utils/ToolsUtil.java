@@ -151,7 +151,7 @@ public class ToolsUtil {
      * @param json 对象
      * @return Map<String, String>
      */
-    public static Map<String, String> jsonToStrMap(String json){
+    public static Map<String, String> jsonToMapAsStr(String json){
         Type type = new TypeToken<Map<String, String>>() {}.getType();
         return JSON.parseObject(json, type);
     }
@@ -168,9 +168,28 @@ public class ToolsUtil {
         return JSON.parseObject(JSONObject.toJSONString(object), type);
     }
 
-    public static List<Map<String, String>> stringToList(String s) {
+    /**
+     * 字符串转List<Map<String, String>>
+     *
+     * @author fzr
+     * @param s 字符串
+     * @return Map<String, String>
+     */
+    public static List<Map<String, String>> stringToListAsMap(String s) {
         Type type = new TypeToken<List<Map<String, String>>>() {}.getType();
         return JSON.parseObject(s, type);
+    }
+
+    /**
+     * 对象转List<Integer>
+     *
+     * @author fzr
+     * @param object 对象
+     * @return List<Integer>
+     */
+    public static List<Integer> objectToListAsInt(Object object) {
+        Type type = new TypeToken<List<Integer>>() {}.getType();
+        return JSON.parseObject(JSONObject.toJSONString(object), type);
     }
 
     /**

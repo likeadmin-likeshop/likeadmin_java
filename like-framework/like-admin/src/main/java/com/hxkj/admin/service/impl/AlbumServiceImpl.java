@@ -113,28 +113,29 @@ public class AlbumServiceImpl implements IAlbumService {
      * 文件移动
      *
      * @author fzr
-     * @param id 文件ID
+     * @param ids 文件ID
      * @param cid 类目ID
      */
     @Override
-    public void albumMove(Integer id, Integer cid) {
-        Album album = albumMapper.selectOne(new QueryWrapper<Album>()
+    public void albumMove(List<Integer> ids, Integer cid) {
+        List<Album> albums = albumMapper.selectList(new QueryWrapper<Album>()
                 .select("id", "name")
-                .eq("id", id)
-                .eq("is_delete", 0)
-                .last("limit 1"));
+                .in("id", ids)
+                .eq("is_delete", 0));
 
-        Assert.notNull(album, "文件丢失！");
+        Assert.notNull(albums, "文件丢失！");
 
-        Assert.notNull( albumCateMapper.selectOne(
+        Assert.notNull(albumCateMapper.selectOne(
                 new QueryWrapper<AlbumCate>()
                     .eq("id", cid)
                     .eq("is_delete", 0)
                 ), "类目已不存在！");
 
-        album.setCid(cid);
-        album.setUpdateTime(System.currentTimeMillis() / 1000);
-        albumMapper.updateById(album);
+        for (Album album : albums) {
+            album.setCid(cid);
+            album.setUpdateTime(System.currentTimeMillis() / 1000);
+            albumMapper.updateById(album);
+        }
     }
 
     /**
@@ -164,21 +165,22 @@ public class AlbumServiceImpl implements IAlbumService {
      * 文件删除
      *
      * @author fzr
-     * @param id 文件ID
+     * @param ids 文件ID
      */
     @Override
-    public void albumDel(Integer id) {
-        Album album = albumMapper.selectOne(new QueryWrapper<Album>()
+    public void albumDel(List<Integer> ids) {
+        List<Album> albums = albumMapper.selectList(new QueryWrapper<Album>()
                 .select("id", "name")
-                .eq("id", id)
-                .eq("is_delete", 0)
-                .last("limit 1"));
+                .in("id", ids)
+                .eq("is_delete", 0));
 
-        Assert.notNull(album, "文件丢失！");
+        Assert.notNull(albums, "文件丢失！");
 
-        album.setIsDelete(1);
-        album.setDeleteTime(System.currentTimeMillis() / 1000);
-        albumMapper.updateById(album);
+        for (Album album : albums) {
+            album.setIsDelete(1);
+            album.setDeleteTime(System.currentTimeMillis() / 1000);
+            albumMapper.updateById(album);
+        }
     }
 
     /**
