@@ -16,7 +16,7 @@ export function useCate(typeValue: Ref<any>) {
     // 分组列表
     const cateLists: Ref<any[]> = ref([])
     // 选中的分组id
-    const cateId = ref('')
+    const cateId = ref('0')
     // 添加分组
     const handleAddCate = (val: string) => {
         apiFileCateAdd({
@@ -54,14 +54,14 @@ export function useCate(typeValue: Ref<any>) {
                 const item: any[] = [
                     {
                         name: '全部',
-                        id: ''
+                        id: '0'
                     },
                     {
                         name: '未分组',
                         id: 0
                     }
                 ]
-                cateLists.value = res?.lists
+                cateLists.value = res ?? []
                 cateLists.value.unshift(...item)
                 resolve(cateLists)
             })
@@ -114,7 +114,7 @@ export function useFile(cateId: Ref<string>, type: Ref<any>, limit: Ref<number>)
         let ids = select.value.map((item: any) => item.id)
         apiFileMove({
             ids,
-            cid: moveId.value || 0
+            cid: moveId.value
         }).then(res => {
             moveId.value = 0
             getFileList()

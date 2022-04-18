@@ -10,7 +10,7 @@ export function apiFileCateEdit(params: { id: number; name: string }) {
 
 // 文件分类删除
 export function apiFileCateDelete(params: { id: number }) {
-    return request.post('/album/albumDel', params)
+    return request.post('/album/cateDel', params)
 }
 
 // 文件分类列表

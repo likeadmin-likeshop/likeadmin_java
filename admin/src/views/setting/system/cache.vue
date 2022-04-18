@@ -200,7 +200,10 @@ const getSystemCache = async () => {
 
             statisticalData.commandChartOption.series[0].data = res.commandStats
             statisticalData.memoryChartOption.series[0].data = res.info.used_memory_human
-            console.log(res.info.used_memory_human, '-------------------------')
+            console.log(
+                statisticalData.memoryChartOption.series[0].data,
+                '-------------------------+'
+            )
         })
         .catch((err: any) => {
             console.log('err', err)
