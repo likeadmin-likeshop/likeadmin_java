@@ -62,7 +62,7 @@ public class AlbumServiceImpl implements IAlbumService {
                 .eq("is_delete", 0)
                 .orderByDesc("id");
 
-        if (params.get("cid") != null) {
+        if (params.get("cid") != null && Integer.parseInt(params.get("cid")) >= 0) {
             queryWrapper.eq("cid", Integer.parseInt(params.get("cid")));
         }
 
