@@ -13,7 +13,7 @@
                 :tree-props="{ children: 'children' }"
                 size="mini"
             >
-                <el-table-column prop="menuName" label="名称"> </el-table-column>
+                <el-table-column prop="menuName" label="名称" width="180"> </el-table-column>
                 <el-table-column prop="menuType" label="菜单类型">
                     <template #default="scope">
                         <span v-if="scope.row.menuType == menuDataType.CATALOG">{{ '目录' }}</span>
@@ -27,8 +27,12 @@
                 <el-table-column prop="menuSort" label="排序"> </el-table-column>
                 <el-table-column prop="perms" label="权限标识"> </el-table-column>
                 <el-table-column prop="paths" label="组件路径"> </el-table-column>
-                <el-table-column prop="isDisable" label="状态"> </el-table-column>
-                <el-table-column prop="createTime" label="创建时间"> </el-table-column>
+                <el-table-column prop="isDisable" label="状态">
+                    <template #default="scope">
+                        <span>{{ scope.row.isDisable == 0 ? '启用' : '关闭' }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="createTime" label="创建时间" width="160"> </el-table-column>
                 <el-table-column label="操作">
                     <template #default="scope">
                         <router-link
