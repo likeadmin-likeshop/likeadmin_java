@@ -114,7 +114,7 @@ export function useFile(cateId: Ref<string>, type: Ref<any>, limit: Ref<number>)
         let ids = select.value.map((item: any) => item.id)
         apiFileMove({
             ids,
-            cid: moveId.value
+            cid: moveId.value || 0
         }).then(res => {
             moveId.value = 0
             getFileList()
