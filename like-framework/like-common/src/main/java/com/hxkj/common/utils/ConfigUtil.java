@@ -101,7 +101,7 @@ public class ConfigUtil {
             return new LinkedHashMap<>();
         }
 
-        return ToolsUtil.jsonToStrMap(config.getValue());
+        return ToolsUtil.jsonToMapAsStr(config.getValue());
     }
 
     /**

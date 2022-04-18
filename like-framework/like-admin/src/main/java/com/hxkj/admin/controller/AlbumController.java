@@ -8,10 +8,12 @@ import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.vo.album.AlbumVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
+import com.hxkj.common.utils.ToolsUtil;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,8 +60,17 @@ public class AlbumController {
      */
     @Log(title = "相册移动")
     @PostMapping("/albumMove")
-    public Object albumMove(@Validated(value = AlbumParam.albumMove.class) @RequestBody AlbumParam albumParam) {
-        iAlbumService.albumMove(albumParam.getId(), albumParam.getCid());
+    public Object albumMove(@RequestBody Map<String, Object> params) {
+        if (params.get("ids") == null) {
+            return AjaxResult.failed("缺少ids参数");
+        }
+
+        if (params.get("cid") == null) {
+            return AjaxResult.failed("缺少cid参数");
+        }
+
+        List<Integer> ids = ToolsUtil.objectToListAsInt(params.get("ids"));
+        iAlbumService.albumMove(ids, Integer.parseInt(params.get("cid").toString()));
         return AjaxResult.success();
     }
 
@@ -71,8 +82,12 @@ public class AlbumController {
      */
     @Log(title = "相册删除")
     @PostMapping("/albumDel")
-    public Object albumDel(@Validated(value = AlbumParam.delete.class) @RequestBody AlbumParam albumParam) {
-        iAlbumService.albumDel(albumParam.getId());
+    public Object albumDel(@RequestBody Map<String, List<Integer>> params) {
+        if (params.get("ids") == null) {
+            return AjaxResult.failed("缺少ids参数");
+        }
+
+        iAlbumService.albumDel(params.get("ids"));
         return AjaxResult.success();
     }
 
