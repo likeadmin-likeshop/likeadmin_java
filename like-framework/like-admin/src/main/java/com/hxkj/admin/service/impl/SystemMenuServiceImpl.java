@@ -44,6 +44,7 @@ public class SystemMenuServiceImpl implements ISystemMenuService {
         QueryWrapper<SystemMenu> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("menu_type", Arrays.asList("M", "C"));
         queryWrapper.eq("is_show", 1);
+        queryWrapper.eq("is_disable", 0);
         queryWrapper.orderByAsc(Arrays.asList("menu_sort", "id"));
         if (adminId != 1 && menuIds.size() > 0) {
             queryWrapper.in("id", menuIds);
