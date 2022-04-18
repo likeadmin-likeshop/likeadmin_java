@@ -62,6 +62,10 @@ public class AlbumServiceImpl implements IAlbumService {
                 .eq("is_delete", 0)
                 .orderByDesc("id");
 
+        if (params.get("cid") != null) {
+            queryWrapper.eq("cid", Integer.parseInt(params.get("cid")));
+        }
+
         albumMapper.setSearch(queryWrapper, params, new String[]{
                 "like:keyword:str",
                 "=:type:int"
