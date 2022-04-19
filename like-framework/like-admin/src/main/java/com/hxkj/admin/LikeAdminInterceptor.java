@@ -49,7 +49,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         }
 
         // 路由转权限
-        String prefix = YmlUtil.get("server.servlet.context-path") + "/";
+        String prefix = "/api/";
         String route = request.getRequestURI().replaceFirst(prefix, "");
         String auths = route.replace("/", ":");
 
