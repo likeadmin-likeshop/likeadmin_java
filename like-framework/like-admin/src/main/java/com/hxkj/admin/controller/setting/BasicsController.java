@@ -12,7 +12,7 @@ import java.util.Map;
  * 基础设置管理
  */
 @RestController
-@RequestMapping("/setting")
+@RequestMapping("/api/setting")
 public class BasicsController {
 
     @Resource

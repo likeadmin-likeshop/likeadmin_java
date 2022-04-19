@@ -19,7 +19,7 @@ import java.util.List;
  * 系统菜单管理
  */
 @RestController
-@RequestMapping("/system/menu")
+@RequestMapping("/api/system/menu")
 public class SystemMenuController {
 
     @Resource

@@ -22,7 +22,7 @@ import java.util.Map;
  * 上传管理
  */
 @RestController
-@RequestMapping("/upload")
+@RequestMapping("/api/upload")
 public class UploadController {
 
     @Resource

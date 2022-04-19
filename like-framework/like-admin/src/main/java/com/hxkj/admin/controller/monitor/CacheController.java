@@ -18,7 +18,7 @@ import java.util.*;
  * 缓存监控管理
  */
 @RestController
-@RequestMapping("/monitor")
+@RequestMapping("/api/monitor")
 public class CacheController {
 
     @Resource

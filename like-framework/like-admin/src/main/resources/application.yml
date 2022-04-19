@@ -4,7 +4,7 @@ server:
   port: 8082
   # 路由前缀
   servlet:
-    context-path: /api
+    context-path: /
 
 # 框架配置
 spring:
