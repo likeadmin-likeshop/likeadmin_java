@@ -43,7 +43,7 @@
                     <el-tree
                         ref="treeRef"
                         :data="menu.permissionsTree"
-                        node-key="auth_key"
+                        node-key="id"
                         default-expand-all
                         icon="ArrowRight"
                         :props="{
@@ -93,14 +93,15 @@ export default defineComponent({
                 formData: {
                     name: '', // 角色名称
                     remark: '', // 备注
-                    auth_keys: [], // 权限
+                    menus: [], // 权限，就选中的菜单id
                     isDisable: 0,
-                    sort: ''
+                    sort: '',
+					menuIds: '', // 菜单ID数组,逗号隔开
                 },
 
                 menu: {
                     permissionsTree: [], // 菜单
-                    allAuthKeys: [] // 菜单全部的auth_keys
+                    allAuthKeys: [] // 菜单全部的id
                 }
             })
         )
@@ -132,13 +133,13 @@ export default defineComponent({
                 .then((res: any) => {
                     // 获取菜单
                     menu.value.permissionsTree = res
-                    // console.log('res', res)
+                    console.log('res', res)
 
                     // 数组扁平化
-                    const menuFlatten = flatten(res, [], 'sons')
+                    const menuFlatten = flatten(res, [], 'children')
                     // console.log(menuFlatten)
-                    // 获取菜单全部 auth_key
-                    menu.value.allAuthKeys = menuFlatten.map((item: any) => item.auth_key) as never
+                    // 获取菜单全部 id
+                    menu.value.allAuthKeys = menuFlatten.map((item: any) => item.id) as never
                 })
                 .catch((err: any) => {
                     console.log('err', err)
@@ -160,6 +161,11 @@ export default defineComponent({
         }
         // 编辑角色
         const roleEdit = () => {
+			// 选择中的权限id字符串
+			formData.value.menus.length == 0 
+			? formData.value.menuIds = ''
+			: formData.value.menuIds = formData.value.menus.join(',')
+			
             apiRoleEdit({
                 ...formData.value,
                 id: id.value
@@ -184,9 +190,8 @@ export default defineComponent({
                     console.log('res', res)
 
                     formData.value = res
-                    // formData.value.auth_keys = []
 
-                    treeRef.value?.setCheckedKeys(res.auth_keys)
+                    treeRef.value?.setCheckedKeys(res.menus)
                 })
                 .catch((err: any) => {
                     console.log('err', err)
@@ -196,17 +201,17 @@ export default defineComponent({
         // 权限树触发函数
         const handlePermissionsCheckChange = (data: any, checked: boolean) => {
             console.log(data)
-            if (!data.auth_key) {
+            if (!data.id) {
                 return
             }
-            const index = formData.value.auth_keys.findIndex(item => item == data.auth_key)
+            const index = formData.value.menus.findIndex(item => item == data.id)
             if (checked) {
-                index == -1 && (formData.value.auth_keys as any).push(data.auth_key)
+                index == -1 && (formData.value.menus as any).push(data.id)
                 return
             }
 
             if (index != -1) {
-                formData.value.auth_keys.splice(index, 1)
+                formData.value.menus.splice(index, 1)
             }
         }
 
