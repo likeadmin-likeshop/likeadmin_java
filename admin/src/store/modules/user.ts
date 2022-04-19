@@ -18,7 +18,9 @@ const user: Module<UserModule, any> = {
             cache.set(TOKEN, data)
         },
         setUser(state, data) {
-            state.user = data
+            console.log(data, 'data____')
+
+            state.user = data.user
         }
     },
     actions: {

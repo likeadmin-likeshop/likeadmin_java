@@ -199,9 +199,16 @@ const getSystemCache = async () => {
             formData.value.dbSize = res.dbSize || ''
 
             statisticalData.commandChartOption.series[0].data = res.commandStats
-            statisticalData.memoryChartOption.series[0].data = res.info.used_memory_human
+
+            statisticalData.memoryChartOption.series[0].data[0].value = (
+                res.info.used_memory /
+                1024 /
+                1024
+            ).toFixed(2)
+            statisticalData.memoryChartOption.series[0].detail.formatter = '{value}' + 'M'
+            console.log(res.info.used_memory_human, '-------------------------+')
             console.log(
-                statisticalData.memoryChartOption.series[0].data,
+                (res.info.used_memory / 1024 / 1024).toFixed(2),
                 '-------------------------+'
             )
         })
