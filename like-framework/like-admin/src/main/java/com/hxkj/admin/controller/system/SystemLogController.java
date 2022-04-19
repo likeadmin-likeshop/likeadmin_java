@@ -19,7 +19,7 @@ import java.util.Map;
  * 系统日志管理
  */
 @RestController
-@RequestMapping("/system/log")
+@RequestMapping("/api/system/log")
 public class SystemLogController {
 
     @Resource
@@ -32,7 +32,7 @@ public class SystemLogController {
      * @param params 搜索参数
      * @return Object
      */
-    @GetMapping("/api/operate")
+    @GetMapping("/operate")
     public Object operate(@Validated PageParam pageParam, @RequestParam Map<String, String> params) {
         PageResult<LogOperateVo> list = iSystemLogServer.operate(pageParam, params);
         return AjaxResult.success(list);
