@@ -284,7 +284,7 @@ const formData = ref({
 
 // 获取详情
 const getMenuDetail = async (id: number) => {
-    ;(formData.value as {}) = await apiMenuDetail({ id })
+    (formData.value as {}) = await apiMenuDetail({ id })
     getFatherMenu()
 }
 
