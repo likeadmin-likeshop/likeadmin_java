@@ -155,7 +155,12 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
                     }
                 }
             }
+            // 没有权限
+            if (auths.size() <= 0) {
+                auths.add("");
+            }
         } else {
+            // 所有权限
             auths.add("*");
         }
 
