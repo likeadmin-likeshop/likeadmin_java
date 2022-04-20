@@ -24,7 +24,7 @@ public class AdminConfig {
     public static String[] notAuthUri = new String[]{
             "system:admin:upInfo", // 管理员更新
             "system:admin:self",   // 管理员信息
-            "system/logout"        // 退出登录
+            "system:logout"        // 退出登录
     };
 
 }
