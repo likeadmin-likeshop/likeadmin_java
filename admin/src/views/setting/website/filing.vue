@@ -51,7 +51,7 @@
         </el-card>
 
         <footer-btns>
-            <el-button type="primary" size="small" @click="setCopyright">保存</el-button>
+            <el-button v-perm="['setting:setCopyright']" type="primary" size="small" @click="setCopyright">保存</el-button>
         </footer-btns>
     </div>
 </template>
