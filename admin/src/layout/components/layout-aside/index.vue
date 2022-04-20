@@ -11,18 +11,9 @@
                     background-color="#2a2c41"
                     :default-active="currentPath"
                     text-color="#E5E5E5"
-                    router
                 >
                     <template v-for="(item, index) in sidebar" :key="index">
-                        <sub-menu :route="item">
-                            <template v-for="(item, index) in item?.children" :key="index">
-                                <sub-menu :route="item">
-                                    <template v-for="(item, index) in item?.children" :key="index">
-                                        <sub-menu :route="item"></sub-menu>
-                                    </template>
-                                </sub-menu>
-                            </template>
-                        </sub-menu>
+                        <sub-menu :route="item" :path="item.path"/>
                     </template>
                 </el-menu>
             </el-scrollbar>
@@ -41,7 +32,7 @@ export default defineComponent({
     setup() {
         const { store, route } = useAdmin()
         const sidebar = computed(() => store.state.permission.sidebar)
-        const currentPath = computed(() => route.meta?.parent ?? route.path)
+        const currentPath = computed(() => route.meta?.activeMenu ?? route.path)
         const config = computed(() => store.getters.config)
         return {
             config,

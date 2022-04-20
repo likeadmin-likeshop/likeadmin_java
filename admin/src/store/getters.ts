@@ -9,8 +9,7 @@ const getters: GetterTree<rootState, any> = {
     // 通用配置
     config: state => state.app.config,
     // 权限列表
-    permission: state => state.permission.permission,
-    isAdmin: state => state.permission.isAdmin
+    permission: state => state.user.permissions
 }
 
 export default getters

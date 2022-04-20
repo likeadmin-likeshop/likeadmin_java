@@ -28,7 +28,7 @@
         </el-card>
         <el-card v-loading="pager.loading" class="m-t-15" shadow="never">
             <router-link to="/permission/admin/edit">
-                <el-button type="primary" size="small">新增管理员</el-button>
+                <el-button v-perm="['system:admin:add']" type="primary" size="small">新增管理员</el-button>
             </router-link>
             <div class="m-t-15">
                 <el-table :data="pager.lists">
@@ -69,6 +69,7 @@
                     <el-table-column label="操作" width="150" fixed="right">
                         <template #default="{ row }">
                             <router-link
+                                v-perm="['system:admin:edit']"
                                 class="m-r-10"
                                 :to="{
                                     path: '/permission/admin/edit',
@@ -79,7 +80,7 @@
                             >
                                 <el-button type="text">编辑</el-button>
                             </router-link>
-                            <popup class="m-r-10 inline" @confirm="handleDelete(row.id)">
+                            <popup v-perm="['system:admin:del']" class="m-r-10 inline" @confirm="handleDelete(row.id)">
                                 <template #trigger>
                                     <el-button type="text">删除</el-button>
                                 </template>

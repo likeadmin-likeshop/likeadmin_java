@@ -4,7 +4,7 @@
 
 import NProgress from 'nprogress'
 import store from './store'
-import router, { asyncRoutes } from './router'
+import router from './router'
 import 'nprogress/nprogress.css'
 
 // NProgress配置
@@ -22,16 +22,28 @@ router.beforeEach(async (to, from, next) => {
     const token = store.getters.token
     if (token) {
         // 获取用户信息
-        if (store.getters.permission == null) {
-            store.commit('permission/setSidebar', asyncRoutes[0].children)
-            await store.dispatch('user/getUser')
-            await store.dispatch('permission/getPermission')
-        }
-        if (to.path === loginPath) {
-            next({ path: defaultPath })
+        if (store.getters.permission.length === 0) {
+            try {
+                await store.dispatch('user/getUser')
+                const routes = await store.dispatch('permission/generateRoutes')
+                routes.forEach((route: any) => {
+                    router.addRoute('index', route) // 动态添加可访问路由表
+                })
+                console.log(router.getRoutes())
+                if (to.path === '/login') {
+                    next({ path: '/' })
+                } else {
+                    next({ ...to, replace: true }) //确保addRoutes已完成
+                }
+            } catch {
+                await store.dispatch('user/logout')
+                next({ path: loginPath, query: { redirect: to.fullPath } })
+                NProgress.done()
+            }
         } else {
             next()
         }
+
     } else if (whiteList.includes(to.path as string)) {
         // 在免登录白名单，直接进入
         next()

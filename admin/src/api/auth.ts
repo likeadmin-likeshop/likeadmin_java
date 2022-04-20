@@ -56,9 +56,9 @@ export function apiConfigGetMenu() {
     return request.get('/system/menu/lists')
 }
 
-// 角色权限
-export function apiConfigGetAuth() {
-    return request.get('/config/getAuth')
+// 菜单路由
+export function apiConfigGetRoutes() {
+    return request.get('/system/menu/menus')
 }
 
 /* 菜单 */

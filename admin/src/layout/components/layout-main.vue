@@ -2,18 +2,25 @@
     <div class="layout-main">
         <el-scrollbar>
             <div class="p-15">
-                <perm />
+                <router-view />
             </div>
         </el-scrollbar>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import Perm from './perm.vue'
+import { useAdmin } from '@/core/hooks/app'
+import { computed, defineComponent } from 'vue'
 export default defineComponent({
-    components: {
-        Perm
+    name: 'layout-main',
+    setup() {
+        const { route } = useAdmin()
+        const keepAlive = computed(() => {
+            return route.meta.keepAlive
+        })
+        return {
+            keepAlive
+        }
     }
 })
 </script>

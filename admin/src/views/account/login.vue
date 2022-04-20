@@ -117,6 +117,7 @@ export default defineComponent({
                             query: { redirect }
                         } = route
                         const path = typeof redirect === 'string' ? redirect : '/'
+                        
                         router.replace(path)
                     })
                     .catch(err => {

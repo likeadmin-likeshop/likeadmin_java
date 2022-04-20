@@ -17,7 +17,7 @@
     "nprogress": "^0.2.0",
     "vue": "^3.2.25",
     "vue-echarts": "^6.0.0",
-    "vue-router": "^4.0.0-0",
+    "vue-router": "^4.0.14",
     "vuedraggable": "^4.1.0",
     "vuex": "^4.0.0-0"
   },

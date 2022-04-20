@@ -2,7 +2,7 @@
     <div class="role">
         <el-card shadow="never">
             <router-link to="/permission/role/edit">
-                <el-button type="primary" size="small">新增角色</el-button>
+                <el-button  v-perm="['system:role:add']" type="primary" size="small">新增角色</el-button>
             </router-link>
             <div v-loading="pager.loading" class="m-t-15">
                 <div class="m-t-15">
@@ -22,6 +22,7 @@
                             <template #default="{ row }">
                                 <!-- 编辑 -->
                                 <router-link
+                                    v-perm="['system:role:edit']"
                                     class="m-r-10"
                                     :to="{
                                         path: '/permission/role/edit',
@@ -33,7 +34,7 @@
                                     <el-button type="text" size="mini">编辑</el-button>
                                 </router-link>
                                 <!-- 删除 -->
-                                <popup class="m-r-10 inline" @confirm="handleDelete(row.id)">
+                                <popup v-perm="['system:role:del']" class="m-r-10 inline" @confirm="handleDelete(row.id)">
                                     <template #trigger>
                                         <el-button type="text" size="mini">删除</el-button>
                                     </template>

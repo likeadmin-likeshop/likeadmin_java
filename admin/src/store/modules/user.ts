@@ -5,12 +5,14 @@ import { apiLogin, apiLogout, apiUserInfo } from '@/api/user'
 export interface UserModule {
     token: string
     user: object
+    permissions: any[]
 }
 const user: Module<UserModule, any> = {
     namespaced: true,
     state: {
         token: cache.get(TOKEN) || '',
-        user: {}
+        user: {},
+        permissions: []
     },
     mutations: {
         setToken(state, data) {
@@ -19,13 +21,15 @@ const user: Module<UserModule, any> = {
         },
         setUser(state, data) {
             state.user = data
+        },
+        setPermission(state, permissions) {
+            state.permissions = permissions
         }
     },
     actions: {
         // 登录
         login({ commit }, data) {
             const { account, password } = data
-            console.log(data, '----------------------')
 
             return new Promise((resolve, reject) => {
                 apiLogin({
@@ -48,6 +52,7 @@ const user: Module<UserModule, any> = {
                     .then(data => {
                         commit('setToken', '')
                         commit('setUser', {})
+                        commit('setPermission', [])
                         cache.remove(TOKEN)
                         resolve(data)
                     })
@@ -60,8 +65,9 @@ const user: Module<UserModule, any> = {
         getUser({ commit }) {
             return new Promise((resolve, reject) => {
                 apiUserInfo()
-                    .then(data => {
+                    .then((data: any) => {
                         commit('setUser', data)
+                        commit('setPermission', data.permissions)
                         resolve(data)
                     })
                     .catch(error => {

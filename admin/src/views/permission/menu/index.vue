@@ -2,7 +2,7 @@
     <div class="menu">
         <el-card shadow="never">
             <router-link to="/permission/menu/edit">
-                <el-button type="primary" size="small">添加菜单</el-button>
+                <el-button  v-perm="['system:menu:add']" type="primary" size="small">添加菜单</el-button>
             </router-link>
 
             <el-table
@@ -36,6 +36,7 @@
                 <el-table-column label="操作">
                     <template #default="scope">
                         <router-link
+                            v-perm="['system:menu:edit']"
                             class="m-r-10"
                             :to="{
                                 path: '/permission/menu/edit',
@@ -47,7 +48,7 @@
                             <el-button type="text" size="mini">编辑</el-button>
                         </router-link>
 
-                        <popup class="m-r-10 inline" @confirm="handleDelete(scope.row.id)">
+                        <popup v-perm="['system:menu:del']" class="m-r-10 inline" @confirm="handleDelete(scope.row.id)">
                             <template #trigger>
                                 <el-button type="text" size="mini">删除</el-button>
                             </template>

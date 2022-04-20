@@ -7,7 +7,8 @@ export interface AppModule {
 const app: Module<AppModule, any> = {
     namespaced: true,
     state: {
-        config: {}
+        // 公共配置
+        config: {},
     },
     mutations: {
         setConfig(state, data) {
