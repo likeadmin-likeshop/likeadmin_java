@@ -49,7 +49,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         }
 
         // 路由转权限
-        String prefix = YmlUtil.get("server.servlet.context-path") + "/";
+        String prefix = "/api/";
         String route = request.getRequestURI().replaceFirst(prefix, "");
         String auths = route.replace("/", ":");
 
@@ -110,8 +110,8 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         LikeAdminThreadLocal.put("nickname", map.get("nickname").toString());
 
         // 免权限验证接口
-        List<String> notAuthUri = Arrays.asList(AdminConfig.notLoginUri);
-        if (notAuthUri.contains(request.getRequestURI()) || Integer.parseInt(uid) == 1) {
+        List<String> notAuthUri = Arrays.asList(AdminConfig.notAuthUri);
+        if (notAuthUri.contains(auths) || Integer.parseInt(uid) == 1) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
 

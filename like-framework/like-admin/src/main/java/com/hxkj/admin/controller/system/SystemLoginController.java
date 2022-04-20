@@ -19,7 +19,7 @@ import java.util.Map;
  * 系统登录管理
  */
 @RestController
-@RequestMapping("/system")
+@RequestMapping("/api/system")
 public class SystemLoginController {
 
     @Resource

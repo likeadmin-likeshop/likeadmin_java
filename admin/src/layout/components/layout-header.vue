@@ -3,10 +3,11 @@
         <!-- <input class="search-input" placeholder="请输入搜索内容…" type="text" /> -->
         <div class="admin-info flex flex-center m-l-40">
             <el-avatar :size="40" :src="userInfo.avatar"></el-avatar>
+
             <div class="m-l-10">
                 <el-dropdown trigger="hover" @command="handleCommand">
                     <div class="flex flex-center">
-                        {{ userInfo.name }}
+                        {{ userInfo.username }}
                         <el-icon class="el-icon--right"><arrow-down /></el-icon>
                     </div>
                     <template #dropdown>
@@ -33,6 +34,8 @@ export default defineComponent({
     setup() {
         const { store, router } = useAdmin()
         const userInfo = computed(() => store.getters.userInfo)
+        console.log(userInfo, 'userInfo')
+
         const handleCommand = (command: string) => {
             switch (command) {
                 case 'logout':

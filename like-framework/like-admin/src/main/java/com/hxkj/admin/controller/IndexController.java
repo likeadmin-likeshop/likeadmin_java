@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("/index")
+@RequestMapping("/api/index")
 public class IndexController {
 
     @Resource

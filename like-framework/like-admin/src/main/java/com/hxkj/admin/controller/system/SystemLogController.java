@@ -19,7 +19,7 @@ import java.util.Map;
  * 系统日志管理
  */
 @RestController
-@RequestMapping("/system/log")
+@RequestMapping("/api/system/log")
 public class SystemLogController {
 
     @Resource

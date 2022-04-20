@@ -141,19 +141,26 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
         List<String> auths = new LinkedList<>();
         if (adminId > 1) {
             List<Integer> menuIds = iSystemRoleMenuService.selectMenuIdsByRoleId(sysAdmin.getRole());
-            List<SystemMenu> systemMenus = systemMenuMapper.selectList(new QueryWrapper<SystemMenu>()
-                    .eq("is_disable", 0)
-                    .in("id", menuIds)
-                    .in("menu_type", Arrays.asList("C", "A"))
-                    .orderByAsc(Arrays.asList("menu_sort", "id")));
+            if (menuIds.size() > 0) {
+                List<SystemMenu> systemMenus = systemMenuMapper.selectList(new QueryWrapper<SystemMenu>()
+                        .eq("is_disable", 0)
+                        .in("id", menuIds)
+                        .in("menu_type", Arrays.asList("C", "A"))
+                        .orderByAsc(Arrays.asList("menu_sort", "id")));
 
-            // 处理权限
-            for (SystemMenu item : systemMenus) {
-                if (StringUtil.isNotNull(item.getPerms()) && StringUtil.isNotEmpty(item.getPerms())) {
-                    auths.add(item.getPerms().trim());
+                // 处理权限
+                for (SystemMenu item : systemMenus) {
+                    if (StringUtil.isNotNull(item.getPerms()) && StringUtil.isNotEmpty(item.getPerms())) {
+                        auths.add(item.getPerms().trim());
+                    }
                 }
             }
+            // 没有权限
+            if (auths.size() <= 0) {
+                auths.add("");
+            }
         } else {
+            // 所有权限
             auths.add("*");
         }
 

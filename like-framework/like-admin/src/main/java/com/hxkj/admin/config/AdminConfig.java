@@ -22,7 +22,10 @@ public class AdminConfig {
 
     // 免权限验证
     public static String[] notAuthUri = new String[]{
-            "system:admin:upInfo" // 管理员更新接口
+            "system:admin:upInfo", // 管理员更新
+            "system:admin:self",   // 管理员信息
+            "system:logout",       // 退出登录
+            "system:menu:menus",   // 系统菜单
     };
 
 }
