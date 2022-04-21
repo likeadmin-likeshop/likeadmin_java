@@ -206,11 +206,6 @@ const getSystemCache = async () => {
                 1024
             ).toFixed(2)
             statisticalData.memoryChartOption.series[0].detail.formatter = '{value}' + 'M'
-            console.log(res.info.used_memory_human, '-------------------------+')
-            console.log(
-                (res.info.used_memory / 1024 / 1024).toFixed(2),
-                '-------------------------+'
-            )
         })
         .catch((err: any) => {
             console.log('err', err)
