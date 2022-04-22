@@ -34,7 +34,7 @@ public class IndexServiceImpl implements IIndexService {
         // 账号信息
         Map<String, Object> version = new LinkedHashMap<>();
         version.put("version", "1.0.0");
-        version.put("website", "www.likeshop.cn");
+        version.put("website", "likeshop");
         console.put("version", version);
 
         // 今日数据
