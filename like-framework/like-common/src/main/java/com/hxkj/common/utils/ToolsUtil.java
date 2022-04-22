@@ -157,7 +157,7 @@ public class ToolsUtil {
     }
 
     /**
-     * map合并(Object)
+     * 对象类型Map合并
      *
      * @author fzr
      * @param map 对象
@@ -171,7 +171,7 @@ public class ToolsUtil {
     }
 
     /**
-     * map合并(String)
+     * 字符串类型Map合并
      *
      * @author fzr
      * @param map 对象

@@ -16,6 +16,8 @@ public class UrlUtil {
 
     /**
      * 转绝对路径
+     * 转前: uploads/11.png
+     * 转后: https://127.0.0.1/uploads/11.png
      *
      * @author fzr
      * @param url 相对路径
@@ -41,6 +43,8 @@ public class UrlUtil {
 
     /**
      * 转相对路径
+     * 转前: https://127.0.0.1/uploads/11.png
+     * 转后: uploads/11.png
      *
      * @author fzr
      * @param url 绝对路径
@@ -62,6 +66,7 @@ public class UrlUtil {
 
     /**
      * 获取存储域名
+     * 示例: https://127.0.0.1/
      *
      * @author fzr
      * @return String
