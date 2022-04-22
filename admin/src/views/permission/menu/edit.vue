@@ -2,6 +2,8 @@
     <div class="menu-edit">
         <el-card shadow="never">
             <el-page-header :content="id ? '编辑菜单' : '新增菜单'" @back="$router.back()" />
+
+            <select-icon class="m-t-20"></select-icon>
         </el-card>
 
         <el-card class="m-t-15" shadow="never">
@@ -52,7 +54,7 @@
                     </el-form-item>
 
                     <div v-if="(formData.menuType == menuDataType.BUTTON) == ''">
-                        <el-form-item label="菜单图标">
+                        <el-form-item label="请选择图标">
                             <el-input
                                 v-model="formData.menuIcon"
                                 show-word-limit
@@ -156,85 +158,6 @@
                             </el-radio-group>
                         </el-form-item>
                     </div>
-
-                    <!-- <el-form-item label="父级菜单">
-                        <el-cascader
-                            v-model="formData.pid"
-                            style="width: 340px"
-                            :options="menuList"
-                            :props="{
-                                checkStrictly: true,
-                                emitPath: false,
-                                label: 'menuName',
-                                value: 'id'
-                            }"
-                            clearable
-                        ></el-cascader>
-                    </el-form-item>
-
-                    <el-form-item label="菜单类型">
-                        <el-radio-group v-model="formData.menuType">
-                            <el-radio :label="menuDataType.CATALOG">目录</el-radio>
-                            <el-radio :label="menuDataType.MENU">菜单</el-radio>
-                            <el-radio :label="menuDataType.BUTTON">按钮</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-
-                    <el-form-item label="菜单名称">
-                        <el-input
-                            v-model="formData.menuName"
-                            show-word-limit
-                            placeholder="请输入名称"
-                        ></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="菜单图标">
-                        <el-input
-                            v-model="formData.menuIcon"
-                            show-word-limit
-                            placeholder="请输入图标"
-                        ></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="菜单排序">
-                        <el-input
-                            v-model="formData.menuSort"
-                            show-word-limit
-                            placeholder="请输入排序"
-                        ></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="菜单权限字符">
-                        <el-input
-                            v-model="formData.perms"
-                            show-word-limit
-                            placeholder="请输入"
-                        ></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="路由路径">
-                        <el-input
-                            v-model="formData.paths"
-                            show-word-limit
-                            placeholder="请输入"
-                        ></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="组件路径">
-                        <el-input
-                            v-model="formData.component"
-                            show-word-limit
-                            placeholder="请输入"
-                        ></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="菜单状态">
-                        <el-switch
-                            v-model="formData.isDisable"
-                            :active-value="0"
-                            :inactive-value="1"
-                        />
-                    </el-form-item> -->
                 </el-form>
             </div>
         </el-card>
@@ -250,6 +173,7 @@ import { onMounted, reactive, ref } from 'vue'
 import FooterBtns from '@/components/footer-btns/index.vue'
 import type { ElForm, ElMessage } from 'element-plus'
 import { apiConfigGetMenu, apiMenuDetail, apiMenuAdd, apiMenuEdit, apiMenuDelete } from '@/api/auth'
+import SelectIcon from './select-icon/index.vue'
 
 const menuDataType = {
     CATALOG: 'M', // 目录
@@ -284,7 +208,7 @@ const formData = ref({
 
 // 获取详情
 const getMenuDetail = async (id: number) => {
-    (formData.value as {}) = await apiMenuDetail({ id })
+    ;(formData.value as {}) = await apiMenuDetail({ id })
     getFatherMenu()
 }
 

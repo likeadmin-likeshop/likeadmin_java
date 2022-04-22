@@ -14,49 +14,76 @@
 
         <el-card class="m-t-15" shadow="never">
             <div>
-                <div class="m-b-15">基本信息</div>
+                <div class="m-b-20 lg">基本信息</div>
 
-                <el-form :inline="true" :model="formData" label-width="110px" size="small">
-                    <el-form-item label="Redis版本">
-                        <div>{{ formData.redis_version || '-' }}</div>
-                    </el-form-item>
-                    <el-form-item label="运行模式">
-                        <div>{{ formData.redis_mode || '-' }}</div>
-                    </el-form-item>
-                    <el-form-item label="端口">
-                        <div>{{ formData.tcp_port || '-' }}</div>
-                    </el-form-item>
-                    <el-form-item label="客户端数">
-                        <div>{{ formData.connected_clients || '-' }}</div>
-                    </el-form-item>
-                    <el-form-item label="运行时间(天)">
-                        <div>{{ formData.uptime_in_days || '-' }}</div>
-                    </el-form-item>
-                    <el-form-item label="使用内存">
-                        <div>{{ formData.used_memory_human || '-' }}</div>
-                    </el-form-item>
-                    <el-form-item label="使用CPU">
-                        <div>{{ formData.used_cpu_user_children || '-' }}</div>
-                    </el-form-item>
-                    <el-form-item label="内存配置">
-                        <div>{{ formData.maxmemory_human || '-' }}</div>
-                    </el-form-item>
-                    <el-form-item label="AOF是否开启">
-                        <div>{{ formData.aof_enabled || '-' }}</div>
-                    </el-form-item>
-                    <el-form-item label="RDB是否成功">
-                        <div>{{ formData.rdb_last_bgsave_status || '-' }}</div>
-                    </el-form-item>
-                    <el-form-item label="Key数量">
-                        <div>{{ formData.dbSize || '-' }}</div>
-                    </el-form-item>
-                    <el-form-item label="网络入口/出口">
-                        <div>
-                            {{ formData.instantaneous_input_kbps || '-' }}
-                            <span>/</span>
-                            {{ formData.instantaneous_output_kbps || '-' }}
+                <el-form :inline="true" :model="formData" size="small">
+                    <div class="flex basic-information">
+                        <div class="flex-1">
+                            <span class="m-r-40 nr">Redis版本</span>
+                            <span>{{ formData.redis_version || '-' }}</span>
                         </div>
-                    </el-form-item>
+
+                        <div class="flex-1">
+                            <span class="m-r-40 nr">运行模式</span>
+                            <span>{{ formData.redis_mode || '-' }}</span>
+                        </div>
+
+                        <div class="flex-1">
+                            <span class="m-r-40 nr">端口</span>
+                            <span>{{ formData.tcp_port || '-' }}</span>
+                        </div>
+
+                        <div class="flex-1">
+                            <span class="m-r-40 nr">客户端数</span>
+                            <span>{{ formData.connected_clients || '-' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex basic-information">
+                        <div class="flex-1">
+                            <span class="m-r-40 nr">运行时间(天)</span>
+                            <span>{{ formData.uptime_in_days || '-' }}</span>
+                        </div>
+                        <div class="flex-1">
+                            <span class="m-r-40 nr">使用内存</span>
+                            <span>{{ formData.used_memory_human || '-' }}</span>
+                        </div>
+                        <div class="flex-1">
+                            <span class="m-r-40 nr">使用CPU</span>
+                            <span>{{ formData.used_cpu_user_children || '-' }}</span>
+                        </div>
+                        <div class="flex-1">
+                            <span class="m-r-40 nr">内存配置</span>
+                            <span>{{ formData.maxmemory_human || '-' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex basic-information">
+                        <div class="flex-1">
+                            <span class="m-r-40 nr">AOF是否开启</span>
+                            <span>{{ formData.aof_enabled == '0' ? '开启' : '关闭' || '-' }}</span>
+                        </div>
+                        <div class="flex-1">
+                            <span class="m-r-40 nr">RDB是否成功</span>
+                            <span>
+                                {{
+                                    formData.rdb_last_bgsave_status == 'ok' ? '成功' : '失败' || '-'
+                                }}
+                            </span>
+                        </div>
+                        <div class="flex-1">
+                            <span class="m-r-40 nr">Key数量</span>
+                            <span>{{ formData.dbSize || '-' }}</span>
+                        </div>
+                        <div class="flex-1">
+                            <span class="m-r-40 nr">网络入口/出口</span>
+                            <span>
+                                {{ formData.instantaneous_input_kbps || '-' }}
+                                <span>/</span>
+                                {{ formData.instantaneous_output_kbps || '-' }}
+                            </span>
+                        </div>
+                    </div>
                 </el-form>
             </div>
         </el-card>
@@ -65,7 +92,7 @@
             <!-- 命令统计 -->
             <el-card class="m-r-15 flex-1 test" shadow="never">
                 <div>
-                    <div class="p-b-60">命令统计</div>
+                    <div class="p-b-60 lg">命令统计</div>
                     <div class="statistical-chart">
                         <v-chart class="chart" :option="statisticalData.commandChartOption" />
                     </div>
@@ -75,7 +102,7 @@
             <!-- 内存信息 -->
             <el-card class="flex-1" shadow="never">
                 <div>
-                    <div class="p-b-40">内存信息</div>
+                    <div class="p-b-40 lg">内存信息</div>
                     <div class="statistical-chart">
                         <v-chart class="chart" :option="statisticalData.memoryChartOption" />
                     </div>
@@ -222,5 +249,11 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     height: 240px;
+}
+
+.basic-information {
+    padding-bottom: 20px;
+    margin-top: 20px;
+    border-bottom: 1px solid #dfdfdf;
 }
 </style>
