@@ -7,7 +7,7 @@ export enum MenuType{
 }
 
 // 匹配views里面所有的.vue文件，动态引入
-const modules = import.meta.glob('@/views/**/*.vue')
+const modules = import.meta.glob('/src/views/**/*.vue')
 
 
 // 过滤路由所需要的数据
