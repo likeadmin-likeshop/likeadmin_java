@@ -121,7 +121,7 @@ public class SystemRoleMenuServiceImpl implements ISystemRoleMenuService {
             }
         }
 
-        RedisUtil.hSet(AdminConfig.backstageRolesKey, String.valueOf(roleId), ArrayUtil.listStrToString(menuArray, ","));
+        RedisUtil.hSet(AdminConfig.backstageRolesKey, String.valueOf(roleId), ArrayUtil.listToStringByStr(menuArray, ","));
     }
 
 }

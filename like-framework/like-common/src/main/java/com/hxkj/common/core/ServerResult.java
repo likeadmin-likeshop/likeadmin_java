@@ -69,11 +69,11 @@ public class ServerResult {
         long idle = ticks[TickType.IDLE.getIndex()] - prevTicks[TickType.IDLE.getIndex()];
         long totalCpu = user + nice + cSys + idle + ioWait + irq + softer + steal;
         cpu.setCpuNum(processor.getLogicalProcessorCount());
-        cpu.setTotal(totalCpu);
-        cpu.setSys(cSys);
-        cpu.setUsed(user);
-        cpu.setWait(ioWait);
-        cpu.setFree(idle);
+        cpu.setTotal(ArithUtil.round(ArithUtil.mul(totalCpu, 100), 2));
+        cpu.setSys(ArithUtil.round(ArithUtil.mul(cSys / cpu.getTotal(), 100), 2));
+        cpu.setUsed(ArithUtil.round(ArithUtil.mul(user / cpu.getTotal(), 100), 2));
+        cpu.setWait(ArithUtil.round(ArithUtil.mul(ioWait / cpu.getTotal(), 100), 2));
+        cpu.setFree( ArithUtil.round(ArithUtil.mul(idle / cpu.getTotal(), 100), 2));
     }
 
     /**

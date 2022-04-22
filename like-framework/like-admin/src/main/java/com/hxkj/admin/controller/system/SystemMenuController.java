@@ -5,7 +5,6 @@ import com.hxkj.admin.LikeAdminThreadLocal;
 import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.ISystemMenuService;
 import com.hxkj.admin.validate.system.SystemMenuParam;
-import com.hxkj.admin.vo.system.SystemAuthVo;
 import com.hxkj.admin.vo.system.SystemMenuVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.validator.annotation.IDMust;
@@ -13,13 +12,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 系统菜单管理
  */
 @RestController
-@RequestMapping("/api/system/menu")
+@RequestMapping("api/system/menu")
 public class SystemMenuController {
 
     @Resource

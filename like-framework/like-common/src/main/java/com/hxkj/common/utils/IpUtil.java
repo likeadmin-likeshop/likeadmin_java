@@ -20,10 +20,11 @@ public class IpUtil {
     /**
      * 获取客户端IP
      *
-     * @param request 请求对象
-     * @return IP地址
+     * @author fzr
+     * @return IP地址 (113.67.10.194)
      */
-    public static String getIpAddress(HttpServletRequest request) {
+    public static String getIpAddress() {
+        HttpServletRequest request = RequestUtil.handler();
         if (request == null) {
             return "unknown";
         }
@@ -51,11 +52,12 @@ public class IpUtil {
     /**
      * 根据IP获取所在地址
      *
+     * @author fzr
      * @param ip Ip地址
      * @return String (广州省 广州市)
      */
     public static String getRealAddressByIP(String ip) {
-        String IP_URL = "http://whois.pconline.com.cn/ipJson.jsp";
+        String IP_URL = "https://whois.pconline.com.cn/ipJson.jsp";
         String UNKNOWN = "XX XX";
 
         // 内网不查询
@@ -95,6 +97,7 @@ public class IpUtil {
     /**
      * 检查是否为内部IP地址
      *
+     * @author fzr
      * @param address byte地址
      * @return 结果
      */
@@ -132,6 +135,7 @@ public class IpUtil {
     /**
      * 将IPv4地址转换成字节
      *
+     * @author fzr
      * @param text IPv4地址
      * @return byte 字节
      */
@@ -206,6 +210,7 @@ public class IpUtil {
     /**
      * 获取IP地址
      *
+     * @author fzr
      * @return 本地IP地址
      */
     public static String getHostIp() {
@@ -219,6 +224,7 @@ public class IpUtil {
     /**
      * 获取主机名
      *
+     * @author fzr
      * @return 本地主机名
      */
     public static String getHostName() {
@@ -232,6 +238,7 @@ public class IpUtil {
     /**
      * 从多级反向代理中获得第一个非unknown IP地址
      *
+     * @author fzr
      * @param ip 获得的IP地址
      * @return 第一个非unknown IP地址
      */
@@ -249,8 +256,9 @@ public class IpUtil {
     }
 
     /**
-     * 检测给定字符串是否为未知，多用于检测HTTP请求相关
+     * 检测给定字符串是否为未知,多用于检测HTTP请求相关
      *
+     * @author fzr
      * @param checkString 被检测的字符串
      * @return 是否未知
      */

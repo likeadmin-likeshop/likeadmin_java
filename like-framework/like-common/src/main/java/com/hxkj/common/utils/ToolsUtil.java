@@ -109,7 +109,7 @@ public class ToolsUtil {
      * @author fzr
      * @return String
      */
-    public static String toStorageUnit(Long size) {
+    public static String storageUnit(Long size) {
         if (size == null) {
             return "0B";
         }
@@ -133,31 +133,19 @@ public class ToolsUtil {
     }
 
     /**
-     * JSON转map
-     *
-     * @author fzr
-     * @param json 对象
-     * @return Map<String, Object>
-     */
-    public static Map<String, Object> jsonToMap(String json){
-        Type type = new TypeToken<Map<String, Object>>() {}.getType();
-        return JSON.parseObject(json, type);
-    }
-
-    /**
-     * JSON转map
+     * JSON转 Map<String, String>
      *
      * @author fzr
      * @param json 对象
      * @return Map<String, String>
      */
-    public static Map<String, String> jsonToMapAsStr(String json){
+    public static Map<String, String> jsonToMap(String json){
         Type type = new TypeToken<Map<String, String>>() {}.getType();
         return JSON.parseObject(json, type);
     }
 
     /**
-     * JSON转map
+     * JSON转Map<String, String>
      *
      * @author fzr
      * @param object 对象
@@ -169,38 +157,28 @@ public class ToolsUtil {
     }
 
     /**
-     * 字符串转List<Map<String, String>>
-     *
-     * @author fzr
-     * @param s 字符串
-     * @return Map<String, String>
-     */
-    public static List<Map<String, String>> stringToListAsMap(String s) {
-        Type type = new TypeToken<List<Map<String, String>>>() {}.getType();
-        return JSON.parseObject(s, type);
-    }
-
-    /**
-     * 对象转List<Integer>
-     *
-     * @author fzr
-     * @param object 对象
-     * @return List<Integer>
-     */
-    public static List<Integer> objectToListAsInt(Object object) {
-        Type type = new TypeToken<List<Integer>>() {}.getType();
-        return JSON.parseObject(JSONObject.toJSONString(object), type);
-    }
-
-    /**
-     * map合并
+     * map合并(Object)
      *
      * @author fzr
      * @param map 对象
      * @return Object
      */
-    public static Map<String, Object> mergeMap(Map<String, Object> map, Map<String, Object> map1){
+    public static Map<String, Object> mergeMapByObj(Map<String, Object> map, Map<String, Object> map1){
         HashMap<String, Object> map2 = new HashMap<>();
+        map2.putAll(map);
+        map2.putAll(map1);
+        return map2;
+    }
+
+    /**
+     * map合并(String)
+     *
+     * @author fzr
+     * @param map 对象
+     * @return Object
+     */
+    public static Map<String, String> mergeMapByStr(Map<String, String> map, Map<String, String> map1){
+        HashMap<String, String> map2 = new HashMap<>();
         map2.putAll(map);
         map2.putAll(map1);
         return map2;

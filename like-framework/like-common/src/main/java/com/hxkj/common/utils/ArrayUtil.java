@@ -1,12 +1,12 @@
 package com.hxkj.common.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.Type;
+import java.util.*;
 
 /**
  * 数组工具类
@@ -98,7 +98,23 @@ public class ArrayUtil {
      * @param separator 分割符号
      * @return String
      */
-    public static String listToString(List<Long> list, String separator) {
+    public static String listToStringByLong(List<Long> list, String separator) {
+        StringBuilder sb = new StringBuilder();
+        for (Object o : list) {
+            sb.append(o).append(separator);
+        }
+        return list.isEmpty() ? "" : sb.substring(0, sb.toString().length() - 1);
+    }
+
+    /**
+     * 列表转字符串
+     *
+     * @author fzr
+     * @param list 列表 [1, 2, 4] -> 1,2,3
+     * @param separator 分割符号
+     * @return String
+     */
+    public static String listToStringByInt(List<Integer> list, String separator) {
         StringBuilder sb = new StringBuilder();
         for (Object o : list) {
             sb.append(o).append(separator);
@@ -114,7 +130,7 @@ public class ArrayUtil {
      * @param separator 分割符号
      * @return String
      */
-    public static String listStrToString(List<String> list, String separator) {
+    public static String listToStringByStr(List<String> list, String separator) {
         StringBuilder sb = new StringBuilder();
         for (Object o : list) {
             sb.append(o).append(separator);
@@ -127,21 +143,22 @@ public class ArrayUtil {
      *
      * @author fzr
      * @param str 字符串
-     * @return List<Integer>
+     * @param regex 分隔符
+     * @return List<Long>
      */
-    public static List<Integer> stringToArray(String str){
-        return stringToArrayByRegex(str, ",");
-    }
-
-    /**
-     * 字符串分割，转化为数组
-     *
-     * @author fzr
-     * @param str 字符串
-     * @return List<String>
-     */
-    public static List<String> stringToArrayStr(String str){
-        return stringToArrayStrRegex(str, ",");
+    public static List<Long> stringToListAsLong(String str, String regex){
+        List<Long> list = new ArrayList<>();
+        if (str.contains(regex)){
+            String[] split = str.split(regex);
+            for (String value : split) {
+                if(!StringUtil.isBlank(value)){
+                    list.add(Long.parseLong(value.trim()));
+                }
+            }
+        }else {
+            list.add(Long.parseLong(str));
+        }
+        return list;
     }
 
     /**
@@ -152,12 +169,10 @@ public class ArrayUtil {
      * @param regex 分隔符
      * @return List<Integer>
      */
-    public static List<Integer> stringToArrayByRegex(String str, String regex){
+    public static List<Integer> stringToListAsInt(String str, String regex){
         List<Integer> list = new ArrayList<>();
         if (str.contains(regex)){
-
             String[] split = str.split(regex);
-
             for (String value : split) {
                 if(!StringUtil.isBlank(value)){
                     list.add(Integer.parseInt(value.trim()));
@@ -170,28 +185,110 @@ public class ArrayUtil {
     }
 
     /**
-     * 字符串分割，转化为数组
+     * 字符串分割,转化为数组
      *
      * @author fzr
      * @param str 字符串
      * @param regex 分隔符
      * @return List<String>
      */
-    public static List<String> stringToArrayStrRegex(String str, String regex ){
+    public static List<String> stringToListAsStr(String str, String regex){
         List<String> list = new ArrayList<>();
         if (str.contains(regex)){
-
             String[] split = str.split(regex);
-
             for (String value : split) {
                 if(!StringUtil.isBlank(value)){
-                    list.add(value);
+                    list.add(value.trim());
                 }
             }
         }else {
             list.add(str);
         }
         return list;
+    }
+
+    /**
+     * 字符串转列表Map
+     *
+     * @author fzr
+     * @param s 字符串
+     * @return Map<String, Long>
+     */
+    public static List<Map<String, Long>> stringToListAsMapLong(String s) {
+        Type type = new TypeToken<List<Map<String, Long>>>() {}.getType();
+        return JSON.parseObject(s, type);
+    }
+
+    /**
+     * 字符串转列表Map
+     *
+     * @author fzr
+     * @param s 字符串
+     * @return Map<String, Integer>
+     */
+    public static List<Map<String, Integer>> stringToListAsMapInt(String s) {
+        Type type = new TypeToken<List<Map<String, Integer>>>() {}.getType();
+        return JSON.parseObject(s, type);
+    }
+
+    /**
+     * 字符串转列表Map
+     *
+     * @author fzr
+     * @param s 字符串
+     * @return Map<String, Object>
+     */
+    public static List<Map<String, Object>> stringToListAsMapObj(String s) {
+        Type type = new TypeToken<List<Map<String, Object>>>() {}.getType();
+        return JSON.parseObject(s, type);
+    }
+
+    /**
+     * 字符串转列表Map
+     *
+     * @author fzr
+     * @param s 字符串
+     * @return Map<String, String>
+     */
+    public static List<Map<String, String>> stringToListAsMapStr(String s) {
+        Type type = new TypeToken<List<Map<String, String>>>() {}.getType();
+        return JSON.parseObject(s, type);
+    }
+
+    /**
+     * 对象转List
+     *
+     * @author fzr
+     * @param object 对象
+     * @return List<Long>
+     */
+    public static List<Integer> objectToListAsLong(Object object) {
+        Type type = new TypeToken<List<Long>>() {}.getType();
+        return JSON.parseObject(JSONObject.toJSONString(object), type);
+    }
+
+    /**
+     * 对象转List
+     *
+     * @author fzr
+     * @param object 对象
+     * @return List<Integer>
+     */
+    public static List<Integer> objectToListAsInt(Object object) {
+        Type type = new TypeToken<List<Integer>>() {}.getType();
+        return JSON.parseObject(JSONObject.toJSONString(object), type);
+    }
+
+    /**
+     * 对象转List
+     *
+     * @author fzr
+     * @param object 对象
+     * @return List<String>
+     */
+    public static List<Integer> objectToListAsStr(Object object) {
+        Type type = new TypeToken<List<String>>() {}.getType();
+        return JSON.parseObject(JSONObject.toJSONString(object), type);
     }
 
 }

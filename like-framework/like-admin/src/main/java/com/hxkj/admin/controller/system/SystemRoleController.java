@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  * 系统角色管理
  */
 @RestController
-@RequestMapping("/api/system/role")
+@RequestMapping("api/system/role")
 public class SystemRoleController {
 
     @Resource

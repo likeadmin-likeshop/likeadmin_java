@@ -331,7 +331,7 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
         this.cacheAdminUserByUid(adminId);
 
         if (systemAdminParam.getPassword() != null) {
-            String token = Objects.requireNonNull(HttpUtil.obj()).getHeader("token");
+            String token = Objects.requireNonNull(RequestUtil.handler()).getHeader("token");
             RedisUtil.del(AdminConfig.backstageTokenKey + token);
         }
     }

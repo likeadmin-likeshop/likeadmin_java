@@ -8,6 +8,7 @@ import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.vo.album.AlbumVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
+import com.hxkj.common.utils.ArrayUtil;
 import com.hxkj.common.utils.ToolsUtil;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ import java.util.Map;
  * 相册管理
  */
 @RestController
-@RequestMapping("/api/album")
+@RequestMapping("api/album")
 public class AlbumController {
 
     @Resource
@@ -69,7 +70,7 @@ public class AlbumController {
             return AjaxResult.failed("缺少cid参数");
         }
 
-        List<Integer> ids = ToolsUtil.objectToListAsInt(params.get("ids"));
+        List<Integer> ids = ArrayUtil.objectToListAsInt(params.get("ids"));
         iAlbumService.albumMove(ids, Integer.parseInt(params.get("cid").toString()));
         return AjaxResult.success();
     }

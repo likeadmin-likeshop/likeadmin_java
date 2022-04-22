@@ -82,8 +82,8 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         }
 
         // 校验用户被删除
-        Map<String, Object> map = ToolsUtil.jsonToMap(RedisUtil.hGet(AdminConfig.backstageManageKey, uid).toString());
-        if (map == null || map.get("isDelete").toString().equals("1")) {
+        Map<String, String> map = ToolsUtil.jsonToMap(RedisUtil.hGet(AdminConfig.backstageManageKey, uid).toString());
+        if (map == null || map.get("isDelete").equals("1")) {
             RedisUtil.del(token);
             RedisUtil.hDel(AdminConfig.backstageManageKey, uid);
             AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());

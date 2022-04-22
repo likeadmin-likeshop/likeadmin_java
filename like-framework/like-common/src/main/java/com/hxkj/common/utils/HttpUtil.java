@@ -14,134 +14,11 @@ import java.security.cert.X509Certificate;
 import java.util.*;
 
 /**
- * 请求工具类
+ * HTTP工具类
  */
 public class HttpUtil {
 
     private static final Logger log = LoggerFactory.getLogger(HttpUtil.class);
-
-    /**
-     * 获取请求对象
-     *
-     * @author fzr
-     * @return HttpServletRequest
-     */
-    public static HttpServletRequest obj() {
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (servletRequestAttributes != null) {
-            return servletRequestAttributes.getRequest();
-        }
-        return null;
-    }
-
-    /**
-     * 获取不带参请求URl
-     *
-     * @author fzr
-     * @return String
-     */
-    public static String url() {
-        HttpServletRequest request = HttpUtil.obj();
-        if (request != null) {
-            return request.getRequestURL().toString();
-        }
-        return null;
-    }
-
-    /**
-     * 获取请求路由
-     *
-     * @author fzr
-     * @return String
-     */
-    public static String route() {
-        HttpServletRequest request = HttpUtil.obj();
-        if (request != null) {
-            return request.getRequestURI();
-        }
-        return null;
-    }
-
-    /**
-     * 获取请求域名
-     *
-     * @author fzr
-     * @return String
-     */
-    public static String domain() {
-        HttpServletRequest request = HttpUtil.obj();
-        if (request != null) {
-            String requestUrl = request.getRequestURL().toString();
-            List<String> urls = Arrays.asList(requestUrl.split("/"));
-
-            String agree = "http:";
-            if (request.getServerPort() == 443) {
-                agree = "https:";
-            }
-
-            return agree + "//" + urls.get(2).split(":")[0];
-        }
-        return null;
-    }
-
-    /**
-     * 请求客户端IP
-     *
-     * @author fzr
-     * @return String
-     */
-    public static String ip() {
-        HttpServletRequest request = HttpUtil.obj();
-        if (request != null) {
-            String ipAddress;
-            try {
-                ipAddress = request.getHeader("x-forwarded-for");
-                if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
-                    ipAddress = request.getHeader("Proxy-Client-IP");
-                }
-                if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
-                    ipAddress = request.getHeader("WL-Proxy-Client-IP");
-                }
-                if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
-                    ipAddress = request.getRemoteAddr();
-                    if (ipAddress.equals("127.0.0.1")) {
-                        InetAddress inet = null;
-                        try {
-                            inet = InetAddress.getLocalHost();
-                        } catch (UnknownHostException e) {
-                            e.printStackTrace();
-                        }
-                        assert inet != null;
-                        ipAddress = inet.getHostAddress();
-                    }
-                }
-                if (ipAddress != null && ipAddress.length() > 15) {
-                    if (ipAddress.indexOf(",") > 0) {
-                        ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
-                    }
-                }
-            } catch (Exception e) {
-                ipAddress="";
-            }
-            return ipAddress == null ? "" : ipAddress;
-        }
-        return "";
-    }
-
-    /**
-     * 判断是否是GET请求
-     *
-     * @author fzr
-     * @return Boolean
-     */
-    public static Boolean isGet() {
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (servletRequestAttributes != null) {
-            HttpServletRequest request = servletRequestAttributes.getRequest();
-            return request.getMethod().equals("GET");
-        }
-        return false;
-    }
 
     /**
      * 向指定URL发送GET方法的请求 (不带参)
@@ -213,6 +90,7 @@ public class HttpUtil {
     /**
      * 向指定 URL 发送POST方法的请求
      *
+     * @author fzr
      * @param url 发送请求的 URL
      * @param param 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
      * @return 所代表远程资源的响应结果
@@ -269,6 +147,7 @@ public class HttpUtil {
     /**
      * 发送SSL的POST请求
      *
+     * @author fzr
      * @param url 请求地址
      * @param param 请求参数
      * @return String

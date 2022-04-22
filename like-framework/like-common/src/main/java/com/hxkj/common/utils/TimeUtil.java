@@ -452,7 +452,7 @@ public class TimeUtil {
      * @author fzr
      * @return int
      */
-    public static long monthDay(){
+    public static Integer monthDay(){
         Date date = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);

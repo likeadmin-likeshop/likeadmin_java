@@ -79,7 +79,7 @@ public class AlbumServiceImpl implements IAlbumService {
             BeanUtils.copyProperties(album, vo);
 
             vo.setUri(UrlUtil.toAbsoluteUrl(album.getUri()));
-            vo.setSize(ToolsUtil.toStorageUnit(album.getSize()));
+            vo.setSize(ToolsUtil.storageUnit(album.getSize()));
             vo.setCreateTime(TimeUtil.timestampToDate(album.getCreateTime()));
             vo.setUpdateTime(TimeUtil.timestampToDate(album.getUpdateTime()));
             albumVoArrayList.add(vo);

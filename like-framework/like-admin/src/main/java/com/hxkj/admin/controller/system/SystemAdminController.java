@@ -20,7 +20,7 @@ import java.util.Map;
  * 系统管理员管理
  */
 @RestController
-@RequestMapping("/api/system/admin")
+@RequestMapping("api/system/admin")
 public class SystemAdminController {
 
     @Resource

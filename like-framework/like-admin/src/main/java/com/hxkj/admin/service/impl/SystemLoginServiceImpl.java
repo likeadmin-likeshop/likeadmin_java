@@ -72,7 +72,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
         }
 
         try {
-            sysAdmin.setLastLoginIp(HttpUtil.ip());
+            sysAdmin.setLastLoginIp(IpUtil.getIpAddress());
             sysAdmin.setLastLoginTime(System.currentTimeMillis() / 1000);
             systemAdminMapper.updateById(sysAdmin);
 
@@ -86,7 +86,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
             response.put("token", token);
 
             // 更新登录信息
-            sysAdmin.setLastLoginIp(HttpUtil.ip());
+            sysAdmin.setLastLoginIp(IpUtil.getIpAddress());
             sysAdmin.setLastLoginTime(TimeUtil.timestamp());
             systemAdminMapper.updateById(sysAdmin);
 
@@ -118,13 +118,13 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
      */
     private void recordLoginLog(Integer adminId, String username, String error) {
         try {
-            HttpServletRequest request = Objects.requireNonNull(HttpUtil.obj());
+            HttpServletRequest request = Objects.requireNonNull(RequestUtil.handler());
             final UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
 
             SystemLogLogin model = new SystemLogLogin();
             model.setAdminId(adminId);
             model.setUsername(username);
-            model.setIp(HttpUtil.ip());
+            model.setIp(IpUtil.getIpAddress());
             model.setOs(userAgent.getOperatingSystem().getName());
             model.setBrowser(userAgent.getBrowser().getName());
             model.setStatus(StringUtil.isEmpty(error) ? 1 : 0);
