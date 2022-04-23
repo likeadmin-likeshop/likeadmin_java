@@ -50,7 +50,7 @@ public class IndexServiceImpl implements IIndexService {
         // 访客图表
         Map<String, Object> visitor = new LinkedHashMap<>();
         visitor.put("date", TimeUtil.daysAgoDate(8));
-        visitor.put("list", new ArrayList<>());
+        visitor.put("list", Arrays.asList(12,13,11,5,8,22,14,9));
         console.put("visitor", visitor);
 
         // 文章排名
