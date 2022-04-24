@@ -78,10 +78,10 @@ request.interceptors.response.use(
             case 403:
             case 404:
             case 500:
-                return eventResponse.error(response)
-            case -1:
             case 330:
             case 331:
+                return eventResponse.error(response.data)
+            case -1:
             case 332:
             case 333:
                 return eventResponse.redirect()

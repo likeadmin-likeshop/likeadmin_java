@@ -40,7 +40,7 @@
                 </el-form-item>
 
                 <!-- 密码输入框 -->
-                <el-form-item label="密码：" prop="password">
+                <el-form-item label="密码：" prop="password" required>
                     <el-input
                         v-model="formData.password"
                         show-password
@@ -49,7 +49,7 @@
                 </el-form-item>
 
                 <!-- 确认密码输入框 -->
-                <el-form-item label="确认密码：" prop="password_confirm">
+                <el-form-item label="确认密码：" prop="password_confirm" required>
                     <el-input
                         v-model="formData.password_confirm"
                         show-password
@@ -155,10 +155,17 @@ export default defineComponent({
                     }
                 ]
                 rules.value.password_confirm = [
+                    { required: true, message: '请再次输入密码', trigger: 'blur' },
                     {
-                        required: true,
-                        message: '请输入确认密码',
-                        trigger: ['blur']
+                        validator: (rule, value, callback) => {
+                            if (formData.value.password) {
+                                if (!value) callback(new Error('请再次输入密码'))
+                                if (value !== formData.value.password)
+                                    callback(new Error('两次输入密码不一致！'))
+                            }
+                            callback()
+                        },
+                        trigger: 'blur'
                     }
                 ]
                 return

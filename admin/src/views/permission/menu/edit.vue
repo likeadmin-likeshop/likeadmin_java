@@ -63,7 +63,17 @@
                         </el-form-item> -->
 
                         <el-form-item label="请选择图标">
-                            <select-icon></select-icon>
+                            <div class="flex">
+                                <!-- <el-input readonly>
+                                    <template #prefix>
+                                        <el-icon class="el-input__icon">
+                                            <search class="f-s-20" />
+                                        </el-icon>
+                                    </template>
+                                </el-input> -->
+
+                                <select-icon></select-icon>
+                            </div>
                         </el-form-item>
                     </div>
 

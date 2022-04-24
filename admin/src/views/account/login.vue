@@ -63,7 +63,8 @@ import { computed, defineComponent, onMounted, reactive, Ref, ref } from 'vue'
 import { useAdmin } from '@/core/hooks/app'
 import { ACCOUNT } from '@/config/cachekey'
 import cache from '@/utils/cache'
-import { ElInput, ElForm } from 'element-plus'
+import { ElInput, ElForm, ElMessage } from 'element-plus'
+
 export default defineComponent({
     setup() {
         const { store, router, route } = useAdmin()
@@ -117,7 +118,7 @@ export default defineComponent({
                             query: { redirect }
                         } = route
                         const path = typeof redirect === 'string' ? redirect : '/'
-                        
+                        ElMessage({ type: 'success', message: '登录成功' })
                         router.replace(path)
                     })
                     .catch(err => {

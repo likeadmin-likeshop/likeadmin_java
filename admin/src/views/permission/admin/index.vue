@@ -28,7 +28,9 @@
         </el-card>
         <el-card v-loading="pager.loading" class="m-t-15" shadow="never">
             <router-link to="/permission/admin/edit">
-                <el-button v-perm="['system:admin:add']" type="primary" size="small">新增管理员</el-button>
+                <el-button v-perm="['system:admin:add']" type="primary" size="small"
+                    >新增管理员</el-button
+                >
             </router-link>
             <div class="m-t-15">
                 <el-table :data="pager.lists">
@@ -80,7 +82,11 @@
                             >
                                 <el-button type="text">编辑</el-button>
                             </router-link>
-                            <popup v-perm="['system:admin:del']" class="m-r-10 inline" @confirm="handleDelete(row.id)">
+                            <popup
+                                v-perm="['system:admin:del']"
+                                class="m-r-10 inline"
+                                @confirm="handleDelete(row.id)"
+                            >
                                 <template #trigger>
                                     <el-button type="text">删除</el-button>
                                 </template>
@@ -106,6 +112,8 @@ import Pagination from '@/components/pagination/index.vue'
 import Popup from '@/components/popup/index.vue'
 import { apiAdminEdit, adminLists, apiAdminDelete, apiRoleLists, apiAdminStatus } from '@/api/auth'
 import { usePages } from '@/core/hooks/pages'
+import { ElMessage } from 'element-plus'
+
 export default defineComponent({
     components: {
         Pagination,
@@ -139,11 +147,13 @@ export default defineComponent({
         const handleStatusChange = async (event: Event, id: number) => {
             await apiAdminStatus({ isDisable: event, id })
             requestApi()
+            ElMessage({ type: 'success', message: '操作成功' })
         }
 
         const handleDelete = (id: number) => {
             apiAdminDelete({ id }).then(() => {
                 requestApi()
+                ElMessage({ type: 'success', message: '删除成功' })
             })
         }
 
