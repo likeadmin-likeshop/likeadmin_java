@@ -29,8 +29,8 @@ public class SystemMenuController {
      * @author fzr
      * @return Object
      */
-    @GetMapping("/menus")
-    public Object menus() {
+    @GetMapping("/route")
+    public Object route() {
         Integer roleId = LikeAdminThreadLocal.getRoleId();
         JSONArray lists = iSystemMenuService.selectMenuByRoleId(roleId);
         return AjaxResult.success(lists);
@@ -42,8 +42,8 @@ public class SystemMenuController {
      * @author fzr
      * @return Object
      */
-    @GetMapping("/lists")
-    public Object lists() {
+    @GetMapping("/list")
+    public Object list() {
         JSONArray lists = iSystemMenuService.lists();
         return AjaxResult.success(lists);
     }
