@@ -2,8 +2,9 @@
     <div class="select-icon">
         <div class="flex">
             <div class="show-icon">
-                <i class="iconfont" :class="selectIcon.icon_kdzs_mdsz"></i>
+                <i class="iconfont"></i>
             </div>
+
             <el-popover placement="bottom" :width="400" trigger="click">
                 <template #reference>
                     <el-button>
@@ -24,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, computed } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 
 const selectIcon = ref<any>([
