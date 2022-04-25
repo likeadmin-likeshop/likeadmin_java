@@ -1,8 +1,8 @@
 {
     "id": "2786219",
-    "name": "菜单图标",
+    "name": "likesadmin",
     "font_family": "iconfont",
-    "css_prefix_text": "",
+    "css_prefix_text": "icon-",
     "description": "",
     "glyphs": [
         {
