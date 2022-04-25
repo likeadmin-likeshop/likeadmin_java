@@ -66,8 +66,10 @@ const user: Module<UserModule, any> = {
             return new Promise((resolve, reject) => {
                 apiUserInfo()
                     .then((data: any) => {
-                        commit('setUser', data)
+                        commit('setUser', data.user)
                         commit('setPermission', data.permissions)
+                        console.log('___data.user___', data.user)
+
                         resolve(data)
                     })
                     .catch(error => {

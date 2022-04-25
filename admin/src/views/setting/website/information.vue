@@ -64,17 +64,24 @@
         </el-card>
 
         <footer-btns>
-            <el-button v-perm="['setting:setWebsite']"  type="primary" size="small" @click="setWebsite">保存</el-button>
+            <el-button
+                v-perm="['setting:setWebsite']"
+                type="primary"
+                size="small"
+                @click="setWebsite"
+                >保存</el-button
+            >
         </footer-btns>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, onMounted, Ref, ref } from 'vue'
-import { ElInput, ElForm } from 'element-plus'
+import { ElInput, ElForm, ElMessage } from 'element-plus'
 import MaterialSelect from '@/components/material-select/index.vue'
 import FooterBtns from '@/components/footer-btns/index.vue'
 import { apiGetWebsite, apiSetWebsite } from '@/api/setting'
+
 export default defineComponent({
     components: {
         MaterialSelect,
@@ -126,6 +133,7 @@ export default defineComponent({
                 })
                     .then((res: any) => {
                         console.log('res', res)
+                        ElMessage({ type: 'success', message: '保存成功' })
                         getWebsite()
                     })
                     .catch((err: any) => {
