@@ -12,16 +12,17 @@ import { TOKEN } from '@/config/cachekey'
 const eventResponse = {
     // 成功
     success: ({ show, msg, data }: any): Promise<any> => {
-        if (show * 1) {
-            ElMessage({ type: 'success', message: msg })
-        }
+        // if (show * 1) {
+        //     ElMessage({ type: 'success', message: msg })
+        // }
+
         return data
     },
     // 失败
-    error: ({ show, msg }: any): Promise<any> => {
-        if (show * 1) {
-            ElMessage({ type: 'error', message: msg })
-        }
+    error: ({ msg }: any): Promise<any> => {
+        console.log(msg, 'msg')
+        ElMessage({ type: 'error', message: msg })
+
         return Promise.reject(msg)
     },
     // 重定向
@@ -77,10 +78,10 @@ request.interceptors.response.use(
             case 403:
             case 404:
             case 500:
-                return eventResponse.error(response.data)
-            case -1:
             case 330:
             case 331:
+                return eventResponse.error(response.data)
+            case -1:
             case 332:
             case 333:
                 return eventResponse.redirect()

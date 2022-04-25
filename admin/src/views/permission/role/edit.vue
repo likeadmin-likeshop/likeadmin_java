@@ -77,6 +77,8 @@ import { ElInput, ElForm } from 'element-plus'
 import FooterBtns from '@/components/footer-btns/index.vue'
 import { useAdmin } from '@/core/hooks/app'
 import { flatten } from '@/utils/util'
+import { ElMessage } from 'element-plus'
+
 export default defineComponent({
     components: {
         FooterBtns
@@ -96,7 +98,7 @@ export default defineComponent({
                     menus: [], // 权限，就选中的菜单id
                     isDisable: 0,
                     sort: '',
-					menuIds: '', // 菜单ID数组,逗号隔开
+                    menuIds: '' // 菜单ID数组,逗号隔开
                 },
 
                 menu: {
@@ -154,6 +156,7 @@ export default defineComponent({
                     setTimeout(() => {
                         router.back()
                     }, 500)
+                    ElMessage({ type: 'success', message: '保存成功' })
                 })
                 .catch((err: any) => {
                     console.log('err', err)
@@ -161,11 +164,11 @@ export default defineComponent({
         }
         // 编辑角色
         const roleEdit = () => {
-			// 选择中的权限id字符串
-			formData.value.menus.length == 0 
-			? formData.value.menuIds = ''
-			: formData.value.menuIds = formData.value.menus.join(',')
-			
+            // 选择中的权限id字符串
+            formData.value.menus.length == 0
+                ? (formData.value.menuIds = '')
+                : (formData.value.menuIds = formData.value.menus.join(','))
+
             apiRoleEdit({
                 ...formData.value,
                 id: id.value
@@ -175,6 +178,7 @@ export default defineComponent({
                     setTimeout(() => {
                         router.back()
                     }, 500)
+                    ElMessage({ type: 'success', message: '保存成功' })
                 })
                 .catch((err: any) => {
                     console.log('err', err)

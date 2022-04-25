@@ -2,7 +2,9 @@
     <div class="role">
         <el-card shadow="never">
             <router-link to="/permission/role/edit">
-                <el-button  v-perm="['system:role:add']" type="primary" size="small">新增角色</el-button>
+                <el-button v-perm="['system:role:add']" type="primary" size="small"
+                    >新增角色</el-button
+                >
             </router-link>
             <div v-loading="pager.loading" class="m-t-15">
                 <div class="m-t-15">
@@ -34,7 +36,11 @@
                                     <el-button type="text" size="mini">编辑</el-button>
                                 </router-link>
                                 <!-- 删除 -->
-                                <popup v-perm="['system:role:del']" class="m-r-10 inline" @confirm="handleDelete(row.id)">
+                                <popup
+                                    v-perm="['system:role:del']"
+                                    class="m-r-10 inline"
+                                    @confirm="handleDelete(row.id)"
+                                >
                                     <template #trigger>
                                         <el-button type="text" size="mini">删除</el-button>
                                     </template>
@@ -61,6 +67,8 @@ import { apiRoleLists, apiRoleDel } from '@/api/auth'
 import Pagination from '@/components/pagination/index.vue'
 import Popup from '@/components/popup/index.vue'
 import { usePages } from '@/core/hooks/pages'
+import { ElMessage } from 'element-plus'
+
 export default defineComponent({
     components: {
         Pagination,
@@ -89,6 +97,7 @@ export default defineComponent({
                 .then((res: any) => {
                     console.log('res', res)
                     requestApi()
+                    ElMessage({ type: 'success', message: '删除成功' })
                 })
                 .catch((err: any) => {
                     console.log('err', err)

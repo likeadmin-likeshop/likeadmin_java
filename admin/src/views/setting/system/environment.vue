@@ -75,7 +75,7 @@
         </el-card>
 
         <el-card shadow="never" class="m-t-15">
-            <div>Java虚拟机信息</div>
+            <div class="lg">Java虚拟机信息</div>
             <div class="m-t-15">
                 <el-table :data="info.jvmFormData" size="medium">
                     <el-table-column prop="name" label="Java名称"> </el-table-column>
@@ -89,7 +89,7 @@
         </el-card>
 
         <el-card shadow="never" class="m-t-15">
-            <div>硬盘状态</div>
+            <div class="lg">硬盘状态</div>
             <div class="m-t-15">
                 <el-table :data="info.disk" size="medium">
                     <el-table-column prop="dirName" label="盘符路径"> </el-table-column>

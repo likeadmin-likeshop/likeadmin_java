@@ -54,12 +54,26 @@
                     </el-form-item>
 
                     <div v-if="(formData.menuType == menuDataType.BUTTON) == ''">
-                        <el-form-item label="请选择图标">
+                        <!-- <el-form-item label="请选择图标">
                             <el-input
                                 v-model="formData.menuIcon"
                                 show-word-limit
                                 placeholder="请输入图标"
                             ></el-input>
+                        </el-form-item> -->
+
+                        <el-form-item label="请选择图标">
+                            <div class="flex">
+                                <!-- <el-input readonly>
+                                    <template #prefix>
+                                        <el-icon class="el-input__icon">
+                                            <search class="f-s-20" />
+                                        </el-icon>
+                                    </template>
+                                </el-input> -->
+
+                                <select-icon></select-icon>
+                            </div>
                         </el-form-item>
                     </div>
 
