@@ -103,7 +103,7 @@
                     <v-chart class="chart" :option="workbenchData.visitorOption" />
                 </div>
             </el-card>
-            <el-card class="flex-1 m-l-15" shadow="never">
+            <!-- <el-card class="flex-1 m-l-15" shadow="never">
                 <template #header>
                     <div>
                         <span class="card-title">文章阅读量排名</span>
@@ -144,7 +144,7 @@
                         <el-table-column prop="visit" label="阅读量"> </el-table-column>
                     </el-table>
                 </div>
-            </el-card>
+            </el-card> -->
         </div>
 
         <!-- <material-select /> -->
@@ -216,9 +216,10 @@ export default defineComponent({
                     res.visitor.date.reverse().forEach((item: any) => {
                         workbenchData.visitorOption.xAxis.data.push(item)
                     })
-                    res.visitor.list[0].forEach((item: any) => {
+                    res.visitor.list.forEach((item: any) => {
                         workbenchData.visitorOption.series[0].data.push(item)
                     })
+                    console.log('res.visitor.list', res.visitor.list)
                 })
                 .catch((err: any) => {
                     console.log('err', err)
