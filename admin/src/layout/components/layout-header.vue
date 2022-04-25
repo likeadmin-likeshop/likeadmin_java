@@ -34,7 +34,7 @@ export default defineComponent({
     setup() {
         const { store, router } = useAdmin()
         const userInfo = computed(() => store.getters.userInfo)
-        console.log(userInfo, 'userInfo')
+        console.log(userInfo, 'userInfo____')
 
         const handleCommand = (command: string) => {
             switch (command) {

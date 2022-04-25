@@ -70,7 +70,7 @@
                                     </template>
                                 </el-input> -->
 
-                                <select-icon :icon="formData.menuIcon"></select-icon>
+                                <select-icon v-model:icon="formData.menuIcon"></select-icon>
                             </div>
                         </el-form-item>
                     </div>

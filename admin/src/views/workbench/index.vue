@@ -80,7 +80,7 @@
                         </div>
                     </router-link>
 
-                    <router-link to="/setting/website/environment">
+                    <router-link to="/setting/system/environment">
                         <div class="nav-item flex-col m-t-10">
                             <view class="flex flex-center">
                                 <img
@@ -216,7 +216,7 @@ export default defineComponent({
                     res.visitor.date.reverse().forEach((item: any) => {
                         workbenchData.visitorOption.xAxis.data.push(item)
                     })
-                    res.visitor.list[0].data.forEach((item: any) => {
+                    res.visitor.list[0].forEach((item: any) => {
                         workbenchData.visitorOption.series[0].data.push(item)
                     })
                 })

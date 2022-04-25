@@ -2,7 +2,7 @@
     <div class="select-icon">
         <div class="flex">
             <div class="show-icon">
-                <i class="iconfont" :class="iconItemValue"></i>
+                <i class="iconfont" :class="icon"></i>
             </div>
 
             <el-popover placement="bottom" :width="400" trigger="click">
@@ -117,11 +117,9 @@ const selectIcon = ref<any>([
     'icon_gongyingshang'
 ])
 
-const iconItemValue = ref<any>([])
-
 const selectIconItem = (item: string) => {
     console.log(item, 'item____')
-    iconItemValue.value = item
+    emit('update:icon', item)
 }
 
 const emit = defineEmits(['update:icon'])
@@ -134,16 +132,6 @@ const props = withDefaults(
         icon: ''
     }
 )
-
-const iconValue = computed({
-    get: () => {
-        return [props.icon]
-    },
-    set: (value: any) => {
-        emit('update:icon', selectIconItem)
-        console.log(selectIconItem, 'selectIconItem______')
-    }
-})
 </script>
 
 <style lang="scss" scoped>
