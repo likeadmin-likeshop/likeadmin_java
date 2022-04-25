@@ -70,7 +70,7 @@
                                     </template>
                                 </el-input> -->
 
-                                <select-icon></select-icon>
+                                <select-icon :icon="formData.menuIcon"></select-icon>
                             </div>
                         </el-form-item>
                     </div>
@@ -228,7 +228,6 @@ const getMenuDetail = async (id: number) => {
 const getFatherMenu = async () => {
     const menus = (await apiConfigGetMenu()) || []
     menuList.value = [{ id: 0, menuName: '顶级' }, ...menus]
-    console.log(menuList.value, '---------------menuaList.value')
 }
 
 // 添加菜单
