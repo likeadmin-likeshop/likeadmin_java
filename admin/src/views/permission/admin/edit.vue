@@ -133,7 +133,12 @@ export default defineComponent({
                         }
                     ],
                     password: [
-                        { required: true, message: '请输入密码', trigger: 'blur' },
+                        {
+                            required: true,
+                            message: '请输入密码',
+                            trigger: 'blur',
+                            pattern: /(^[^\s]*$)/ // 不能输入空格
+                        },
                         {
                             validator: (rule: object, value: string, callback: any) => {
                                 !value ? callback(new Error('请输入密码')) : callback()
@@ -142,7 +147,12 @@ export default defineComponent({
                         }
                     ] as any[],
                     password_confirm: [
-                        { required: true, message: '请再次输入密码', trigger: 'blur' },
+                        {
+                            required: true,
+                            message: '请再次输入密码',
+                            trigger: 'blur',
+                            pattern: /(^[^\s]*$)/ // 不能输入空格
+                        },
                         {
                             validator: (rule: object, value: string, callback: any) => {
                                 if (formData.value.password) {
