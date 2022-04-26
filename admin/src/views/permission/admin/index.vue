@@ -37,7 +37,13 @@
                     <el-table-column label="ID" prop="id" min-width="60"></el-table-column>
                     <el-table-column label="头像" min-width="100">
                         <template #default="{ row }">
-                            <el-avatar :size="50" :src="row.avatar"></el-avatar>
+                            <div v-if="row.avatar == ''">
+                                <img class="default-avatar" src="@/assets/images/avatar.png" />
+                            </div>
+
+                            <div v-else>
+                                <el-avatar :size="50" :src="row.avatar"></el-avatar>
+                            </div>
                         </template>
                     </el-table-column>
                     <el-table-column label="账号" prop="username" min-width="100"></el-table-column>
@@ -187,5 +193,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 .ls-form {
     margin-bottom: -16px;
+}
+
+.default-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
 }
 </style>

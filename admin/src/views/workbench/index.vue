@@ -58,36 +58,36 @@
                     > -->
                     <router-link to="">
                         <div class="nav-item flex-col m-t-10">
-                            <view class="flex flex-center">
+                            <div class="flex flex-center">
                                 <img
                                     style="width: 48px; height: 48px"
                                     src="@/assets/images/avatar.png"
                                 />
-                            </view>
+                            </div>
                             <div class="m-t-8 normal text-center">工作台</div>
                         </div>
                     </router-link>
 
                     <router-link to="/setting/website/information">
                         <div class="nav-item flex-col m-t-10">
-                            <view class="flex flex-center">
+                            <div class="flex flex-center">
                                 <img
                                     style="width: 48px; height: 48px"
                                     src="@/assets/images/avatar.png"
                                 />
-                            </view>
+                            </div>
                             <div class="m-t-8 normal text-center">网站信息</div>
                         </div>
                     </router-link>
 
                     <router-link to="/setting/system/environment">
                         <div class="nav-item flex-col m-t-10">
-                            <view class="flex flex-center">
+                            <div class="flex flex-center">
                                 <img
                                     style="width: 48px; height: 48px"
                                     src="@/assets/images/avatar.png"
                                 />
-                            </view>
+                            </div>
                             <div class="m-t-8 normal text-center">系统环境</div>
                         </div>
                     </router-link>
