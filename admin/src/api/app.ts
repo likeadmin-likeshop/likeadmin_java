@@ -5,7 +5,7 @@ export function apiFileCateAdd(params: any) {
 }
 
 export function apiFileCateEdit(params: { id: number; name: string }) {
-    return request.post('/file/editCate', params)
+    return request.post('/album/cateRename', params)
 }
 
 // 文件分类删除
