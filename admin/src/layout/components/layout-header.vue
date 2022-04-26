@@ -12,7 +12,7 @@
                     </div>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <router-link to="/setting/personal/personal_data">
+                            <router-link to="/setting/personal_data">
                                 <el-dropdown-item>个人设置</el-dropdown-item>
                             </router-link>
                         </el-dropdown-menu>
@@ -34,7 +34,7 @@ export default defineComponent({
     setup() {
         const { store, router } = useAdmin()
         const userInfo = computed(() => store.getters.userInfo)
-        console.log(userInfo, 'userInfo')
+        console.log('____userInfo____', userInfo)
 
         const handleCommand = (command: string) => {
             switch (command) {

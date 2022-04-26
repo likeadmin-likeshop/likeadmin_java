@@ -2,8 +2,6 @@
     <div class="menu-edit">
         <el-card shadow="never">
             <el-page-header :content="id ? '编辑菜单' : '新增菜单'" @back="$router.back()" />
-
-            <select-icon class="m-t-20 text-center"></select-icon>
         </el-card>
 
         <el-card class="m-t-15" shadow="never">
@@ -72,7 +70,7 @@
                                     </template>
                                 </el-input> -->
 
-                                <select-icon></select-icon>
+                                <select-icon v-model:icon="formData.menuIcon"></select-icon>
                             </div>
                         </el-form-item>
                     </div>
@@ -230,7 +228,6 @@ const getMenuDetail = async (id: number) => {
 const getFatherMenu = async () => {
     const menus = (await apiConfigGetMenu()) || []
     menuList.value = [{ id: 0, menuName: '顶级' }, ...menus]
-    console.log(menuList.value, '---------------menuaList.value')
 }
 
 // 添加菜单

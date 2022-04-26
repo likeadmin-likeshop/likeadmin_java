@@ -2,7 +2,7 @@ import request from '@/utils/request'
 import { terminal } from '@/config/app'
 
 export function adminLists(params: any) {
-    return request.get('/system/admin/lists', { params })
+    return request.get('/system/admin/list', { params })
 }
 
 // 管理员添加
@@ -32,7 +32,7 @@ export function apiAdminStatus(params: any) {
 /* 角色 */
 // 角色列表
 export function apiRoleLists(params: any) {
-    return request.get('/system/role/lists', { params })
+    return request.get('/system/role/list', { params })
 }
 // 添加角色
 export function apiRoleAdd(params: any) {
@@ -53,12 +53,12 @@ export function apiRoleDetail(params: any) {
 
 // 角色权限菜单
 export function apiConfigGetMenu() {
-    return request.get('/system/menu/lists')
+    return request.get('/system/menu/list')
 }
 
 // 菜单路由
 export function apiConfigGetRoutes() {
-    return request.get('/system/menu/menus')
+    return request.get('/system/menu/route')
 }
 
 /* 菜单 */
