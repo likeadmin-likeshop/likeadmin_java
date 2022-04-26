@@ -1,2 +1,10 @@
-/.idea
-/.vscode
+.vscode
+.idea
+*.iws
+*.iml
+*.ipr
+target/
+application-dev.yml
+application-pro.yml
+application-prod.yml
+application-test.yml
