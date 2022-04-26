@@ -54,6 +54,7 @@ public class UploadController {
             album.put("size", map.get("size").toString());
             album.put("ext", map.get("ext").toString());
             album.put("url", map.get("url").toString());
+            album.put("name", map.get("name").toString());
             Integer id = iAlbumService.albumAdd(album);
 
             map.put("id", id);
