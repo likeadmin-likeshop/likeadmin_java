@@ -105,6 +105,7 @@ public class GlobalException {
      */
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseBody
     public AjaxResult handleIllegalArgumentException(IllegalArgumentException e) {
         Integer code = HttpEnum.ASSERT_ARGUMENT_ERROR.getCode();
         String msg   = Objects.requireNonNull(e.getMessage());
