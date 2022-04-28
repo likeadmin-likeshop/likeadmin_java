@@ -180,10 +180,15 @@ export default defineComponent({
                 page_type: 1
             }).then((res: any) => {
                 roleList.value = res.lists
-                roleList.value.push({
-                    id: 0,
-                    name: '超级管理员'
-                })
+
+                if (formData.value.id == 1) {
+                    roleList.value.push({
+                        id: 0,
+                        name: '超级管理员'
+                    })
+                    console.log(formData.value.id, 'formData.value.id')
+                }
+
                 console.log('roleList.value', roleList.value)
             })
         }
