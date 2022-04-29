@@ -79,7 +79,7 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
                 !info.getColumn().equals("is_delete") &&
                 !info.getColumn().equals("delete_time"))
         .eq("is_delete", 0)
-        .orderByDesc("sort");
+        .orderByDesc(Arrays.asList("id", "sort"));
 
         systemAdminMapper.setSearch(queryWrapper, params, new String[]{
                 "like:username:str",
