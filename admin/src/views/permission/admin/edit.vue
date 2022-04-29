@@ -29,7 +29,11 @@
 
                 <!-- 角色选择框 -->
                 <el-form-item label="角色：" prop="role">
-                    <el-select v-model="formData.role" placeholder="请选择角色">
+                    <el-select
+                        v-model="formData.role"
+                        placeholder="请选择角色"
+                        :disabled="formData.id == 1"
+                    >
                         <el-option
                             v-for="(item, index) in roleList"
                             :key="index"
@@ -176,6 +180,15 @@ export default defineComponent({
                 page_type: 1
             }).then((res: any) => {
                 roleList.value = res.lists
+
+                if (formData.value.id == 1) {
+                    roleList.value.push({
+                        id: 0,
+                        name: '超级管理员'
+                    })
+                    console.log(formData.value.id, 'formData.value.id')
+                }
+
                 console.log('roleList.value', roleList.value)
             })
         }

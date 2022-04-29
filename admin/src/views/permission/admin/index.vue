@@ -88,7 +88,10 @@
                             >
                                 <el-button type="text">编辑</el-button>
                             </router-link>
+
+                            <div v-if="row.id == 1"></div>
                             <popup
+                                v-else
                                 v-perm="['system:admin:del']"
                                 class="m-r-10 inline"
                                 @confirm="handleDelete(row.id)"
