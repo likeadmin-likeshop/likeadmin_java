@@ -41,7 +41,7 @@ public class SystemAdminParam implements Serializable {
     private String nickname;
 
     @NotEmpty(message = "密码不能为空", groups = {create.class})
-    @Length(min = 6, max = 18, message = "密码必须在6~18个字符内", groups = {create.class, update.class, upInfo.class})
+    @Length(min = 6, max = 32, message = "密码必须在6~32个字符内", groups = {create.class, update.class, upInfo.class})
     private String password;
 
     @NotNull(message = "请选择状态", groups = {create.class, update.class})
