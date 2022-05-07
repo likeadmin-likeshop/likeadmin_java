@@ -114,7 +114,8 @@ export default defineComponent({
                 {
                     required: true,
                     message: '请输入角色名称',
-                    trigger: ['blur']
+                    trigger: ['blur'],
+                    pattern: /(^[^\s]*$)/ // 不能输入空格
                 }
             ],
             sort: [

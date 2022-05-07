@@ -152,6 +152,7 @@ const onSubmit = (formEl: FormInstance | undefined): void => {
 
     formEl.validate((valid): Boolean | undefined => {
         if (!valid) return false
+        ElMessage({ type: 'success', message: '保存成功' })
         setAuthAdminEditSelf()
     })
 }
