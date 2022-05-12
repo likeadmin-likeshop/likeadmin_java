@@ -135,6 +135,7 @@
             <artifactId>aliyun-java-sdk-core</artifactId>
             <version>${aliyun-java.version}</version>
         </dependency>
+        <!--系统监控-->
         <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
