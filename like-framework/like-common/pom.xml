@@ -38,7 +38,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--log4j2依赖-->
+        <!-- log4j2依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
@@ -123,19 +123,19 @@
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
         </dependency>
-        <!--腾讯云短信-->
+        <!-- 腾讯云短信 -->
         <dependency>
             <groupId>com.tencentcloudapi</groupId>
             <artifactId>tencentcloud-sdk-java</artifactId>
             <version>${tencentcloudapi.version}</version>
         </dependency>
-        <!--阿里云短信-->
+        <!-- 阿里云短信 -->
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-core</artifactId>
             <version>${aliyun-java.version}</version>
         </dependency>
-        <!--系统监控-->
+        <!-- 系统监控 -->
         <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
