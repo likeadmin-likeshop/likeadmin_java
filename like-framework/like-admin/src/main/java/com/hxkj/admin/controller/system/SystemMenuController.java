@@ -24,7 +24,7 @@ public class SystemMenuController {
     ISystemMenuService iSystemMenuService;
 
     /**
-     * 获取系统菜单
+     * 获取菜单路由
      *
      * @author fzr
      * @return Object
