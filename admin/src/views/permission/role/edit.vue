@@ -27,7 +27,7 @@
                     ></el-input>
                 </el-form-item>
                 <!-- 排序 -->
-                <el-form-item label="排序">
+                <el-form-item label="排序" prop="sort">
                     <el-input v-model="formData.sort" placeholder="请输入" type="number"></el-input>
                 </el-form-item>
                 <el-form-item label="状态">
@@ -114,7 +114,16 @@ export default defineComponent({
                 {
                     required: true,
                     message: '请输入角色名称',
-                    trigger: ['blur']
+                    trigger: ['blur'],
+                    pattern: /(^[^\s]*$)/ // 不能输入空格
+                }
+            ],
+            sort: [
+                {
+                    required: true,
+                    message: '请输入排序',
+                    trigger: 'blur',
+                    pattern: /(^[0-9]\d*$)/
                 }
             ]
         }

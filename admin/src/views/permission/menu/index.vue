@@ -2,7 +2,9 @@
     <div class="menu">
         <el-card shadow="never">
             <router-link to="/permission/menu/edit">
-                <el-button  v-perm="['system:menu:add']" type="primary" size="small">添加菜单</el-button>
+                <el-button v-perm="['system:menu:add']" type="primary" size="small"
+                    >添加菜单</el-button
+                >
             </router-link>
 
             <el-table
@@ -24,9 +26,10 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="menuIcon" label="图标"> </el-table-column>
+                <el-table-column prop="component" label="组件路径"> </el-table-column>
                 <el-table-column prop="menuSort" label="排序"> </el-table-column>
                 <el-table-column prop="perms" label="权限标识"> </el-table-column>
-                <el-table-column prop="paths" label="组件路径"> </el-table-column>
+                <el-table-column prop="paths" label="路由地址"> </el-table-column>
                 <el-table-column prop="isDisable" label="状态">
                     <template #default="scope">
                         <span>{{ scope.row.isDisable == 0 ? '启用' : '关闭' }}</span>
@@ -48,7 +51,11 @@
                             <el-button type="text" size="mini">编辑</el-button>
                         </router-link>
 
-                        <popup v-perm="['system:menu:del']" class="m-r-10 inline" @confirm="handleDelete(scope.row.id)">
+                        <popup
+                            v-perm="['system:menu:del']"
+                            class="m-r-10 inline"
+                            @confirm="handleDelete(scope.row.id)"
+                        >
                             <template #trigger>
                                 <el-button type="text" size="mini">删除</el-button>
                             </template>

@@ -51,7 +51,13 @@
         </el-card>
 
         <footer-btns>
-            <el-button v-perm="['setting:setCopyright']" type="primary" size="small" @click="setCopyright">保存</el-button>
+            <el-button
+                v-perm="['setting:setCopyright']"
+                type="primary"
+                size="small"
+                @click="setCopyright"
+                >保存</el-button
+            >
         </footer-btns>
     </div>
 </template>
@@ -60,6 +66,8 @@
 import { defineComponent, reactive, onMounted } from 'vue'
 import { apiGetCopyright, apiSetCopyright } from '@/api/setting'
 import FooterBtns from '@/components/footer-btns/index.vue'
+import { ElMessage } from 'element-plus'
+
 export default defineComponent({
     components: {
         FooterBtns
@@ -110,6 +118,7 @@ export default defineComponent({
             })
                 .then((res: any) => {
                     console.log('res', res)
+                    ElMessage({ type: 'success', message: '保存成功' })
                     getCopyright()
                 })
                 .catch((err: any) => {

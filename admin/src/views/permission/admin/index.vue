@@ -37,7 +37,13 @@
                     <el-table-column label="ID" prop="id" min-width="60"></el-table-column>
                     <el-table-column label="头像" min-width="100">
                         <template #default="{ row }">
-                            <el-avatar :size="50" :src="row.avatar"></el-avatar>
+                            <div v-if="row.avatar == ''">
+                                <img class="default-avatar" src="@/assets/images/avatar.png" />
+                            </div>
+
+                            <div v-else>
+                                <el-avatar :size="50" :src="row.avatar"></el-avatar>
+                            </div>
                         </template>
                     </el-table-column>
                     <el-table-column label="账号" prop="username" min-width="100"></el-table-column>
@@ -82,7 +88,10 @@
                             >
                                 <el-button type="text">编辑</el-button>
                             </router-link>
+
+                            <div v-if="row.id == 1"></div>
                             <popup
+                                v-else
                                 v-perm="['system:admin:del']"
                                 class="m-r-10 inline"
                                 @confirm="handleDelete(row.id)"
@@ -187,5 +196,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 .ls-form {
     margin-bottom: -16px;
+}
+
+.default-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
 }
 </style>

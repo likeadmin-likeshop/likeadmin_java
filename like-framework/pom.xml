@@ -38,6 +38,7 @@
         <tencentcloudapi.version>3.1.411</tencentcloudapi.version>
         <aliyun-oss.version>3.10.2</aliyun-oss.version>
         <aliyun-java.version>4.5.16</aliyun-java.version>
+        <oshi-core.version>6.1.2</oshi-core.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -140,6 +141,12 @@
                 <groupId>com.aliyun</groupId>
                 <artifactId>aliyun-java-sdk-core</artifactId>
                 <version>${aliyun-java.version}</version>
+            </dependency>
+            <!--系统监控-->
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>${oshi-core.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

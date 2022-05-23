@@ -13,14 +13,13 @@ import com.hxkj.admin.service.ISystemRoleService;
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.system.SystemAdminParam;
 import com.hxkj.admin.vo.system.SystemAdminVo;
+import com.hxkj.admin.vo.system.SystemRoleVo;
 import com.hxkj.admin.vo.system.SystemSelfVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SystemAdmin;
 import com.hxkj.common.entity.system.SystemMenu;
-import com.hxkj.common.entity.system.SystemRoleMenu;
 import com.hxkj.common.mapper.system.SystemAdminMapper;
 import com.hxkj.common.mapper.system.SystemMenuMapper;
-import com.hxkj.common.mapper.system.SystemRoleMenuMapper;
 import com.hxkj.common.utils.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -79,7 +78,7 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
                 !info.getColumn().equals("is_delete") &&
                 !info.getColumn().equals("delete_time"))
         .eq("is_delete", 0)
-        .orderByDesc("sort");
+        .orderByDesc(Arrays.asList("id", "sort"));
 
         systemAdminMapper.setSearch(queryWrapper, params, new String[]{
                 "like:username:str",
@@ -225,7 +224,9 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
                 .eq("nickname", systemAdminParam.getNickname())
                 .last("limit 1")), "昵称已存在换一个吧！");
 
-        Assert.notNull(iSystemRoleService.detail(systemAdminParam.getRole()), "角色不存在!");
+        SystemRoleVo roleVo = iSystemRoleService.detail(systemAdminParam.getRole());
+        Assert.notNull(roleVo, "角色不存在!");
+        Assert.isTrue(roleVo.getIsDisable() <= 0, "当前角色已被禁用!");
 
         String salt   = ToolsUtil.randomString(5);
         String pwd    = ToolsUtil.makeMd5(systemAdminParam.getPassword().trim() + salt);

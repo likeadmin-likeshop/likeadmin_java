@@ -2,7 +2,7 @@
     <div v-if="!route.meta.hidden">
         <el-sub-menu v-if="hasChildren" :index="path">
             <template #title>
-                <i class="iconfont m-r-10" :class="route.meta.icon"></i>
+                <i class="iconfont m-r-10 icon-szie" :class="route.meta.icon"></i>
                 <span>{{ route.meta.title }}</span>
             </template>
             <template #default>
@@ -65,9 +65,7 @@ export default defineComponent({
                 } else {
                     return JSON.parse(query)
                 }
-            } catch (error) {
-
-            }
+            } catch (error) {}
         })
 
         return {
@@ -78,3 +76,9 @@ export default defineComponent({
     }
 })
 </script>
+
+<style lang="scss" scoped>
+.iconfont {
+    font-size: 26px;
+}
+</style>

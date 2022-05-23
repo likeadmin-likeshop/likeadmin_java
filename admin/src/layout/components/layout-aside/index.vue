@@ -1,8 +1,8 @@
 <template>
     <div class="layout-aside">
         <router-link to="/workbench" class="logo flex col-center">
-            <img class="logo-img" :src="config.web_logo" alt />
-            <div class="line-1">{{ config.web_name }}</div>
+            <img class="logo-img" :src="config.webLogo" alt />
+            <div class="line-1">{{ config.webName }}</div>
         </router-link>
         <div class="scrollbar-wrap">
             <el-scrollbar style="height: 100%" class="ls-scrollbar">
@@ -13,7 +13,7 @@
                     text-color="#E5E5E5"
                 >
                     <template v-for="(item, index) in sidebar" :key="index">
-                        <sub-menu :route="item" :path="item.path"/>
+                        <sub-menu :route="item" :path="item.path" />
                     </template>
                 </el-menu>
             </el-scrollbar>

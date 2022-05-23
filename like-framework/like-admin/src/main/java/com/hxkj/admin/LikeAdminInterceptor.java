@@ -9,7 +9,6 @@ import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.enums.HttpEnum;
 import com.hxkj.common.utils.RedisUtil;
 import com.hxkj.common.utils.ToolsUtil;
-import com.hxkj.common.utils.YmlUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -92,7 +91,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         }
 
         // 校验用户被禁用
-        if (map.get("isDisable").toString().equals("1")) {
+        if (map.get("isDisable").equals("1")) {
             AjaxResult result = AjaxResult.failed(HttpEnum.LOGIN_DISABLE_ERROR.getCode(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
@@ -105,9 +104,9 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
 
         // 写入本地线程
         LikeAdminThreadLocal.put("adminId", uid);
-        LikeAdminThreadLocal.put("roleId", map.get("role").toString());
-        LikeAdminThreadLocal.put("username", map.get("username").toString());
-        LikeAdminThreadLocal.put("nickname", map.get("nickname").toString());
+        LikeAdminThreadLocal.put("roleId", map.get("role"));
+        LikeAdminThreadLocal.put("username", map.get("username"));
+        LikeAdminThreadLocal.put("nickname", map.get("nickname"));
 
         // 免权限验证接口
         List<String> notAuthUri = Arrays.asList(AdminConfig.notAuthUri);
@@ -116,7 +115,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         }
 
         // 校验角色权限是否存在
-        String roleId = map.get("role").toString();
+        String roleId = map.get("role");
         if (!RedisUtil.hExists(AdminConfig.backstageRolesKey, roleId)) {
             iSystemRoleMenuService.cacheRoleMenusByRoleId(Integer.parseInt(roleId));
         }
