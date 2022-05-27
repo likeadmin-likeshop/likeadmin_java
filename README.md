@@ -31,29 +31,43 @@ likeadmin交流群QQ：629475409
 
 # 📄 文档
 ## ⚙️项目部署
-#### 环境安装
-下载并安装：[JDK1.8](https://www.java.com/zh-CN/download/ "JDK1.8")、Maven 3.8.*、Mysql5.7
+### 环境安装
+环境配置：[JDK1.8](https://www.java.com/zh-CN/download/ "JDK1.8")、[Maven 3.8.x](https://maven.apache.org/download.cgi "Maven 3.8.x")、Mysql5.7、Redis6.x、node14.x
+需要配置好JAVA_HOME变量，可在终端运行`java -version`和`mvn -v`验证。
+![](https://md.likeshop.cn/Public/Uploads/2022-05-27/62909b7c55dff.png)<br>
+### JAVA服务端
 #### 数据库配置
 1.登录mysql，创建编码为utf8mb4的数据库，导入/sql/install.sql文件，数据库创建完毕。<br>
-2.复制/like-framework/like-admin/src/main/resources/application-example-pro.yml文件为/like-framework/like-admin/src/main/resources/application-pro.yml，打开application-pro.yml文件，修改url项的地址为数据库ip地址，地址“/”后面为数据库名称，username项为数据库账号，password项为数据密码，然后保存。
+2.复制“/server/like-admin/src/main/resources/application-example-pro.yml”文件为“/server/like-admin/src/main/resources/application-pro.yml”，打开“application-pro.yml”，修改url项的地址为数据库ip地址，地址“/”后面为数据库名称，username项为数据库账号，password项为数据密码，然后保存。
 ![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=640156ad1b5b55defef7b0418e700a99)
 #### 构建项目
-打开终端，使用cd命令进入\like-framework目录，运行 `mvn install`，构建项目。
-![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=04c5085ee95cc58bf7e85e1ecd87c564)
+打开终端，使用cd命令进入“\server”目录，运行 `mvn install`，构建项目。
+![](https://md.likeshop.cn/Public/Uploads/2022-05-27/62909c6a1330e.png)
 #### 运行项目
-打开终端，使用cd命令进入\like-framework\like-admin目录，运行“mvn spring-boot:run”。
-![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=3db66d7e51c1d6f0d1fadee6083f7c80)<br>
+打开终端，使用cd命令进入“\server\like-admin”目录，运行`mvn spring-boot:run`。
+![](https://md.likeshop.cn/Public/Uploads/2022-05-27/62909c6a1330e.png)<br>
 打开浏览器，访问http://127.0.0.1:8082 ，即可看到接口返回信息。
-![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=e9fc7af2de10c504219cd762f88d72ec)<br>
+![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=88b7fac34ec63b01ca3f3fd88276e241)<br>
+### 前端
+打开“/.env.development”文件，将文件内容“VITE_APP_BASE_URL”项的值修改为服务端的地址，有端口号需要加上端口号,保存。
+![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=6eb2a594e5c81d1e076db170e315e914)<br>
+打开终端，使用cd命令进入“/admin”目录，运行`npm install`安装依赖。
+![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=8378d21ee57ac759ca649fd97a6dc955)<br>
+打开终端，使用cd命令进入“/admin”目录，运行`npm run dev`,在开发者模式中运行项目,然后打开浏览器访问终端显示本地地址。
+![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=cf549fa67917f051bb66e8a43cfc97c0)<br>
 
-### 📁 目录结构
+访问后，进入登录页面。如果报系统错误，请检查前端JAVA服务端部署步骤，一般为Mysql和Redis参数配置错误。
+![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=6578d11fdf414b24520c0bc3769bed01)<br>
+默认的账号为：admin，密码为123456，输入账号密码登入后台。
+![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=c28c218c67223b810759209a8dc72f05)<br>
+## 📁 目录结构
 ```shell
 │
 ├─📂admin  //管理后台前端源码
 │
 ├─📂frontend  // //前端已编译代码目录（入口目录、上线运行）
 │
-├─📂like-framework //java项目目录（编辑器、IDE打开此目录）
+├─📂server //java项目目录（编辑器、IDE打开此目录）
 │ │ ├─📂like-admin //管理后台模块
 │ │ ├─📂like-common //公共模块
 │ │ ├─📂like-front //前台模块
