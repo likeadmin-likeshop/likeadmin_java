@@ -29,17 +29,22 @@ likeadmin交流群QQ：629475409
 2.后台界面使用element-plus UI框架，简单精美的后台界面，丰富的组件库，方便快速开发，满足各种后台交互。
 <br>
 
-# 📄 文档
-## ⚙️项目部署
-### 环境安装
-环境配置：[JDK1.8](https://www.java.com/zh-CN/download/ "JDK1.8")、[Maven 3.8.x](https://maven.apache.org/download.cgi "Maven 3.8.x")、Mysql5.7、Redis6.x、node14.x
-需要配置好JAVA_HOME变量，可在终端运行`java -version`和`mvn -v`验证。
+
+# ⚙️项目启动（开发模式）
+## 环境要求
+[JDK1.8](https://www.java.com/zh-CN/download/ "JDK1.8")、Mysql5.7、Redis6.x、node14.x<br>
+## Mysql数据库和Redis缓存配置
+1.复制“/server/like-admin/src/main/resources/application-example-pro.yml”文件为“/server/like-admin/src/main/resources/application-pro.yml”<br>
+2.启动并登录Mysql，创建编码为utf8mb4的数据库，导入项目中/sql/install.sql文件，数据库创建完毕。打开“application-pro.yml”，找到datasource，修改url项的地址为数据库ip地址，地址“/”后面为数据库名称，username项为数据库账号，password项为数据密码，然后保存。
+![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=640156ad1b5b55defef7b0418e700a99)<br>
+3.启动Redis，同样打开“application-pro.yml”，找到redis，修改host项为Redis的地址，port项为redis的端口，有密码填写密码，无密码则留空，然后保存。
+![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=463ab8cb922dfdd59a7624d816c8750a)<br>
+## JAVA服务端部署
+**服务端部署有两种方式，选择一种即可。**
+### JAVA服务端部署方式①
+下载并安装[Maven 3.8.x](https://maven.apache.org/download.cgi "Maven 3.8.x")，需要配置好JAVA_HOME变量，可在终端运行`java -version`和`mvn -v`验证。
 ![](https://md.likeshop.cn/Public/Uploads/2022-05-27/62909b7c55dff.png)<br>
-### JAVA服务端
-#### 数据库配置
-1.登录mysql，创建编码为utf8mb4的数据库，导入/sql/install.sql文件，数据库创建完毕。<br>
-2.复制“/server/like-admin/src/main/resources/application-example-pro.yml”文件为“/server/like-admin/src/main/resources/application-pro.yml”，打开“application-pro.yml”，修改url项的地址为数据库ip地址，地址“/”后面为数据库名称，username项为数据库账号，password项为数据密码，然后保存。
-![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=640156ad1b5b55defef7b0418e700a99)
+
 #### 构建项目
 打开终端，使用cd命令进入“\server”目录，运行 `mvn install`，构建项目。
 ![](https://md.likeshop.cn/Public/Uploads/2022-05-27/62909c6a1330e.png)
@@ -48,7 +53,14 @@ likeadmin交流群QQ：629475409
 ![](https://md.likeshop.cn/Public/Uploads/2022-05-27/62909c6a1330e.png)<br>
 打开浏览器，访问http://127.0.0.1:8082 ，即可看到接口返回信息。
 ![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=88b7fac34ec63b01ca3f3fd88276e241)<br>
-### 前端
+### JAVA服务端部署方式②（IDEA）
+使用IDEA打开server目录，打开设置，将项目的SDK设置为1.8，等待依赖加载（右下角有提示），加载完以后。
+![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=314475d7aa4b529ff079fdfa5400c755)<br>
+点击右上角运行图标启动项目。
+![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=49e647f1ec18b7f9a52aa8246eae9588)<br>
+打开浏览器，访问http://127.0.0.1:8082 ，即可看到接口返回信息。
+![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=88b7fac34ec63b01ca3f3fd88276e241)<br>
+## 前端部署
 打开“/.env.development”文件，将文件内容“VITE_APP_BASE_URL”项的值修改为服务端的地址，有端口号需要加上端口号,保存。
 ![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=6eb2a594e5c81d1e076db170e315e914)<br>
 打开终端，使用cd命令进入“/admin”目录，运行`npm install`安装依赖。
