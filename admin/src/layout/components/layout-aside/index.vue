@@ -1,7 +1,12 @@
 <template>
     <div class="layout-aside">
         <router-link to="/workbench" class="logo flex col-center">
-            <img class="logo-img" :src="config.webLogo" alt />
+            <div v-if="config.webLogo == ''">
+                <img class="logo-img" src="@/assets/images/avatar.png" alt />
+            </div>
+            <div v-else>
+                <img class="logo-img" :src="config.webLogo" alt />
+            </div>
             <div class="line-1">{{ config.webName }}</div>
         </router-link>
         <div class="scrollbar-wrap">
