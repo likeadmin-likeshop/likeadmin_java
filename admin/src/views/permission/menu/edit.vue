@@ -52,24 +52,8 @@
                     </el-form-item>
 
                     <div v-if="(formData.menuType == menuDataType.BUTTON) == ''">
-                        <!-- <el-form-item label="请选择图标">
-                            <el-input
-                                v-model="formData.menuIcon"
-                                show-word-limit
-                                placeholder="请输入图标"
-                            ></el-input>
-                        </el-form-item> -->
-
                         <el-form-item label="请选择图标">
                             <div class="flex">
-                                <!-- <el-input readonly>
-                                    <template #prefix>
-                                        <el-icon class="el-input__icon">
-                                            <search class="f-s-20" />
-                                        </el-icon>
-                                    </template>
-                                </el-input> -->
-
                                 <select-icon v-model:icon="formData.menuIcon"></select-icon>
                             </div>
                         </el-form-item>
@@ -184,7 +168,7 @@ import { useAdmin } from '@/core/hooks/app'
 import { onMounted, reactive, ref } from 'vue'
 import FooterBtns from '@/components/footer-btns/index.vue'
 import type { ElForm, ElMessage } from 'element-plus'
-import { apiConfigGetMenu, apiMenuDetail, apiMenuAdd, apiMenuEdit, apiMenuDelete } from '@/api/auth'
+import { apiConfigGetMenu, apiMenuDetail, apiMenuAdd, apiMenuEdit } from '@/api/auth'
 import SelectIcon from './select-icon/index.vue'
 
 const menuDataType = {
