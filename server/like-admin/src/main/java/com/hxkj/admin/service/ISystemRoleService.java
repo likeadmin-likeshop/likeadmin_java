@@ -37,7 +37,7 @@ public interface ISystemRoleService {
     SystemRoleVo detail(Integer id);
 
     /**
-     * 新增角色
+     * 角色新增
      *
      * @author fzr
      * @param systemRoleParam 参数
@@ -45,7 +45,7 @@ public interface ISystemRoleService {
     void add(SystemRoleParam systemRoleParam);
 
     /**
-     * 更新角色
+     * 角色更新
      *
      * @author fzr
      * @param systemRoleParam 参数
@@ -53,7 +53,7 @@ public interface ISystemRoleService {
     void edit(SystemRoleParam systemRoleParam);
 
     /**
-     * 删除角色
+     * 角色删除
      *
      * @author fzr
      * @param id 主键参数

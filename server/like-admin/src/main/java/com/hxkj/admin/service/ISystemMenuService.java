@@ -38,7 +38,7 @@ public interface ISystemMenuService {
     SystemMenuVo detail(Integer id);
 
     /**
-     * 新增菜单
+     * 菜单新增
      *
      * @author fzr
      * @param systemMenuParam 参数
@@ -46,7 +46,7 @@ public interface ISystemMenuService {
     void add(SystemMenuParam systemMenuParam);
 
     /**
-     * 编辑菜单
+     * 菜单编辑
      *
      * @author fzr
      * @param systemMenuParam 参数
@@ -54,7 +54,7 @@ public interface ISystemMenuService {
     void edit(SystemMenuParam systemMenuParam);
 
     /**
-     * 删除菜单
+     * 菜单删除
      *
      * @author fzr
      * @param id 主键
