@@ -269,6 +269,8 @@ INSERT INTO `ls_system_menu` VALUES (24, 23, 'C', '系统环境', '', 100, 'sett
 INSERT INTO `ls_system_menu` VALUES (25, 23, 'C', '系统日志', '', 100, 'setting:operate', 'journal', 'setting/system/journal', '', '', 0, 1, 0, 1650600381, 1650600796);
 INSERT INTO `ls_system_menu` VALUES (26, 23, 'C', '系统缓存', '', 100, 'setting:cache', 'cache', 'setting/system/cache', '', '', 0, 1, 0, 1650600466, 1650600807);
 INSERT INTO `ls_system_menu` VALUES (28, 19, 'C', '个人设置', '', 100, 'system:admin:self', 'personal_data', 'setting/personal/personal_data', '', '', 0, 0, 0, 1650859164, 1650859929);
+INSERT INTO `ls_system_menu` VALUES (30, 29, 'C', '部门管理', '', 100, '', 'department', 'organize/department/index', '', '', 1, 1, 0, 1653978472, 1653978472);
+INSERT INTO `ls_system_menu` VALUES (31, 29, 'C', '岗位管理', '', 100, '', 'post', 'organize/post/index', '', '', 1, 1, 0, 1653978814, 1653978814);
 COMMIT;
 
 BEGIN;
