@@ -2,16 +2,23 @@ package com.hxkj.admin.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.validate.system.SystemDeptParam;
-import com.hxkj.admin.validate.system.SystemMenuParam;
 import com.hxkj.admin.vo.system.SystemDeptVo;
-import com.hxkj.admin.vo.system.SystemMenuVo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
  * 系统部门服务接口类
  */
 public interface ISystemDeptService {
+
+    /**
+     * 部门所有
+     *
+     * @author fzr
+     * @return List<SystemDeptVo>
+     */
+    List<SystemDeptVo> all();
 
     /**
      * 部门列表

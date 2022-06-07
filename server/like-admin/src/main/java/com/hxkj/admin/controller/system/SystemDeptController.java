@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,6 +22,18 @@ public class SystemDeptController {
 
     @Resource
     ISystemDeptService iSystemDeptService;
+
+    /**
+     * 部门所有
+     *
+     * @author fzr
+     * @return Object
+     */
+    @GetMapping("/all")
+    public Object all() {
+        List<SystemDeptVo> vos = iSystemDeptService.all();
+        return AjaxResult.success(vos);
+    }
 
     /**
      * 部门列表

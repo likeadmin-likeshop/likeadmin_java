@@ -26,6 +26,32 @@ public class SystemDeptServiceImpl implements ISystemDeptService {
     SystemDeptMapper systemDeptMapper;
 
     /**
+     * 岗位所有
+     *
+     * @author fzr
+     * @return List<SystemPostVo>
+     */
+    @Override
+    public List<SystemDeptVo> all() {
+        List<SystemDept> systemDeptList = systemDeptMapper.selectList(new QueryWrapper<SystemDept>()
+                .gt("pid", 0)
+                .eq("is_delete", 0)
+                .orderByDesc((Arrays.asList("id", "sort"))));
+
+        List<SystemDeptVo> adminVoArrayList = new ArrayList<>();
+        for (SystemDept systemDept : systemDeptList) {
+            SystemDeptVo vo = new SystemDeptVo();
+            BeanUtils.copyProperties(systemDept, vo);
+
+            vo.setUpdateTime(TimeUtil.timestampToDate(systemDept.getUpdateTime()));
+            vo.setCreateTime(TimeUtil.timestampToDate(systemDept.getCreateTime()));
+            adminVoArrayList.add(vo);
+        }
+
+        return adminVoArrayList;
+    }
+
+    /**
      *  部门列表
      *
      * @author fzr
