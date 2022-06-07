@@ -82,6 +82,8 @@ CREATE TABLE `ls_article_category`  (
 DROP TABLE IF EXISTS `ls_system_admin`;
 CREATE TABLE `ls_system_admin`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `dept_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '部门ID',
+  `post_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '岗位ID',
   `username` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户账号',
   `nickname` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户昵称',
   `password` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户密码',
@@ -201,6 +203,43 @@ CREATE TABLE `ls_system_role_menu`  (
   `menu_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '菜单ID',
   PRIMARY KEY (`role_id`, `menu_id`, `id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统角色菜单表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for ls_system_dept
+-- ----------------------------
+DROP TABLE IF EXISTS `ls_system_dept`;
+CREATE TABLE `ls_system_dept`  (
+   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+   `pid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '上级主键',
+   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '部门名称',
+   `duty` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '负责人名',
+   `mobile` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '联系电话',
+   `sort` smallint(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序编号',
+   `is_stop` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否禁用: 0=否, 1=是',
+   `is_delete` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除: 0=否, 1=是',
+   `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+   `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+   `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
+   PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统部门管理表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for ls_system_post
+-- ----------------------------
+DROP TABLE IF EXISTS `ls_system_post`;
+CREATE TABLE `ls_system_post`  (
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `code` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '岗位编码',
+    `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '岗位名称',
+    `remarks` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '岗位备注',
+    `sort` smallint(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '岗位排序',
+    `is_stop` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否停用: 0=否, 1=是',
+    `is_delete` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除: 0=否, 1=是',
+    `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+    `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+    `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统岗位管理表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- INSERT
