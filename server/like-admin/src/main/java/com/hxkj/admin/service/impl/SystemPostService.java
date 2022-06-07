@@ -9,7 +9,9 @@ import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.system.SystemPostParam;
 import com.hxkj.admin.vo.system.SystemPostVo;
 import com.hxkj.common.core.PageResult;
+import com.hxkj.common.entity.system.SystemAdmin;
 import com.hxkj.common.entity.system.SystemPost;
+import com.hxkj.common.mapper.system.SystemAdminMapper;
 import com.hxkj.common.mapper.system.SystemPostMapper;
 import com.hxkj.common.utils.TimeUtil;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +28,9 @@ public class SystemPostService implements ISystemPostService {
 
     @Resource
     SystemPostMapper systemPostMapper;
+
+    @Resource
+    SystemAdminMapper systemAdminMapper;
 
     /**
      * 岗位所有
@@ -203,6 +208,14 @@ public class SystemPostService implements ISystemPostService {
                 .last("limit 1"));
 
         Assert.notNull(model, "岗位不存在");
+
+        SystemAdmin systemAdmin = systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
+                .select("id,nickname")
+                .eq("post_id", id)
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        Assert.isNull(systemAdmin, "该岗位已被“"+systemAdmin.getNickname()+"”管理员使用,请先移除");
 
         model.setIsDelete(1);
         model.setDeleteTime(System.currentTimeMillis() / 1000);

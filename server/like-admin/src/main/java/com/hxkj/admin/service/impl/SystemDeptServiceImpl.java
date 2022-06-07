@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.hxkj.admin.service.ISystemDeptService;
 import com.hxkj.admin.validate.system.SystemDeptParam;
 import com.hxkj.admin.vo.system.SystemDeptVo;
+import com.hxkj.common.entity.system.SystemAdmin;
 import com.hxkj.common.entity.system.SystemDept;
+import com.hxkj.common.mapper.system.SystemAdminMapper;
 import com.hxkj.common.mapper.system.SystemDeptMapper;
 import com.hxkj.common.utils.ArrayUtil;
 import com.hxkj.common.utils.TimeUtil;
@@ -24,6 +26,9 @@ public class SystemDeptServiceImpl implements ISystemDeptService {
 
     @Resource
     SystemDeptMapper systemDeptMapper;
+
+    @Resource
+    SystemAdminMapper systemAdminMapper;
 
     /**
      * 岗位所有
@@ -196,6 +201,14 @@ public class SystemDeptServiceImpl implements ISystemDeptService {
 
         Assert.notNull(model, "部门不存在");
         Assert.isFalse((model.getPid() == 0), "顶级部门不能删除");
+
+        SystemAdmin systemAdmin = systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
+                .select("id,nickname")
+                .eq("dept_id", id)
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        Assert.isNull(systemAdmin, "该部门已被“"+systemAdmin.getNickname()+"”管理员使用,请先移除");
 
         model.setIsDelete(1);
         model.setDeleteTime(System.currentTimeMillis() / 1000);
