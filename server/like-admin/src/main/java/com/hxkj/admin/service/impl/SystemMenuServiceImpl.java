@@ -72,7 +72,7 @@ public class SystemMenuServiceImpl implements ISystemMenuService {
      * @return JSONArray
      */
     @Override
-    public JSONArray lists() {
+    public JSONArray list() {
         QueryWrapper<SystemMenu> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByAsc(Arrays.asList("menu_sort", "id"));
 

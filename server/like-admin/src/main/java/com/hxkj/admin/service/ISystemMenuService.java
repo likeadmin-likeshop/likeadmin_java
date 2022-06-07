@@ -26,7 +26,7 @@ public interface ISystemMenuService {
      * @author fzr
      * @return JSONArray
      */
-    JSONArray lists();
+    JSONArray list();
 
     /**
      * 菜单详情

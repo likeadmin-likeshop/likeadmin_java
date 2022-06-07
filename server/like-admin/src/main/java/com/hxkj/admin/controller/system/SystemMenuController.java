@@ -44,7 +44,7 @@ public class SystemMenuController {
      */
     @GetMapping("/list")
     public Object list() {
-        JSONArray lists = iSystemMenuService.lists();
+        JSONArray lists = iSystemMenuService.list();
         return AjaxResult.success(lists);
     }
 
