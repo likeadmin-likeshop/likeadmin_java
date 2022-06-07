@@ -43,27 +43,6 @@ public class SystemRoleServiceImpl implements ISystemRoleService {
     ISystemRoleMenuService iSystemRoleMenuService;
 
     /**
-     * 根据ID获取角色名称
-     *
-     * @author fzr
-     * @param id 角色ID
-     * @return String
-     */
-    @Override
-    public String getRoleNameById(Integer id) {
-        QueryWrapper<SystemRole> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("id", "name")
-                .eq("id", id)
-                .last("limit 1");
-
-        SystemRole systemRole = systemRoleMapper.selectOne(queryWrapper);
-        if (systemRole == null) {
-            return "";
-        }
-        return systemRole.getName();
-    }
-
-    /**
      * 角色列表
      *
      * @author fzr
@@ -71,7 +50,7 @@ public class SystemRoleServiceImpl implements ISystemRoleService {
      * @return PageResult<SysRoleListVo>
      */
     @Override
-    public PageResult<SystemRoleVo> lists(@Validated PageParam pageParam) {
+    public PageResult<SystemRoleVo> list(@Validated PageParam pageParam) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
@@ -85,7 +64,12 @@ public class SystemRoleServiceImpl implements ISystemRoleService {
             SystemRoleVo vo = new SystemRoleVo();
             BeanUtils.copyProperties(systemRole, vo);
 
+            Integer member = systemAdminMapper.selectCount(new QueryWrapper<SystemAdmin>()
+                    .eq("is_delete", 0)
+                    .eq("role", systemRole.getId()));
+
             vo.setMenus(new ArrayList<>());
+            vo.setMember(member);
             vo.setCreateTime(TimeUtil.timestampToDate(systemRole.getCreateTime()));
             vo.setUpdateTime(TimeUtil.timestampToDate(systemRole.getUpdateTime()));
             roleVoArrayList.add(vo);
@@ -109,9 +93,13 @@ public class SystemRoleServiceImpl implements ISystemRoleService {
 
         Assert.notNull(systemRole, "角色已不存在!");
 
+        Integer member = systemAdminMapper.selectCount(new QueryWrapper<SystemAdmin>()
+                .eq("is_delete", 0)
+                .eq("role", systemRole.getId()));
+
         SystemRoleVo vo = new SystemRoleVo();
         BeanUtils.copyProperties(systemRole, vo);
-
+        vo.setMember(member);
         vo.setMenus(iSystemRoleMenuService.selectMenuIdsByRoleId(systemRole.getId()));
         vo.setCreateTime(TimeUtil.timestampToDate(systemRole.getCreateTime()));
         vo.setUpdateTime(TimeUtil.timestampToDate(systemRole.getUpdateTime()));

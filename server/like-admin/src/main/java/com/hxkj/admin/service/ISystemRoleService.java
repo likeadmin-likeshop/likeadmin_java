@@ -12,20 +12,13 @@ import org.springframework.validation.annotation.Validated;
 public interface ISystemRoleService {
 
     /**
-     * 根据id获取角色名称
-     * @param id 角色ID
-     * @return String
-     */
-    String getRoleNameById(Integer id);
-
-    /**
      * 角色列表
      *
      * @author fzr
      * @param pageParam 参数
      * @return PageResult<SysRoleListVo>
      */
-    PageResult<SystemRoleVo> lists(@Validated PageParam pageParam);
+    PageResult<SystemRoleVo> list(@Validated PageParam pageParam);
 
     /**
      * 角色详情

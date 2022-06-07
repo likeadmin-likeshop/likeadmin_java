@@ -30,7 +30,7 @@ public interface ISystemAdminService {
      * @param pageParam 分页参数
      * @return PageResult<SysAdminListVo>
      */
-    PageResult<SystemAdminVo> lists(PageParam pageParam, Map<String, String> params);
+    PageResult<SystemAdminVo> list(PageParam pageParam, Map<String, String> params);
 
     /**
      * 当前管理员

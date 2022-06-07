@@ -35,7 +35,7 @@ public class SystemAdminController {
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                         @RequestParam Map<String, String> params) {
-        PageResult<SystemAdminVo> list = iSystemAdminService.lists(pageParam, params);
+        PageResult<SystemAdminVo> list = iSystemAdminService.list(pageParam, params);
         return AjaxResult.success(list);
     }
 

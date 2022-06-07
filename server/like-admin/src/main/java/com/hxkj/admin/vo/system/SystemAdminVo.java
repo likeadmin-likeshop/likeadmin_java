@@ -13,9 +13,12 @@ public class SystemAdminVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
+    private Integer deptId;
+    private Integer postId;
     private String username;
     private String nickname;
     private String avatar;
+    private String dept;
     private String role;
     private Integer isMultipoint;
     private Integer isDisable;

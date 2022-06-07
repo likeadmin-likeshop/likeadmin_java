@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.yulichang.query.MPJQueryWrapper;
 import com.hxkj.admin.LikeAdminThreadLocal;
 import com.hxkj.admin.config.AdminConfig;
 import com.hxkj.admin.service.ISystemAdminService;
@@ -67,46 +68,46 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
      * @return PageResult<SysAdminListVo>
      */
     @Override
-    public PageResult<SystemAdminVo> lists(PageParam pageParam, Map<String, String> params) {
+    public PageResult<SystemAdminVo> list(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
-        QueryWrapper<SystemAdmin> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select(SystemAdmin.class, info->
-                !info.getColumn().equals("salt") &&
-                !info.getColumn().equals("password") &&
-                !info.getColumn().equals("is_delete") &&
-                !info.getColumn().equals("delete_time"))
-        .eq("is_delete", 0)
-        .orderByDesc(Arrays.asList("id", "sort"));
+        MPJQueryWrapper<SystemAdmin> mpjQueryWrapper = new MPJQueryWrapper<>();
+        mpjQueryWrapper.select("t.id,t.dept_id,t.post_id,t.username,t.nickname,t.avatar," +
+                "sd.name as dept,sr.name as role,t.is_multipoint,t.is_disable," +
+                "t.last_login_ip,t.last_login_time,t.create_time,t.update_time")
+            .eq("t.is_delete", 0)
+            .leftJoin("ls_system_role sr ON sr.id=t.role")
+            .leftJoin("ls_system_dept sd ON sd.id=t.dept_id")
+            .orderByDesc(Arrays.asList("t.id", "t.sort"));
 
-        systemAdminMapper.setSearch(queryWrapper, params, new String[]{
+        systemAdminMapper.setSearch(mpjQueryWrapper, params, new String[]{
                 "like:username:str",
                 "like:nickname:str",
                 "=:role:int"
         });
 
-        IPage<SystemAdmin> iPage = systemAdminMapper.selectPage(new Page<>(page, limit), queryWrapper);
+        IPage<SystemAdminVo> iPage = systemAdminMapper.selectJoinPage(
+                new Page<>(page, limit),
+                SystemAdminVo.class,
+                mpjQueryWrapper);
 
-        List<SystemAdminVo> adminVoArrayList = new ArrayList<>();
-        for (SystemAdmin sysAdmin : iPage.getRecords()) {
-            SystemAdminVo vo = new SystemAdminVo();
-            BeanUtils.copyProperties(sysAdmin, vo);
-
-            if (sysAdmin.getId() == 1) {
-                vo.setRole("超级管理员");
-            } else {
-                vo.setRole(iSystemRoleService.getRoleNameById(sysAdmin.getRole()));
+        for (SystemAdminVo vo : iPage.getRecords()) {
+            if (vo.getId() == 1) {
+                vo.setRole("系统管理员");
             }
 
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(sysAdmin.getAvatar()));
-            vo.setCreateTime(TimeUtil.timestampToDate(sysAdmin.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(sysAdmin.getUpdateTime()));
-            vo.setLastLoginTime(TimeUtil.timestampToDate(sysAdmin.getLastLoginTime()));
-            adminVoArrayList.add(vo);
+            if (vo.getDept() == null) {
+                vo.setDept("");
+            }
+
+            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar()));
+            vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
+            vo.setUpdateTime(TimeUtil.timestampToDate(vo.getUpdateTime()));
+            vo.setLastLoginTime(TimeUtil.timestampToDate(vo.getLastLoginTime()));
         }
 
-        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), adminVoArrayList);
+        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), iPage.getRecords());
     }
 
     /**
@@ -130,6 +131,7 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
 
         SystemAdminVo systemAdminVo = new SystemAdminVo();
         BeanUtils.copyProperties(sysAdmin, systemAdminVo);
+        systemAdminVo.setDept(String.valueOf(sysAdmin.getDeptId()));
         systemAdminVo.setRole(String.valueOf(sysAdmin.getRole()));
         systemAdminVo.setAvatar(UrlUtil.toAbsoluteUrl(sysAdmin.getAvatar()));
         systemAdminVo.setUpdateTime(TimeUtil.timestampToDate(sysAdmin.getUpdateTime()));
@@ -194,6 +196,7 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
         SystemAdminVo vo = new SystemAdminVo();
         BeanUtils.copyProperties(sysAdmin, vo);
 
+        vo.setDept(String.valueOf(vo.getDeptId()));
         vo.setRole(String.valueOf(sysAdmin.getRole()));
         vo.setAvatar(UrlUtil.toAbsoluteUrl(sysAdmin.getAvatar()));
         vo.setCreateTime(TimeUtil.timestampToDate(sysAdmin.getCreateTime()));
@@ -233,6 +236,8 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
         String avatar = UrlUtil.toRelativeUrl(systemAdminParam.getAvatar());
 
         SystemAdmin model = new SystemAdmin();
+        model.setDeptId(systemAdminParam.getDeptId());
+        model.setPostId(systemAdminParam.getPostId());
         model.setUsername(systemAdminParam.getUsername());
         model.setNickname(systemAdminParam.getNickname());
         model.setRole(systemAdminParam.getRole());
@@ -280,6 +285,8 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
 
         SystemAdmin model = new SystemAdmin();
         model.setId(systemAdminParam.getId());
+        model.setDeptId(systemAdminParam.getDeptId());
+        model.setPostId(systemAdminParam.getPostId());
         model.setNickname(systemAdminParam.getNickname());
         model.setUsername(systemAdminParam.getUsername());
         model.setAvatar( UrlUtil.toRelativeUrl(systemAdminParam.getAvatar()));

@@ -33,7 +33,7 @@ public class SystemRoleController {
     @Log(title = "角色列表")
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam) {
-        PageResult<SystemRoleVo> lists = iSystemRoleService.lists(pageParam);
+        PageResult<SystemRoleVo> lists = iSystemRoleService.list(pageParam);
         return AjaxResult.success(lists);
     }
 
