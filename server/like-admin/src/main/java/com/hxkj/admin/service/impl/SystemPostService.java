@@ -85,17 +85,17 @@ public class SystemPostService implements ISystemPostService {
 
         IPage<SystemPost> iPage = systemPostMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
-        List<SystemPostVo> adminVoArrayList = new ArrayList<>();
+        List<SystemPostVo> list = new ArrayList<>();
         for (SystemPost systemPost : iPage.getRecords()) {
             SystemPostVo vo = new SystemPostVo();
             BeanUtils.copyProperties(systemPost, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(systemPost.getCreateTime()));
             vo.setUpdateTime(TimeUtil.timestampToDate(systemPost.getUpdateTime()));
-            adminVoArrayList.add(vo);
+            list.add(vo);
         }
 
-        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), adminVoArrayList);
+        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), list);
     }
 
     /**

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.pagehelper.PageInfo;
 import lombok.Data;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Data
@@ -24,7 +23,7 @@ public class PageResult<T> {
      * @return PageList
      */
     public static <T> PageResult<T> pageHelper(List<T> list) {
-        PageResult<T> pageResult = new PageResult<T>();
+        PageResult<T> pageResult = new PageResult<>();
         PageInfo<T> pageInfo = new PageInfo<>(list);
         pageResult.setCount(pageInfo.getTotal());
         pageResult.setPageNo(pageInfo.getPageNum());
@@ -41,7 +40,7 @@ public class PageResult<T> {
      * @return PageList
      */
     public static <T> PageResult<T> iPageHandle(IPage<T> iPage) {
-        PageResult<T> pageResult = new PageResult<T>();
+        PageResult<T> pageResult = new PageResult<>();
         pageResult.setCount(iPage.getTotal());
         pageResult.setPageNo((int) iPage.getCurrent());
         pageResult.setPageSize((int) iPage.getSize());
@@ -56,12 +55,12 @@ public class PageResult<T> {
      * @param <T> 实体类型
      * @return PageList
      */
-    public static <T> PageResult<T> iPageHandle(Long total, Long pageNo, Long size, List<T> lists) {
-        PageResult<T> pageResult = new PageResult<T>();
+    public static <T> PageResult<T> iPageHandle(Long total, Long pageNo, Long size, List<T> list) {
+        PageResult<T> pageResult = new PageResult<>();
         pageResult.setCount(total);
         pageResult.setPageNo(Math.toIntExact(pageNo));
         pageResult.setPageSize(Math.toIntExact(size));
-        pageResult.setLists(lists);
+        pageResult.setLists(list);
 
         return pageResult;
     }

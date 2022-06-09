@@ -107,7 +107,7 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
             vo.setLastLoginTime(TimeUtil.timestampToDate(vo.getLastLoginTime()));
         }
 
-        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), iPage.getRecords());
+        return PageResult.iPageHandle(iPage);
     }
 
     /**

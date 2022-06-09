@@ -77,7 +77,7 @@ public class SystemLogServerImpl implements ISystemLogServer {
             vo.setError(StringUtil.isNull(vo.getError()) ? "" : vo.getError());
         }
 
-        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), iPage.getRecords());
+        return PageResult.iPageHandle(iPage);
     }
 
     /**

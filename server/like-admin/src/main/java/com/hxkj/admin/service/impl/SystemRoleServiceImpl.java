@@ -59,7 +59,7 @@ public class SystemRoleServiceImpl implements ISystemRoleService {
 
         IPage<SystemRole> iPage = systemRoleMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
-        List<SystemRoleVo> roleVoArrayList = new ArrayList<>();
+        List<SystemRoleVo> list = new ArrayList<>();
         for (SystemRole systemRole : iPage.getRecords()) {
             SystemRoleVo vo = new SystemRoleVo();
             BeanUtils.copyProperties(systemRole, vo);
@@ -72,10 +72,10 @@ public class SystemRoleServiceImpl implements ISystemRoleService {
             vo.setMember(member);
             vo.setCreateTime(TimeUtil.timestampToDate(systemRole.getCreateTime()));
             vo.setUpdateTime(TimeUtil.timestampToDate(systemRole.getUpdateTime()));
-            roleVoArrayList.add(vo);
+            list.add(vo);
         }
 
-        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), roleVoArrayList);
+        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), list);
     }
 
     /**

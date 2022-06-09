@@ -43,7 +43,7 @@ public class SystemDeptController {
      */
     @GetMapping("/list")
     public Object list(@RequestParam Map<String, String> params) {
-        JSONArray list = iSystemDeptService.lists(params);
+        JSONArray list = iSystemDeptService.list(params);
         return AjaxResult.success(list);
     }
 
