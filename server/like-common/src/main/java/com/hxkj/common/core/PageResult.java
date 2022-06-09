@@ -55,12 +55,12 @@ public class PageResult<T> {
      * @param <T> 实体类型
      * @return PageList
      */
-    public static <T> PageResult<T> iPageHandle(Long total, Long pageNo, Long size, List<T> lists) {
+    public static <T> PageResult<T> iPageHandle(Long total, Long pageNo, Long size, List<T> list) {
         PageResult<T> pageResult = new PageResult<>();
         pageResult.setCount(total);
         pageResult.setPageNo(Math.toIntExact(pageNo));
         pageResult.setPageSize(Math.toIntExact(size));
-        pageResult.setLists(lists);
+        pageResult.setLists(list);
 
         return pageResult;
     }

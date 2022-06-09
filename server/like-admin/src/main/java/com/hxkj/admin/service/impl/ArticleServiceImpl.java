@@ -76,7 +76,7 @@ public class ArticleServiceImpl implements IArticleService {
             vo.setUpdateTime(TimeUtil.timestampToDate(vo.getUpdateTime()));
         }
 
-        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), iPage.getRecords());
+        return PageResult.iPageHandle(iPage);
     }
 
     /**

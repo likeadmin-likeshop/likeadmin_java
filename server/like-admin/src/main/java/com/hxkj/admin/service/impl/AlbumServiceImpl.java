@@ -73,7 +73,7 @@ public class AlbumServiceImpl implements IAlbumService {
 
         IPage<Album> iPage = albumMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
-        List<AlbumVo> albumVoArrayList = new ArrayList<>();
+        List<AlbumVo> list = new ArrayList<>();
         for (Album album : iPage.getRecords()) {
             AlbumVo vo = new AlbumVo();
             BeanUtils.copyProperties(album, vo);
@@ -82,10 +82,10 @@ public class AlbumServiceImpl implements IAlbumService {
             vo.setSize(ToolsUtil.storageUnit(album.getSize()));
             vo.setCreateTime(TimeUtil.timestampToDate(album.getCreateTime()));
             vo.setUpdateTime(TimeUtil.timestampToDate(album.getUpdateTime()));
-            albumVoArrayList.add(vo);
+            list.add(vo);
         }
 
-        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), albumVoArrayList);
+        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), list);
     }
 
     /**

@@ -64,7 +64,7 @@ public class SystemDeptServiceImpl implements ISystemDeptService {
      * @return JSONArray
      */
     @Override
-    public JSONArray lists(Map<String, String> params) {
+    public JSONArray list(Map<String, String> params) {
         QueryWrapper<SystemDept> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("is_delete", 0);
         queryWrapper.orderByAsc(Arrays.asList("sort", "id"));

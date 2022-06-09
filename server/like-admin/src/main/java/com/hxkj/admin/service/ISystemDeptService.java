@@ -27,7 +27,7 @@ public interface ISystemDeptService {
      * @param params 搜索参数
      * @return JSONArray
      */
-    JSONArray lists(Map<String, String> params);
+    JSONArray list(Map<String, String> params);
 
     /**
      * 部门详情
