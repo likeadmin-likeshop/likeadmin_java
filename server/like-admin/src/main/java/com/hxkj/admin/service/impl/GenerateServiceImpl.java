@@ -10,19 +10,30 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.*;
 
+/**
+ * 代码生成器服务实现类
+ */
 @Service
 public class GenerateServiceImpl implements IGenerateService {
 
     @Resource
     GenTableMapper genTableMapper;
 
+    /**
+     * 数据表列表
+     *
+     * @author fzr
+     * @param pageParam 分页参数
+     * @param params 搜索参数
+     * @return PageResult<Map<String, String>>
+     */
     @Override
-    public List<Map<String, String>> db(PageParam pageParam, Map<String, String> params) {
+    public PageResult<Map<String, String>> db(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
         PageHelper.startPage(page, limit);
-        List<Map<String, String>> tables = genTableMapper.selectDbTableList();
+        List<Map<String, String>> tables = genTableMapper.selectDbTableList(params);
 
         List<Map<String, String>> list = new LinkedList<>();
         for (Map<String, String> item : tables) {
@@ -33,8 +44,8 @@ public class GenerateServiceImpl implements IGenerateService {
             map.put("updateTime", item.getOrDefault("update_time", ""));
             list.add(map);
         }
-        System.out.println(PageResult.pageHelper(tables));
-        return list;
+
+        return PageResult.pageHelper(tables, list);
     }
 
 }

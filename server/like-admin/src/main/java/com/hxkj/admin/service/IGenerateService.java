@@ -1,6 +1,7 @@
 package com.hxkj.admin.service;
 
 import com.hxkj.admin.validate.PageParam;
+import com.hxkj.common.core.PageResult;
 
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,14 @@ import java.util.Map;
  */
 public interface IGenerateService {
 
-    List<Map<String, String>> db(PageParam pageParam, Map<String, String> params);
+    /**
+     * 数据表列表
+     *
+     * @author fzr
+     * @param pageParam 分页参数
+     * @param params 搜索参数
+     * @return PageResult<Map<String, String>>
+     */
+    PageResult<Map<String, String>> db(PageParam pageParam, Map<String, String> params);
 
 }
