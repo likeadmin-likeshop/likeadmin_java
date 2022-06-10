@@ -13,6 +13,7 @@
         <module>like-admin</module>
         <module>like-front</module>
         <module>like-common</module>
+        <module>like-generator</module>
     </modules>
 
     <!-- 特性信息 -->
