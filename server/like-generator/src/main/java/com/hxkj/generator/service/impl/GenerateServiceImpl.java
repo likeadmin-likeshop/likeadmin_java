@@ -1,22 +1,23 @@
 package com.hxkj.generator.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.hxkj.common.constant.GenConstants;
 import com.hxkj.common.core.PageResult;
 
 import com.hxkj.common.utils.StringUtil;
+import com.hxkj.common.utils.TimeUtil;
 import com.hxkj.generator.entity.GenTable;
 import com.hxkj.generator.entity.GenTableColumn;
 import com.hxkj.generator.mapper.GenTableColumnMapper;
 import com.hxkj.generator.mapper.GenTableMapper;
 import com.hxkj.generator.service.IGenerateService;
 import com.hxkj.generator.util.GenUtil;
+import com.hxkj.generator.util.VelocityUtil;
 import com.hxkj.generator.validate.PageParam;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,7 +37,7 @@ public class GenerateServiceImpl implements IGenerateService {
     GenTableColumnMapper genTableColumnMapper;
 
     /**
-     * 数据表列表
+     * 库列表
      *
      * @author fzr
      * @param pageParam 分页参数
@@ -64,6 +65,96 @@ public class GenerateServiceImpl implements IGenerateService {
         return PageResult.pageHelper(tables, list);
     }
 
+    /**
+     * 生成列表
+     *
+     * @param pageParam 分页参数
+     * @param params 搜索参数
+     * @return PageResult<Map<String, Object>>
+     */
+    @Override
+    public PageResult<Map<String, Object>> genList(PageParam pageParam, Map<String, String> params) {
+        Integer page  = pageParam.getPageNo();
+        Integer limit = pageParam.getPageSize();
+
+        QueryWrapper<GenTable> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("id");
+        queryWrapper.select("id,entity_name,table_name,table_comment,create_time,update_time");
+
+        genTableMapper.setSearch(queryWrapper, params, new String[]{
+                "like:tableName@table_name:str",
+                "like:tableComment@table_comment:str",
+                "datetime:startTime-endTime@create_time:str"
+        });
+
+        PageHelper.startPage(page, limit);
+        List<Map<String, Object>> tables = genTableMapper.selectMaps(queryWrapper);
+
+        List<Map<String, Object>> list = new LinkedList<>();
+        for (Map<String, Object> item : tables) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("id", item.get("id"));
+            map.put("tableName", item.get("table_name"));
+            map.put("entityName", item.get("entity_name"));
+            map.put("tableComment", item.get("table_comment"));
+            map.put("createTime", TimeUtil.timestampToDate(item.get("create_time").toString()));
+            map.put("updateTime", TimeUtil.timestampToDate(item.get("update_time").toString()));
+            list.add(map);
+        }
+
+        return PageResult.pageHelper(tables, list);
+    }
+
+    /**
+     * 生成详情
+     *
+     * @author fzr
+     * @return Object
+     */
+    @Override
+    public Map<String, Object> genDetail(Integer id) {
+        Map<String, Object> maps = new LinkedHashMap<>();
+        GenTable genTable = genTableMapper.selectById(id);
+
+        // 基本信息
+        Map<String, Object> base = new LinkedHashMap<>();
+        base.put("id", genTable.getId());
+        base.put("tableName", genTable.getTableName());
+        base.put("entityName", genTable.getEntityName());
+        base.put("tableComment", genTable.getTableComment());
+        base.put("functionAuthor", genTable.getFunctionName());
+        base.put("createTime", TimeUtil.timestampToDate(genTable.getCreateTime()));
+        base.put("updateTime", TimeUtil.timestampToDate(genTable.getUpdateTime()));
+        maps.put("base", base);
+
+        // 生成信息
+        Map<String, Object> gen = new LinkedHashMap<>();
+        gen.put("genTpl", genTable.getGenTpl());
+        gen.put("genType", genTable.getGenType());
+        gen.put("genPath", genTable.getGenPath());
+        gen.put("moduleName", genTable.getModuleName());
+        gen.put("packageName", genTable.getPackageName());
+        gen.put("businessName", genTable.getBusinessName());
+        gen.put("functionName", genTable.getFunctionName());
+        maps.put("gen", gen);
+
+        // 字段信息
+        List<GenTableColumn> columns = genTableColumnMapper.selectList(
+                new QueryWrapper<GenTableColumn>()
+                        .eq("table_id", id)
+                        .orderByDesc("sort"));
+
+        maps.put("column", columns);
+
+        return maps;
+    }
+
+    /**
+     * 导入表结构
+     *
+     * @author fzr
+     * @param tableNames 参数
+     */
     @Override
     public void importTable(String[] tableNames) {
         List<Map<String, String>> tables = genTableMapper.selectDbTableListByNames(tableNames);
@@ -171,30 +262,75 @@ public class GenerateServiceImpl implements IGenerateService {
         }
     }
 
+    /**
+     * 编辑表结构
+     *
+     * @author fzr
+     * @param id 主键
+     */
     @Override
-    public Object previewCode() {
-        try{
-            Velocity.init(getDefaultProp());
-            VelocityContext context = new VelocityContext();
-            context.put("hello", "Hello World!");
-            StringWriter w = new StringWriter();
-            Template t = Velocity.getTemplate("vm/java/controller.java.vm");
-            t.merge(context, w);
-            System.out.println("template:" + w);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
+    public void editTable(Integer id) {
+
     }
 
-    public Properties getDefaultProp(){
-        Properties prop = new Properties();
-//        prop.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-//        prop.setProperty(RuntimeConstants.RESOURCE_LOADER_CLASS, "classpath");
-        prop.setProperty(RuntimeConstants.RESOURCE_LOADERS, "classpath");
-//        prop.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
-        prop.setProperty("resource.loader.file.class", ClasspathResourceLoader.class.getName());
-        return prop;
+    /**
+     * 删除表结构
+     *
+     * @author fzr
+     * @param id 主键
+     */
+    @Override
+    public void deleteTable(Integer id) {
+
+    }
+
+    /**
+     * 同步数据表
+     *
+     * @author fzr
+     */
+    @Override
+    public void syncTable(Integer id) {
+
+    }
+
+    /**
+     * 预览代码
+     *
+     * @author fzr
+     * @return Map<String, String>
+     */
+    @Override
+    public Map<String, String> previewCode(Integer id) {
+
+        GenTable table = genTableMapper.selectById(id);
+
+        // 初始模板
+        VelocityUtil.initVelocity();
+        VelocityContext context = VelocityUtil.prepareContext(table);
+
+        // 渲染模板
+        Map<String, String> map = new LinkedHashMap<>();
+        List<String> templates = VelocityUtil.getTemplateList("curd");
+        for (String template : templates) {
+            StringWriter sw = new StringWriter();
+            Template tpl = Velocity.getTemplate(template, "UTF-8");
+            tpl.merge(context, sw);
+            map.put(template, sw.toString());
+        }
+
+        return map;
+    }
+
+    /**
+     * 生成代码
+     *
+     * @author fzr
+     * @return Object
+     */
+    @Override
+    public Object genCode(Integer id) {
+        return null;
     }
 
 }

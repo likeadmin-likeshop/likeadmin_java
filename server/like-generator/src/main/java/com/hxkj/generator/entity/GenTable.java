@@ -29,8 +29,8 @@ public class GenTable implements Serializable {
     private String genTpl;
     private String genType;
     private String genPath;
+    private String remarks;
     private Long createTime;
     private Long updateTime;
-    private Long deleteTime;
 
 }

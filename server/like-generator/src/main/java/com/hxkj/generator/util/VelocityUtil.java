@@ -1,13 +1,16 @@
 package com.hxkj.generator.util;
 
 import com.hxkj.common.utils.StringUtil;
+import com.hxkj.common.utils.TimeUtil;
 import com.hxkj.generator.entity.GenTable;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -43,10 +46,16 @@ public class VelocityUtil {
         String functionName = genTable.getFunctionName();
 
         VelocityContext velocityContext = new VelocityContext();
-        velocityContext.put("tplCategory", genTable.getGenTpl());
+        velocityContext.put("genTpl", genTable.getGenTpl());
         velocityContext.put("tableName", genTable.getTableName());
         velocityContext.put("functionName", StringUtil.isNotEmpty(functionName) ? functionName : "【请填写功能名称】");
         velocityContext.put("ClassName", genTable.getEntityName());
+        velocityContext.put("moduleName", genTable.getModuleName());
+        velocityContext.put("BusinessName", StringUtil.capitalize(genTable.getBusinessName()));
+        velocityContext.put("businessName", genTable.getBusinessName());
+        velocityContext.put("packageName", packageName);
+        velocityContext.put("author", genTable.getFunctionAuthor());
+        velocityContext.put("datetime", TimeUtil.nowDate());
         return velocityContext;
     }
 
@@ -55,30 +64,18 @@ public class VelocityUtil {
      *
      * @return 模板列表
      */
-    public static List<String> getTemplateList(String tplCategory)
+    public static List<String> getTemplateList(String genTpl)
     {
-        List<String> templates = new ArrayList<String>();
-//        templates.add("vm/java/domain.java.vm");
-//        templates.add("vm/java/mapper.java.vm");
-//        templates.add("vm/java/service.java.vm");
-//        templates.add("vm/java/serviceImpl.java.vm");
-        templates.add("vm/java/controller.java.vm");
+        List<String> templates = new LinkedList<>();
+        templates.add("java/controller.java.vm");
+
+//        templates.add("java/domain.java.vm");
+//        templates.add("java/mapper.java.vm");
+//        templates.add("java/service.java.vm");
+//        templates.add("java/serviceImpl.java.vm");
 //        templates.add("vm/xml/mapper.xml.vm");
 //        templates.add("vm/sql/sql.vm");
 //        templates.add("vm/js/api.js.vm");
-//        if (GenConstants.TPL_CRUD.equals(tplCategory))
-//        {
-//            templates.add("vm/vue/index.vue.vm");
-//        }
-//        else if (GenConstants.TPL_TREE.equals(tplCategory))
-//        {
-//            templates.add("vm/vue/index-tree.vue.vm");
-//        }
-//        else if (GenConstants.TPL_SUB.equals(tplCategory))
-//        {
-//            templates.add("vm/vue/index.vue.vm");
-//            templates.add("vm/java/sub-domain.java.vm");
-//        }
         return templates;
     }
 

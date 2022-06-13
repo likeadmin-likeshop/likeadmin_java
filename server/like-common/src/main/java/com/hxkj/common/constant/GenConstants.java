@@ -30,8 +30,9 @@ public class GenConstants {
     public static final String[] COLUMN_TYPE_TIME = {"datetime", "time", "date", "timestamp"};
 
     /** 数据库数字类型 */
-    public static final String[] COLUMN_TYPE_NUMBER = {"tinyint", "smallint", "mediumint", "int",
-            "number", "integer", "bit", "bigint", "float", "double", "decimal"};
+    public static final String[] COLUMN_TYPE_NUMBER = {
+            "tinyint", "smallint", "mediumint", "int", "number",
+            "integer", "bit", "bigint", "float", "double", "decimal"};
 
     /** 页面不需要编辑字段 */
     public static final String[] COLUMN_NAME_NOT_EDIT = {"id", "create_time", "update_time", "delete_time"};
