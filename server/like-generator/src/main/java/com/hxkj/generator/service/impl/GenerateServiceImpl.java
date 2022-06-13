@@ -318,8 +318,13 @@ public class GenerateServiceImpl implements IGenerateService {
      * @param id 主键
      */
     @Override
+    @Transactional
     public void deleteTable(Integer id) {
+        GenTable genTable = genTableMapper.selectById(id);
+        Assert.notNull(genTable, "数据已丢失");
 
+        genTableMapper.deleteById(id);
+        genTableColumnMapper.delete(new QueryWrapper<GenTableColumn>().eq("table_id", id));
     }
 
     /**
