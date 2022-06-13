@@ -1,6 +1,7 @@
 package com.hxkj.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.github.pagehelper.PageHelper;
 import com.hxkj.common.constant.GenConstants;
 import com.hxkj.common.core.PageResult;
@@ -14,11 +15,13 @@ import com.hxkj.generator.mapper.GenTableMapper;
 import com.hxkj.generator.service.IGenerateService;
 import com.hxkj.generator.util.GenUtil;
 import com.hxkj.generator.util.VelocityUtil;
+import com.hxkj.generator.validate.GenParam;
 import com.hxkj.generator.validate.PageParam;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.StringWriter;
@@ -156,6 +159,7 @@ public class GenerateServiceImpl implements IGenerateService {
      * @param tableNames 参数
      */
     @Override
+    @Transactional
     public void importTable(String[] tableNames) {
         List<Map<String, String>> tables = genTableMapper.selectDbTableListByNames(tableNames);
 
@@ -266,11 +270,45 @@ public class GenerateServiceImpl implements IGenerateService {
      * 编辑表结构
      *
      * @author fzr
-     * @param id 主键
+     * @param genParam 参数
      */
     @Override
-    public void editTable(Integer id) {
+    @Transactional
+    public void editTable(GenParam genParam) {
+        GenTable model = genTableMapper.selectById(genParam.getId());
+        Assert.notNull(model, "数据已丢失");
 
+        model.setTableName(genParam.getTableName());
+        model.setEntityName(genParam.getEntityName());
+        model.setTableComment(genParam.getTableComment());
+        model.setFunctionAuthor(genParam.getFunctionAuthor());
+        model.setRemarks(genParam.getRemarks());
+        model.setGenTpl(genParam.getGenTpl());
+        model.setModuleName(genParam.getModuleName());
+        model.setPackageName(genParam.getPackageName());
+        model.setBusinessName(genParam.getBusinessName());
+        model.setFunctionName(genParam.getFunctionName());
+        model.setGenType(genParam.getGenType());
+        model.setGenPath(genParam.getGenPath());
+        genTableMapper.updateById(model);
+
+        for (Map<String, String> item : genParam.getColumns()) {
+            Integer id = Integer.parseInt(item.get("id"));
+            GenTableColumn column = genTableColumnMapper.selectById(id);
+            column.setColumnComment(item.get("columnComment"));
+            column.setJavaField(item.get("javaField"));
+            column.setIsPk(Integer.parseInt(item.get("isPK")));
+            column.setIsIncrement(Integer.parseInt(item.get("isIncrement")));
+            column.setIsRequired(Integer.parseInt(item.get("isRequired")));
+            column.setIsInsert(Integer.parseInt(item.get("isInsert")));
+            column.setIsEdit(Integer.parseInt(item.get("isEdit")));
+            column.setIsList(Integer.parseInt(item.get("isList")));
+            column.setIsQuery(Integer.parseInt(item.get("isQuery")));
+            column.setQueryType(item.get("queryType"));
+            column.setHtmlType(item.get("htmlType"));
+            column.setDictType(item.get("dictType"));
+            genTableColumnMapper.updateById(column);
+        }
     }
 
     /**

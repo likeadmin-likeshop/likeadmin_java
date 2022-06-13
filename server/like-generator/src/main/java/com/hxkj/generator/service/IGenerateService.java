@@ -1,6 +1,7 @@
 package com.hxkj.generator.service;
 
 import com.hxkj.common.core.PageResult;
+import com.hxkj.generator.validate.GenParam;
 import com.hxkj.generator.validate.PageParam;
 
 import java.util.List;
@@ -50,7 +51,7 @@ public interface IGenerateService {
      *
      * @author fzr
      */
-    void editTable(Integer id);
+    void editTable(GenParam genParam);
 
     /**
      * 删除表结构

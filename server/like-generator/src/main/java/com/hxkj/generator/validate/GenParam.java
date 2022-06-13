@@ -11,6 +11,8 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 生成参数
@@ -77,5 +79,7 @@ public class GenParam implements Serializable {
 
     @Length(max = 200, message = "生成代码路径不能大于200个字符")
     private String genPath;
+
+    private List<Map<String, String>> columns;
 
 }

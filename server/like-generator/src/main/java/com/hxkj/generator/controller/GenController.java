@@ -4,6 +4,7 @@ import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.validator.annotation.IDMust;
 import com.hxkj.generator.service.IGenerateService;
+import com.hxkj.generator.validate.GenParam;
 import com.hxkj.generator.validate.PageParam;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -78,8 +79,8 @@ public class GenController {
      * @return Object
      */
     @PostMapping("/editTable")
-    public Object editTable(@Validated @IDMust() @RequestParam("id") Integer id) {
-        iGenerateService.editTable(id);
+    public Object editTable(@Validated() @RequestBody GenParam genParam) {
+        iGenerateService.editTable(genParam);
         return AjaxResult.success();
     }
 
