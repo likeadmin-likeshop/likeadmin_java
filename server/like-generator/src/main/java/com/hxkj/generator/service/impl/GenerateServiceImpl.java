@@ -1,13 +1,17 @@
 package com.hxkj.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageHelper;
 import com.hxkj.common.constant.GenConstants;
 import com.hxkj.common.core.PageResult;
 
+import com.hxkj.common.exception.OperateException;
 import com.hxkj.common.utils.StringUtil;
 import com.hxkj.common.utils.TimeUtil;
+import com.hxkj.generator.config.GenConfig;
 import com.hxkj.generator.entity.GenTable;
 import com.hxkj.generator.entity.GenTableColumn;
 import com.hxkj.generator.mapper.GenTableColumnMapper;
@@ -17,9 +21,13 @@ import com.hxkj.generator.util.GenUtil;
 import com.hxkj.generator.util.VelocityUtil;
 import com.hxkj.generator.validate.GenParam;
 import com.hxkj.generator.validate.PageParam;
+import com.hxkj.generator.vo.DbTableVo;
+import com.hxkj.generator.vo.GenColumnVo;
+import com.hxkj.generator.vo.GenTableVo;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,24 +56,20 @@ public class GenerateServiceImpl implements IGenerateService {
      * @return PageResult<Map<String, String>>
      */
     @Override
-    public PageResult<Map<String, String>> db(PageParam pageParam, Map<String, String> params) {
+    public PageResult<DbTableVo> db(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
         PageHelper.startPage(page, limit);
-        List<Map<String, String>> tables = genTableMapper.selectDbTableList(params);
+        List<DbTableVo> tables = genTableMapper.selectDbTableList(params);
 
-        List<Map<String, String>> list = new LinkedList<>();
-        for (Map<String, String> item : tables) {
-            Map<String, String> map = new LinkedHashMap<>();
-            map.put("tableName", item.get("table_name"));
-            map.put("tableComment", item.get("table_comment"));
-            map.put("createTime", item.get("create_time"));
-            map.put("updateTime", item.getOrDefault("update_time", ""));
-            list.add(map);
+        for (DbTableVo vo : tables) {
+            if (vo.getUpdateTime() == null) {
+                vo.setUpdateTime("");
+            }
         }
 
-        return PageResult.pageHelper(tables, list);
+        return PageResult.pageHelper(tables);
     }
 
     /**
@@ -76,13 +80,13 @@ public class GenerateServiceImpl implements IGenerateService {
      * @return PageResult<Map<String, Object>>
      */
     @Override
-    public PageResult<Map<String, Object>> genList(PageParam pageParam, Map<String, String> params) {
+    public PageResult<GenTableVo> list(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
         QueryWrapper<GenTable> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("id");
-        queryWrapper.select("id,entity_name,table_name,table_comment,create_time,update_time");
+        queryWrapper.select("id,gen_tpl,entity_name,table_name,table_comment,create_time,update_time");
 
         genTableMapper.setSearch(queryWrapper, params, new String[]{
                 "like:tableName@table_name:str",
@@ -90,22 +94,18 @@ public class GenerateServiceImpl implements IGenerateService {
                 "datetime:startTime-endTime@create_time:str"
         });
 
-        PageHelper.startPage(page, limit);
-        List<Map<String, Object>> tables = genTableMapper.selectMaps(queryWrapper);
+        IPage<GenTable> iPage = genTableMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
-        List<Map<String, Object>> list = new LinkedList<>();
-        for (Map<String, Object> item : tables) {
-            Map<String, Object> map = new LinkedHashMap<>();
-            map.put("id", item.get("id"));
-            map.put("tableName", item.get("table_name"));
-            map.put("entityName", item.get("entity_name"));
-            map.put("tableComment", item.get("table_comment"));
-            map.put("createTime", TimeUtil.timestampToDate(item.get("create_time").toString()));
-            map.put("updateTime", TimeUtil.timestampToDate(item.get("update_time").toString()));
-            list.add(map);
+        List<GenTableVo> list = new LinkedList<>();
+        for (GenTable item : iPage.getRecords()) {
+            GenTableVo vo = new GenTableVo();
+            BeanUtils.copyProperties(item, vo);
+            vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
+            vo.setUpdateTime(TimeUtil.timestampToDate(item.getUpdateTime()));
+            list.add(vo);
         }
 
-        return PageResult.pageHelper(tables, list);
+        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), list);
     }
 
     /**
@@ -115,7 +115,7 @@ public class GenerateServiceImpl implements IGenerateService {
      * @return Object
      */
     @Override
-    public Map<String, Object> genDetail(Integer id) {
+    public Map<String, Object> detail(Integer id) {
         Map<String, Object> maps = new LinkedHashMap<>();
         GenTable genTable = genTableMapper.selectById(id);
 
@@ -123,9 +123,10 @@ public class GenerateServiceImpl implements IGenerateService {
         Map<String, Object> base = new LinkedHashMap<>();
         base.put("id", genTable.getId());
         base.put("tableName", genTable.getTableName());
-        base.put("entityName", genTable.getEntityName());
         base.put("tableComment", genTable.getTableComment());
-        base.put("functionAuthor", genTable.getFunctionName());
+        base.put("entityName", genTable.getEntityName());
+        base.put("authorName", genTable.getAuthorName());
+        base.put("remarks", genTable.getRemarks());
         base.put("createTime", TimeUtil.timestampToDate(genTable.getCreateTime()));
         base.put("updateTime", TimeUtil.timestampToDate(genTable.getUpdateTime()));
         maps.put("base", base);
@@ -142,10 +143,17 @@ public class GenerateServiceImpl implements IGenerateService {
         maps.put("gen", gen);
 
         // 字段信息
-        List<GenTableColumn> columns = genTableColumnMapper.selectList(
-                new QueryWrapper<GenTableColumn>()
-                        .eq("table_id", id)
-                        .orderByDesc("sort"));
+        QueryWrapper<GenTableColumn> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("table_id", id);
+        queryWrapper.orderByAsc("sort");
+        List<GenColumnVo> columns = new LinkedList<>();
+        for (GenTableColumn item : genTableColumnMapper.selectList(queryWrapper)) {
+            GenColumnVo vo = new GenColumnVo();
+            BeanUtils.copyProperties(item, vo);
+            vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
+            vo.setUpdateTime(TimeUtil.timestampToDate(item.getUpdateTime()));
+            columns.add(vo);
+        }
 
         maps.put("column", columns);
 
@@ -161,108 +169,117 @@ public class GenerateServiceImpl implements IGenerateService {
     @Override
     @Transactional
     public void importTable(String[] tableNames) {
-        List<Map<String, String>> tables = genTableMapper.selectDbTableListByNames(tableNames);
+        try {
+            List<Map<String, String>> tables = genTableMapper.selectDbTableListByNames(tableNames);
 
-        for (Map<String, String> map : tables) {
-            // 生成表信息
-            String tableName = map.get("table_name");
-            String tableDesc = map.get("table_comment");
-            GenTable table = new GenTable();
-            table.setTableName(tableName);
-            table.setTableComment(tableDesc);
-            table.setEntityName(GenUtil.toClassName(tableName));
-            table.setPackageName("com.hxkj.admin");
-            table.setModuleName(GenUtil.toModuleName("com.hxkj.admin"));
-            table.setBusinessName(GenUtil.toBusinessName(tableName));
-            table.setFunctionName(GenUtil.replaceText(tableDesc));
-            table.setFunctionAuthor("likeAdmin");
-            table.setCreateTime(System.currentTimeMillis() / 1000);
-            table.setUpdateTime(System.currentTimeMillis() / 1000);
-            int row = genTableMapper.insert(table);
+            for (Map<String, String> map : tables) {
+                // 取基本数据
+                String tableName = map.get("table_name");
+                String tableDesc = map.get("table_comment");
 
-            // 生成列信息
-            if (row > 0) {
-                List<GenTableColumn> genTableColumns = genTableMapper.selectDbTableColumnsByName(tableName);
-                for (GenTableColumn column : genTableColumns) {
-                    String columnType = GenUtil.getDbType(column.getColumnType());
-                    String columnName = column.getColumnName();
+                // 生成表信息
+                GenTable table = new GenTable();
+                table.setTableName(tableName);
+                table.setTableComment(tableDesc);
+                table.setAuthorName(GenConfig.authorName);
+                table.setEntityName(GenUtil.toClassName(tableName));
+                table.setModuleName(GenUtil.toModuleName(GenConfig.packageName));
+                table.setPackageName(GenConfig.packageName);
+                table.setBusinessName(GenUtil.toBusinessName(tableName));
+                table.setFunctionName(GenUtil.replaceText(tableDesc));
+                table.setCreateTime(System.currentTimeMillis() / 1000);
+                table.setUpdateTime(System.currentTimeMillis() / 1000);
+                int row = genTableMapper.insert(table);
 
-                    column.setTableId(table.getId());
-                    column.setUpdateTime(table.getUpdateTime());
-                    column.setCreateTime(table.getCreateTime());
-                    column.setJavaField(StringUtil.toCamelCase(columnName));
-                    column.setJavaType("String");
-                    column.setQueryType("EQ");
-                    column.setIsInsert(GenConstants.REQUIRE);
+                // 生成列信息
+                if (row > 0) {
+                    List<GenTableColumn> genTableColumns = genTableMapper.selectDbTableColumnsByName(tableName);
 
-                    if (GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_STR, columnType) ||
-                        GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_TEXT, columnType)) {
-                        Integer columnLength = GenUtil.getColumnLength(column.getColumnType());
-                        String htmlType = columnLength >= 500 || GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_TEXT, columnType)
-                                ? GenConstants.HTML_TEXTAREA
-                                : GenConstants.HTML_INPUT;
-                        column.setHtmlType(htmlType);
-                    }
+                    for (GenTableColumn column : genTableColumns) {
+                        String columnName = column.getColumnName();
+                        String columnType = GenUtil.getDbType(column.getColumnType());
+                        column.setTableId(table.getId());
+                        column.setJavaField(StringUtil.toCamelCase(columnName));
+                        column.setJavaType(GenConstants.TYPE_STRING);
+                        column.setQueryType(GenConstants.QUERY_EQ);
+                        column.setIsInsert(GenConstants.REQUIRE);
+                        column.setUpdateTime(table.getUpdateTime());
+                        column.setCreateTime(table.getCreateTime());
 
-                    else if (GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_TIME, columnType)) {
-                        column.setJavaType(GenConstants.TYPE_DATE);
-                        column.setHtmlType(GenConstants.HTML_DATETIME);
-                    }
-
-                    else if (GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_NUMBER, columnType)) {
-                        column.setHtmlType(GenConstants.HTML_INPUT);
-                        String[] str = StringUtil.split(StringUtil.substringBetween(column.getColumnType(), "(", ")"), ",");
-                        if (str != null && str.length == 2 && Integer.parseInt(str[1]) > 0) {
-                            column.setJavaType(GenConstants.TYPE_BIG_DECIMAL); // 浮点形
-                        } else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 10) {
-                            column.setJavaType(GenConstants.TYPE_INTEGER);     // 整数形
-                        } else {
-                            column.setJavaType(GenConstants.TYPE_LONG);        // 长整形
+                        // 文本域组
+                        if (GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_STR, columnType) ||
+                                GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_TEXT, columnType)) {
+                            Integer columnLength = GenUtil.getColumnLength(column.getColumnType());
+                            String htmlType = columnLength >= 500 || GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_TEXT, columnType)
+                                    ? GenConstants.HTML_TEXTAREA
+                                    : GenConstants.HTML_INPUT;
+                            column.setHtmlType(htmlType);
                         }
-                    }
 
-                    // 编辑字段
-                    if (!GenUtil.isArraysContains(GenConstants.COLUMN_NAME_NOT_EDIT, columnName) && column.getIsPk() == 0) {
-                        column.setIsEdit(GenConstants.REQUIRE);
-                    }
+                        // 日期组件
+                        else if (GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_TIME, columnType)) {
+                            column.setJavaType(GenConstants.TYPE_DATE);
+                            column.setHtmlType(GenConstants.HTML_DATETIME);
+                        }
 
-                    // 列表字段
-                    if (!GenUtil.isArraysContains(GenConstants.COLUMN_NAME_NOT_LIST, columnName) && column.getIsPk() == 0) {
-                        column.setIsList(GenConstants.REQUIRE);
-                    }
+                        // 数字组件
+                        else if (GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_NUMBER, columnType)) {
+                            column.setHtmlType(GenConstants.HTML_INPUT);
+                            String[] str = StringUtil.split(StringUtil.substringBetween(column.getColumnType(), "(", ")"), ",");
+                            if (str != null && str.length == 2 && Integer.parseInt(str[1]) > 0) {
+                                column.setJavaType(GenConstants.TYPE_BIG_DECIMAL); // 浮点形
+                            } else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 10) {
+                                column.setJavaType(GenConstants.TYPE_INTEGER);     // 整数形
+                            } else {
+                                column.setJavaType(GenConstants.TYPE_LONG);        // 长整形
+                            }
+                        }
 
-                    // 查询字段
-                    if (!GenUtil.isArraysContains(GenConstants.COLUMN_NAME_NOT_QUERY, columnName) && column.getIsPk() == 0) {
-                        column.setIsQuery(GenConstants.REQUIRE);
-                    }
+                        // 编辑字段
+                        if (!GenUtil.isArraysContains(GenConstants.COLUMN_NAME_NOT_EDIT, columnName) && column.getIsPk() == 0) {
+                            column.setIsEdit(GenConstants.REQUIRE);
+                        }
 
-                    // 查询字段类型
-                    if (StringUtil.endsWithIgnoreCase(columnName, "name")) {
-                        column.setQueryType(GenConstants.QUERY_LIKE);
-                    }
+                        //  列表字段
+                        if (!GenUtil.isArraysContains(GenConstants.COLUMN_NAME_NOT_LIST, columnName) && column.getIsPk() == 0) {
+                            column.setIsList(GenConstants.REQUIRE);
+                        }
 
-                    // 根据字段设置
-                    if (StringUtil.endsWithIgnoreCase(columnName, "status")) {
-                        // 状态字段设置单选框
-                        column.setHtmlType(GenConstants.HTML_RADIO);
-                    } else if (StringUtil.endsWithIgnoreCase(columnName, "type") ||
-                               StringUtil.endsWithIgnoreCase(columnName, "sex")) {
-                        // 类型&性别字段设置下拉框
-                        column.setHtmlType(GenConstants.HTML_SELECT);
-                    } else if (StringUtil.endsWithIgnoreCase(columnName, "image")) {
-                        // 图片字段设置图片上传控件
-                        column.setHtmlType(GenConstants.HTML_IMAGE_UPLOAD);
-                    } else if (StringUtil.endsWithIgnoreCase(columnName, "file")) {
-                        // 文件字段设置文件上传控件
-                        column.setHtmlType(GenConstants.HTML_FILE_UPLOAD);
-                    } else if (StringUtil.endsWithIgnoreCase(columnName, "content")) {
-                        // 内容字段设置富文本控件
-                        column.setHtmlType(GenConstants.HTML_EDITOR);
-                    }
+                        //  查询字段
+                        if (!GenUtil.isArraysContains(GenConstants.COLUMN_NAME_NOT_QUERY, columnName) && column.getIsPk() == 0) {
+                            column.setIsQuery(GenConstants.REQUIRE);
+                        }
 
-                    genTableColumnMapper.insert(column);
+                        // 查询字段类型
+                        if (StringUtil.endsWithIgnoreCase(columnName, "name")) {
+                            column.setQueryType(GenConstants.QUERY_LIKE);
+                        }
+
+                        // 根据字段设置
+                        if (StringUtil.endsWithIgnoreCase(columnName, "status")) {
+                            // 状态字段设置单选框
+                            column.setHtmlType(GenConstants.HTML_RADIO);
+                        } else if (StringUtil.endsWithIgnoreCase(columnName, "type") ||
+                                StringUtil.endsWithIgnoreCase(columnName, "sex")) {
+                            // 类型&性别字段设置下拉框
+                            column.setHtmlType(GenConstants.HTML_SELECT);
+                        } else if (StringUtil.endsWithIgnoreCase(columnName, "image")) {
+                            // 图片字段设置图片上传控件
+                            column.setHtmlType(GenConstants.HTML_IMAGE_UPLOAD);
+                        } else if (StringUtil.endsWithIgnoreCase(columnName, "file")) {
+                            // 文件字段设置文件上传控件
+                            column.setHtmlType(GenConstants.HTML_FILE_UPLOAD);
+                        } else if (StringUtil.endsWithIgnoreCase(columnName, "content")) {
+                            // 内容字段的设置富文本控件
+                            column.setHtmlType(GenConstants.HTML_EDITOR);
+                        }
+
+                        genTableColumnMapper.insert(column);
+                    }
                 }
             }
+        } catch (Exception e) {
+            throw new OperateException("导入失败：" + e.getMessage());
         }
     }
 
@@ -279,15 +296,15 @@ public class GenerateServiceImpl implements IGenerateService {
         Assert.notNull(model, "数据已丢失");
 
         model.setTableName(genParam.getTableName());
-        model.setEntityName(genParam.getEntityName());
         model.setTableComment(genParam.getTableComment());
-        model.setFunctionAuthor(genParam.getFunctionAuthor());
-        model.setRemarks(genParam.getRemarks());
-        model.setGenTpl(genParam.getGenTpl());
+        model.setAuthorName(genParam.getAuthorName());
+        model.setEntityName(genParam.getEntityName());
         model.setModuleName(genParam.getModuleName());
         model.setPackageName(genParam.getPackageName());
         model.setBusinessName(genParam.getBusinessName());
         model.setFunctionName(genParam.getFunctionName());
+        model.setRemarks(genParam.getRemarks());
+        model.setGenTpl(genParam.getGenTpl());
         model.setGenType(genParam.getGenType());
         model.setGenPath(genParam.getGenPath());
         genTableMapper.updateById(model);

@@ -1,11 +1,14 @@
 package com.hxkj.generator.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.validator.annotation.IDMust;
 import com.hxkj.generator.service.IGenerateService;
 import com.hxkj.generator.validate.GenParam;
 import com.hxkj.generator.validate.PageParam;
+import com.hxkj.generator.vo.DbTableVo;
+import com.hxkj.generator.vo.GenTableVo;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +33,7 @@ public class GenController {
     @GetMapping("/db")
     public Object db(@Validated PageParam pageParam,
                      @RequestParam Map<String, String> params) {
-        PageResult<Map<String, String>> list = iGenerateService.db(pageParam, params);
+        PageResult<DbTableVo> list = iGenerateService.db(pageParam, params);
         return AjaxResult.success(list);
     }
 
@@ -40,10 +43,10 @@ public class GenController {
      * @author fzr
      * @return Object
      */
-    @GetMapping("/genList")
-    public Object genList(@Validated PageParam pageParam,
+    @GetMapping("/list")
+    public Object list(@Validated PageParam pageParam,
                           @RequestParam Map<String, String> params) {
-        PageResult<Map<String, Object>> list = iGenerateService.genList(pageParam, params);
+        PageResult<GenTableVo> list = iGenerateService.list(pageParam, params);
         return AjaxResult.success(list);
     }
 
@@ -53,9 +56,9 @@ public class GenController {
      * @author fzr
      * @return Object
      */
-    @GetMapping("/genDetail")
-    public Object genDetail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        Map<String, Object> maps = iGenerateService.genDetail(id);
+    @GetMapping("/detail")
+    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+        Map<String, Object> maps = iGenerateService.detail(id);
         return AjaxResult.success(maps);
     }
 
@@ -67,6 +70,7 @@ public class GenController {
      */
     @PostMapping("/importTable")
     public Object importTable(String tables) {
+        Assert.notNull(tables, "tables参数缺失");
         String[] tableNames = tables.split(",");
         iGenerateService.importTable(tableNames);
         return AjaxResult.success();

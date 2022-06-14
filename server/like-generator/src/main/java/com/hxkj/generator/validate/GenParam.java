@@ -40,10 +40,10 @@ public class GenParam implements Serializable {
     @Length(min = 1, max = 200, message = "表描述不能大于200个字符")
     private String tableComment;
 
-    @NotNull(message = "functionAuthor参数缺失")
-    @NotEmpty(message = "表描述不能为空")
-    @Length(min = 1, max = 60, message = "表描述不能大于200个字符")
-    private String functionAuthor;
+    @NotNull(message = "authorName参数缺失")
+    @NotEmpty(message = "作者名称不能为空")
+    @Length(min = 1, max = 100, message = "作者名称不能大于60个字符")
+    private String authorName;
 
     @Length(max = 60, message = "备注不能大于200个字符")
     private String remarks;

@@ -132,4 +132,8 @@ public class GenUtil {
         }
     }
 
+    public static void setPkColumn() {
+
+    }
+
 }

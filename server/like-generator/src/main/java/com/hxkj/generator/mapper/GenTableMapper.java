@@ -3,6 +3,7 @@ package com.hxkj.generator.mapper;
 import com.hxkj.common.core.basics.IBaseMapper;
 import com.hxkj.generator.entity.GenTable;
 import com.hxkj.generator.entity.GenTableColumn;
+import com.hxkj.generator.vo.DbTableVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -35,7 +36,7 @@ public interface GenTableMapper extends IBaseMapper<GenTable> {
             "AND lower(table_comment) like lower(concat('%', #{tableComment}, '%'))" +
         "</if>",
     "</script>"})
-    List<Map<String, String>> selectDbTableList(Map<String, String> params);
+    List<DbTableVo> selectDbTableList(Map<String, String> params);
 
     /**
      * 根据表名集查询表

@@ -54,7 +54,7 @@ public class VelocityUtil {
         velocityContext.put("BusinessName", StringUtil.capitalize(genTable.getBusinessName()));
         velocityContext.put("businessName", genTable.getBusinessName());
         velocityContext.put("packageName", packageName);
-        velocityContext.put("author", genTable.getFunctionAuthor());
+        velocityContext.put("author", genTable.getAuthorName());
         velocityContext.put("datetime", TimeUtil.nowDate());
         return velocityContext;
     }

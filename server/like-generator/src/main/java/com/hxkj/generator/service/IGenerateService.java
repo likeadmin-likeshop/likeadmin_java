@@ -3,6 +3,8 @@ package com.hxkj.generator.service;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.generator.validate.GenParam;
 import com.hxkj.generator.validate.PageParam;
+import com.hxkj.generator.vo.DbTableVo;
+import com.hxkj.generator.vo.GenTableVo;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +22,7 @@ public interface IGenerateService {
      * @param params 搜索参数
      * @return PageResult<Map<String, String>>
      */
-    PageResult<Map<String, String>> db(PageParam pageParam, Map<String, String> params);
+    PageResult<DbTableVo> db(PageParam pageParam, Map<String, String> params);
 
     /**
      * 生成列表
@@ -28,7 +30,7 @@ public interface IGenerateService {
      * @author fzr
      * @return Object
      */
-    PageResult<Map<String, Object>> genList(PageParam pageParam, Map<String, String> params);
+    PageResult<GenTableVo> list(PageParam pageParam, Map<String, String> params);
 
     /**
      * 生成详情
@@ -36,7 +38,7 @@ public interface IGenerateService {
      * @author fzr
      * @return Object
      */
-    Map<String, Object> genDetail(Integer id);
+    Map<String, Object> detail(Integer id);
 
     /**
      * 导入表结构
