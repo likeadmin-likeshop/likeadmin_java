@@ -8,8 +8,6 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -19,8 +17,7 @@ public class VelocityUtil {
     /**
      * 初始化vm方法
      */
-    public static void initVelocity()
-    {
+    public static void initVelocity() {
         try {
             Properties p = new Properties();
             p.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
@@ -37,8 +34,7 @@ public class VelocityUtil {
      *
      * @return 模板列表
      */
-    public static VelocityContext prepareContext(GenTable genTable)
-    {
+    public static VelocityContext prepareContext(GenTable genTable) {
         String moduleName = genTable.getModuleName();
         String businessName = genTable.getBusinessName();
         String packageName = genTable.getPackageName();
@@ -64,8 +60,7 @@ public class VelocityUtil {
      *
      * @return 模板列表
      */
-    public static List<String> getTemplateList(String genTpl)
-    {
+    public static List<String> getTemplateList(String genTpl) {
         List<String> templates = new LinkedList<>();
         templates.add("java/controller.java.vm");
 

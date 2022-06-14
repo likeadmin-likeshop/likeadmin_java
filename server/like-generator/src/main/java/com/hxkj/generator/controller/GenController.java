@@ -106,8 +106,10 @@ public class GenController {
      * @author fzr
      * @return Object
      */
+    @PostMapping("/syncTable")
     public Object syncTable(@Validated @IDMust() @RequestParam("id") Integer id) {
-        return null;
+        iGenerateService.syncTable(id);
+        return AjaxResult.success();
     }
 
     /**

@@ -73,4 +73,16 @@ public interface GenTableMapper extends IBaseMapper<GenTable> {
     "</script>"})
     List<GenTableColumn> selectDbTableColumnsByName(String tableName);
 
+    @Select({"<script>",
+        "SELECT " +
+            "t.id, t.author_name, t.table_name, t.table_comment, t.sub_table_name, t.sub_table_fk, t.entity_name, " +
+            "t.module_name, t.package_name, t.business_name, t.function_name, t.gen_tpl, t.gen_type, t.gen_path, t.remarks, " +
+            "c.id as column_id, c.column_name, c.column_comment, c.column_type, c.java_type, c.java_field, c.is_pk, " +
+            "c.is_increment, c.is_required, c.is_insert, c.is_edit, c.is_list, c.is_query, c.html_type, c.dict_type, c.sort",
+        "FROM ls_gen_table t",
+            "LEFT JOIN ls_gen_table_column c ON t.id = c.table_id",
+        "WHERE t.id = #{id} ORDER BY c.sort",
+    "</script>"})
+    Map<String, String> selectGenTableByName(Integer id);
+
 }

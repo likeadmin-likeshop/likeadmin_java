@@ -9,8 +9,10 @@ import com.hxkj.common.constant.GenConstants;
 import com.hxkj.common.core.PageResult;
 
 import com.hxkj.common.exception.OperateException;
+import com.hxkj.common.utils.ArrayUtil;
 import com.hxkj.common.utils.StringUtil;
 import com.hxkj.common.utils.TimeUtil;
+import com.hxkj.common.utils.ToolsUtil;
 import com.hxkj.generator.config.GenConfig;
 import com.hxkj.generator.entity.GenTable;
 import com.hxkj.generator.entity.GenTableColumn;
@@ -34,6 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.io.StringWriter;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 代码生成器服务实现类
@@ -171,109 +175,18 @@ public class GenerateServiceImpl implements IGenerateService {
     public void importTable(String[] tableNames) {
         try {
             List<Map<String, String>> tables = genTableMapper.selectDbTableListByNames(tableNames);
-
             for (Map<String, String> map : tables) {
-                // 取基本数据
-                String tableName = map.get("table_name");
-                String tableDesc = map.get("table_comment");
-
                 // 生成表信息
                 GenTable table = new GenTable();
-                table.setTableName(tableName);
-                table.setTableComment(tableDesc);
-                table.setAuthorName(GenConfig.authorName);
-                table.setEntityName(GenUtil.toClassName(tableName));
-                table.setModuleName(GenUtil.toModuleName(GenConfig.packageName));
-                table.setPackageName(GenConfig.packageName);
-                table.setBusinessName(GenUtil.toBusinessName(tableName));
-                table.setFunctionName(GenUtil.replaceText(tableDesc));
-                table.setCreateTime(System.currentTimeMillis() / 1000);
-                table.setUpdateTime(System.currentTimeMillis() / 1000);
+                GenUtil.initTable(table, map);
                 int row = genTableMapper.insert(table);
 
                 // 生成列信息
                 if (row > 0) {
+                    String tableName = map.get("table_name");
                     List<GenTableColumn> genTableColumns = genTableMapper.selectDbTableColumnsByName(tableName);
-
                     for (GenTableColumn column : genTableColumns) {
-                        String columnName = column.getColumnName();
-                        String columnType = GenUtil.getDbType(column.getColumnType());
-                        column.setTableId(table.getId());
-                        column.setJavaField(StringUtil.toCamelCase(columnName));
-                        column.setJavaType(GenConstants.TYPE_STRING);
-                        column.setQueryType(GenConstants.QUERY_EQ);
-                        column.setIsInsert(GenConstants.REQUIRE);
-                        column.setUpdateTime(table.getUpdateTime());
-                        column.setCreateTime(table.getCreateTime());
-
-                        // 文本域组
-                        if (GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_STR, columnType) ||
-                                GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_TEXT, columnType)) {
-                            Integer columnLength = GenUtil.getColumnLength(column.getColumnType());
-                            String htmlType = columnLength >= 500 || GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_TEXT, columnType)
-                                    ? GenConstants.HTML_TEXTAREA
-                                    : GenConstants.HTML_INPUT;
-                            column.setHtmlType(htmlType);
-                        }
-
-                        // 日期组件
-                        else if (GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_TIME, columnType)) {
-                            column.setJavaType(GenConstants.TYPE_DATE);
-                            column.setHtmlType(GenConstants.HTML_DATETIME);
-                        }
-
-                        // 数字组件
-                        else if (GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_NUMBER, columnType)) {
-                            column.setHtmlType(GenConstants.HTML_INPUT);
-                            String[] str = StringUtil.split(StringUtil.substringBetween(column.getColumnType(), "(", ")"), ",");
-                            if (str != null && str.length == 2 && Integer.parseInt(str[1]) > 0) {
-                                column.setJavaType(GenConstants.TYPE_BIG_DECIMAL); // 浮点形
-                            } else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 10) {
-                                column.setJavaType(GenConstants.TYPE_INTEGER);     // 整数形
-                            } else {
-                                column.setJavaType(GenConstants.TYPE_LONG);        // 长整形
-                            }
-                        }
-
-                        // 编辑字段
-                        if (!GenUtil.isArraysContains(GenConstants.COLUMN_NAME_NOT_EDIT, columnName) && column.getIsPk() == 0) {
-                            column.setIsEdit(GenConstants.REQUIRE);
-                        }
-
-                        //  列表字段
-                        if (!GenUtil.isArraysContains(GenConstants.COLUMN_NAME_NOT_LIST, columnName) && column.getIsPk() == 0) {
-                            column.setIsList(GenConstants.REQUIRE);
-                        }
-
-                        //  查询字段
-                        if (!GenUtil.isArraysContains(GenConstants.COLUMN_NAME_NOT_QUERY, columnName) && column.getIsPk() == 0) {
-                            column.setIsQuery(GenConstants.REQUIRE);
-                        }
-
-                        // 查询字段类型
-                        if (StringUtil.endsWithIgnoreCase(columnName, "name")) {
-                            column.setQueryType(GenConstants.QUERY_LIKE);
-                        }
-
-                        // 根据字段设置
-                        if (StringUtil.endsWithIgnoreCase(columnName, "status")) {
-                            // 状态字段设置单选框
-                            column.setHtmlType(GenConstants.HTML_RADIO);
-                        } else if (StringUtil.endsWithIgnoreCase(columnName, "type") ||
-                                StringUtil.endsWithIgnoreCase(columnName, "sex")) {
-                            // 类型&性别字段设置下拉框
-                            column.setHtmlType(GenConstants.HTML_SELECT);
-                        } else if (StringUtil.endsWithIgnoreCase(columnName, "image")) {
-                            // 图片字段设置图片上传控件
-                            column.setHtmlType(GenConstants.HTML_IMAGE_UPLOAD);
-                        } else if (StringUtil.endsWithIgnoreCase(columnName, "file")) {
-                            // 文件字段设置文件上传控件
-                            column.setHtmlType(GenConstants.HTML_FILE_UPLOAD);
-                        } else if (StringUtil.endsWithIgnoreCase(columnName, "content")) {
-                            // 内容字段的设置富文本控件
-                            column.setHtmlType(GenConstants.HTML_EDITOR);
-                        }
-
+                        GenUtil.initColumn(column, table);
                         genTableColumnMapper.insert(column);
                     }
                 }
@@ -348,10 +261,63 @@ public class GenerateServiceImpl implements IGenerateService {
      * 同步数据表
      *
      * @author fzr
+     * @param id 主键
      */
     @Override
+    @Transactional
     public void syncTable(Integer id) {
+        // 原表数据
+        GenTable genTable = genTableMapper.selectById(id);
+        List<GenTableColumn> genTableColumns = genTableColumnMapper.selectList(
+                new QueryWrapper<GenTableColumn>()
+                        .eq("table_id", id)
+                        .orderByAsc("sort"));
 
+        // 原表转Map
+        Map<String, GenTableColumn> tableColumnMap = genTableColumns
+                .stream().collect(Collectors.toMap(GenTableColumn::getColumnName, Function.identity()));
+
+        // 新表数据
+        List<GenTableColumn> columns = genTableMapper.selectDbTableColumnsByName(genTable.getTableName());
+        if (StringUtil.isNull(columns)) {
+            throw new OperateException("同步结构失败,原表结构不存在！");
+        }
+
+        // 处理更新字段
+        columns.forEach(column -> {
+            GenUtil.initColumn(column, genTable);
+            if (tableColumnMap.containsKey(column.getColumnName())) {
+                GenTableColumn prevColumn = tableColumnMap.get(column.getColumnName());
+                column.setId(prevColumn.getId());
+
+                if (column.getIsList() != null && column.getIsList() == 1) {
+                    column.setDictType(prevColumn.getDictType());
+                    column.setQueryType(prevColumn.getQueryType());
+                }
+
+                if (prevColumn.getIsRequired() == 1
+                        && column.getIsPk() == 0
+                        && (column.getIsInsert() == 1 || column.getIsEdit() == 1)) {
+                    column.setHtmlType(prevColumn.getHtmlType());
+                    column.setIsRequired(prevColumn.getIsRequired());
+                }
+
+                genTableColumnMapper.updateById(column);
+            } else {
+                genTableColumnMapper.insert(column);
+            }
+        });
+
+        // 删除弃用字段
+        List<String> dbTableColumnNames = columns.stream().map(GenTableColumn::getColumnName).collect(Collectors.toList());
+        List<GenTableColumn> delColumns = genTableColumns.stream()
+                .filter(column -> !dbTableColumnNames.contains(column.getColumnName()))
+                .collect(Collectors.toList());
+        if (StringUtil.isNotEmpty(delColumns)) {
+            for (GenTableColumn item : delColumns) {
+                genTableColumnMapper.deleteById(item);
+            }
+        }
     }
 
     /**
@@ -362,7 +328,6 @@ public class GenerateServiceImpl implements IGenerateService {
      */
     @Override
     public Map<String, String> previewCode(Integer id) {
-
         GenTable table = genTableMapper.selectById(id);
 
         // 初始模板
