@@ -1,4 +1,4 @@
-package com.hxkj.admin.entity;
+package com.hxkj.generator.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

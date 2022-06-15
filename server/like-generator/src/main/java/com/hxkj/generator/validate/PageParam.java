@@ -1,4 +1,4 @@
-package com.hxkj.admin.validate;
+package com.hxkj.generator.validate;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,4 +1,4 @@
-package com.hxkj.admin.vo;
+package com.hxkj.generator.vo;
 
 import lombok.Data;
 

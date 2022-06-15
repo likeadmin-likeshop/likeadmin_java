@@ -1,10 +1,10 @@
-package com.hxkj.admin.util;
+package com.hxkj.generator.util;
 
 import com.hxkj.common.constant.GenConstants;
 import com.hxkj.common.utils.StringUtil;
 import com.hxkj.admin.config.GenConfig;
-import com.hxkj.admin.entity.GenTable;
-import com.hxkj.admin.entity.GenTableColumn;
+import com.hxkj.generator.entity.GenTable;
+import com.hxkj.generator.entity.GenTableColumn;
 import org.apache.commons.lang3.RegExUtils;
 
 import java.util.Arrays;

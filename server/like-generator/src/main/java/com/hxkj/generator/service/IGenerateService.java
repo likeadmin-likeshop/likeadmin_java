@@ -1,10 +1,10 @@
-package com.hxkj.admin.service;
+package com.hxkj.generator.service;
 
 import com.hxkj.common.core.PageResult;
-import com.hxkj.admin.validate.GenParam;
-import com.hxkj.admin.validate.PageParam;
-import com.hxkj.admin.vo.DbTableVo;
-import com.hxkj.admin.vo.GenTableVo;
+import com.hxkj.generator.validate.GenParam;
+import com.hxkj.generator.validate.PageParam;
+import com.hxkj.generator.vo.DbTableVo;
+import com.hxkj.generator.vo.GenTableVo;
 
 import java.util.Map;
 

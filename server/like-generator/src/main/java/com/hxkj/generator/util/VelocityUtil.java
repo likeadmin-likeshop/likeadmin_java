@@ -1,8 +1,8 @@
-package com.hxkj.admin.util;
+package com.hxkj.generator.util;
 
 import com.hxkj.common.utils.StringUtil;
-import com.hxkj.admin.entity.GenTable;
-import com.hxkj.admin.entity.GenTableColumn;
+import com.hxkj.generator.entity.GenTable;
+import com.hxkj.generator.entity.GenTableColumn;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;

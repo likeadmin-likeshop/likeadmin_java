@@ -1,4 +1,4 @@
-package com.hxkj.admin.validate;
+package com.hxkj.generator.validate;
 
 import com.hxkj.common.validator.annotation.IDMust;
 import com.hxkj.common.validator.annotation.IntegerContains;

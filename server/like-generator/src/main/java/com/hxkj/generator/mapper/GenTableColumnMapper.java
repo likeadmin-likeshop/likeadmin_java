@@ -1,7 +1,7 @@
-package com.hxkj.admin.mapper;
+package com.hxkj.generator.mapper;
 
 import com.hxkj.common.core.basics.IBaseMapper;
-import com.hxkj.admin.entity.GenTableColumn;
+import com.hxkj.generator.entity.GenTableColumn;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

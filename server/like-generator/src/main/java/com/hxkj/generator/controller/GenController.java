@@ -1,14 +1,14 @@
-package com.hxkj.admin.controller;
+package com.hxkj.generator.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.validator.annotation.IDMust;
-import com.hxkj.admin.service.IGenerateService;
-import com.hxkj.admin.validate.GenParam;
-import com.hxkj.admin.validate.PageParam;
-import com.hxkj.admin.vo.DbTableVo;
-import com.hxkj.admin.vo.GenTableVo;
+import com.hxkj.generator.service.IGenerateService;
+import com.hxkj.generator.validate.GenParam;
+import com.hxkj.generator.validate.PageParam;
+import com.hxkj.generator.vo.DbTableVo;
+import com.hxkj.generator.vo.GenTableVo;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
