@@ -27,65 +27,41 @@ import javax.annotation.Resource;
 import java.util.*;
 
 /**
- * 系统管理员实现类
+ * ${functionName}实现类
  */
 @Service
-public class SystemAdminServiceImpl implements ISystemAdminService {
+public class ${EntityName}ServiceImpl implements I${EntityName}Service {
 
     @Resource
-    SystemAdminMapper systemAdminMapper;
-
-    @Resource
-    SystemMenuMapper systemMenuMapper;
-
-    @Resource
-    ISystemRoleService iSystemRoleService;
-
-    @Resource
-    ISystemRoleMenuService iSystemRoleMenuService;
+    ${EntityName}Mapper ${entityName}Mapper;
 
     /**
-     * 管理员列表
+     * ${functionName}列表
      *
-     * @author fzr
+     * @author ${authorName}
      * @param pageParam 分页参数
      * @return PageResult<SysAdminListVo>
      */
     @Override
-    public PageResult<SystemAdminVo> list(PageParam pageParam, Map<String, String> params) {
+    public PageResult<${EntityName}Vo> list(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
-        MPJQueryWrapper<SystemAdmin> mpjQueryWrapper = new MPJQueryWrapper<>();
-        mpjQueryWrapper.select("t.id,t.dept_id,t.post_id,t.username,t.nickname,t.avatar," +
-                "sd.name as dept,sr.name as role,t.is_multipoint,t.is_disable," +
-                "t.last_login_ip,t.last_login_time,t.create_time,t.update_time")
-                .eq("t.is_delete", 0)
-                .leftJoin("ls_system_role sr ON sr.id=t.role")
-                .leftJoin("ls_system_dept sd ON sd.id=t.dept_id")
-                .orderByDesc(Arrays.asList("t.id", "t.sort"));
+        QueryWrapper<SystemAdmin> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("is_delete", 0);
+        queryWrapper.orderByDesc(Arrays.asList("id", "sort"));
 
-        systemAdminMapper.setSearch(mpjQueryWrapper, params, new String[]{
+        #if($column.isPk)
+        systemAdminMapper.setSearch(queryWrapper, params, new String[]{
                 "like:username:str",
                 "like:nickname:str",
                 "=:role:int"
         });
+        #end
 
-        IPage<SystemAdminVo> iPage = systemAdminMapper.selectJoinPage(
-                new Page<>(page, limit),
-                SystemAdminVo.class,
-                mpjQueryWrapper);
+        IPage<SystemAdminVo> iPage = systemAdminMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
         for (SystemAdminVo vo : iPage.getRecords()) {
-            if (vo.getId() == 1) {
-                vo.setRole("系统管理员");
-            }
-
-            if (vo.getDept() == null) {
-                vo.setDept("");
-            }
-
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar()));
             vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
             vo.setUpdateTime(TimeUtil.timestampToDate(vo.getUpdateTime()));
             vo.setLastLoginTime(TimeUtil.timestampToDate(vo.getLastLoginTime()));
@@ -95,20 +71,20 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
     }
 
     /**
-     * 管理员详细
+     * ${functionName}详细
      *
-     * @author fzr
+     * @author ${authorName}
      * @param id 主键
      * @return SysAdmin
      */
     @Override
-    public SystemAdminVo detail(Integer id) {
+    public ${EntityName}Vo detail(Integer id) {
         SystemAdmin sysAdmin = systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
                 .select(SystemAdmin.class, info->
-                        !info.getColumn().equals("salt") &&
-                                !info.getColumn().equals("password") &&
-                                !info.getColumn().equals("is_delete") &&
-                                !info.getColumn().equals("delete_time"))
+                    !info.getColumn().equals("salt") &&
+                    !info.getColumn().equals("password") &&
+                    !info.getColumn().equals("is_delete") &&
+                    !info.getColumn().equals("delete_time"))
                 .eq("id", id)
                 .eq("is_delete", 0)
                 .last("limit 1"));
@@ -129,82 +105,28 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
     }
 
     /**
-     * 管理员新增
+     * ${functionName}新增
      *
-     * @author fzr
-     * @param systemAdminParam 参数
+     * @author ${authorName}
+     * @param ${entityName}Param 参数
      */
     @Override
-    public void add(SystemAdminParam systemAdminParam) {
-        String[] field = {"id", "username", "nickname"};
-        Assert.isNull(systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
-                .select(field)
-                .eq("is_delete", 0)
-                .eq("username", systemAdminParam.getUsername())
-                .last("limit 1")), "账号已存在换一个吧！");
-
-        Assert.isNull(systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
-                .select(field)
-                .eq("is_delete", 0)
-                .eq("nickname", systemAdminParam.getNickname())
-                .last("limit 1")), "昵称已存在换一个吧！");
-
-        SystemRoleVo roleVo = iSystemRoleService.detail(systemAdminParam.getRole());
-        Assert.notNull(roleVo, "角色不存在!");
-        Assert.isTrue(roleVo.getIsDisable() <= 0, "当前角色已被禁用!");
-
-        String salt   = ToolsUtil.randomString(5);
-        String pwd    = ToolsUtil.makeMd5(systemAdminParam.getPassword().trim() + salt);
-        String avatar = UrlUtil.toRelativeUrl(systemAdminParam.getAvatar());
-
+    public void add(${EntityName}Param ${entityName}Param) {
         SystemAdmin model = new SystemAdmin();
-        model.setDeptId(systemAdminParam.getDeptId());
-        model.setPostId(systemAdminParam.getPostId());
-        model.setUsername(systemAdminParam.getUsername());
-        model.setNickname(systemAdminParam.getNickname());
-        model.setRole(systemAdminParam.getRole());
-        model.setAvatar(avatar);
-        model.setPassword(pwd);
-        model.setSalt(salt);
-        model.setSort(systemAdminParam.getSort());
-        model.setIsMultipoint(systemAdminParam.getIsMultipoint());
-        model.setIsDisable(systemAdminParam.getIsDisable());
-        model.setCreateTime(System.currentTimeMillis() / 1000);
-        model.setUpdateTime(System.currentTimeMillis() / 1000);
-        systemAdminMapper.insert(model);
+        #foreach ($column in $columns)
+        model.set${column.javaField}(${entityName}Param.get${column.javaField.toUpperCase()}());
+        #end
+        ${entityName}Mapper.insert(model);
     }
 
     /**
-     * 管理员更新
+     * ${functionName}更新
      *
-     * @author fzr
-     * @param systemAdminParam 参数
+     * @author ${authorName}
+     * @param ${entityName}Param 参数
      */
     @Override
-    public void edit(SystemAdminParam systemAdminParam) {
-        String[] field = {"id", "username", "nickname"};
-        Assert.notNull(systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
-                .select(field)
-                .eq("id", systemAdminParam.getId())
-                .eq("is_delete", 0)
-                .last("limit 1")), "账号不存在了!");
-
-        Assert.isNull(systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
-                .select(field)
-                .eq("is_delete", 0)
-                .eq("username", systemAdminParam.getUsername())
-                .ne("id", systemAdminParam.getId())
-                .last("limit 1")), "账号已存在换一个吧！");
-
-        Assert.isNull(systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
-                .select(field)
-                .eq("is_delete", 0)
-                .eq("nickname", systemAdminParam.getNickname())
-                .ne("id", systemAdminParam.getId())
-                .last("limit 1")), "昵称已存在换一个吧！");
-
-        Assert.notNull(iSystemRoleService.detail(systemAdminParam.getRole()), "角色不存在!");
-
+    public void edit(${EntityName}Param ${entityName}Param) {
         SystemAdmin model = new SystemAdmin();
         model.setId(systemAdminParam.getId());
         model.setDeptId(systemAdminParam.getDeptId());
@@ -218,43 +140,23 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
         model.setIsDisable(systemAdminParam.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
 
-        if (systemAdminParam.getPassword() != null) {
-            String salt   = ToolsUtil.randomString(5);
-            String pwd    = ToolsUtil.makeMd5( systemAdminParam.getPassword().trim() + salt);
-            model.setPassword(pwd);
-            model.setSalt(salt);
-        }
-
         systemAdminMapper.updateById(model);
         this.cacheAdminUserByUid(systemAdminParam.getId());
     }
 
     /**
-     * 管理员删除
+     * ${functionName}删除
      *
-     * @author fzr
+     * @author ${authorName}
      * @param id 主键
      */
     @Override
     public void del(Integer id) {
-        String[] field = {"id", "username", "nickname"};
-        Assert.notNull(systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
-                .select(field)
-                .eq("id", id)
-                .eq("is_delete", 0)
-                .last("limit 1")), "账号已不存在！");
-
-        Assert.isFalse(id == 1, "系统管理员不允许删除");
-
-        int adminId = Integer.parseInt(LikeAdminThreadLocal.getAdminId().toString());
-        Assert.isFalse(id == adminId, "不能删除自己");
-
         SystemAdmin model = new SystemAdmin();
         model.setId(id);
         model.setIsDelete(1);
         model.setDeleteTime(System.currentTimeMillis() / 1000);
         systemAdminMapper.updateById(model);
-        this.cacheAdminUserByUid(id);
     }
 
 }

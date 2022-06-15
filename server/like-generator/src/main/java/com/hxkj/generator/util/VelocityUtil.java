@@ -40,18 +40,14 @@ public class VelocityUtil {
         velocityContext.put("genTpl", table.getGenTpl());
         velocityContext.put("tableName", table.getTableName());
         velocityContext.put("authorName", table.getAuthorName());
-        velocityContext.put("entityName", table.getEntityName());
+        velocityContext.put("EntityName", table.getEntityName());
+        velocityContext.put("entityName", StringUtil.uncapitalize(table.getEntityName()));
         velocityContext.put("moduleName", table.getModuleName());
         velocityContext.put("packageName", table.getPackageName());
         velocityContext.put("businessName", StringUtil.capitalize(table.getBusinessName()));
         velocityContext.put("functionName", StringUtil.isNotEmpty(table.getFunctionName()) ? table.getFunctionName() : "【请填写功能名称】");
         velocityContext.put("table", table);
         velocityContext.put("columns", columns);
-        System.out.println(table.getTableName());
-        System.out.println(table.getAuthorName());
-        System.out.println(table.getEntityName());
-        System.out.println(table.getModuleName());
-        System.out.println(table.getPackageName());
         return velocityContext;
     }
 
@@ -64,10 +60,10 @@ public class VelocityUtil {
     public static List<String> getTemplateList(String genTpl) {
         List<String> templates = new LinkedList<>();
 //        templates.add("java/controller.java.vm");
-        templates.add("java/entity.java.vm");
+//        templates.add("java/entity.java.vm");
 //        templates.add("java/mapper.java.vm");
 //        templates.add("java/service.java.vm");
-//        templates.add("java/serviceImpl.java.vm");
+        templates.add("java/serviceImpl.java.vm");
 //        templates.add("java/validate.java.vm");
         return templates;
     }
