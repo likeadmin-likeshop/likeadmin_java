@@ -1,4 +1,4 @@
-package ${packageName}.controller;
+package com.hxkj.admin.controller.system;
 
 import com.hxkj.admin.LikeAdminThreadLocal;
 import com.hxkj.admin.config.aop.Log;
@@ -17,32 +17,45 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 /**
- * ${functionName}管理
+ * 系统管理员管理
  */
 @RestController
-@RequestMapping("api/${moduleName}/${businessName}")
-public class ${ClassName}Controller {
+@RequestMapping("api/system/admin")
+public class SystemAdminController {
 
     @Resource
     ISystemAdminService iSystemAdminService;
 
     /**
-     * ${functionName}列表
+     * 管理员列表
      *
-     * @author ${authorName}
+     * @author fzr
      * @return Object
      */
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
-                       @RequestParam Map<String, String> params) {
+                        @RequestParam Map<String, String> params) {
         PageResult<SystemAdminVo> list = iSystemAdminService.list(pageParam, params);
         return AjaxResult.success(list);
     }
 
     /**
-     * ${functionName}详情
+     * 管理员信息
      *
-     * @author ${authorName}
+     * @author fzr
+     * @return Object
+     */
+    @GetMapping("/self")
+    public Object self() {
+        Integer adminId = LikeAdminThreadLocal.getAdminId();
+        SystemSelfVo vo = iSystemAdminService.self(adminId);
+        return AjaxResult.success(vo);
+    }
+
+    /**
+     * 管理员详情
+     *
+     * @author fzr
      * @param id 主键ID
      * @return Object
      */
@@ -53,13 +66,13 @@ public class ${ClassName}Controller {
     }
 
     /**
-     * ${functionName}新增
+     * 管理员新增
      *
-     * @author ${authorName}
+     * @author fzr
      * @param systemAdminParam 参数
      * @return Object
      */
-    @Log(title = "${functionName}新增")
+    @Log(title = "管理员新增")
     @PostMapping("/add")
     public Object add(@Validated(value = SystemAdminParam.create.class) @RequestBody SystemAdminParam systemAdminParam) {
         iSystemAdminService.add(systemAdminParam);
@@ -67,13 +80,13 @@ public class ${ClassName}Controller {
     }
 
     /**
-     * ${functionName}编辑
+     * 管理员编辑
      *
-     * @author ${authorName}
+     * @author fzr
      * @param systemAdminParam 参数
      * @return Object
      */
-    @Log(title = "${functionName}编辑")
+    @Log(title = "管理员编辑")
     @PostMapping("/edit")
     public Object edit(@Validated(value = SystemAdminParam.update.class) @RequestBody SystemAdminParam systemAdminParam) {
         iSystemAdminService.edit(systemAdminParam);
@@ -81,15 +94,42 @@ public class ${ClassName}Controller {
     }
 
     /**
-     * ${functionName}删除
+     * 当前管理员更新
      *
-     * @author ${authorName}
+     * @author fzr
      * @return Object
      */
-    @Log(title = "${functionName}删除")
+    @Log(title = "管理员更新")
+    @PostMapping("/upInfo")
+    public Object upInfo(@Validated(value = SystemAdminParam.upInfo.class) @RequestBody SystemAdminParam systemAdminParam) {
+        Integer adminId = LikeAdminThreadLocal.getAdminId();
+        iSystemAdminService.upInfo(systemAdminParam, adminId);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 管理员删除
+     *
+     * @author fzr
+     * @return Object
+     */
+    @Log(title = "管理员删除")
     @PostMapping("/del")
     public Object del(@Validated(value = SystemAdminParam.delete.class) @RequestBody SystemAdminParam systemAdminParam) {
         iSystemAdminService.del(systemAdminParam.getId());
+        return AjaxResult.success();
+    }
+
+    /**
+     * 管理员状态切换
+     *
+     * @author fzr
+     * @return Object
+     */
+    @Log(title = "管理员状态切换")
+    @PostMapping("/disable")
+    public Object disable(@Validated(value = SystemAdminParam.delete.class) @RequestBody SystemAdminParam systemAdminParam) {
+        iSystemAdminService.disable(systemAdminParam.getId());
         return AjaxResult.success();
     }
 

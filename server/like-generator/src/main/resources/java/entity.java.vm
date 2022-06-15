@@ -1,0 +1,18 @@
+package com.hxkj.common.entity;
+
+/**
+ * ${functionName}实体
+ */
+@Data
+public class ${entityName} implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+ #foreach ($column in $columns)
+    #if($column.isPk)
+    @TableId(value="${column.columnName}", type= IdType.AUTO)
+    #end
+    private ${column.javaType} ${column.javaField};
+ #end
+
+}
