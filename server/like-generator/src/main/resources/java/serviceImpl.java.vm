@@ -51,16 +51,31 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         queryWrapper.eq("is_delete", 0);
         queryWrapper.orderByDesc(Arrays.asList("id", "sort"));
 
-        #if($column.isPk)
-        systemAdminMapper.setSearch(queryWrapper, params, new String[]{
-                "like:username:str",
-                "like:nickname:str",
-                "=:role:int"
+        #if($isSearch)
+        ${entityName}Mapper.setSearch(queryWrapper, params, new String[]{
+        #foreach ($column in $columns)
+            #if($column.isQuery)
+                #if($column.queryType=="EQ")
+                    #if($column.javaType=="String")
+                        #if($column.javaField.equals($column.columnName))
+                        "=:${column.javaField}:str",
+                        #else
+                        "=:${column.javaField}@${column.columnName}:str",
+                        #end
+                    #elseif($column.javaType=="Integer")
+                        #if($column.javaField.equals($column.columnName))
+                        "=:${column.javaField}:int",
+                        #else
+                        "=:${column.javaField}@${column.columnName}:int",
+                        #end
+                    #end
+                #end
+            #end
+        #end
         });
         #end
 
         IPage<SystemAdminVo> iPage = systemAdminMapper.selectPage(new Page<>(page, limit), queryWrapper);
-
         for (SystemAdminVo vo : iPage.getRecords()) {
             vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
             vo.setUpdateTime(TimeUtil.timestampToDate(vo.getUpdateTime()));
@@ -68,95 +83,6 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         }
 
         return PageResult.iPageHandle(iPage);
-    }
-
-    /**
-     * ${functionName}详细
-     *
-     * @author ${authorName}
-     * @param id 主键
-     * @return SysAdmin
-     */
-    @Override
-    public ${EntityName}Vo detail(Integer id) {
-        SystemAdmin sysAdmin = systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
-                .select(SystemAdmin.class, info->
-                    !info.getColumn().equals("salt") &&
-                    !info.getColumn().equals("password") &&
-                    !info.getColumn().equals("is_delete") &&
-                    !info.getColumn().equals("delete_time"))
-                .eq("id", id)
-                .eq("is_delete", 0)
-                .last("limit 1"));
-
-        Assert.notNull(sysAdmin, "账号已不存在！");
-
-        SystemAdminVo vo = new SystemAdminVo();
-        BeanUtils.copyProperties(sysAdmin, vo);
-
-        vo.setDept(String.valueOf(vo.getDeptId()));
-        vo.setRole(String.valueOf(sysAdmin.getRole()));
-        vo.setAvatar(UrlUtil.toAbsoluteUrl(sysAdmin.getAvatar()));
-        vo.setCreateTime(TimeUtil.timestampToDate(sysAdmin.getCreateTime()));
-        vo.setUpdateTime(TimeUtil.timestampToDate(sysAdmin.getUpdateTime()));
-        vo.setLastLoginTime(TimeUtil.timestampToDate(sysAdmin.getLastLoginTime()));
-
-        return vo;
-    }
-
-    /**
-     * ${functionName}新增
-     *
-     * @author ${authorName}
-     * @param ${entityName}Param 参数
-     */
-    @Override
-    public void add(${EntityName}Param ${entityName}Param) {
-        SystemAdmin model = new SystemAdmin();
-        #foreach ($column in $columns)
-        model.set${column.javaField}(${entityName}Param.get${column.javaField.toUpperCase()}());
-        #end
-        ${entityName}Mapper.insert(model);
-    }
-
-    /**
-     * ${functionName}更新
-     *
-     * @author ${authorName}
-     * @param ${entityName}Param 参数
-     */
-    @Override
-    public void edit(${EntityName}Param ${entityName}Param) {
-        SystemAdmin model = new SystemAdmin();
-        model.setId(systemAdminParam.getId());
-        model.setDeptId(systemAdminParam.getDeptId());
-        model.setPostId(systemAdminParam.getPostId());
-        model.setNickname(systemAdminParam.getNickname());
-        model.setUsername(systemAdminParam.getUsername());
-        model.setAvatar( UrlUtil.toRelativeUrl(systemAdminParam.getAvatar()));
-        model.setRole(systemAdminParam.getId() == 1 ? 0 : systemAdminParam.getRole());
-        model.setSort(systemAdminParam.getSort());
-        model.setIsMultipoint(systemAdminParam.getIsMultipoint());
-        model.setIsDisable(systemAdminParam.getIsDisable());
-        model.setUpdateTime(System.currentTimeMillis() / 1000);
-
-        systemAdminMapper.updateById(model);
-        this.cacheAdminUserByUid(systemAdminParam.getId());
-    }
-
-    /**
-     * ${functionName}删除
-     *
-     * @author ${authorName}
-     * @param id 主键
-     */
-    @Override
-    public void del(Integer id) {
-        SystemAdmin model = new SystemAdmin();
-        model.setId(id);
-        model.setIsDelete(1);
-        model.setDeleteTime(System.currentTimeMillis() / 1000);
-        systemAdminMapper.updateById(model);
     }
 
 }

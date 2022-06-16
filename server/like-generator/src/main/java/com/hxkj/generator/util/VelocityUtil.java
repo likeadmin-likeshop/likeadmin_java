@@ -10,7 +10,10 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class VelocityUtil {
 
@@ -36,6 +39,17 @@ public class VelocityUtil {
      * @return VelocityContext
      */
     public static VelocityContext prepareContext(GenTable table, List<GenTableColumn> columns) {
+        // 处理变量字段
+        boolean isSearch = false;
+        List<String> fields = new LinkedList<>();
+        for (GenTableColumn column : columns) {
+            fields.add(column.getColumnName());
+            if (column.getIsQuery() == 1) {
+                isSearch = true;
+            }
+        }
+
+        // 设置模板变量
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("genTpl", table.getGenTpl());
         velocityContext.put("tableName", table.getTableName());
@@ -48,6 +62,9 @@ public class VelocityUtil {
         velocityContext.put("functionName", StringUtil.isNotEmpty(table.getFunctionName()) ? table.getFunctionName() : "【请填写功能名称】");
         velocityContext.put("table", table);
         velocityContext.put("columns", columns);
+        velocityContext.put("fields", fields);
+        velocityContext.put("isSearch", isSearch);
+
         return velocityContext;
     }
 
@@ -59,12 +76,12 @@ public class VelocityUtil {
      */
     public static List<String> getTemplateList(String genTpl) {
         List<String> templates = new LinkedList<>();
-        templates.add("java/controller.java.vm");
-        templates.add("java/entity.java.vm");
-        templates.add("java/mapper.java.vm");
-        templates.add("java/service.java.vm");
+//        templates.add("java/controller.java.vm");
+//        templates.add("java/entity.java.vm");
+//        templates.add("java/mapper.java.vm");
+//        templates.add("java/service.java.vm");
         templates.add("java/serviceImpl.java.vm");
-        templates.add("java/validate.java.vm");
+//        templates.add("java/validate.java.vm");
         return templates;
     }
 

@@ -1,5 +1,8 @@
 package com.hxkj.common.constant;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class GenConstants {
 
     /** 单表（增删改查） */
@@ -89,7 +92,7 @@ public class GenConstants {
     public static final String QUERY_LIKE = "LIKE";
 
     /** 相等查询 */
-    public static final String QUERY_EQ = "EQ";
+    public static final String QUERY_EQ = "=";
 
     /** 需要 */
     public static final Integer REQUIRE = 1;

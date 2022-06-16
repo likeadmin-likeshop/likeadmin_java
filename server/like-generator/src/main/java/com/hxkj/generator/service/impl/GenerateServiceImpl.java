@@ -127,6 +127,7 @@ public class GenerateServiceImpl implements IGenerateService {
     public Map<String, Object> detail(Integer id) {
         Map<String, Object> maps = new LinkedHashMap<>();
         GenTable genTable = genTableMapper.selectById(id);
+        Assert.notNull(genTable, "查询的数据不存在");
 
         // 基本信息
         Map<String, Object> base = new LinkedHashMap<>();
@@ -329,6 +330,7 @@ public class GenerateServiceImpl implements IGenerateService {
      * 预览代码
      *
      * @author fzr
+     * @param id 主键
      * @return Map<String, String>
      */
     @Override
@@ -357,6 +359,13 @@ public class GenerateServiceImpl implements IGenerateService {
         return map;
     }
 
+    /**
+     * 下载代码
+     *
+     * @author fzr
+     * @param tableNames 表名集合
+     * @return byte[]
+     */
     @Override
     public byte[] downloadCode(String[] tableNames) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -374,7 +383,7 @@ public class GenerateServiceImpl implements IGenerateService {
      * @param tableName 表名
      * @param zip 压缩包
      */
-    public void genZipCode(String tableName, ZipOutputStream zip) {
+    private void genZipCode(String tableName, ZipOutputStream zip) {
         // 查表信息
         GenTable table = genTableMapper.selectOne(new QueryWrapper<GenTable>()
                 .eq("table_name", tableName)

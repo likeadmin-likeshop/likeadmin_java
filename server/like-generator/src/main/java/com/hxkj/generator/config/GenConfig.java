@@ -1,4 +1,4 @@
-package com.hxkj.admin.config;
+package com.hxkj.generator.config;
 
 public class GenConfig {
 

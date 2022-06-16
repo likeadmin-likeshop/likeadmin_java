@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
-import java.util.zip.ZipOutputStream;
 
 @RestController
 @RequestMapping("/api/gen")
@@ -46,11 +44,13 @@ public class GenController {
      * 生成列表
      *
      * @author fzr
+     * @param pageParam 分页参数
+     * @param params 搜索参数
      * @return Object
      */
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
-                          @RequestParam Map<String, String> params) {
+                       @RequestParam Map<String, String> params) {
         PageResult<GenTableVo> list = iGenerateService.list(pageParam, params);
         return AjaxResult.success(list);
     }
@@ -59,6 +59,7 @@ public class GenController {
      * 生成详情
      *
      * @author fzr
+     * @param id 主键
      * @return Object
      */
     @GetMapping("/detail")
@@ -75,7 +76,7 @@ public class GenController {
      */
     @PostMapping("/importTable")
     public Object importTable(String tables) {
-        Assert.notNull(tables, "tables参数缺失");
+        Assert.notNull(tables, "请选择要导出的表");
         String[] tableNames = tables.split(",");
         iGenerateService.importTable(tableNames);
         return AjaxResult.success();
@@ -85,6 +86,7 @@ public class GenController {
      * 编辑表结构
      *
      * @author fzr
+     * @param genParam 参数
      * @return Object
      */
     @PostMapping("/editTable")
@@ -97,6 +99,7 @@ public class GenController {
      * 删除表结构
      *
      * @author fzr
+     * @param id 主键
      * @return Object
      */
     @PostMapping("/deleteTable")
@@ -109,6 +112,7 @@ public class GenController {
      * 同步表结构
      *
      * @author fzr
+     * @param id 主键
      * @return Object
      */
     @PostMapping("/syncTable")
@@ -121,6 +125,7 @@ public class GenController {
      * 预览代码
      *
      * @author fzr
+     * @param id 主键
      * @return Object
      */
     @GetMapping("/previewCode")
@@ -132,23 +137,23 @@ public class GenController {
     /**
      * 生成代码
      *
-     * @author fzr
-     * @return Object
+     * @param response 响应对象
+     * @param tables 表名
+     * @throws IOException 异常
      */
     @GetMapping("/genCode")
-    public Object genCode(HttpServletResponse response, String tables) throws IOException {
+    public void genCode(HttpServletResponse response, String tables) throws IOException {
+        Assert.notNull(tables, "请选择要生成的表");
         String[] tableNames = tables.split(",");
-
         byte[] data = iGenerateService.downloadCode(tableNames);
 
         response.reset();
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Expose-Headers", "Content-Disposition");
-        response.setHeader("Content-Disposition", "attachment; filename=\"ruoyi.zip\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"like.zip\"");
         response.addHeader("Content-Length", "" + data.length);
         response.setContentType("application/octet-stream; charset=UTF-8");
         IOUtils.write(data, response.getOutputStream());
-        return null;
     }
 
 }
