@@ -22,24 +22,33 @@ import com.hxkj.generator.validate.PageParam;
 import com.hxkj.generator.vo.DbTableVo;
 import com.hxkj.generator.vo.GenColumnVo;
 import com.hxkj.generator.vo.GenTableVo;
+import org.apache.commons.io.IOUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * 代码生成器服务实现类
  */
 @Service
 public class GenerateServiceImpl implements IGenerateService {
+
+    private static final Logger log = LoggerFactory.getLogger(GenerateServiceImpl.class);
 
     @Resource
     GenTableMapper genTableMapper;
@@ -348,15 +357,54 @@ public class GenerateServiceImpl implements IGenerateService {
         return map;
     }
 
+    @Override
+    public byte[] downloadCode(String[] tableNames) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ZipOutputStream zip = new ZipOutputStream(outputStream);
+        for (String tableName : tableNames) {
+            genZipCode(tableName, zip);
+        }
+        IOUtils.closeQuietly(zip);
+        return outputStream.toByteArray();
+    }
+
     /**
      * 生成代码
      *
-     * @author fzr
-     * @return Object
+     * @param tableName 表名
+     * @param zip 压缩包
      */
-    @Override
-    public Object genCode(Integer id) {
-        return null;
+    public void genZipCode(String tableName, ZipOutputStream zip) {
+        // 查表信息
+        GenTable table = genTableMapper.selectOne(new QueryWrapper<GenTable>()
+                .eq("table_name", tableName)
+                .last("limit 1"));
+
+        // 查列信息
+        List<GenTableColumn> columns = genTableColumnMapper.selectList(
+                new QueryWrapper<GenTableColumn>()
+                        .orderByAsc("sort")
+                        .eq("table_id", table.getId()));
+
+        // 初始模板
+        VelocityUtil.initVelocity();
+        VelocityContext context = VelocityUtil.prepareContext(table, columns);
+
+        // 渲染模板
+        List<String> templates = VelocityUtil.getTemplateList(table.getGenTpl());
+        for (String template : templates) {
+            StringWriter sw = new StringWriter();
+            Template tpl = Velocity.getTemplate(template, "UTF-8");
+            tpl.merge(context, sw);
+            try {
+                zip.putNextEntry(new ZipEntry(VelocityUtil.getFileName(template, table)));
+                IOUtils.write(sw.toString(), zip, "UTF-8");
+                zip.flush();
+                zip.closeEntry();
+            } catch (IOException e) {
+                log.error("生成渲染模板失败: " + e.getMessage());
+            }
+        }
     }
 
 }

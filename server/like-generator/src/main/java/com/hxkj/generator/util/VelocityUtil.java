@@ -59,13 +59,54 @@ public class VelocityUtil {
      */
     public static List<String> getTemplateList(String genTpl) {
         List<String> templates = new LinkedList<>();
-//        templates.add("java/controller.java.vm");
-//        templates.add("java/entity.java.vm");
-//        templates.add("java/mapper.java.vm");
-//        templates.add("java/service.java.vm");
+        templates.add("java/controller.java.vm");
+        templates.add("java/entity.java.vm");
+        templates.add("java/mapper.java.vm");
+        templates.add("java/service.java.vm");
         templates.add("java/serviceImpl.java.vm");
-//        templates.add("java/validate.java.vm");
+        templates.add("java/validate.java.vm");
         return templates;
+    }
+
+    /**
+     * 获取文件名
+     */
+    public static String getFileName(String template, GenTable genTable)
+    {
+        // 文件名称
+        String fileName = "";
+        String entityName = genTable.getEntityName();
+        String moduleName = genTable.getModuleName();
+        String packageName  = genTable.getPackageName();
+        String businessName = genTable.getBusinessName();
+
+        String javaPath = StringUtil.replace(packageName, ".", "/");
+
+        if (template.contains("mapper.java.vm")) {
+            fileName = StringUtil.format("{}/mapper/{}Mapper.java", "com/hxkj/common", entityName);
+        }
+
+        else if (template.contains("entity.java.vm")) {
+            fileName = StringUtil.format("{}/entity/{}Entity.java", "com/hxkj/common", entityName);
+        }
+
+        else if (template.contains("service.java.vm")) {
+            fileName = StringUtil.format("{}/service/I{}Service.java", javaPath, entityName);
+        }
+
+        else if (template.contains("serviceImpl.java.vm")) {
+            fileName = StringUtil.format("{}/service/impl/{}ServiceImpl.java", javaPath, entityName);
+        }
+
+        else if (template.contains("controller.java.vm")) {
+            fileName = StringUtil.format("{}/controller/{}Controller.java", javaPath, entityName);
+        }
+
+        else if (template.contains("validate.java.vm")) {
+            fileName = StringUtil.format("{}/validate/{}Param.java", javaPath, entityName);
+        }
+
+        return fileName;
     }
 
 }

@@ -474,4 +474,65 @@ public class StringUtil extends org.apache.commons.lang3.StringUtils {
         return sb.toString();
     }
 
+    /**
+     * 格式化文本, {} 表示占位符<br>
+     * 此方法只是简单将占位符 {} 按照顺序替换为参数<br>
+     * 如果想输出 {} 使用 \\转义 { 即可，如果想输出 {} 之前的 \ 使用双转义符 \\\\ 即可<br>
+     * 例：<br>
+     * 通常使用：format("this is {} for {}", "a", "b") -> this is a for b<br>
+     * 转义{}： format("this is \\{} for {}", "a", "b") -> this is \{} for a<br>
+     * 转义\： format("this is \\\\{} for {}", "a", "b") -> this is \a for b<br>
+     *
+     * @param strPattern 文本模板，被替换的部分用 {} 表示
+     * @param argArray 参数值
+     * @return 格式化后的文本
+     */
+    public static String format(String strPattern, Object... argArray) {
+        String EMPTY_JSON  = "{}";
+        char C_BACKSLASH   = '\\';
+        char C_DELIM_START = '{';
+
+        if (isEmpty(argArray) || isEmpty(strPattern)) {
+            return strPattern;
+        }
+
+        final int strPatternLength = strPattern.length();
+        StringBuilder sbuf = new StringBuilder(strPatternLength + 50);
+        int handledPosition = 0;
+        int delimIndex;
+        for (int argIndex = 0; argIndex < argArray.length; argIndex++) {
+            delimIndex = strPattern.indexOf(EMPTY_JSON, handledPosition);
+            if (delimIndex == -1) {
+                if (handledPosition == 0) {
+                    return strPattern;
+                } else {
+                    sbuf.append(strPattern, handledPosition, strPatternLength);
+                    return sbuf.toString();
+                }
+            } else {
+                if (delimIndex > 0 && strPattern.charAt(delimIndex - 1) == C_BACKSLASH) {
+                    if (delimIndex > 1 && strPattern.charAt(delimIndex - 2) == C_BACKSLASH) {
+                        sbuf.append(strPattern, handledPosition, delimIndex - 1);
+                        sbuf.append(argArray[argIndex]);
+                        handledPosition = delimIndex + 2;
+                    } else {
+                        // 占位符被转义
+                        argIndex--;
+                        sbuf.append(strPattern, handledPosition, delimIndex - 1);
+                        sbuf.append(C_DELIM_START);
+                        handledPosition = delimIndex + 1;
+                    }
+                } else {
+                    // 正常占位符
+                    sbuf.append(strPattern, handledPosition, delimIndex);
+                    sbuf.append(argArray[argIndex]);
+                    handledPosition = delimIndex + 2;
+                }
+            }
+        }
+
+        sbuf.append(strPattern, handledPosition, strPattern.length());
+        return sbuf.toString();
+    }
+
 }

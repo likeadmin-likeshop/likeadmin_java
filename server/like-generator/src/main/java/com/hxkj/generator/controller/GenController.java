@@ -9,11 +9,16 @@ import com.hxkj.generator.validate.GenParam;
 import com.hxkj.generator.validate.PageParam;
 import com.hxkj.generator.vo.DbTableVo;
 import com.hxkj.generator.vo.GenTableVo;
+import org.apache.commons.io.IOUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Map;
+import java.util.zip.ZipOutputStream;
 
 @RestController
 @RequestMapping("/api/gen")
@@ -130,8 +135,19 @@ public class GenController {
      * @author fzr
      * @return Object
      */
-    @GetMapping("genCode")
-    public Object genCode(@Validated @IDMust() @RequestParam("id") Integer id) {
+    @GetMapping("/genCode")
+    public Object genCode(HttpServletResponse response, String tables) throws IOException {
+        String[] tableNames = tables.split(",");
+
+        byte[] data = iGenerateService.downloadCode(tableNames);
+
+        response.reset();
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Expose-Headers", "Content-Disposition");
+        response.setHeader("Content-Disposition", "attachment; filename=\"ruoyi.zip\"");
+        response.addHeader("Content-Length", "" + data.length);
+        response.setContentType("application/octet-stream; charset=UTF-8");
+        IOUtils.write(data, response.getOutputStream());
         return null;
     }
 

@@ -27,6 +27,8 @@ public interface IGenerateService {
      * 生成列表
      *
      * @author fzr
+     * @param pageParam 分页参数
+     * @param params 搜索参数
      * @return Object
      */
     PageResult<GenTableVo> list(PageParam pageParam, Map<String, String> params);
@@ -35,6 +37,7 @@ public interface IGenerateService {
      * 生成详情
      *
      * @author fzr
+     * @param id 主键
      * @return Object
      */
     Map<String, Object> detail(Integer id);
@@ -50,6 +53,7 @@ public interface IGenerateService {
     /**
      * 编辑表结构
      *
+     * @param  genParam 参数
      * @author fzr
      */
     void editTable(GenParam genParam);
@@ -57,6 +61,7 @@ public interface IGenerateService {
     /**
      * 删除表结构
      *
+     * @param id 主键
      * @author fzr
      */
     void deleteTable(Integer id);
@@ -64,6 +69,7 @@ public interface IGenerateService {
     /**
      * 同步数据表
      *
+     * @param id 主键
      * @author fzr
      */
     void syncTable(Integer id);
@@ -77,11 +83,12 @@ public interface IGenerateService {
     Map<String, String> previewCode(Integer id);
 
     /**
-     * 生成代码
+     * 下载代码
      *
      * @author fzr
+     * @param tableNames 表名集合
      * @return Object
      */
-    Object genCode(Integer id);
+    byte[] downloadCode(String[] tableNames);
 
 }
