@@ -10,6 +10,7 @@ import com.hxkj.common.core.PageResult;
 import com.hxkj.common.exception.OperateException;
 import com.hxkj.common.utils.StringUtil;
 import com.hxkj.common.utils.TimeUtil;
+import com.hxkj.generator.constant.GenConstants;
 import com.hxkj.generator.entity.GenTable;
 import com.hxkj.generator.entity.GenTableColumn;
 import com.hxkj.generator.mapper.GenTableColumnMapper;
@@ -22,6 +23,7 @@ import com.hxkj.generator.validate.PageParam;
 import com.hxkj.generator.vo.DbTableVo;
 import com.hxkj.generator.vo.GenColumnVo;
 import com.hxkj.generator.vo.GenTableVo;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -34,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
@@ -211,6 +214,11 @@ public class GenerateServiceImpl implements IGenerateService {
     @Override
     @Transactional
     public void editTable(GenParam genParam) {
+        if (genParam.getGenTpl().equals(GenConstants.TPL_TREE)) {
+            Assert.isFalse(genParam.getTreePrimary().equals(""), "树主ID不能为空");
+            Assert.isFalse(genParam.getTreeParent().equals(""), "树父ID不能为空");
+        }
+
         GenTable model = genTableMapper.selectById(genParam.getId());
         Assert.notNull(model, "数据已丢失");
 
@@ -222,6 +230,8 @@ public class GenerateServiceImpl implements IGenerateService {
         model.setPackageName(genParam.getPackageName());
         model.setBusinessName(genParam.getBusinessName());
         model.setFunctionName(genParam.getFunctionName());
+        model.setTreePrimary(genParam.getTreePrimary());
+        model.setTreeParent(genParam.getTreeParent());
         model.setRemarks(genParam.getRemarks());
         model.setGenTpl(genParam.getGenTpl());
         model.setGenType(genParam.getGenType());
@@ -347,10 +357,10 @@ public class GenerateServiceImpl implements IGenerateService {
 
         // 渲染模板
         Map<String, String> map = new LinkedHashMap<>();
-        List<String> templates = VelocityUtil.getTemplateList("curd");
+        List<String> templates = VelocityUtil.getTemplateList(table.getGenTpl());
         for (String template : templates) {
             StringWriter sw = new StringWriter();
-            Template tpl = Velocity.getTemplate(template, "UTF-8");
+            Template tpl = Velocity.getTemplate(template, GenConstants.UTF8);
             tpl.merge(context, sw);
             map.put(template, sw.toString());
             System.out.println(sw);
@@ -378,8 +388,49 @@ public class GenerateServiceImpl implements IGenerateService {
     }
 
     /**
-     * 生成代码
+     * 生成代码 (自定义路径)
      *
+     * @author fzr
+     * @param tableName 表名
+     */
+    @Override
+    public void genCode(String tableName) {
+        // 查表信息
+        GenTable table = genTableMapper.selectOne(new QueryWrapper<GenTable>()
+                .eq("table_name", tableName)
+                .last("limit 1"));
+
+        // 查列信息
+        Integer tableId = table.getId();
+        List<GenTableColumn> columns = genTableColumnMapper.selectList(
+                new QueryWrapper<GenTableColumn>()
+                        .orderByAsc("sort")
+                        .eq("table_id", tableId));
+
+        // 初始模板
+        VelocityUtil.initVelocity();
+        VelocityContext context = VelocityUtil.prepareContext(table, columns);
+
+        // 渲染模板
+        List<String> templates = VelocityUtil.getTemplateList(table.getGenTpl());
+        for (String template : templates) {
+            StringWriter sw = new StringWriter();
+            Template tpl = Velocity.getTemplate(template, GenConstants.UTF8);
+            tpl.merge(context, sw);
+            try {
+                String basePath = VelocityUtil.getGenPath(table);
+                String filePath = basePath + VelocityUtil.getFileName(template, table);
+                FileUtils.writeStringToFile(new File(filePath), sw.toString(), GenConstants.UTF8);
+            } catch (IOException e) {
+                log.error("生成渲染模板失败: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 生成代码 (压缩包下载)
+     *
+     * @author fzr
      * @param tableName 表名
      * @param zip 压缩包
      */
@@ -403,11 +454,11 @@ public class GenerateServiceImpl implements IGenerateService {
         List<String> templates = VelocityUtil.getTemplateList(table.getGenTpl());
         for (String template : templates) {
             StringWriter sw = new StringWriter();
-            Template tpl = Velocity.getTemplate(template, "UTF-8");
+            Template tpl = Velocity.getTemplate(template, GenConstants.UTF8);
             tpl.merge(context, sw);
             try {
                 zip.putNextEntry(new ZipEntry(VelocityUtil.getFileName(template, table)));
-                IOUtils.write(sw.toString(), zip, "UTF-8");
+                IOUtils.write(sw.toString(), zip, GenConstants.UTF8);
                 zip.flush();
                 zip.closeEntry();
             } catch (IOException e) {

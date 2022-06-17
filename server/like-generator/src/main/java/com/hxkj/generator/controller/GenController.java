@@ -137,11 +137,23 @@ public class GenController {
     /**
      * 生成代码
      *
+     * @author fzr
+     * @param tableName 表名
+     */
+    @GetMapping("/genCode")
+    public void genCode(String tableName) {
+        Assert.notNull(tableName, "请选择要生成的表");
+        iGenerateService.genCode(tableName);
+    }
+
+    /**
+     * 下载代码
+     *
      * @param response 响应对象
      * @param tables 表名
      * @throws IOException 异常
      */
-    @GetMapping("/genCode")
+    @GetMapping("/downloadCode")
     public void genCode(HttpServletResponse response, String tables) throws IOException {
         Assert.notNull(tables, "请选择要生成的表");
         String[] tableNames = tables.split(",");

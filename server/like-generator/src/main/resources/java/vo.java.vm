@@ -1,0 +1,25 @@
+package com.hxkj.admin.vo;
+
+import lombok.Data;
+
+import java.io.Serializable;
+
+/**
+* ${EntityName}Vo
+*/
+@Data
+public class ${EntityName}Vo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+#foreach ($column in $columns)
+#if($column.isList==1)
+    #if($column.javaField.equals("createTime") || $column.javaField.equals("updateTime") || $column.javaField.equals("deleteTime"))
+    private String ${column.javaField};
+    #else
+    private ${column.javaType} ${column.javaField};
+    #end
+#end
+#end
+
+}

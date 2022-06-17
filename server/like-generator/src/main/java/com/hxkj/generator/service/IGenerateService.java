@@ -83,6 +83,14 @@ public interface IGenerateService {
     Map<String, String> previewCode(Integer id);
 
     /**
+     * 生成代码
+     *
+     * @author fzr
+     * @param tableName 表名
+     */
+    void genCode(String tableName);
+
+    /**
      * 下载代码
      *
      * @author fzr

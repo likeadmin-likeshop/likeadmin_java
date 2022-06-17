@@ -2,7 +2,9 @@ package com.hxkj.admin.service;
 
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.${EntityName}Param;
+#if($table.genTpl=="curd")
 import com.hxkj.admin.vo.system.${EntityName}Vo;
+#end
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.${EntityName};
 
@@ -11,25 +13,37 @@ import java.util.Map;
 /**
  * ${functionName}服务接口类
  */
-public interface ISystemAdminService {
+public interface I${EntityName}Service {
 
+ #if($table.genTpl=="curd")
     /**
      * ${functionName}列表
      *
      * @author ${authorName}
      * @param pageParam 分页参数
+     * @param params 搜索参数
      * @return PageResult<${EntityName}Vo}>
      */
     PageResult<${EntityName}Vo> list(PageParam pageParam, Map<String, String> params);
+#elseif($table.genTpl=="tree")
+    /**
+     * ${functionName}列表
+     *
+     * @author ${authorName}
+     *  @param params 搜索参数
+     * @return JSONArray
+    */
+    JSONArray list(Map<String, String> params);
+ #end
 
     /**
      * ${functionName}详情
      *
      * @author ${authorName}
-     * @param id 主键参数
-     * @return ${EntityName}Vo
+     * @param id 主键ID
+     * @return ${EntityName}
      */
-    SystemAdminVo detail(Integer id);
+     ${EntityName} detail(Integer id);
 
     /**
      * ${functionName}新增
@@ -51,7 +65,7 @@ public interface ISystemAdminService {
      * ${functionName}删除
      *
      * @author ${authorName}
-     * @param id 主键参数
+     * @param id 主键ID
      */
     void del(Integer id);
 

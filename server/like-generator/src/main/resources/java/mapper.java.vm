@@ -1,12 +1,12 @@
 package com.hxkj.common.mapper;
 
 import com.hxkj.common.core.basics.IBaseMapper;
-import com.hxkj.common.entity.${entityName};
+import com.hxkj.common.entity.${EntityName};
 import org.apache.ibatis.annotations.Mapper;
 
 /**
  * ${functionName}
  */
 @Mapper
-public interface ${entityName}Mapper extends IBaseMapper<${entityName}> {
+public interface ${EntityName}Mapper extends IBaseMapper<${EntityName}> {
 }

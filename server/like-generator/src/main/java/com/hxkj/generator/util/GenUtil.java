@@ -1,8 +1,11 @@
 package com.hxkj.generator.util;
 
-import com.hxkj.common.constant.GenConstants;
+import com.hxkj.generator.constant.GenConstants;
 import com.hxkj.common.utils.StringUtil;
-import com.hxkj.admin.config.GenConfig;
+import com.hxkj.generator.config.GenConfig;
+import com.hxkj.generator.constant.HtmlConstants;
+import com.hxkj.generator.constant.JavaConstants;
+import com.hxkj.generator.constant.SqlConstants;
 import com.hxkj.generator.entity.GenTable;
 import com.hxkj.generator.entity.GenTableColumn;
 import org.apache.commons.lang3.RegExUtils;
@@ -46,78 +49,90 @@ public class GenUtil {
         String columnType = GenUtil.getDbType(column.getColumnType());
         column.setTableId(table.getId());
         column.setJavaField(StringUtil.toCamelCase(columnName));
-        column.setJavaType(GenConstants.TYPE_STRING);
+        column.setJavaType(JavaConstants.TYPE_STRING);
         column.setQueryType(GenConstants.QUERY_EQ);
         column.setIsInsert(GenConstants.REQUIRE);
         column.setUpdateTime(table.getUpdateTime());
         column.setCreateTime(table.getCreateTime());
 
         // 文本域组
-        if (GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_STR, columnType) ||
-                GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_TEXT, columnType)) {
+        if (GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_STR, columnType) ||
+                GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_TEXT, columnType)) {
             Integer columnLength = GenUtil.getColumnLength(column.getColumnType());
-            String htmlType = columnLength >= 500 || GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_TEXT, columnType)
-                    ? GenConstants.HTML_TEXTAREA
-                    : GenConstants.HTML_INPUT;
+            String htmlType = columnLength >= 500 || GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_TEXT, columnType)
+                    ? HtmlConstants.HTML_TEXTAREA
+                    : HtmlConstants.HTML_INPUT;
             column.setHtmlType(htmlType);
         }
 
-        // 日期组件
-        else if (GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_TIME, columnType)) {
-            column.setJavaType(GenConstants.TYPE_DATE);
-            column.setHtmlType(GenConstants.HTML_DATETIME);
+        // 日期字段
+        else if (GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_TIME, columnType)) {
+            column.setJavaType(JavaConstants.TYPE_DATE);
+            column.setHtmlType(HtmlConstants.HTML_DATETIME);
         }
 
-        // 数字组件
-        else if (GenUtil.isArraysContains(GenConstants.COLUMN_TYPE_NUMBER, columnType)) {
-            column.setHtmlType(GenConstants.HTML_INPUT);
+        // 时间字段
+        else if (GenUtil.isArraysContains(SqlConstants.COLUMN_TIME_NAME, columnName)) {
+            column.setJavaType(JavaConstants.TYPE_LONG);
+            column.setHtmlType(HtmlConstants.HTML_DATETIME);
+        }
+
+        // 数字字段
+        else if (GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_NUMBER, columnType)) {
+            column.setHtmlType(HtmlConstants.HTML_INPUT);           // 输入框
             String[] str = StringUtil.split(StringUtil.substringBetween(column.getColumnType(), "(", ")"), ",");
             if (str != null && str.length == 2 && Integer.parseInt(str[1]) > 0) {
-                column.setJavaType(GenConstants.TYPE_BIG_DECIMAL); // 浮点形
+                column.setJavaType(JavaConstants.TYPE_BIG_DECIMAL); // 浮点形
             } else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 10) {
-                column.setJavaType(GenConstants.TYPE_INTEGER);     // 整数形
+                column.setJavaType(JavaConstants.TYPE_INTEGER);     // 整数形
             } else {
-                column.setJavaType(GenConstants.TYPE_LONG);        // 长整形
+                column.setJavaType(JavaConstants.TYPE_LONG);        // 长整形
             }
         }
 
-        // 编辑字段
-        if (!GenUtil.isArraysContains(GenConstants.COLUMN_NAME_NOT_EDIT, columnName) && column.getIsPk() == 0) {
+        // 需编辑字段
+        if (!GenUtil.isArraysContains(SqlConstants.COLUMN_NAME_NOT_EDIT, columnName) && column.getIsPk() == 0) {
             column.setIsEdit(GenConstants.REQUIRE);
         }
 
-        //  列表字段
-        if (!GenUtil.isArraysContains(GenConstants.COLUMN_NAME_NOT_LIST, columnName) && column.getIsPk() == 0) {
+        //  需列表字段
+        if (!GenUtil.isArraysContains(SqlConstants.COLUMN_NAME_NOT_LIST, columnName) && column.getIsPk() == 0) {
             column.setIsList(GenConstants.REQUIRE);
         }
 
-        //  查询字段
-        if (!GenUtil.isArraysContains(GenConstants.COLUMN_NAME_NOT_QUERY, columnName) && column.getIsPk() == 0) {
+        // 需查询字段
+        if (!GenUtil.isArraysContains(SqlConstants.COLUMN_NAME_NOT_QUERY, columnName) && column.getIsPk() == 0) {
             column.setIsQuery(GenConstants.REQUIRE);
         }
 
-        // 查询字段类型
-        if (StringUtil.endsWithIgnoreCase(columnName, "name")) {
+        // 模糊查字段
+        if (StringUtil.endsWithIgnoreCase(columnName, "name") ||
+                columnName.equals("nickname") ||
+                columnName.equals("username") ||
+                columnName.equals("title")    ||
+                columnName.equals("mobile")) {
             column.setQueryType(GenConstants.QUERY_LIKE);
         }
 
         // 根据字段设置
-        if (StringUtil.endsWithIgnoreCase(columnName, "status")) {
+        if (StringUtil.endsWithIgnoreCase(columnName, "status")
+                || columnName.equals("isShow")
+                || columnName.equals("isDisable")) {
             // 状态字段设置单选框
-            column.setHtmlType(GenConstants.HTML_RADIO);
+            column.setHtmlType(HtmlConstants.HTML_RADIO);
         } else if (StringUtil.endsWithIgnoreCase(columnName, "type") ||
                 StringUtil.endsWithIgnoreCase(columnName, "sex")) {
             // 类型&性别字段设置下拉框
-            column.setHtmlType(GenConstants.HTML_SELECT);
+            column.setHtmlType(HtmlConstants.HTML_SELECT);
         } else if (StringUtil.endsWithIgnoreCase(columnName, "image")) {
             // 图片字段设置图片上传控件
-            column.setHtmlType(GenConstants.HTML_IMAGE_UPLOAD);
+            column.setHtmlType(HtmlConstants.HTML_IMAGE_UPLOAD);
         } else if (StringUtil.endsWithIgnoreCase(columnName, "file")) {
             // 文件字段设置文件上传控件
-            column.setHtmlType(GenConstants.HTML_FILE_UPLOAD);
+            column.setHtmlType(HtmlConstants.HTML_FILE_UPLOAD);
         } else if (StringUtil.endsWithIgnoreCase(columnName, "content")) {
             // 内容字段的设置富文本控件
-            column.setHtmlType(GenConstants.HTML_EDITOR);
+            column.setHtmlType(HtmlConstants.HTML_EDITOR);
         }
     }
 
@@ -155,8 +170,8 @@ public class GenUtil {
      * @return 类名
      */
     public static String toClassName(String tableName) {
-        String tablePrefix = "ls_";
-        if (StringUtil.isNotEmpty(tablePrefix)) {
+        String tablePrefix = GenConfig.tablePrefix;
+        if (GenConfig.isRemoveTablePrefix && StringUtil.isNotEmpty(tablePrefix)) {
             String[] searchList = StringUtil.split(tablePrefix, ",");
             tableName = replaceFirst(tableName, searchList);
         }

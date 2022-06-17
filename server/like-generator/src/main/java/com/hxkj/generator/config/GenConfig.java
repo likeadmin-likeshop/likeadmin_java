@@ -6,7 +6,13 @@ public class GenConfig {
     public static String authorName = "LikeAdmin";
 
     // 生成包名
-    public static String packageName = "com.hxkj.like-admin";
+    public static String packageName = "com.hxkj.admin";
+
+    // 主要应用
+    public static String mainApp   = "like-{}/src/main/java/";
+
+    // 公共应用
+    public static String commonApp = "like-common/src/main/java/";
 
     // 表前缀名
     public static String tablePrefix = "ls_";

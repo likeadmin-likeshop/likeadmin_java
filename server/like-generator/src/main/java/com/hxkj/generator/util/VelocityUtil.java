@@ -1,6 +1,9 @@
 package com.hxkj.generator.util;
 
 import com.hxkj.common.utils.StringUtil;
+import com.hxkj.common.utils.UrlUtil;
+import com.hxkj.generator.config.GenConfig;
+import com.hxkj.generator.constant.GenConstants;
 import com.hxkj.generator.entity.GenTable;
 import com.hxkj.generator.entity.GenTableColumn;
 import org.apache.velocity.VelocityContext;
@@ -8,6 +11,7 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +73,21 @@ public class VelocityUtil {
     }
 
     /**
+     * 获取生成路径
+     *
+     * @author fzr
+     * @param table 表
+     * @return String
+     */
+    public static String getGenPath(GenTable table) {
+        String genPath = table.getGenPath();
+        if (StringUtil.equals(genPath, "/")) {
+            return System.getProperty("user.dir") + File.separator + "src" + File.separator;
+        }
+        return genPath + File.separator;
+    }
+
+    /**
      * 获取模板列表
      *
      * @author fzr
@@ -76,51 +95,65 @@ public class VelocityUtil {
      */
     public static List<String> getTemplateList(String genTpl) {
         List<String> templates = new LinkedList<>();
-//        templates.add("java/controller.java.vm");
-//        templates.add("java/entity.java.vm");
-//        templates.add("java/mapper.java.vm");
-//        templates.add("java/service.java.vm");
+        templates.add("java/controller.java.vm");
+        templates.add("java/entity.java.vm");
+        templates.add("java/mapper.java.vm");
+        templates.add("java/service.java.vm");
         templates.add("java/serviceImpl.java.vm");
-//        templates.add("java/validate.java.vm");
+        templates.add("java/validate.java.vm");
+        templates.add("java/vo.java.vm");
+//        if (GenConstants.TPL_CRUD.equals(genTpl)) {
+//            templates.add("vue/index.vue.vm");
+//        }
+//        else if (GenConstants.TPL_TREE.equals(genTpl)) {
+//            templates.add("vue/index-tree.vue.vm");
+//        }
         return templates;
     }
 
     /**
      * 获取文件名
      */
-    public static String getFileName(String template, GenTable genTable)
-    {
-        // 文件名称
+    public static String getFileName(String template, GenTable genTable) {
         String fileName = "";
-        String entityName = genTable.getEntityName();
-        String moduleName = genTable.getModuleName();
+        String entityName   = genTable.getEntityName();
         String packageName  = genTable.getPackageName();
-        String businessName = genTable.getBusinessName();
+        String moduleName   = genTable.getModuleName();
+        String[] arrPackage = packageName.split("\\.");
 
-        String javaPath = StringUtil.replace(packageName, ".", "/");
+        // 生成路径
+        String javaPath      = StringUtil.replace(packageName, ".", "/");
+        String basePackage   = arrPackage[0] + "/" + arrPackage[1]+"/";
+        String commonPackage = GenConfig.commonApp + basePackage + "common";
+        String mainPackage = StringUtil.format(GenConfig.mainApp, arrPackage.length>=3?arrPackage[2]:"admin")+javaPath;
+        String subPackage  = !moduleName.equals("") ? StringUtil.replace(moduleName, ".", "/") + "/" : "";
 
         if (template.contains("mapper.java.vm")) {
-            fileName = StringUtil.format("{}/mapper/{}Mapper.java", "com/hxkj/common", entityName);
+            fileName = StringUtil.format("{}/mapper/{}{}Mapper.java", commonPackage, subPackage, entityName);
         }
 
         else if (template.contains("entity.java.vm")) {
-            fileName = StringUtil.format("{}/entity/{}Entity.java", "com/hxkj/common", entityName);
+            fileName = StringUtil.format("{}/entity/{}{}Entity.java", commonPackage, subPackage, entityName);
         }
 
         else if (template.contains("service.java.vm")) {
-            fileName = StringUtil.format("{}/service/I{}Service.java", javaPath, entityName);
+            fileName = StringUtil.format("{}/service/I{}Service.java", mainPackage, entityName);
         }
 
         else if (template.contains("serviceImpl.java.vm")) {
-            fileName = StringUtil.format("{}/service/impl/{}ServiceImpl.java", javaPath, entityName);
+            fileName = StringUtil.format("{}/service/impl/{}ServiceImpl.java", mainPackage, entityName);
         }
 
         else if (template.contains("controller.java.vm")) {
-            fileName = StringUtil.format("{}/controller/{}Controller.java", javaPath, entityName);
+            fileName = StringUtil.format("{}/controller/{}{}Controller.java", mainPackage, subPackage, entityName);
         }
 
         else if (template.contains("validate.java.vm")) {
-            fileName = StringUtil.format("{}/validate/{}Param.java", javaPath, entityName);
+            fileName = StringUtil.format("{}/validate/{}{}Param.java", mainPackage, subPackage, entityName);
+        }
+
+        else if (template.contains("vo.java.vm")) {
+            fileName = StringUtil.format("{}/vo/{}{}Vo.java", mainPackage, subPackage, entityName);
         }
 
         return fileName;
