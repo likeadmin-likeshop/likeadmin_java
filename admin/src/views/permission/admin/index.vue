@@ -28,9 +28,9 @@
         </el-card>
         <el-card v-loading="pager.loading" class="m-t-15" shadow="never">
             <router-link to="/permission/admin/edit">
-                <el-button v-perm="['system:admin:add']" type="primary" size="small"
-                    >新增管理员</el-button
-                >
+                <el-button v-perm="['system:admin:add']" type="primary" size="small">
+                    新增管理员
+                </el-button>
             </router-link>
             <div class="m-t-15">
                 <el-table :data="pager.lists">
