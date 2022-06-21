@@ -80,7 +80,7 @@ public class SystemPostService implements ISystemPostService {
         systemPostMapper.setSearch(queryWrapper, params, new String[]{
                 "like:code:str",
                 "like:name:str",
-                "=:isStop:int"
+                "=:isStop@is_stop:int"
         });
 
         IPage<SystemPost> iPage = systemPostMapper.selectPage(new Page<>(page, limit), queryWrapper);
@@ -215,7 +215,7 @@ public class SystemPostService implements ISystemPostService {
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
-        Assert.isNull(systemAdmin, "该岗位已被“"+systemAdmin.getNickname()+"”管理员使用,请先移除");
+        Assert.isNull(systemAdmin, "该岗位已被管理员使用,请先移除");
 
         model.setIsDelete(1);
         model.setDeleteTime(System.currentTimeMillis() / 1000);

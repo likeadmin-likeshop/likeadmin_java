@@ -163,7 +163,7 @@ public interface ISystemAdminService {
 
             systemDeptMapper.setSearch(queryWrapper, params, new String[]{
                     "like:name:str",
-                    "=:isStop:int"
+                    "=:isStop@is_stop:int"
             });
 
             List<SystemDept> systemDeptList = systemDeptMapper.selectList(queryWrapper);
@@ -297,7 +297,7 @@ public interface ISystemAdminService {
                     .eq("is_delete", 0)
                     .last("limit 1"));
 
-            Assert.isNull(systemAdmin, "该部门已被“"+systemAdmin.getNickname()+"”管理员使用,请先移除");
+            Assert.isNull(systemAdmin, "该部门已被管理员使用,请先移除");
 
             model.setIsDelete(1);
             model.setDeleteTime(System.currentTimeMillis() / 1000);
