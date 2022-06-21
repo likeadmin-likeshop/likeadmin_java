@@ -2,20 +2,20 @@ import request from '@/utils/request'
 
 // 获取备案信息
 export function apiGetCopyright() {
-    return request.get('/setting/getCopyright')
+    return request.get('/setting/basics/getCopyright')
 }
 // 设置备案信息
 export function apiSetCopyright(params: any) {
-    return request.post('/setting/setCopyright', { ...params })
+    return request.post('/setting/basics/setCopyright', { ...params })
 }
 
 // 获取网站信息
 export function apiGetWebsite() {
-    return request.get('/setting/getWebsite')
+    return request.get('/setting/basics/getWebsite')
 }
 // 设置网站信息
 export function apiSetWebsite(params: any) {
-    return request.post('/setting/setWebsite', { ...params })
+    return request.post('/setting/basics/setWebsite', { ...params })
 }
 
 // 获取政策协议

@@ -38,7 +38,7 @@ export function deepClone(target: any) {
  */
 export function filterObject(target: any, filters: any[]) {
     const _target = deepClone(target)
-    filters.map(key => delete _target[key])
+    filters.map((key) => delete _target[key])
     return _target
 }
 
@@ -125,15 +125,12 @@ export const timeFormat = (dateTime: number, fmt = 'yyyy-mm-dd') => {
         'd+': date.getDate().toString(), // 日
         'h+': date.getHours().toString(), // 时
         'M+': date.getMinutes().toString(), // 分
-        's+': date.getSeconds().toString() // 秒
+        's+': date.getSeconds().toString(), // 秒
     }
     for (const k in opt) {
         ret = new RegExp('(' + k + ')').exec(fmt)
         if (ret) {
-            fmt = fmt.replace(
-                ret[1],
-                ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, '0')
-            )
+            fmt = fmt.replace(ret[1], ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, '0'))
         }
     }
     return fmt
@@ -162,9 +159,10 @@ export const timeFormat = (dateTime: number, fmt = 'yyyy-mm-dd') => {
  * @return { Array }            扁平化后的数组
  */
 export function flatten(tree = [], arr = [], childrenKey = 'children') {
-    tree.forEach(item => {
+    tree.forEach((item) => {
         const children = item[childrenKey]
-        children ? flatten(children, arr, childrenKey) : arr.push(item)
+        arr.push(item)
+        if (children) flatten(children, arr, childrenKey)
     })
     return arr
 }

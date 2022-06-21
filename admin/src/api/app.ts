@@ -40,5 +40,5 @@ export function apiFileRename(params: { id: number; name: string }) {
 
 // 配置
 export function apiConfig() {
-    return request.get('/index/config')
+    return request.get('/common/index/config')
 }
