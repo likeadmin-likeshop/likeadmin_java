@@ -1,4 +1,3 @@
-
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout/index.vue'
 /**
@@ -24,7 +23,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: 'index',
         component: Layout
     },
-    
+
     {
         path: '/permission',
         component: Layout,
@@ -47,6 +46,22 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         ]
     },
     {
+        path: '/organize',
+        component: Layout,
+        children: [
+            {
+                path: 'department/edit',
+                component: () => import('@/views/organize/department/edit.vue'),
+                meta: { title: '编辑部门', activeMenu: '/organize/department' }
+            },
+            {
+                path: 'post/edit',
+                component: () => import('@/views/organize/post/edit.vue'),
+                meta: { title: '编辑岗位', activeMenu: '/organize/post' }
+            }
+        ]
+    },
+    {
         path: '/login',
         component: () => import('@/views/account/login.vue')
     },
@@ -60,7 +75,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     }
 ]
 
-
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: constantRoutes,
@@ -70,7 +84,7 @@ const router = createRouter({
         } else {
             return { top: 0 }
         }
-    },
+    }
 })
 
 export default router

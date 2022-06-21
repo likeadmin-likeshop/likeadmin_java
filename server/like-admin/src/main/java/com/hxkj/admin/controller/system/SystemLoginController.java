@@ -1,6 +1,6 @@
 package com.hxkj.admin.controller.system;
 
-import com.hxkj.admin.service.ISystemLoginService;
+import com.hxkj.admin.service.system.ISystemLoginService;
 import com.hxkj.admin.validate.system.SystemLoginParam;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.exception.LoginException;

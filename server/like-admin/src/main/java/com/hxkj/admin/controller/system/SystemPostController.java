@@ -1,7 +1,7 @@
 package com.hxkj.admin.controller.system;
 
-import com.hxkj.admin.service.ISystemPostService;
-import com.hxkj.admin.validate.PageParam;
+import com.hxkj.admin.service.system.ISystemPostService;
+import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.system.SystemPostParam;
 import com.hxkj.admin.vo.system.SystemPostVo;
 import com.hxkj.common.core.AjaxResult;
