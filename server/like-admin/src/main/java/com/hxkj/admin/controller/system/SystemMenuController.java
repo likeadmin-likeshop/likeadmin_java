@@ -3,7 +3,7 @@ package com.hxkj.admin.controller.system;
 import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.LikeAdminThreadLocal;
 import com.hxkj.admin.config.aop.Log;
-import com.hxkj.admin.service.ISystemMenuService;
+import com.hxkj.admin.service.system.ISystemMenuService;
 import com.hxkj.admin.validate.system.SystemMenuParam;
 import com.hxkj.admin.vo.system.SystemMenuVo;
 import com.hxkj.common.core.AjaxResult;

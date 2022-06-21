@@ -1,7 +1,7 @@
 package com.hxkj.admin.controller.system;
 
-import com.hxkj.admin.service.ISystemLogServer;
-import com.hxkj.admin.validate.PageParam;
+import com.hxkj.admin.service.system.ISystemLogServer;
+import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.system.LogLoginVo;
 import com.hxkj.admin.vo.system.LogOperateVo;
 import com.hxkj.common.core.AjaxResult;

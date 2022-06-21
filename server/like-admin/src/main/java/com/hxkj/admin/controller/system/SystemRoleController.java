@@ -1,8 +1,8 @@
 package com.hxkj.admin.controller.system;
 
 import com.hxkj.admin.config.aop.Log;
-import com.hxkj.admin.service.ISystemRoleService;
-import com.hxkj.admin.validate.PageParam;
+import com.hxkj.admin.service.system.ISystemRoleService;
+import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.system.SystemRoleParam;
 import com.hxkj.admin.vo.system.SystemRoleVo;
 import com.hxkj.common.core.AjaxResult;

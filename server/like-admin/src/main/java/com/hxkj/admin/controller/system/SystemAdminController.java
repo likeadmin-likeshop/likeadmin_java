@@ -2,8 +2,8 @@ package com.hxkj.admin.controller.system;
 
 import com.hxkj.admin.LikeAdminThreadLocal;
 import com.hxkj.admin.config.aop.Log;
-import com.hxkj.admin.service.ISystemAdminService;
-import com.hxkj.admin.validate.PageParam;
+import com.hxkj.admin.service.system.ISystemAdminService;
+import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.system.SystemAdminParam;
 import com.hxkj.admin.vo.system.SystemAdminVo;
 import com.hxkj.admin.vo.system.SystemSelfVo;

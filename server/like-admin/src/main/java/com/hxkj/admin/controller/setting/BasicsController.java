@@ -1,7 +1,7 @@
 package com.hxkj.admin.controller.setting;
 
 import com.hxkj.admin.config.aop.Log;
-import com.hxkj.admin.service.IBasicsService;
+import com.hxkj.admin.service.setting.IBasicsService;
 import com.hxkj.common.core.AjaxResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +12,7 @@ import java.util.Map;
  * 基础设置管理
  */
 @RestController
-@RequestMapping("api/setting")
+@RequestMapping("api/setting/basics")
 public class BasicsController {
 
     @Resource

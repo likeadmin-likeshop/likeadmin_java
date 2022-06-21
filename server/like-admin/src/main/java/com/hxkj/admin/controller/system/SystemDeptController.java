@@ -1,7 +1,7 @@
 package com.hxkj.admin.controller.system;
 
 import com.alibaba.fastjson.JSONArray;
-import com.hxkj.admin.service.ISystemDeptService;
+import com.hxkj.admin.service.system.ISystemDeptService;
 import com.hxkj.admin.validate.system.SystemDeptParam;
 import com.hxkj.admin.vo.system.SystemDeptVo;
 import com.hxkj.common.core.AjaxResult;
