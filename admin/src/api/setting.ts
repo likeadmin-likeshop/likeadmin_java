@@ -83,3 +83,25 @@ export function apiAuthAdminEditSelf(params: any) {
 export function apiAuthAdminMySelf() {
     return request.post('/auth.admin/mySelf')
 }
+
+/** S 存储设置 **/
+// 存储列表
+export function apiStorageLists() {
+    return request.get('/setting/storage/list')
+}
+
+// 存储切换
+export function apiStorageChange(params: any) {
+    return request.post('/setting/storage/change', params)
+}
+
+// 存储详情
+export function apiStorageDetail(params: any) {
+    return request.get('/setting/storage/detail', { params })
+}
+
+// 存储配置
+export function apiStorageEdit(params: any) {
+    return request.post('/setting/storage/edit', params)
+}
+/** E 存储设置 **/
