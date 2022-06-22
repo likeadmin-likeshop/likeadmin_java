@@ -28,9 +28,7 @@
         </el-card>
         <el-card v-loading="pager.loading" class="m-t-15" shadow="never">
             <router-link to="/permission/admin/edit">
-                <el-button v-perm="['system:admin:add']" type="primary" size="small">
-                    新增管理员
-                </el-button>
+                <el-button v-perm="['system:admin:add']" type="primary" size="small"> 新增管理员 </el-button>
             </router-link>
             <div class="m-t-15">
                 <el-table :data="pager.lists">
@@ -49,21 +47,14 @@
                     <el-table-column label="账号" prop="username" min-width="100"></el-table-column>
                     <el-table-column label="名称" prop="nickname" min-width="100"></el-table-column>
                     <el-table-column label="角色" prop="role" min-width="100"></el-table-column>
-                    <el-table-column
-                        label="创建时间"
-                        prop="createTime"
-                        min-width="150"
-                    ></el-table-column>
+                    <el-table-column label="部门" prop="dept" min-width="100"></el-table-column>
+                    <el-table-column label="创建时间" prop="createTime" min-width="150"></el-table-column>
                     <el-table-column
                         label="最近登录时间"
                         prop="lastLoginTime"
                         min-width="150"
                     ></el-table-column>
-                    <el-table-column
-                        label="最近登录IP"
-                        prop="lastLoginIp"
-                        min-width="100"
-                    ></el-table-column>
+                    <el-table-column label="最近登录IP" prop="lastLoginIp" min-width="100"></el-table-column>
                     <el-table-column label="状态" min-width="100">
                         <template #default="scope">
                             <el-switch
@@ -82,8 +73,8 @@
                                 :to="{
                                     path: '/permission/admin/edit',
                                     query: {
-                                        id: row.id
-                                    }
+                                        id: row.id,
+                                    },
                                 }"
                             >
                                 <el-button type="text">编辑</el-button>
@@ -105,102 +96,98 @@
                 </el-table>
             </div>
             <div class="flex row-right">
-                <pagination
-                    v-model="pager"
-                    layout="total, prev, pager, next, jumper"
-                    @change="requestApi"
-                />
+                <pagination v-model="pager" layout="total, prev, pager, next, jumper" @change="requestApi" />
             </div>
         </el-card>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, Ref, ref } from 'vue'
-import Pagination from '@/components/pagination/index.vue'
-import Popup from '@/components/popup/index.vue'
-import { apiAdminEdit, adminLists, apiAdminDelete, apiRoleLists, apiAdminStatus } from '@/api/auth'
-import { usePages } from '@/core/hooks/pages'
-import { ElMessage } from 'element-plus'
+    import { defineComponent, onMounted, reactive, Ref, ref } from 'vue'
+    import Pagination from '@/components/pagination/index.vue'
+    import Popup from '@/components/popup/index.vue'
+    import { apiAdminEdit, adminLists, apiAdminDelete, apiRoleLists, apiAdminStatus } from '@/api/auth'
+    import { usePages } from '@/core/hooks/pages'
+    import { ElMessage } from 'element-plus'
 
-export default defineComponent({
-    components: {
-        Pagination,
-        Popup
-    },
-    setup() {
-        // 表单数据
-        const formData = reactive({
-            username: '',
-            nickname: '',
-            role: ''
-        })
-        const roleList: Ref<any[]> = ref([])
-        const { pager, requestApi, resetParams, resetPage } = usePages({
-            callback: adminLists,
-            params: formData
-        })
-        const changeStatus = (data: any) => {
-            apiAdminEdit({
-                id: data.id,
-                username: data.username,
-                nickname: data.nickname,
-                role: data.role,
-                isDisable: data.isDisable,
-                multipoint_login: data.multipoint_login
-            }).finally(() => {
+    export default defineComponent({
+        components: {
+            Pagination,
+            Popup,
+        },
+        setup() {
+            // 表单数据
+            const formData = reactive({
+                username: '',
+                nickname: '',
+                role: '',
+            })
+            const roleList: Ref<any[]> = ref([])
+            const { pager, requestApi, resetParams, resetPage } = usePages({
+                callback: adminLists,
+                params: formData,
+            })
+            const changeStatus = (data: any) => {
+                apiAdminEdit({
+                    id: data.id,
+                    username: data.username,
+                    nickname: data.nickname,
+                    role: data.role,
+                    isDisable: data.isDisable,
+                    multipoint_login: data.multipoint_login,
+                }).finally(() => {
+                    requestApi()
+                })
+            }
+
+            const handleStatusChange = async (event: Event, id: number) => {
+                await apiAdminStatus({ isDisable: event, id })
                 requestApi()
-            })
-        }
+                ElMessage({ type: 'success', message: '操作成功' })
+            }
 
-        const handleStatusChange = async (event: Event, id: number) => {
-            await apiAdminStatus({ isDisable: event, id })
-            requestApi()
-            ElMessage({ type: 'success', message: '操作成功' })
-        }
+            const handleDelete = (id: number) => {
+                apiAdminDelete({ id }).then(() => {
+                    requestApi()
+                    ElMessage({ type: 'success', message: '删除成功' })
+                })
+            }
 
-        const handleDelete = (id: number) => {
-            apiAdminDelete({ id }).then(() => {
+            const getRoleList = () => {
+                apiRoleLists({
+                    page_type: 1,
+                }).then((res: any) => {
+                    roleList.value = res.lists
+                })
+            }
+            onMounted(() => {
                 requestApi()
-                ElMessage({ type: 'success', message: '删除成功' })
+                getRoleList()
             })
-        }
-
-        const getRoleList = () => {
-            apiRoleLists({
-                page_type: 1
-            }).then((res: any) => {
-                roleList.value = res.lists
-            })
-        }
-        onMounted(() => {
-            requestApi()
-            getRoleList()
-        })
-        return {
-            formData,
-            roleList,
-            pager,
-            requestApi,
-            resetParams,
-            resetPage,
-            adminLists,
-            changeStatus,
-            handleDelete,
-            handleStatusChange
-        }
-    }
-})
+            return {
+                formData,
+                roleList,
+                pager,
+                requestApi,
+                resetParams,
+                resetPage,
+                adminLists,
+                changeStatus,
+                handleDelete,
+                handleStatusChange,
+            }
+        },
+    })
 </script>
 
 <style lang="scss" scoped>
-.ls-form {
-    margin-bottom: -16px;
-}
+    .ls-form {
+        margin-bottom: -16px;
+    }
 
-.default-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-}
+    .default-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
 </style>

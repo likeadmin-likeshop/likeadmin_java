@@ -39,93 +39,93 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, Ref, ref } from 'vue'
-import { ElMessage, ElUpload } from 'element-plus'
-import { useStore } from '@/store'
-import { version } from '@/config/app'
-export default defineComponent({
-    components: {},
-    props: {
-        // 上传文件类型
-        type: {
-            type: String,
-            default: 'image'
+    import { computed, defineComponent, Ref, ref } from 'vue'
+    import { ElMessage, ElUpload } from 'element-plus'
+    import { useStore } from '@/store'
+    import { version } from '@/config/app'
+    export default defineComponent({
+        components: {},
+        props: {
+            // 上传文件类型
+            type: {
+                type: String,
+                default: 'image',
+            },
+            // 是否支持多选
+            multiple: {
+                type: Boolean,
+                default: true,
+            },
+            // 多选时最多选择几条
+            limit: {
+                type: Number,
+                default: 10,
+            },
+            // 上传时的额外参数
+            data: {
+                type: Object,
+                default: () => ({}),
+            },
+            // 是否显示上传进度
+            showProgress: {
+                type: Boolean,
+                default: false,
+            },
         },
-        // 是否支持多选
-        multiple: {
-            type: Boolean,
-            default: true
-        },
-        // 多选时最多选择几条
-        limit: {
-            type: Number,
-            default: 10
-        },
-        // 上传时的额外参数
-        data: {
-            type: Object,
-            default: () => ({})
-        },
-        // 是否显示上传进度
-        showProgress: {
-            type: Boolean,
-            default: false
-        }
-    },
-    emits: ['change', 'error'],
-    setup(props, { emit }) {
-        const store = useStore()
-        const uploadRefs: Ref<typeof ElUpload | null> = ref(null)
-        const action = ref(`${import.meta.env.VITE_APP_BASE_URL}/api/upload/${props.type}`)
-        const headers = computed(() => ({
-            token: store.getters.token,
-            version: version
-        }))
-        const visible = ref(false)
-        const fileList: Ref<any[]> = ref([])
+        emits: ['change', 'error'],
+        setup(props, { emit }) {
+            const store = useStore()
+            const uploadRefs: Ref<typeof ElUpload | null> = ref(null)
+            const action = ref(`${import.meta.env.VITE_APP_BASE_URL}/api/common/upload/${props.type}`)
+            const headers = computed(() => ({
+                token: store.getters.token,
+                version: version,
+            }))
+            const visible = ref(false)
+            const fileList: Ref<any[]> = ref([])
 
-        const handleProgress = (event: any, file: any, fileLists: any[]) => {
-            visible.value = true
-            fileList.value = fileLists
-        }
+            const handleProgress = (event: any, file: any, fileLists: any[]) => {
+                visible.value = true
+                fileList.value = fileLists
+            }
 
-        const handleSuccess = (event: any, file: any, fileLists: any[]) => {
-            const allSuccess = fileLists.every(item => item.status == 'success')
-            if (allSuccess) {
-                uploadRefs.value?.clearFiles()
+            const handleSuccess = (event: any, file: any, fileLists: any[]) => {
+                const allSuccess = fileLists.every((item) => item.status == 'success')
+                if (allSuccess) {
+                    uploadRefs.value?.clearFiles()
+                    visible.value = false
+                    emit('change')
+                }
+            }
+            const handleError = (event: any, file: any, fileLists: any[]) => {
+                ElMessage.error(`${file.name}文件上传失败`)
+                uploadRefs.value?.abort()
                 visible.value = false
                 emit('change')
+                emit('error')
             }
-        }
-        const handleError = (event: any, file: any, fileLists: any[]) => {
-            ElMessage.error(`${file.name}文件上传失败`)
-            uploadRefs.value?.abort()
-            visible.value = false
-            emit('change')
-            emit('error')
-        }
-        const handleExceed = () => {
-            ElMessage.error('超出上传上限，请重新上传')
-        }
-        const handleClose = () => {
-            uploadRefs.value?.abort()
-            uploadRefs.value?.clearFiles()
-            visible.value = false
-        }
-        return {
-            uploadRefs,
-            action,
-            headers,
-            visible,
-            fileList,
-            handleProgress,
-            handleSuccess,
-            handleError,
-            handleExceed,
-            handleClose
-        }
-    }
-})
+            const handleExceed = () => {
+                ElMessage.error('超出上传上限，请重新上传')
+            }
+            const handleClose = () => {
+                uploadRefs.value?.abort()
+                uploadRefs.value?.clearFiles()
+                visible.value = false
+            }
+            return {
+                uploadRefs,
+                action,
+                headers,
+                visible,
+                fileList,
+                handleProgress,
+                handleSuccess,
+                handleError,
+                handleExceed,
+                handleClose,
+            }
+        },
+    })
 </script>
 
 <style lang="scss"></style>
