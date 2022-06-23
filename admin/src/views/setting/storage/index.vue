@@ -35,7 +35,7 @@
                             :to="{
                                 path: '/setting/storage/edit',
                                 query: {
-                                    engine: scope.row.engine,
+                                    alias: scope.row.alias,
                                 },
                             }"
                         >
