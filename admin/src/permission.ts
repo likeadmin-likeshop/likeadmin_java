@@ -4,7 +4,7 @@
 
 import NProgress from 'nprogress'
 import store from './store'
-import router from './router'
+import router, { indexName } from './router'
 import 'nprogress/nprogress.css'
 
 // NProgress配置
@@ -27,7 +27,11 @@ router.beforeEach(async (to, from, next) => {
                 await store.dispatch('user/getUser')
                 const routes = await store.dispatch('permission/generateRoutes')
                 routes.forEach((route: any) => {
-                    router.addRoute('index', route) // 动态添加可访问路由表
+                    if(!route.children) {
+                        router.addRoute(indexName, route) 
+                        return 
+                    }
+                    router.addRoute(route) // 动态添加可访问路由表
                 })
                 console.log(router.getRoutes())
                 if (to.path === '/login') {

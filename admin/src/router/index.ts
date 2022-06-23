@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout/index.vue'
+export const indexName = Symbol('index')
 /**
  * Note: 路由配置项
  *
@@ -18,12 +19,11 @@ import Layout from '@/layout/index.vue'
 // 公共路由
 export const constantRoutes: Array<RouteRecordRaw> = [
     {
+        name: indexName,
         path: '/',
-        redirect: 'workbench',
-        name: 'index',
-        component: Layout,
+        redirect: '/workbench',
+        component: Layout
     },
-
     {
         path: '/permission',
         component: Layout,
