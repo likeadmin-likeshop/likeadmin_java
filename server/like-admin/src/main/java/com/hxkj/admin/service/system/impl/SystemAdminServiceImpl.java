@@ -121,10 +121,10 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
         // 管理员信息
         SystemAdmin sysAdmin = systemAdminMapper.selectOne(new QueryWrapper<SystemAdmin>()
                 .select(SystemAdmin.class, info->
-                        !info.getColumn().equals("salt") &&
-                                !info.getColumn().equals("password") &&
-                                !info.getColumn().equals("is_delete") &&
-                                !info.getColumn().equals("delete_time"))
+                    !info.getColumn().equals("salt") &&
+                    !info.getColumn().equals("password") &&
+                    !info.getColumn().equals("is_delete") &&
+                    !info.getColumn().equals("delete_time"))
                 .eq("is_delete", 0)
                 .eq("id", adminId)
                 .last("limit 1"));

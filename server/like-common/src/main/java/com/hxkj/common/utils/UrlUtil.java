@@ -33,12 +33,13 @@ public class UrlUtil {
         }
 
         String engine = ConfigUtil.get("storage", "default", "local");
+        engine = engine.equals("") ? "local" : engine;
         if (engine.equals("local")) {
             return RequestUtil.domain() + "/" + uploadPrefix + url;
         }
 
         Map<String, String> config = ConfigUtil.getMap("storage", engine);
-        return config.get("domain") + url;
+        return config.getOrDefault("domain", "") + url;
     }
 
     /**
@@ -56,12 +57,13 @@ public class UrlUtil {
         }
 
         String engine = ConfigUtil.get("storage", "default", "local");
+        engine = engine.equals("") ? "local" : engine;
         if (engine.equals("local")) {
             return url.replace(RequestUtil.domain() + "/" + uploadPrefix + "/", "");
         }
 
         Map<String, String> config = ConfigUtil.getMap("storage", engine);
-        return url.replace(config.get("domain") + "/" + uploadPrefix + "/", "");
+        return url.replace(config.getOrDefault("domain", "") + "/" + uploadPrefix + "/", "");
     }
 
     /**
@@ -73,12 +75,13 @@ public class UrlUtil {
      */
     public static String domain() {
         String engine = ConfigUtil.get("storage", "default", "local");
+        engine = engine.equals("") ? "local" : engine;
         if (engine.equals("local")) {
             return RequestUtil.domain() + "/";
         }
 
         Map<String, String> config = ConfigUtil.getMap("storage", engine);
-        return config.get("domain") + "/";
+        return config.getOrDefault("domain", "") + "/";
     }
 
 }
