@@ -18,7 +18,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("api/system/dept")
-public class SystemDeptController {
+public class DeptController {
 
     @Resource
     ISystemDeptService iSystemDeptService;

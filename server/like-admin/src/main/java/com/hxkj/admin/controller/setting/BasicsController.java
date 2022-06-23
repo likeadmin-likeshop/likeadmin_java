@@ -1,7 +1,7 @@
 package com.hxkj.admin.controller.setting;
 
 import com.hxkj.admin.config.aop.Log;
-import com.hxkj.admin.service.setting.IBasicsService;
+import com.hxkj.admin.service.setting.ISettingBasicsService;
 import com.hxkj.common.core.AjaxResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +16,7 @@ import java.util.Map;
 public class BasicsController {
 
     @Resource
-    IBasicsService iBasicsService;
+    ISettingBasicsService iBasicsService;
 
     /**
      * “获取”网站信息

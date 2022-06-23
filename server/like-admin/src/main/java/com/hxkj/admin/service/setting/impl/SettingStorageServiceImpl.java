@@ -2,7 +2,7 @@ package com.hxkj.admin.service.setting.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
-import com.hxkj.admin.service.setting.IStorageService;
+import com.hxkj.admin.service.setting.ISettingStorageService;
 import com.hxkj.common.utils.ConfigUtil;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.*;
  * 存储配置实现类
  */
 @Service
-public class StorageServiceImpl implements IStorageService {
+public class SettingStorageServiceImpl implements ISettingStorageService {
 
     /**
      * 存储列表
@@ -26,7 +26,7 @@ public class StorageServiceImpl implements IStorageService {
         List<Map<String, Object>> list = new LinkedList<>();
 
         Map<String, Object> local = new LinkedHashMap<>();
-        local.put("alias", "qiniu");
+        local.put("alias", "local");
         local.put("describe", "存储在本地服务器");
         local.put("status", engine.equals("local") ? 1 : 0);
         list.add(local);

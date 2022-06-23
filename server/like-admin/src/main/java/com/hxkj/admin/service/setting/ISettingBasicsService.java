@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * 基础配置服务接口类
  */
-public interface IBasicsService {
+public interface ISettingBasicsService {
 
     /**
      * 获取网站信息
