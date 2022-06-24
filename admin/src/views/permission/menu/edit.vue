@@ -21,16 +21,10 @@
                             >
                                 目录
                             </el-radio>
-                            <el-radio
-                                :label="menuDataType.MENU"
-                                @change="changeType(menuDataType.MENU)"
-                            >
+                            <el-radio :label="menuDataType.MENU" @change="changeType(menuDataType.MENU)">
                                 菜单
                             </el-radio>
-                            <el-radio
-                                :label="menuDataType.BUTTON"
-                                @change="changeType(menuDataType.BUTTON)"
-                            >
+                            <el-radio :label="menuDataType.BUTTON" @change="changeType(menuDataType.BUTTON)">
                                 按钮
                             </el-radio>
                         </el-radio-group>
@@ -45,7 +39,7 @@
                                 checkStrictly: true,
                                 emitPath: false,
                                 label: 'menuName',
-                                value: 'id'
+                                value: 'id',
                             }"
                             clearable
                         ></el-cascader>
@@ -164,89 +158,89 @@
 </template>
 
 <script lang="ts" setup>
-import { useAdmin } from '@/core/hooks/app'
-import { onMounted, reactive, ref } from 'vue'
-import FooterBtns from '@/components/footer-btns/index.vue'
-import type { ElForm, ElMessage } from 'element-plus'
-import { apiConfigGetMenu, apiMenuDetail, apiMenuAdd, apiMenuEdit } from '@/api/auth'
-import SelectIcon from './select-icon/index.vue'
+    import { useAdmin } from '@/core/hooks/app'
+    import { onMounted, reactive, ref } from 'vue'
+    import FooterBtns from '@/components/footer-btns/index.vue'
+    import type { ElForm, ElMessage } from 'element-plus'
+    import { apiConfigGetMenu, apiMenuDetail, apiMenuAdd, apiMenuEdit } from '@/api/auth'
+    import SelectIcon from './select-icon/index.vue'
 
-const menuDataType = {
-    CATALOG: 'M', // 目录
-    MENU: 'C', // 菜单
-    BUTTON: 'A' // 按钮
-}
+    const menuDataType = {
+        CATALOG: 'M', // 目录
+        MENU: 'C', // 菜单
+        BUTTON: 'A', // 按钮
+    }
 
-const { router, route } = useAdmin()
-const id: any = route.query.id
+    const { router, route } = useAdmin()
+    const id: any = route.query.id
 
-const formRefs = ref<InstanceType<typeof ElForm>>()
+    const formRefs = ref<InstanceType<typeof ElForm>>()
 
-// 父级菜单选择
-const menuList = ref<any>([])
+    // 父级菜单选择
+    const menuList = ref<any>([])
 
-// 表单数据
-const formData = ref({
-    pid: '', // 上级ID
-    menuType: 'M', // 菜单类型
-    menuName: '', // 菜单名称
-    menuIcon: '', // 菜单图标
-    menuSort: '', // 菜单排序
-    perms: '', // 菜单权限字符
-    paths: '', // 路由路径
-    component: '', // 前端组件
-    selected: '', // 选中路径
-    params: '', // 路由参数
-    isShow: 1, // 是否显示：0=否， 1=是
-    isCache: 0, // 是否缓存：0=否， 1=是
-    isDisable: 0 // 是否禁用: 0=否， 1=是
-})
-
-// 获取详情
-const getMenuDetail = async (id: number) => {
-    ;(formData.value as {}) = await apiMenuDetail({ id })
-    getFatherMenu()
-}
-
-// 获取父级菜单选择
-const getFatherMenu = async () => {
-    const menus = (await apiConfigGetMenu()) || []
-    menuList.value = [{ id: 0, menuName: '顶级' }, ...menus]
-}
-
-// 添加菜单
-const handleMenuAdd = async () => {
-    await apiMenuAdd({ ...formData.value })
-    router.back()
-}
-
-// 编辑菜单
-const handleMenuEdit = async () => {
-    await apiMenuEdit({ ...formData.value })
-    router.back()
-}
-
-// 保存
-const onSubmit = () => {
-    formRefs.value?.validate()?.then(valid => {
-        if (!valid) {
-            return
-        }
-
-        if (!id) handleMenuAdd()
-        else handleMenuEdit()
+    // 表单数据
+    const formData = ref({
+        pid: '', // 上级ID
+        menuType: 'M', // 菜单类型
+        menuName: '', // 菜单名称
+        menuIcon: '', // 菜单图标
+        menuSort: '', // 菜单排序
+        perms: '', // 菜单权限字符
+        paths: '', // 路由路径
+        component: '', // 前端组件
+        selected: '', // 选中路径
+        params: '', // 路由参数
+        isShow: 1, // 是否显示：0=否， 1=是
+        isCache: 0, // 是否缓存：0=否， 1=是
+        isDisable: 0, // 是否禁用: 0=否， 1=是
     })
-}
 
-// 切换
-const changeType = (val: string) => {
-    menuDataType.value = val
-}
+    // 获取详情
+    const getMenuDetail = async (id: number) => {
+        ;(formData.value as {}) = await apiMenuDetail({ id })
+        getFatherMenu()
+    }
 
-onMounted(() => {
-    if (id) getMenuDetail(id)
-    getFatherMenu()
-})
+    // 获取父级菜单选择
+    const getFatherMenu = async () => {
+        const menus = (await apiConfigGetMenu()) || []
+        menuList.value = [{ id: 0, menuName: '顶级' }, ...menus]
+    }
+
+    // 添加菜单
+    const handleMenuAdd = async () => {
+        await apiMenuAdd({ ...formData.value })
+        router.back()
+    }
+
+    // 编辑菜单
+    const handleMenuEdit = async () => {
+        await apiMenuEdit({ ...formData.value })
+        router.back()
+    }
+
+    // 保存
+    const onSubmit = () => {
+        formRefs.value?.validate()?.then((valid) => {
+            if (!valid) {
+                return
+            }
+
+            if (!id) handleMenuAdd()
+            else handleMenuEdit()
+        })
+    }
+
+    // 切换
+    const changeType = (val: string) => {
+        menuDataType.value = val
+    }
+
+    onMounted(() => {
+        if (id) getMenuDetail(id)
+        getFatherMenu()
+    })
 </script>
 
 <style lang="scss" scoped></style>
