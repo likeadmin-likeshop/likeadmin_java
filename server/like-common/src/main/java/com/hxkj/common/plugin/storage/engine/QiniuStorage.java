@@ -37,8 +37,8 @@ public class QiniuStorage {
      * @return String
      */
     public String upToken() {
-        String accessKey = this.config.get("access_key");
-        String secretKey = this.config.get("secret_key");
+        String accessKey = this.config.get("accessKey");
+        String secretKey = this.config.get("secretKey");
         String bucket    = this.config.get("bucket");
         Auth auth = Auth.create(accessKey, secretKey);
         return auth.uploadToken(bucket);

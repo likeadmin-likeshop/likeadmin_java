@@ -70,8 +70,8 @@ public class SettingStorageServiceImpl implements ISettingStorageService {
         map.put("status", engine.equals(alias) ? 1 : 0);
         if (!alias.equals("local")) {
             map.put("bucket", config.getOrDefault("bucket", ""));
-            map.put("secretKey", config.getOrDefault("secret_key", ""));
-            map.put("accessKey", config.getOrDefault("access_key", ""));
+            map.put("secretKey", config.getOrDefault("secretKey", ""));
+            map.put("accessKey", config.getOrDefault("accessKey", ""));
             map.put("domain", config.getOrDefault("domain", ""));
             if (alias.equals("qcloud")) {
                 map.put("region", config.getOrDefault("region", ""));
@@ -92,7 +92,8 @@ public class SettingStorageServiceImpl implements ISettingStorageService {
         Assert.notNull(params.get("alias"), "alias参数缺失");
         Assert.notNull(params.get("status"), "status参数缺失");
         Map<String, String> map = new LinkedHashMap<>();
-
+        System.out.println("斤斤计较");
+        System.out.println(params);
         map.put("name", "本地存储");
         if (!params.get("alias").equals("local")) {
             map.put("bucket", params.getOrDefault("bucket", ""));
@@ -113,8 +114,9 @@ public class SettingStorageServiceImpl implements ISettingStorageService {
             }
         }
 
-        String engine = ConfigUtil.get("storage", "default", "local");
         ConfigUtil.set("storage", params.get("alias"), JSON.toJSONString(map));
+
+        String engine = ConfigUtil.get("storage", "default", "local");
         if (Integer.parseInt(params.get("status")) == 1) {
             ConfigUtil.set("storage", "default", params.get("alias"));
         } else if (engine.equals(params.get("alias")) && Integer.parseInt(params.get("status")) == 0) {
