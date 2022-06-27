@@ -56,7 +56,7 @@
     import { computed, defineComponent, onMounted, reactive, Ref, ref, toRefs } from 'vue'
     import FooterBtns from '@/components/footer-btns/index.vue'
     import { apiPostAdd, apiPostEdit, apiPostDetail } from '@/api/organize'
-    import { ElForm } from 'element-plus'
+    import { ElForm, ElMessage } from 'element-plus'
     import { useAdmin } from '@/core/hooks/app'
 
     const { router, route } = useAdmin()
@@ -119,6 +119,7 @@
                 : apiPostAdd(formData.value)
             promise.then(() => {
                 setTimeout(() => router.go(-1), 500)
+                ElMessage({ type: 'success', message: '保存成功' })
             })
         })
     }

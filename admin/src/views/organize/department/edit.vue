@@ -70,6 +70,7 @@
     import { ElForm } from 'element-plus'
     import { useAdmin } from '@/core/hooks/app'
     import FooterBtns from '@/components/footer-btns/index.vue'
+    import { ElMessage } from 'element-plus'
     import { apiDeptAdd, apiDeptEdit, apiDeptDetail, apiDeptLists } from '@/api/organize'
 
     const { router, route } = useAdmin()
@@ -169,6 +170,7 @@
                 : apiDeptAdd(formData.value)
             promise.then(() => {
                 setTimeout(() => router.go(-1), 500)
+                ElMessage({ type: 'success', message: '保存成功' })
             })
         })
     }

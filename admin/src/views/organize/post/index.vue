@@ -80,6 +80,7 @@
     import Popup from '@/components/popup/index.vue'
     import { usePages } from '@/core/hooks/pages'
     import { apiPostLists, apiPostDelete } from '@/api/organize'
+    import { ElMessage } from 'element-plus'
 
     // 表单数据
     const formData = reactive({
@@ -100,6 +101,7 @@
             id,
         }).then(() => {
             requestApi()
+            ElMessage({ type: 'success', message: '删除成功' })
         })
     }
 

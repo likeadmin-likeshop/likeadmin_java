@@ -77,6 +77,7 @@
     import Popup from '@/components/popup/index.vue'
     import { flatten } from '@/utils/util'
     import { apiDeptLists, apiDeptDelete } from '@/api/organize'
+    import { ElMessage } from 'element-plus'
 
     // 表单数据
     const formData = reactive({
@@ -108,6 +109,7 @@
     const handleDelete = (id: number) => {
         apiDeptDelete({ id }).then(() => {
             getDeptLists()
+            ElMessage({ type: 'success', message: '删除成功' })
         })
     }
 
