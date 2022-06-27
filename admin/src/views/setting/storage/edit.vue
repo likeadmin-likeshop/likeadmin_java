@@ -168,6 +168,7 @@
             })
                 .then((res: any) => {
                     setTimeout(() => router.back(), 500)
+                    ElMessage({ type: 'success', message: '设置成功' })
                 })
                 .catch((err: any) => {
                     console.log('err', err)
