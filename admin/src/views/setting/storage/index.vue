@@ -19,12 +19,7 @@
 
                 <el-table-column label="状态">
                     <template #default="{ row }">
-                        <el-switch
-                            v-model="row.status"
-                            :active-value="1"
-                            :inactive-value="0"
-                            @change="handleChange(row)"
-                        />
+                        <span>{{ row.status == 0 ? '关闭' : '开启' }}</span>
                     </template>
                 </el-table-column>
 
