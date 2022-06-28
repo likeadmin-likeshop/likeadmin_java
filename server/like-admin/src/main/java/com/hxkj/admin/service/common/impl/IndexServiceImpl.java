@@ -2,6 +2,7 @@ package com.hxkj.admin.service.common.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hxkj.admin.service.common.IIndexService;
+import com.hxkj.common.config.GlobalConfig;
 import com.hxkj.common.entity.article.Article;
 import com.hxkj.common.mapper.article.ArticleMapper;
 import com.hxkj.common.utils.ConfigUtil;
@@ -33,7 +34,7 @@ public class IndexServiceImpl implements IIndexService {
 
         // 账号信息
         Map<String, Object> version = new LinkedHashMap<>();
-        version.put("version", "1.0.0");
+        version.put("version", GlobalConfig.version);
         version.put("website", "likeadmin");
         console.put("version", version);
 
