@@ -74,34 +74,33 @@ CREATE TABLE `ls_article_category`  (
   `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
   `delete_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章分类表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章分类表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for ls_system_admin
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_system_admin`;
 CREATE TABLE `ls_system_admin`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `dept_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '部门ID',
-  `post_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '岗位ID',
-  `username` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户账号',
-  `nickname` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户昵称',
-  `password` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户密码',
-  `avatar` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户头像',
-  `role` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '角色主键',
-  `salt` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '加密盐巴',
-  `sort` smallint(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序编号',
-  `is_multipoint` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '多端登录: 0=否, 1=是',
-  `is_disable` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否禁用: 0=否, 1=是',
-  `is_delete` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除: 0=否, 1=是',
-  `last_login_ip` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '最后登录IP',
-  `last_login_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '最后登录',
-  `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
-  `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
-  `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统管理员表' ROW_FORMAT = Dynamic;
-
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `dept_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '部门ID',
+    `post_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '岗位ID',
+    `username` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户账号',
+    `nickname` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户昵称',
+    `password` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户密码',
+    `avatar` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户头像',
+    `role` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '角色主键',
+    `salt` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '加密盐巴',
+    `sort` smallint(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序编号',
+    `is_multipoint` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '多端登录: 0=否, 1=是',
+    `is_disable` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否禁用: 0=否, 1=是',
+    `is_delete` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除: 0=否, 1=是',
+    `last_login_ip` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '最后登录IP',
+    `last_login_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '最后登录',
+    `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+    `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+    `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统管理成员表' ROW_FORMAT = Dynamic;
 -- ----------------------------
 -- Table structure for ls_system_config
 -- ----------------------------
@@ -114,7 +113,26 @@ CREATE TABLE `ls_system_config`  (
   `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '创建时间',
   `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统配置表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统配置表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for ls_system_dept
+-- ----------------------------
+DROP TABLE IF EXISTS `ls_system_dept`;
+CREATE TABLE `ls_system_dept`  (
+   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+   `pid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '上级主键',
+   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '部门名称',
+   `duty` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '负责人名',
+   `mobile` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '联系电话',
+   `sort` smallint(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序编号',
+   `is_stop` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否禁用: 0=否, 1=是',
+   `is_delete` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除: 0=否, 1=是',
+   `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+   `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+   `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
+   PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统部门管理表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for ls_system_log_login
@@ -228,6 +246,25 @@ CREATE TABLE `ls_system_dept`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `ls_system_post`;
 CREATE TABLE `ls_system_post`  (
+   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+   `code` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '岗位编码',
+   `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '岗位名称',
+   `remarks` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '岗位备注',
+   `sort` smallint(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '岗位排序',
+   `is_stop` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否停用: 0=否, 1=是',
+   `is_delete` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除: 0=否, 1=是',
+   `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+   `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+   `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
+   PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统岗位管理表' ROW_FORMAT = Dynamic;
+
+
+-- ----------------------------
+-- Table structure for ls_system_post
+-- ----------------------------
+DROP TABLE IF EXISTS `ls_system_post`;
+CREATE TABLE `ls_system_post`  (
     `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
     `code` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '岗位编码',
     `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '岗位名称',
@@ -269,11 +306,17 @@ INSERT INTO `ls_system_menu` VALUES (24, 23, 'C', '系统环境', '', 100, 'sett
 INSERT INTO `ls_system_menu` VALUES (25, 23, 'C', '系统日志', '', 100, 'setting:operate', 'journal', 'setting/system/journal', '', '', 0, 1, 0, 1650600381, 1650600796);
 INSERT INTO `ls_system_menu` VALUES (26, 23, 'C', '系统缓存', '', 100, 'setting:cache', 'cache', 'setting/system/cache', '', '', 0, 1, 0, 1650600466, 1650600807);
 INSERT INTO `ls_system_menu` VALUES (28, 19, 'C', '个人设置', '', 100, 'system:admin:self', 'personal_data', 'setting/personal/personal_data', '', '', 0, 0, 0, 1650859164, 1650859929);
+INSERT INTO `ls_system_menu` VALUES (29, 0, 'M', '组织管理', 'icon_fenxiao_member', 90, '', 'organize', '', '', '', 0, 1, 0, 1653978281, 1656302989);
 INSERT INTO `ls_system_menu` VALUES (30, 29, 'C', '部门管理', '', 100, '', 'department', 'organize/department/index', '', '', 1, 1, 0, 1653978472, 1653978472);
-INSERT INTO `ls_system_menu` VALUES (31, 29, 'C', '岗位管理', '', 100, '', 'post', 'organize/post/index', '', '', 1, 1, 0, 1653978814, 1653978814);
+INSERT INTO `ls_system_menu` VALUES (31, 29, 'C', '岗位管理', '', 100, 'system:post:list', 'post', 'organize/post/index', '', '', 1, 1, 0, 1653978814, 1655716541);
+INSERT INTO `ls_system_menu` VALUES (32, 31, 'A', '新增岗位', '', 10, 'system:post:add', '', '', '', '', 0, 1, 0, 1655716165, 1655716446);
+INSERT INTO `ls_system_menu` VALUES (33, 19, 'M', '存储设置', '', 100, '', 'storage', '', '', '', 0, 1, 0, 1655891318, 1655891318);
+INSERT INTO `ls_system_menu` VALUES (34, 33, 'C', '存储设置', '', 100, '', 'index', 'setting/storage/index', '', '', 0, 1, 0, 1655891420, 1655891420);
+INSERT INTO `ls_system_menu` VALUES (36, 34, 'A', '设置储存', '', 10, 'setting:storage:edit', '', '', '', '', 0, 1, 0, 1655981352, 1655981352);
 COMMIT;
 
 BEGIN;
+INSERT INTO `ls_system_dept` VALUES (1, 0, '总公司部门', 'boss', '13800138000', 3, 0, 0, 1648696695, 1656303298, 0);
 INSERT INTO `ls_system_admin`(`id`, `username`, `nickname`, `password`, `avatar`, `role`, `salt`, `sort`, `is_multipoint`, `is_disable`, `is_delete`, `last_login_ip`, `last_login_time`, `create_time`, `update_time`, `delete_time`) VALUES (1, 'admin', 'admin', 'c507c81efc8c2fbd3b68bf66b1c5eaa3', '', '0', 'YisBi', 0, 0, 0, 0, '127.0.0.1', 1652336423, 1642321599, 1651819202, 0);
 COMMIT;
 
