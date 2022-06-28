@@ -2,20 +2,20 @@ import request from '@/utils/request'
 
 // 获取备案信息
 export function apiGetCopyright() {
-    return request.get('/setting/getCopyright')
+    return request.get('/setting/basics/getCopyright')
 }
 // 设置备案信息
 export function apiSetCopyright(params: any) {
-    return request.post('/setting/setCopyright', { ...params })
+    return request.post('/setting/basics/setCopyright', { ...params })
 }
 
 // 获取网站信息
 export function apiGetWebsite() {
-    return request.get('/setting/getWebsite')
+    return request.get('/setting/basics/getWebsite')
 }
 // 设置网站信息
 export function apiSetWebsite(params: any) {
-    return request.post('/setting/setWebsite', { ...params })
+    return request.post('/setting/basics/setWebsite', { ...params })
 }
 
 // 获取政策协议
@@ -83,3 +83,25 @@ export function apiAuthAdminEditSelf(params: any) {
 export function apiAuthAdminMySelf() {
     return request.post('/auth.admin/mySelf')
 }
+
+/** S 存储设置 **/
+// 存储列表
+export function apiStorageLists() {
+    return request.get('/setting/storage/list')
+}
+
+// 存储切换
+export function apiStorageChange(params: any) {
+    return request.post('/setting/storage/change', params)
+}
+
+// 存储详情
+export function apiStorageDetail(params: any) {
+    return request.get('/setting/storage/detail', { params })
+}
+
+// 存储配置
+export function apiStorageEdit(params: any) {
+    return request.post('/setting/storage/edit', params)
+}
+/** E 存储设置 **/

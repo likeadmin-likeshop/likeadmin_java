@@ -16,6 +16,8 @@ public class SystemAdmin implements Serializable {
 
     @TableId(value="id", type=IdType.AUTO)
     private Integer id;
+    private Integer deptId;
+    private Integer postId;
     private String nickname;
     private String username;
     private String password;

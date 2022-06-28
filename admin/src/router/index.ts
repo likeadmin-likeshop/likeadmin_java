@@ -1,6 +1,6 @@
-
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout/index.vue'
+export const indexName = Symbol('index')
 /**
  * Note: 路由配置项
  *
@@ -19,12 +19,11 @@ import Layout from '@/layout/index.vue'
 // 公共路由
 export const constantRoutes: Array<RouteRecordRaw> = [
     {
+        name: indexName,
         path: '/',
-        redirect: 'workbench',
-        name: 'index',
+        redirect: '/workbench',
         component: Layout
     },
-    
     {
         path: '/permission',
         component: Layout,
@@ -32,34 +31,60 @@ export const constantRoutes: Array<RouteRecordRaw> = [
             {
                 path: 'admin/edit',
                 component: () => import('@/views/permission/admin/edit.vue'),
-                meta: { title: '编辑管理员', activeMenu: '/permission/admin' }
+                meta: { title: '编辑管理员', activeMenu: '/permission/admin' },
             },
             {
                 path: 'menu/edit',
                 component: () => import('@/views/permission/menu/edit.vue'),
-                meta: { title: '编辑菜单', activeMenu: '/permission/menu' }
+                meta: { title: '编辑菜单', activeMenu: '/permission/menu' },
             },
             {
                 path: 'role/edit',
                 component: () => import('@/views/permission/role/edit.vue'),
-                meta: { title: '编辑角色', activeMenu: '/permission/role' }
-            }
-        ]
+                meta: { title: '编辑角色', activeMenu: '/permission/role' },
+            },
+        ],
+    },
+    {
+        path: '/organize',
+        component: Layout,
+        children: [
+            {
+                path: 'department/edit',
+                component: () => import('@/views/organize/department/edit.vue'),
+                meta: { title: '编辑部门', activeMenu: '/organize/department' },
+            },
+            {
+                path: 'post/edit',
+                component: () => import('@/views/organize/post/edit.vue'),
+                meta: { title: '编辑岗位', activeMenu: '/organize/post' },
+            },
+        ],
+    },
+    {
+        path: '/setting',
+        component: Layout,
+        children: [
+            {
+                path: 'storage/edit',
+                component: () => import('@/views/setting/storage/edit.vue'),
+                meta: { title: '存储设置', activeMenu: '/setting/storage' },
+            },
+        ],
     },
     {
         path: '/login',
-        component: () => import('@/views/account/login.vue')
+        component: () => import('@/views/account/login.vue'),
     },
     {
         path: '/500',
-        component: () => import('@/views/error/500.vue')
+        component: () => import('@/views/error/500.vue'),
     },
     {
         path: '/:pathMatch(.*)*',
-        component: () => import('@/views/error/404.vue')
-    }
+        component: () => import('@/views/error/404.vue'),
+    },
 ]
-
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),

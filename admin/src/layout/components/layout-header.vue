@@ -2,7 +2,12 @@
     <div class="layout-header">
         <!-- <input class="search-input" placeholder="请输入搜索内容…" type="text" /> -->
         <div class="admin-info flex flex-center m-l-40">
-            <el-avatar :size="40" :src="userInfo.avatar"></el-avatar>
+            <div v-if="userInfo.avatar == ''">
+                <img class="default-avatar" src="@/assets/images/avatar.png" alt />
+            </div>
+            <div v-else>
+                <el-avatar :size="40" :src="userInfo.avatar"></el-avatar>
+            </div>
 
             <div class="m-l-10">
                 <el-dropdown trigger="hover" @command="handleCommand">
@@ -71,6 +76,12 @@ export default defineComponent({
         border-radius: 20px;
         background: #f6f6f6;
         padding: 0 20px;
+    }
+
+    .default-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
     }
 }
 </style>

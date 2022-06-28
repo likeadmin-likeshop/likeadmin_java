@@ -35,8 +35,8 @@ public class AliyunStorage {
      */
     public OSS ossClient() {
         String endpoint        = "https://oss-cn-shenzhen.aliyuncs.com";
-        String accessKeyId     = this.config.get("access_key");
-        String accessKeySecret = this.config.get("secret_key");
+        String accessKeyId     = this.config.get("accessKey");
+        String accessKeySecret = this.config.get("secretKey");
        return new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
     }
 

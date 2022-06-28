@@ -1,6 +1,5 @@
 package com.hxkj.admin.validate.article;
 
-import com.hxkj.admin.validate.system.SystemAdminParam;
 import com.hxkj.common.validator.annotation.IDMust;
 import com.hxkj.common.validator.annotation.IntegerContains;
 import lombok.Data;

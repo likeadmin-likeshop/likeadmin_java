@@ -1,19 +1,24 @@
 <template>
     <div class="menu">
         <el-card shadow="never">
-            <router-link to="/permission/menu/edit">
-                <el-button v-perm="['system:menu:add']" type="primary" size="small"
-                    >添加菜单</el-button
-                >
+            <router-link to="/permission/menu/edit" class="m-r-15">
+                <el-button v-perm="['system:menu:add']" type="primary" size="small">
+                    添加菜单
+                </el-button>
             </router-link>
+
+            <el-button size="small" @click="toggleRowExpansion(openFlag.openFlagValue)">
+                全部展开/折叠
+            </el-button>
 
             <el-table
                 :data="menuTableData"
                 class="m-t-24"
                 row-key="id"
-                default-expand-all
-                :tree-props="{ children: 'children' }"
+                :default-expand-all="openFlag.openFlagValue"
+                :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
                 size="mini"
+                ref="dataTreeList"
             >
                 <el-table-column prop="menuName" label="名称" width="180"> </el-table-column>
                 <el-table-column prop="menuType" label="菜单类型">
@@ -71,7 +76,8 @@
 import Popup from '@/components/popup/index.vue'
 import { usePages } from '@/core/hooks/pages'
 import { onMounted, reactive, ref } from 'vue'
-import { apiConfigGetMenu, apiMenuDetail, apiMenuAdd, apiMenuEdit, apiMenuDelete } from '@/api/auth'
+import { apiConfigGetMenu, apiMenuDelete } from '@/api/auth'
+import type { ElForm } from 'element-plus'
 
 const menuDataType = {
     CATALOG: 'M', // 目录
@@ -79,7 +85,7 @@ const menuDataType = {
     BUTTON: 'A' // 按钮
 }
 
-const menuTableData = ref([])
+const menuTableData = ref<any>([])
 
 // 获取菜单列表
 const getMenuTableData = () => {
@@ -92,6 +98,28 @@ const getMenuTableData = () => {
 const handleDelete = async (id: number) => {
     await apiMenuDelete({ id })
     getMenuTableData()
+}
+
+const dataTreeList = ref<any>()
+
+// 树层级打开
+const openFlag = {
+    openFlagValue: true
+}
+
+// 展开收缩
+const toggleRowExpansion = (isExpansion: any) => {
+    openFlag.openFlagValue = !isExpansion
+    toggleRowExpansion_forAll(menuTableData.value, openFlag.openFlagValue)
+}
+
+const toggleRowExpansion_forAll = (data: any, isExpansion: any) => {
+    data.forEach((item: any) => {
+        dataTreeList.value.toggleRowExpansion(item, isExpansion)
+        if (item.children != undefined && item.children != null) {
+            toggleRowExpansion_forAll(item.children, isExpansion)
+        }
+    })
 }
 
 onMounted(() => {

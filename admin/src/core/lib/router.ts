@@ -1,5 +1,5 @@
 import { RouteRecordRaw, RouterView } from "vue-router"
-
+import Layout from '@/layout/index.vue'
 export enum MenuType{
     Catalogue = 'M',
     Menu = 'C',
@@ -12,6 +12,7 @@ const modules = import.meta.glob('/src/views/**/*.vue')
 
 // 过滤路由所需要的数据
 export function filterAsyncRoutes(routes: any[], firstRoute = true) {
+
     return routes.map((route => {
         const routeRecord = createRouteRecord(route, firstRoute)
         if (route.children != null && route.children && route.children.length) {
@@ -39,7 +40,7 @@ export function createRouteRecord(route: any, firstRoute: boolean): RouteRecordR
     }
     switch (route.menuType) {
         case MenuType.Catalogue:
-            routeRecord.component = RouterView
+            routeRecord.component = firstRoute ? Layout :  RouterView
             break
         case MenuType.Menu:
             routeRecord.component = loadRouteView(route.component)

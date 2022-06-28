@@ -39,8 +39,8 @@ public class QcloudStorage {
      * @return String
      */
     public COSClient cosClient() {
-        String secretId     = this.config.get("access_key");
-        String secretKey    = this.config.get("secret_key");
+        String secretId     = this.config.get("accessKey");
+        String secretKey    = this.config.get("secretKey");
         COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
         Region region = new Region(this.config.get("region"));
         ClientConfig clientConfig = new ClientConfig(region);

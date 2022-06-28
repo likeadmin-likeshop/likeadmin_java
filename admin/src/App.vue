@@ -19,7 +19,7 @@ export default defineComponent({
         onMounted(async () => {
             // 获取配置
             const data = await store.dispatch('app/getConfig')
-			console.log('data', data)
+            console.log('data', data)
             // 设置网站logo
             let favicon: HTMLLinkElement = document.querySelector('link[rel="icon"]')!
             if (favicon) {
@@ -39,6 +39,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import './assets/font/iconfont.css';
-@import './styles/index.scss';
+@import "./assets/font/iconfont.css";
+@import "./styles/index.scss";
 </style>

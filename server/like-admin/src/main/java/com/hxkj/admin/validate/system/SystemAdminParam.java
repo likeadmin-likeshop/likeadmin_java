@@ -55,6 +55,10 @@ public class SystemAdminParam implements Serializable {
     @DecimalMin(value = "0", message = "排序号值不能少于0", groups = {create.class, update.class})
     private Integer sort = 0;
 
+    private Integer deptId = 0;
+
+    private Integer postId = 0;
+
     private String avatar = "";
 
 }

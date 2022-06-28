@@ -5,7 +5,7 @@
     "dev": "vite",
     "build": "vite build && ./release.sh",
     "preview": "vite preview",
-    "lint": "eslint --fix --ext .ts,.tsx,.vue,.js,.jsx src/",
+    "lint": "eslint ./src/App.vue",
     "prettier": "prettier --write src"
   },
   "dependencies": {

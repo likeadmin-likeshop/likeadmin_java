@@ -16,6 +16,7 @@ public class SystemRoleVo implements Serializable {
     private String name;
     private String remark;
     private Object menus;
+    private Integer member;
     private Integer sort;
     private Integer isDisable;
     private String createTime;

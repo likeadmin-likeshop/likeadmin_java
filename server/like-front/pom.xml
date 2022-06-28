@@ -7,7 +7,7 @@
     <parent>
         <artifactId>likeadmin-java</artifactId>
         <groupId>org.hxkj</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <!-- 模块信息 -->
@@ -15,18 +15,12 @@
     <artifactId>like-front</artifactId>
     <packaging>jar</packaging>
 
-    <!-- 特性信息 -->
-    <properties>
-        <like-common>1.0-SNAPSHOT</like-common>
-    </properties>
-
     <!-- 项目管理 -->
     <dependencies>
         <!-- 公共依赖 -->
         <dependency>
             <groupId>org.hxkj</groupId>
             <artifactId>like-common</artifactId>
-            <version>${like-common}</version>
         </dependency>
     </dependencies>
 
