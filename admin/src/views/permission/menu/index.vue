@@ -2,9 +2,7 @@
     <div class="menu">
         <el-card shadow="never">
             <router-link to="/permission/menu/edit" class="m-r-15">
-                <el-button v-perm="['system:menu:add']" type="primary" size="small">
-                    添加菜单
-                </el-button>
+                <el-button v-perm="['system:menu:add']" type="primary" size="small"> 添加菜单 </el-button>
             </router-link>
 
             <el-button size="small" @click="toggleRowExpansion(openFlag.openFlagValue)">
@@ -37,7 +35,7 @@
                 <el-table-column prop="paths" label="路由地址"> </el-table-column>
                 <el-table-column prop="isDisable" label="状态">
                     <template #default="scope">
-                        <span>{{ scope.row.isDisable == 0 ? '启用' : '关闭' }}</span>
+                        <span>{{ scope.row.isDisable == 0 ? '正常' : '停用' }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="createTime" label="创建时间" width="160"> </el-table-column>
@@ -49,8 +47,8 @@
                             :to="{
                                 path: '/permission/menu/edit',
                                 query: {
-                                    id: scope.row.id
-                                }
+                                    id: scope.row.id,
+                                },
                             }"
                         >
                             <el-button type="text" size="mini">编辑</el-button>
@@ -73,58 +71,58 @@
 </template>
 
 <script lang="ts" setup>
-import Popup from '@/components/popup/index.vue'
-import { usePages } from '@/core/hooks/pages'
-import { onMounted, reactive, ref } from 'vue'
-import { apiConfigGetMenu, apiMenuDelete } from '@/api/auth'
-import type { ElForm } from 'element-plus'
+    import Popup from '@/components/popup/index.vue'
+    import { usePages } from '@/core/hooks/pages'
+    import { onMounted, reactive, ref } from 'vue'
+    import { apiConfigGetMenu, apiMenuDelete } from '@/api/auth'
+    import type { ElForm } from 'element-plus'
 
-const menuDataType = {
-    CATALOG: 'M', // 目录
-    MENU: 'C', // 菜单
-    BUTTON: 'A' // 按钮
-}
+    const menuDataType = {
+        CATALOG: 'M', // 目录
+        MENU: 'C', // 菜单
+        BUTTON: 'A', // 按钮
+    }
 
-const menuTableData = ref<any>([])
+    const menuTableData = ref<any>([])
 
-// 获取菜单列表
-const getMenuTableData = () => {
-    apiConfigGetMenu().then(data => {
-        menuTableData.value = data
+    // 获取菜单列表
+    const getMenuTableData = () => {
+        apiConfigGetMenu().then((data) => {
+            menuTableData.value = data
+        })
+    }
+
+    // 删除菜单
+    const handleDelete = async (id: number) => {
+        await apiMenuDelete({ id })
+        getMenuTableData()
+    }
+
+    const dataTreeList = ref<any>()
+
+    // 树层级打开
+    const openFlag = {
+        openFlagValue: true,
+    }
+
+    // 展开收缩
+    const toggleRowExpansion = (isExpansion: any) => {
+        openFlag.openFlagValue = !isExpansion
+        toggleRowExpansion_forAll(menuTableData.value, openFlag.openFlagValue)
+    }
+
+    const toggleRowExpansion_forAll = (data: any, isExpansion: any) => {
+        data.forEach((item: any) => {
+            dataTreeList.value.toggleRowExpansion(item, isExpansion)
+            if (item.children != undefined && item.children != null) {
+                toggleRowExpansion_forAll(item.children, isExpansion)
+            }
+        })
+    }
+
+    onMounted(() => {
+        getMenuTableData()
     })
-}
-
-// 删除菜单
-const handleDelete = async (id: number) => {
-    await apiMenuDelete({ id })
-    getMenuTableData()
-}
-
-const dataTreeList = ref<any>()
-
-// 树层级打开
-const openFlag = {
-    openFlagValue: true
-}
-
-// 展开收缩
-const toggleRowExpansion = (isExpansion: any) => {
-    openFlag.openFlagValue = !isExpansion
-    toggleRowExpansion_forAll(menuTableData.value, openFlag.openFlagValue)
-}
-
-const toggleRowExpansion_forAll = (data: any, isExpansion: any) => {
-    data.forEach((item: any) => {
-        dataTreeList.value.toggleRowExpansion(item, isExpansion)
-        if (item.children != undefined && item.children != null) {
-            toggleRowExpansion_forAll(item.children, isExpansion)
-        }
-    })
-}
-
-onMounted(() => {
-    getMenuTableData()
-})
 </script>
 
 <style lang="scss" scoped></style>
