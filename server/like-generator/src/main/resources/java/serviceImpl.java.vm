@@ -426,7 +426,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      * @return ${EntityName}
      */
     @Override
-    public#if($isEqually) ${EntityName}Vo#else  ${EntityName}DetailVo#end detail(Integer id) {
+    public#if($isEqually) ${EntityName}Vo#else ${EntityName}DetailVo#end detail(Integer id) {
         Article model = ${entityName}Mapper.selectOne(
             #if($field.contains("is_delete"))
                 new QueryWrapper<${EntityName}>()
