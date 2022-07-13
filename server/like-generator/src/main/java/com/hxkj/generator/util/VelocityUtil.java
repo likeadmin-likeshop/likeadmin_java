@@ -117,17 +117,17 @@ public class VelocityUtil {
     public static List<String> getTemplateList(String genTpl, List<GenTableColumn> columns) {
         List<String> templates = new LinkedList<>();
         templates.add("java/controller.java.vm");
-//        templates.add("java/entity.java.vm");
-//        templates.add("java/mapper.java.vm");
-//        templates.add("java/service.java.vm");
-//        templates.add("java/serviceImpl.java.vm");
-//        templates.add("java/validate.java.vm");
-//        if (VelocityUtil.getIsEqually(columns)) {
-//            templates.add("java/vo.java.vm");
-//        } else {
-//            templates.add("java/voList.java.vm");
-//            templates.add("java/voDetail.java.vm");
-//        }
+        templates.add("java/entity.java.vm");
+        templates.add("java/mapper.java.vm");
+        templates.add("java/service.java.vm");
+        templates.add("java/serviceImpl.java.vm");
+        templates.add("java/validate.java.vm");
+        if (VelocityUtil.getIsEqually(columns)) {
+            templates.add("java/vo.java.vm");
+        } else {
+            templates.add("java/voList.java.vm");
+            templates.add("java/voDetail.java.vm");
+        }
 //        if (GenConstants.TPL_CRUD.equals(genTpl)) {
 //            templates.add("vue/index.vue.vm");
 //        }
@@ -171,6 +171,14 @@ public class VelocityUtil {
 
         else if (template.contains("vo.java.vm")) {
             fileName = StringUtil.format("{}/vo/{}/{}Vo.java", GenConfig.adminPackage, moduleName, entityName);
+        }
+
+        else if (template.contains("voList.java.vm")) {
+            fileName = StringUtil.format("{}/vo/{}/{}ListVo.java", GenConfig.adminPackage, moduleName, entityName);
+        }
+
+        else if (template.contains("voDetail.java.vm")) {
+            fileName = StringUtil.format("{}/vo/{}/{}DetailVo.java", GenConfig.adminPackage, moduleName, entityName);
         }
 
         return fileName;
