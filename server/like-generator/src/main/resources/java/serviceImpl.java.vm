@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
-import ${packageName}.admin.service.common.IArticleService;
+import ${packageName}.admin.service.common.${moduleName}.IArticleService;
 import ${packageName}.admin.validate.common.PageParam;
 import ${packageName}.admin.validate.${moduleName}.ArticleParam;
 #if($isEqually)
@@ -16,10 +16,8 @@ import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
 import ${packageName}.common.core.PageResult;
 import ${packageName}.common.entity.${moduleName}.Article;
 import ${packageName}.common.mapper.${moduleName}.ArticleMapper;
-import ${packageName}.common.utils.StringUtil;
 import ${packageName}.common.utils.TimeUtil;
 import ${packageName}.common.utils.UrlUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -252,7 +250,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         Integer limit = pageParam.getPageSize();
 
         MPJQueryWrapper<${EntityName}> mpjQueryWrapper = new MPJQueryWrapper<>();
-        mpjQueryWrapper.join("${table.sub_table_name} f ON f.${table.sub_table_fk}=t.id")
+        mpjQueryWrapper.leftJoin("${table.sub_table_name} f ON f.${table.sub_table_fk}=t.id")
     #if($isSearch)
     #if($fields.contains("is_delete"))
         mpjQueryWrapper.eq("is_delete", 0);
@@ -312,7 +310,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         for (${EntityName}ListVo vo : iPage.getRecords()) {
         #end
             #if($fields.contains("image"))
-            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage))
+            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage));
             #end
             #if($fields.contains("avatar"))
             vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar))
@@ -321,10 +319,10 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
             vo.setLogo(UrlUtil.toAbsoluteUrl(vo.getLogo))
             #end
             #if($fields.contains("create_time"))
-            vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
+            vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
             #end
             #if($fields.contains("update_time"))
-            vo.setUpdateTime(TimeUtil.timestampToDate(item.getUpdateTime()));
+            vo.setUpdateTime(TimeUtil.timestampToDate(vo.getUpdateTime()));
             #end
         }
 
