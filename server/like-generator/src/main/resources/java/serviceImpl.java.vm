@@ -8,8 +8,12 @@ import ${packageName}.admin.service.common.IArticleService;
 import ${packageName}.admin.validate.common.PageParam;
 import ${packageName}.admin.validate.${moduleName}.CategoryParam;
 import ${packageName}.admin.validate.${moduleName}.ArticleParam;
-import ${packageName}.admin.vo.common.${moduleName}.ArticleDetailVo;
-import ${packageName}.admin.vo.common.${moduleName}.ArticleListVo;
+#if($isEqually)
+import ${packageName}.admin.vo.${moduleName}.${EntityName}Vo;
+#else
+import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
+import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
+#end
 import ${packageName}.admin.vo.common.${moduleName}.CategoryVo;
 import ${packageName}.common.core.PageResult;
 import ${packageName}.common.entity.${moduleName}.Article;

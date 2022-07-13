@@ -3,7 +3,12 @@ package ${packageName}.admin.service.${moduleName};
 import ${packageName}.admin.validate.common.PageParam;
 import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
 #if($table.genTpl=="curd")
+#if($isEqually)
 import ${packageName}.admin.vo.${moduleName}.${EntityName}Vo;
+#else
+import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
+import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
+#end
 #end
 import ${packageName}.common.core.PageResult;
 import ${packageName}.common.entity.${moduleName}.${EntityName};
