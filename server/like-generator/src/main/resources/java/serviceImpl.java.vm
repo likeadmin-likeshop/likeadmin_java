@@ -85,7 +85,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
               #if($column.javaField.equals($column.columnName))
               "${column.queryType}:${column.javaField}:str",
               #else
-              "${column.queryType}:${column.javaField}@${column.columnName}:str",
+              "${column.queryType.toLowerCase()}:${column.javaField}@${column.columnName}:str",
               #end
             #end
           #end
@@ -183,7 +183,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
               #if($column.javaField.equals($column.columnName))
               "${column.queryType}:${column.javaField}:str",
               #else
-              "${column.queryType}:${column.javaField}@${column.columnName}:str",
+              "${column.queryType.toLowerCase()}:${column.javaField}@${column.columnName}:str",
               #end
               #end
                #end
@@ -250,7 +250,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         Integer limit = pageParam.getPageSize();
 
         MPJQueryWrapper<${EntityName}> mpjQueryWrapper = new MPJQueryWrapper<>();
-        mpjQueryWrapper.leftJoin("${table.sub_table_name} f ON f.${table.sub_table_fk}=t.id")
+        mpjQueryWrapper.leftJoin("{$table.sub_table_name} f ON f.{$table.sub_table_fk}=t.id");
     #if($isSearch)
     #if($fields.contains("is_delete"))
         mpjQueryWrapper.eq("is_delete", 0);
@@ -285,7 +285,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
                 #if($column.javaField.equals($column.columnName))
                 "${column.queryType}:${column.javaField}:str",
                 #else
-                "${column.queryType}:${column.javaField}@${column.columnName}:str",
+                "${column.queryType.toLowerCase()}:${column.javaField}@${column.columnName}:str",
                 #end
               #end
             #end

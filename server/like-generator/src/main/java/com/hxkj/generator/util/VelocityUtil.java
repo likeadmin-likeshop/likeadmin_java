@@ -47,8 +47,8 @@ public class VelocityUtil {
         boolean isSearch = false;
         List<String> fields = new LinkedList<>();
         for (GenTableColumn column : columns) {
-            fields.add(column.getColumnName());
             if (column.getIsQuery() == 1) {
+                fields.add(column.getColumnName());
                 isSearch = true;
             }
         }
@@ -68,6 +68,7 @@ public class VelocityUtil {
         velocityContext.put("fields", fields);
         velocityContext.put("isSearch", isSearch);
         velocityContext.put("isEqually", VelocityUtil.getIsEqually(columns));
+        System.out.println(fields);
 
         return velocityContext;
     }
