@@ -62,9 +62,9 @@ public class ${EntityName}Controller {
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         #if($isEqually)
-        ${EntityName}DetailVo detail = i${EntityName}Service.detail(id);
-        #else
         ${EntityName}Vo detail = i${EntityName}Service.detail(id);
+        #else
+        ${EntityName}DetailVo detail = i${EntityName}Service.detail(id);
         #end
         return AjaxResult.success(detail);
     }
