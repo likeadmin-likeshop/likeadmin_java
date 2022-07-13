@@ -2,26 +2,26 @@ package ${packageName}.admin.service.${moduleName}.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
-import com.hxkj.admin.LikeAdminThreadLocal;
-import com.hxkj.admin.config.AdminConfig;
-import com.hxkj.admin.service.ISystemAdminService;
-import com.hxkj.admin.service.ISystemRoleMenuService;
-import com.hxkj.admin.service.ISystemRoleService;
-import com.hxkj.admin.validate.PageParam;
-import com.hxkj.admin.validate.system.SystemAdminParam;
-import com.hxkj.admin.vo.system.SystemAdminVo;
-import com.hxkj.admin.vo.system.SystemRoleVo;
-import com.hxkj.admin.vo.system.SystemSelfVo;
-import com.hxkj.common.core.PageResult;
-import com.hxkj.common.entity.system.SystemAdmin;
-import com.hxkj.common.mapper.system.SystemAdminMapper;
-import com.hxkj.common.mapper.system.SystemMenuMapper;
-import com.hxkj.common.utils.*;
+import ${packageName}.admin.service.common.IArticleService;
+import ${packageName}.admin.validate.common.PageParam;
+import ${packageName}.admin.validate.${moduleName}.CategoryParam;
+import ${packageName}.admin.validate.${moduleName}.ArticleParam;
+import ${packageName}.admin.vo.common.${moduleName}.ArticleDetailVo;
+import ${packageName}.admin.vo.common.${moduleName}.ArticleListVo;
+import ${packageName}.admin.vo.common.${moduleName}.CategoryVo;
+import ${packageName}.common.core.PageResult;
+import ${packageName}.common.entity.${moduleName}.Article;
+import ${packageName}.common.entity.${moduleName}.ArticleCategory;
+import ${packageName}.common.mapper.${moduleName}.ArticleCategoryMapper;
+import ${packageName}.common.mapper.${moduleName}.ArticleMapper;
+import ${packageName}.common.utils.StringUtil;
+import ${packageName}.common.utils.TimeUtil;
+import ${packageName}.common.utils.UrlUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -40,7 +40,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     /**
      * ${functionName}列表
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param pageParam 分页参数
      * @param params 搜索参数
      * @return PageResult<${EntityName}Vo>
@@ -127,7 +129,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     /**
      * ${functionName}列表
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param params 搜索参数
      * @return PageResult<${EntityName}Vo>
      */
@@ -214,7 +218,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     /**
      * ${functionName}列表
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param pageParam 分页参数
      * @param params 搜索参数
      * @return PageResult<${EntityName}Vo>
@@ -302,7 +308,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     /**
      * ${functionName}列表
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param params 搜索参数
      * @return PageResult<${EntityName}Vo>
      */
@@ -376,7 +384,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     /**
      * ${functionName}详情
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param id 主键参数
      * @return ${EntityName}
      */
@@ -411,7 +421,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     /**
      * ${functionName}新增
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param ${entityName}Param 参数
      */
     @Override
@@ -435,7 +447,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     /**
      * ${functionName}编辑
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param ${entityName}Param 参数
      */
     @Override
@@ -472,7 +486,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     /**
      * ${functionName}删除
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param id 主键ID
      */
     @Override

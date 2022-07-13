@@ -1,12 +1,12 @@
 package ${packageName}.admin.service.${moduleName};
 
-import com.hxkj.admin.validate.PageParam;
-import com.hxkj.admin.validate.${entityName}.${EntityName}Param;
+import ${packageName}.admin.validate.common.PageParam;
+import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
 #if($table.genTpl=="curd")
-import com.hxkj.admin.vo.${entityName}.${EntityName}Vo;
+import ${packageName}.admin.vo.${moduleName}.${EntityName}Vo;
 #end
-import com.hxkj.common.core.PageResult;
-import com.hxkj.common.entity.${EntityName};
+import ${packageName}.common.core.PageResult;
+import ${packageName}.common.entity.${moduleName}.${EntityName};
 
 import java.util.Map;
 
