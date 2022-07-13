@@ -1,4 +1,4 @@
-package com.hxkj.admin.service;
+package ${packageName}.admin.service.${moduleName};
 
 import com.hxkj.admin.validate.PageParam;
 import com.hxkj.admin.validate.${entityName}.${EntityName}Param;

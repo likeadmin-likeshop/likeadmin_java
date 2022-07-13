@@ -1,4 +1,4 @@
-package com.hxkj.common.entity;
+package ${packageName}.common.entity.${moduleName};
 
 /**
  * ${functionName}实体

@@ -1,4 +1,4 @@
-package com.hxkj.common.mapper;
+package ${packageName}.common.mapper.${moduleName};
 
 import com.hxkj.common.core.basics.IBaseMapper;
 import com.hxkj.common.entity.${entityName}.${EntityName};
