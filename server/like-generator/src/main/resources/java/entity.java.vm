@@ -4,7 +4,7 @@ package ${packageName}.common.entity.${moduleName};
  * ${functionName}实体
  */
 @Data
-public class ${entityName} implements Serializable {
+public class ${EntityName} implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
