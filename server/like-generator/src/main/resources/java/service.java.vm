@@ -11,7 +11,6 @@ import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
 #end
 #end
 import ${packageName}.common.core.PageResult;
-import ${packageName}.common.entity.${moduleName}.${EntityName};
 
 import java.util.Map;
 

@@ -456,6 +456,15 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #if($field.contains("logo"))
         vo.setLogo(UrlUtil.toAbsoluteUrl(model.getLogo()));
         #end
+        #if($field.contains("create_time"))
+        vo.setCreateTime(TimeUtil.timestampToDate(model.getCreateTime()));
+        #end
+        #if($field.contains("update_time"))
+        vo.setUpdateTime(TimeUtil.timestampToDate(model.getUpdateTime()));
+        #end
+        #if($field.contains("delete_time"))
+        vo.setUpdateTime(TimeUtil.timestampToDate(model.getUpdateTime()));
+        #end
         return vo;
     }
 
