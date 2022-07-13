@@ -115,13 +115,13 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
             #end
             BeanUtils.copyProperties(item, vo);
             #if($fields.contains("image"))
-            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage));
+            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()));
             #end
             #if($fields.contains("avatar"))
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar))
+            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar()))
             #end
             #if($fields.contains("logo"))
-            vo.setLogo(UrlUtil.toAbsoluteUrl(vo.getLogo))
+            vo.setLogo(UrlUtil.toAbsoluteUrl(vo.getLogo()))
             #end
             #if($fields.contains("create_time"))
             vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
@@ -208,13 +208,13 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
             #end
             BeanUtils.copyProperties(item, vo);
             #if($fields.contains("image"))
-            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage))
+            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()))
             #end
             #if($fields.contains("avatar"))
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar))
+            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar()))
             #end
             #if($fields.contains("logo"))
-            vo.setLogo(UrlUtil.toAbsoluteUrl(vo.getLogo))
+            vo.setLogo(UrlUtil.toAbsoluteUrl(vo.getLogo()))
             #end
             #if($fields.contains("create_time"))
             vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
@@ -310,13 +310,13 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         for (${EntityName}ListVo vo : iPage.getRecords()) {
         #end
             #if($fields.contains("image"))
-            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage));
+            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()));
             #end
             #if($fields.contains("avatar"))
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar))
+            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar()))
             #end
             #if($fields.contains("logo"))
-            vo.setLogo(UrlUtil.toAbsoluteUrl(vo.getLogo))
+            vo.setLogo(UrlUtil.toAbsoluteUrl(vo.getLogo()))
             #end
             #if($fields.contains("create_time"))
             vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
@@ -391,13 +391,13 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
             #end
             BeanUtils.copyProperties(item, vo);
             #if($fields.contains("image"))
-            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage))
+            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()))
             #end
             #if($fields.contains("avatar"))
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar))
+            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar()))
             #end
             #if($fields.contains("logo"))
-            vo.setLogo(UrlUtil.toAbsoluteUrl(vo.getLogo))
+            vo.setLogo(UrlUtil.toAbsoluteUrl(vo.getLogo()))
             #end
             #if($fields.contains("create_time"))
             vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
