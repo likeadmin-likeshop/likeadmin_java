@@ -105,10 +105,11 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #if($fields.contains("create_time") || $fields.contains("update_time"))
         #if($isEqually)
         List<${EntityName}Vo> list = new ArrayList<>();
+        for (${EntityName}Vo item : iPage.getRecords()) {
         #else
         List<${EntityName}ListVo> list = new ArrayList<>();
+        for (${EntityName}ListVo item : iPage.getRecords()) {
         #end
-        for (${EntityName} item : iPage.getRecords()) {
             #if($isEqually)
             ${EntityName}Vo vo = new ${EntityName}Vo();
             #else
@@ -116,7 +117,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
             #end
             BeanUtils.copyProperties(item, vo);
             #if($fields.contains("image"))
-            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage))
+            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage));
             #end
             #if($fields.contains("avatar"))
             vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar))
@@ -300,15 +301,16 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
                 new Page<>(page, limit),
                 ${EntityName}Vo.class,
                 mpjQueryWrapper);
+
+        for (${EntityName}Vo vo : iPage.getRecords()) {
         #else
         IPage<${EntityName}ListVo> iPage = ${entityName}Mapper.selectJoinPage(
                 new Page<>(page, limit),
-            ${EntityName}ListVo.class,
+                ${EntityName}ListVo.class,
                 mpjQueryWrapper);
-        #end
 
-    #if($fields.contains("create_time") || $fields.contains("update_time"))
-        for (${EntityName} vo : iPage.getRecords()) {
+        for (${EntityName}ListVo vo : iPage.getRecords()) {
+        #end
             #if($fields.contains("image"))
             vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage))
             #end
@@ -326,7 +328,6 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
             #end
         }
 
-    #end
         return PageResult.iPageHandle(iPage);
    }
 #elseif($table.genTpl=="tree")
@@ -483,7 +484,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     #if(!$column.isIncrement)
         #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
         #if($column.javaField.equals("image") || $colum.javaField.equals("avatar") || $colum.javaField.equals("logo"))
-        model.set${AttrName}(UrlUtil.toRelativeUrl(Param.get${AttrName}()))
+        model.set${AttrName}(UrlUtil.toRelativeUrl(${entityName}Param.get${AttrName}()));
         #elseif(!$column.javaField.equals("createTime") and !$column.javaField.equals("deleteTime") and !$column.javaField.equals("updateTime") and !$column.javaField.equals("isDelete"))
         model.set${AttrName}(${entityName}Param.get${AttrName}());
         #elseif($column.javaField.equals("createTime") || $column.javaField.equals("updateTime"))
@@ -522,7 +523,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     #if(!$column.isIncrement)
         #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
         #if($column.javaField.equals("image") || $colum.javaField.equals("avatar") || $colum.javaField.equals("logo"))
-        model.set${AttrName}(UrlUtil.toRelativeUrl(Param.get${AttrName}()))
+        model.set${AttrName}(UrlUtil.toRelativeUrl(${entityName}Param.get${AttrName}()));
         #elseif(!$column.javaField.equals("createTime") and !$column.javaField.equals("deleteTime") and !$column.javaField.equals("updateTime") and !$column.javaField.equals("isDelete"))
         model.set${AttrName}(${entityName}Param.get${AttrName}());
         #elseif($column.javaField.equals("updateTime"))
@@ -546,11 +547,13 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         ${EntityName} model = ${entityName}Mapper.selectOne(
             #if($fields.contains("is_delete"))
                 new QueryWrapper<${EntityName}>()
+                        .select("id")
                         .eq("id", id)
                         .eq("is_delete", 0)
                         .last("limit 1"));
             #else
                 new QueryWrapper<${EntityName}>()
+                        .select("id")
                         .eq("id", id)
                         .last("limit 1"));
             #end
@@ -562,7 +565,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #if($fields.contains("delete_time"))
         model.setDeleteTime(System.currentTimeMillis() / 1000);
         #end
-        ${entityName}Mapper.updateById(article);
+        ${entityName}Mapper.updateById(model);
    #else
        ${entityName}Mapper.delete(new QueryWrapper<${EntityName}>().eq("id", id));
    #end
