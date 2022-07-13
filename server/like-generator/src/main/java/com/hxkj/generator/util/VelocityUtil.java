@@ -150,7 +150,7 @@ public class VelocityUtil {
         }
 
         else if (template.contains("entity.java.vm")) {
-            fileName = StringUtil.format("{}/entity/{}/{}Entity.java", GenConfig.commonPackage, moduleName, entityName);
+            fileName = StringUtil.format("{}/entity/{}/{}.java", GenConfig.commonPackage, moduleName, entityName);
         }
 
         else if (template.contains("service.java.vm")) {
