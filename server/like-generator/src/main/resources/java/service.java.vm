@@ -26,7 +26,11 @@ public interface I${EntityName}Service {
      * @param params 搜索参数
      * @return PageResult<${EntityName}Vo}>
      */
-    PageResult<${EntityName}ListVo> list(PageParam pageParam, Map<String, String> params);
+     #if($isEqually)
+     PageResult<${EntityName}Vo> list(PageParam pageParam, Map<String, String> params);
+     #else
+     PageResult<${EntityName}ListVo> list(PageParam pageParam, Map<String, String> params);
+     #end
 #elseif($table.genTpl=="tree")
     /**
      * ${functionName}列表
@@ -49,7 +53,11 @@ public interface I${EntityName}Service {
      * @param id 主键ID
      * @return ${EntityName}
      */
-     ${EntityName} detail(Integer id);
+     #if($isEqually)
+     ${EntityName}Vo detail(Integer id);
+     #else
+     ${EntityName}DetailVo detail(Integer id);
+     #end
 
     /**
      * ${functionName}新增

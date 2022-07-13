@@ -42,7 +42,11 @@ public class ${EntityName}Controller {
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
+        #if($isEqually)
+        PageResult<${EntityName}Vo> list = i${EntityName}Service.list(pageParam, params);
+        #else
         PageResult<${EntityName}ListVo> list = i${EntityName}Service.list(pageParam, params);
+        #end
         return AjaxResult.success(list);
     }
 
@@ -57,7 +61,11 @@ public class ${EntityName}Controller {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+        #if($isEqually)
         ${EntityName}DetailVo detail = i${EntityName}Service.detail(id);
+        #else
+        ${EntityName}Vo detail = i${EntityName}Service.detail(id);
+        #end
         return AjaxResult.success(detail);
     }
 
@@ -88,7 +96,7 @@ public class ${EntityName}Controller {
      */
     @Log(title = "${functionName}编辑")
     @PostMapping("/edit")
-    public Object edit(@Validated(value = ${EntityName}Param.update.class}) @RequestBody ${EntityName}Param ${entityName}Param}) {
+    public Object edit(@Validated(value = ${EntityName}Param.update.class) @RequestBody ${EntityName}Param ${entityName}Param) {
         i${EntityName}Service.edit(${entityName}Param);
         return AjaxResult.success();
     }

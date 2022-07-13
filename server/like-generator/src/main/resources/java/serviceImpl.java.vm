@@ -48,7 +48,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      * @return PageResult<${EntityName}Vo>
      */
     @Override
-    public PageResult<${EntityName}Vo> list(PageParam pageParam, Map<String, String> params) {
+    public#if($isEqually) PageResult<${EntityName}Vo>#else PageResult<${EntityName}ListVo>#end list(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
@@ -96,12 +96,24 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         });
         #end
 
+        #if($isEqually)
         IPage<${EntityName}Vo> iPage = ${entityName}Mapper.selectPage(new Page<>(page, limit), queryWrapper);
+        #else
+        IPage<${EntityName}ListVo> iPage = ${entityName}Mapper.selectPage(new Page<>(page, limit), queryWrapper);
+        #end
 
         #if($fields.contains("create_time") || $fields.contains("update_time"))
+        #if($isEqually)
         List<${EntityName}Vo> list = new ArrayList<>();
+        #else
+        List<${EntityName}ListVo> list = new ArrayList<>();
+        #end
         for (${EntityName} item : iPage.getRecords()) {
+            #if($isEqually)
             ${EntityName}Vo vo = new ${EntityName}Vo();
+            #else
+             ${EntityName}ListVo vo = new ${EntityName}ListVo();
+            #end
             BeanUtils.copyProperties(item, vo);
             #if($fields.contains("image"))
             vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage))
@@ -184,9 +196,17 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         List<${EntityName}> arrayData = ${entityName}Mapper.selectList(queryWrapper);
 
         #if($fields.contains("create_time") || $fields.contains("update_time"))
+        #if($isEqually)
         List<${EntityName}Vo> list = new ArrayList<>();
+        #else
+        List<${EntityName}ListVo> list = new ArrayList<>();
+        #end
         for (${EntityName} item : arrayData) {
+            #if($isEqually)
             ${EntityName}Vo vo = new ${EntityName}Vo();
+            #else
+            ${EntityName}ListVo vo = new ${EntityName}ListVo();
+            #end
             BeanUtils.copyProperties(item, vo);
             #if($fields.contains("image"))
             vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage))
@@ -226,7 +246,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      * @return PageResult<${EntityName}Vo>
      */
     @Override
-    public PageResult<${EntityName}Vo> list(PageParam pageParam, Map<String, String> params) {
+    public#if($isEqually) PageResult<${EntityName}Vo>#else PageResult<${EntityName}ListVo>#end list(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
@@ -275,15 +295,20 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         });
         #end
 
+        #if($isEqually)
         IPage<${EntityName}Vo> iPage = ${entityName}Mapper.selectJoinPage(
                 new Page<>(page, limit),
                 ${EntityName}Vo.class,
                 mpjQueryWrapper);
+        #else
+        IPage<${EntityName}ListVo> iPage = ${entityName}Mapper.selectJoinPage(
+                new Page<>(page, limit),
+            ${EntityName}ListVo.class,
+                mpjQueryWrapper);
+        #end
 
     #if($fields.contains("create_time") || $fields.contains("update_time"))
-        for (${EntityName} item : iPage.getRecords()) {
-            ${EntityName}Vo vo = new ${EntityName}Vo();
-            BeanUtils.copyProperties(item, vo);
+        for (${EntityName} vo : iPage.getRecords()) {
             #if($fields.contains("image"))
             vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage))
             #end
@@ -348,13 +373,23 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         });
         #end
 
+        #if($isEqually)
         List<${EntityName}> arrayData = ${entityName}Mapper.selectJoinList(
                 ${EntityName}Vo.class,
                 mpjQueryWrapper);
+        #else
+        List<${EntityNameList}> arrayData = ${entityName}Mapper.selectJoinList(
+            ${EntityName}ListVo.class,
+            mpjQueryWrapper);
+        #end
 
    #if($fields.contains("create_time") || $fields.contains("update_time"))
         for (${EntityName} item : arrayData) {
+            #if($isEqually)
             ${EntityName}Vo vo = new ${EntityName}Vo();
+            #else
+            ${EntityName}ListVo vo = new ${EntityName}Vo();
+            #end
             BeanUtils.copyProperties(item, vo);
             #if($fields.contains("image"))
             vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage))
@@ -391,7 +426,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      * @return ${EntityName}
      */
     @Override
-    public ${EntityName} detail(Integer id) {
+    public#if($isEqually) ${EntityName}Vo#else  ${EntityName}DetailVo#end detail(Integer id) {
         Article model = ${entityName}Mapper.selectOne(
             #if($field.contains("is_delete"))
                 new QueryWrapper<${EntityName}>()
@@ -406,16 +441,22 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
 
         Assert.notNull(model, "${functionName}不存在}");
 
+        #if($isEqually)
+        ArticleVo vo = new ArticleVo();
+        #else
+        ArticleDetailVo vo = new ArticleDetailVo();
+        #end
+
         #if($field.contains("image"))
-        model.setImage(UrlUtil.toAbsoluteUrl(model.getImage()));
+        vo.setImage(UrlUtil.toAbsoluteUrl(model.getImage()));
         #end
         #if($field.contains("avatar"))
-        model.setAvatar(UrlUtil.toAbsoluteUrl(model.getAvatar()));
+        vo.setAvatar(UrlUtil.toAbsoluteUrl(model.getAvatar()));
         #end
         #if($field.contains("logo"))
-        model.setLogo(UrlUtil.toAbsoluteUrl(model.getLogo()));
+        vo.setLogo(UrlUtil.toAbsoluteUrl(model.getLogo()));
         #end
-        return model;
+        return vo;
     }
 
     /**
@@ -454,7 +495,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      */
     @Override
     public void edit(${EntityName}Param ${entityName}Param) {
-        ${EntityName} model = ${entityName}Mapper.selectOne(
+         ${EntityName} model = ${entityName}Mapper.selectOne(
             #if($field.contains("is_delete"))
                 new QueryWrapper<${EntityName}>()
                         .eq("id", ${entityName}Param.getId())
