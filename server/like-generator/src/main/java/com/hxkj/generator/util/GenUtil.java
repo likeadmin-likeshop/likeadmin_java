@@ -27,9 +27,9 @@ public class GenUtil {
         String tableDesc = map.get("table_comment");
         table.setTableName(tableName);
         table.setTableComment(tableDesc);
-        table.setAuthorName(GenConfig.authorName);
+        table.setAuthorName(map.getOrDefault("author_name", ""));
         table.setEntityName(GenUtil.toClassName(tableName));
-        table.setModuleName(GenUtil.toModuleName(GenConfig.packageName));
+        table.setModuleName(GenUtil.toBusinessName(tableName));
         table.setPackageName(GenConfig.packageName);
         table.setBusinessName(GenUtil.toBusinessName(tableName));
         table.setFunctionName(GenUtil.replaceText(tableDesc));
@@ -48,10 +48,10 @@ public class GenUtil {
         String columnName = column.getColumnName();
         String columnType = GenUtil.getDbType(column.getColumnType());
         column.setTableId(table.getId());
+        column.setColumnLength(GenUtil.getColumnLength(column.getColumnType()));
         column.setJavaField(StringUtil.toCamelCase(columnName));
         column.setJavaType(JavaConstants.TYPE_STRING);
         column.setQueryType(GenConstants.QUERY_EQ);
-        column.setIsInsert(GenConstants.REQUIRE);
         column.setUpdateTime(table.getUpdateTime());
         column.setCreateTime(table.getCreateTime());
 
@@ -90,9 +90,15 @@ public class GenUtil {
             }
         }
 
+        // 需插入字段
+        if (!GenUtil.isArraysContains(SqlConstants.COLUMN_NAME_NOT_ADD, columnName)) {
+            column.setIsInsert(GenConstants.REQUIRE);
+        }
+
         // 需编辑字段
-        if (!GenUtil.isArraysContains(SqlConstants.COLUMN_NAME_NOT_EDIT, columnName) && column.getIsPk() == 0) {
+        if (!GenUtil.isArraysContains(SqlConstants.COLUMN_NAME_NOT_EDIT, columnName)) {
             column.setIsEdit(GenConstants.REQUIRE);
+            column.setIsRequired(GenConstants.REQUIRE);
         }
 
         //  需列表字段

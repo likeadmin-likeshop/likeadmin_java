@@ -12,7 +12,7 @@ public class ${entityName} implements Serializable {
     #if($column.isPk)
     @TableId(value="${column.columnName}", type= IdType.AUTO)
     #end
-    private ${column.javaType} ${column.javaField};
+    private ${column.javaType} ${column.javaField}; // ${column.columnComment}
  #end
 
 }

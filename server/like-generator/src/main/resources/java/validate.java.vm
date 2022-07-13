@@ -30,10 +30,19 @@ public class ${EntityName}Param implements Serializable {
     @IDMust(message = "${column.javaField}参数必传且需大于0", groups = {update.class, delete.class})
     #end
     #if(!$column.isPk && $column.isRequired)
-    @NotNull(message = "${column.javaField}参数缺失", groups = {create.class, update.class})
+    @NotNull(message = "${column.javaField}参数缺失", groups = {#if($column.isInsert)create.class#end#if($column.isInsert&&$column.isEdit), #end#if($column.isEdit)update.class#end})
+    #end
+    #if(!$column.isPk && $column.javaType.equals("String"))
+    @Length(max = ${column.columnLength}, message = "${column.javaField}参数不能超出${column.columnLength}个字符", groups = {#if($column.isInsert)create.class#end#if($column.isInsert&&$column.isEdit), #end#if($column.isEdit)update.class#end})
+    #end
+    #if(!$column.isPk && $column.javaField.substring(0,2)!="is" && ($column.javaType.equals("Integer") || $column.javaType.equals("Long")))
+    @DecimalMin(value = 0, message = "${column.javaField}参数值不能少于0", groups = {#if($column.isInsert)create.class#end#if($column.isInsert&&$column.isEdit), #end#if($column.isEdit)update.class#end})
+    #end
+    #if(!$column.isPk && $column.javaField.substring(0,2)=="is" && $column.javaType.equals("Integer"))
+    @IntegerContains(values = {0, 1}, message = "${column.javaField}参数值不在符合范围", groups = {#if($column.isInsert)create.class#end#if($column.isInsert&&$column.isEdit), #end#if($column.isEdit)update.class#end})
     #end
     private ${column.javaType} ${column.javaField};
-  #end
 
+  #end
 #end
 }

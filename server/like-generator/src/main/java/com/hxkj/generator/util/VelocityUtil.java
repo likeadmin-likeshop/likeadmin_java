@@ -58,16 +58,16 @@ public class VelocityUtil {
         velocityContext.put("genTpl", table.getGenTpl());
         velocityContext.put("tableName", table.getTableName());
         velocityContext.put("authorName", table.getAuthorName());
+        velocityContext.put("packageName", GenConfig.packageName);
         velocityContext.put("EntityName", table.getEntityName());
         velocityContext.put("entityName", StringUtil.uncapitalize(table.getEntityName()));
         velocityContext.put("moduleName", table.getModuleName());
-        velocityContext.put("packageName", table.getPackageName());
-        velocityContext.put("businessName", StringUtil.capitalize(table.getBusinessName()));
         velocityContext.put("functionName", StringUtil.isNotEmpty(table.getFunctionName()) ? table.getFunctionName() : "【请填写功能名称】");
         velocityContext.put("table", table);
         velocityContext.put("columns", columns);
         velocityContext.put("fields", fields);
         velocityContext.put("isSearch", isSearch);
+        velocityContext.put("isEqually", VelocityUtil.getIsEqually(columns));
 
         return velocityContext;
     }
@@ -88,20 +88,46 @@ public class VelocityUtil {
     }
 
     /**
+     * 判断需列表字段和查询字段是否一致
+     *
+     * @author fzr
+     * @param columns 字段列表
+     * @return Boolean
+     */
+    public static Boolean getIsEqually(List<GenTableColumn> columns) {
+        StringBuilder listStr  = new StringBuilder();
+        StringBuilder queryStr = new StringBuilder();
+        for (GenTableColumn col : columns) {
+            if (col.getIsList() == 1) {
+                listStr.append(",").append(col.getColumnName());
+            }
+            if (col.getIsQuery() == 1) {
+                queryStr.append(",").append(col.getColumnName());
+            }
+        }
+        return listStr.toString().equals(queryStr.toString());
+    }
+
+    /**
      * 获取模板列表
      *
      * @author fzr
      * @return List<String>
      */
-    public static List<String> getTemplateList(String genTpl) {
+    public static List<String> getTemplateList(String genTpl, List<GenTableColumn> columns) {
         List<String> templates = new LinkedList<>();
         templates.add("java/controller.java.vm");
-        templates.add("java/entity.java.vm");
-        templates.add("java/mapper.java.vm");
-        templates.add("java/service.java.vm");
-        templates.add("java/serviceImpl.java.vm");
-        templates.add("java/validate.java.vm");
-        templates.add("java/vo.java.vm");
+//        templates.add("java/entity.java.vm");
+//        templates.add("java/mapper.java.vm");
+//        templates.add("java/service.java.vm");
+//        templates.add("java/serviceImpl.java.vm");
+//        templates.add("java/validate.java.vm");
+//        if (VelocityUtil.getIsEqually(columns)) {
+//            templates.add("java/vo.java.vm");
+//        } else {
+//            templates.add("java/voList.java.vm");
+//            templates.add("java/voDetail.java.vm");
+//        }
 //        if (GenConstants.TPL_CRUD.equals(genTpl)) {
 //            templates.add("vue/index.vue.vm");
 //        }
@@ -117,43 +143,34 @@ public class VelocityUtil {
     public static String getFileName(String template, GenTable genTable) {
         String fileName = "";
         String entityName   = genTable.getEntityName();
-        String packageName  = genTable.getPackageName();
         String moduleName   = genTable.getModuleName();
-        String[] arrPackage = packageName.split("\\.");
-
-        // 生成路径
-        String javaPath      = StringUtil.replace(packageName, ".", "/");
-        String basePackage   = arrPackage[0] + "/" + arrPackage[1]+"/";
-        String commonPackage = GenConfig.commonApp + basePackage + "common";
-        String mainPackage = StringUtil.format(GenConfig.mainApp, arrPackage.length>=3?arrPackage[2]:"admin")+javaPath;
-        String subPackage  = !moduleName.equals("") ? StringUtil.replace(moduleName, ".", "/") + "/" : "";
 
         if (template.contains("mapper.java.vm")) {
-            fileName = StringUtil.format("{}/mapper/{}{}Mapper.java", commonPackage, subPackage, entityName);
+            fileName = StringUtil.format("{}/mapper/{}/{}Mapper.java", GenConfig.commonPackage, moduleName, entityName);
         }
 
         else if (template.contains("entity.java.vm")) {
-            fileName = StringUtil.format("{}/entity/{}{}Entity.java", commonPackage, subPackage, entityName);
+            fileName = StringUtil.format("{}/entity/{}/{}Entity.java", GenConfig.commonPackage, moduleName, entityName);
         }
 
         else if (template.contains("service.java.vm")) {
-            fileName = StringUtil.format("{}/service/I{}Service.java", mainPackage, entityName);
+            fileName = StringUtil.format("{}/service/{}/I{}Service.java", GenConfig.adminPackage, moduleName, entityName);
         }
 
         else if (template.contains("serviceImpl.java.vm")) {
-            fileName = StringUtil.format("{}/service/impl/{}ServiceImpl.java", mainPackage, entityName);
+            fileName = StringUtil.format("{}/service/{}/impl/{}ServiceImpl.java", GenConfig.adminPackage, moduleName, entityName);
         }
 
         else if (template.contains("controller.java.vm")) {
-            fileName = StringUtil.format("{}/controller/{}{}Controller.java", mainPackage, subPackage, entityName);
+            fileName = StringUtil.format("{}/controller/{}/{}Controller.java", GenConfig.adminPackage, moduleName, entityName);
         }
 
         else if (template.contains("validate.java.vm")) {
-            fileName = StringUtil.format("{}/validate/{}{}Param.java", mainPackage, subPackage, entityName);
+            fileName = StringUtil.format("{}/validate/{}/{}Param.java", GenConfig.adminPackage, moduleName, entityName);
         }
 
         else if (template.contains("vo.java.vm")) {
-            fileName = StringUtil.format("{}/vo/{}{}Vo.java", mainPackage, subPackage, entityName);
+            fileName = StringUtil.format("{}/vo/{}/{}Vo.java", GenConfig.adminPackage, moduleName, entityName);
         }
 
         return fileName;

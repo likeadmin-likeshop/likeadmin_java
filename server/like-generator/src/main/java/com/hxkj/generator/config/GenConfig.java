@@ -2,17 +2,14 @@ package com.hxkj.generator.config;
 
 public class GenConfig {
 
-    // 作者姓名
-    public static String authorName = "LikeAdmin";
+    // 基础包名
+    public static String packageName = "com.hxkj";
 
-    // 生成包名
-    public static String packageName = "com.hxkj.admin";
-
-    // 主要应用
-    public static String mainApp   = "like-{}/src/main/java/";
+    // 后台应用
+    public static String adminPackage   = "like-admin/src/main/java/com/hxkj/admin";
 
     // 公共应用
-    public static String commonApp = "like-common/src/main/java/";
+    public static String commonPackage = "like-common/src/main/java/com/hxkj/common";
 
     // 表前缀名
     public static String tablePrefix = "ls_";

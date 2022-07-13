@@ -76,7 +76,7 @@ public class GenController {
      */
     @PostMapping("/importTable")
     public Object importTable(String tables) {
-        Assert.notNull(tables, "请选择要导出的表");
+        Assert.notNull(tables, "请选择要导入的表");
         String[] tableNames = tables.split(",");
         iGenerateService.importTable(tableNames);
         return AjaxResult.success();
@@ -162,7 +162,7 @@ public class GenController {
         response.reset();
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Expose-Headers", "Content-Disposition");
-        response.setHeader("Content-Disposition", "attachment; filename=\"like.zip\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"likeadmin-curd.zip\"");
         response.addHeader("Content-Length", "" + data.length);
         response.setContentType("application/octet-stream; charset=UTF-8");
         IOUtils.write(data, response.getOutputStream());

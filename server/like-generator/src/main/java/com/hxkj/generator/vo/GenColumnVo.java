@@ -12,9 +12,10 @@ public class GenColumnVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;             // 主键
+    private Integer id;             // 字段主键
     private String columnName;      // 字段名称
     private String columnComment;   // 字段描述
+    private Integer columnLength;   // 字段长度
     private String columnType;      // 字段类型
     private String javaType;        // JAVA类型
     private String javaField;       // JAVA字段

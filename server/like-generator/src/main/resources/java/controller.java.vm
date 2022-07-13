@@ -1,14 +1,18 @@
-package ${packageName}.controller;
+package ${packageName}.admin.controller.${moduleName};
 
-import com.hxkj.admin.LikeAdminThreadLocal;
-import com.hxkj.admin.config.aop.Log;
-import com.hxkj.admin.service.I${EntityName}Service;
-import com.hxkj.admin.validate.PageParam;
-import com.hxkj.admin.validate.system.${EntityName}Param;
-import com.hxkj.admin.vo.system.${EntityName}Vo;
-import com.hxkj.common.core.AjaxResult;
-import com.hxkj.common.core.PageResult;
-import com.hxkj.common.validator.annotation.IDMust;
+import ${packageName}.admin.config.aop.Log;
+import ${packageName}.admin.service.${moduleName}.I${EntityName}Service;
+import ${packageName}.admin.validate.PageParam;
+import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
+#if($isEqually)
+import ${packageName}.admin.vo.${moduleName}.${EntityName}Vo;
+#else
+import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
+import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
+#end
+import ${packageName}.common.core.AjaxResult;
+import ${packageName}.common.core.PageResult;
+import ${packageName}.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +23,8 @@ import java.util.Map;
  * ${functionName}管理
  */
 @RestController
-@RequestMapping("api/${moduleName}/${businessName}")
-public class ${ClassName}Controller {
+@RequestMapping("api/${moduleName}")
+public class ${EntityName}Controller {
 
     @Resource
     I${EntityName}Service i${EntityName}AdminService;
@@ -28,61 +32,74 @@ public class ${ClassName}Controller {
     /**
      * ${functionName}列表
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
+     * @param pageParam 分页参数
+     * @param params 搜索参数
      * @return Object
      */
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
-        PageResult<${EntityName}Vo> list = i${EntityName}Service.list(pageParam, params);
+        PageResult<${EntityName}ListVo> list = i${EntityName}Service.list(pageParam, params);
         return AjaxResult.success(list);
     }
 
     /**
      * ${functionName}详情
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param id 主键ID
      * @return Object
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        ${EntityName}Vo vo = i${EntityName}Service.detail(id);
-        return AjaxResult.success(vo);
+        ${EntityName}DetailVo detail = i${EntityName}Service.detail(id);
+        return AjaxResult.success(detail);
     }
 
     /**
      * ${functionName}新增
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param ${entityName}Param 参数
      * @return Object
      */
     @Log(title = "${functionName}新增")
     @PostMapping("/add")
     public Object add(@Validated(value = ${EntityName}Param.create.class) @RequestBody ${EntityName}Param ${entityName}Param) {
-        i${EntityName}Service.add(systemAdminParam);
+        i${EntityName}Service.add(${entityName}Param);
         return AjaxResult.success();
     }
 
     /**
      * ${functionName}编辑
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param ${entityName}Param 参数
      * @return Object
      */
     @Log(title = "${functionName}编辑")
     @PostMapping("/edit")
-    public Object edit(@Validated(value = ${EntityName}Param.update.class}) @RequestBody ${EntityName}Param} ${entityName}Param}) {
-        i${EntityName}Service.edit(${entityName}Param});
+    public Object edit(@Validated(value = ${EntityName}Param.update.class}) @RequestBody ${EntityName}Param ${entityName}Param}) {
+        i${EntityName}Service.edit(${entityName}Param);
         return AjaxResult.success();
     }
 
     /**
      * ${functionName}删除
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
+     * @param ${entityName}Param 参数
      * @return Object
      */
     @Log(title = "${functionName}删除")

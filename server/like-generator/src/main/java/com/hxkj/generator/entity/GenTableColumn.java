@@ -19,6 +19,7 @@ public class GenTableColumn implements Serializable {
     private Integer tableId;
     private String columnName;
     private String columnComment;
+    private Integer columnLength;
     private String columnType;
     private String javaType;
     private String javaField;

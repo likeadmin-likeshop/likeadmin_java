@@ -1,9 +1,9 @@
 package com.hxkj.admin.service;
 
 import com.hxkj.admin.validate.PageParam;
-import com.hxkj.admin.validate.${EntityName}Param;
+import com.hxkj.admin.validate.${entityName}.${EntityName}Param;
 #if($table.genTpl=="curd")
-import com.hxkj.admin.vo.system.${EntityName}Vo;
+import com.hxkj.admin.vo.${entityName}.${EntityName}Vo;
 #end
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.${EntityName};
@@ -19,18 +19,22 @@ public interface I${EntityName}Service {
     /**
      * ${functionName}列表
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param pageParam 分页参数
      * @param params 搜索参数
      * @return PageResult<${EntityName}Vo}>
      */
-    PageResult<${EntityName}Vo> list(PageParam pageParam, Map<String, String> params);
+    PageResult<${EntityName}ListVo> list(PageParam pageParam, Map<String, String> params);
 #elseif($table.genTpl=="tree")
     /**
      * ${functionName}列表
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
-     *  @param params 搜索参数
+     #end
+     * @param params 搜索参数
      * @return JSONArray
     */
     JSONArray list(Map<String, String> params);
@@ -39,7 +43,9 @@ public interface I${EntityName}Service {
     /**
      * ${functionName}详情
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param id 主键ID
      * @return ${EntityName}
      */
@@ -48,7 +54,9 @@ public interface I${EntityName}Service {
     /**
      * ${functionName}新增
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param ${entityName}Param 参数
      */
     void add(${EntityName}Param ${entityName}Param);
@@ -56,7 +64,9 @@ public interface I${EntityName}Service {
     /**
      * ${functionName}编辑
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param ${entityName}Param 参数
      */
     void edit(${EntityName}Param ${entityName}Param);
@@ -64,7 +74,9 @@ public interface I${EntityName}Service {
     /**
      * ${functionName}删除
      *
+     #if(!$authorName.equals(""))
      * @author ${authorName}
+     #end
      * @param id 主键ID
      */
     void del(Integer id);

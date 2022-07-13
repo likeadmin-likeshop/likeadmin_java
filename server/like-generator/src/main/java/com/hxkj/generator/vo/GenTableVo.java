@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 生成表实体
+ * 生成列表Vo
  */
 @Data
 public class GenTableVo implements Serializable {
@@ -13,7 +13,6 @@ public class GenTableVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;           // 生成主键
-    private String genTpl;        // 生成模板
     private String tableName;     // 表的名称
     private String tableComment;  // 表的描述
     private String createTime;    // 创建时间

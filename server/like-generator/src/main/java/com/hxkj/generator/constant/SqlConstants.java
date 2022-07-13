@@ -17,13 +17,16 @@ public class SqlConstants {
     /** 时间日期字段名 */
     public static final String[] COLUMN_TIME_NAME = {"create_time", "update_time", "delete_time", "start_time", "end_time"};
 
+    /** 页面不需要插入字段 */
+    public static final String[] COLUMN_NAME_NOT_ADD = {"id", "is_delete", "create_time", "update_time", "delete_time"};
+
     /** 页面不需要编辑字段 */
-    public static final String[] COLUMN_NAME_NOT_EDIT = {"id", "create_time", "update_time", "delete_time"};
+    public static final String[] COLUMN_NAME_NOT_EDIT = {"is_delete", "create_time", "update_time", "delete_time"};
 
     /** 页面不需要列表字段 */
     public static final String[] COLUMN_NAME_NOT_LIST = {"id", "intro", "content", "is_delete", "delete_time"};
 
     /** 页面不需要查询字段 */
-    public static final String[] COLUMN_NAME_NOT_QUERY = {"id", "image", "intro", "content", "sort", "is_delete", "create_time", "update_time", "delete_time"};
+    public static final String[] COLUMN_NAME_NOT_QUERY = {"is_delete", "create_time", "update_time", "delete_time"};
 
 }

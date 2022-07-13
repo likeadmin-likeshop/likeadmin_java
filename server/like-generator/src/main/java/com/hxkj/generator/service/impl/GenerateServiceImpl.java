@@ -98,7 +98,7 @@ public class GenerateServiceImpl implements IGenerateService {
 
         QueryWrapper<GenTable> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("id");
-        queryWrapper.select("id,gen_tpl,entity_name,table_name,table_comment,create_time,update_time");
+        queryWrapper.select("id,table_name,table_comment,create_time,update_time");
 
         genTableMapper.setSearch(queryWrapper, params, new String[]{
                 "like:tableName@table_name:str",
@@ -346,6 +346,8 @@ public class GenerateServiceImpl implements IGenerateService {
     @Override
     public Map<String, String> previewCode(Integer id) {
         GenTable table = genTableMapper.selectById(id);
+        Assert.notNull(table, "记录丢失！");
+
         List<GenTableColumn> columns = genTableColumnMapper.selectList(
                 new QueryWrapper<GenTableColumn>()
                         .eq("table_id", id)
@@ -357,7 +359,7 @@ public class GenerateServiceImpl implements IGenerateService {
 
         // 渲染模板
         Map<String, String> map = new LinkedHashMap<>();
-        List<String> templates = VelocityUtil.getTemplateList(table.getGenTpl());
+        List<String> templates = VelocityUtil.getTemplateList(table.getGenTpl(), columns);
         for (String template : templates) {
             StringWriter sw = new StringWriter();
             Template tpl = Velocity.getTemplate(template, GenConstants.UTF8);
@@ -412,7 +414,7 @@ public class GenerateServiceImpl implements IGenerateService {
         VelocityContext context = VelocityUtil.prepareContext(table, columns);
 
         // 渲染模板
-        List<String> templates = VelocityUtil.getTemplateList(table.getGenTpl());
+        List<String> templates = VelocityUtil.getTemplateList(table.getGenTpl(), columns);
         for (String template : templates) {
             StringWriter sw = new StringWriter();
             Template tpl = Velocity.getTemplate(template, GenConstants.UTF8);
@@ -451,7 +453,7 @@ public class GenerateServiceImpl implements IGenerateService {
         VelocityContext context = VelocityUtil.prepareContext(table, columns);
 
         // 渲染模板
-        List<String> templates = VelocityUtil.getTemplateList(table.getGenTpl());
+        List<String> templates = VelocityUtil.getTemplateList(table.getGenTpl(), columns);
         for (String template : templates) {
             StringWriter sw = new StringWriter();
             Template tpl = Velocity.getTemplate(template, GenConstants.UTF8);
