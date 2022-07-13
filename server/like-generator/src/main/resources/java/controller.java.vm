@@ -2,7 +2,7 @@ package ${packageName}.admin.controller.${moduleName};
 
 import ${packageName}.admin.config.aop.Log;
 import ${packageName}.admin.service.${moduleName}.I${EntityName}Service;
-import ${packageName}.admin.validate.PageParam;
+import ${packageName}.admin.validate.common.PageParam;
 import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
 #if($isEqually)
 import ${packageName}.admin.vo.${moduleName}.${EntityName}Vo;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class ${EntityName}Controller {
 
     @Resource
-    I${EntityName}Service i${EntityName}AdminService;
+    I${EntityName}Service i${EntityName}Service;
 
     /**
      * ${functionName}列表
