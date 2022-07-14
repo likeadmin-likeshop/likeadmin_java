@@ -2,10 +2,7 @@ package com.hxkj.admin.service.system;
 
 import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.validate.system.SystemMenuParam;
-import com.hxkj.admin.vo.system.SystemAuthVo;
 import com.hxkj.admin.vo.system.SystemMenuVo;
-
-import java.util.List;
 
 /**
  * 系统菜单服务接口类

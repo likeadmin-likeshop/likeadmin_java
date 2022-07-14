@@ -108,6 +108,11 @@
             <groupId>nl.bitwalker</groupId>
             <artifactId>UserAgentUtils</artifactId>
         </dependency>
+        <!-- io常用工具类 -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
         <!-- 七牛云 -->
         <dependency>
             <groupId>com.qiniu</groupId>

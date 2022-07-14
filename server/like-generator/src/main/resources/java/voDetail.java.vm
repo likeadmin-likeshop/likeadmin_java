@@ -1,0 +1,25 @@
+package ${packageName}.admin.vo.${moduleName};
+
+import lombok.Data;
+
+import java.io.Serializable;
+
+/**
+ * ${EntityName}Vo
+ */
+@Data
+public class ${EntityName}DetailVo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+#foreach ($column in $columns)
+#if($column.isDetail==1)
+    #if($dateFields.contains($column.columnName))
+    private String ${column.javaField}; // ${column.columnComment}
+    #else
+    private ${column.javaType} ${column.javaField}; // ${column.columnComment}
+    #end
+#end
+#end
+
+}

@@ -13,6 +13,7 @@
         <module>like-admin</module>
         <module>like-front</module>
         <module>like-common</module>
+        <module>like-generator</module>
     </modules>
 
     <!-- 特性信息 -->
@@ -34,6 +35,7 @@
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <gson.version>2.9.0</gson.version>
         <bitwalker.version>1.2.4</bitwalker.version>
+        <commons.io.version>2.11.0</commons.io.version>
         <qiniu.version>7.9.5</qiniu.version>
         <qcloud-version>5.6.54</qcloud-version>
         <tencentcloudapi.version>3.1.411</tencentcloudapi.version>
@@ -112,6 +114,12 @@
                 <groupId>nl.bitwalker</groupId>
                 <artifactId>UserAgentUtils</artifactId>
                 <version>${bitwalker.version}</version>
+            </dependency>
+            <!-- io常用工具类 -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
             </dependency>
             <!-- 七牛云 -->
             <dependency>
