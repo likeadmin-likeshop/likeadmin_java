@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageHelper;
+import com.hxkj.common.config.GlobalConfig;
 import com.hxkj.common.core.PageResult;
 
 import com.hxkj.common.exception.OperateException;
@@ -232,6 +233,8 @@ public class GenerateServiceImpl implements IGenerateService {
         model.setGenTpl(genParam.getGenTpl());
         model.setGenType(genParam.getGenType());
         model.setGenPath(genParam.getGenPath());
+        model.setSubTableFk(genParam.getSubTableFk());
+        model.setSubTableName(genParam.getSubTableName().replace(GlobalConfig.tablePrefix, ""));
         genTableMapper.updateById(model);
 
         for (Map<String, String> item : genParam.getColumns()) {

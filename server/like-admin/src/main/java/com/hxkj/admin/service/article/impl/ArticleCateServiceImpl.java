@@ -104,8 +104,8 @@ public class ArticleCateServiceImpl implements IArticleCateService {
         ArticleCategory model = articleCategoryMapper.selectOne(
                 new QueryWrapper<ArticleCategory>()
                         .select(ArticleCategory.class, info->
-                                !info.getColumn().equals("is_delete") &&
-                                        !info.getColumn().equals("delete_time"))
+                          !info.getColumn().equals("is_delete") &&
+                          !info.getColumn().equals("delete_time"))
                         .eq("id", id)
                         .eq("is_delete", 0));
 
@@ -147,8 +147,8 @@ public class ArticleCateServiceImpl implements IArticleCateService {
         ArticleCategory model = articleCategoryMapper.selectOne(
                 new QueryWrapper<ArticleCategory>()
                         .select(ArticleCategory.class, info->
-                                !info.getColumn().equals("is_delete") &&
-                                        !info.getColumn().equals("delete_time"))
+                           !info.getColumn().equals("is_delete") &&
+                           !info.getColumn().equals("delete_time"))
                         .eq("id", categoryParam.getId())
                         .eq("is_delete", 0));
 
@@ -171,8 +171,8 @@ public class ArticleCateServiceImpl implements IArticleCateService {
         ArticleCategory model = articleCategoryMapper.selectOne(
                 new QueryWrapper<ArticleCategory>()
                         .select(ArticleCategory.class, info->
-                                !info.getColumn().equals("is_delete") &&
-                                        !info.getColumn().equals("delete_time"))
+                          !info.getColumn().equals("is_delete") &&
+                          !info.getColumn().equals("delete_time"))
                         .eq("id", id)
                         .eq("is_delete", 0));
 

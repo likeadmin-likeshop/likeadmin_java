@@ -54,20 +54,10 @@ public class GenParam implements Serializable {
     @StringContains(values = {"curd", "tree"}, message = "选择的生成模板不符合")
     private String genTpl;
 
-    @NotNull(message = "packageName参数缺失")
-    @NotEmpty(message = "生成包路径不能为空")
-    @Length(min = 1, max = 60, message = "生成包路径不能大于200个字符")
-    private String packageName;
-
     @NotNull(message = "moduleName参数缺失")
     @NotEmpty(message = "生成模块名不能为空")
     @Length(min = 1, max = 60, message = "生成模块名不能大于60个字符")
     private String moduleName;
-
-    @NotNull(message = "businessName参数缺失")
-    @NotEmpty(message = "生成业务名不能为空")
-    @Length(min = 1, max = 60, message = "生成业务名不能大于60个字符")
-    private String businessName;
 
     @NotNull(message = "functionName参数缺失")
     @NotEmpty(message = "生成功能名不能为空")
@@ -86,5 +76,9 @@ public class GenParam implements Serializable {
     private String treePrimary = "";
 
     private String treeParent  = "";
+
+    private String subTableName = "";
+
+    private String subTableFk = "";
 
 }

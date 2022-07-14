@@ -8,6 +8,7 @@ import com.hxkj.admin.service.system.ISystemLogServer;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.system.LogLoginVo;
 import com.hxkj.admin.vo.system.LogOperateVo;
+import com.hxkj.common.config.GlobalConfig;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SystemLogLogin;
 import com.hxkj.common.entity.system.SystemLogOperate;
@@ -51,7 +52,7 @@ public class SystemLogServerImpl implements ISystemLogServer {
         MPJQueryWrapper<SystemLogOperate> mpjQueryWrapper = new MPJQueryWrapper<SystemLogOperate>()
                 .selectAll(SystemLogOperate.class)
                 .select("sa.username,sa.nickname")
-                .leftJoin("ls_system_admin sa ON sa.id=t.admin_id")
+                .leftJoin("?_system_admin sa ON sa.id=t.admin_id".replace("?_", GlobalConfig.tablePrefix))
                 .orderByDesc("id");
 
         logOperateMapper.setSearch(mpjQueryWrapper, params, new String[]{

@@ -1,5 +1,6 @@
 package com.hxkj.generator.util;
 
+import com.hxkj.common.config.GlobalConfig;
 import com.hxkj.generator.constant.GenConstants;
 import com.hxkj.common.utils.StringUtil;
 import com.hxkj.generator.config.GenConfig;
@@ -166,7 +167,7 @@ public class GenUtil {
      * @return 类名
      */
     public static String toClassName(String tableName) {
-        String tablePrefix = GenConfig.tablePrefix;
+        String tablePrefix = GlobalConfig.tablePrefix;
         if (GenConfig.isRemoveTablePrefix && StringUtil.isNotEmpty(tablePrefix)) {
             String[] searchList = StringUtil.split(tablePrefix, ",");
             tableName = replaceFirst(tableName, searchList);

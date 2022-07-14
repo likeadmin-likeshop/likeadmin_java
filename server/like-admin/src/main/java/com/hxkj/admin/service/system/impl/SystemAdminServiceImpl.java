@@ -16,6 +16,7 @@ import com.hxkj.admin.validate.system.SystemAdminParam;
 import com.hxkj.admin.vo.system.SystemAdminVo;
 import com.hxkj.admin.vo.system.SystemRoleVo;
 import com.hxkj.admin.vo.system.SystemSelfVo;
+import com.hxkj.common.config.GlobalConfig;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SystemAdmin;
 import com.hxkj.common.entity.system.SystemMenu;
@@ -77,8 +78,8 @@ public class SystemAdminServiceImpl implements ISystemAdminService {
                 "sd.name as dept,sr.name as role,t.is_multipoint,t.is_disable," +
                 "t.last_login_ip,t.last_login_time,t.create_time,t.update_time")
             .eq("t.is_delete", 0)
-            .leftJoin("ls_system_role sr ON sr.id=t.role")
-            .leftJoin("ls_system_dept sd ON sd.id=t.dept_id")
+            .leftJoin("?_system_role sr ON sr.id=t.role".replace("?_", GlobalConfig.tablePrefix))
+            .leftJoin("?_system_dept sd ON sd.id=t.dept_id".replace("?_", GlobalConfig.tablePrefix))
             .orderByDesc(Arrays.asList("t.id", "t.sort"));
 
         systemAdminMapper.setSearch(mpjQueryWrapper, params, new String[]{

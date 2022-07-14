@@ -9,6 +9,7 @@ import com.hxkj.admin.validate.article.ArticleParam;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.common.article.ArticleDetailVo;
 import com.hxkj.admin.vo.common.article.ArticleListVo;
+import com.hxkj.common.config.GlobalConfig;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.article.Article;
 import com.hxkj.common.entity.article.ArticleCategory;
@@ -53,7 +54,7 @@ public class ArticleTextServiceImpl implements IArticleTextService {
         MPJQueryWrapper<Article> mpjQueryWrapper = new MPJQueryWrapper<Article>()
                 .selectAll(Article.class)
                 .select("ac.name as category")
-                .innerJoin("ls_article_category ac ON ac.id=t.cid")
+                .innerJoin("?_article_category ac ON ac.id=t.cid".replace("?_", GlobalConfig.tablePrefix))
                 .eq("t.is_delete", 0)
                 .orderByDesc(Arrays.asList("t.sort", "t.id"));
 
@@ -89,8 +90,8 @@ public class ArticleTextServiceImpl implements IArticleTextService {
         Article model = articleMapper.selectOne(
                 new QueryWrapper<Article>()
                         .select(Article.class, info->
-                               !info.getColumn().equals("is_delete") &&
-                               !info.getColumn().equals("delete_time"))
+                          !info.getColumn().equals("is_delete") &&
+                          !info.getColumn().equals("delete_time"))
                         .eq("id", id)
                         .eq("is_delete", 0));
 
