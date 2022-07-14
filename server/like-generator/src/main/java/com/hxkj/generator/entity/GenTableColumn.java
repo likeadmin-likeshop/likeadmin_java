@@ -29,6 +29,7 @@ public class GenTableColumn implements Serializable {
     private Integer isInsert;
     private Integer isEdit;
     private Integer isList;
+    private Integer isDetail;
     private Integer isQuery;
     private String queryType;
     private String htmlType;

@@ -2,6 +2,7 @@ package com.hxkj.generator.util;
 
 import com.hxkj.common.utils.StringUtil;
 import com.hxkj.generator.config.GenConfig;
+import com.hxkj.generator.constant.SqlConstants;
 import com.hxkj.generator.entity.GenTable;
 import com.hxkj.generator.entity.GenTableColumn;
 import org.apache.velocity.VelocityContext;
@@ -38,12 +39,19 @@ public class VelocityUtil {
      * @return VelocityContext
      */
     public static VelocityContext prepareContext(GenTable table, List<GenTableColumn> columns) {
-        // 处理变量字段
-        boolean isSearch = false;
-        List<String> fields = new LinkedList<>();
+        boolean isSearch = false; // 是否需要搜索
+        List<String> allFields  = new LinkedList<>();    // 所有字段
+        List<String> listFields = new LinkedList<>();    // 列表字段
+        List<String> detailFields = new LinkedList<>();  // 详情字段
         for (GenTableColumn column : columns) {
+            allFields.add(column.getColumnName());
+            if (column.getIsList() == 1) {
+                listFields.add(column.getColumnName());
+            }
+            if (column.getIsDetail() == 1) {
+                detailFields.add(column.getColumnName());
+            }
             if (column.getIsQuery() == 1) {
-                fields.add(column.getColumnName());
                 isSearch = true;
             }
         }
@@ -60,7 +68,10 @@ public class VelocityUtil {
         velocityContext.put("functionName", StringUtil.isNotEmpty(table.getFunctionName()) ? table.getFunctionName() : "【请填写功能名称】");
         velocityContext.put("table", table);
         velocityContext.put("columns", columns);
-        velocityContext.put("fields", fields);
+        velocityContext.put("dateFields", SqlConstants.COLUMN_TIME_NAME);
+        velocityContext.put("allFields", allFields);
+        velocityContext.put("listFields", listFields);
+        velocityContext.put("detailFields", detailFields);
         velocityContext.put("isSearch", isSearch);
         return velocityContext;
     }

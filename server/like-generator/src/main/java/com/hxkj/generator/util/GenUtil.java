@@ -29,9 +29,7 @@ public class GenUtil {
         table.setTableComment(tableDesc);
         table.setAuthorName(map.getOrDefault("author_name", ""));
         table.setEntityName(GenUtil.toClassName(tableName));
-        table.setModuleName(GenUtil.toBusinessName(tableName));
-        table.setPackageName(GenConfig.packageName);
-        table.setBusinessName(GenUtil.toBusinessName(tableName));
+        table.setModuleName(GenUtil.toModuleName(tableName));
         table.setFunctionName(GenUtil.replaceText(tableDesc));
         table.setCreateTime(System.currentTimeMillis() / 1000);
         table.setUpdateTime(System.currentTimeMillis() / 1000);
@@ -143,26 +141,13 @@ public class GenUtil {
     }
 
     /**
-     * 转模块名
-     *
-     * @author fzr
-     * @param packageName 包名
-     * @return 模块名
-     */
-    public static String toModuleName(String packageName) {
-        int lastIndex = packageName.lastIndexOf(".");
-        int nameLength = packageName.length();
-        return StringUtil.substring(packageName, lastIndex + 1, nameLength);
-    }
-
-    /**
      * 转业务名
      *
      * @author fzr
      * @param tableName 表名
      * @return 业务名
      */
-    public static String toBusinessName(String tableName)   {
+    public static String toModuleName(String tableName)   {
         int lastIndex = tableName.lastIndexOf("_");
         int nameLength = tableName.length();
         return StringUtil.substring(tableName, lastIndex + 1, nameLength);

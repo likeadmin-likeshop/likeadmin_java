@@ -17,6 +17,9 @@ public class GlobalConfig {
     // 系统加密字符
     public static String secret = "UVTIyzCy";
 
+    // Mysql表前缀
+    public static String tablePrefix = "ls_";
+
     // Redis键前缀
     public static String redisPrefix = "Like:";
 

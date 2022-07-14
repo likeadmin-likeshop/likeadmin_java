@@ -4,16 +4,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
-import ${packageName}.admin.service.${moduleName}.IArticleService;
+import ${packageName}.admin.service.${moduleName}.I${EntityName}Service;
 import ${packageName}.admin.validate.common.PageParam;
-import ${packageName}.admin.validate.${moduleName}.ArticleParam;
+import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
 import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
 import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
 import ${packageName}.common.core.PageResult;
-import ${packageName}.common.entity.${moduleName}.Article;
-import ${packageName}.common.mapper.${moduleName}.ArticleMapper;
+import ${packageName}.common.entity.${moduleName}.${EntityName};
+import ${packageName}.common.mapper.${moduleName}.${EntityName}Mapper;
 import ${packageName}.common.utils.TimeUtil;
 import ${packageName}.common.utils.UrlUtil;
+import com.hxkj.common.config.GlobalConfig;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -25,408 +26,250 @@ import java.util.*;
  */
 @Service
 public class ${EntityName}ServiceImpl implements I${EntityName}Service {
+    ## 设置模板方式的变量
+    #if($table.genTpl.equals("curd"))
+        #set($genTpl = "PageResult<${EntityName}ListVo>")
+        #if($isSearch)
+            #set($isSearchParam = true)
+            #set($genParam = "PageParam pageParam, Map<String, String> params")
+        #else
+            #set($isSearchParam = false)
+            #set($genParam = "PageParam pageParam")
+        #end
+    #else
+        #set($genTpl = "JSONArray")
+        #if($isSearch)
+            #set($isSearchParam = true)
+            #set($genParam = "Map<String, String> params")
+        #else
+            #set($isSearchParam = false)
+            #set($genParam = "")
+        #end
+    #end
+    ## 设置基本的参数变量
+    #set($isAuthor = !$authorName.equals(""))
+    #set($pageParam = "@param pageParam 分页参数")
+    #set($searchparams = "@param params 搜索参数")
 
     @Resource
     ${EntityName}Mapper ${entityName}Mapper;
 
-#if($table.sub_table_name.equals(""))
-#if($table.genTpl=="curd")
     /**
      * ${functionName}列表
      *
-     #if(!$authorName.equals(""))
+     #if($isAuthor)
      * @author ${authorName}
      #end
-     * @param pageParam 分页参数
-     * @param params 搜索参数
-     * @return PageResult<${EntityName}Vo>
+     * ${pageParam}
+     #if($isSearchParam)
+     * ${searchparams}
+     #end
+     * @return $genTpl
      */
     @Override
-    public PageResult<${EntityName}ListVo> list(PageParam pageParam, Map<String, String> params) {
-        Integer page  = pageParam.getPageNo();
-        Integer limit = pageParam.getPageSize();
+    public $genTpl list($genParam) {
+    #if($table.genTpl.equals("curd"))
+        Integer pageNo   = pageParam.getPageNo();
+        Integer pageSize = pageParam.getPageSize();
+    #end
 
+    #if(!$table.subTableName.equals("") && !$table.subTableFk.equals(""))
+        MPJQueryWrapper<${EntityName}> queryWrapper = new MPJQueryWrapper<>();
+        queryWrapper.innerJoin("?_$table.subTableName f ON f.$table.SubTableFk=t.id".replace("?_", GlobalConfig.tablePrefix));
+    #else
         QueryWrapper<${EntityName}> queryWrapper = new QueryWrapper<>();
-        #if($isSearch)
-        #if($fields.contains("is_delete"))
-        queryWrapper.eq("is_delete", 0);
-        #end
-        #if($fields.contains("sort"))
-        queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
-        #else
-        queryWrapper.orderByDesc("id");
-        #end
-        #end
-
-        #if($isSearch)
-        ${entityName}Mapper.setSearch(queryWrapper, params, new String[]{
-        #foreach ($column in $columns)
-        #if($column.isQuery)
-          #if($column.queryType=="datetime")
-              "datetime:startTime-endTime@${column.columnName}:str"
-          #else
-            #if($column.javaType=="Integer")
-              #if($column.javaField.equals($column.columnName))
-              "${column.queryType}:${column.javaField}:int",
-              #else
-              "${column.queryType}:${column.javaField}@${column.columnName}:int",
-              #end
-            #elseif($column.javaType=="Long")
-              #if($column.javaField.equals($column.columnName))
-              "${column.queryType}:${column.javaField}:long",
-              #else
-              "${column.queryType}:${column.javaField}@${column.columnName}:long",
-              #end
-            #else
-              #if($column.javaField.equals($column.columnName))
-              "${column.queryType}:${column.javaField}:str",
-              #else
-              "${column.queryType.toLowerCase()}:${column.javaField}@${column.columnName}:str",
-              #end
-            #end
-          #end
-        #end
-        #end
-        });
-        #end
-
-        IPage<${EntityName}ListVo> iPage = ${entityName}Mapper.selectPage(new Page<>(page, limit), queryWrapper);
-
-        #if($fields.contains("create_time") || $fields.contains("update_time"))
-        List<${EntityName}ListVo> list = new ArrayList<>();
-        #end
-        for (${EntityName}ListVo item : iPage.getRecords()) {
-            ${EntityName}ListVo vo = new ${EntityName}ListVo();
-            BeanUtils.copyProperties(item, vo);
-            #if($fields.contains("image"))
-            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()));
-            #end
-            #if($fields.contains("avatar"))
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar()))
-            #end
-            #if($fields.contains("logo"))
-            vo.setLogo(UrlUtil.toAbsoluteUrl(vo.getLogo()))
-            #end
-            #if($fields.contains("create_time"))
-            vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
-            #end
-            #if($fields.contains("update_time"))
-            vo.setUpdateTime(TimeUtil.timestampToDate(item.getUpdateTime()));
-            #end
-            list.add(vo);
-        }
-        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), list);
-        #else
-        return PageResult.iPageHandle(iPage);
-        #end
-    }
-#elseif($table.genTpl=="tree")
-    /**
-     * ${functionName}列表
-     *
-     #if(!$authorName.equals(""))
-     * @author ${authorName}
-     #end
-     * @param params 搜索参数
-     * @return PageResult<${EntityName}Vo>
-     */
-    @Override
-    public JSONArray list(Map<String, String> params) {
-        QueryWrapper<${EntityName}> queryWrapper = new QueryWrapper<>();
-        #if($isSearch)
-        #if($fields.contains("is_delete"))
-        queryWrapper.eq("is_delete", 0);
-        #end
-        #if($fields.contains("sort"))
-        queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
-        #else
-        queryWrapper.orderByDesc("id");
-        #end
-        #end
-
-        #if($isSearch)
-        ${entityName}Mapper.setSearch(queryWrapper, params, new String[]{
-        #foreach ($column in $columns)
-        #if($column.isQuery)
-            #if($column.queryType=="datetime")
-              "datetime:startTime-endTime@${column.columnName}:str"
-            #else
-            #if($column.javaType=="Integer")
-              #if($column.javaField.equals($column.columnName))
-              "${column.queryType}:${column.javaField}:int",
-              #else
-              "${column.queryType}:${column.javaField}@${column.columnName}:int",
-              #end
-              #elseif($column.javaType=="Long")
-              #if($column.javaField.equals($column.columnName))
-              "${column.queryType}:${column.javaField}:long",
-              #else
-              "${column.queryType}:${column.javaField}@${column.columnName}:long",
-              #end
-              #else
-              #if($column.javaField.equals($column.columnName))
-              "${column.queryType}:${column.javaField}:str",
-              #else
-              "${column.queryType.toLowerCase()}:${column.javaField}@${column.columnName}:str",
-              #end
-              #end
-               #end
-               #end
-            #end
-        });
-        #end
-
-        List<${EntityName}> arrayData = ${entityName}Mapper.selectList(queryWrapper);
-
-        #if($fields.contains("create_time") || $fields.contains("update_time"))
-        List<${EntityName}ListVo> list = new ArrayList<>();
-        for (${EntityName} item : arrayData) {
-            ${EntityName}ListVo vo = new ${EntityName}ListVo();
-            BeanUtils.copyProperties(item, vo);
-            #if($fields.contains("image"))
-            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()))
-            #end
-            #if($fields.contains("avatar"))
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar()))
-            #end
-            #if($fields.contains("logo"))
-            vo.setLogo(UrlUtil.toAbsoluteUrl(vo.getLogo()))
-            #end
-            #if($fields.contains("create_time"))
-            vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
-            #end
-            #if($fields.contains("update_time"))
-            vo.setUpdateTime(TimeUtil.timestampToDate(item.getUpdateTime()));
-            #end
-            list.add(vo);
-        }
-        JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(list));
-        return ArrayUtil.listToTree(jsonArray, "${table.treePrimary}", "${table.treeParent}", "children");
-        #else
-        JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(arrayData));
-        return ArrayUtil.listToTree(jsonArray, "${table.treePrimary}", "${table.treeParent}", "children");
-        #end
-    }
-#end
-#else
-#if($table.genTpl=="curd")
-    /**
-     * ${functionName}列表
-     *
-     #if(!$authorName.equals(""))
-     * @author ${authorName}
-     #end
-     * @param pageParam 分页参数
-     * @param params 搜索参数
-     * @return PageResult<${EntityName}Vo>
-     */
-    @Override
-    public#if($isEqually) PageResult<${EntityName}Vo>#else PageResult<${EntityName}ListVo>#end list(PageParam pageParam, Map<String, String> params) {
-        Integer page  = pageParam.getPageNo();
-        Integer limit = pageParam.getPageSize();
-
-        MPJQueryWrapper<${EntityName}> mpjQueryWrapper = new MPJQueryWrapper<>();
-        mpjQueryWrapper.leftJoin("{$table.sub_table_name} f ON f.{$table.sub_table_fk}=t.id");
-    #if($isSearch)
+    #end
     #if($fields.contains("is_delete"))
-        mpjQueryWrapper.eq("is_delete", 0);
+        queryWrapper.eq("is_delete", 0);
     #end
     #if($fields.contains("sort"))
-        mpjQueryWrapper.orderByDesc(Arrays.asList("sort", "id"));
+        queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
     #else
-        mpjQueryWrapper.orderByDesc("id");
-    #end
+        queryWrapper.orderByDesc("id");
     #end
 
-        #if($isSearch)
+    #if($isSearch)
         ${entityName}Mapper.setSearch(mpjQueryWrapper, params, new String[]{
-        #foreach ($column in $columns)
-        #if($column.isQuery)
-            #if($column.queryType=="datetime")
-                "datetime:startTime-endTime@${column.columnName}:str"
+    #foreach ($column in $columns)
+    #if($column.isQuery)
+        #if($dateFields.contains($column.columnName))
+            "datetime:startTime-endTime@${column.columnName}:str"
+        #elseif($column.javaType=="Integer")
+            #if($column.javaField.equals($column.columnName))
+            "${column.queryType.toLowerCase()}:${column.javaField}:int",
             #else
-            #if($column.javaType=="Integer")
-              #if($column.javaField.equals($column.columnName))
-                "${column.queryType}:${column.javaField}:int",
-              #else
-                "${column.queryType}:${column.javaField}@${column.columnName}:int",
-              #end
-              #elseif($column.javaType=="Long")
-                #if($column.javaField.equals($column.columnName))
-                "${column.queryType}:${column.javaField}:long",
-                #else
-                "${column.queryType}:${column.javaField}@${column.columnName}:long",
-                #end
-              #else
-                #if($column.javaField.equals($column.columnName))
-                "${column.queryType}:${column.javaField}:str",
-                #else
-                "${column.queryType.toLowerCase()}:${column.javaField}@${column.columnName}:str",
-                #end
-              #end
+            "${column.queryType.toLowerCase()}:${column.javaField}@${column.columnName}:int",
+            #end
+        #elseif($column.javaType=="Long")
+            #if($column.javaField.equals($column.columnName))
+            "${column.queryType.toLowerCase()}:${column.javaField}:long",
+            #else
+            "${column.queryType.toLowerCase()}:${column.javaField}@${column.columnName}:long",
+            #end
+        #else
+            #if($column.javaField.equals($column.columnName))
+            "${column.queryType.toLowerCase()}:${column.javaField}:str",
+            #else
+            "${column.queryType.toLowerCase()}:${column.javaField}@${column.columnName}:str",
             #end
         #end
-        #end
-        });
-        #end
+    #end
+    #end
+        }
+    #end
 
+    #if(!$table.subTableName.equals("") && !$table.subTableFk.equals(""))
+        #set($isJoin = true)
+        #set($joinCurdList = "${EntityName}ListVo")
+        #set($joinCurdName = "iPage.getRecords()")
+        #if($table.genTpl.equals("curd"))
         IPage<${EntityName}ListVo> iPage = ${entityName}Mapper.selectJoinPage(
                 new Page<>(page, limit),
                 ${EntityName}ListVo.class,
                 mpjQueryWrapper);
-
-        for (${EntityName}ListVo vo : iPage.getRecords()) {
-            #if($fields.contains("image"))
-            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()));
-            #end
-            #if($fields.contains("avatar"))
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar()))
-            #end
-            #if($fields.contains("logo"))
-            vo.setLogo(UrlUtil.toAbsoluteUrl(vo.getLogo()))
-            #end
-            #if($fields.contains("create_time"))
-            vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
-            #end
-            #if($fields.contains("update_time"))
-            vo.setUpdateTime(TimeUtil.timestampToDate(vo.getUpdateTime()));
-            #end
-        }
-
-        return PageResult.iPageHandle(iPage);
-   }
-#elseif($table.genTpl=="tree")
-    /**
-     * ${functionName}列表
-     *
-     #if(!$authorName.equals(""))
-     * @author ${authorName}
-     #end
-     * @param params 搜索参数
-     * @return PageResult<${EntityName}Vo>
-     */
-    @Override
-    public JSONArray list(Map<String, String> params) {
-        MPJQueryWrapper<${EntityName}> mpjQueryWrapper = new MPJQueryWrapper<>();
-    #if($isSearch)
-    #if($fields.contains("is_delete"))
-        mpjQueryWrapper.eq("t.is_delete", 0);
-    #end
-    #if($fields.contains("sort"))
-        mpjQueryWrapper.orderByDesc(Arrays.asList("t.sort", "t.id"));
+        #else
+        List<${EntityName}ListVo> iPage = ${entityName}Mapper.selectJoinList(
+                ${EntityName}ListVo.class,
+                mpjQueryWrapper);
+        #end
     #else
-        mpjQueryWrapper.orderByDesc("t.id");
+        #set($isJoin = false)
+        #set($joinCurdList = "${EntityName}")
+        #if($table.genTpl.equals("curd"))
+        #set($joinCurdName = "iPage.getRecords()")
+        IPage<${EntityName}> iPage = ${entityName}Mapper.selectPage(new Page<>(page, limit), queryWrapper);
+        #else
+        #set($joinCurdName = "array")
+        List<${EntityName}> array = ${entityName}Mapper.selectList(queryWrapper);
+        #end
     #end
-    #end
 
-        #if($isSearch)
-        ${entityName}Mapper.setSearch(mpjQueryWrapper, params, new String[]{
-        #foreach ($column in $columns)
-        #if($column.isQuery)
-            #if($column.queryType=="datetime")
-                "datetime:startTime-endTime@t.${column.columnName}:str"
-            #else
-              #if($column.javaType=="Integer")
-                "${column.queryType}:${column.javaField}@t.${column.columnName}:int",
-              #elseif($column.javaType=="Long")
-                "${column.queryType}:${column.javaField}@t.${column.columnName}:long",
-              #else
-                "${column.queryType}:${column.javaField}@t.${column.columnName}:str",
-              #end
-            #end
+    #set($filter = false)
+    #if($listFields.contains("create_time") || $listFields.contains("update_time") ||
+        $listFields.contains("delete_time") || $listFields.contains("start_time") ||
+        $listFields.contains("end_time") || $listFields.contains("image") ||
+        $listFields.contains("avatar") || $listFields.contains("logo") ||
+        $listFields.contains("img"))
+        #set($filter = true)
+        #if(!$isJoin)
+        List<${EntityName}ListVo> list = new LinkedList<>();
         #end
-        #end
-        });
-        #end
-
-        List<${EntityNameList}> arrayData = ${entityName}Mapper.selectJoinList(
-            ${EntityName}ListVo.class,
-            mpjQueryWrapper);
-
-   #if($fields.contains("create_time") || $fields.contains("update_time"))
-        for (${EntityName} item : arrayData) {
-            #if($isEqually)
-            ${EntityName}Vo vo = new ${EntityName}Vo();
-            #else
+        for($joinCurdList item : $joinCurdName) {
+            #if(!$isJoin)
             ${EntityName}ListVo vo = new ${EntityName}Vo();
-            #end
             BeanUtils.copyProperties(item, vo);
-            #if($fields.contains("image"))
-            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()))
             #end
-            #if($fields.contains("avatar"))
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar()))
+            #if($listFields.contains("image"))
+            vo.setImage(UrlUtil.toAbsoluteUrl(item.getImage()))
             #end
-            #if($fields.contains("logo"))
-            vo.setLogo(UrlUtil.toAbsoluteUrl(vo.getLogo()))
+            #if($listFields.contains("avatar"))
+            vo.setAvatar(UrlUtil.toAbsoluteUrl(item.getAvatar()))
             #end
-            #if($fields.contains("create_time"))
+            #if($listFields.contains("logo"))
+            vo.setLogo(UrlUtil.toAbsoluteUrl(item.getLogo()))
+            #end
+            #if($listFields.contains("img"))
+            vo.setImg(UrlUtil.toAbsoluteUrl(item.getImg()))
+            #end
+            #if($listFields.contains("create_time"))
             vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
             #end
-            #if($fields.contains("update_time"))
+            #if($listFields.contains("update_time"))
             vo.setUpdateTime(TimeUtil.timestampToDate(item.getUpdateTime()));
             #end
-            list.add(vo);
+            #if($listFields.contains("delete_time"))
+            vo.setDeleteTime(TimeUtil.timestampToDate(item.getDeleteTime()));
+            #end
+            #if($listFields.contains("start_time"))
+            vo.setStartTime(TimeUtil.timestampToDate(item.getStartTime()));
+            #end
+            #if($listFields.contains("end_time"))
+            vo.setEndTime(TimeUtil.timestampToDate(item.getEndTime()));
+            #end
+            #if(!$isJoin)
+            list.add(vo)
+            #end
         }
-
-        #end
-        JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(arrayData));
-        return ArrayUtil.listToTree(jsonArray, "${table.treePrimary}", "${table.treeParent}", "children");
-    }
     #end
-#end
+
+    #if($table.genTpl.equals("curd"))
+        #if($isJoin)
+        return PageResult.iPageHandle(iPage);
+        #else
+        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), list);
+        #end
+    #else
+        #if($filter)
+        JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(list));
+        #else
+        JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(array));
+        #end
+        return ArrayUtil.listToTree(jsonArray, "${table.treePrimary}", "${table.treeParent}", "children");
+    #end
+    }
 
     /**
      * ${functionName}详情
      *
-     #if(!$authorName.equals(""))
+     #if($isAuthor)
      * @author ${authorName}
      #end
      * @param id 主键参数
      * @return ${EntityName}
      */
     @Override
-    public#if($isEqually) ${EntityName}Vo#else ${EntityName}DetailVo#end detail(Integer id) {
-        Article model = ${entityName}Mapper.selectOne(
-            #if($field.contains("is_delete"))
-                new QueryWrapper<${EntityName}>()
-                        .eq("id", id)
-                        .eq("is_delete", 0)
-                        .last("limit 1"));
-            #else
-                new QueryWrapper<${EntityName}>()
-                        .eq("id", id)
-                        .last("limit 1"));
-            #end
+    public ${EntityName}DetailVo detail(Integer id) {
+        ${EntityName} model = new QueryWrapper<${EntityName}>()
+                .eq("id", id)
+                #if($allFields.contains("is_delete"))
+                .eq("is_delete", 0)
+                #end
+                .last("limit 1"));
 
-        Assert.notNull(model, "${functionName}不存在}");
+        Assert.notNull(model, "数据不存在");
 
-        ArticleDetailVo vo = new ArticleDetailVo();
-        #if($field.contains("image"))
-        vo.setImage(UrlUtil.toAbsoluteUrl(model.getImage()));
+        ${EntityName}DetailVo vo = new ${EntityName}DetailVo();
+        BeanUtils.copyProperties(model, vo);
+    #if($detailFields.contains("create_time") || $detailFields.contains("update_time") ||
+        $detailFields.contains("delete_time") || $detailFields.contains("start_time") ||
+        $detailFields.contains("end_time") || $detailFields.contains("image") ||
+        $detailFields.contains("avatar") || $detailFields.contains("logo") ||
+        $detailFields.contains("img"))
+        #if($detailFields.contains("image"))
+        vo.setImage(UrlUtil.toAbsoluteUrl(model.getImage()))
         #end
-        #if($field.contains("avatar"))
-        vo.setAvatar(UrlUtil.toAbsoluteUrl(model.getAvatar()));
+        #if($detailFields.contains("avatar"))
+        vo.setAvatar(UrlUtil.toAbsoluteUrl(model.getAvatar()))
         #end
-        #if($field.contains("logo"))
-        vo.setLogo(UrlUtil.toAbsoluteUrl(model.getLogo()));
+        #if($detailFields.contains("logo"))
+        vo.setLogo(UrlUtil.toAbsoluteUrl(model.getLogo()))
         #end
-        #if($field.contains("create_time"))
+        #if($detailFields.contains("img"))
+        vo.setImg(UrlUtil.toAbsoluteUrl(model.getImg()))
+        #end
+        #if($detailFields.contains("create_time"))
         vo.setCreateTime(TimeUtil.timestampToDate(model.getCreateTime()));
         #end
-        #if($field.contains("update_time"))
+        #if($detailFields.contains("update_time"))
         vo.setUpdateTime(TimeUtil.timestampToDate(model.getUpdateTime()));
         #end
-        #if($field.contains("delete_time"))
-        vo.setUpdateTime(TimeUtil.timestampToDate(model.getUpdateTime()));
+        #if($detailFields.contains("delete_time"))
+        vo.setDeleteTime(TimeUtil.timestampToDate(model.getDeleteTime()));
         #end
+        #if($detailFields.contains("start_time"))
+        vo.setStartTime(TimeUtil.timestampToDate(model.getStartTime()));
+        #end
+        #if($detailFields.contains("end_time"))
+        vo.setEndTime(TimeUtil.timestampToDate(model.getEndTime()));
+        #end
+     #end
         return vo;
     }
 
     /**
      * ${functionName}新增
      *
-     #if(!$authorName.equals(""))
+     #if($isAuthor)
      * @author ${authorName}
      #end
      * @param ${entityName}Param 参数
@@ -435,13 +278,13 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     public void add(${EntityName}Param ${entityName}Param) {
         ${EntityName} model = new ${EntityName}();
     #foreach ($column in $columns)
-    #if(!$column.isIncrement)
+    #if($column.isInsert)
         #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
-        #if($column.javaField.equals("image") || $colum.javaField.equals("avatar") || $colum.javaField.equals("logo"))
+        #if($column.javaField.equals("image") || $column.javaField.equals("avatar") || $column.javaField.equals("logo") || $column.javaField.equals("img"))
         model.set${AttrName}(UrlUtil.toRelativeUrl(${entityName}Param.get${AttrName}()));
-        #elseif(!$column.javaField.equals("createTime") and !$column.javaField.equals("deleteTime") and !$column.javaField.equals("updateTime") and !$column.javaField.equals("isDelete"))
+        #elseif(!$dateFields.contains($column.columnName) and !$column.javaField.equals("isDelete"))
         model.set${AttrName}(${entityName}Param.get${AttrName}());
-        #elseif($column.javaField.equals("createTime") || $column.javaField.equals("updateTime"))
+        #elseif($dateFields.contains($column.columnName))
         model.set${AttrName}(System.currentTimeMillis() / 1000);
         #end
     #end
@@ -452,35 +295,30 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     /**
      * ${functionName}编辑
      *
-     #if(!$authorName.equals(""))
+     #if($isAuthor)
      * @author ${authorName}
      #end
      * @param ${entityName}Param 参数
      */
     @Override
     public void edit(${EntityName}Param ${entityName}Param) {
-         ${EntityName} model = ${entityName}Mapper.selectOne(
-            #if($field.contains("is_delete"))
-                new QueryWrapper<${EntityName}>()
-                        .eq("id", ${entityName}Param.getId())
-                        .eq("is_delete", 0)
-                        .last("limit 1"));
-            #else
-                new QueryWrapper<${EntityName}>()
-                        .eq("id", ${entityName}Param.getId())
-                        .last("limit 1"));
-            #end
+        ${EntityName} model = new QueryWrapper<${EntityName}>()
+                .eq("id", id)
+                #if($allFields.contains("is_delete"))
+                .eq("is_delete", 0)
+                #end
+                .last("limit 1"));
 
-        Assert.notNull(model, "${functionName}不存在!");
+        Assert.notNull(model, "数据不存在!");
 
     #foreach ($column in $columns)
-    #if(!$column.isIncrement)
+    #if($column.isEdit==1)
         #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
-        #if($column.javaField.equals("image") || $colum.javaField.equals("avatar") || $colum.javaField.equals("logo"))
+        #if($column.javaField.equals("image") || $column.javaField.equals("avatar") || $column.javaField.equals("logo") || $column.javaField.equals("img"))
         model.set${AttrName}(UrlUtil.toRelativeUrl(${entityName}Param.get${AttrName}()));
-        #elseif(!$column.javaField.equals("createTime") and !$column.javaField.equals("deleteTime") and !$column.javaField.equals("updateTime") and !$column.javaField.equals("isDelete"))
+        #elseif(!$dateFields.contains($column.columnName) and !$column.javaField.equals("isDelete"))
         model.set${AttrName}(${entityName}Param.get${AttrName}());
-        #elseif($column.javaField.equals("updateTime"))
+        #elseif($dateFields.contains($column.columnName))
         model.set${AttrName}(System.currentTimeMillis() / 1000);
         #end
     #end
@@ -491,38 +329,31 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     /**
      * ${functionName}删除
      *
-     #if(!$authorName.equals(""))
+     #if($isAuthor)
      * @author ${authorName}
      #end
      * @param id 主键ID
      */
     @Override
     public void del(Integer id) {
-        ${EntityName} model = ${entityName}Mapper.selectOne(
-            #if($fields.contains("is_delete"))
-                new QueryWrapper<${EntityName}>()
-                        .select("id")
-                        .eq("id", id)
-                        .eq("is_delete", 0)
-                        .last("limit 1"));
-            #else
-                new QueryWrapper<${EntityName}>()
-                        .select("id")
-                        .eq("id", id)
-                        .last("limit 1"));
-            #end
+        ${EntityName} model = new QueryWrapper<${EntityName}>()
+                .eq("id", id)
+                #if($allFields.contains("is_delete"))
+                .eq("is_delete", 0)
+                #end
+                .last("limit 1"));
 
-        Assert.notNull(model, "${functionName}不存在!");
+        Assert.notNull(model, "数据不存在!");
 
-    #if($fields.contains("is_delete"))
+    #if($allFields.contains("is_delete"))
         model.setIsDelete(1);
-        #if($fields.contains("delete_time"))
+        #if($allFields.contains("delete_time"))
         model.setDeleteTime(System.currentTimeMillis() / 1000);
         #end
         ${entityName}Mapper.updateById(model);
-   #else
-       ${entityName}Mapper.delete(new QueryWrapper<${EntityName}>().eq("id", id));
-   #end
+    #else
+        ${entityName}Mapper.delete(new QueryWrapper<${EntityName}>().eq("id", id));
+    #end
     }
 
 }

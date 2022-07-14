@@ -150,8 +150,6 @@ public class GenerateServiceImpl implements IGenerateService {
         gen.put("genType", genTable.getGenType());
         gen.put("genPath", genTable.getGenPath());
         gen.put("moduleName", genTable.getModuleName());
-        gen.put("packageName", genTable.getPackageName());
-        gen.put("businessName", genTable.getBusinessName());
         gen.put("functionName", genTable.getFunctionName());
         maps.put("gen", gen);
 
@@ -227,8 +225,6 @@ public class GenerateServiceImpl implements IGenerateService {
         model.setAuthorName(genParam.getAuthorName());
         model.setEntityName(genParam.getEntityName());
         model.setModuleName(genParam.getModuleName());
-        model.setPackageName(genParam.getPackageName());
-        model.setBusinessName(genParam.getBusinessName());
         model.setFunctionName(genParam.getFunctionName());
         model.setTreePrimary(genParam.getTreePrimary());
         model.setTreeParent(genParam.getTreeParent());

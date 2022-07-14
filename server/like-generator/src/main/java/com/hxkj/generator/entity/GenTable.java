@@ -22,9 +22,7 @@ public class GenTable implements Serializable {
     private String subTableFk;
     private String authorName;
     private String entityName;
-    private String packageName;
     private String moduleName;
-    private String businessName;
     private String functionName;
     private String treePrimary;
     private String treeParent;

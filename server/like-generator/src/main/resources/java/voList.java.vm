@@ -14,10 +14,10 @@ public class ${EntityName}ListVo implements Serializable {
 
 #foreach ($column in $columns)
 #if($column.isList==1)
-    #if($column.javaField.equals("createTime") || $column.javaField.equals("updateTime") || $column.javaField.equals("deleteTime"))
-    private String ${column.javaField};
+    #if($dateFields.contains($column.columnName))
+    private String ${column.javaField}; // ${column.columnComment}
     #else
-    private ${column.javaType} ${column.javaField};
+    private ${column.javaType} ${column.javaField}; // ${column.columnComment}
     #end
 #end
 #end
