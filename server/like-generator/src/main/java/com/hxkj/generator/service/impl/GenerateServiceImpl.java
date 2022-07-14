@@ -245,6 +245,7 @@ public class GenerateServiceImpl implements IGenerateService {
             column.setIsInsert(Integer.parseInt(item.get("isInsert")));
             column.setIsEdit(Integer.parseInt(item.get("isEdit")));
             column.setIsList(Integer.parseInt(item.get("isList")));
+            column.setIsDetail(Integer.parseInt(item.get("isDetail")));
             column.setIsQuery(Integer.parseInt(item.get("isQuery")));
             column.setQueryType(item.get("queryType"));
             column.setHtmlType(item.get("htmlType"));

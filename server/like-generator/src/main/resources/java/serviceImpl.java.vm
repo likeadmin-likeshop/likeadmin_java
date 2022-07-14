@@ -15,6 +15,7 @@ import ${packageName}.common.mapper.${moduleName}.${EntityName}Mapper;
 import ${packageName}.common.utils.TimeUtil;
 import ${packageName}.common.utils.UrlUtil;
 import com.hxkj.common.config.GlobalConfig;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -69,27 +70,37 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     @Override
     public $genTpl list($genParam) {
     #if($table.genTpl.equals("curd"))
-        Integer pageNo   = pageParam.getPageNo();
-        Integer pageSize = pageParam.getPageSize();
+        Integer page  = pageParam.getPageNo();
+        Integer limit = pageParam.getPageSize();
     #end
 
     #if(!$table.subTableName.equals("") && !$table.subTableFk.equals(""))
-        MPJQueryWrapper<${EntityName}> queryWrapper = new MPJQueryWrapper<>();
-        queryWrapper.innerJoin("?_$table.subTableName f ON f.$table.SubTableFk=t.id".replace("?_", GlobalConfig.tablePrefix));
+        #set($queryWrapper = "mpjQueryWrapper")
+        MPJQueryWrapper<${EntityName}> mpjQueryWrapper = new MPJQueryWrapper<>();
+        mpjQueryWrapper.innerJoin("?_$table.subTableName f ON f.$table.SubTableFk=t.id".replace("?_", GlobalConfig.tablePrefix));
+        #if($fields.contains("is_delete"))
+        mpjQueryWrapper.eq("is_delete", 0);
+        #end
+        #if($fields.contains("sort"))
+         mpjQueryWrapper.orderByDesc(Arrays.asList("sort", "id"));
+        #else
+        mpjQueryWrapper.orderByDesc("id");
+        #end
     #else
+        #set($queryWrapper = "queryWrapper")
         QueryWrapper<${EntityName}> queryWrapper = new QueryWrapper<>();
-    #end
-    #if($fields.contains("is_delete"))
+        #if($fields.contains("is_delete"))
         queryWrapper.eq("is_delete", 0);
-    #end
-    #if($fields.contains("sort"))
+        #end
+        #if($fields.contains("sort"))
         queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
-    #else
+        #else
         queryWrapper.orderByDesc("id");
+        #end
     #end
 
     #if($isSearch)
-        ${entityName}Mapper.setSearch(mpjQueryWrapper, params, new String[]{
+        ${entityName}Mapper.setSearch($queryWrapper, params, new String[]{
     #foreach ($column in $columns)
     #if($column.isQuery)
         #if($dateFields.contains($column.columnName))
@@ -115,7 +126,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #end
     #end
     #end
-        }
+        });
     #end
 
     #if(!$table.subTableName.equals("") && !$table.subTableFk.equals(""))
@@ -126,21 +137,21 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         IPage<${EntityName}ListVo> iPage = ${entityName}Mapper.selectJoinPage(
                 new Page<>(page, limit),
                 ${EntityName}ListVo.class,
-                mpjQueryWrapper);
+                $queryWrapper);
         #else
         List<${EntityName}ListVo> iPage = ${entityName}Mapper.selectJoinList(
                 ${EntityName}ListVo.class,
-                mpjQueryWrapper);
+                $queryWrapper);
         #end
     #else
         #set($isJoin = false)
         #set($joinCurdList = "${EntityName}")
         #if($table.genTpl.equals("curd"))
         #set($joinCurdName = "iPage.getRecords()")
-        IPage<${EntityName}> iPage = ${entityName}Mapper.selectPage(new Page<>(page, limit), queryWrapper);
+        IPage<${EntityName}> iPage = ${entityName}Mapper.selectPage(new Page<>(page, limit), $queryWrapper);
         #else
         #set($joinCurdName = "array")
-        List<${EntityName}> array = ${entityName}Mapper.selectList(queryWrapper);
+        List<${EntityName}> array = ${entityName}Mapper.selectList($queryWrapper);
         #end
     #end
 
@@ -155,21 +166,20 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         List<${EntityName}ListVo> list = new LinkedList<>();
         #end
         for($joinCurdList item : $joinCurdName) {
-            #if(!$isJoin)
-            ${EntityName}ListVo vo = new ${EntityName}Vo();
+        #if(!$isJoin)
+            ${EntityName}ListVo vo = new ${EntityName}ListVo();
             BeanUtils.copyProperties(item, vo);
-            #end
             #if($listFields.contains("image"))
-            vo.setImage(UrlUtil.toAbsoluteUrl(item.getImage()))
+            vo.setImage(UrlUtil.toAbsoluteUrl(item.getImage()));
             #end
             #if($listFields.contains("avatar"))
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(item.getAvatar()))
+            vo.setAvatar(UrlUtil.toAbsoluteUrl(item.getAvatar()));
             #end
             #if($listFields.contains("logo"))
-            vo.setLogo(UrlUtil.toAbsoluteUrl(item.getLogo()))
+            vo.setLogo(UrlUtil.toAbsoluteUrl(item.getLogo()));
             #end
             #if($listFields.contains("img"))
-            vo.setImg(UrlUtil.toAbsoluteUrl(item.getImg()))
+            vo.setImg(UrlUtil.toAbsoluteUrl(item.getImg()));
             #end
             #if($listFields.contains("create_time"))
             vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
@@ -186,9 +196,36 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
             #if($listFields.contains("end_time"))
             vo.setEndTime(TimeUtil.timestampToDate(item.getEndTime()));
             #end
-            #if(!$isJoin)
-            list.add(vo)
+            list.add(vo);
+        #else
+            #if($listFields.contains("image"))
+            item.setImage(UrlUtil.toAbsoluteUrl(item.getImage()));
             #end
+            #if($listFields.contains("avatar"))
+            item.setAvatar(UrlUtil.toAbsoluteUrl(item.getAvatar()));
+            #end
+            #if($listFields.contains("logo"))
+            item.setLogo(UrlUtil.toAbsoluteUrl(item.getLogo()));
+            #end
+            #if($listFields.contains("img"))
+            item.setImg(UrlUtil.toAbsoluteUrl(item.getImg()));
+            #end
+            #if($listFields.contains("create_time"))
+            item.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
+            #end
+            #if($listFields.contains("update_time"))
+            item.setUpdateTime(TimeUtil.timestampToDate(item.getUpdateTime()));
+            #end
+            #if($listFields.contains("delete_time"))
+            item.setDeleteTime(TimeUtil.timestampToDate(item.getDeleteTime()));
+            #end
+            #if($listFields.contains("start_time"))
+            item.setStartTime(TimeUtil.timestampToDate(item.getStartTime()));
+            #end
+            #if($listFields.contains("end_time"))
+            item.setEndTime(TimeUtil.timestampToDate(item.getEndTime()));
+            #end
+        #end
         }
     #end
 
@@ -219,12 +256,13 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      */
     @Override
     public ${EntityName}DetailVo detail(Integer id) {
-        ${EntityName} model = new QueryWrapper<${EntityName}>()
-                .eq("id", id)
-                #if($allFields.contains("is_delete"))
-                .eq("is_delete", 0)
-                #end
-                .last("limit 1"));
+        ${EntityName} model = ${entityName}Mapper.selectOne(
+                new QueryWrapper<${EntityName}>()
+                    .eq("id", id)
+                    #if($allFields.contains("is_delete"))
+                    .eq("is_delete", 0)
+                    #end
+                    .last("limit 1"));
 
         Assert.notNull(model, "数据不存在");
 
@@ -236,16 +274,16 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         $detailFields.contains("avatar") || $detailFields.contains("logo") ||
         $detailFields.contains("img"))
         #if($detailFields.contains("image"))
-        vo.setImage(UrlUtil.toAbsoluteUrl(model.getImage()))
+        vo.setImage(UrlUtil.toAbsoluteUrl(model.getImage()));
         #end
         #if($detailFields.contains("avatar"))
-        vo.setAvatar(UrlUtil.toAbsoluteUrl(model.getAvatar()))
+        vo.setAvatar(UrlUtil.toAbsoluteUrl(model.getAvatar()));
         #end
         #if($detailFields.contains("logo"))
-        vo.setLogo(UrlUtil.toAbsoluteUrl(model.getLogo()))
+        vo.setLogo(UrlUtil.toAbsoluteUrl(model.getLogo()));
         #end
         #if($detailFields.contains("img"))
-        vo.setImg(UrlUtil.toAbsoluteUrl(model.getImg()))
+        vo.setImg(UrlUtil.toAbsoluteUrl(model.getImg()));
         #end
         #if($detailFields.contains("create_time"))
         vo.setCreateTime(TimeUtil.timestampToDate(model.getCreateTime()));
@@ -302,12 +340,13 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      */
     @Override
     public void edit(${EntityName}Param ${entityName}Param) {
-        ${EntityName} model = new QueryWrapper<${EntityName}>()
-                .eq("id", id)
-                #if($allFields.contains("is_delete"))
-                .eq("is_delete", 0)
-                #end
-                .last("limit 1"));
+        ${EntityName} model = ${entityName}Mapper.selectOne(
+                new QueryWrapper<${EntityName}>()
+                    .eq("id",  ${entityName}Param.getId())
+                    #if($allFields.contains("is_delete"))
+                    .eq("is_delete", 0)
+                    #end
+                    .last("limit 1"));
 
         Assert.notNull(model, "数据不存在!");
 
@@ -336,12 +375,13 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      */
     @Override
     public void del(Integer id) {
-        ${EntityName} model = new QueryWrapper<${EntityName}>()
-                .eq("id", id)
-                #if($allFields.contains("is_delete"))
-                .eq("is_delete", 0)
-                #end
-                .last("limit 1"));
+        ${EntityName} model = ${entityName}Mapper.selectOne(
+                new QueryWrapper<${EntityName}>()
+                    .eq("id", id)
+                    #if($allFields.contains("is_delete"))
+                    .eq("is_delete", 0)
+                    #end
+                    .last("limit 1"));
 
         Assert.notNull(model, "数据不存在!");
 

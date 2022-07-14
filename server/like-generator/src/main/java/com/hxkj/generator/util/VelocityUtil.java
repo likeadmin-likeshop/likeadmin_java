@@ -2,6 +2,7 @@ package com.hxkj.generator.util;
 
 import com.hxkj.common.utils.StringUtil;
 import com.hxkj.generator.config.GenConfig;
+import com.hxkj.generator.constant.GenConstants;
 import com.hxkj.generator.constant.SqlConstants;
 import com.hxkj.generator.entity.GenTable;
 import com.hxkj.generator.entity.GenTableColumn;
@@ -108,12 +109,14 @@ public class VelocityUtil {
         templates.add("java/voList.java.vm");
         templates.add("java/voDetail.java.vm");
 
-//        if (GenConstants.TPL_CRUD.equals(genTpl)) {
-//            templates.add("vue/index.vue.vm");
-//        }
-//        else if (GenConstants.TPL_TREE.equals(genTpl)) {
-//            templates.add("vue/index-tree.vue.vm");
-//        }
+        if (GenConstants.TPL_CRUD.equals(genTpl)) {
+            templates.add("vue/index.vue.vm");
+        }
+
+        else if (GenConstants.TPL_TREE.equals(genTpl)) {
+            templates.add("vue/index-tree.vue.vm");
+        }
+
         return templates;
     }
 
