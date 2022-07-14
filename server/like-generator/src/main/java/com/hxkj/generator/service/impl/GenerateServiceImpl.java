@@ -99,7 +99,7 @@ public class GenerateServiceImpl implements IGenerateService {
 
         QueryWrapper<GenTable> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("id");
-        queryWrapper.select("id,table_name,table_comment,create_time,update_time");
+        queryWrapper.select("id,gen_type,table_name,table_comment,create_time,update_time");
 
         genTableMapper.setSearch(queryWrapper, params, new String[]{
                 "like:tableName@table_name:str",
@@ -152,6 +152,10 @@ public class GenerateServiceImpl implements IGenerateService {
         gen.put("genPath", genTable.getGenPath());
         gen.put("moduleName", genTable.getModuleName());
         gen.put("functionName", genTable.getFunctionName());
+        gen.put("treePrimary", genTable.getTreePrimary());
+        gen.put("treeParent", genTable.getTreeParent());
+        gen.put("subTableName", genTable.getSubTableName());
+        gen.put("subTableFk", genTable.getSubTableFk());
         maps.put("gen", gen);
 
         // 字段信息

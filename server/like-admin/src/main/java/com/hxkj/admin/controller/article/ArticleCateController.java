@@ -45,7 +45,7 @@ public class ArticleCateController {
      * @param params 搜索参数
      * @return Object
      */
-    @GetMapping("/cateList")
+    @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
         PageResult<CategoryVo> list = iArticleCateService.list(pageParam, params);
