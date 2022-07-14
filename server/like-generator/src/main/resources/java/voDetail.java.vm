@@ -13,13 +13,11 @@ public class ${EntityName}DetailVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
 #foreach ($column in $columns)
-#if($column.isQuery==1)
     #if($column.javaField.equals("createTime") || $column.javaField.equals("updateTime") || $column.javaField.equals("deleteTime"))
     private String ${column.javaField};
     #else
     private ${column.javaType} ${column.javaField};
     #end
-#end
 #end
 
 }

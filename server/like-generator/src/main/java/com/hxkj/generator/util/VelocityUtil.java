@@ -1,9 +1,7 @@
 package com.hxkj.generator.util;
 
 import com.hxkj.common.utils.StringUtil;
-import com.hxkj.common.utils.UrlUtil;
 import com.hxkj.generator.config.GenConfig;
-import com.hxkj.generator.constant.GenConstants;
 import com.hxkj.generator.entity.GenTable;
 import com.hxkj.generator.entity.GenTableColumn;
 import org.apache.velocity.VelocityContext;
@@ -14,10 +12,7 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class VelocityUtil {
 
@@ -67,9 +62,6 @@ public class VelocityUtil {
         velocityContext.put("columns", columns);
         velocityContext.put("fields", fields);
         velocityContext.put("isSearch", isSearch);
-        velocityContext.put("isEqually", VelocityUtil.getIsEqually(columns));
-        System.out.println(fields);
-
         return velocityContext;
     }
 
@@ -89,27 +81,6 @@ public class VelocityUtil {
     }
 
     /**
-     * 判断需列表字段和查询字段是否一致
-     *
-     * @author fzr
-     * @param columns 字段列表
-     * @return Boolean
-     */
-    public static Boolean getIsEqually(List<GenTableColumn> columns) {
-        StringBuilder listStr  = new StringBuilder();
-        StringBuilder queryStr = new StringBuilder();
-        for (GenTableColumn col : columns) {
-            if (col.getIsList() == 1) {
-                listStr.append(",").append(col.getColumnName());
-            }
-            if (col.getIsQuery() == 1) {
-                queryStr.append(",").append(col.getColumnName());
-            }
-        }
-        return listStr.toString().equals(queryStr.toString());
-    }
-
-    /**
      * 获取模板列表
      *
      * @author fzr
@@ -123,12 +94,9 @@ public class VelocityUtil {
         templates.add("java/service.java.vm");
         templates.add("java/serviceImpl.java.vm");
         templates.add("java/validate.java.vm");
-        if (VelocityUtil.getIsEqually(columns)) {
-            templates.add("java/vo.java.vm");
-        } else {
-            templates.add("java/voList.java.vm");
-            templates.add("java/voDetail.java.vm");
-        }
+        templates.add("java/voList.java.vm");
+        templates.add("java/voDetail.java.vm");
+
 //        if (GenConstants.TPL_CRUD.equals(genTpl)) {
 //            templates.add("vue/index.vue.vm");
 //        }

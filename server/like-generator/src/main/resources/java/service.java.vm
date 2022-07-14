@@ -2,14 +2,8 @@ package ${packageName}.admin.service.${moduleName};
 
 import ${packageName}.admin.validate.common.PageParam;
 import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
-#if($table.genTpl=="curd")
-#if($isEqually)
-import ${packageName}.admin.vo.${moduleName}.${EntityName}Vo;
-#else
 import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
 import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
-#end
-#end
 import ${packageName}.common.core.PageResult;
 
 import java.util.Map;
@@ -20,7 +14,7 @@ import java.util.Map;
 public interface I${EntityName}Service {
 
  #if($table.genTpl=="curd")
-    /**
+    /**、
      * ${functionName}列表
      *
      #if(!$authorName.equals(""))
@@ -30,11 +24,7 @@ public interface I${EntityName}Service {
      * @param params 搜索参数
      * @return PageResult<${EntityName}Vo}>
      */
-    #if($isEqually)
-    PageResult<${EntityName}Vo> list(PageParam pageParam, Map<String, String> params);
-    #else
     PageResult<${EntityName}ListVo> list(PageParam pageParam, Map<String, String> params);
-    #end
 #elseif($table.genTpl=="tree")
     /**
      * ${functionName}列表
@@ -57,11 +47,7 @@ public interface I${EntityName}Service {
      * @param id 主键ID
      * @return ${EntityName}
      */
-    #if($isEqually)
-    ${EntityName}Vo detail(Integer id);
-    #else
     ${EntityName}DetailVo detail(Integer id);
-    #end
 
     /**
      * ${functionName}新增

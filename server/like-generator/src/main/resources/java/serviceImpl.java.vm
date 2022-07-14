@@ -7,12 +7,8 @@ import com.github.yulichang.query.MPJQueryWrapper;
 import ${packageName}.admin.service.${moduleName}.IArticleService;
 import ${packageName}.admin.validate.common.PageParam;
 import ${packageName}.admin.validate.${moduleName}.ArticleParam;
-#if($isEqually)
-import ${packageName}.admin.vo.${moduleName}.${EntityName}Vo;
-#else
 import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
 import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
-#end
 import ${packageName}.common.core.PageResult;
 import ${packageName}.common.entity.${moduleName}.Article;
 import ${packageName}.common.mapper.${moduleName}.ArticleMapper;
@@ -46,7 +42,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      * @return PageResult<${EntityName}Vo>
      */
     @Override
-    public#if($isEqually) PageResult<${EntityName}Vo>#else PageResult<${EntityName}ListVo>#end list(PageParam pageParam, Map<String, String> params) {
+    public PageResult<${EntityName}ListVo> list(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
@@ -94,25 +90,13 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         });
         #end
 
-        #if($isEqually)
-        IPage<${EntityName}Vo> iPage = ${entityName}Mapper.selectPage(new Page<>(page, limit), queryWrapper);
-        #else
         IPage<${EntityName}ListVo> iPage = ${entityName}Mapper.selectPage(new Page<>(page, limit), queryWrapper);
-        #end
 
         #if($fields.contains("create_time") || $fields.contains("update_time"))
-        #if($isEqually)
-        List<${EntityName}Vo> list = new ArrayList<>();
-        for (${EntityName}Vo item : iPage.getRecords()) {
-        #else
         List<${EntityName}ListVo> list = new ArrayList<>();
-        for (${EntityName}ListVo item : iPage.getRecords()) {
         #end
-            #if($isEqually)
-            ${EntityName}Vo vo = new ${EntityName}Vo();
-            #else
-             ${EntityName}ListVo vo = new ${EntityName}ListVo();
-            #end
+        for (${EntityName}ListVo item : iPage.getRecords()) {
+            ${EntityName}ListVo vo = new ${EntityName}ListVo();
             BeanUtils.copyProperties(item, vo);
             #if($fields.contains("image"))
             vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()));
@@ -195,17 +179,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         List<${EntityName}> arrayData = ${entityName}Mapper.selectList(queryWrapper);
 
         #if($fields.contains("create_time") || $fields.contains("update_time"))
-        #if($isEqually)
-        List<${EntityName}Vo> list = new ArrayList<>();
-        #else
         List<${EntityName}ListVo> list = new ArrayList<>();
-        #end
         for (${EntityName} item : arrayData) {
-            #if($isEqually)
-            ${EntityName}Vo vo = new ${EntityName}Vo();
-            #else
             ${EntityName}ListVo vo = new ${EntityName}ListVo();
-            #end
             BeanUtils.copyProperties(item, vo);
             #if($fields.contains("image"))
             vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()))
@@ -294,21 +270,12 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         });
         #end
 
-        #if($isEqually)
-        IPage<${EntityName}Vo> iPage = ${entityName}Mapper.selectJoinPage(
-                new Page<>(page, limit),
-                ${EntityName}Vo.class,
-                mpjQueryWrapper);
-
-        for (${EntityName}Vo vo : iPage.getRecords()) {
-        #else
         IPage<${EntityName}ListVo> iPage = ${entityName}Mapper.selectJoinPage(
                 new Page<>(page, limit),
                 ${EntityName}ListVo.class,
                 mpjQueryWrapper);
 
         for (${EntityName}ListVo vo : iPage.getRecords()) {
-        #end
             #if($fields.contains("image"))
             vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()));
             #end
@@ -372,15 +339,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         });
         #end
 
-        #if($isEqually)
-        List<${EntityName}> arrayData = ${entityName}Mapper.selectJoinList(
-                ${EntityName}Vo.class,
-                mpjQueryWrapper);
-        #else
         List<${EntityNameList}> arrayData = ${entityName}Mapper.selectJoinList(
             ${EntityName}ListVo.class,
             mpjQueryWrapper);
-        #end
 
    #if($fields.contains("create_time") || $fields.contains("update_time"))
         for (${EntityName} item : arrayData) {
@@ -440,12 +401,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
 
         Assert.notNull(model, "${functionName}不存在}");
 
-        #if($isEqually)
-        ArticleVo vo = new ArticleVo();
-        #else
         ArticleDetailVo vo = new ArticleDetailVo();
-        #end
-
         #if($field.contains("image"))
         vo.setImage(UrlUtil.toAbsoluteUrl(model.getImage()));
         #end

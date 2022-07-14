@@ -4,12 +4,8 @@ import ${packageName}.admin.config.aop.Log;
 import ${packageName}.admin.service.${moduleName}.I${EntityName}Service;
 import ${packageName}.admin.validate.common.PageParam;
 import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
-#if($isEqually)
-import ${packageName}.admin.vo.${moduleName}.${EntityName}Vo;
-#else
 import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
 import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
-#end
 import ${packageName}.common.core.AjaxResult;
 import ${packageName}.common.core.PageResult;
 import ${packageName}.common.validator.annotation.IDMust;
@@ -42,11 +38,7 @@ public class ${EntityName}Controller {
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
-        #if($isEqually)
-        PageResult<${EntityName}Vo> list = i${EntityName}Service.list(pageParam, params);
-        #else
         PageResult<${EntityName}ListVo> list = i${EntityName}Service.list(pageParam, params);
-        #end
         return AjaxResult.success(list);
     }
 
@@ -61,11 +53,7 @@ public class ${EntityName}Controller {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        #if($isEqually)
-        ${EntityName}Vo detail = i${EntityName}Service.detail(id);
-        #else
         ${EntityName}DetailVo detail = i${EntityName}Service.detail(id);
-        #end
         return AjaxResult.success(detail);
     }
 
