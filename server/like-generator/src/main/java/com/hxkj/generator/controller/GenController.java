@@ -138,12 +138,16 @@ public class GenController {
      * 生成代码
      *
      * @author fzr
-     * @param tableName 表名
+     * @param tables 表名
      */
     @GetMapping("/genCode")
-    public void genCode(String tableName) {
-        Assert.notNull(tableName, "请选择要生成的表");
-        iGenerateService.genCode(tableName);
+    public Object genCode(String tables) {
+        Assert.notNull(tables, "请选择要生成的表");
+        String[] tableNames = tables.split(",");
+        for (String tableName : tableNames) {
+            iGenerateService.genCode(tableName);
+        }
+        return AjaxResult.success();
     }
 
     /**
@@ -154,7 +158,7 @@ public class GenController {
      * @throws IOException 异常
      */
     @GetMapping("/downloadCode")
-    public void genCode(HttpServletResponse response, String tables) throws IOException {
+    public void downloadCode(HttpServletResponse response, String tables) throws IOException {
         Assert.notNull(tables, "请选择要生成的表");
         String[] tableNames = tables.split(",");
         byte[] data = iGenerateService.downloadCode(tableNames);
