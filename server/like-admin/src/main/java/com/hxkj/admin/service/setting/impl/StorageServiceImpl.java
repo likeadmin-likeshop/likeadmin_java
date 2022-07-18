@@ -2,7 +2,7 @@ package com.hxkj.admin.service.setting.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
-import com.hxkj.admin.service.setting.ISettingStorageService;
+import com.hxkj.admin.service.setting.IStorageService;
 import com.hxkj.common.utils.ConfigUtil;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.*;
  * 存储配置实现类
  */
 @Service
-public class SettingStorageServiceImpl implements ISettingStorageService {
+public class StorageServiceImpl implements IStorageService {
 
     /**
      * 存储列表

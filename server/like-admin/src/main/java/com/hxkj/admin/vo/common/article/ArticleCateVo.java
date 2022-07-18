@@ -8,7 +8,7 @@ import java.io.Serializable;
  * 文章分类Vo
  */
 @Data
-public class CategoryVo implements Serializable {
+public class ArticleCateVo implements Serializable {
 
     private Integer id;
     private String name;

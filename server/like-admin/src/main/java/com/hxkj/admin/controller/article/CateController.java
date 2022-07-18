@@ -4,7 +4,7 @@ import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.article.IArticleCateService;
 import com.hxkj.admin.validate.article.ArticleCateParam;
 import com.hxkj.admin.validate.common.PageParam;
-import com.hxkj.admin.vo.common.article.CategoryVo;
+import com.hxkj.admin.vo.common.article.ArticleCateVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.validator.annotation.IDMust;
@@ -20,7 +20,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("api/article/cate")
-public class ArticleCateController {
+public class CateController {
 
     @Resource
     IArticleCateService iArticleCateService;
@@ -33,7 +33,7 @@ public class ArticleCateController {
      */
     @GetMapping("/all")
     public Object all() {
-        List<CategoryVo> list = iArticleCateService.all();
+        List<ArticleCateVo> list = iArticleCateService.all();
         return AjaxResult.success(list);
     }
 
@@ -48,7 +48,7 @@ public class ArticleCateController {
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
-        PageResult<CategoryVo> list = iArticleCateService.list(pageParam, params);
+        PageResult<ArticleCateVo> list = iArticleCateService.list(pageParam, params);
         return AjaxResult.success(list);
     }
 
@@ -61,7 +61,7 @@ public class ArticleCateController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        CategoryVo vo = iArticleCateService.detail(id);
+        ArticleCateVo vo = iArticleCateService.detail(id);
         return AjaxResult.success(vo);
     }
 

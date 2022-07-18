@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hxkj.admin.service.article.IArticleCateService;
 import com.hxkj.admin.validate.article.ArticleCateParam;
 import com.hxkj.admin.validate.common.PageParam;
-import com.hxkj.admin.vo.common.article.CategoryVo;
+import com.hxkj.admin.vo.common.article.ArticleCateVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.article.ArticleCategory;
 import com.hxkj.common.mapper.article.ArticleCategoryMapper;
@@ -36,16 +36,16 @@ public class ArticleCateServiceImpl implements IArticleCateService {
      * @return List<CategoryVo>
      */
     @Override
-    public List<CategoryVo> all() {
+    public List<ArticleCateVo> all() {
         QueryWrapper<ArticleCategory> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id", "name", "sort", "is_show", "create_time", "update_time")
                 .eq("is_delete", 0);
 
         List<ArticleCategory> lists = articleCategoryMapper.selectList(queryWrapper);
 
-        List<CategoryVo> vos = new ArrayList<>();
+        List<ArticleCateVo> vos = new ArrayList<>();
         for (ArticleCategory category : lists) {
-            CategoryVo vo = new CategoryVo();
+            ArticleCateVo vo = new ArticleCateVo();
             BeanUtils.copyProperties(category, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
@@ -64,7 +64,7 @@ public class ArticleCateServiceImpl implements IArticleCateService {
      * @return PageResult<CategoryVo>
      */
     @Override
-    public PageResult<CategoryVo> list(PageParam pageParam, Map<String, String> params) {
+    public PageResult<ArticleCateVo> list(PageParam pageParam, Map<String, String> params) {
         Integer pageNo   = pageParam.getPageNo();
         Integer pageSize = pageParam.getPageSize();
 
@@ -79,9 +79,9 @@ public class ArticleCateServiceImpl implements IArticleCateService {
 
         IPage<ArticleCategory> iPage = articleCategoryMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
 
-        List<CategoryVo> list = new ArrayList<>();
+        List<ArticleCateVo> list = new ArrayList<>();
         for (ArticleCategory category : iPage.getRecords()) {
-            CategoryVo vo = new CategoryVo();
+            ArticleCateVo vo = new ArticleCateVo();
             BeanUtils.copyProperties(category, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
@@ -100,7 +100,7 @@ public class ArticleCateServiceImpl implements IArticleCateService {
      * @return CategoryVo
      */
     @Override
-    public CategoryVo detail(Integer id) {
+    public ArticleCateVo detail(Integer id) {
         ArticleCategory model = articleCategoryMapper.selectOne(
                 new QueryWrapper<ArticleCategory>()
                         .select(ArticleCategory.class, info->
@@ -111,7 +111,7 @@ public class ArticleCateServiceImpl implements IArticleCateService {
 
         Assert.notNull(model, "分类不存在");
 
-        CategoryVo vo = new CategoryVo();
+        ArticleCateVo vo = new ArticleCateVo();
         BeanUtils.copyProperties(model, vo);
         vo.setCreateTime(TimeUtil.timestampToDate(model.getCreateTime()));
         vo.setUpdateTime(TimeUtil.timestampToDate(model.getUpdateTime()));

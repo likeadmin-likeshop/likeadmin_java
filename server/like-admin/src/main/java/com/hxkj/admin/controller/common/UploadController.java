@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("api/common/upload")
-public class CommonUploadController {
+public class UploadController {
 
     @Resource
     IAlbumService iAlbumService;

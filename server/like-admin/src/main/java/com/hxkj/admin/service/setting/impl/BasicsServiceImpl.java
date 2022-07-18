@@ -1,6 +1,6 @@
 package com.hxkj.admin.service.setting.impl;
 
-import com.hxkj.admin.service.setting.ISettingBasicsService;
+import com.hxkj.admin.service.setting.IBasicsService;
 import com.hxkj.common.utils.ConfigUtil;
 import com.hxkj.common.utils.UrlUtil;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.Map;
  * 基础配置服务实现类
  */
 @Service
-public class SettingBasicsServiceImpl implements ISettingBasicsService {
+public class BasicsServiceImpl implements IBasicsService {
 
     /**
      * 获取网站信息

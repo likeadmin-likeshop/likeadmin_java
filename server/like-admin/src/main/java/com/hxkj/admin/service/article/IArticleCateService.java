@@ -2,7 +2,7 @@ package com.hxkj.admin.service.article;
 
 import com.hxkj.admin.validate.article.ArticleCateParam;
 import com.hxkj.admin.validate.common.PageParam;
-import com.hxkj.admin.vo.common.article.CategoryVo;
+import com.hxkj.admin.vo.common.article.ArticleCateVo;
 import com.hxkj.common.core.PageResult;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public interface IArticleCateService {
      * @author fzr
      * @return List<CategoryVo>
      */
-    List<CategoryVo> all();
+    List<ArticleCateVo> all();
 
     /**
      * 分类列表
@@ -29,7 +29,7 @@ public interface IArticleCateService {
      * @param params 搜索参数
      * @return PageResult<CategoryVo>
      */
-    PageResult<CategoryVo> list(PageParam pageParam, Map<String, String> params);
+    PageResult<ArticleCateVo> list(PageParam pageParam, Map<String, String> params);
 
     /**
      * 分类详情
@@ -37,7 +37,7 @@ public interface IArticleCateService {
      * @author fzr
      * @param id 分类ID
      */
-    CategoryVo detail(Integer id);
+    ArticleCateVo detail(Integer id);
 
     /**
      * 分类新增

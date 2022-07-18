@@ -20,7 +20,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("api/article")
-public class ArticleTextController {
+public class TextController {
 
     @Resource
     IArticleTextService iArticleTextService;

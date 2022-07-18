@@ -1,22 +1,25 @@
 package com.hxkj.admin.controller.setting;
 
+import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.common.core.AjaxResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.hxkj.common.validator.annotation.IDMust;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/setting/dict/type")
-public class SettingDictTypeController {
+public class DictTypeController {
 
     @GetMapping("/list")
-    public Object list() {
+    public Object list(@Validated PageParam pageParam,
+                       @RequestParam Map<String, String> params) {
         return AjaxResult.success();
     }
 
     @GetMapping("/detail")
-    public Object detail() {
+    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         return AjaxResult.success();
     }
 

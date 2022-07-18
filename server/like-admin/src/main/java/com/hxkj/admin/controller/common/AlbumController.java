@@ -21,7 +21,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("api/common/album")
-public class CommonAlbumController {
+public class AlbumController {
 
     @Resource
     IAlbumService iAlbumService;

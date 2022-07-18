@@ -1,7 +1,7 @@
 package com.hxkj.admin.controller.setting;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
-import com.hxkj.admin.service.setting.ISettingStorageService;
+import com.hxkj.admin.service.setting.IStorageService;
 import com.hxkj.common.core.AjaxResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +11,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/setting/storage")
-public class SettingStorageController {
+public class StorageController {
 
     @Resource
-    ISettingStorageService iStorageService;
+    IStorageService iStorageService;
 
     /**
      * 存储列表

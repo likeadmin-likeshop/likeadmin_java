@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * 存储配置接口类
  */
-public interface ISettingStorageService {
+public interface IStorageService {
 
     /**
      * 存储列表
