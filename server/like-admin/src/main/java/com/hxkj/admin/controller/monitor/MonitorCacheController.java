@@ -19,7 +19,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("api/monitor")
-public class CacheController {
+public class MonitorCacheController {
 
     @Resource
     private RedisTemplate<String, String> redisTemplate;

@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class CategoryParam implements Serializable {
+public class ArticleCateParam implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -26,7 +26,7 @@ public class CategoryParam implements Serializable {
     public interface update{}
     public interface delete{}
 
-    @IDMust(message = "id参数必传且需大于0", groups = {ArticleParam.create.class, ArticleParam.delete.class})
+    @IDMust(message = "id参数必传且需大于0", groups = {ArticleTextParam.create.class, ArticleTextParam.delete.class})
     private Integer id;
 
     @NotEmpty(message = "分类名称不能为空", groups = {create.class, update.class})

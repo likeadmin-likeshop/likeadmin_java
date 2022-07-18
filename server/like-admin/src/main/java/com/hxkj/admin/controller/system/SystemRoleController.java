@@ -18,7 +18,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("api/system/role")
-public class RoleController {
+public class SystemRoleController {
 
     @Resource
     ISystemRoleService iSystemRoleService;

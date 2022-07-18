@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.hxkj.admin.service.article.IArticleTextService;
-import com.hxkj.admin.validate.article.ArticleParam;
+import com.hxkj.admin.validate.article.ArticleTextParam;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.common.article.ArticleDetailVo;
 import com.hxkj.admin.vo.common.article.ArticleListVo;
@@ -111,18 +111,18 @@ public class ArticleTextServiceImpl implements IArticleTextService {
      * 文章新增
      *
      * @author fzr
-     * @param articleParam 文章参数
+     * @param articleTextParam 文章参数
      */
     @Override
-    public void add(ArticleParam articleParam) {
+    public void add(ArticleTextParam articleTextParam) {
         Article model = new Article();
-        model.setCid(articleParam.getCid());
-        model.setTitle(articleParam.getTitle());
-        model.setImage(UrlUtil.toRelativeUrl(articleParam.getImage()));
-        model.setIntro(articleParam.getIntro());
-        model.setContent(articleParam.getContent());
-        model.setSort(articleParam.getSort());
-        model.setIsShow(articleParam.getIsShow());
+        model.setCid(articleTextParam.getCid());
+        model.setTitle(articleTextParam.getTitle());
+        model.setImage(UrlUtil.toRelativeUrl(articleTextParam.getImage()));
+        model.setIntro(articleTextParam.getIntro());
+        model.setContent(articleTextParam.getContent());
+        model.setSort(articleTextParam.getSort());
+        model.setIsShow(articleTextParam.getIsShow());
         model.setVisit(0);
         model.setCreateTime(TimeUtil.timestamp());
         model.setUpdateTime(TimeUtil.timestamp());
@@ -133,29 +133,29 @@ public class ArticleTextServiceImpl implements IArticleTextService {
      * 文章编辑
      *
      * @author fzr
-     * @param articleParam 文章参数
+     * @param articleTextParam 文章参数
      */
     @Override
-    public void edit(ArticleParam articleParam) {
+    public void edit(ArticleTextParam articleTextParam) {
         Article model = articleMapper.selectOne(
                 new QueryWrapper<Article>()
-                .eq("id", articleParam.getId())
+                .eq("id", articleTextParam.getId())
                 .eq("is_delete", 0));
 
         Assert.notNull(model, "文章不存在!");
 
         Assert.notNull(articleCategoryMapper.selectOne(
                 new QueryWrapper<ArticleCategory>()
-                .eq("id", articleParam.getCid())
+                .eq("id", articleTextParam.getCid())
                 .eq("is_delete", 0)), "分类不存在");
 
-        model.setCid(articleParam.getCid());
-        model.setTitle(articleParam.getTitle());
-        model.setImage(UrlUtil.toRelativeUrl(articleParam.getImage()));
-        model.setIntro(articleParam.getIntro());
-        model.setContent(articleParam.getContent());
-        model.setIsShow(articleParam.getIsShow());
-        model.setSort(articleParam.getSort());
+        model.setCid(articleTextParam.getCid());
+        model.setTitle(articleTextParam.getTitle());
+        model.setImage(UrlUtil.toRelativeUrl(articleTextParam.getImage()));
+        model.setIntro(articleTextParam.getIntro());
+        model.setContent(articleTextParam.getContent());
+        model.setIsShow(articleTextParam.getIsShow());
+        model.setSort(articleTextParam.getSort());
         model.setUpdateTime(TimeUtil.timestamp());
         articleMapper.updateById(model);
     }

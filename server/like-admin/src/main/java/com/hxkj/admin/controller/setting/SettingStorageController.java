@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/setting/storage")
-public class StorageController {
+public class SettingStorageController {
 
     @Resource
     ISettingStorageService iStorageService;

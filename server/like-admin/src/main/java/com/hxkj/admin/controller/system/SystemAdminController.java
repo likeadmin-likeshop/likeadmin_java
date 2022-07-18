@@ -21,7 +21,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("api/system/admin")
-public class AdminController {
+public class SystemAdminController {
 
     @Resource
     ISystemAdminService iSystemAdminService;

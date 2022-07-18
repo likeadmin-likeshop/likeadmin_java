@@ -14,7 +14,6 @@ import com.hxkj.common.entity.system.SystemPost;
 import com.hxkj.common.mapper.system.SystemAdminMapper;
 import com.hxkj.common.mapper.system.SystemPostMapper;
 import com.hxkj.common.utils.TimeUtil;
-import com.hxkj.common.utils.UrlUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 

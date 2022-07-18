@@ -1,6 +1,6 @@
 package com.hxkj.admin.service.article;
 
-import com.hxkj.admin.validate.article.CategoryParam;
+import com.hxkj.admin.validate.article.ArticleCateParam;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.common.article.CategoryVo;
 import com.hxkj.common.core.PageResult;
@@ -45,7 +45,7 @@ public interface IArticleCateService {
      * @author fzr
      * @param articleCateParam 分类参数
      */
-    void add(CategoryParam articleCateParam);
+    void add(ArticleCateParam articleCateParam);
 
     /**
      * 分类编辑
@@ -53,7 +53,7 @@ public interface IArticleCateService {
      * @author fzr
      * @param articleCateParam 分类参数
      */
-    void edit(CategoryParam articleCateParam);
+    void edit(ArticleCateParam articleCateParam);
 
     /**
      * 分类删除

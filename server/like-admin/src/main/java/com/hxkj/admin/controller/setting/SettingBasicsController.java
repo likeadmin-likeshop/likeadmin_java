@@ -13,7 +13,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("api/setting/basics")
-public class BasicsController {
+public class SettingBasicsController {
 
     @Resource
     ISettingBasicsService iBasicsService;

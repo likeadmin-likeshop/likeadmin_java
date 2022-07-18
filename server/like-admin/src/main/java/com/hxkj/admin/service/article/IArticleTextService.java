@@ -1,6 +1,6 @@
 package com.hxkj.admin.service.article;
 
-import com.hxkj.admin.validate.article.ArticleParam;
+import com.hxkj.admin.validate.article.ArticleTextParam;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.common.article.ArticleDetailVo;
 import com.hxkj.admin.vo.common.article.ArticleListVo;
@@ -35,17 +35,17 @@ public interface IArticleTextService {
      * 文章新增
      *
      * @author fzr
-     * @param articleParam 文章参数
+     * @param articleTextParam 文章参数
      */
-    void add(ArticleParam articleParam);
+    void add(ArticleTextParam articleTextParam);
 
     /**
      * 文章编辑
      *
      * @author fzr
-     * @param articleParam 文章参数
+     * @param articleTextParam 文章参数
      */
-    void edit(ArticleParam articleParam);
+    void edit(ArticleTextParam articleTextParam);
 
     /**
      * 文章删除

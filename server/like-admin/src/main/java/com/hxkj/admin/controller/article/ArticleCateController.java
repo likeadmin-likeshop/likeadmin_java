@@ -2,7 +2,7 @@ package com.hxkj.admin.controller.article;
 
 import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.article.IArticleCateService;
-import com.hxkj.admin.validate.article.CategoryParam;
+import com.hxkj.admin.validate.article.ArticleCateParam;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.common.article.CategoryVo;
 import com.hxkj.common.core.AjaxResult;
@@ -74,8 +74,8 @@ public class ArticleCateController {
      */
     @Log(title = "文章分类新增")
     @PostMapping("/add")
-    public Object add(@Validated(value = CategoryParam.create.class)
-                          @RequestBody CategoryParam articleCateParam) {
+    public Object add(@Validated(value = ArticleCateParam.create.class)
+                          @RequestBody ArticleCateParam articleCateParam) {
         iArticleCateService.add(articleCateParam);
         return AjaxResult.success();
     }
@@ -89,8 +89,8 @@ public class ArticleCateController {
      */
     @Log(title = "文章分类编辑")
     @PostMapping("/edit")
-    public Object edit(@Validated(value = CategoryParam.update.class)
-                           @RequestBody CategoryParam articleCateParam) {
+    public Object edit(@Validated(value = ArticleCateParam.update.class)
+                           @RequestBody ArticleCateParam articleCateParam) {
         iArticleCateService.edit(articleCateParam);
         return AjaxResult.success();
     }
@@ -104,8 +104,8 @@ public class ArticleCateController {
      */
     @Log(title = "文章分类删除")
     @PostMapping("/cateDel")
-    public Object del(@Validated(value = CategoryParam.delete.class)
-                          @RequestBody CategoryParam articleCateParam) {
+    public Object del(@Validated(value = ArticleCateParam.delete.class)
+                          @RequestBody ArticleCateParam articleCateParam) {
         iArticleCateService.del(articleCateParam.getId());
         return AjaxResult.success();
     }

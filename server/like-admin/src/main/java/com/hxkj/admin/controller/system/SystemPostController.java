@@ -16,7 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/system/post")
-public class PostController {
+public class SystemPostController {
 
     @Resource
     ISystemPostService iSystemPostService;

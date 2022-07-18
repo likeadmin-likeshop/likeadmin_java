@@ -20,7 +20,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("api/system/log")
-public class LogController {
+public class SystemLogController {
 
     @Resource
     ISystemLogServer iSystemLogServer;

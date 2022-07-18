@@ -18,7 +18,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("api/system/menu")
-public class MenuController {
+public class SystemMenuController {
 
     @Resource
     ISystemMenuService iSystemMenuService;
