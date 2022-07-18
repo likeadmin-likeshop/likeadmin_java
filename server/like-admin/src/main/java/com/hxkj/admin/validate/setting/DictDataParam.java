@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SettingDictDataParam implements Serializable {
+public class DictDataParam implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,8 +31,8 @@ public class SettingDictDataParam implements Serializable {
     @IDMust(message = "typeId参数必传且需大于0", groups = {create.class, update.class})
     private Integer typeId;
 
-    @NotNull(message = "key参数缺失", groups = {create.class, update.class})
-    private String key;
+    @NotNull(message = "name参数缺失", groups = {create.class, update.class})
+    private String name;
 
     @NotNull(message = "value参数缺失", groups = {create.class, update.class})
     @Length(max = 100, message = "键名不能超出100个字符", groups = {create.class, update.class})

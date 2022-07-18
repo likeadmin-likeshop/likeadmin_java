@@ -17,7 +17,7 @@ public class DictData implements Serializable {
     @TableId(value="id", type= IdType.AUTO)
     private Integer id;       // 主键
     private Integer typeId;   // 类型
-    private String key;       // 键名
+    private String name;      // 键名
     private String value;     // 数值
     private String remark;    // 备注
     private Integer sort;     // 排序

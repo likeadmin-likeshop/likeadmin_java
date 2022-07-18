@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SettingDictTypeParam implements Serializable {
+public class DictTypeParam implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,6 +40,6 @@ public class SettingDictTypeParam implements Serializable {
 
     @NotNull(message = "dictStatus参数缺失")
     @IntegerContains(values = {0, 1}, message = "dictStatus参数不在合法值内", groups = {create.class, update.class})
-    private String dictStatus;
+    private Integer dictStatus;
 
 }

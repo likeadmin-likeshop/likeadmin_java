@@ -104,16 +104,16 @@ public class SystemLogServerImpl implements ISystemLogServer {
 
         IPage<SystemLogLogin> iPage = logLoginMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
 
-        List<LogLoginVo> voList = new LinkedList<>();
+        List<LogLoginVo> list = new LinkedList<>();
         for (SystemLogLogin item : iPage.getRecords()) {
             LogLoginVo vo = new LogLoginVo();
             BeanUtils.copyProperties(item, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
-            voList.add(vo);
+            list.add(vo);
         }
 
-        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), voList);
+        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), list);
     }
 
 }
