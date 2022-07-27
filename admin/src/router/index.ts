@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout/index.vue'
 export const indexName = Symbol('index')
 /**
@@ -87,7 +87,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(import.meta.env.BASE_URL),
     routes: constantRoutes,
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
