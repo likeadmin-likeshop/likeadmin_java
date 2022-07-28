@@ -5,7 +5,6 @@ import path from 'path'
 export default defineConfig({
   plugins: [vue()],
   // 引入第三方的配置
-  base: '/admin/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
