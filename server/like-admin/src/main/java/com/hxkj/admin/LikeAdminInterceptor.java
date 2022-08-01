@@ -36,11 +36,11 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 404拦截
         response.setContentType("application/json;charset=utf-8");
-//        if (response.getStatus() == 404) {
-//            AjaxResult result = AjaxResult.failed(HttpEnum.REQUEST_404_ERROR.getCode(), HttpEnum.REQUEST_404_ERROR.getMsg());
-//            response.getWriter().print(JSON.toJSONString(result));
-//            return false;
-//        }
+        if (response.getStatus() == 404) {
+            AjaxResult result = AjaxResult.failed(HttpEnum.REQUEST_404_ERROR.getCode(), HttpEnum.REQUEST_404_ERROR.getMsg());
+            response.getWriter().print(JSON.toJSONString(result));
+            return false;
+        }
 
         // 判断请求接口
         if (!(handler instanceof HandlerMethod)) {

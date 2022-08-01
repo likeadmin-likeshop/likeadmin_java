@@ -109,7 +109,7 @@ public class SystemRoleMenuServiceImpl implements ISystemRoleMenuService {
         if (menuIds.size() > 0) {
             List<SystemMenu> systemMenus = systemMenuMapper.selectList(new QueryWrapper<SystemMenu>()
                     .select("id,perms")
-                    .eq("is_show", 0)
+                    .eq("is_disable", 0)
                     .in("id", menuIds)
                     .in("menu_type", Arrays.asList("C", "A"))
                     .orderByAsc(Arrays.asList("menu_sort", "id")));
