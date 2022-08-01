@@ -35,7 +35,7 @@ public class UrlUtil {
         String engine = ConfigUtil.get("storage", "default", "local");
         engine = engine.equals("") ? "local" : engine;
         if (engine.equals("local")) {
-            return RequestUtil.domain() + "/" + uploadPrefix + url;
+            return RequestUtil.uri() + "/" + uploadPrefix + url;
         }
 
         Map<String, String> config = ConfigUtil.getMap("storage", engine);
@@ -59,7 +59,7 @@ public class UrlUtil {
         String engine = ConfigUtil.get("storage", "default", "local");
         engine = engine.equals("") ? "local" : engine;
         if (engine.equals("local")) {
-            return url.replace(RequestUtil.domain() + "/" + uploadPrefix + "/", "");
+            return url.replace(RequestUtil.uri() + "/" + uploadPrefix + "/", "");
         }
 
         Map<String, String> config = ConfigUtil.getMap("storage", engine);
@@ -77,7 +77,7 @@ public class UrlUtil {
         String engine = ConfigUtil.get("storage", "default", "local");
         engine = engine.equals("") ? "local" : engine;
         if (engine.equals("local")) {
-            return RequestUtil.domain() + "/";
+            return RequestUtil.uri() + "/";
         }
 
         Map<String, String> config = ConfigUtil.getMap("storage", engine);
