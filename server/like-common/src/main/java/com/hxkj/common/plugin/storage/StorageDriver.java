@@ -7,6 +7,7 @@ import com.hxkj.common.plugin.storage.engine.LocalStorage;
 import com.hxkj.common.plugin.storage.engine.QcloudStorage;
 import com.hxkj.common.plugin.storage.engine.QiniuStorage;
 import com.hxkj.common.utils.ConfigUtil;
+import com.hxkj.common.utils.StringUtil;
 import com.hxkj.common.utils.TimeUtil;
 import com.hxkj.common.utils.UrlUtil;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +31,14 @@ public class StorageDriver {
      */
     public StorageDriver() {
         this.engine = ConfigUtil.get("storage", "default", "local");
-        this.config = ConfigUtil.getMap("storage", this.engine);
+
+        Map<String, String> config1;
+        config1 = ConfigUtil.getMap("storage", this.engine);
+        if (config1 == null) {
+            config1 = new HashMap<>();
+        }
+
+        this.config = config1;
     }
 
     /**
