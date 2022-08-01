@@ -137,6 +137,8 @@ public class SystemMenuServiceImpl implements ISystemMenuService {
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         systemMenuMapper.insert(model);
+
+        RedisUtil.del(AdminConfig.backstageRolesKey);
     }
 
     /**
