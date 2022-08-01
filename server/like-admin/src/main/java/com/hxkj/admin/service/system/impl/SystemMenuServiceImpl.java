@@ -182,8 +182,11 @@ public class SystemMenuServiceImpl implements ISystemMenuService {
         SystemMenu model = systemMenuMapper.selectOne(new QueryWrapper<SystemMenu>().eq("id", id));
         Assert.notNull(model, "菜单已不存在!");
 
-        systemMenuMapper.deleteById(id);
+        Assert.isNull(systemMenuMapper.selectOne(
+                new QueryWrapper<SystemMenu>().eq("pid", id)),
+                "请先删除子菜单再操作！");
 
+        systemMenuMapper.deleteById(id);
         iSystemRoleMenuService.batchDeleteByMenuId(id);
         RedisUtil.del(AdminConfig.backstageRolesKey);
     }

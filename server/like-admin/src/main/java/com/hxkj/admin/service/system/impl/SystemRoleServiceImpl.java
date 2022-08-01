@@ -128,7 +128,8 @@ public class SystemRoleServiceImpl implements ISystemRoleService {
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         systemRoleMapper.insert(model);
-
+        System.out.println(model.getId());
+        System.out.println(systemRoleParam.getMenuIds());
         iSystemRoleMenuService.batchSaveByMenuIds(model.getId(), systemRoleParam.getMenuIds());
     }
 
