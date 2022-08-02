@@ -153,6 +153,11 @@
 
             // 添加角色
             const roleAdd = () => {
+                // 选择中的权限id字符串
+                formData.value.menus.length == 0
+                    ? (formData.value.menuIds = '')
+                    : (formData.value.menuIds = formData.value.menus.join(','))
+
                 apiRoleAdd({ ...formData.value })
                     .then((res: any) => {
                         setTimeout(() => {
