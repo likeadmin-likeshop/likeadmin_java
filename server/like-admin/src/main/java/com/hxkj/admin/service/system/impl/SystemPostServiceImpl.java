@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class SystemPostService implements ISystemPostService {
+public class SystemPostServiceImpl implements ISystemPostService {
 
     @Resource
     SystemPostMapper systemPostMapper;
