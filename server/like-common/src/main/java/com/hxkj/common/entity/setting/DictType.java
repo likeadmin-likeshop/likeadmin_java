@@ -19,8 +19,8 @@ public class DictType implements Serializable {
     private String dictName;    // 字典名称
     private String dictType;    // 字典类型
     private String dictRemark;  // 字典备注
-    private Integer dictStatus; // 字典状态: 0=停用, 1=正常
-    private Integer isDelete;   // 是否删除: 0=否, 1=是
+    private Integer dictStatus; // 字典状态: [0=停用, 1=正常]
+    private Integer isDelete;   // 是否删除: [0=否, 1=是]
     private Long createTime;    // 创建时间
     private Long updateTime;    // 更新时间
     private Long deleteTime;    // 删除时间

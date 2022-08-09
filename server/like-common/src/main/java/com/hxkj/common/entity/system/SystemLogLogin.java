@@ -15,13 +15,13 @@ public class SystemLogLogin implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value="id", type= IdType.AUTO)
-    private Integer id;
-    private Integer adminId;
-    private String username;
-    private String ip;
-    private String os;
-    private String browser;
-    private Integer status;
-    private Long createTime;
+    private Integer id;       // 主键
+    private Integer adminId;  // 管理员ID
+    private String username;  // 登录账号
+    private String ip;        // 登录IP
+    private String os;        // 操作系统
+    private String browser;   // 浏览器
+    private Integer status;   // 操作状态: [1=成功, 2=失败]
+    private Long createTime;  // 创建时间
 
 }

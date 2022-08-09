@@ -15,16 +15,16 @@ public class SystemAuthDept implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value="id", type= IdType.AUTO)
-    private Integer id;
-    private Integer pid;
-    private String name;
-    private String duty;
-    private String mobile;
-    private Integer sort;
-    private Integer isStop;
-    private Integer isDelete;
-    private Long createTime;
-    private Long updateTime;
-    private Long deleteTime;
+    private Integer id;       // 主键
+    private Integer pid;      // 上级部门
+    private String name;      // 部门名称
+    private String duty;      // 负责人名
+    private String mobile;    // 联系电话
+    private Integer sort;     // 排序编号
+    private Integer isStop;   // 是否禁用: [0=否, 1=是]
+    private Integer isDelete; // 是否删除: [0=否, 1=是]
+    private Long createTime;  // 创建时间
+    private Long updateTime;  // 更新时间
+    private Long deleteTime;  // 删除时间
 
 }

@@ -15,12 +15,12 @@ public class SystemAuthRole implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value="id", type= IdType.AUTO)
-    private Integer id;
-    private String name;
-    private String remark;
-    private Integer sort;
-    private Integer isDisable;
-    private Long createTime;
-    private Long updateTime;
+    private Integer id;        // 主键
+    private String name;       // 角色名称
+    private String remark;     // 备注信息
+    private Integer sort;      // 角色排序
+    private Integer isDisable; // 是否禁用: [0=否, 1=是]
+    private Long createTime;   // 创建时间
+    private Long updateTime;   // 更新时间
 
 }
