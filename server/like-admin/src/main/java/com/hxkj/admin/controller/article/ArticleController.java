@@ -19,7 +19,7 @@ import java.util.Map;
  * 文章管理
  */
 @RestController(value = "articleArchive")
-@RequestMapping("api/article/archive")
+@RequestMapping("api/article")
 public class ArticleController {
 
     @Resource
