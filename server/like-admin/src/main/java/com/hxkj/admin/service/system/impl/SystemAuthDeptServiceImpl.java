@@ -21,6 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 系统部门服务实现类
+ */
 @Service
 class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
 

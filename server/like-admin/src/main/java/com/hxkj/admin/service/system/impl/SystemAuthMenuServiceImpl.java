@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 系统菜单服务实现类
+ */
 @Service
 public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
 

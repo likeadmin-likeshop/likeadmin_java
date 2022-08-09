@@ -19,7 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 系统菜单服务实现类
+ * 系统权限服务实现类
  */
 @Service
 public class SystemAuthPermServiceImpl implements ISystemAuthPermService {

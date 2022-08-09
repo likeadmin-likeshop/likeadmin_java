@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * 字典类型配置管理
+ */
 @RestController
 @RequestMapping("api/setting/dict/type")
 public class DictTypeController {

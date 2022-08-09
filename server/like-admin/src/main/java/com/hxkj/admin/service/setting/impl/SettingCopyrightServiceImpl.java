@@ -1,12 +1,10 @@
 package com.hxkj.admin.service.setting.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.service.setting.ISettingCopyrightService;
 import com.hxkj.common.utils.ArrayUtil;
 import com.hxkj.common.utils.ConfigUtil;
 import com.hxkj.common.utils.StringUtil;
-import com.hxkj.common.utils.ToolsUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

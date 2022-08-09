@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 文章分类服务类接口
+ * 文章分类服接口务类
  */
 public interface IArticleCategoryService {
 

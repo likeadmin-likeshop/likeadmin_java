@@ -30,7 +30,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 /**
- * 系统管理员实现类
+ * 系统管理员服务实现类
  */
 @Service
 public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {

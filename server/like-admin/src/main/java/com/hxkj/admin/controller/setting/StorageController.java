@@ -9,6 +9,9 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 存储方式配置管理
+ */
 @RestController
 @RequestMapping("api/setting/storage")
 public class StorageController {

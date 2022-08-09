@@ -23,6 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 系统岗位服务实现类
+ */
 @Service
 public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
 

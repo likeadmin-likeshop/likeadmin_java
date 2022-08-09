@@ -14,6 +14,9 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 系统岗位管理
+ */
 @RestController
 @RequestMapping("api/system/post")
 public class AuthPostController {

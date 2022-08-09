@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * 网站信息配置管理
+ */
 @RestController
 @RequestMapping("api/setting/website")
 public class WebsiteController {

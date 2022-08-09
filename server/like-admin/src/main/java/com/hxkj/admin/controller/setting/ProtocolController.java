@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * 政策协议配置管理
+ */
 @RestController
 @RequestMapping("api/setting/protocol")
 public class ProtocolController {

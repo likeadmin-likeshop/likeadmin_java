@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * 存储配置实现类
+ * 存储配置服务实现类
  */
 @Service
 public class SettingStorageServiceImpl implements ISettingStorageService {
