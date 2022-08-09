@@ -9,7 +9,7 @@ import com.hxkj.admin.service.system.ISystemAuthPermService;
 import com.hxkj.admin.service.system.ISystemAuthRoleService;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.system.SystemAuthRoleParam;
-import com.hxkj.admin.vo.system.SystemRoleVo;
+import com.hxkj.admin.vo.system.SystemAuthRoleVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SystemAuthAdmin;
 import com.hxkj.common.entity.system.SystemAuthRole;
@@ -50,7 +50,7 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
      * @return PageResult<SysRoleListVo>
      */
     @Override
-    public PageResult<SystemRoleVo> list(@Validated PageParam pageParam) {
+    public PageResult<SystemAuthRoleVo> list(@Validated PageParam pageParam) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
@@ -59,9 +59,9 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
 
         IPage<SystemAuthRole> iPage = systemAuthRoleMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
-        List<SystemRoleVo> list = new ArrayList<>();
+        List<SystemAuthRoleVo> list = new ArrayList<>();
         for (SystemAuthRole systemAuthRole : iPage.getRecords()) {
-            SystemRoleVo vo = new SystemRoleVo();
+            SystemAuthRoleVo vo = new SystemAuthRoleVo();
             BeanUtils.copyProperties(systemAuthRole, vo);
 
             Integer member = systemAuthAdminMapper.selectCount(new QueryWrapper<SystemAuthAdmin>()
@@ -86,7 +86,7 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
      * @return SysRole
      */
     @Override
-    public SystemRoleVo detail(Integer id) {
+    public SystemAuthRoleVo detail(Integer id) {
         SystemAuthRole systemAuthRole = systemAuthRoleMapper.selectOne(new QueryWrapper<SystemAuthRole>()
                 .eq("id", id)
                 .last("limit 1"));
@@ -97,7 +97,7 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
                 .eq("is_delete", 0)
                 .eq("role", systemAuthRole.getId()));
 
-        SystemRoleVo vo = new SystemRoleVo();
+        SystemAuthRoleVo vo = new SystemAuthRoleVo();
         BeanUtils.copyProperties(systemAuthRole, vo);
         vo.setMember(member);
         vo.setMenus(iSystemAuthPermService.selectMenuIdsByRoleId(systemAuthRole.getId()));

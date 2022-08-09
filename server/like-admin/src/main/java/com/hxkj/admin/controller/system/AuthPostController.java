@@ -3,7 +3,7 @@ package com.hxkj.admin.controller.system;
 import com.hxkj.admin.service.system.ISystemAuthPostService;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.system.SystemAuthPostParam;
-import com.hxkj.admin.vo.system.SystemPostVo;
+import com.hxkj.admin.vo.system.SystemAuthPostVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.validator.annotation.IDMust;
@@ -32,7 +32,7 @@ public class AuthPostController {
      */
     @GetMapping("/all")
     public Object all() {
-        List<SystemPostVo> vos = iSystemAuthPostService.all();
+        List<SystemAuthPostVo> vos = iSystemAuthPostService.all();
         return AjaxResult.success(vos);
     }
 
@@ -45,13 +45,13 @@ public class AuthPostController {
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
-        PageResult<SystemPostVo> list = iSystemAuthPostService.list(pageParam, params);
+        PageResult<SystemAuthPostVo> list = iSystemAuthPostService.list(pageParam, params);
         return AjaxResult.success(list);
     }
 
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        SystemPostVo vo = iSystemAuthPostService.detail(id);
+        SystemAuthPostVo vo = iSystemAuthPostService.detail(id);
         return AjaxResult.success(vo);
     }
 

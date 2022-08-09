@@ -2,7 +2,7 @@ package com.hxkj.admin.service.system;
 
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.system.SystemAuthPostParam;
-import com.hxkj.admin.vo.system.SystemPostVo;
+import com.hxkj.admin.vo.system.SystemAuthPostVo;
 import com.hxkj.common.core.PageResult;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public interface ISystemAuthPostService {
      * @author fzr
      * @return List<SystemPostVo>
      */
-    List<SystemPostVo> all();
+    List<SystemAuthPostVo> all();
 
     /**
      * 岗位列表
@@ -29,7 +29,7 @@ public interface ISystemAuthPostService {
      * @param params 搜索参数
      * @return PageResult<SystemPostVo>
      */
-    PageResult<SystemPostVo> list(PageParam pageParam, Map<String, String> params);
+    PageResult<SystemAuthPostVo> list(PageParam pageParam, Map<String, String> params);
 
     /**
      * 岗位详情
@@ -38,7 +38,7 @@ public interface ISystemAuthPostService {
      * @param id 主键
      * @return SystemPostVo
      */
-    SystemPostVo detail(Integer id);
+    SystemAuthPostVo detail(Integer id);
 
     /**
      * 岗位新增

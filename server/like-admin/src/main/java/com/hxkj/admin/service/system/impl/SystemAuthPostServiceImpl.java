@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hxkj.admin.service.system.ISystemAuthPostService;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.system.SystemAuthPostParam;
-import com.hxkj.admin.vo.system.SystemPostVo;
+import com.hxkj.admin.vo.system.SystemAuthPostVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SystemAuthAdmin;
 import com.hxkj.common.entity.system.SystemAuthPost;
@@ -42,14 +42,14 @@ public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
      * @return List<SystemPostVo>
      */
     @Override
-    public List<SystemPostVo> all() {
+    public List<SystemAuthPostVo> all() {
         List<SystemAuthPost> systemAuthPostList = systemAuthPostMapper.selectList(new QueryWrapper<SystemAuthPost>()
                 .eq("is_delete", 0)
                 .orderByDesc((Arrays.asList("id", "sort"))));
 
-        List<SystemPostVo> adminVoArrayList = new ArrayList<>();
+        List<SystemAuthPostVo> adminVoArrayList = new ArrayList<>();
         for (SystemAuthPost systemAuthPost : systemAuthPostList) {
-            SystemPostVo vo = new SystemPostVo();
+            SystemAuthPostVo vo = new SystemAuthPostVo();
             BeanUtils.copyProperties(systemAuthPost, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(systemAuthPost.getCreateTime()));
@@ -69,7 +69,7 @@ public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
      * @return PageResult<SystemPostVo>
      */
     @Override
-    public PageResult<SystemPostVo> list(PageParam pageParam, Map<String, String> params) {
+    public PageResult<SystemAuthPostVo> list(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
@@ -88,9 +88,9 @@ public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
 
         IPage<SystemAuthPost> iPage = systemAuthPostMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
-        List<SystemPostVo> list = new ArrayList<>();
+        List<SystemAuthPostVo> list = new ArrayList<>();
         for (SystemAuthPost systemAuthPost : iPage.getRecords()) {
-            SystemPostVo vo = new SystemPostVo();
+            SystemAuthPostVo vo = new SystemAuthPostVo();
             BeanUtils.copyProperties(systemAuthPost, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(systemAuthPost.getCreateTime()));
@@ -109,7 +109,7 @@ public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
      * @return SystemPostVo
      */
     @Override
-    public SystemPostVo detail(Integer id) {
+    public SystemAuthPostVo detail(Integer id) {
         SystemAuthPost systemAuthPost = systemAuthPostMapper.selectOne(new QueryWrapper<SystemAuthPost>()
                 .select(SystemAuthPost.class, info ->
                     !info.getColumn().equals("is_delete") &&
@@ -120,7 +120,7 @@ public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
 
         Assert.notNull(systemAuthPost, "岗位不存在");
 
-        SystemPostVo vo = new SystemPostVo();
+        SystemAuthPostVo vo = new SystemAuthPostVo();
         BeanUtils.copyProperties(systemAuthPost, vo);
         vo.setCreateTime(TimeUtil.timestampToDate(systemAuthPost.getCreateTime()));
         vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthPost.getUpdateTime()));

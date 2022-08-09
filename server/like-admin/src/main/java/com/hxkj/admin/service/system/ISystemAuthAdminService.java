@@ -2,8 +2,8 @@ package com.hxkj.admin.service.system;
 
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.system.SystemAuthAdminParam;
-import com.hxkj.admin.vo.system.SystemAdminVo;
-import com.hxkj.admin.vo.system.SystemSelfVo;
+import com.hxkj.admin.vo.system.SystemAuthAdminVo;
+import com.hxkj.admin.vo.system.SystemAuthSelfVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SystemAuthAdmin;
 
@@ -30,7 +30,7 @@ public interface ISystemAuthAdminService {
      * @param pageParam 分页参数
      * @return PageResult<SysAdminListVo>
      */
-    PageResult<SystemAdminVo> list(PageParam pageParam, Map<String, String> params);
+    PageResult<SystemAuthAdminVo> list(PageParam pageParam, Map<String, String> params);
 
     /**
      * 当前管理员
@@ -38,7 +38,7 @@ public interface ISystemAuthAdminService {
      * @author fzr
      * @return SystemSelfVo
      */
-    SystemSelfVo self(Integer adminId);
+    SystemAuthSelfVo self(Integer adminId);
 
     /**
      * 管理员详情
@@ -47,7 +47,7 @@ public interface ISystemAuthAdminService {
      * @param id 主键参数
      * @return SysAdmin
      */
-    SystemAdminVo detail(Integer id);
+    SystemAuthAdminVo detail(Integer id);
 
     /**
      * 管理员新增

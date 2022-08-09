@@ -2,7 +2,7 @@ package com.hxkj.admin.service.system;
 
 import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.validate.system.SystemAuthDeptParam;
-import com.hxkj.admin.vo.system.SystemDeptVo;
+import com.hxkj.admin.vo.system.SystemAuthDeptVo;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +18,7 @@ public interface ISystemAuthDeptService {
      * @author fzr
      * @return List<SystemDeptVo>
      */
-    List<SystemDeptVo> all();
+    List<SystemAuthDeptVo> all();
 
     /**
      * 部门列表
@@ -36,7 +36,7 @@ public interface ISystemAuthDeptService {
      * @param id 主键
      * @return SysMenu
      */
-    SystemDeptVo detail(Integer id);
+    SystemAuthDeptVo detail(Integer id);
 
     /**
      * 部门新增

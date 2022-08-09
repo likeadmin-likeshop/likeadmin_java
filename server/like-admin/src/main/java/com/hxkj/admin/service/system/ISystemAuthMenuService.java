@@ -2,7 +2,7 @@ package com.hxkj.admin.service.system;
 
 import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.validate.system.SystemAuthMenuParam;
-import com.hxkj.admin.vo.system.SystemMenuVo;
+import com.hxkj.admin.vo.system.SystemAuthMenuVo;
 
 /**
  * 系统菜单服务接口类
@@ -32,7 +32,7 @@ public interface ISystemAuthMenuService {
      * @param id 主键
      * @return SysMenu
      */
-    SystemMenuVo detail(Integer id);
+    SystemAuthMenuVo detail(Integer id);
 
     /**
      * 菜单新增

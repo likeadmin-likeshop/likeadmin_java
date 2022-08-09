@@ -4,7 +4,7 @@ import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.system.ISystemAuthRoleService;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.system.SystemAuthRoleParam;
-import com.hxkj.admin.vo.system.SystemRoleVo;
+import com.hxkj.admin.vo.system.SystemAuthRoleVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.validator.annotation.IDMust;
@@ -33,7 +33,7 @@ public class AuthRoleController {
     @Log(title = "角色列表")
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam) {
-        PageResult<SystemRoleVo> lists = iSystemAuthRoleService.list(pageParam);
+        PageResult<SystemAuthRoleVo> lists = iSystemAuthRoleService.list(pageParam);
         return AjaxResult.success(lists);
     }
 
@@ -46,7 +46,7 @@ public class AuthRoleController {
     @Log(title = "角色详情")
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        SystemRoleVo vo = iSystemAuthRoleService.detail(id);
+        SystemAuthRoleVo vo = iSystemAuthRoleService.detail(id);
         return AjaxResult.success(vo);
     }
 

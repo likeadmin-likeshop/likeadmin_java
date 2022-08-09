@@ -13,9 +13,9 @@ import com.hxkj.admin.service.system.ISystemAuthPermService;
 import com.hxkj.admin.service.system.ISystemAuthRoleService;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.system.SystemAuthAdminParam;
-import com.hxkj.admin.vo.system.SystemAdminVo;
-import com.hxkj.admin.vo.system.SystemRoleVo;
-import com.hxkj.admin.vo.system.SystemSelfVo;
+import com.hxkj.admin.vo.system.SystemAuthAdminVo;
+import com.hxkj.admin.vo.system.SystemAuthRoleVo;
+import com.hxkj.admin.vo.system.SystemAuthSelfVo;
 import com.hxkj.common.config.GlobalConfig;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SystemAuthAdmin;
@@ -69,7 +69,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
      * @return PageResult<SysAdminListVo>
      */
     @Override
-    public PageResult<SystemAdminVo> list(PageParam pageParam, Map<String, String> params) {
+    public PageResult<SystemAuthAdminVo> list(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
@@ -88,12 +88,12 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 "=:role:int"
         });
 
-        IPage<SystemAdminVo> iPage = systemAuthAdminMapper.selectJoinPage(
+        IPage<SystemAuthAdminVo> iPage = systemAuthAdminMapper.selectJoinPage(
                 new Page<>(page, limit),
-                SystemAdminVo.class,
+                SystemAuthAdminVo.class,
                 mpjQueryWrapper);
 
-        for (SystemAdminVo vo : iPage.getRecords()) {
+        for (SystemAuthAdminVo vo : iPage.getRecords()) {
             if (vo.getId() == 1) {
                 vo.setRole("系统管理员");
             }
@@ -118,7 +118,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
      * @return SystemSelfVo
      */
     @Override
-    public SystemSelfVo self(Integer adminId) {
+    public SystemAuthSelfVo self(Integer adminId) {
         // 管理员信息
         SystemAuthAdmin sysAdmin = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select(SystemAuthAdmin.class, info->
@@ -130,14 +130,14 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .eq("id", adminId)
                 .last("limit 1"));
 
-        SystemAdminVo systemAdminVo = new SystemAdminVo();
-        BeanUtils.copyProperties(sysAdmin, systemAdminVo);
-        systemAdminVo.setDept(String.valueOf(sysAdmin.getDeptId()));
-        systemAdminVo.setRole(String.valueOf(sysAdmin.getRole()));
-        systemAdminVo.setAvatar(UrlUtil.toAbsoluteUrl(sysAdmin.getAvatar()));
-        systemAdminVo.setUpdateTime(TimeUtil.timestampToDate(sysAdmin.getUpdateTime()));
-        systemAdminVo.setCreateTime(TimeUtil.timestampToDate(sysAdmin.getCreateTime()));
-        systemAdminVo.setLastLoginTime(TimeUtil.timestampToDate(sysAdmin.getLastLoginTime()));
+        SystemAuthAdminVo systemAuthAdminVo = new SystemAuthAdminVo();
+        BeanUtils.copyProperties(sysAdmin, systemAuthAdminVo);
+        systemAuthAdminVo.setDept(String.valueOf(sysAdmin.getDeptId()));
+        systemAuthAdminVo.setRole(String.valueOf(sysAdmin.getRole()));
+        systemAuthAdminVo.setAvatar(UrlUtil.toAbsoluteUrl(sysAdmin.getAvatar()));
+        systemAuthAdminVo.setUpdateTime(TimeUtil.timestampToDate(sysAdmin.getUpdateTime()));
+        systemAuthAdminVo.setCreateTime(TimeUtil.timestampToDate(sysAdmin.getCreateTime()));
+        systemAuthAdminVo.setLastLoginTime(TimeUtil.timestampToDate(sysAdmin.getLastLoginTime()));
 
         // 角色权限
         List<String> auths = new LinkedList<>();
@@ -167,8 +167,8 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         }
 
         // 返回数据
-        SystemSelfVo vo = new SystemSelfVo();
-        vo.setUser(systemAdminVo);
+        SystemAuthSelfVo vo = new SystemAuthSelfVo();
+        vo.setUser(systemAuthAdminVo);
         vo.setPermissions(auths);
         return vo;
     }
@@ -181,7 +181,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
      * @return SysAdmin
      */
     @Override
-    public SystemAdminVo detail(Integer id) {
+    public SystemAuthAdminVo detail(Integer id) {
         SystemAuthAdmin sysAdmin = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select(SystemAuthAdmin.class, info->
                     !info.getColumn().equals("salt") &&
@@ -194,7 +194,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
 
         Assert.notNull(sysAdmin, "账号已不存在！");
 
-        SystemAdminVo vo = new SystemAdminVo();
+        SystemAuthAdminVo vo = new SystemAuthAdminVo();
         BeanUtils.copyProperties(sysAdmin, vo);
 
         vo.setDept(String.valueOf(vo.getDeptId()));
@@ -228,7 +228,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .eq("nickname", systemAuthAdminParam.getNickname())
                 .last("limit 1")), "昵称已存在换一个吧！");
 
-        SystemRoleVo roleVo = iSystemAuthRoleService.detail(systemAuthAdminParam.getRole());
+        SystemAuthRoleVo roleVo = iSystemAuthRoleService.detail(systemAuthAdminParam.getRole());
         Assert.notNull(roleVo, "角色不存在!");
         Assert.isTrue(roleVo.getIsDisable() <= 0, "当前角色已被禁用!");
 

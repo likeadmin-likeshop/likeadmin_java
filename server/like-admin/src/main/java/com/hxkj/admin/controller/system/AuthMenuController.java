@@ -5,7 +5,7 @@ import com.hxkj.admin.LikeAdminThreadLocal;
 import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.system.ISystemAuthMenuService;
 import com.hxkj.admin.validate.system.SystemAuthMenuParam;
-import com.hxkj.admin.vo.system.SystemMenuVo;
+import com.hxkj.admin.vo.system.SystemAuthMenuVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
@@ -56,7 +56,7 @@ public class AuthMenuController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        SystemMenuVo vo = iSystemAuthMenuService.detail(id);
+        SystemAuthMenuVo vo = iSystemAuthMenuService.detail(id);
         return AjaxResult.success(vo);
     }
 

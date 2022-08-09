@@ -2,7 +2,7 @@ package com.hxkj.admin.service.system;
 
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.system.SystemAuthRoleParam;
-import com.hxkj.admin.vo.system.SystemRoleVo;
+import com.hxkj.admin.vo.system.SystemAuthRoleVo;
 import com.hxkj.common.core.PageResult;
 import org.springframework.validation.annotation.Validated;
 
@@ -18,7 +18,7 @@ public interface ISystemAuthRoleService {
      * @param pageParam 参数
      * @return PageResult<SysRoleListVo>
      */
-    PageResult<SystemRoleVo> list(@Validated PageParam pageParam);
+    PageResult<SystemAuthRoleVo> list(@Validated PageParam pageParam);
 
     /**
      * 角色详情
@@ -27,7 +27,7 @@ public interface ISystemAuthRoleService {
      * @param id 主键参数
      * @return SysRole
      */
-    SystemRoleVo detail(Integer id);
+    SystemAuthRoleVo detail(Integer id);
 
     /**
      * 角色新增

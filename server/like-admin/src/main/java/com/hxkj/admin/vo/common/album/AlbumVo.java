@@ -12,13 +12,13 @@ public class AlbumVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
-    private Integer cid;
-    private String name;
-    private String uri;
-    private String ext;
-    private String size;
-    private String createTime;
-    private String updateTime;
+    private Integer id;        // 主键
+    private Integer cid;       // 所属类目
+    private String name;       // 文件名称
+    private String uri;        // 文件路径
+    private String ext;        // 文件扩展
+    private String size;       // 文件大小
+    private String createTime; // 创建时间
+    private String updateTime; // 更新时间
 
 }

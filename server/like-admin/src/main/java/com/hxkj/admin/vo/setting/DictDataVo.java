@@ -12,14 +12,14 @@ public class DictDataVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
-    private Integer typeId;
-    private String name;
-    private String value;
-    private String remark;
-    private Integer sort;
-    private Integer status;
-    private String createTime;
-    private String updateTime;
+    private Integer id;        // 主键
+    private Integer typeId;    // 类型
+    private String name;       // 键
+    private String value;      // 值
+    private String remark;     // 备注
+    private Integer sort;      // 排序
+    private Integer status;    // 状态: [0=停用, 1=禁用]
+    private String createTime; // 创建时间
+    private String updateTime; // 更新时间
 
 }

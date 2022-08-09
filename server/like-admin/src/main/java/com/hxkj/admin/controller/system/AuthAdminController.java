@@ -5,8 +5,8 @@ import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.system.ISystemAuthAdminService;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.system.SystemAuthAdminParam;
-import com.hxkj.admin.vo.system.SystemAdminVo;
-import com.hxkj.admin.vo.system.SystemSelfVo;
+import com.hxkj.admin.vo.system.SystemAuthAdminVo;
+import com.hxkj.admin.vo.system.SystemAuthSelfVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.validator.annotation.IDMust;
@@ -35,7 +35,7 @@ public class AuthAdminController {
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                         @RequestParam Map<String, String> params) {
-        PageResult<SystemAdminVo> list = iSystemAuthAdminService.list(pageParam, params);
+        PageResult<SystemAuthAdminVo> list = iSystemAuthAdminService.list(pageParam, params);
         return AjaxResult.success(list);
     }
 
@@ -48,7 +48,7 @@ public class AuthAdminController {
     @GetMapping("/self")
     public Object self() {
         Integer adminId = LikeAdminThreadLocal.getAdminId();
-        SystemSelfVo vo = iSystemAuthAdminService.self(adminId);
+        SystemAuthSelfVo vo = iSystemAuthAdminService.self(adminId);
         return AjaxResult.success(vo);
     }
 
@@ -61,7 +61,7 @@ public class AuthAdminController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        SystemAdminVo vo = iSystemAuthAdminService.detail(id);
+        SystemAuthAdminVo vo = iSystemAuthAdminService.detail(id);
         return AjaxResult.success(vo);
     }
 

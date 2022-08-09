@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.hxkj.admin.service.system.ISystemAuthDeptService;
 import com.hxkj.admin.validate.system.SystemAuthDeptParam;
-import com.hxkj.admin.vo.system.SystemDeptVo;
+import com.hxkj.admin.vo.system.SystemAuthDeptVo;
 import com.hxkj.common.entity.system.SystemAuthAdmin;
 import com.hxkj.common.entity.system.SystemAuthDept;
 import com.hxkj.common.mapper.system.SystemAuthAdminMapper;
@@ -40,15 +40,15 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
      * @return List<SystemPostVo>
      */
     @Override
-    public List<SystemDeptVo> all() {
+    public List<SystemAuthDeptVo> all() {
         List<SystemAuthDept> systemAuthDeptList = systemAuthDeptMapper.selectList(new QueryWrapper<SystemAuthDept>()
                 .gt("pid", 0)
                 .eq("is_delete", 0)
                 .orderByDesc((Arrays.asList("id", "sort"))));
 
-        List<SystemDeptVo> adminVoArrayList = new ArrayList<>();
+        List<SystemAuthDeptVo> adminVoArrayList = new ArrayList<>();
         for (SystemAuthDept systemAuthDept : systemAuthDeptList) {
-            SystemDeptVo vo = new SystemDeptVo();
+            SystemAuthDeptVo vo = new SystemAuthDeptVo();
             BeanUtils.copyProperties(systemAuthDept, vo);
 
             vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthDept.getUpdateTime()));
@@ -82,9 +82,9 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
 
         List<SystemAuthDept> systemAuthDeptList = systemAuthDeptMapper.selectList(queryWrapper);
 
-        List<SystemDeptVo> lists = new ArrayList<>();
+        List<SystemAuthDeptVo> lists = new ArrayList<>();
         for (SystemAuthDept systemAuthDept : systemAuthDeptList) {
-            SystemDeptVo vo = new SystemDeptVo();
+            SystemAuthDeptVo vo = new SystemAuthDeptVo();
             BeanUtils.copyProperties(systemAuthDept, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(systemAuthDept.getCreateTime()));
@@ -104,7 +104,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
      * @return SystemDeptVo
      */
     @Override
-    public SystemDeptVo detail(Integer id) {
+    public SystemAuthDeptVo detail(Integer id) {
         SystemAuthDept systemAuthDept = systemAuthDeptMapper.selectOne(
                 new QueryWrapper<SystemAuthDept>()
                         .select(SystemAuthDept.class, info ->
@@ -116,7 +116,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
 
         Assert.notNull(systemAuthDept, "部门已不存在!");
 
-        SystemDeptVo vo  = new SystemDeptVo();
+        SystemAuthDeptVo vo  = new SystemAuthDeptVo();
         BeanUtils.copyProperties(systemAuthDept, vo);
         vo.setCreateTime(TimeUtil.timestampToDate(systemAuthDept.getCreateTime()));
         vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthDept.getUpdateTime()));

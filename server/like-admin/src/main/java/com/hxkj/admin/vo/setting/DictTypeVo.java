@@ -12,12 +12,12 @@ public class DictTypeVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
-    private String dictName;
-    private String dictType;
-    private String dictRemark;
-    private Integer dictStatus;
-    private String createTime;
-    private String updateTime;
+    private Integer id;          // 主键
+    private String dictName;     // 字典名称
+    private String dictType;     // 字典类型
+    private String dictRemark;   // 字典备注
+    private Integer dictStatus;  // 字典状态
+    private String createTime;   // 创建时间
+    private String updateTime;   // 更新时间
 
 }

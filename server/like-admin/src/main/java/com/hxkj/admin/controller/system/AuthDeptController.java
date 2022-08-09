@@ -3,7 +3,7 @@ package com.hxkj.admin.controller.system;
 import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.service.system.ISystemAuthDeptService;
 import com.hxkj.admin.validate.system.SystemAuthDeptParam;
-import com.hxkj.admin.vo.system.SystemDeptVo;
+import com.hxkj.admin.vo.system.SystemAuthDeptVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
@@ -31,7 +31,7 @@ public class AuthDeptController {
      */
     @GetMapping("/all")
     public Object all() {
-        List<SystemDeptVo> vos = iSystemAuthDeptService.all();
+        List<SystemAuthDeptVo> vos = iSystemAuthDeptService.all();
         return AjaxResult.success(vos);
     }
 
@@ -56,7 +56,7 @@ public class AuthDeptController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        SystemDeptVo vo = iSystemAuthDeptService.detail(id);
+        SystemAuthDeptVo vo = iSystemAuthDeptService.detail(id);
         return AjaxResult.success(vo);
     }
 

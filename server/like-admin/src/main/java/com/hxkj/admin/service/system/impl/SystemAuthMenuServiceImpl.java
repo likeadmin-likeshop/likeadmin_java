@@ -8,7 +8,7 @@ import com.hxkj.admin.config.AdminConfig;
 import com.hxkj.admin.service.system.ISystemAuthMenuService;
 import com.hxkj.admin.service.system.ISystemAuthPermService;
 import com.hxkj.admin.validate.system.SystemAuthMenuParam;
-import com.hxkj.admin.vo.system.SystemMenuVo;
+import com.hxkj.admin.vo.system.SystemAuthMenuVo;
 import com.hxkj.common.entity.system.SystemAuthMenu;
 import com.hxkj.common.mapper.system.SystemAuthMenuMapper;
 import com.hxkj.common.utils.*;
@@ -54,9 +54,9 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
 
         List<SystemAuthMenu> systemAuthMenus = systemAuthMenuMapper.selectList(queryWrapper);
 
-        List<SystemMenuVo> lists = new ArrayList<>();
+        List<SystemAuthMenuVo> lists = new ArrayList<>();
         for (SystemAuthMenu systemAuthMenu : systemAuthMenus) {
-            SystemMenuVo vo = new SystemMenuVo();
+            SystemAuthMenuVo vo = new SystemAuthMenuVo();
             BeanUtils.copyProperties(systemAuthMenu, vo);
 
             vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthMenu.getUpdateTime()));
@@ -81,9 +81,9 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
 
         List<SystemAuthMenu> systemAuthMenus = systemAuthMenuMapper.selectList(queryWrapper);
 
-        List<SystemMenuVo> lists = new ArrayList<>();
+        List<SystemAuthMenuVo> lists = new ArrayList<>();
         for (SystemAuthMenu systemAuthMenu : systemAuthMenus) {
-            SystemMenuVo vo = new SystemMenuVo();
+            SystemAuthMenuVo vo = new SystemAuthMenuVo();
             BeanUtils.copyProperties(systemAuthMenu, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(systemAuthMenu.getCreateTime()));
@@ -103,11 +103,11 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
      * @return SysMenu
      */
     @Override
-    public SystemMenuVo detail(Integer id) {
+    public SystemAuthMenuVo detail(Integer id) {
         SystemAuthMenu systemAuthMenu = systemAuthMenuMapper.selectOne(new QueryWrapper<SystemAuthMenu>().eq("id", id));
         Assert.notNull(systemAuthMenu, "菜单已不存在!");
 
-        SystemMenuVo vo  = new SystemMenuVo();
+        SystemAuthMenuVo vo  = new SystemAuthMenuVo();
         BeanUtils.copyProperties(systemAuthMenu, vo);
         vo.setCreateTime(TimeUtil.timestampToDate(systemAuthMenu.getCreateTime()));
         vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthMenu.getUpdateTime()));
