@@ -1,6 +1,6 @@
 package com.hxkj.admin.controller.setting;
 
-import com.hxkj.admin.service.setting.IDictTypeService;
+import com.hxkj.admin.service.setting.ISettingDictTypeService;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.setting.DictTypeParam;
 import com.hxkj.admin.vo.setting.DictTypeVo;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class DictTypeController {
 
     @Resource
-    IDictTypeService iDictTypeService;
+    ISettingDictTypeService iSettingDictTypeService;
 
     /**
      * 字典类型列表
@@ -31,7 +31,7 @@ public class DictTypeController {
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
-        PageResult<DictTypeVo> list = iDictTypeService.list(pageParam, params);
+        PageResult<DictTypeVo> list = iSettingDictTypeService.list(pageParam, params);
         return AjaxResult.success(list);
     }
 
@@ -44,7 +44,7 @@ public class DictTypeController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        DictTypeVo vo = iDictTypeService.detail(id);
+        DictTypeVo vo = iSettingDictTypeService.detail(id);
         return AjaxResult.success(vo);
     }
 
@@ -57,7 +57,7 @@ public class DictTypeController {
      */
     @PostMapping("/add")
     public Object add(@Validated(value = DictTypeParam.create.class) @RequestBody DictTypeParam dictTypeParam) {
-        iDictTypeService.add(dictTypeParam);
+        iSettingDictTypeService.add(dictTypeParam);
         return AjaxResult.success();
     }
 
@@ -70,7 +70,7 @@ public class DictTypeController {
      */
     @PostMapping("/edit")
     public Object edit(@Validated(value = DictTypeParam.update.class) @RequestBody DictTypeParam dictTypeParam) {
-        iDictTypeService.edit(dictTypeParam);
+        iSettingDictTypeService.edit(dictTypeParam);
         return AjaxResult.success();
     }
 
@@ -83,7 +83,7 @@ public class DictTypeController {
      */
     @PostMapping("/del")
     public Object del(@Validated(value = DictTypeParam.delete.class) @RequestBody DictTypeParam dictTypeParam) {
-        iDictTypeService.del(dictTypeParam.getId());
+        iSettingDictTypeService.del(dictTypeParam.getId());
         return AjaxResult.success();
     }
 

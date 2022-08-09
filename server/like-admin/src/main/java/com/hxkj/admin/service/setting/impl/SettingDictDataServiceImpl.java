@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hxkj.admin.service.setting.IDictDataService;
+import com.hxkj.admin.service.setting.ISettingDictDataService;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.setting.DictDataParam;
 import com.hxkj.admin.vo.setting.DictDataVo;
@@ -24,7 +24,7 @@ import java.util.Map;
  * 字典数据服务实现类
  */
 @Service
-public class DictDataServiceImpl implements IDictDataService {
+public class SettingDictDataServiceImpl implements ISettingDictDataService {
 
     @Resource
     DictDataMapper dictDataMapper;
