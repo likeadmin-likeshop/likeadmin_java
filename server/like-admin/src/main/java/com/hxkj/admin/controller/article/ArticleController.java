@@ -1,7 +1,7 @@
 package com.hxkj.admin.controller.article;
 
 import com.hxkj.admin.config.aop.Log;
-import com.hxkj.admin.service.article.IArticleTextService;
+import com.hxkj.admin.service.article.IArticleArchivesService;
 import com.hxkj.admin.validate.article.ArticleTextParam;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.common.article.ArticleDetailVo;
@@ -18,12 +18,12 @@ import java.util.Map;
 /**
  * 文章管理
  */
-@RestController
-@RequestMapping("api/article")
-public class TextController {
+@RestController(value = "articleArchive")
+@RequestMapping("api/article/archive")
+public class ArticleController {
 
     @Resource
-    IArticleTextService iArticleTextService;
+    IArticleArchivesService iArticleArchivesService;
 
     /**
      * 文章列表
@@ -36,7 +36,7 @@ public class TextController {
     @GetMapping("/list")
     public Object articleList(@Validated PageParam pageParam,
                               @RequestParam Map<String, String> params) {
-        PageResult<ArticleListVo> vos = iArticleTextService.list(pageParam, params);
+        PageResult<ArticleListVo> vos = iArticleArchivesService.list(pageParam, params);
         return AjaxResult.success(vos);
     }
 
@@ -49,7 +49,7 @@ public class TextController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        ArticleDetailVo vo = iArticleTextService.detail(id);
+        ArticleDetailVo vo = iArticleArchivesService.detail(id);
         return AjaxResult.success(vo);
     }
 
@@ -65,7 +65,7 @@ public class TextController {
     public Object add(
             @Validated(value = ArticleTextParam.create.class)
             @RequestBody ArticleTextParam articleTextParam) {
-        iArticleTextService.add(articleTextParam);
+        iArticleArchivesService.add(articleTextParam);
         return AjaxResult.success();
     }
 
@@ -80,7 +80,7 @@ public class TextController {
     @PostMapping("/edit")
     public Object edit(@Validated(value = ArticleTextParam.update.class)
                        @RequestBody ArticleTextParam articleTextParam) {
-        iArticleTextService.edit(articleTextParam);
+        iArticleArchivesService.edit(articleTextParam);
         return AjaxResult.success();
     }
 
@@ -95,7 +95,7 @@ public class TextController {
     @PostMapping("/del")
     public Object del(@Validated(value = ArticleTextParam.delete.class)
                       @RequestBody ArticleTextParam articleTextParam) {
-        iArticleTextService.del(articleTextParam.getId());
+        iArticleArchivesService.del(articleTextParam.getId());
         return AjaxResult.success();
     }
 

@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * 文章服务接口类
  */
-public interface IArticleTextService {
+public interface IArticleArchivesService {
 
     /**
      * 文章列表

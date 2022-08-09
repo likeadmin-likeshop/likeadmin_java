@@ -38,7 +38,13 @@ public class UploadController {
     @Log(title = "上传图片")
     @PostMapping("/image")
     public Object image(HttpServletRequest request) {
-        MultipartFile multipartFile = ((MultipartRequest) request).getFile("file");
+        MultipartFile multipartFile;
+        try {
+            multipartFile = ((MultipartRequest) request).getFile("file");
+        } catch (Exception e) {
+            return AjaxResult.failed("请正确选择上传图片");
+        }
+
         if (multipartFile == null) {
             return AjaxResult.failed("请选择上传图片");
         }
@@ -75,7 +81,13 @@ public class UploadController {
     @Log(title = "上传视频")
     @PostMapping("/video")
     public Object video(HttpServletRequest request) {
-        MultipartFile multipartFile = ((MultipartRequest) request).getFile("file");
+        MultipartFile multipartFile;
+        try {
+            multipartFile = ((MultipartRequest) request).getFile("file");
+        } catch (Exception e) {
+            return AjaxResult.failed("请正确选择上传视频");
+        }
+
         if (multipartFile == null) {
             return AjaxResult.failed("请选择上传视频");
         }

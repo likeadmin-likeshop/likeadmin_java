@@ -3,7 +3,7 @@ package com.hxkj.admin.service.article.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hxkj.admin.service.article.IArticleCateService;
+import com.hxkj.admin.service.article.IArticleCategoryService;
 import com.hxkj.admin.validate.article.ArticleCateParam;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.common.article.ArticleCateVo;
@@ -24,7 +24,7 @@ import java.util.Map;
  * 文章分类服务实现类
  */
 @Service
-public class ArticleCateServiceImpl implements IArticleCateService {
+public class ArticleCategoryServiceImpl implements IArticleCategoryService {
 
     @Resource
     ArticleCategoryMapper articleCategoryMapper;

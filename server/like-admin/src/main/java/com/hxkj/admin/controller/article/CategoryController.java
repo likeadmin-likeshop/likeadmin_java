@@ -1,7 +1,7 @@
 package com.hxkj.admin.controller.article;
 
 import com.hxkj.admin.config.aop.Log;
-import com.hxkj.admin.service.article.IArticleCateService;
+import com.hxkj.admin.service.article.IArticleCategoryService;
 import com.hxkj.admin.validate.article.ArticleCateParam;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.common.article.ArticleCateVo;
@@ -18,12 +18,12 @@ import java.util.Map;
 /**
  * 文章分类管理
  */
-@RestController
-@RequestMapping("api/article/cate")
-public class CateController {
+@RestController(value = "articleCategory")
+@RequestMapping("api/article/category")
+public class CategoryController {
 
     @Resource
-    IArticleCateService iArticleCateService;
+    IArticleCategoryService iArticleCategoryService;
 
     /**
      * 分类所有
@@ -33,7 +33,7 @@ public class CateController {
      */
     @GetMapping("/all")
     public Object all() {
-        List<ArticleCateVo> list = iArticleCateService.all();
+        List<ArticleCateVo> list = iArticleCategoryService.all();
         return AjaxResult.success(list);
     }
 
@@ -48,7 +48,7 @@ public class CateController {
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
-        PageResult<ArticleCateVo> list = iArticleCateService.list(pageParam, params);
+        PageResult<ArticleCateVo> list = iArticleCategoryService.list(pageParam, params);
         return AjaxResult.success(list);
     }
 
@@ -61,7 +61,7 @@ public class CateController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        ArticleCateVo vo = iArticleCateService.detail(id);
+        ArticleCateVo vo = iArticleCategoryService.detail(id);
         return AjaxResult.success(vo);
     }
 
@@ -76,7 +76,7 @@ public class CateController {
     @PostMapping("/add")
     public Object add(@Validated(value = ArticleCateParam.create.class)
                           @RequestBody ArticleCateParam articleCateParam) {
-        iArticleCateService.add(articleCateParam);
+        iArticleCategoryService.add(articleCateParam);
         return AjaxResult.success();
     }
 
@@ -91,7 +91,7 @@ public class CateController {
     @PostMapping("/edit")
     public Object edit(@Validated(value = ArticleCateParam.update.class)
                            @RequestBody ArticleCateParam articleCateParam) {
-        iArticleCateService.edit(articleCateParam);
+        iArticleCategoryService.edit(articleCateParam);
         return AjaxResult.success();
     }
 
@@ -106,7 +106,7 @@ public class CateController {
     @PostMapping("/cateDel")
     public Object del(@Validated(value = ArticleCateParam.delete.class)
                           @RequestBody ArticleCateParam articleCateParam) {
-        iArticleCateService.del(articleCateParam.getId());
+        iArticleCategoryService.del(articleCateParam.getId());
         return AjaxResult.success();
     }
 

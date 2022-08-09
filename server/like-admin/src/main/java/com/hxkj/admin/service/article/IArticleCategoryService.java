@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * 文章分类服务类接口
  */
-public interface IArticleCateService {
+public interface IArticleCategoryService {
 
     /**
      * 分类所有

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
-import com.hxkj.admin.service.article.IArticleTextService;
+import com.hxkj.admin.service.article.IArticleArchivesService;
 import com.hxkj.admin.validate.article.ArticleTextParam;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.common.article.ArticleDetailVo;
@@ -30,7 +30,7 @@ import java.util.Map;
  * 文章服务实现类
  */
 @Service
-public class ArticleTextServiceImpl implements IArticleTextService {
+public class ArticleArchivesServiceImpl implements IArticleArchivesService {
 
     @Resource
     ArticleMapper articleMapper;
