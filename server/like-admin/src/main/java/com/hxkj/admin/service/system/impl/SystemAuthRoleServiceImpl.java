@@ -23,9 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * 系统角色服务实现类
@@ -41,6 +39,32 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
 
     @Resource
     ISystemAuthPermService iSystemAuthPermService;
+
+    /**
+     * 角色所有
+     *
+     * @author fzr
+     * @return List<SystemAuthRoleVo>
+     */
+    @Override
+    public List<Map<String, Object>> all() {
+        QueryWrapper<SystemAuthRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("id,name,create_time,update_time");
+        queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
+        List<SystemAuthRole> systemAuthRoles = systemAuthRoleMapper.selectList(queryWrapper);
+
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (SystemAuthRole systemAuthRole : systemAuthRoles) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("id", systemAuthRole.getId());
+            map.put("name", systemAuthRole.getName());
+            map.put("createTime", TimeUtil.timestampToDate(systemAuthRole.getCreateTime()));
+            map.put("updateTime", TimeUtil.timestampToDate(systemAuthRole.getUpdateTime()));
+            list.add(map);
+        }
+
+        return list;
+    }
 
     /**
      * 角色列表

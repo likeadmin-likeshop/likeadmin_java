@@ -12,6 +12,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 系统角色管理
@@ -22,6 +24,18 @@ public class AuthRoleController {
 
     @Resource
     ISystemAuthRoleService iSystemAuthRoleService;
+
+    /**
+     * 角色所有
+     *
+     * @author fzr
+     * @return Object
+     */
+    @GetMapping("/all")
+    public Object all() {
+        List<Map<String, Object>> list = iSystemAuthRoleService.all();
+        return AjaxResult.success(list);
+    }
 
     /**
      * 角色列表

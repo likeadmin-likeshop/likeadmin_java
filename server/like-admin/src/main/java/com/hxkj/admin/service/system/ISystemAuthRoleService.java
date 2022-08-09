@@ -6,10 +6,21 @@ import com.hxkj.admin.vo.system.SystemAuthRoleVo;
 import com.hxkj.common.core.PageResult;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 系统角色服务接口类
  */
 public interface ISystemAuthRoleService {
+
+    /**
+     * 角色所有
+     *
+     * @author fzr
+     * @return List<SystemAuthRoleVo>
+     */
+    List<Map<String, Object>> all();
 
     /**
      * 角色列表
