@@ -2,7 +2,7 @@ package com.hxkj.admin.controller.article;
 
 import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.article.IArticleArchivesService;
-import com.hxkj.admin.validate.article.ArticleTextParam;
+import com.hxkj.admin.validate.article.ArticleArchivesParam;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.common.article.ArticleDetailVo;
 import com.hxkj.admin.vo.common.article.ArticleListVo;
@@ -57,15 +57,15 @@ public class ArticleController {
      * 文章新增
      *
      * @author fzr
-     * @param articleTextParam 文章参数
+     * @param articleArchivesParam 文章参数
      * @return Object
      */
     @Log(title = "文章新增")
     @PostMapping("/add")
     public Object add(
-            @Validated(value = ArticleTextParam.create.class)
-            @RequestBody ArticleTextParam articleTextParam) {
-        iArticleArchivesService.add(articleTextParam);
+            @Validated(value = ArticleArchivesParam.create.class)
+            @RequestBody ArticleArchivesParam articleArchivesParam) {
+        iArticleArchivesService.add(articleArchivesParam);
         return AjaxResult.success();
     }
 
@@ -73,14 +73,14 @@ public class ArticleController {
      * 文章编辑
      *
      * @author fzr
-     * @param articleTextParam 文章参数
+     * @param articleArchivesParam 文章参数
      * @return Object
      */
     @Log(title = "文章编辑")
     @PostMapping("/edit")
-    public Object edit(@Validated(value = ArticleTextParam.update.class)
-                       @RequestBody ArticleTextParam articleTextParam) {
-        iArticleArchivesService.edit(articleTextParam);
+    public Object edit(@Validated(value = ArticleArchivesParam.update.class)
+                       @RequestBody ArticleArchivesParam articleArchivesParam) {
+        iArticleArchivesService.edit(articleArchivesParam);
         return AjaxResult.success();
     }
 
@@ -88,14 +88,14 @@ public class ArticleController {
      * 文章删除
      *
      * @author fzr
-     * @param articleTextParam 文章参数
+     * @param articleArchivesParam 文章参数
      * @return Object
      */
     @Log(title = "文章删除")
     @PostMapping("/del")
-    public Object del(@Validated(value = ArticleTextParam.delete.class)
-                      @RequestBody ArticleTextParam articleTextParam) {
-        iArticleArchivesService.del(articleTextParam.getId());
+    public Object del(@Validated(value = ArticleArchivesParam.delete.class)
+                      @RequestBody ArticleArchivesParam articleArchivesParam) {
+        iArticleArchivesService.del(articleArchivesParam.getId());
         return AjaxResult.success();
     }
 

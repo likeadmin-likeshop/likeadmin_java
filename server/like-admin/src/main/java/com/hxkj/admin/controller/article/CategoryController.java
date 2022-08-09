@@ -2,7 +2,7 @@ package com.hxkj.admin.controller.article;
 
 import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.article.IArticleCategoryService;
-import com.hxkj.admin.validate.article.ArticleCateParam;
+import com.hxkj.admin.validate.article.ArticleCategoryParam;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.common.article.ArticleCateVo;
 import com.hxkj.common.core.AjaxResult;
@@ -69,14 +69,14 @@ public class CategoryController {
      * 分类新增
      *
      * @author fzr
-     * @param articleCateParam 分类参数
+     * @param articleCategoryParam 分类参数
      * @return Object
      */
     @Log(title = "文章分类新增")
     @PostMapping("/add")
-    public Object add(@Validated(value = ArticleCateParam.create.class)
-                          @RequestBody ArticleCateParam articleCateParam) {
-        iArticleCategoryService.add(articleCateParam);
+    public Object add(@Validated(value = ArticleCategoryParam.create.class)
+                          @RequestBody ArticleCategoryParam articleCategoryParam) {
+        iArticleCategoryService.add(articleCategoryParam);
         return AjaxResult.success();
     }
 
@@ -84,14 +84,14 @@ public class CategoryController {
      * 分类编辑
      *
      * @author fzr
-     * @param articleCateParam 分类编辑
+     * @param articleCategoryParam 分类编辑
      * @return Object
      */
     @Log(title = "文章分类编辑")
     @PostMapping("/edit")
-    public Object edit(@Validated(value = ArticleCateParam.update.class)
-                           @RequestBody ArticleCateParam articleCateParam) {
-        iArticleCategoryService.edit(articleCateParam);
+    public Object edit(@Validated(value = ArticleCategoryParam.update.class)
+                           @RequestBody ArticleCategoryParam articleCategoryParam) {
+        iArticleCategoryService.edit(articleCategoryParam);
         return AjaxResult.success();
     }
 
@@ -99,14 +99,14 @@ public class CategoryController {
      * 分类删除
      *
      * @author fzr
-     * @param articleCateParam 分类删除
+     * @param articleCategoryParam 分类删除
      * @return Object
      */
     @Log(title = "文章分类删除")
     @PostMapping("/cateDel")
-    public Object del(@Validated(value = ArticleCateParam.delete.class)
-                          @RequestBody ArticleCateParam articleCateParam) {
-        iArticleCategoryService.del(articleCateParam.getId());
+    public Object del(@Validated(value = ArticleCategoryParam.delete.class)
+                          @RequestBody ArticleCategoryParam articleCategoryParam) {
+        iArticleCategoryService.del(articleCategoryParam.getId());
         return AjaxResult.success();
     }
 

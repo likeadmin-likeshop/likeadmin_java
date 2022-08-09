@@ -3,8 +3,8 @@ package com.hxkj.admin;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.hxkj.admin.config.AdminConfig;
-import com.hxkj.admin.service.system.ISystemAdminService;
-import com.hxkj.admin.service.system.ISystemRoleMenuService;
+import com.hxkj.admin.service.system.ISystemAuthAdminService;
+import com.hxkj.admin.service.system.ISystemAuthPermService;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.enums.HttpEnum;
 import com.hxkj.common.utils.RedisUtil;
@@ -27,10 +27,10 @@ import java.util.Map;
 public class LikeAdminInterceptor implements HandlerInterceptor {
 
     @Resource
-    ISystemAdminService iSystemAdminService;
+    ISystemAuthAdminService iSystemAuthAdminService;
 
     @Resource
-    ISystemRoleMenuService iSystemRoleMenuService;
+    ISystemAuthPermService iSystemAuthPermService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -77,7 +77,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         // 用户信息缓存
         String uid = RedisUtil.get(token).toString();
         if (!RedisUtil.hExists(AdminConfig.backstageManageKey, uid)) {
-            iSystemAdminService.cacheAdminUserByUid(Integer.parseInt(uid));
+            iSystemAuthAdminService.cacheAdminUserByUid(Integer.parseInt(uid));
         }
 
         // 校验用户被删除
@@ -117,7 +117,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         // 校验角色权限是否存在
         String roleId = map.get("role");
         if (!RedisUtil.hExists(AdminConfig.backstageRolesKey, roleId)) {
-            iSystemRoleMenuService.cacheRoleMenusByRoleId(Integer.parseInt(roleId));
+            iSystemAuthPermService.cacheRoleMenusByRoleId(Integer.parseInt(roleId));
         }
 
         // 验证是否有权限操作

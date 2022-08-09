@@ -1,6 +1,6 @@
 package com.hxkj.admin.controller.system;
 
-import com.hxkj.admin.service.system.ISystemLogServer;
+import com.hxkj.admin.service.system.ISystemLogsServer;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.system.LogLoginVo;
 import com.hxkj.admin.vo.system.LogOperateVo;
@@ -18,12 +18,12 @@ import java.util.Map;
 /**
  * 系统日志管理
  */
-@RestController
+@RestController("systemLogController")
 @RequestMapping("api/system/log")
 public class LogController {
 
     @Resource
-    ISystemLogServer iSystemLogServer;
+    ISystemLogsServer iSystemLogsServer;
 
     /**
      * 系统操作日志
@@ -34,7 +34,7 @@ public class LogController {
      */
     @GetMapping("/operate")
     public Object operate(@Validated PageParam pageParam, @RequestParam Map<String, String> params) {
-        PageResult<LogOperateVo> list = iSystemLogServer.operate(pageParam, params);
+        PageResult<LogOperateVo> list = iSystemLogsServer.operate(pageParam, params);
         return AjaxResult.success(list);
     }
 
@@ -47,7 +47,7 @@ public class LogController {
      */
     @GetMapping("/login")
     public Object login(@Validated PageParam pageParam, @RequestParam Map<String, String> params) {
-        PageResult<LogLoginVo> list = iSystemLogServer.login(pageParam, params);
+        PageResult<LogLoginVo> list = iSystemLogsServer.login(pageParam, params);
         return AjaxResult.success(list);
     }
 

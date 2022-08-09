@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 服务监控管理
  */
-@RestController
+@RestController(value = "monitorServerController")
 @RequestMapping("api/monitor")
 public class ServerController {
     /**
