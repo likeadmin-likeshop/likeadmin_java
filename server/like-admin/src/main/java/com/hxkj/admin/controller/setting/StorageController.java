@@ -1,7 +1,7 @@
 package com.hxkj.admin.controller.setting;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
-import com.hxkj.admin.service.setting.IStorageService;
+import com.hxkj.admin.service.setting.ISettingStorageService;
 import com.hxkj.common.core.AjaxResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 public class StorageController {
 
     @Resource
-    IStorageService iStorageService;
+    ISettingStorageService iSettingStorageService;
 
     /**
      * 存储列表
@@ -24,7 +24,7 @@ public class StorageController {
      */
     @GetMapping("/list")
     public Object list() {
-        List<Map<String, Object>> list = iStorageService.list();
+        List<Map<String, Object>> list = iSettingStorageService.list();
         return AjaxResult.success(list);
     }
 
@@ -36,7 +36,7 @@ public class StorageController {
      */
     @GetMapping("/detail")
     public Object detail(String alias) {
-        Map<String, Object> map = iStorageService.detail(alias);
+        Map<String, Object> map = iSettingStorageService.detail(alias);
         return AjaxResult.success(map);
     }
 
@@ -49,7 +49,7 @@ public class StorageController {
      */
     @PostMapping("/edit")
     public Object edit(@RequestBody Map<String, String> params) {
-        iStorageService.edit(params);
+        iSettingStorageService.edit(params);
         return AjaxResult.success();
     }
 
@@ -66,7 +66,7 @@ public class StorageController {
         Assert.notNull(params.get("status"), "status参数缺失");
         String alias = params.get("alias");
         Integer status = Integer.parseInt(params.get("status"));
-        iStorageService.change(alias, status);
+        iSettingStorageService.change(alias, status);
         return AjaxResult.success();
     }
 
