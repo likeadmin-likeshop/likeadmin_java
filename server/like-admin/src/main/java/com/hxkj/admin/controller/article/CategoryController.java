@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * 文章分类管理
  */
-@RestController(value = "articleCategory")
+@RestController("articleCategoryController")
 @RequestMapping("api/article/cate")
 public class CategoryController {
 
