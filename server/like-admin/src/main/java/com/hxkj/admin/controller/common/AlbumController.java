@@ -70,6 +70,10 @@ public class AlbumController {
         }
 
         List<Integer> ids = ArrayUtil.objectToListAsInt(params.get("ids"));
+        if (ids.size() <= 0) {
+            return AjaxResult.failed("请至少选择一个文件");
+        }
+
         iAlbumService.albumMove(ids, Integer.parseInt(params.get("cid").toString()));
         return AjaxResult.success();
     }
