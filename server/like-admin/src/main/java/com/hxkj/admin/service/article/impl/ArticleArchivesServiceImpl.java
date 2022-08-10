@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.hxkj.admin.service.article.IArticleArchivesService;
-import com.hxkj.admin.validate.article.ArticleArchivesParam;
+import com.hxkj.admin.validate.article.ArticleParam;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.vo.common.article.ArticleDetailVo;
 import com.hxkj.admin.vo.common.article.ArticleListVo;
@@ -111,18 +111,18 @@ public class ArticleArchivesServiceImpl implements IArticleArchivesService {
      * 文章新增
      *
      * @author fzr
-     * @param articleArchivesParam 文章参数
+     * @param articleParam 文章参数
      */
     @Override
-    public void add(ArticleArchivesParam articleArchivesParam) {
+    public void add(ArticleParam articleParam) {
         Article model = new Article();
-        model.setCid(articleArchivesParam.getCid());
-        model.setTitle(articleArchivesParam.getTitle());
-        model.setImage(UrlUtil.toRelativeUrl(articleArchivesParam.getImage()));
-        model.setIntro(articleArchivesParam.getIntro());
-        model.setContent(articleArchivesParam.getContent());
-        model.setSort(articleArchivesParam.getSort());
-        model.setIsShow(articleArchivesParam.getIsShow());
+        model.setCid(articleParam.getCid());
+        model.setTitle(articleParam.getTitle());
+        model.setImage(UrlUtil.toRelativeUrl(articleParam.getImage()));
+        model.setIntro(articleParam.getIntro());
+        model.setContent(articleParam.getContent());
+        model.setSort(articleParam.getSort());
+        model.setIsShow(articleParam.getIsShow());
         model.setVisit(0);
         model.setCreateTime(TimeUtil.timestamp());
         model.setUpdateTime(TimeUtil.timestamp());
@@ -133,29 +133,29 @@ public class ArticleArchivesServiceImpl implements IArticleArchivesService {
      * 文章编辑
      *
      * @author fzr
-     * @param articleArchivesParam 文章参数
+     * @param articleParam 文章参数
      */
     @Override
-    public void edit(ArticleArchivesParam articleArchivesParam) {
+    public void edit(ArticleParam articleParam) {
         Article model = articleMapper.selectOne(
                 new QueryWrapper<Article>()
-                .eq("id", articleArchivesParam.getId())
+                .eq("id", articleParam.getId())
                 .eq("is_delete", 0));
 
         Assert.notNull(model, "文章不存在!");
 
         Assert.notNull(articleCategoryMapper.selectOne(
                 new QueryWrapper<ArticleCategory>()
-                .eq("id", articleArchivesParam.getCid())
+                .eq("id", articleParam.getCid())
                 .eq("is_delete", 0)), "分类不存在");
 
-        model.setCid(articleArchivesParam.getCid());
-        model.setTitle(articleArchivesParam.getTitle());
-        model.setImage(UrlUtil.toRelativeUrl(articleArchivesParam.getImage()));
-        model.setIntro(articleArchivesParam.getIntro());
-        model.setContent(articleArchivesParam.getContent());
-        model.setIsShow(articleArchivesParam.getIsShow());
-        model.setSort(articleArchivesParam.getSort());
+        model.setCid(articleParam.getCid());
+        model.setTitle(articleParam.getTitle());
+        model.setImage(UrlUtil.toRelativeUrl(articleParam.getImage()));
+        model.setIntro(articleParam.getIntro());
+        model.setContent(articleParam.getContent());
+        model.setIsShow(articleParam.getIsShow());
+        model.setSort(articleParam.getSort());
         model.setUpdateTime(TimeUtil.timestamp());
         articleMapper.updateById(model);
     }

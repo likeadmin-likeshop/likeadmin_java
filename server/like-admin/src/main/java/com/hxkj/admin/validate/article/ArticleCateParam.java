@@ -13,12 +13,12 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * 文章参数
+ * 文章分类参数
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class ArticleArchivesParam implements Serializable {
+public class ArticleCateParam implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -26,23 +26,12 @@ public class ArticleArchivesParam implements Serializable {
     public interface update{}
     public interface delete{}
 
-    @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
+    @IDMust(message = "id参数必传且需大于0", groups = {ArticleParam.create.class, ArticleParam.delete.class})
     private Integer id;
 
-    @IDMust(message = "id参数必传且需大于0", groups = {create.class, update.class})
-    private Integer cid;
-
-    @NotEmpty(message = "文章标题不能为空", groups = {create.class, update.class})
-    @Length(min = 1, max = 200, message = "文章标题不能大于200个字符", groups = {create.class, update.class})
-    private String title;
-
-    @Length(max = 200, message = "简介不能超出200个字符", groups = {create.class, update.class})
-    private String intro = "";
-
-    @Length(max = 200, message = "图片链接过长不能超200个字符", groups = {create.class, update.class})
-    private String image = "";
-
-    private String content = "";
+    @NotEmpty(message = "分类名称不能为空", groups = {create.class, update.class})
+    @Length(min = 1, max = 60, message = "分类名称不能大于60个字符", groups = {create.class, update.class})
+    private String name;
 
     @NotNull(message = "排序号不能为空", groups = {create.class, update.class})
     @DecimalMin(value = "0", message = "排序号值不能少于0", groups = {create.class, update.class})
