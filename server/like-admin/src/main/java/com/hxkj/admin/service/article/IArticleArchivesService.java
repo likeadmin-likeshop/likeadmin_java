@@ -2,8 +2,8 @@ package com.hxkj.admin.service.article;
 
 import com.hxkj.admin.validate.article.ArticleParam;
 import com.hxkj.admin.validate.common.PageParam;
-import com.hxkj.admin.vo.common.article.ArticleDetailVo;
-import com.hxkj.admin.vo.common.article.ArticleListVo;
+import com.hxkj.admin.vo.article.ArticleDetailVo;
+import com.hxkj.admin.vo.article.ArticleListVo;
 import com.hxkj.common.core.PageResult;
 
 import java.util.Map;

@@ -12,6 +12,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+/**
+ * 相册参数
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)

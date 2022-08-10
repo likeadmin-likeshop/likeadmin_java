@@ -1,4 +1,4 @@
-package com.hxkj.admin.vo.common.album;
+package com.hxkj.admin.vo.album;
 
 import lombok.Data;
 

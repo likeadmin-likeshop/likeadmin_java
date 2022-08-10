@@ -1,4 +1,4 @@
-package com.hxkj.admin.vo.common.article;
+package com.hxkj.admin.vo.article;
 
 import lombok.Data;
 

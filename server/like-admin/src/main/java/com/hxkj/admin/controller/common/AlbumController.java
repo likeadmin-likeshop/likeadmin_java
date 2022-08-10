@@ -5,7 +5,7 @@ import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.common.IAlbumService;
 import com.hxkj.admin.validate.common.AlbumParam;
 import com.hxkj.admin.validate.common.PageParam;
-import com.hxkj.admin.vo.common.album.AlbumVo;
+import com.hxkj.admin.vo.album.AlbumVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.utils.ArrayUtil;

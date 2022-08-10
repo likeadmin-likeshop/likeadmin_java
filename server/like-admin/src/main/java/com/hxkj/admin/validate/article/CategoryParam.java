@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class ArticleCateParam implements Serializable {
+public class CategoryParam implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hxkj.admin.service.article.IArticleCategoryService;
-import com.hxkj.admin.validate.article.ArticleCateParam;
+import com.hxkj.admin.validate.article.CategoryParam;
 import com.hxkj.admin.validate.common.PageParam;
-import com.hxkj.admin.vo.common.article.ArticleCateVo;
+import com.hxkj.admin.vo.article.ArticleCateVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.article.ArticleCategory;
 import com.hxkj.common.mapper.article.ArticleCategoryMapper;
@@ -123,14 +123,14 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
      * 分类新增
      *
      * @author fzr
-     * @param articleCateParam 分类参数
+     * @param categoryParam 分类参数
      */
     @Override
-    public void add(ArticleCateParam articleCateParam) {
+    public void add(CategoryParam categoryParam) {
         ArticleCategory model = new ArticleCategory();
-        model.setId(articleCateParam.getId());
-        model.setName(articleCateParam.getName());
-        model.setSort(articleCateParam.getSort());
+        model.setId(categoryParam.getId());
+        model.setName(categoryParam.getName());
+        model.setSort(categoryParam.getSort());
         model.setCreateTime(TimeUtil.timestamp());
         model.setUpdateTime(TimeUtil.timestamp());
         articleCategoryMapper.insert(model);
@@ -140,22 +140,22 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
      * 文章编辑
      *
      * @author fzr
-     * @param articleCateParam 分类参数
+     * @param categoryParam 分类参数
      */
     @Override
-    public void edit(ArticleCateParam articleCateParam) {
+    public void edit(CategoryParam categoryParam) {
         ArticleCategory model = articleCategoryMapper.selectOne(
                 new QueryWrapper<ArticleCategory>()
                         .select(ArticleCategory.class, info->
                            !info.getColumn().equals("is_delete") &&
                            !info.getColumn().equals("delete_time"))
-                        .eq("id", articleCateParam.getId())
+                        .eq("id", categoryParam.getId())
                         .eq("is_delete", 0));
 
         Assert.notNull(model, "分类不存在");
 
-        model.setName(articleCateParam.getName());
-        model.setSort(articleCateParam.getSort());
+        model.setName(categoryParam.getName());
+        model.setSort(categoryParam.getSort());
         model.setUpdateTime(TimeUtil.timestamp());
         articleCategoryMapper.updateById(model);
     }

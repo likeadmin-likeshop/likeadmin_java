@@ -3,7 +3,7 @@ package com.hxkj.admin.service.common;
 import com.alibaba.fastjson.JSONArray;
 import com.hxkj.admin.validate.common.AlbumParam;
 import com.hxkj.admin.validate.common.PageParam;
-import com.hxkj.admin.vo.common.album.AlbumVo;
+import com.hxkj.admin.vo.album.AlbumVo;
 import com.hxkj.common.core.PageResult;
 
 import java.util.List;
