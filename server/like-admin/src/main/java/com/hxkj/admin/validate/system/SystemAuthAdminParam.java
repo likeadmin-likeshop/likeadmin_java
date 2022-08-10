@@ -29,7 +29,7 @@ public class SystemAuthAdminParam implements Serializable {
     private Integer id;
 
     @NotNull(message = "请选择角色", groups = {create.class, update.class})
-    @Min(value = 1, message = "role参数异常", groups = {create.class, update.class})
+    @Min(value = 0, message = "role参数异常", groups = {create.class, update.class})
     private Integer role;
 
     @NotEmpty(message = "账号不能为空", groups = {create.class, update.class})
