@@ -275,14 +275,16 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .ne("id", systemAuthAdminParam.getId())
                 .last("limit 1")), "账号已存在换一个吧！");
 
-        Assert.isNull(systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
-                .select(field)
-                .eq("is_delete", 0)
-                .eq("nickname", systemAuthAdminParam.getNickname())
-                .ne("id", systemAuthAdminParam.getId())
-                .last("limit 1")), "昵称已存在换一个吧！");
+        if (systemAuthAdminParam.getRole() > 0) {
+            Assert.isNull(systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
+                    .select(field)
+                    .eq("is_delete", 0)
+                    .eq("nickname", systemAuthAdminParam.getNickname())
+                    .ne("id", systemAuthAdminParam.getId())
+                    .last("limit 1")), "昵称已存在换一个吧！");
 
-        Assert.notNull(iSystemAuthRoleService.detail(systemAuthAdminParam.getRole()), "角色不存在!");
+            Assert.notNull(iSystemAuthRoleService.detail(systemAuthAdminParam.getRole()), "角色不存在!");
+        }
 
         SystemAuthAdmin model = new SystemAuthAdmin();
         model.setId(systemAuthAdminParam.getId());
