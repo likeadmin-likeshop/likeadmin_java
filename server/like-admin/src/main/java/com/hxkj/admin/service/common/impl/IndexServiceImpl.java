@@ -35,6 +35,7 @@ public class IndexServiceImpl implements IIndexService {
         version.put("name", ConfigUtil.get("website", "name", "LikeAdmin-Java"));
         version.put("version", GlobalConfig.version);
         version.put("website", "www.likeadmin.cn");
+        version.put("based", "Vue3.x、ElementUI、MySQL");
         Map<String, String> channel = new LinkedHashMap<>();
         channel.put("gitee", "https://gitee.com/likeadmin/likeadmin_java");
         channel.put("website", "https://www.likeadmin.cn");
