@@ -44,6 +44,7 @@ public class IndexServiceImpl implements IIndexService {
 
         // 今日数据
         Map<String, Object> today = new LinkedHashMap<>();
+        today.put("time", "2022-08-11 15:08:29");
         today.put("todayVisits", 10);   // 访问量(人)
         today.put("totalVisits", 100);  // 总访问量
         today.put("todaySales", 30);    // 销售额(元)
@@ -56,7 +57,6 @@ public class IndexServiceImpl implements IIndexService {
 
         // 访客图表
         Map<String, Object> visitor = new LinkedHashMap<>();
-        visitor.put("time", "2022-08-11 15:08:29");
         visitor.put("date", TimeUtil.daysAgoDate(15));
         visitor.put("list", Arrays.asList(12,13,11,5,8,22,14,9,456,62,78,12,18,22,46));
         console.put("visitor", visitor);
