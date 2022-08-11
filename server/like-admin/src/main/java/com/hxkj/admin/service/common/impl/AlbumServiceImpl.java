@@ -15,10 +15,7 @@ import com.hxkj.common.entity.album.Album;
 import com.hxkj.common.entity.album.AlbumCate;
 import com.hxkj.common.mapper.album.AlbumCateMapper;
 import com.hxkj.common.mapper.album.AlbumMapper;
-import com.hxkj.common.utils.ArrayUtil;
-import com.hxkj.common.utils.TimeUtil;
-import com.hxkj.common.utils.ToolsUtil;
-import com.hxkj.common.utils.UrlUtil;
+import com.hxkj.common.utils.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +51,7 @@ public class AlbumServiceImpl implements IAlbumService {
 
         QueryWrapper<Album> queryWrapper = new QueryWrapper<>();
         queryWrapper.select(Album.class, info->
-                !info.getColumn().equals("type") &&
+                    !info.getColumn().equals("type") &&
                     !info.getColumn().equals("aid") &&
                     !info.getColumn().equals("uid") &&
                     !info.getColumn().equals("is_delete") &&
@@ -62,7 +59,7 @@ public class AlbumServiceImpl implements IAlbumService {
                 .eq("is_delete", 0)
                 .orderByDesc("id");
 
-        if (params.get("cid") != null && Integer.parseInt(params.get("cid")) >= 0) {
+        if (StringUtil.isNotEmpty(params.get("cid"))) {
             queryWrapper.eq("cid", Integer.parseInt(params.get("cid")));
         }
 
