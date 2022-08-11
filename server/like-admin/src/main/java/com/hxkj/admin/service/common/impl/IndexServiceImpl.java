@@ -32,35 +32,34 @@ public class IndexServiceImpl implements IIndexService {
     public Map<String, Object> console() {
         Map<String, Object> console = new LinkedHashMap<>();
 
-        // 账号信息
+        // 版本信息
         Map<String, Object> version = new LinkedHashMap<>();
+        version.put("name", ConfigUtil.get("website", "name", "LikeAdmin-Java"));
         version.put("version", GlobalConfig.version);
-        version.put("website", "likeadmin");
+        version.put("website", "www.likeadmin.cn");
+        Map<String, String> channel = new LinkedHashMap<>();
+        channel.put("gitee", "https://gitee.com/likeadmin/likeadmin_java");
+        channel.put("website", "https://www.likeadmin.cn");
+        version.put("channel", channel);
         console.put("version", version);
 
         // 今日数据
         Map<String, Object> today = new LinkedHashMap<>();
-        today.put("todayVisits", 10);
-        today.put("totalVisits", 100);
-        today.put("todaySales", 30);
-        today.put("totalSales", 65);
-        today.put("todayUsers", 120);
-        today.put("totalUsers", 360);
+        today.put("todayVisits", 10);   // 访问量(人)
+        today.put("totalVisits", 100);  // 总访问量
+        today.put("todaySales", 30);    // 销售额(元)
+        today.put("totalSales", 65);    // 总销售额
+        today.put("todayOrder", 12);    // 订单量(笔)
+        today.put("totalOrder", 255);   // 总订单量
+        today.put("todayUsers", 120);   // 新增用户
+        today.put("totalUsers", 360);   // 总访用户
         console.put("today", today);
 
         // 访客图表
         Map<String, Object> visitor = new LinkedHashMap<>();
-        visitor.put("date", TimeUtil.daysAgoDate(8));
-        visitor.put("list", Arrays.asList(12,13,11,5,8,22,14,9));
+        visitor.put("date", TimeUtil.daysAgoDate(15));
+        visitor.put("list", Arrays.asList(12,13,11,5,8,22,14,9,456,62,78,12,18,22,46));
         console.put("visitor", visitor);
-
-        // 文章排名
-        List<Map<String, Object>> articles = articleMapper.selectMaps(new QueryWrapper<Article>()
-                        .select("id", "title", "visit")
-                        .eq("is_delete", 0)
-                        .orderByDesc(Arrays.asList("visit", "id"))
-                        .last("limit 10"));
-        console.put("article", articles);
 
         return console;
     }
