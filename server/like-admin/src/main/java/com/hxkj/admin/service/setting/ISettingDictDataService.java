@@ -19,7 +19,7 @@ public interface ISettingDictDataService {
      * @author fzr
      * @return List<DictDataVo>
      */
-    List<DictDataVo> all();
+    List<DictDataVo> all(Map<String, String> params);
 
     /**
      * 字典数据列表

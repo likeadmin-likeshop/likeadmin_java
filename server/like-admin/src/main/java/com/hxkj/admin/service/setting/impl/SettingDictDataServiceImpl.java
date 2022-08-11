@@ -36,13 +36,18 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
      * @return List<DictDataVo>
      */
     @Override
-    public List<DictDataVo> all() {
+    public List<DictDataVo> all(Map<String, String> params) {
         QueryWrapper<DictData> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id,type_id,name,value,remark,sort,status,create_time,update_time");
         queryWrapper.eq("is_delete", 0);
         queryWrapper.orderByDesc("id");
 
         List<DictData> dictDataList = dictDataMapper.selectList(queryWrapper);
+
+        dictDataMapper.setSearch(queryWrapper, params, new String[]{
+                "like:key:str",
+                "=:status:int",
+        });
 
         List<DictDataVo> list = new LinkedList<>();
         for (DictData dictData : dictDataList) {

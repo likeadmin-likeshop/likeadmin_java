@@ -31,8 +31,8 @@ public class DictDataController {
      * @return Object
      */
     @GetMapping("/all")
-    public Object all() {
-        List<DictDataVo> list = iSettingDictDataService.all();
+    public Object all(Map<String, String> params) {
+        List<DictDataVo> list = iSettingDictDataService.all(params);
         return AjaxResult.success(list);
     }
 
