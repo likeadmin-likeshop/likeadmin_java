@@ -152,8 +152,6 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         systemAuthRoleMapper.insert(model);
-        System.out.println(model.getId());
-        System.out.println(systemAuthRoleParam.getMenuIds());
         iSystemAuthPermService.batchSaveByMenuIds(model.getId(), systemAuthRoleParam.getMenuIds());
     }
 

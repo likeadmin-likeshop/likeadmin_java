@@ -5,12 +5,21 @@ import com.hxkj.admin.validate.setting.DictDataParam;
 import com.hxkj.admin.vo.setting.DictDataVo;
 import com.hxkj.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
  * 字典数据服务接口类
  */
 public interface ISettingDictDataService {
+
+    /**
+     * 字典数据所有
+     *
+     * @author fzr
+     * @return List<DictDataVo>
+     */
+    List<DictDataVo> all();
 
     /**
      * 字典数据列表

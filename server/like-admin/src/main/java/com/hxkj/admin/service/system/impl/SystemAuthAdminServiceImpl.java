@@ -275,14 +275,14 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .ne("id", systemAuthAdminParam.getId())
                 .last("limit 1")), "账号已存在换一个吧！");
 
-        if (systemAuthAdminParam.getRole() > 0) {
-            Assert.isNull(systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
-                    .select(field)
-                    .eq("is_delete", 0)
-                    .eq("nickname", systemAuthAdminParam.getNickname())
-                    .ne("id", systemAuthAdminParam.getId())
-                    .last("limit 1")), "昵称已存在换一个吧！");
+        Assert.isNull(systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
+                .select(field)
+                .eq("is_delete", 0)
+                .eq("nickname", systemAuthAdminParam.getNickname())
+                .ne("id", systemAuthAdminParam.getId())
+                .last("limit 1")), "昵称已存在换一个吧！");
 
+        if (systemAuthAdminParam.getRole() > 0 && systemAuthAdminParam.getId() != 1) {
             Assert.notNull(iSystemAuthRoleService.detail(systemAuthAdminParam.getRole()), "角色不存在!");
         }
 
@@ -292,7 +292,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         model.setPostId(systemAuthAdminParam.getPostId());
         model.setNickname(systemAuthAdminParam.getNickname());
         model.setUsername(systemAuthAdminParam.getUsername());
-        model.setAvatar( UrlUtil.toRelativeUrl(systemAuthAdminParam.getAvatar()));
+        model.setAvatar(UrlUtil.toRelativeUrl(systemAuthAdminParam.getAvatar()));
         model.setRole(systemAuthAdminParam.getId() == 1 ? 0 : systemAuthAdminParam.getRole());
         model.setSort(systemAuthAdminParam.getSort());
         model.setIsMultipoint(systemAuthAdminParam.getIsMultipoint());

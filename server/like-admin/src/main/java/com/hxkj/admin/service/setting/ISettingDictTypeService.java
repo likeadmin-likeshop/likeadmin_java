@@ -5,12 +5,21 @@ import com.hxkj.admin.validate.setting.DictTypeParam;
 import com.hxkj.admin.vo.setting.DictTypeVo;
 import com.hxkj.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
  * 字典类型服务接口类
  */
 public interface ISettingDictTypeService {
+
+    /**
+     * 字典类型所有
+     *
+     * @author fzr
+     * @return List<DictTypeVo>
+     */
+    List<DictTypeVo> all();
 
     /**
      * 字典类型列表

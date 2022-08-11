@@ -30,6 +30,34 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
     DictDataMapper dictDataMapper;
 
     /**
+     * 字典数据所有
+     *
+     * @author fzr
+     * @return List<DictDataVo>
+     */
+    @Override
+    public List<DictDataVo> all() {
+        QueryWrapper<DictData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("id,type_id,name,value,remark,sort,status,create_time,update_time");
+        queryWrapper.eq("is_delete", 0);
+        queryWrapper.orderByDesc("id");
+
+        List<DictData> dictDataList = dictDataMapper.selectList(queryWrapper);
+
+        List<DictDataVo> list = new LinkedList<>();
+        for (DictData dictData : dictDataList) {
+            DictDataVo vo = new DictDataVo();
+            BeanUtils.copyProperties(dictData, vo);
+
+            vo.setCreateTime(TimeUtil.timestampToDate(dictData.getCreateTime()));
+            vo.setUpdateTime(TimeUtil.timestampToDate(dictData.getUpdateTime()));
+            list.add(vo);
+        }
+
+        return list;
+    }
+
+    /**
      * 字典数据列表
      *
      * @author fzr

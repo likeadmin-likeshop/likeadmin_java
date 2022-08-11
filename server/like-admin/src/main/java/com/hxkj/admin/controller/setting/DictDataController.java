@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,6 +23,18 @@ public class DictDataController {
 
     @Resource
     ISettingDictDataService iSettingDictDataService;
+
+    /**
+     * 字典数据所有
+     *
+     * @author fzr
+     * @return Object
+     */
+    @GetMapping("/all")
+    public Object all() {
+        List<DictDataVo> list = iSettingDictDataService.all();
+        return AjaxResult.success(list);
+    }
 
     /**
      * 字典数据列表

@@ -30,6 +30,34 @@ public class SettingDictTypeServiceImpl implements ISettingDictTypeService {
     DictTypeMapper dictTypeMapper;
 
     /**
+     * 字典类型所有
+     *
+     * @author fzr
+     * @return List<DictTypeVo>
+     */
+    @Override
+    public List<DictTypeVo> all() {
+        QueryWrapper<DictType> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("id,dict_name,dict_type,dict_remark,dict_status,create_time,update_time");
+        queryWrapper.eq("is_delete", 0);
+        queryWrapper.orderByDesc("id");
+
+        List<DictType> dictTypeList = dictTypeMapper.selectList(queryWrapper);
+
+        List<DictTypeVo> list = new LinkedList<>();
+        for (DictType dictType : dictTypeList) {
+            DictTypeVo vo = new DictTypeVo();
+            BeanUtils.copyProperties(dictType, vo);
+
+            vo.setCreateTime(TimeUtil.timestampToDate(dictType.getCreateTime()));
+            vo.setUpdateTime(TimeUtil.timestampToDate(dictType.getUpdateTime()));
+            list.add(vo);
+        }
+
+        return list;
+    }
+
+    /**
      * 字典类型列表
      *
      * @author fzr
