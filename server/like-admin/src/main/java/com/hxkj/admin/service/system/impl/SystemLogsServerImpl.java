@@ -62,7 +62,7 @@ public class SystemLogsServerImpl implements ISystemLogsServer {
                 "=:status:int",
                 "=:url:str",
                 "=:ip:str",
-                "datetime:startTime-endTime@create_time:str"
+                "datetime:startTime-endTime@t.create_time:str"
         });
 
         IPage<LogOperateVo> iPage = logOperateMapper.selectJoinPage(

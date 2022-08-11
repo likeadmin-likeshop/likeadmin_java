@@ -155,16 +155,14 @@ public interface IBaseMapper<T> extends MPJBaseMapper<T> {
                     break;
                 case "datetime":
                     String[] dateKeys = key.split("-");
-                    String dateStart = params.getOrDefault(dateKeys[0].trim(), "");
-                    if (dateStart.equals("")) {
-                        continue;
-                    }
-                    String dateEnd = dateKeys.length > 1 ? params.getOrDefault(dateKeys[1].trim(), "") : "";
+                    String dateStart  = params.getOrDefault(dateKeys[0].trim(), "");
+                    String dateEnd    = dateKeys.length > 1 ? params.getOrDefault(dateKeys[1].trim(), "") : "";
+
                     if (type.equals("long")) {
                         if (!dateEnd.equals("")) { queryWrapper.le(field, Long.parseLong(dateEnd)); }
-                        queryWrapper.ge(field, Long.parseLong(dateStart));
+                        if (!dateStart.equals("")) { queryWrapper.ge(field, Long.parseLong(dateStart)); };
                     } else {
-                        queryWrapper.ge(field, TimeUtil.dateToTimestamp(dateStart));
+                        if (!dateStart.equals("")) { queryWrapper.ge(field, TimeUtil.dateToTimestamp(dateStart)); }
                         if (!dateEnd.equals("")) { queryWrapper.le(field, TimeUtil.dateToTimestamp(dateEnd)); }
                     }
                     break;
@@ -291,19 +289,17 @@ public interface IBaseMapper<T> extends MPJBaseMapper<T> {
                     queryWrapper.notIn(field, val);
                     break;
                 case "datetime":
-                     String[] dateKeys = key.split("-");
-                     String dateStart = params.getOrDefault(dateKeys[0].trim(), "");
-                    if (dateStart.equals("")) {
-                        continue;
+                    String[] dateKeys = key.split("-");
+                    String dateStart  = params.getOrDefault(dateKeys[0].trim(), "");
+                    String dateEnd    = dateKeys.length > 1 ? params.getOrDefault(dateKeys[1].trim(), "") : "";
+
+                    if (type.equals("long")) {
+                        if (!dateStart.equals("")) { queryWrapper.ge(field, Long.parseLong(dateStart)); }
+                        if (!dateEnd.equals("")) { queryWrapper.le(field, Long.parseLong(dateEnd)); }
+                    } else {
+                        if (!dateStart.equals("")) { queryWrapper.ge(field, TimeUtil.dateToTimestamp(dateStart)); };
+                        if (!dateEnd.equals("")) { queryWrapper.le(field, TimeUtil.dateToTimestamp(dateEnd)); }
                     }
-                     String dateEnd = dateKeys.length > 1 ? params.getOrDefault(dateKeys[1].trim(), "") : "";
-                     if (type.equals("long")) {
-                         queryWrapper.ge(field, Long.parseLong(dateStart));
-                         if (!dateEnd.equals("")) { queryWrapper.le(field, Long.parseLong(dateEnd)); }
-                     } else {
-                         queryWrapper.ge(field, TimeUtil.dateToTimestamp(dateStart));
-                         if (!dateEnd.equals("")) { queryWrapper.le(field, TimeUtil.dateToTimestamp(dateEnd)); }
-                     }
                      break;
             }
         }
