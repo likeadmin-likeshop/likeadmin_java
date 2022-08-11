@@ -7,6 +7,7 @@ import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.enums.AlbumEnum;
 import com.hxkj.common.exception.OperateException;
 import com.hxkj.common.plugin.storage.StorageDriver;
+import com.hxkj.common.utils.StringUtil;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,10 +53,11 @@ public class UploadController {
         try {
             StorageDriver storageDriver = new StorageDriver();
             Map<String, Object> map = storageDriver.upload(multipartFile, "image", AlbumEnum.IMAGE.getCode());
+            String cid = StringUtil.isNotEmpty(request.getParameter("cid")) ? request.getParameter("cid") : "0";
 
             Map<String, String> album = new LinkedHashMap<>();
             album.put("aid", String.valueOf(LikeAdminThreadLocal.getAdminId()));
-            album.put("cid", request.getParameter("cid"));
+            album.put("cid", cid);
             album.put("type", String.valueOf(AlbumEnum.IMAGE.getCode()));
             album.put("size", map.get("size").toString());
             album.put("ext", map.get("ext").toString());
@@ -95,9 +97,10 @@ public class UploadController {
         try {
             StorageDriver storageDriver = new StorageDriver();
             Map<String, Object> map = storageDriver.upload(multipartFile, "video", AlbumEnum.Video.getCode());
+            String cid = StringUtil.isNotEmpty(request.getParameter("cid")) ? request.getParameter("cid") : "0";
 
             Map<String, String> album = new LinkedHashMap<>();
-            album.put("cid", request.getParameter("cid"));
+            album.put("cid", cid);
             album.put("aid", String.valueOf(LikeAdminThreadLocal.getAdminId()));
             album.put("type", String.valueOf(AlbumEnum.Video.getCode()));
             album.put("ext", map.get("ext").toString());
