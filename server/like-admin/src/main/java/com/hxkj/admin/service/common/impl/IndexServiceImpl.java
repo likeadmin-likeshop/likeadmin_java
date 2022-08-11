@@ -5,9 +5,7 @@ import com.hxkj.admin.service.common.IIndexService;
 import com.hxkj.common.config.GlobalConfig;
 import com.hxkj.common.entity.article.Article;
 import com.hxkj.common.mapper.article.ArticleMapper;
-import com.hxkj.common.utils.ConfigUtil;
-import com.hxkj.common.utils.TimeUtil;
-import com.hxkj.common.utils.UrlUtil;
+import com.hxkj.common.utils.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -73,21 +71,15 @@ public class IndexServiceImpl implements IIndexService {
     @Override
     public Map<String, Object> config() {
         Map<String, String> website   = ConfigUtil.get("website");
-        Map<String, String> copyright = ConfigUtil.get("copyright");
+        String copyright = ConfigUtil.get("website", "copyright", "");
 
         Map<String, Object> map = new LinkedHashMap<>();
-        map.put("lawPrivilege", copyright.getOrDefault("privilege", ""));
-        map.put("lawIcpNumber", copyright.getOrDefault("icpNumber", ""));
-        map.put("lawIcpLink", copyright.getOrDefault("icpLink", ""));
-        map.put("lawGaNumber", copyright.getOrDefault("gaNumber", ""));
-        map.put("lawGaLink", copyright.getOrDefault("gaLink", ""));
-
         map.put("webName", website.getOrDefault("name", ""));
         map.put("webLogo", UrlUtil.toAbsoluteUrl(website.getOrDefault("logo", "")));
         map.put("webFavicon", UrlUtil.toAbsoluteUrl(website.getOrDefault("favicon", "")));
         map.put("webBackdrop", UrlUtil.toAbsoluteUrl(website.getOrDefault("backdrop", "")));
-
         map.put("ossDomain", UrlUtil.domain());
+        map.put("copyright", ArrayUtil.stringToListAsMapStr(copyright));
 
         return map;
     }
