@@ -39,6 +39,18 @@ public class GlobalException {
     }
 
     /**
+     * 拦截自定义抛出异常
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(BaseException.class)
+    @ResponseBody
+    public AjaxResult handleException(BaseException e) {
+        int code = e.getCode();
+        String msg = e.getMsg();
+        return AjaxResult.failed(code, msg);
+    }
+
+    /**
      * 拦截表单参数校验FROM
      */
     @ResponseStatus(HttpStatus.OK)
