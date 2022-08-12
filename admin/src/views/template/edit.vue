@@ -39,16 +39,24 @@
 </template>
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { postEdit, postAdd } from '@/api/org/post'
+import { postEdit, postAdd } from '@/api/org/post' //接口要替换
 import Popup from '@/components/popup/index.vue'
 import feedback from '@/utils/feedback'
+import type { PropType } from 'vue'
+defineProps({
+    dictData: {
+        type: Object as PropType<Record<string, any[]>>,
+        default: () => ({})
+    }
+})
 const emit = defineEmits(['success', 'close'])
 const formRef = shallowRef<FormInstance>()
 const popupRef = shallowRef<InstanceType<typeof Popup>>()
 const mode = ref('add')
 const popupTitle = computed(() => {
-    return mode.value == 'edit' ? '编辑岗位' : '新增岗位'
+    return mode.value == 'edit' ? '编辑岗位' : '新增岗位' //要替换
 })
+//要替换
 const formData = reactive({
     id: '',
     name: '',
@@ -57,7 +65,7 @@ const formData = reactive({
     remark: '',
     isStop: 1
 })
-
+//要替换 ，输入类的请输入，选择类的请选择
 const formRules = {
     code: [
         {
@@ -77,7 +85,7 @@ const formRules = {
 
 const handleSubmit = async () => {
     await formRef.value?.validate()
-    mode.value == 'edit' ? await postEdit(formData) : await postAdd(formData)
+    mode.value == 'edit' ? await postEdit(formData) : await postAdd(formData) // 接口替换
     popupRef.value?.close()
     feedback.msgSuccess('操作成功')
     emit('success')

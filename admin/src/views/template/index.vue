@@ -65,11 +65,17 @@
                 <pagination v-model="pager" @change="getLists" />
             </div>
         </el-card>
-        <edit-popup v-if="showEdit" ref="editRef" @success="getLists" @close="showEdit = false" />
+        <edit-popup
+            v-if="showEdit"
+            ref="editRef"
+            :dict-data="dictData"
+            @success="getLists"
+            @close="showEdit = false"
+        />
     </div>
 </template>
 <script lang="ts" setup>
-import { postDelete, postLists } from '@/api/org/post'
+import { postDelete, postLists } from '@/api/org/post' //接口要替换
 import { useDictData } from '@/hooks/useDictOptions'
 import { usePaging } from '@/hooks/usePaging'
 import feedback from '@/utils/feedback'
@@ -77,17 +83,18 @@ import EditPopup from './edit.vue'
 const editRef = shallowRef<InstanceType<typeof EditPopup>>()
 const showEdit = ref(false)
 const queryParams = reactive({
+    //需要替换
     code: '',
     name: '',
     isStop: ''
 })
 
 const { pager, getLists, resetPage, resetParams } = usePaging({
-    fetchFun: postLists,
+    fetchFun: postLists, //接口名要替换
     params: queryParams
 })
 
-// 获取字典类型数据
+// 获取字典类型数据，需要替换
 const { dictData } = useDictData<{
     dict_sex: any[]
 }>(['dict_sex'])
@@ -106,7 +113,7 @@ const handleEdit = async (data: any) => {
 }
 
 const handleDelete = async (id: number) => {
-    await postDelete({ id })
+    await postDelete({ id }) // id为主键，需要替换
     feedback.msgSuccess('删除成功')
     getLists()
 }
