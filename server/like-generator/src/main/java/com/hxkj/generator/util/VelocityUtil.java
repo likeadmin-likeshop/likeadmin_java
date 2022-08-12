@@ -100,15 +100,14 @@ public class VelocityUtil {
      */
     public static List<String> getTemplateList(String genTpl, List<GenTableColumn> columns) {
         List<String> templates = new LinkedList<>();
-        templates.add("java/controller.java.vm");
-        templates.add("java/entity.java.vm");
-        templates.add("java/mapper.java.vm");
-        templates.add("java/service.java.vm");
-        templates.add("java/serviceImpl.java.vm");
-        templates.add("java/validate.java.vm");
-        templates.add("java/voList.java.vm");
-        templates.add("java/voDetail.java.vm");
-
+//        templates.add("java/controller.java.vm");
+//        templates.add("java/entity.java.vm");
+//        templates.add("java/mapper.java.vm");
+//        templates.add("java/service.java.vm");
+//        templates.add("java/serviceImpl.java.vm");
+//        templates.add("java/validate.java.vm");
+//        templates.add("java/voList.java.vm");
+//        templates.add("java/voDetail.java.vm");
         if (GenConstants.TPL_CRUD.equals(genTpl)) {
             templates.add("vue/index.vue.vm");
         }
