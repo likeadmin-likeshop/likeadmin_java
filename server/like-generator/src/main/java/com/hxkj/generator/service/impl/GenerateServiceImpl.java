@@ -290,8 +290,10 @@ public class GenerateServiceImpl implements IGenerateService {
         GenTable genTable = genTableMapper.selectById(id);
         List<GenTableColumn> genTableColumns = genTableColumnMapper.selectList(
                 new QueryWrapper<GenTableColumn>()
-                        .eq("table_id", id)
+                         .eq("table_id", id)
                         .orderByAsc("sort"));
+
+        Assert.isFalse(StringUtil.isEmpty(genTableColumns), "原表数据异常！");
 
         // 原表转Map
         Map<String, GenTableColumn> tableColumnMap = genTableColumns
