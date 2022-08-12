@@ -128,9 +128,14 @@ public class SettingDictTypeServiceImpl implements ISettingDictTypeService {
      */
     @Override
     public void add(DictTypeParam dictTypeParam) {
-       Assert.isNull(dictTypeMapper.selectOne(new QueryWrapper<DictType>()
+        Assert.isNull(dictTypeMapper.selectOne(new QueryWrapper<DictType>()
                 .select("id")
                 .eq("dict_name", dictTypeParam.getDictName())
+                .eq("is_delete", 0)
+                .last("limit 1")), "字典名称已存在！");
+
+       Assert.isNull(dictTypeMapper.selectOne(new QueryWrapper<DictType>()
+                .select("id")
                 .eq("dict_type", dictTypeParam.getDictType())
                 .eq("is_delete", 0)
                 .last("limit 1")), "字典类型已存在！");
@@ -163,6 +168,11 @@ public class SettingDictTypeServiceImpl implements ISettingDictTypeService {
         Assert.isNull(dictTypeMapper.selectOne(new QueryWrapper<DictType>()
                 .ne("id", dictTypeParam.getId())
                 .eq("dict_name", dictTypeParam.getDictName())
+                .eq("is_delete", 0)
+                .last("limit 1")), "字典类型已存在！");
+
+        Assert.isNull(dictTypeMapper.selectOne(new QueryWrapper<DictType>()
+                .ne("id", dictTypeParam.getId())
                 .eq("dict_type", dictTypeParam.getDictType())
                 .eq("is_delete", 0)
                 .last("limit 1")), "字典类型已存在！");
