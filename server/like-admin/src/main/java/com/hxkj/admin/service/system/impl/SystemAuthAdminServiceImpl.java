@@ -20,6 +20,7 @@ import com.hxkj.common.config.GlobalConfig;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.system.SystemAuthAdmin;
 import com.hxkj.common.entity.system.SystemAuthMenu;
+import com.hxkj.common.exception.OperateException;
 import com.hxkj.common.mapper.system.SystemAuthAdminMapper;
 import com.hxkj.common.mapper.system.SystemAuthMenuMapper;
 import com.hxkj.common.utils.*;
@@ -318,7 +319,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
      */
     @Override
     public void upInfo(SystemAuthAdminParam systemAuthAdminParam, Integer adminId) {
-        String[] field = {"id", "username", "nickname"};
+        String[] field = {"id", "username", "nickname", "password", "salt"};
         SystemAuthAdmin model = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select(field)
                 .eq("id", adminId)
@@ -326,6 +327,11 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .last("limit 1"));
 
         Assert.notNull(model, "账号不存在了!");
+
+        String currPassword = ToolsUtil.makeMd5(systemAuthAdminParam.getCurrPassword() + model.getSalt());
+        if (!currPassword.equals(model.getPassword())) {
+            throw new OperateException("当前密码不正确!");
+        }
 
         model.setNickname(systemAuthAdminParam.getNickname());
         model.setAvatar( UrlUtil.toRelativeUrl(systemAuthAdminParam.getAvatar()));
@@ -360,7 +366,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .select(field)
                 .eq("id", id)
                 .eq("is_delete", 0)
-                .last("limit 1")), "账号已不存在！");
+                .last("limit 1")), "账号已不存在!");
 
         Assert.isFalse(id == 1, "系统管理员不允许删除");
 
@@ -390,7 +396,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
-        Assert.notNull(systemAuthAdmin, "账号已不存在！");
+        Assert.notNull(systemAuthAdmin, "账号已不存在!");
 
         Integer disable = systemAuthAdmin.getIsDisable() == 1 ? 0 : 1;
         systemAuthAdmin.setIsDisable(disable);

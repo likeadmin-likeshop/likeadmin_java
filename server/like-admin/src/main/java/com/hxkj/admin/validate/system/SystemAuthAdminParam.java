@@ -44,6 +44,10 @@ public class SystemAuthAdminParam implements Serializable {
     @Length(min = 6, max = 32, message = "密码必须在6~32个字符内", groups = {create.class})
     private String password;
 
+    @NotEmpty(message = "当前密码不能为空", groups = {upInfo.class})
+    @Length(min = 6, max = 32, message = "当前密码错误", groups = {upInfo.class})
+    private String currPassword;
+
     @NotNull(message = "请选择状态", groups = {create.class, update.class})
     @IntegerContains(values = {0, 1}, message = "isDisable参数不在合法值内", groups = {create.class, update.class})
     private Integer isDisable;
