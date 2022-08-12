@@ -10,7 +10,9 @@ import com.hxkj.admin.validate.setting.DictDataParam;
 import com.hxkj.admin.vo.setting.DictDataVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.setting.DictData;
+import com.hxkj.common.entity.setting.DictType;
 import com.hxkj.common.mapper.setting.DictDataMapper;
+import com.hxkj.common.mapper.setting.DictTypeMapper;
 import com.hxkj.common.utils.TimeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,9 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
     @Resource
     DictDataMapper dictDataMapper;
 
+    @Resource
+    DictTypeMapper dictTypeMapper;
+
     /**
      * 字典数据所有
      *
@@ -37,17 +42,26 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
      */
     @Override
     public List<DictDataVo> all(Map<String, String> params) {
+        DictType dictType = dictTypeMapper.selectOne(new QueryWrapper<DictType>()
+                .eq("dict_type", params.get("dictType"))
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        Assert.notNull(dictType, "该字典类型不存在!");
+
         QueryWrapper<DictData> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id,type_id,name,value,remark,sort,status,create_time,update_time");
         queryWrapper.eq("is_delete", 0);
+        queryWrapper.eq("type_id", dictType.getId());
         queryWrapper.orderByDesc("id");
 
-        List<DictData> dictDataList = dictDataMapper.selectList(queryWrapper);
-
         dictDataMapper.setSearch(queryWrapper, params, new String[]{
-                "like:key:str",
+                "like:name:str",
+                "like:value:str",
                 "=:status:int",
         });
+
+        List<DictData> dictDataList = dictDataMapper.selectList(queryWrapper);
 
         List<DictDataVo> list = new LinkedList<>();
         for (DictData dictData : dictDataList) {
@@ -75,13 +89,22 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
+        DictType dictType = dictTypeMapper.selectOne(new QueryWrapper<DictType>()
+                .eq("is_delete", 0)
+                .eq("dict_type", params.get("dictType"))
+                .last("limit 1"));
+
+        Assert.notNull(dictType, "该字典类型不存在!");
+
         QueryWrapper<DictData> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id,type_id,name,value,remark,sort,status,create_time,update_time");
+        queryWrapper.eq("type_id", dictType.getId());
         queryWrapper.eq("is_delete", 0);
         queryWrapper.orderByDesc("id");
 
         dictDataMapper.setSearch(queryWrapper, params, new String[]{
-                "like:key:str",
+                "like:name:str",
+                "like:value:str",
                 "=:status:int",
         });
 

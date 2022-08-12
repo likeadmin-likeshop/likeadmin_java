@@ -328,16 +328,16 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
 
         Assert.notNull(model, "账号不存在了!");
 
-        String currPassword = ToolsUtil.makeMd5(systemAuthAdminParam.getCurrPassword() + model.getSalt());
-        if (!currPassword.equals(model.getPassword())) {
-            throw new OperateException("当前密码不正确!");
-        }
-
         model.setNickname(systemAuthAdminParam.getNickname());
         model.setAvatar( UrlUtil.toRelativeUrl(systemAuthAdminParam.getAvatar()));
         model.setUpdateTime(System.currentTimeMillis() / 1000);
 
         if (systemAuthAdminParam.getPassword() != null && !systemAuthAdminParam.getPassword().equals("")) {
+            String currPassword = ToolsUtil.makeMd5(systemAuthAdminParam.getCurrPassword() + model.getSalt());
+            if (!currPassword.equals(model.getPassword())) {
+                throw new OperateException("当前密码不正确!");
+            }
+
             String salt   = ToolsUtil.randomString(5);
             String pwd    = ToolsUtil.makeMd5( systemAuthAdminParam.getPassword().trim() + salt);
             model.setPassword(pwd);

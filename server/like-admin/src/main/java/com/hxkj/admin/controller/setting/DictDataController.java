@@ -1,11 +1,13 @@
 package com.hxkj.admin.controller.setting;
 
+import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.hxkj.admin.service.setting.ISettingDictDataService;
 import com.hxkj.admin.validate.common.PageParam;
 import com.hxkj.admin.validate.setting.DictDataParam;
 import com.hxkj.admin.vo.setting.DictDataVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
+import com.hxkj.common.utils.StringUtil;
 import com.hxkj.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +33,8 @@ public class DictDataController {
      * @return Object
      */
     @GetMapping("/all")
-    public Object all(Map<String, String> params) {
+    public Object all(@RequestParam Map<String, String> params) {
+        Assert.isFalse(StringUtil.isEmpty(params.get("dictType")), "dictType缺失");
         List<DictDataVo> list = iSettingDictDataService.all(params);
         return AjaxResult.success(list);
     }
@@ -47,6 +50,7 @@ public class DictDataController {
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
+        Assert.isFalse(StringUtil.isEmpty(params.get("dictType")), "dictType缺失");
         PageResult<DictDataVo> list = iSettingDictDataService.list(pageParam, params);
         return AjaxResult.success(list);
     }
