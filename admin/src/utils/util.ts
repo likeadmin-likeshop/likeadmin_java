@@ -1,104 +1,87 @@
-/**
- * 工具方法
- * 请谨慎操作，影响全局
- */
+import { isObject } from '@vue/shared'
 
 /**
- * 深拷贝
- * @param {any} target 需要深拷贝的对象
- * @returns {Object}
+ * @description 添加单位
+ * @param {String | Number} value 值 100
+ * @param {String} unit 单位 px em rem
  */
-export function deepClone(target: any) {
-    if (typeof target !== 'object' || target === null) {
-        return target
-    }
+export const addUnit = (value: string | number, unit = 'px') => {
+    return !Object.is(Number(value), NaN) ? `${value}${unit}` : value
+}
 
-    const cloneResult: any = Array.isArray(target) ? [] : {}
+/**
+ * @description 添加单位
+ * @param {unknown} value
+ * @return {Boolean}
+ */
+export const isEmpty = (value: unknown) => {
+    return value !== null && value !== '' && typeof value !== 'undefined'
+}
 
-    for (const key in target) {
-        if (Object.prototype.hasOwnProperty.call(target, key)) {
-            const value = target[key]
+/**
+ * @description 树转数组，队列实现广度优先遍历
+ * @param {Array} data  数据
+ * @param {Object} props `{ children: 'children' }`
+ */
 
-            if (typeof value === 'object' && value !== null) {
-                cloneResult[key] = deepClone(value)
-            } else {
-                cloneResult[key] = value
-            }
+export const treeToArray = (data: any[], props = { children: 'children' }) => {
+    data = JSON.parse(JSON.stringify(data))
+    const { children } = props
+    const newData = []
+    const queue: any[] = []
+    data.forEach((child: any) => queue.push(child))
+    while (queue.length) {
+        const item: any = queue.shift()
+        if (item[children]) {
+            item[children].forEach((child: any) => queue.push(child))
+            delete item[children]
         }
+        newData.push(item)
     }
-
-    return cloneResult
+    return newData
 }
 
 /**
- * 过滤对象属性
- * @param { Object } target
- * @param { Array } filters
- * @return { Object } 过滤后的对象
+ * @description 获取正确的路经
+ * @param {String} path  数据
  */
-export function filterObject(target: any, filters: any[]) {
-    const _target = deepClone(target)
-    filters.map((key) => delete _target[key])
-    return _target
-}
-
-/**
- * 节流
- * @param { Function } func
- * @param { Number } time
- * @param context
- * @return { Function }
- */
-export function throttle(func: () => any, time = 1000, context?: any): any {
-    let previous = new Date(0).getTime()
-    return function (...args: []) {
-        const now = new Date().getTime()
-        if (now - previous > time) {
-            previous = now
-            return func.apply(context, args)
-        }
+export function getNormalPath(path: string) {
+    if (path.length === 0 || !path || path == 'undefined') {
+        return path
     }
-}
-
-/**
- * Query语法格式化为对象
- * @param { String } str
- * @return { Object }
- */
-export function queryToObject(str: string) {
-    const params: any = {}
-    for (const item of str.split('&')) {
-        params[item.split('=')[0]] = item.split('=')[1]
+    const newPath = path.replace('//', '/')
+    const length = newPath.length
+    if (newPath[length - 1] === '/') {
+        return newPath.slice(0, length - 1)
     }
-    return params
+    return newPath
 }
 
 /**
- * 对象格式化为Query语法
+ * @description对象格式化为Query语法
  * @param { Object } params
  * @return {string} Query语法
  */
-export function objectToQuery(params: any) {
-    let p = ''
-    if (typeof params === 'object') {
-        p = '?'
-        for (const props in params) {
-            p += `${props}=${params[props]}&`
+export function objectToQuery(params: Record<string, any>): string {
+    let query = ''
+    for (const props of Object.keys(params)) {
+        const value = params[props]
+        const part = encodeURIComponent(props) + '='
+        if (!isEmpty(value)) {
+            if (isObject(value)) {
+                for (const key of Object.keys(value)) {
+                    if (!isEmpty(value[key])) {
+                        const params = props + '[' + key + ']'
+                        const subPart = encodeURIComponent(params) + '='
+                        query += subPart + encodeURIComponent(value[key]) + '&'
+                    }
+                }
+            } else {
+                query += part + encodeURIComponent(value) + '&'
+            }
         }
-        p = p.slice(0, -1)
     }
-    return p
-}
-
-/**
- * @description 获取不重复的id
- * @param length { Number } id的长度
- * @return { String } id
- */
-export const getNonDuplicateID = (length = 8) => {
-    let idStr = Date.now().toString(36)
-    idStr += Math.random().toString(36).substr(3, length)
-    return idStr
+    return query.slice(0, -1)
 }
 
 /**
@@ -125,44 +108,16 @@ export const timeFormat = (dateTime: number, fmt = 'yyyy-mm-dd') => {
         'd+': date.getDate().toString(), // 日
         'h+': date.getHours().toString(), // 时
         'M+': date.getMinutes().toString(), // 分
-        's+': date.getSeconds().toString(), // 秒
+        's+': date.getSeconds().toString() // 秒
     }
     for (const k in opt) {
         ret = new RegExp('(' + k + ')').exec(fmt)
         if (ret) {
-            fmt = fmt.replace(ret[1], ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, '0'))
+            fmt = fmt.replace(
+                ret[1],
+                ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, '0')
+            )
         }
     }
     return fmt
-}
-
-// /**
-//  *
-//  * @param {*} tree
-//  * @param {*} arr
-//  * @returns
-//  */
-// export function flatten(tree = [], arr = []) {
-//     tree.forEach((item) => {
-//         const { children } = item
-//         arr.push(item)
-//         if (children) flatten(children, arr)
-//     })
-//     return arr
-// }
-
-/**
- * @description 树状数组扁平化
- * @param { Array } tree        树状结构数组
- * @param { Array } arr         扁平化后的数组
- * @param { String } childrenKey 子节点键名
- * @return { Array }            扁平化后的数组
- */
-export function flatten(tree = [], arr = [], childrenKey = 'children') {
-    tree.forEach((item) => {
-        const children = item[childrenKey]
-        arr.push(item)
-        if (children) flatten(children, arr, childrenKey)
-    })
-    return arr
 }

@@ -1,246 +1,264 @@
 <template>
-    <div class="menu-edit">
-        <el-card shadow="never">
-            <el-page-header :content="id ? '编辑菜单' : '新增菜单'" @back="$router.back()" />
-        </el-card>
-
-        <el-card class="m-t-15" shadow="never">
-            <div class="m-t-15">
-                <el-form
-                    ref="formRefs"
-                    :model="formData"
-                    label-width="120px"
-                    size="small"
-                    style="max-width: 460px"
-                >
-                    <el-form-item label="菜单类型">
+    <div class="edit-popup">
+        <popup
+            ref="popupRef"
+            :title="popupTitle"
+            :async="true"
+            width="550px"
+            :clickModalClose="true"
+            @confirm="handleSubmit"
+            @close="handleClose"
+        >
+            <el-scrollbar class="h-[400px] sm:h-[500px]">
+                <el-form ref="formRef" :model="formData" label-width="80px" :rules="formRules">
+                    <el-form-item label="菜单类型" prop="menuType" required>
                         <el-radio-group v-model="formData.menuType">
-                            <el-radio
-                                :label="menuDataType.CATALOG"
-                                @change="changeType(menuDataType.CATALOG)"
-                            >
-                                目录
-                            </el-radio>
-                            <el-radio :label="menuDataType.MENU" @change="changeType(menuDataType.MENU)">
-                                菜单
-                            </el-radio>
-                            <el-radio :label="menuDataType.BUTTON" @change="changeType(menuDataType.BUTTON)">
-                                按钮
-                            </el-radio>
+                            <el-radio :label="MenuEnum.CATALOGUE">目录</el-radio>
+                            <el-radio :label="MenuEnum.MENU">菜单</el-radio>
+                            <el-radio :label="MenuEnum.BUTTON">按钮</el-radio>
                         </el-radio-group>
                     </el-form-item>
-
-                    <el-form-item label="父级菜单">
-                        <el-cascader
+                    <el-form-item label="父级菜单" prop="pid">
+                        <el-tree-select
+                            class="flex-1"
                             v-model="formData.pid"
-                            style="width: 340px"
-                            :options="menuList"
-                            :props="{
-                                checkStrictly: true,
-                                emitPath: false,
-                                label: 'menuName',
-                                value: 'id',
-                            }"
+                            :data="menuOptions"
                             clearable
-                        ></el-cascader>
+                            node-key="id"
+                            :props="{
+                                label: 'menuName'
+                            }"
+                            :default-expand-all="true"
+                            placeholder="请选择父级菜单"
+                            check-strictly
+                        />
+                    </el-form-item>
+                    <el-form-item label="菜单名称" prop="menuName">
+                        <el-input v-model="formData.menuName" placeholder="请输入菜单名称" />
+                    </el-form-item>
+                    <el-form-item
+                        v-if="formData.menuType != MenuEnum.BUTTON"
+                        label="菜单图标"
+                        prop="menuIcon"
+                    >
+                        <icon-picker class="flex-1" v-model="formData.menuIcon" />
                     </el-form-item>
 
-                    <div v-if="(formData.menuType == menuDataType.BUTTON) == ''">
-                        <el-form-item label="请选择图标">
-                            <div class="flex">
-                                <select-icon v-model:icon="formData.menuIcon"></select-icon>
+                    <el-form-item
+                        v-if="formData.menuType != MenuEnum.BUTTON"
+                        label="路由路径"
+                        prop="paths"
+                    >
+                        <div class="flex-1">
+                            <el-input v-model="formData.paths" placeholder="请输入路由路径" />
+                            <div class="form-tips">
+                                访问的路由地址，如：`admin`，如外网地址需内链访问则以`http(s)://`开头
                             </div>
-                        </el-form-item>
-                    </div>
-
-                    <el-form-item label="菜单名称">
-                        <el-input
-                            v-model="formData.menuName"
-                            show-word-limit
-                            placeholder="请输入名称"
-                        ></el-input>
+                        </div>
                     </el-form-item>
-
-                    <div v-if="formData.menuType == menuDataType.BUTTON">
-                        <el-form-item label="菜单权限字符">
-                            <el-input
-                                v-model="formData.perms"
-                                show-word-limit
-                                placeholder="请输入"
-                            ></el-input>
-                        </el-form-item>
-                    </div>
-
-                    <div v-if="(formData.menuType == menuDataType.BUTTON) == ''">
-                        <el-form-item label="路由地址">
-                            <el-input
-                                v-model="formData.paths"
-                                show-word-limit
-                                placeholder="请输入"
-                            ></el-input>
-                        </el-form-item>
-                    </div>
-
-                    <div v-if="formData.menuType == menuDataType.MENU">
-                        <el-form-item label="组件路径">
-                            <el-input
-                                v-model="formData.component"
-                                show-word-limit
-                                placeholder="请输入"
-                            ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="菜单权限字符">
-                            <el-input
-                                v-model="formData.perms"
-                                show-word-limit
-                                placeholder="请输入"
-                            ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="路由参数">
-                            <el-input
-                                v-model="formData.params"
-                                show-word-limit
-                                placeholder="请输入"
-                            ></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="选中菜单">
-                            <el-input
-                                v-model="formData.selected"
-                                show-word-limit
-                                placeholder="请输入选中菜单路径"
-                            ></el-input>
-                        </el-form-item>
-                    </div>
-
-                    <el-form-item label="菜单排序">
-                        <el-input
-                            v-model="formData.menuSort"
-                            show-word-limit
-                            type="number"
-                            placeholder="请输入排序"
-                        ></el-input>
+                    <el-form-item
+                        v-if="formData.menuType == MenuEnum.MENU"
+                        label="组件路径"
+                        prop="component"
+                    >
+                        <div class="flex-1">
+                            <el-input v-model="formData.component" placeholder="请输入组件路径" />
+                            <div class="form-tips">
+                                访问的组件路径，如：`permission/admin/index`，默认在`views`目录下
+                            </div>
+                        </div>
                     </el-form-item>
-
-                    <div v-if="formData.menuType == menuDataType.MENU">
-                        <el-form-item label="是否缓存">
-                            <el-radio-group v-model="formData.isCache">
-                                <el-radio :label="1">缓存</el-radio>
-                                <el-radio :label="0">不缓存</el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                    </div>
-
-                    <div v-if="(formData.menuType == menuDataType.BUTTON) == ''">
-                        <el-form-item label="显示状态">
+                    <el-form-item
+                        v-if="formData.menuType != MenuEnum.CATALOGUE"
+                        label="权限字符"
+                        prop="perms"
+                    >
+                        <div class="flex-1">
+                            <el-input v-model="formData.perms" placeholder="请输入权限字符" />
+                            <div class="form-tips">
+                                将作为server端API验权使用，如`system:admin:list`，请谨慎修改
+                            </div>
+                        </div>
+                    </el-form-item>
+                    <el-form-item
+                        v-if="formData.menuType == MenuEnum.MENU"
+                        label="路由参数"
+                        prop="params"
+                    >
+                        <div>
+                            <div class="flex-1">
+                                <el-input v-model="formData.params" placeholder="请输入路由参数" />
+                            </div>
+                            <div class="form-tips">
+                                访问路由的默认传递参数，如：`{"id": 1, "name":
+                                "admin"}`或`id=1&name=admin`
+                            </div>
+                        </div>
+                    </el-form-item>
+                    <!-- <el-form-item v-if="formData.type == MenuEnum.MENU" label="是否缓存" prop="isCache" required>
+              <div>
+                <el-radio-group v-model="formData.isCache">
+                  <el-radio :label="1">缓存</el-radio>
+                  <el-radio :label="0">不缓存</el-radio>
+                </el-radio-group>
+                <div class="form-tips">选择缓存则会被`keep-alive`缓存</div>
+              </div>
+            </el-form-item>-->
+                    <el-form-item
+                        v-if="formData.menuType != MenuEnum.BUTTON"
+                        label="是否显示"
+                        prop="isShow"
+                        required
+                    >
+                        <div>
                             <el-radio-group v-model="formData.isShow">
                                 <el-radio :label="1">显示</el-radio>
                                 <el-radio :label="0">隐藏</el-radio>
                             </el-radio-group>
-                        </el-form-item>
-
-                        <el-form-item label="菜单状态">
+                            <div class="form-tips">
+                                选择隐藏则路由将不会出现在侧边栏，但仍然可以访问
+                            </div>
+                        </div>
+                    </el-form-item>
+                    <el-form-item
+                        v-if="formData.menuType != MenuEnum.BUTTON"
+                        label="菜单状态"
+                        prop="isDisable"
+                        required
+                    >
+                        <div>
                             <el-radio-group v-model="formData.isDisable">
                                 <el-radio :label="0">正常</el-radio>
                                 <el-radio :label="1">停用</el-radio>
                             </el-radio-group>
-                        </el-form-item>
-                    </div>
+                            <div class="form-tips">
+                                选择停用则路由将不会出现在侧边栏，也不能被访问
+                            </div>
+                        </div>
+                    </el-form-item>
+                    <el-form-item label="菜单排序" prop="menuSort">
+                        <div>
+                            <el-input-number v-model="formData.menuSort" />
+                            <div class="form-tips">数值越大越排前</div>
+                        </div>
+                    </el-form-item>
                 </el-form>
-            </div>
-        </el-card>
-        <footer-btns>
-            <el-button type="primary" size="small" @click="onSubmit">保存</el-button>
-        </footer-btns>
+            </el-scrollbar>
+        </popup>
     </div>
 </template>
-
 <script lang="ts" setup>
-    import { useAdmin } from '@/core/hooks/app'
-    import { onMounted, reactive, ref } from 'vue'
-    import FooterBtns from '@/components/footer-btns/index.vue'
-    import type { ElForm, ElMessage } from 'element-plus'
-    import { apiConfigGetMenu, apiMenuDetail, apiMenuAdd, apiMenuEdit } from '@/api/auth'
-    import SelectIcon from './select-icon/index.vue'
+import type { FormInstance } from 'element-plus'
+import { menuLists, menuEdit, menuAdd } from '@/api/perms/menu'
+import { MenuEnum } from '@/enums/appEnums'
+import Popup from '@/components/popup/index.vue'
 
-    const menuDataType = {
-        CATALOG: 'M', // 目录
-        MENU: 'C', // 菜单
-        BUTTON: 'A', // 按钮
+const emit = defineEmits(['success', 'close'])
+const formRef = shallowRef<FormInstance>()
+const popupRef = shallowRef<InstanceType<typeof Popup>>()
+const mode = ref('add')
+const popupTitle = computed(() => {
+    return mode.value == 'edit' ? '编辑菜单' : '新增菜单'
+})
+
+const formData = reactive({
+    id: '',
+    //父级id
+    pid: 0,
+    //类型
+    menuType: MenuEnum.CATALOGUE,
+    //图标
+    menuIcon: '',
+    //名称
+    menuName: '',
+    //排序号
+    menuSort: 0,
+    // 路由路径
+    paths: '',
+    //权限链接
+    perms: '',
+    //前端组件
+    component: '',
+    //选中路径
+    selected: '',
+    //路由参数
+    params: '',
+    //是否缓存 0=否， 1=是
+    isCache: 0,
+    //是否显示 0=否， 1=是
+    isShow: 1,
+    //是否禁用 0=否， 1=是
+    isDisable: 0
+})
+
+const formRules = {
+    pid: [
+        {
+            required: true,
+            message: '请选择父级菜单',
+            trigger: ['blur', 'change']
+        }
+    ],
+    menuName: [
+        {
+            required: true,
+            message: '请输入菜单名称',
+            trigger: 'blur'
+        }
+    ],
+    paths: [
+        {
+            required: true,
+            message: '请输入路由地址',
+            trigger: 'blur'
+        }
+    ],
+    component: [
+        {
+            required: true,
+            message: '请输入组件地址',
+            trigger: 'blur'
+        }
+    ]
+}
+const menuOptions = ref<any[]>([])
+
+const getMenu = async () => {
+    const data: any = await menuLists()
+    const menu = { id: 0, menuName: '顶级', children: [] }
+    menu.children = data
+    menuOptions.value.push(menu)
+}
+
+const handleSubmit = async () => {
+    await formRef.value?.validate()
+    mode.value == 'edit' ? await menuEdit(formData) : await menuAdd(formData)
+    popupRef.value?.close()
+    emit('success')
+}
+
+const open = (type = 'add') => {
+    mode.value = type
+    popupRef.value?.open()
+}
+
+const setFormData = (data: Record<any, any>) => {
+    for (const key in formData) {
+        if (data[key] != null && data[key] != undefined) {
+            //@ts-ignore
+            formData[key] = data[key]
+        }
     }
+}
 
-    const { router, route } = useAdmin()
-    const id: any = route.query.id
+const handleClose = () => {
+    emit('close')
+}
 
-    const formRefs = ref<InstanceType<typeof ElForm>>()
+getMenu()
 
-    // 父级菜单选择
-    const menuList = ref<any>([])
-
-    // 表单数据
-    const formData = ref({
-        pid: '', // 上级ID
-        menuType: 'M', // 菜单类型
-        menuName: '', // 菜单名称
-        menuIcon: '', // 菜单图标
-        menuSort: '', // 菜单排序
-        perms: '', // 菜单权限字符
-        paths: '', // 路由路径
-        component: '', // 前端组件
-        selected: '', // 选中路径
-        params: '', // 路由参数
-        isShow: 1, // 是否显示：0=否， 1=是
-        isCache: 0, // 是否缓存：0=否， 1=是
-        isDisable: 0, // 是否禁用: 0=否， 1=是
-    })
-
-    // 获取详情
-    const getMenuDetail = async (id: number) => {
-        ;(formData.value as {}) = await apiMenuDetail({ id })
-        getFatherMenu()
-    }
-
-    // 获取父级菜单选择
-    const getFatherMenu = async () => {
-        const menus = (await apiConfigGetMenu()) || []
-        menuList.value = [{ id: 0, menuName: '顶级' }, ...menus]
-    }
-
-    // 添加菜单
-    const handleMenuAdd = async () => {
-        await apiMenuAdd({ ...formData.value })
-        router.back()
-    }
-
-    // 编辑菜单
-    const handleMenuEdit = async () => {
-        await apiMenuEdit({ ...formData.value })
-        router.back()
-    }
-
-    // 保存
-    const onSubmit = () => {
-        formRefs.value?.validate()?.then((valid) => {
-            if (!valid) {
-                return
-            }
-
-            if (!id) handleMenuAdd()
-            else handleMenuEdit()
-        })
-    }
-
-    // 切换
-    const changeType = (val: string) => {
-        menuDataType.value = val
-    }
-
-    onMounted(() => {
-        if (id) getMenuDetail(id)
-        getFatherMenu()
-    })
+defineExpose({
+    open,
+    setFormData
+})
 </script>
-
-<style lang="scss" scoped></style>

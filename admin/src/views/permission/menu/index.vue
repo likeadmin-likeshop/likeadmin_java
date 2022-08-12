@@ -1,128 +1,148 @@
 <template>
-    <div class="menu">
-        <el-card shadow="never">
-            <router-link to="/permission/menu/edit" class="m-r-15">
-                <el-button v-perm="['system:menu:add']" type="primary" size="small"> 添加菜单 </el-button>
-            </router-link>
-
-            <el-button size="small" @click="toggleRowExpansion(openFlag.openFlagValue)">
-                全部展开/折叠
-            </el-button>
-
+    <div class="menu-lists">
+        <el-card class="!border-none" shadow="never">
+            <div>
+                <el-button v-perms="['system:menu:add']" type="primary" @click="handleAdd()">
+                    <template #icon>
+                        <icon name="el-icon-Plus" />
+                    </template>
+                    新增
+                </el-button>
+                <el-button @click="handleExpand"> 展开/折叠 </el-button>
+            </div>
             <el-table
-                :data="menuTableData"
-                class="m-t-24"
+                ref="tableRef"
+                class="mt-4"
+                size="large"
+                :data="lists"
                 row-key="id"
-                :default-expand-all="openFlag.openFlagValue"
                 :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-                size="mini"
-                ref="dataTreeList"
             >
-                <el-table-column prop="menuName" label="名称" width="180"> </el-table-column>
-                <el-table-column prop="menuType" label="菜单类型">
-                    <template #default="scope">
-                        <span v-if="scope.row.menuType == menuDataType.CATALOG">{{ '目录' }}</span>
-                        <span v-else-if="scope.row.menuType == menuDataType.MENU">
-                            {{ '菜单' }}
-                        </span>
-                        <span v-else>{{ '按钮' }}</span>
+                <el-table-column
+                    label="菜单名称"
+                    prop="menuName"
+                    min-width="150"
+                    show-overflow-tooltip
+                />
+                <el-table-column label="类型" prop="menuType" min-width="80">
+                    <template #default="{ row }">
+                        <div v-if="row.menuType == MenuEnum.CATALOGUE">目录</div>
+                        <div v-else-if="row.menuType == MenuEnum.MENU">菜单</div>
+                        <div v-else-if="row.menuType == MenuEnum.BUTTON">按钮</div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="menuIcon" label="图标"> </el-table-column>
-                <el-table-column prop="component" label="组件路径"> </el-table-column>
-                <el-table-column prop="menuSort" label="排序"> </el-table-column>
-                <el-table-column prop="perms" label="权限标识"> </el-table-column>
-                <el-table-column prop="paths" label="路由地址"> </el-table-column>
-                <el-table-column prop="isDisable" label="状态">
-                    <template #default="scope">
-                        <span>{{ scope.row.isDisable == 0 ? '正常' : '停用' }}</span>
+                <el-table-column label="图标" prop="menuIcon" min-width="80">
+                    <template #default="{ row }">
+                        <div class="flex">
+                            <icon :name="row.menuIcon" :size="20" />
+                        </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="createTime" label="创建时间" width="160"> </el-table-column>
-                <el-table-column label="操作">
-                    <template #default="scope">
-                        <router-link
-                            v-perm="['system:menu:edit']"
-                            class="m-r-10"
-                            :to="{
-                                path: '/permission/menu/edit',
-                                query: {
-                                    id: scope.row.id,
-                                },
-                            }"
+                <el-table-column
+                    label="权限标识"
+                    prop="perms"
+                    min-width="150"
+                    show-overflow-tooltip
+                />
+                <el-table-column label="状态" prop="isDisable" min-width="100">
+                    <template #default="{ row }">
+                        <el-tag v-if="row.isDisable == 0">正常</el-tag>
+                        <el-tag v-else type="danger">停用</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="排序" prop="menuSort" min-width="100" />
+                <el-table-column
+                    label="更新时间"
+                    prop="updateTime"
+                    min-width="180"
+                ></el-table-column>
+                <el-table-column label="操作" width="160" fixed="right">
+                    <template #default="{ row }">
+                        <el-button
+                            v-perms="['system:menu:add']"
+                            type="primary"
+                            link
+                            @click="handleAdd(row.id)"
                         >
-                            <el-button type="text" size="mini">编辑</el-button>
-                        </router-link>
-
-                        <popup
-                            v-perm="['system:menu:del']"
-                            class="m-r-10 inline"
-                            @confirm="handleDelete(scope.row.id)"
+                            新增
+                        </el-button>
+                        <el-button
+                            v-perms="['system:menu:edit']"
+                            type="primary"
+                            link
+                            @click="handleEdit(row)"
                         >
-                            <template #trigger>
-                                <el-button type="text" size="mini">删除</el-button>
-                            </template>
-                        </popup>
+                            编辑
+                        </el-button>
+                        <el-button
+                            v-perms="['system:menu:del']"
+                            type="danger"
+                            link
+                            @click="handleDelete(row.id)"
+                        >
+                            删除
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </el-card>
+        <edit-popup v-if="showEdit" ref="editRef" @success="getLists" @close="showEdit = false" />
     </div>
 </template>
-
 <script lang="ts" setup>
-    import Popup from '@/components/popup/index.vue'
-    import { usePages } from '@/core/hooks/pages'
-    import { onMounted, reactive, ref } from 'vue'
-    import { apiConfigGetMenu, apiMenuDelete } from '@/api/auth'
-    import type { ElForm } from 'element-plus'
+import { menuDelete, menuLists } from '@/api/perms/menu'
+import type { ElTable } from 'element-plus'
+import { MenuEnum } from '@/enums/appEnums'
+import EditPopup from './edit.vue'
+import feedback from '@/utils/feedback'
+const tableRef = shallowRef<InstanceType<typeof ElTable>>()
+const editRef = shallowRef<InstanceType<typeof EditPopup>>()
+let isExpand = false
+const showEdit = ref(false)
+const lists = ref([])
 
-    const menuDataType = {
-        CATALOG: 'M', // 目录
-        MENU: 'C', // 菜单
-        BUTTON: 'A', // 按钮
-    }
+const getLists = async () => {
+    const data = await menuLists()
+    lists.value = data
+}
 
-    const menuTableData = ref<any>([])
-
-    // 获取菜单列表
-    const getMenuTableData = () => {
-        apiConfigGetMenu().then((data) => {
-            menuTableData.value = data
+const handleAdd = async (id?: number) => {
+    showEdit.value = true
+    await nextTick()
+    if (id) {
+        editRef.value?.setFormData({
+            pid: id
         })
     }
+    editRef.value?.open('add')
+}
 
-    // 删除菜单
-    const handleDelete = async (id: number) => {
-        await apiMenuDelete({ id })
-        getMenuTableData()
+const handleEdit = async (data: any) => {
+    showEdit.value = true
+    await nextTick()
+    editRef.value?.open('edit')
+    editRef.value?.setFormData(data)
+}
+
+const handleDelete = async (id: number) => {
+    await feedback.confirm('确定要删除？')
+    await menuDelete({ id })
+    getLists()
+}
+
+const handleExpand = () => {
+    isExpand = !isExpand
+    toggleExpand(lists.value, isExpand)
+}
+
+const toggleExpand = (children: any[], unfold = true) => {
+    for (const key in children) {
+        tableRef.value?.toggleRowExpansion(children[key], unfold)
+        if (children[key].children) {
+            toggleExpand(children[key].children!, unfold)
+        }
     }
+}
 
-    const dataTreeList = ref<any>()
-
-    // 树层级打开
-    const openFlag = {
-        openFlagValue: true,
-    }
-
-    // 展开收缩
-    const toggleRowExpansion = (isExpansion: any) => {
-        openFlag.openFlagValue = !isExpansion
-        toggleRowExpansion_forAll(menuTableData.value, openFlag.openFlagValue)
-    }
-
-    const toggleRowExpansion_forAll = (data: any, isExpansion: any) => {
-        data.forEach((item: any) => {
-            dataTreeList.value.toggleRowExpansion(item, isExpansion)
-            if (item.children != undefined && item.children != null) {
-                toggleRowExpansion_forAll(item.children, isExpansion)
-            }
-        })
-    }
-
-    onMounted(() => {
-        getMenuTableData()
-    })
+getLists()
 </script>
-
-<style lang="scss" scoped></style>

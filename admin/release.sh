@@ -2,7 +2,7 @@
 # 文件原路径
 srcPath="./dist/"
 # 发布路径文件夹
-releasePath="../frontend/public/admin"
+releasePath="../server/public/admin"
 
 #删除发布目录下的mobile文件
 rm -r $releasePath

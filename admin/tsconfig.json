@@ -1,21 +1,23 @@
 {
+  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "include": [
+    "global.d.ts",
+    "src/**/*",
+    "src/**/*.vue",
+    "components.d.ts",
+    "auto-imports.d.ts",
+    "typings/**/*.d.ts"
+  ],
   "compilerOptions": {
-    "target": "esnext",
-    "useDefineForClassFields": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
-    "jsx": "preserve",
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
-    "lib": ["esnext", "dom"]
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+  "references": [
+    {
+      "path": "./tsconfig.config.json"
+    }
+  ]
 }

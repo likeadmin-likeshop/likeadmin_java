@@ -1,14 +1,14 @@
 <!-- 系统日志 -->
 <template>
     <div class="journal">
-        <el-card shadow="never">
-            <el-form class="ls-form" :model="formData" label-width="80px" size="small" inline>
+        <el-card class="!border-none" shadow="never">
+            <el-form class="ls-form" :model="formData" inline>
                 <el-form-item label="管理员">
-                    <el-input placeholder="请输入" class="ls-input" v-model="formData.username" />
+                    <el-input class="w-56" placeholder="请输入" v-model="formData.username" />
                 </el-form-item>
 
                 <el-form-item label="访问方式">
-                    <el-select v-model="formData.type" placeholder="请选择">
+                    <el-select class="w-56" v-model="formData.type" placeholder="请选择">
                         <el-option
                             v-for="(item, index) in visitType"
                             :key="index"
@@ -19,83 +19,61 @@
                 </el-form-item>
 
                 <el-form-item label="来源IP">
-                    <el-input placeholder="请输入" class="ls-input" v-model="formData.ip" />
+                    <el-input class="w-56" placeholder="请输入" v-model="formData.ip" />
                 </el-form-item>
 
                 <el-form-item label="访问时间">
                     <data-picker
-                        v-model:start_time="formData.start_time"
-                        v-model:end_time="formData.end_time"
+                        v-model:start_time="formData.startTime"
+                        v-model:end_time="formData.endTime"
                     ></data-picker>
                 </el-form-item>
 
                 <el-form-item label="访问链接">
-                    <el-input placeholder="请输入" class="ls-input" v-model="formData.url" />
+                    <el-input class="w-56" placeholder="请输入" v-model="formData.url" />
                 </el-form-item>
 
                 <el-form-item>
-                    <div class="m-l-20">
-                        <el-button type="primary" @click="resetPage">查询</el-button>
-                        <el-button @click="resetParams">重置</el-button>
-                    </div>
+                    <el-button type="primary" @click="resetPage">查询</el-button>
+                    <el-button @click="resetParams">重置</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
 
-        <el-card class="m-t-15" shadow="never" v-loading="pager.loading">
+        <el-card class="!border-none mt-4" shadow="never" v-loading="pager.loading">
             <div>
-                <el-table class="m-t-20" :data="pager.lists">
-                    <el-table-column label="记录ID" prop="id"></el-table-column>
-                    <el-table-column label="操作" prop="title"></el-table-column>
-                    <el-table-column label="管理员" prop="username"></el-table-column>
-                    <!-- <el-table-column label="管理员ID" prop="admin_id"> </el-table-column> -->
-                    <el-table-column label="访问链接" prop="url"></el-table-column>
-                    <el-table-column label="访问方式" prop="type"></el-table-column>
-                    <el-table-column label="访问参数" prop="args"> </el-table-column>
-                    <el-table-column label="来源IP" prop="ip"> </el-table-column>
-                    <el-table-column label="错误信息" prop="error"> </el-table-column>
-                    <el-table-column label="IP" prop="address"> </el-table-column>
-                    <el-table-column label="状态" prop="status"> </el-table-column>
-                    <el-table-column label="执行耗时 毫秒" prop="taskTime"> </el-table-column>
-                    <el-table-column label="日志时间" prop="createTime"> </el-table-column>
+                <el-table :data="pager.lists" size="large">
+                    <el-table-column label="记录ID" prop="id" />
+                    <el-table-column label="操作" prop="title" min-width="120" />
+                    <el-table-column label="管理员" prop="username" min-width="120" />
+                    <el-table-column label="访问链接" prop="url" min-width="160" />
+                    <el-table-column label="访问方式" prop="type" min-width="100" />
+                    <el-table-column label="来源IP" prop="ip" min-width="160" />
+                    <el-table-column label="错误信息" prop="error" min-width="160" />
+                    <el-table-column label="IP" prop="address" min-width="160" />
+                    <el-table-column label="执行耗时(毫秒)" prop="taskTime" min-width="100" />
+                    <el-table-column label="日志时间" prop="createTime" min-width="180" />
                 </el-table>
             </div>
-            <div class="flex row-right">
-                <pagination
-                    v-model="pager"
-                    @change="requestApi"
-                    layout="total, prev, pager, next, jumper"
-                />
+            <div class="flex mt-4 justify-end">
+                <pagination v-model="pager" @change="getLists" />
             </div>
         </el-card>
     </div>
 </template>
 
 <script setup lang="ts">
-import { apiSystemLogLists } from '@/api/setting'
-import { onMounted, reactive, ref } from 'vue'
-import Pagination from '@/components/pagination/index.vue'
-import Popup from '@/components/Popup/index.vue'
-import { usePages } from '@/core/hooks/pages'
-import DataPicker from '@/components/data-picker/index.vue'
-
-interface formDataObj {
-    username?: string // 管理员
-    url?: string // 访问链接
-    ip?: string // ip
-    type?: string // 访问方式
-    start_time?: string // 日志时间开始
-    end_time?: string // 日志时间结束
-}
+import { systemLogLists } from '@/api/setting/system'
+import { usePaging } from '@/hooks/usePaging'
 
 // 查询表单
-let formData = ref<formDataObj>({
+const formData = ref({
     username: '',
     url: '',
     ip: '',
     type: '',
-    start_time: '',
-    end_time: ''
+    startTime: '',
+    endTime: ''
 })
 
 // 访问方式
@@ -112,28 +90,14 @@ const visitType = ref<Array<any>>([
         label: 'post',
         value: 'post'
     }
-    // {
-    //     label: 'put',
-    //     value: 'put'
-    // },
-    // {
-    //     label: 'delete',
-    //     value: 'delete'
-    // },
-    // {
-    //     label: 'option',
-    //     value: 'option'
-    // }
 ])
 
-const { pager, requestApi, resetParams, resetPage } = usePages({
-    callback: apiSystemLogLists,
+const { pager, getLists, resetParams, resetPage } = usePaging({
+    fetchFun: systemLogLists,
     params: formData.value
 })
 
-onMounted(() => {
-    requestApi()
-})
+getLists()
 </script>
 
 <style lang="scss" scoped></style>

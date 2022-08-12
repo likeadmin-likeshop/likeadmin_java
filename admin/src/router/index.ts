@@ -1,101 +1,99 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Layout from '@/layout/index.vue'
-export const indexName = Symbol('index')
-/**
- * Note: 路由配置项
- *
- * name:'router-name'               // 设定路由的名字，一定要填写不然使用<keep-alive>时会出现各种问题
- * 
- * meta : {
-    keepAlive: true                  // 如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
-    title: 'title'                  // 设置该路由在侧边栏的名字
-    icon: 'svg-name'                // 设置该路由的图标
-    activeMenu: '/system/user'      // 当路由设置了该属性，则会高亮相对应的侧边栏。
-    query: '{"id": 1}'             // 访问路由的默认传递参数
-    hidden: true                   // 当设置 true 的时候该路由不会再侧边栏出现 
-  }
- */
+import { createRouter, createWebHistory, RouterView, type RouteRecordRaw } from 'vue-router'
+import { MenuEnum } from '@/enums/appEnums'
+import { isExternal } from '@/utils/validate'
+import { constantRoutes, INDEX_ROUTE_NAME, LAYOUT } from './routes'
+import useUserStore from '@/stores/modules/user'
 
-// 公共路由
-export const constantRoutes: Array<RouteRecordRaw> = [
-    {
-        name: indexName,
-        path: '/',
-        redirect: '/workbench',
-        component: Layout
-    },
-    {
-        path: '/permission',
-        component: Layout,
-        children: [
-            {
-                path: 'admin/edit',
-                component: () => import('@/views/permission/admin/edit.vue'),
-                meta: { title: '编辑管理员', activeMenu: '/permission/admin' },
-            },
-            {
-                path: 'menu/edit',
-                component: () => import('@/views/permission/menu/edit.vue'),
-                meta: { title: '编辑菜单', activeMenu: '/permission/menu' },
-            },
-            {
-                path: 'role/edit',
-                component: () => import('@/views/permission/role/edit.vue'),
-                meta: { title: '编辑角色', activeMenu: '/permission/role' },
-            },
-        ],
-    },
-    {
-        path: '/organize',
-        component: Layout,
-        children: [
-            {
-                path: 'department/edit',
-                component: () => import('@/views/organize/department/edit.vue'),
-                meta: { title: '编辑部门', activeMenu: '/organize/department' },
-            },
-            {
-                path: 'post/edit',
-                component: () => import('@/views/organize/post/edit.vue'),
-                meta: { title: '编辑岗位', activeMenu: '/organize/post' },
-            },
-        ],
-    },
-    {
-        path: '/setting',
-        component: Layout,
-        children: [
-            {
-                path: 'storage/edit',
-                component: () => import('@/views/setting/storage/edit.vue'),
-                meta: { title: '存储设置', activeMenu: '/setting/storage' },
-            },
-        ],
-    },
-    {
-        path: '/login',
-        component: () => import('@/views/account/login.vue'),
-    },
-    {
-        path: '/500',
-        component: () => import('@/views/error/500.vue'),
-    },
-    {
-        path: '/:pathMatch(.*)*',
-        component: () => import('@/views/error/404.vue'),
-    },
-]
+// 匹配views里面所有的.vue文件，动态引入
+const modules = import.meta.glob('/src/views/**/*.vue')
+
+// 过滤路由所需要的数据
+export function filterAsyncRoutes(routes: any[], firstRoute = true) {
+    return routes.map((route) => {
+        const routeRecord = createRouteRecord(route, firstRoute)
+        if (route.children != null && route.children && route.children.length) {
+            routeRecord.children = filterAsyncRoutes(route.children, false)
+        }
+        return routeRecord
+    })
+}
+
+// 创建一条路由记录
+export function createRouteRecord(route: any, firstRoute: boolean): RouteRecordRaw {
+    //@ts-ignore
+    const routeRecord: RouteRecordRaw = {
+        path: isExternal(route.paths) ? route.paths : firstRoute ? `/${route.paths}` : route.paths,
+        name: Symbol(route.paths),
+        meta: {
+            hidden: !route.isShow,
+            keepAlive: !!route.isCache,
+            title: route.menuName,
+            perms: route.perms,
+            query: route.params,
+            icon: route.menuIcon,
+            type: route.menuType
+        }
+    }
+    switch (route.menuType) {
+        case MenuEnum.CATALOGUE:
+            routeRecord.component = firstRoute ? LAYOUT : RouterView
+            if (!route.children) {
+                routeRecord.component = RouterView
+            }
+            break
+        case MenuEnum.MENU:
+            routeRecord.component = loadRouteView(route.component)
+            break
+    }
+    return routeRecord
+}
+
+// 动态加载组件
+export function loadRouteView(component: string) {
+    try {
+        const key = Object.keys(modules).find((key) => {
+            return key.includes(`${component}.vue`)
+        })
+        if (key) {
+            return modules[key]
+        }
+        throw Error(`找不到组件${component}，请确保组件路径正确`)
+    } catch (error) {
+        console.error(error)
+        return RouterView
+    }
+}
+
+// 找到第一个有效的路由
+export function findFirstValidRoute(routes: RouteRecordRaw[]): string | undefined {
+    for (const route of routes) {
+        if (route.meta?.type == MenuEnum.MENU && !route.meta?.hidden && !isExternal(route.path)) {
+            return route.name as string
+        }
+        if (route.children) {
+            const name = findFirstValidRoute(route.children)
+            if (name) {
+                return name
+            }
+        }
+    }
+}
+
+// 重置路由
+export function resetRouter() {
+    router.removeRoute(INDEX_ROUTE_NAME)
+    const { routes } = useUserStore()
+    routes.forEach((route) => {
+        const name = route.name
+        if (name && router.hasRoute(name)) {
+            router.removeRoute(name)
+        }
+    })
+}
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
-    routes: constantRoutes,
-    scrollBehavior(to, from, savedPosition) {
-        if (savedPosition) {
-            return savedPosition
-        } else {
-            return { top: 0 }
-        }
-    },
+    routes: constantRoutes
 })
 
 export default router
