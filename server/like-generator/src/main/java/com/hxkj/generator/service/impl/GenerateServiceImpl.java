@@ -286,18 +286,21 @@ public class GenerateServiceImpl implements IGenerateService {
     @Override
     @Transactional
     public void syncTable(Integer id) {
-        // 原表数据
+        // 生成的数据
         GenTable genTable = genTableMapper.selectById(id);
+        Assert.notNull(genTable, "生成数据不存在！");
+
+        // 旧表的数据
         List<GenTableColumn> genTableColumns = genTableColumnMapper.selectList(
                 new QueryWrapper<GenTableColumn>()
                          .eq("table_id", id)
                         .orderByAsc("sort"));
-
-        Assert.isFalse(StringUtil.isEmpty(genTableColumns), "原表数据异常！");
+        Assert.isFalse(StringUtil.isEmpty(genTableColumns), "旧数据异常！");
 
         // 原表转Map
         Map<String, GenTableColumn> tableColumnMap = genTableColumns
                 .stream().collect(Collectors.toMap(GenTableColumn::getColumnName, Function.identity()));
+
 
         // 新表数据
         List<GenTableColumn> columns = genTableMapper.selectDbTableColumnsByName(genTable.getTableName());
@@ -318,8 +321,8 @@ public class GenerateServiceImpl implements IGenerateService {
                 }
 
                 if (prevColumn.getIsRequired() == 1
-                        && column.getIsPk() == 0
-                        && (column.getIsInsert() == 1 || column.getIsEdit() == 1)) {
+                        && prevColumn.getIsPk() == 0
+                        && (prevColumn.getIsInsert() == 1 || prevColumn.getIsEdit() == 1)) {
                     column.setHtmlType(prevColumn.getHtmlType());
                     column.setIsRequired(prevColumn.getIsRequired());
                 }
