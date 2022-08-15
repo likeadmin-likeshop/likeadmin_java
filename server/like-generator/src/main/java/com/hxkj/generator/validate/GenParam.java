@@ -23,8 +23,13 @@ import java.util.Map;
 @Accessors(chain = true)
 public class GenParam implements Serializable {
 
+    public interface delete{}
+
     @IDMust(message = "id参数必传且需大于0")
     private Integer id;
+
+    @NotNull(message = "ids参数缺失", groups = {delete.class})
+    private List<Integer> ids;
 
     @NotNull(message = "tableName参数缺失")
     @NotEmpty(message = "表名称不能为空")
