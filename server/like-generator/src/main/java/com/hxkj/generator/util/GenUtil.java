@@ -89,6 +89,11 @@ public class GenUtil {
             }
         }
 
+        // 非必填字段
+        if (GenUtil.isArraysContains(SqlConstants.COLUMN_NAME_NOT_EDIT, columnName)) {
+            column.setIsRequired(0);
+        }
+
         // 需插入字段
         if (!GenUtil.isArraysContains(SqlConstants.COLUMN_NAME_NOT_ADD, columnName)) {
             column.setIsInsert(GenConstants.REQUIRE);
