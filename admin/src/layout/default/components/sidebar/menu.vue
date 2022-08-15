@@ -1,5 +1,5 @@
 <template>
-    <div class="menu flex-1 min-h-0" :class="themeClass">
+    <div class="menu flex-1 min-h-0" :class="themeClass" :style="`--aside-width: ${width}px`">
         <el-scrollbar>
             <el-menu
                 v-bind="config"
@@ -38,6 +38,10 @@ const props = defineProps({
     },
     theme: {
         type: String
+    },
+    width: {
+        type: Number,
+        default: 200
     }
 })
 

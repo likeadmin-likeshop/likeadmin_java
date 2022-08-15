@@ -23,14 +23,27 @@
                                     <span class="flex-1 truncate mr-2">
                                         <overflow-tooltip :content="data.name" />
                                     </span>
-                                    <el-dropdown v-if="data.id > 0" :hide-on-click="false">
+                                    <el-dropdown
+                                        v-perms="[
+                                            'common:album:cateRename',
+                                            'common:album:cateDel'
+                                        ]"
+                                        v-if="data.id > 0"
+                                        :hide-on-click="false"
+                                    >
                                         <span class="muted m-r-10">···</span>
                                         <template #dropdown>
                                             <el-dropdown-menu>
-                                                <div @click="handleEditCate(data.name, data.id)">
+                                                <div
+                                                    v-perms="['common:album:cateRename']"
+                                                    @click="handleEditCate(data.name, data.id)"
+                                                >
                                                     <el-dropdown-item>命名分组</el-dropdown-item>
                                                 </div>
-                                                <div @click="handleDeleteCate(data.id)">
+                                                <div
+                                                    v-perms="['common:album:cateDel']"
+                                                    @click="handleDeleteCate(data.id)"
+                                                >
                                                     <el-dropdown-item>删除分组</el-dropdown-item>
                                                 </div>
                                             </el-dropdown-menu>
@@ -44,7 +57,9 @@
             </div>
 
             <div class="flex justify-center p-2 border-t border-br">
-                <el-button @click="handleAddCate">添加分组</el-button>
+                <el-button @click="handleAddCate" v-perms="['common:album:cateAdd']">
+                    添加分组
+                </el-button>
             </div>
         </div>
         <div class="material__center flex flex-col">
@@ -60,6 +75,7 @@
                         <el-button type="primary">本地上传</el-button>
                     </upload>
                     <el-button
+                        v-perms="['common:album:albumDel']"
                         v-if="mode == 'page'"
                         :disabled="!select.length"
                         @click.stop="batchFileDelete()"
@@ -68,6 +84,7 @@
                     </el-button>
 
                     <popup
+                        v-perms="['common:album:albumMove']"
                         v-if="mode == 'page'"
                         class="ml-3"
                         @confirm="batchFileMove"
@@ -166,6 +183,7 @@
                             <overflow-tooltip class="mt-1" :content="item.name" />
                             <div class="operation-btns flex items-center">
                                 <el-button
+                                    v-perms="['common:album:albumRename']"
                                     type="primary"
                                     link
                                     @click="handleFileRename(item.name, item.id)"
@@ -208,7 +226,7 @@
                     <el-table-column prop="createTime" label="上传时间" min-width="100" />
                     <el-table-column label="操作" width="150" fixed="right">
                         <template #default="{ row }">
-                            <div class="inline-block">
+                            <div class="inline-block" v-perms="['common:album:albumRename']">
                                 <el-button
                                     type="primary"
                                     link
@@ -222,7 +240,7 @@
                                     查看
                                 </el-button>
                             </div>
-                            <div class="inline-block">
+                            <div class="inline-block" v-perms="['common:album:albumDel']">
                                 <el-button
                                     type="primary"
                                     link
@@ -255,7 +273,11 @@
                                 当页全选
                             </el-checkbox>
                         </span>
-                        <el-button :disabled="!select.length" @click="batchFileDelete()">
+                        <el-button
+                            v-perms="['common:album:albumDel']"
+                            :disabled="!select.length"
+                            @click="batchFileDelete()"
+                        >
                             删除
                         </el-button>
                         <popup

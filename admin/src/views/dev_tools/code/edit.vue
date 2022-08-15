@@ -323,19 +323,6 @@ const getDetails = async () => {
         //@ts-ignore
         formData[key] = data[key]
     })
-
-    // watch(
-    //     () => formData.genType,
-    //     (value) => {
-    //         if (value == 1) {
-    //             feedback
-    //                 .confirm('生成到模块方式如遇同名文件会覆盖旧文件，确定要选择此方式吗？')
-    //                 .catch(() => {
-    //                     formData.genType = 0
-    //                 })
-    //         }
-    //     }
-    // )
 }
 
 const { optionsData } = useDictOptions<{

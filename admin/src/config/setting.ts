@@ -3,6 +3,7 @@ const defaultSetting = {
     sideTheme: 'light',
     sideDarkColor: '#1d2124',
     theme: '#4A5DFF',
+    openMultipleTabs: true,
     successTheme: '#67c23a',
     warningTheme: '#e6a23c',
     dangerTheme: '#f56c6c',

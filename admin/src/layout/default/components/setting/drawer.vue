@@ -38,6 +38,20 @@
                 </div>
             </div>
             <div class="setting-item mb-5 flex justify-between items-center">
+                <span class="text-tx-secondary">开启多页签栏</span>
+                <div>
+                    <el-switch
+                        v-model="openMultipleTabs"
+                        :active-value="true"
+                        :inactive-value="false"
+                    />
+                </div>
+            </div>
+            <div class="setting-item mb-5 flex justify-between items-center">
+                <span class="text-tx-secondary">菜单栏宽度</span>
+                <div><el-input-number v-model="sideWidth" :min="180" :max="250" /></div>
+            </div>
+            <div class="setting-item mb-5 flex justify-between items-center">
                 <el-button @click="resetTheme">重置主题</el-button>
             </div>
         </el-drawer>
@@ -71,6 +85,30 @@ const sideTheme = computed({
     set(value) {
         settingStore.setSetting({
             key: 'sideTheme',
+            value
+        })
+    }
+})
+
+const openMultipleTabs = computed({
+    get() {
+        return settingStore.openMultipleTabs
+    },
+    set(value) {
+        settingStore.setSetting({
+            key: 'openMultipleTabs',
+            value
+        })
+    }
+})
+
+const sideWidth = computed({
+    get() {
+        return settingStore.sideWidth
+    },
+    set(value) {
+        settingStore.setSetting({
+            key: 'sideWidth',
             value
         })
     }
