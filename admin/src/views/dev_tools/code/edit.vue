@@ -186,7 +186,7 @@
                     <el-tab-pane label="生成配置" name="config">
                         <el-form-item label="模板类型" prop="gen.genTpl" required>
                             <el-radio-group v-model="formData.gen.genTpl">
-                                <el-radio :label="GenTpl.CURD">单表（增删改查）</el-radio>
+                                <el-radio :label="GenTpl.CRUD">单表（增删改查）</el-radio>
                                 <el-radio :label="GenTpl.TREE">树表（增删改查）</el-radio>
                             </el-radio-group>
                         </el-form-item>
@@ -270,7 +270,7 @@ import { menuLists } from '@/api/perms/menu'
 import { useDictOptions } from '@/hooks/useDictOptions'
 
 enum GenTpl {
-    CURD = 'curd',
+    CRUD = 'crud',
     TREE = 'tree'
 }
 
