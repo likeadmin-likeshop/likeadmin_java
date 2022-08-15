@@ -8,5 +8,7 @@
         >
             {{ item.name }}
         </el-radio>
+        //没有选字典数据时渲染
+        <el-radio label="0">请选择字典生成</el-radio>
     </el-radio-group>
 </el-form-item>
