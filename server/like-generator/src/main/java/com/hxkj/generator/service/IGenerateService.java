@@ -6,6 +6,7 @@ import com.hxkj.generator.validate.PageParam;
 import com.hxkj.generator.vo.DbTableVo;
 import com.hxkj.generator.vo.GenTableVo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,10 +62,10 @@ public interface IGenerateService {
     /**
      * 删除表结构
      *
-     * @param id 主键
+     * @param ids 主键
      * @author fzr
      */
-    void deleteTable(Integer id);
+    void deleteTable(List<Integer> ids);
 
     /**
      * 同步数据表

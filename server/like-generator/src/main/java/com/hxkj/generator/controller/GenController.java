@@ -99,12 +99,12 @@ public class GenController {
      * 删除表结构
      *
      * @author fzr
-     * @param id 主键
+     * @param genParam 参数
      * @return Object
      */
     @PostMapping("/deleteTable")
-    public Object deleteTable(@Validated @IDMust() @RequestParam("id") Integer id) {
-        iGenerateService.deleteTable(id);
+    public Object deleteTable(@Validated(value = GenParam.delete.class) @RequestBody GenParam genParam) {
+        iGenerateService.deleteTable(genParam.getIds());
         return AjaxResult.success();
     }
 
