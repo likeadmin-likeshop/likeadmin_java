@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 岗位列表
-export function postLists(params: any) {
+export function postLists(params?: any) {
     return request.get({ url: '/system/post/list', params })
 }
 // 岗位列表

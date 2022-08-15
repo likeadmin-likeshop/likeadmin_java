@@ -39,7 +39,7 @@
 </template>
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { postEdit, postAdd } from '@/api/org/post' //接口要替换
+import { postEdit, postAdd, postAll } from '@/api/org/post' //接口要替换
 import Popup from '@/components/popup/index.vue'
 import feedback from '@/utils/feedback'
 import type { PropType } from 'vue'
@@ -52,6 +52,9 @@ defineProps({
 const emit = defineEmits(['success', 'close'])
 const formRef = shallowRef<FormInstance>()
 const popupRef = shallowRef<InstanceType<typeof Popup>>()
+// 树表才有
+const treeList = ref<any[]>([])
+// 树表才有
 const mode = ref('add')
 const popupTitle = computed(() => {
     return mode.value == 'edit' ? '编辑岗位' : '新增岗位' //要替换
@@ -108,6 +111,17 @@ const setFormData = (data: Record<string, any>) => {
 const handleClose = () => {
     emit('close')
 }
+
+// 树表才有
+const getLists = () => {
+    const data: any = await postAll()
+    const item = { id: 0, menuName: '顶级', children: [] }
+    item.children = data
+    treeList.value.push(item)
+}
+
+getLists()
+// 树表才有
 
 defineExpose({
     open,

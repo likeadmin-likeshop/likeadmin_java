@@ -12,7 +12,7 @@
             :value="item.value"
             :disabled="!item.status"
         />
-        //
+        //没有选字典数据时渲染
         <el-option label="请选择字典生成" value="" />
     </el-select>
 </el-form-item>
