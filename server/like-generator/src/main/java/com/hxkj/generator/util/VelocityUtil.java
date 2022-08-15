@@ -1,5 +1,6 @@
 package com.hxkj.generator.util;
 
+import com.hxkj.common.utils.ArrayUtil;
 import com.hxkj.common.utils.StringUtil;
 import com.hxkj.generator.config.GenConfig;
 import com.hxkj.generator.constant.GenConstants;
@@ -41,9 +42,11 @@ public class VelocityUtil {
      */
     public static VelocityContext prepareContext(GenTable table, List<GenTableColumn> columns) {
         boolean isSearch = false; // 是否需要搜索
-        List<String> allFields  = new LinkedList<>();    // 所有字段
-        List<String> listFields = new LinkedList<>();    // 列表字段
+        String primaryKey = "id"; // 主键字段名称
+        List<String> allFields    = new LinkedList<>();  // 所有字段
+        List<String> listFields   = new LinkedList<>();  // 列表字段
         List<String> detailFields = new LinkedList<>();  // 详情字段
+        List<String> dictFields   = new LinkedList<>();  // 字段字段
         for (GenTableColumn column : columns) {
             allFields.add(column.getColumnName());
             if (column.getIsList() == 1) {
@@ -54,6 +57,12 @@ public class VelocityUtil {
             }
             if (column.getIsQuery() == 1) {
                 isSearch = true;
+            }
+            if (column.getIsPk() == 1) {
+                primaryKey = column.getJavaField();
+            }
+            if (StringUtil.isNotEmpty(column.getDictType())) {
+                dictFields.add(column.getDictType());
             }
         }
 
@@ -70,9 +79,11 @@ public class VelocityUtil {
         velocityContext.put("table", table);
         velocityContext.put("columns", columns);
         velocityContext.put("dateFields", SqlConstants.COLUMN_TIME_NAME);
+        velocityContext.put("primaryKey", primaryKey);
         velocityContext.put("allFields", allFields);
         velocityContext.put("listFields", listFields);
         velocityContext.put("detailFields", detailFields);
+        velocityContext.put("dictFields", ArrayUtil.listToStringByStr(dictFields,","));
         velocityContext.put("isSearch", isSearch);
         return velocityContext;
     }
