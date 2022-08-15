@@ -71,7 +71,7 @@ public class GenParam implements Serializable {
     @Length(max = 200, message = "生成代码路径不能大于200个字符")
     private String genPath = "/";
 
-    private List<Map<String, String>> columns = new ArrayList<>();
+    private List<Map<String, String>> column = new ArrayList<>();
 
     private String treePrimary = "";
 
