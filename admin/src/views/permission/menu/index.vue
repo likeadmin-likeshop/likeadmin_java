@@ -11,6 +11,7 @@
                 <el-button @click="handleExpand"> 展开/折叠 </el-button>
             </div>
             <el-table
+                v-loading="loading"
                 ref="tableRef"
                 class="mt-4"
                 size="large"
@@ -98,12 +99,19 @@ import feedback from '@/utils/feedback'
 const tableRef = shallowRef<InstanceType<typeof ElTable>>()
 const editRef = shallowRef<InstanceType<typeof EditPopup>>()
 let isExpand = false
+const loading = ref(false)
 const showEdit = ref(false)
 const lists = ref([])
 
 const getLists = async () => {
-    const data = await menuLists()
-    lists.value = data
+    loading.value = true
+    try {
+        const data = await menuLists()
+        lists.value = data
+        loading.value = false
+    } catch (error) {
+        loading.value = false
+    }
 }
 
 const handleAdd = async (id?: number) => {

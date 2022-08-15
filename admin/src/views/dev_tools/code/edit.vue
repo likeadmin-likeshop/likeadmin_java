@@ -13,7 +13,7 @@
             >
                 <el-tabs v-model="activeName">
                     <el-tab-pane label="基础信息" name="base">
-                        <el-form-item label="表名称" prop="tableName">
+                        <el-form-item label="表名称" prop="base.tableName">
                             <div class="w-80">
                                 <el-input
                                     v-model="formData.base.tableName"
@@ -21,7 +21,7 @@
                                 />
                             </div>
                         </el-form-item>
-                        <el-form-item label="表描述" prop="tableComment">
+                        <el-form-item label="表描述" prop="base.tableComment">
                             <div class="w-80">
                                 <el-input
                                     v-model="formData.base.tableComment"
@@ -29,7 +29,7 @@
                                 />
                             </div>
                         </el-form-item>
-                        <el-form-item label="实体类名称" prop="entityName">
+                        <el-form-item label="实体类名称" prop="base.entityName">
                             <div class="w-80">
                                 <el-input
                                     v-model="formData.base.entityName"
@@ -38,9 +38,12 @@
                             </div>
                         </el-form-item>
 
-                        <el-form-item label="作者">
+                        <el-form-item label="作者" prop="base.authorName">
                             <div class="w-80">
-                                <el-input v-model="formData.base.authorName" />
+                                <el-input
+                                    v-model="formData.base.authorName"
+                                    placeholder="请输入作者"
+                                />
                             </div>
                         </el-form-item>
                         <el-form-item label="备注">
@@ -181,19 +184,13 @@
                         </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="生成配置" name="config">
-                        <el-form-item label="模板类型" prop="template_type">
+                        <el-form-item label="模板类型" prop="gen.genTpl" required>
                             <el-radio-group v-model="formData.gen.genTpl">
                                 <el-radio :label="GenTpl.CURD">单表（增删改查）</el-radio>
                                 <el-radio :label="GenTpl.TREE">树表（增删改查）</el-radio>
                             </el-radio-group>
                         </el-form-item>
-                        <el-form-item label="生成方式" prop="generate_type">
-                            <el-radio-group v-model="formData.gen.genType">
-                                <el-radio :label="GenType.ZIP">压缩包下载</el-radio>
-                                <el-radio :label="GenType.CUSTOM_PATH">自定义路径</el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                        <el-form-item label="模块名" prop="moduleName">
+                        <el-form-item label="模块名" prop="gen.moduleName">
                             <div class="w-80">
                                 <el-input
                                     v-model="formData.gen.moduleName"
@@ -202,7 +199,7 @@
                                 <div class="form-tips">生成文件所在模块名</div>
                             </div>
                         </el-form-item>
-                        <el-form-item label="功能名称" prop="functionName">
+                        <el-form-item label="功能名称" prop="gen.functionName">
                             <div class="w-80">
                                 <el-input
                                     v-model="formData.gen.functionName"
@@ -210,10 +207,16 @@
                                 />
                             </div>
                         </el-form-item>
+                        <el-form-item label="生成方式" prop="gen.genType">
+                            <el-radio-group v-model="formData.gen.genType">
+                                <el-radio :label="GenType.ZIP">压缩包下载</el-radio>
+                                <el-radio :label="GenType.CUSTOM_PATH">自定义路径</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
                         <el-form-item
                             v-if="formData.gen.genType == GenType.CUSTOM_PATH"
                             label="自定义路径"
-                            prop="treePrimary"
+                            prop="gen.genPath"
                         >
                             <div class="w-80">
                                 <el-input
@@ -223,7 +226,7 @@
                             </div>
                         </el-form-item>
                         <template v-if="formData.gen.genTpl == GenTpl.TREE">
-                            <el-form-item label="树主键字段" prop="treePrimary">
+                            <el-form-item label="树主键字段" prop="gen.treePrimary">
                                 <el-select
                                     class="w-80"
                                     v-model="formData.gen.treePrimary"
@@ -237,7 +240,7 @@
                                     />
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="树父级字段" prop="treeParent">
+                            <el-form-item label="树父级字段" prop="gen.treeParent">
                                 <el-select class="w-80" v-model="formData.gen.treeParent" clearable>
                                     <el-option
                                         v-for="item in formData.column"
@@ -304,9 +307,12 @@ const formData = reactive({
 
 const formRef = shallowRef<FormInstance>()
 const rules = reactive({
-    table_name: [{ required: true, message: '请输入表名称', trigger: 'blur' }],
-    table_comment: [{ required: true, message: '请输入表描述', trigger: 'blur' }],
-    module_name: [{ required: true, message: '请输入模块名', trigger: 'blur' }]
+    ['base.tableName']: [{ required: true, message: '请输入表名称', trigger: 'blur' }],
+    ['base.tableComment']: [{ required: true, message: '请输入表描述', trigger: 'blur' }],
+    ['base.entityName']: [{ required: true, message: '请输入实体类名称', trigger: 'blur' }],
+    ['base.authorName']: [{ required: true, message: '请输入作者', trigger: 'blur' }],
+    ['gen.moduleName']: [{ required: true, message: '请输入模块名', trigger: 'blur' }],
+    ['gen.functionName']: [{ required: true, message: '请输入功能名称', trigger: 'blur' }]
 })
 
 const getDetails = async () => {
