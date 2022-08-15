@@ -105,11 +105,6 @@ public class GenUtil {
             column.setIsList(GenConstants.REQUIRE);
         }
 
-        // 需详情的字段
-        if (!GenUtil.isArraysContains(new String[]{"is_delete", "delete_time"}, columnName)) {
-            column.setIsDetail(GenConstants.REQUIRE);
-        }
-
         // 需查询字段
         if (!GenUtil.isArraysContains(SqlConstants.COLUMN_NAME_NOT_QUERY, columnName) && column.getIsPk() == 0) {
             column.setIsQuery(GenConstants.REQUIRE);

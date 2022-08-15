@@ -14,7 +14,7 @@ import java.util.Map;
 public interface I${EntityName}Service {
 
  #if($table.genTpl=="curd")
-    /**、
+    /**
      * ${functionName}列表
      *
      #if(!$authorName.equals(""))
@@ -22,7 +22,7 @@ public interface I${EntityName}Service {
      #end
      * @param pageParam 分页参数
      * @param params 搜索参数
-     * @return PageResult<${EntityName}Vo}>
+     * @return PageResult<${EntityName}Vo>
      */
     PageResult<${EntityName}ListVo> list(PageParam pageParam, Map<String, String> params);
 #elseif($table.genTpl=="tree")
