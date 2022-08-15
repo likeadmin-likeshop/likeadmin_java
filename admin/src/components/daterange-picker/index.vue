@@ -17,27 +17,27 @@ import { withDefaults, computed } from 'vue'
 /* Props S */
 const props = withDefaults(
     defineProps<{
-        start_time?: string
-        end_time?: string
+        startTime?: string
+        endTime?: string
     }>(),
     {
-        start_time: '',
-        end_time: ''
+        startTime: '',
+        endTime: ''
     }
 )
-const emit = defineEmits(['update:start_time', 'update:end_time'])
+const emit = defineEmits(['update:startTime', 'update:endTime'])
 
 const content = computed<any>({
     get: () => {
-        return [props.start_time, props.end_time]
+        return [props.startTime, props.endTime]
     },
     set: (value: Event | any) => {
         if (value === null) {
-            emit('update:start_time', '')
-            emit('update:end_time', '')
+            emit('update:startTime', '')
+            emit('update:endTime', '')
         } else {
-            emit('update:start_time', value[0])
-            emit('update:end_time', value[1])
+            emit('update:startTime', value[0])
+            emit('update:endTime', value[1])
         }
     }
 })
