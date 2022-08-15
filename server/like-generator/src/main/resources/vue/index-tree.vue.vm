@@ -1,1 +1,198 @@
-未定的内容
+<template>
+    <div class="index-tree">
+        <el-card class="!border-none mb-4" shadow="never">
+            <el-form ref="formRef" class="mb-[-16px]" :model="queryParams" :inline="true">
+                #foreach ($column in $columns)
+                #if($column.isQuery==1)
+                    #if($column.htmlType=="datetime")
+                    <el-form-item label="${column.columnComment}" prop="${column.javaField}">
+                        <data-picker
+                            v-model:startTime="queryParams.startTime"
+                            v-model:endTime="queryParams.endTime"
+                        />
+                    </el-form-item>
+                    #elseif($column.htmlType=="select")
+                        <el-form-item label="${column.columnComment}" prop="${column.javaField}">
+                            <el-select
+                                    v-model="queryParams.${column.javaField}"
+                                    class="w-56"
+                                    clearable
+                            >
+                                #if($column.dictType=="")
+                                    <el-option label="请选择字典生成" value="" />
+                                #else
+                                    <el-option label="全部" value="" />
+                                    <el-option
+                                            v-for="(item, index) in dictData.${column.dictType}"
+                                            :key="index"
+                                            :label="item.name"
+                                            :value="item.value"
+                                    />
+                                #end
+                            </el-select>
+                        </el-form-item>
+                    #elseif($column.htmlType=="input")
+                        <el-form-item label="${column.columnComment}" prop="${column.javaField}">
+                            <el-input class="w-56" v-model="queryParams.${column.javaField}" />
+                        </el-form-item>
+                   #end
+                #end
+                #end
+                <el-form-item>
+                    <el-button type="primary" @click="getLists">查询</el-button>
+                    <el-button @click="getLists">重置</el-button>
+                </el-form-item>
+            </el-form>
+        </el-card>
+        <el-card class="!border-none" shadow="never">
+            <div>
+                <el-button v-perms="['${moduleName}:add']" type="primary" @click="handleAdd()">
+                    <template #icon>
+                        <icon name="el-icon-Plus" />
+                    </template>
+                    新增
+                </el-button>
+                <el-button @click="handleExpand"> 展开/折叠 </el-button>
+            </div>
+            <el-table
+                    v-loading="loading"
+                    ref="tableRef"
+                    class="mt-4"
+                    size="large"
+                    :data="lists"
+                    row-key="id"
+                    :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+            >
+            #foreach ($column in $columns)
+            #if($column.isList)
+                #if($column.htmlType=="imageUpload")
+                <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="80">
+                    <template #default="{ row }">
+                        <div class="flex">
+                            <icon :name="row.${column.javaField}" :size="20" />
+                        </div>
+                    </template>
+                </el-table-column>
+                #elseif($column.htmlType=="number")
+                <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="100" />
+                #elseif($column.htmlType=="datetime")
+                <el-table-column
+                    label="${column.columnComment}"
+                    prop="${column.javaField}"
+                    min-width="180"
+                ></el-table-column>
+                #else
+                <el-table-column
+                    label="菜单名称"
+                    prop="menuName"
+                    min-width="150"
+                    show-overflow-tooltip
+                />
+                #end
+            #end
+            #end
+                <el-table-column label="操作" width="160" fixed="right">
+                    <template #default="{ row }">
+                        <el-button
+                                v-perms="['${moduleName}:add']"
+                                type="primary"
+                                link
+                                @click="handleAdd(row.id)"
+                        >
+                            新增
+                        </el-button>
+                        <el-button
+                                v-perms="['${moduleName}:edit']"
+                                type="primary"
+                                link
+                                @click="handleEdit(row)"
+                        >
+                            编辑
+                        </el-button>
+                        <el-button
+                                v-perms="['${moduleName}:del']"
+                                type="danger"
+                                link
+                                @click="handleDelete(row.id)"
+                        >
+                            删除
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-card>
+        <edit-popup v-if="showEdit" ref="editRef" @success="getLists" @close="showEdit = false" />
+    </div>
+</template>
+<script lang="ts" setup>
+    import { ${moduleName}Delete, ${moduleName}Lists } from '@/api/${moduleName}'
+    import type { ElTable } from 'element-plus'
+    import { MenuEnum } from '@/enums/appEnums'
+    import EditPopup from './edit.vue'
+    import feedback from '@/utils/feedback'
+    const tableRef = shallowRef<InstanceType<typeof ElTable>>()
+    const editRef = shallowRef<InstanceType<typeof EditPopup>>()
+    let isExpand = false
+    const showEdit = ref(false)
+    const loading = ref(false)
+    const lists = ref<any[]>([])
+
+    const queryParams = reactive({
+        #foreach ($column in $columns)
+        #if($column.isQuery)
+        ${column.javaField}: '',
+        #end
+        #end
+    })
+
+    const getLists = async () => {
+        loading.value = true
+        try {
+            const data = await ${moduleName}Lists(queryParams)
+            lists.value = data
+            loading.value = false
+        } catch (error) {
+            loading.value = false
+        }
+    }
+
+    const handleAdd = async (id?: number) => {
+        showEdit.value = true
+        await nextTick()
+        if (id) {
+            editRef.value?.setFormData({
+                pid: id
+            })
+        }
+        editRef.value?.open('add')
+    }
+
+    const handleEdit = async (data: any) => {
+        showEdit.value = true
+        await nextTick()
+        editRef.value?.open('edit')
+        editRef.value?.setFormData(data)
+    }
+
+    const handleDelete = async (${primaryKey}: number) => {
+        await feedback.confirm('确定要删除？')
+        await menuDelete({ ${primaryKey} })
+        getLists()
+    }
+
+    const handleExpand = () => {
+        isExpand = !isExpand
+        toggleExpand(lists.value, isExpand)
+    }
+
+    const toggleExpand = (children: any[], unfold = true) => {
+        for (const key in children) {
+            tableRef.value?.toggleRowExpansion(children[key], unfold)
+            if (children[key].children) {
+                toggleExpand(children[key].children!, unfold)
+            }
+        }
+    }
+
+    getLists()
+</script>
