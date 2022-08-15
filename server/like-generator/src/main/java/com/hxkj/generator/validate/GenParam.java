@@ -77,6 +77,8 @@ public class GenParam implements Serializable {
 
     private String treeParent  = "";
 
+    private String treeName  = "";
+
     private String subTableName = "";
 
     private String subTableFk = "";

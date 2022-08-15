@@ -26,6 +26,7 @@ public class GenTable implements Serializable {
     private String functionName;
     private String treePrimary;
     private String treeParent;
+    private String treeName;
     private String genTpl;
     private Integer genType;
     private String genPath;

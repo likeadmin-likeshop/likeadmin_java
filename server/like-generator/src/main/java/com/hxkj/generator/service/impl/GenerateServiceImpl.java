@@ -233,6 +233,7 @@ public class GenerateServiceImpl implements IGenerateService {
         model.setFunctionName(genParam.getFunctionName());
         model.setTreePrimary(genParam.getTreePrimary());
         model.setTreeParent(genParam.getTreeParent());
+        model.setTreeName(genParam.getTreeName());
         model.setRemarks(genParam.getRemarks());
         model.setGenTpl(genParam.getGenTpl());
         model.setGenType(genParam.getGenType());
