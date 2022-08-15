@@ -23,7 +23,7 @@
         </el-card>
         <el-card class="!border-none mt-4" shadow="never">
             <div>
-                <el-button v-perms="['dept.jobs/add']" type="primary" @click="handleAdd()">
+                <el-button v-perms="['system:post:add']" type="primary" @click="handleAdd()">
                     <template #icon>
                         <icon name="el-icon-Plus" />
                     </template>
@@ -45,7 +45,7 @@
                 <el-table-column label="操作" width="120" fixed="right">
                     <template #default="{ row }">
                         <el-button
-                            v-perms="['dept.jobs/edit']"
+                            v-perms="['system:post:edit']"
                             type="primary"
                             link
                             @click="handleEdit(row)"
@@ -53,7 +53,7 @@
                             编辑
                         </el-button>
                         <el-button
-                            v-perms="['dept.jobs/delete']"
+                            v-perms="['system:post:del']"
                             type="danger"
                             link
                             @click="handleDelete(row.id)"

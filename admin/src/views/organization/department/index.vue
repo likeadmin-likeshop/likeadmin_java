@@ -20,7 +20,7 @@
         </el-card>
         <el-card class="!border-none mt-4" shadow="never">
             <div>
-                <el-button v-perms="['dept.dept/add']" type="primary" @click="handleAdd()">
+                <el-button v-perms="['system:dept:add']" type="primary" @click="handleAdd()">
                     <template #icon>
                         <icon name="el-icon-Plus" />
                     </template>
@@ -55,7 +55,7 @@
                 <el-table-column label="操作" width="160" fixed="right">
                     <template #default="{ row }">
                         <el-button
-                            v-perms="['dept.dept/add']"
+                            v-perms="['system:dept:add']"
                             type="primary"
                             link
                             @click="handleAdd(row.id)"
@@ -63,7 +63,7 @@
                             新增
                         </el-button>
                         <el-button
-                            v-perms="['dept.dept/edit']"
+                            v-perms="['system:dept:edit']"
                             type="primary"
                             link
                             @click="handleEdit(row)"
@@ -72,7 +72,7 @@
                         </el-button>
                         <el-button
                             v-if="row.pid !== 0"
-                            v-perms="['dept.dept/delete']"
+                            v-perms="['system:dept:del']"
                             type="danger"
                             link
                             @click="handleDelete(row.id)"

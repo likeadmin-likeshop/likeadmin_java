@@ -15,7 +15,7 @@
                         v-model="formData.username"
                         :disabled="isRoot"
                         placeholder="请输入账号"
-                    ></el-input>
+                    />
                 </el-form-item>
                 <el-form-item label="头像">
                     <div>
@@ -54,7 +54,7 @@
                             :key="index"
                             :label="item.name"
                             :value="item.id"
-                        ></el-option>
+                        />
                     </el-select>
                 </el-form-item>
 
@@ -65,22 +65,18 @@
                         class="flex-1"
                         placeholder="请选择角色"
                     >
-                        <el-option v-if="isRoot" label="系统管理员" value="0"></el-option>
+                        <el-option v-if="isRoot" label="系统管理员" value="0" />
                         <el-option
                             v-for="(item, index) in optionsData.role"
                             :key="index"
                             :label="item.name"
                             :value="String(item.id)"
-                        ></el-option>
+                        />
                     </el-select>
                 </el-form-item>
 
                 <el-form-item label="密码" prop="password">
-                    <el-input
-                        v-model="formData.password"
-                        show-password
-                        placeholder="请输入密码"
-                    ></el-input>
+                    <el-input v-model="formData.password" show-password placeholder="请输入密码" />
                 </el-form-item>
 
                 <el-form-item label="确认密码" prop="passwordConfirm">
@@ -88,7 +84,7 @@
                         v-model="formData.passwordConfirm"
                         show-password
                         placeholder="请输入确认密码"
-                    ></el-input>
+                    />
                 </el-form-item>
 
                 <el-form-item label="管理员状态" v-if="!isRoot">

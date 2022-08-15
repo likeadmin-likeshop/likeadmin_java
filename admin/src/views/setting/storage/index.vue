@@ -21,7 +21,7 @@
                 <el-table-column label="操作" min-width="80" fixed="right">
                     <template #default="{ row }">
                         <el-button
-                            v-perms="['setting.storage/setup']"
+                            v-perms="['setting:storage:edit']"
                             type="primary"
                             link
                             @click="handleSet(row.alias)"

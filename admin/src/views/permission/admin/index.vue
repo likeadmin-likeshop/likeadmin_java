@@ -47,13 +47,10 @@
                     <el-table-column label="创建时间" prop="createTime" min-width="180" />
                     <el-table-column label="最近登录时间" prop="lastLoginTime" min-width="180" />
                     <el-table-column label="最近登录IP" prop="lastLoginIp" min-width="120" />
-                    <el-table-column
-                        label="状态"
-                        min-width="100"
-                        v-perms="['system:admin:disable']"
-                    >
+                    <el-table-column label="状态" min-width="100">
                         <template #default="{ row }">
                             <el-switch
+                                v-perms="['system:admin:disable']"
                                 v-if="row.id != 1"
                                 :model-value="row.isDisable"
                                 :active-value="0"

@@ -23,10 +23,10 @@
                 </el-form-item>
 
                 <el-form-item label="访问时间">
-                    <data-picker
-                        v-model:start_time="formData.startTime"
-                        v-model:end_time="formData.endTime"
-                    ></data-picker>
+                    <daterange-picker
+                        v-model:startTime="formData.startTime"
+                        v-model:endTime="formData.endTime"
+                    />
                 </el-form-item>
 
                 <el-form-item label="访问链接">

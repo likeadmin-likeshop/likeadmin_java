@@ -71,7 +71,7 @@
                         <el-table-column label="操作" width="120" fixed="right">
                             <template #default="{ row }">
                                 <el-button
-                                    v-perms="['setting.dict.dict_data/edit']"
+                                    v-perms="['setting:dict:data:edit']"
                                     link
                                     type="primary"
                                     @click="handleEdit(row)"
@@ -79,7 +79,7 @@
                                     编辑
                                 </el-button>
                                 <el-button
-                                    v-perms="['setting.dict.dict_data/delete']"
+                                    v-perms="['setting:dict:data:del']"
                                     link
                                     type="danger"
                                     @click="handleDelete(row.id)"

@@ -97,7 +97,8 @@ const { pager, getLists, resetPage, resetParams } = usePaging({
 // 获取字典类型数据，需要替换
 const { dictData } = useDictData<{
     dict_sex: any[]
-}>(['dict_sex'])
+    dict_1: any[]
+}>(['dict_sex', 'dict_1'])
 
 const handleAdd = async () => {
     showEdit.value = true

@@ -17,7 +17,7 @@
         <el-card class="!border-none mt-4" shadow="never" v-loading="pager.loading">
             <div class="flex">
                 <data-table
-                    v-perms="['tools.generator/selectTable']"
+                    v-perms="['gen:importTable']"
                     class="inline-block mr-[10px]"
                     @success="getLists"
                 >
@@ -29,7 +29,7 @@
                     </el-button>
                 </data-table>
                 <el-button
-                    v-perms="['tools.generator/delete']"
+                    v-perms="['gen:delTable']"
                     :disabled="!selectData.length"
                     @click="handleDelete(selectData)"
                     type="danger"
@@ -40,7 +40,7 @@
                     删除
                 </el-button>
                 <el-button
-                    v-perms="['tools.generator/generate']"
+                    v-perms="['gen:genCode', 'gen:downloadCode']"
                     :disabled="!selectData.length"
                     @click="handleGenerate(selectData)"
                 >
@@ -58,11 +58,11 @@
                     <el-table-column label="表描述" prop="tableComment" min-width="180" />
                     <el-table-column label="创建时间" prop="createTime" min-width="180" />
                     <el-table-column label="更新时间" prop="updateTime" min-width="180" />
-                    <el-table-column label="操作" width="150" fixed="right">
+                    <el-table-column label="操作" width="160" fixed="right">
                         <template #default="{ row }">
                             <div class="flex items-center">
                                 <el-button
-                                    v-perms="['tools.generator/preview']"
+                                    v-perms="['gen:previewCode']"
                                     type="primary"
                                     link
                                     @click="handlePreview(row.id)"
@@ -70,9 +70,8 @@
                                     预览
                                 </el-button>
 
-                                <el-button type="primary" link>
+                                <el-button type="primary" link v-perms="['gen:editTable']">
                                     <router-link
-                                        v-perms="['tools.generator/edit']"
                                         :to="{
                                             path: '/dev_tools/code/edit',
                                             query: {
@@ -83,7 +82,16 @@
                                         编辑
                                     </router-link></el-button
                                 >
-                                <el-dropdown class="ml-2" @command="handleCommand($event, row)">
+                                <el-dropdown
+                                    class="ml-2"
+                                    @command="handleCommand($event, row)"
+                                    v-perms="[
+                                        'gen:genCode',
+                                        'gen:downloadCode',
+                                        'gen:syncTable',
+                                        'gen:delTable'
+                                    ]"
+                                >
                                     <el-button type="primary" link>
                                         更多
                                         <icon name="el-icon-ArrowDown" :size="14" />
@@ -91,21 +99,21 @@
 
                                     <template #dropdown>
                                         <el-dropdown-menu>
-                                            <div v-perms="['tools.generator/']">
+                                            <div v-perms="['gen:genCode', 'gen:downloadCode']">
                                                 <el-dropdown-item command="generate">
                                                     <el-button type="primary" link>
                                                         生成代码
                                                     </el-button>
                                                 </el-dropdown-item>
                                             </div>
-                                            <div v-perms="['tools.generator/']">
+                                            <div v-perms="['gen:syncTable']">
                                                 <el-dropdown-item command="sync">
                                                     <el-button type="primary" link>
                                                         同步
                                                     </el-button>
                                                 </el-dropdown-item>
                                             </div>
-                                            <div v-perms="['tools.generator/']">
+                                            <div v-perms="['gen:delTable']">
                                                 <el-dropdown-item command="delete">
                                                     <el-button type="danger" link> 删除 </el-button>
                                                 </el-dropdown-item>

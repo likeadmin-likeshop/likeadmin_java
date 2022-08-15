@@ -2,13 +2,7 @@
 <template>
     <div class="website-information">
         <el-card shadow="never" class="!border-none">
-            <el-form
-                ref="formRef"
-                :rules="rules"
-                class="ls-form"
-                :model="formData"
-                label-width="120px"
-            >
+            <el-form ref="formRef" :rules="rules" :model="formData" label-width="120px">
                 <el-form-item label="网站名称" prop="name">
                     <div class="w-80">
                         <el-input
@@ -40,7 +34,7 @@
             </el-form>
         </el-card>
 
-        <footer-btns v-perms="['setting.web.web_setting/setWebsite']">
+        <footer-btns v-perms="['setting:website:save']">
             <el-button type="primary" @click="handleSubmit">保存</el-button>
         </footer-btns>
     </div>
