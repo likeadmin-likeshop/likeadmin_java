@@ -154,6 +154,7 @@ public class GenerateServiceImpl implements IGenerateService {
         gen.put("functionName", genTable.getFunctionName());
         gen.put("treePrimary", genTable.getTreePrimary());
         gen.put("treeParent", genTable.getTreeParent());
+        gen.put("treeName", genTable.getTreeName());
         gen.put("subTableName", genTable.getSubTableName());
         gen.put("subTableFk", genTable.getSubTableFk());
         maps.put("gen", gen);
