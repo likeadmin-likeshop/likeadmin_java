@@ -52,7 +52,7 @@ public class VelocityUtil {
             if (column.getIsList() == 1) {
                 listFields.add(column.getColumnName());
             }
-            if (column.getIsDetail() == 1) {
+            if (column.getIsEdit() == 1) {
                 detailFields.add(column.getColumnName());
             }
             if (column.getIsQuery() == 1) {

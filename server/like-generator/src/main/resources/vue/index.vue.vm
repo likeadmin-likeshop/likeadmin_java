@@ -46,7 +46,7 @@
         </el-card>
         <el-card class="!border-none mt-4" shadow="never">
             <div>
-                <el-button v-perms="['dept.jobs/add']" type="primary" @click="handleAdd()">
+                <el-button v-perms="['${moduleName}/add']" type="primary" @click="handleAdd()">
                     <template #icon>
                         <icon name="el-icon-Plus" />
                     </template>
@@ -62,8 +62,20 @@
                         <dict-value :options="dictData.${column.dictType}" :value="row.${column.javaField}" />
                     </template>
                 </el-table-column>
-                #elseif ($column.htmlType=="datetime")
+                #elseif($column.htmlType=="datetime")
                 <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="180" />
+                #elseif($column.htmlType=="imageUpload")
+                <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="60">
+                    <template #default="{ row }">
+                        <image-contain width="50px" height="50px" :src="row.${column.javaField}" />
+                    </template>
+                </el-table-column>
+                #elseif($column.htmlType=="select" || $column.htmlType=="radio")
+                <el-table-column label="${column.columnComment}" prop="${column.javaField}">
+                    <template #default="{ row }">
+                        <dict-value :options="dictData.${column.dictType}" :value="row.${column.javaField}" />
+                    </template>
+                </el-table-column>
                 #else
                 <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="100" />
                 #end
@@ -123,8 +135,8 @@
         fetchFun: ${moduleName}Lists,
         params: queryParams
     })
-    #if($dictFields!="")
 
+    #if($dictFields!="")
     const { dictData } = useDictData<{
         #foreach ($column in $columns)
         #if($column.dictType!="")
@@ -132,8 +144,8 @@
         #end
         #end
     }>([${dictFields}])
-    #end
 
+    #end
     const handleAdd = async () => {
         showEdit.value = true
         await nextTick()
