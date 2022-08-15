@@ -96,6 +96,40 @@ const rules = reactive<object>({
             message: '请输入名称',
             trigger: ['blur']
         }
+    ],
+    currPassword: [
+        {
+            validator: (rule: object, value: string, callback: any) => {
+                if (formData.password) {
+                    if (!value) callback(new Error('请输入当前密码'))
+                }
+                callback()
+            },
+            trigger: 'blur'
+        }
+    ],
+    password: [
+        {
+            validator: (rule: object, value: string, callback: any) => {
+                if (formData.currPassword) {
+                    if (!value) callback(new Error('请输入新的密码'))
+                }
+                callback()
+            },
+            trigger: 'blur'
+        }
+    ],
+    passwordConfirm: [
+        {
+            validator: (rule: object, value: string, callback: any) => {
+                if (formData.password) {
+                    if (!value) callback(new Error('请再次输入密码'))
+                    if (value !== formData.password) callback(new Error('两次输入密码不一致!'))
+                }
+                callback()
+            },
+            trigger: 'blur'
+        }
     ]
 })
 
