@@ -12,29 +12,29 @@
                         />
                     </el-form-item>
                     #elseif($column.htmlType=="select")
-                        <el-form-item label="${column.columnComment}" prop="${column.javaField}">
-                            <el-select
-                                    v-model="queryParams.${column.javaField}"
-                                    class="w-56"
-                                    clearable
-                            >
-                                #if($column.dictType=="")
-                                    <el-option label="请选择字典生成" value="" />
-                                #else
-                                    <el-option label="全部" value="" />
-                                    <el-option
-                                            v-for="(item, index) in dictData.${column.dictType}"
-                                            :key="index"
-                                            :label="item.name"
-                                            :value="item.value"
-                                    />
-                                #end
-                            </el-select>
-                        </el-form-item>
+                    <el-form-item label="${column.columnComment}" prop="${column.javaField}">
+                        <el-select
+                                v-model="queryParams.${column.javaField}"
+                                class="w-56"
+                                clearable
+                        >
+                            #if($column.dictType=="")
+                                <el-option label="请选择字典生成" value="" />
+                            #else
+                                <el-option label="全部" value="" />
+                                <el-option
+                                        v-for="(item, index) in dictData.${column.dictType}"
+                                        :key="index"
+                                        :label="item.name"
+                                        :value="item.value"
+                                />
+                            #end
+                        </el-select>
+                    </el-form-item>
                     #elseif($column.htmlType=="input")
-                        <el-form-item label="${column.columnComment}" prop="${column.javaField}">
-                            <el-input class="w-56" v-model="queryParams.${column.javaField}" />
-                        </el-form-item>
+                    <el-form-item label="${column.columnComment}" prop="${column.javaField}">
+                        <el-input class="w-56" v-model="queryParams.${column.javaField}" />
+                    </el-form-item>
                    #end
                 #end
                 #end
@@ -83,8 +83,8 @@
                 ></el-table-column>
                 #else
                 <el-table-column
-                    label="菜单名称"
-                    prop="menuName"
+                    label="${column.columnComment}"
+                    prop="${column.javaField}"
                     min-width="150"
                     show-overflow-tooltip
                 />
@@ -125,9 +125,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-    import { ${moduleName}Delete, ${moduleName}Lists } from '@/api/${moduleName}'
-    import type { ElTable } from 'element-plus'
-    import { MenuEnum } from '@/enums/appEnums'
+    import { ${moduleName}Edit, ${moduleName}Delete, ${moduleName}Lists } from '@/api/${moduleName}'
     import EditPopup from './edit.vue'
     import feedback from '@/utils/feedback'
     const tableRef = shallowRef<InstanceType<typeof ElTable>>()
