@@ -46,34 +46,42 @@
         </el-card>
         <el-card class="!border-none mt-4" shadow="never">
             <div>
-                <el-button v-perms="['${moduleName}/add']" type="primary" @click="handleAdd()">
+                <el-button v-perms="['${moduleName}:add']" type="primary" @click="handleAdd()">
                     <template #icon>
                         <icon name="el-icon-Plus" />
                     </template>
                     新增
                 </el-button>
+                 <el-button
+                    v-perms="['${moduleName}:del']"
+                    :disabled="!selectData.length"
+                    type="danger"
+                    @click="handleDelete(selectData)"
+                >
+                    <template #icon>
+                        <icon name="el-icon-Delete" />
+                    </template>
+                    删除
+                </el-button>
             </div>
-            <el-table class="mt-4" size="large" v-loading="pager.loading" :data="pager.lists">
+            <el-table class="mt-4"
+                size="large"
+                v-loading="pager.loading"
+                :data="pager.lists"
+                @selection-change="handleSelectionChange"
+            >
             #foreach ($column in $columns)
             #if($column.isList)
-                #if($column.htmlType=="select")
-                <el-table-column label="${column.columnComment}" prop="isStop" min-width="100">
+                #if($column.htmlType=="select" || $column.htmlType=="radio" $column.htmlType=="checkbox")
+                <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="100">
                     <template #default="{ row }">
                         <dict-value :options="dictData.${column.dictType}" :value="row.${column.javaField}" />
                     </template>
                 </el-table-column>
-                #elseif($column.htmlType=="datetime")
-                <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="180" />
                 #elseif($column.htmlType=="imageUpload")
                 <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="60">
                     <template #default="{ row }">
                         <image-contain width="50px" height="50px" :src="row.${column.javaField}" />
-                    </template>
-                </el-table-column>
-                #elseif($column.htmlType=="select" || $column.htmlType=="radio")
-                <el-table-column label="${column.columnComment}" prop="${column.javaField}">
-                    <template #default="{ row }">
-                        <dict-value :options="dictData.${column.dictType}" :value="row.${column.javaField}" />
                     </template>
                 </el-table-column>
                 #else
@@ -95,7 +103,7 @@
                             v-perms="['${moduleName}:del']"
                             type="danger"
                             link
-                            @click="handleDelete(row.id)"
+                            @click="handleDelete(row.${primaryKey})"
                         >
                             删除
                         </el-button>
@@ -144,8 +152,13 @@
         #end
         #end
     }>([${dictFields}])
-
     #end
+
+    const selectData = ref<any[]>([])
+    const handleSelectionChange = (selection: any[]) => {
+        selectData.value = selection.map(item => item.${primaryKey})
+    }
+
     const handleAdd = async () => {
         showEdit.value = true
         await nextTick()
@@ -159,7 +172,7 @@
         editRef.value?.setFormData(data)
     }
 
-    const handleDelete = async (${primaryKey}: number) => {
+    const handleDelete = async (${primaryKey}: number || number[]) => {
         await ${moduleName}Delete({ ${primaryKey} })
         feedback.msgSuccess('删除成功')
         getLists()

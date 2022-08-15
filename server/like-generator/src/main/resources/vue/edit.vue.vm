@@ -1,17 +1,31 @@
 <template>
     <div class="edit-popup">
         <popup
-                ref="popupRef"
-                :title="popupTitle"
-                :async="true"
-                width="550px"
-                :clickModalClose="true"
-                @confirm="handleSubmit"
-                @close="handleClose"
+            ref="popupRef"
+            :title="popupTitle"
+            :async="true"
+            width="550px"
+            :clickModalClose="true"
+            @confirm="handleSubmit"
+            @close="handleClose"
         >
             <el-form ref="formRef" :model="formData" label-width="84px" :rules="formRules">
             #foreach ($column in $columns)
             #if($column.isEdit)
+            #if($table.treeParent!="" && $column.javaField==$table.treeParent)
+            <el-form-item label="${column.columnComment}" prop="${column.javaField}">
+                <el-tree-select
+                    class="flex-1"
+                    v-model="formData.${column.javaField}"
+                    :data="treeList"
+                    clearable
+                    node-key="${table.treePrimary}"
+                    :props="{label: ${table.treeName}, value: ${table.treePrimary}, children: 'children'}"
+                    :default-expand-all="true"
+                    placeholder="请选择${column.columnComment}"
+                    check-strictly
+                />
+            </el-form-item>
             #if($column.htmlType=="input")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
                     <el-input v-model="formData.name" placeholder="请输入${column.columnComment}" />
@@ -21,20 +35,6 @@
                     <div>
                         <el-input-number v-model="formData.sort" />
                     </div>
-                </el-form-item>
-            #elseif($column.htmlType=="treeSelect")
-                <el-form-item label="${column.columnComment}" prop="${column.javaField}">
-                    <el-tree-select
-                        class="flex-1"
-                        v-model="formData.${字段名}"
-                        :data="treeList"
-                        clearable
-                        node-key="${树主键}"
-                        :props="{label: ${显示的字段名如name}}"
-                        :default-expand-all="true"
-                        placeholder="请选择${字段描述}"
-                        check-strictly
-                    />
                 </el-form-item>
             #elseif($column.htmlType=="textarea")
                 <el-form-item label="备注" prop="remark">
@@ -106,7 +106,13 @@
 </template>
 <script lang="ts" setup>
     import type { FormInstance } from 'element-plus'
-    import { ${moduleName}Edit, ${moduleName}Add, ${moduleName}All } from '@/api/${moduleName}'
+    import { 
+        ${moduleName}Edit,
+        ${moduleName}Add, 
+        #if($table.treePrimary && $table.treeParent)
+        ${moduleName}Lists
+        #end
+    } from '@/api/${moduleName}'
     import Popup from '@/components/popup/index.vue'
     import feedback from '@/utils/feedback'
     import type { PropType } from 'vue'
@@ -128,8 +134,12 @@
     })
 
     const formData = reactive({
+        ${primaryKey}: '',
         #foreach ($column in $columns)
         #if($column.isEdit)
+        #if($column.htmlType=="checkbox")
+        ${column.javaField}: [],
+        #else
         ${column.javaField}: '',
         #end
         #end
@@ -155,7 +165,13 @@
 
     const handleSubmit = async () => {
         await formRef.value?.validate()
-        mode.value == 'edit' ? await ${moduleName}Edit(formData) : await${moduleName}Add(formData)
+        const data = {...formData}
+        #foreach ($column in $columns)
+        #if($column.htmlType == "checkbox")
+        data.${column.javaField} = data.${column.javaField}.join(",");
+        #end
+        #end
+        mode.value == 'edit' ? await ${moduleName}Edit(data) : await ${moduleName}Add(data)
         popupRef.value?.close()
         feedback.msgSuccess('操作成功')
         emit('success')
@@ -171,6 +187,11 @@
             if (data[key] != null && data[key] != undefined) {
                 //@ts-ignore
                 formData[key] = data[key]
+                #foreach ($column in $columns)
+                #if($column.htmlType == "checkbox")
+                formData.${column.javaField} = form.${column.javaField}.split(',')
+                #end
+                #end
             }
         }
     }
@@ -181,9 +202,9 @@
     #if($table.treePrimary && $table.treeParent)
 
     // 树表
-    const getLists = () => {
+    const getLists = async () => {
         const data: any = await ${moduleName}List()
-        const item = { id: 0, menuName: '顶级', children: [] }
+        const item = { ${table.treePrimary}: 0, ${table.treeName}: '顶级', children: [] }
         item.children = data
         treeList.value.push(item)
     }

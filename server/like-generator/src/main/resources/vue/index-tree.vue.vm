@@ -14,19 +14,19 @@
                     #elseif($column.htmlType=="select")
                     <el-form-item label="${column.columnComment}" prop="${column.javaField}">
                         <el-select
-                                v-model="queryParams.${column.javaField}"
-                                class="w-56"
-                                clearable
+                            v-model="queryParams.${column.javaField}"
+                            class="w-56"
+                            clearable
                         >
                             #if($column.dictType=="")
                                 <el-option label="请选择字典生成" value="" />
                             #else
                                 <el-option label="全部" value="" />
                                 <el-option
-                                        v-for="(item, index) in dictData.${column.dictType}"
-                                        :key="index"
-                                        :label="item.name"
-                                        :value="item.value"
+                                    v-for="(item, index) in dictData.${column.dictType}"
+                                    :key="index"
+                                    :label="item.name"
+                                    :value="item.value"
                                 />
                             #end
                         </el-select>
@@ -55,65 +55,58 @@
                 <el-button @click="handleExpand"> 展开/折叠 </el-button>
             </div>
             <el-table
-                    v-loading="loading"
-                    ref="tableRef"
-                    class="mt-4"
-                    size="large"
-                    :data="lists"
-                    row-key="id"
-                    :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+                v-loading="loading"
+                ref="tableRef"
+                class="mt-4"
+                size="large"
+                :data="lists"
+                row-key="${table.treePrimary}"
+                :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
             >
             #foreach ($column in $columns)
             #if($column.isList)
                 #if($column.htmlType=="imageUpload")
-                <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="80">
-                    <template #default="{ row }">
-                        <div class="flex">
-                            <icon :name="row.${column.javaField}" :size="20" />
-                        </div>
-                    </template>
-                </el-table-column>
-                #elseif($column.htmlType=="number")
-                <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="100" />
-                #elseif($column.htmlType=="datetime")
-                <el-table-column
-                    label="${column.columnComment}"
-                    prop="${column.javaField}"
-                    min-width="180"
-                ></el-table-column>
-                #else
-                <el-table-column
-                    label="${column.columnComment}"
-                    prop="${column.javaField}"
-                    min-width="150"
-                    show-overflow-tooltip
-                />
+                    #if($column.htmlType=="select" || $column.htmlType=="radio" $column.htmlType=="checkbox")
+                    <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="100">
+                        <template #default="{ row }">
+                            <dict-value :options="dictData.${column.dictType}" :value="row.${column.javaField}" />
+                        </template>
+                    </el-table-column>
+                    #elseif($column.htmlType=="imageUpload")
+                    <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="60">
+                        <template #default="{ row }">
+                            <image-contain width="50px" height="50px" :src="row.${column.javaField}" />
+                        </template>
+                    </el-table-column>
+                    #else
+                    <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="100" />
+                    #end
                 #end
             #end
             #end
                 <el-table-column label="操作" width="160" fixed="right">
                     <template #default="{ row }">
                         <el-button
-                                v-perms="['${moduleName}:add']"
-                                type="primary"
-                                link
-                                @click="handleAdd(row.id)"
+                            v-perms="['${moduleName}:add']"
+                            type="primary"
+                            link
+                            @click="handleAdd(row.${table.treePrimary})"
                         >
                             新增
                         </el-button>
                         <el-button
-                                v-perms="['${moduleName}:edit']"
-                                type="primary"
-                                link
-                                @click="handleEdit(row)"
+                            v-perms="['${moduleName}:edit']"
+                            type="primary"
+                            link
+                            @click="handleEdit(row)"
                         >
                             编辑
                         </el-button>
                         <el-button
-                                v-perms="['${moduleName}:del']"
-                                type="danger"
-                                link
-                                @click="handleDelete(row.id)"
+                            v-perms="['${moduleName}:del']"
+                            type="danger"
+                            link
+                            @click="handleDelete(row.${primaryKey})"
                         >
                             删除
                         </el-button>
@@ -154,12 +147,12 @@
         }
     }
 
-    const handleAdd = async (id?: number) => {
+    const handleAdd = async (${table.treePrimary}?: number) => {
         showEdit.value = true
         await nextTick()
-        if (id) {
+        if (${table.treePrimary}) {
             editRef.value?.setFormData({
-                pid: id
+                ${table.treeParent}: ${table.treePrimary}
             })
         }
         editRef.value?.open('add')

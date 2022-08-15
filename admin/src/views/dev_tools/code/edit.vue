@@ -250,6 +250,16 @@
                                     />
                                 </el-select>
                             </el-form-item>
+                            <el-form-item label="树名称字段" prop="gen.treeName">
+                                <el-select class="w-80" v-model="formData.gen.treeName" clearable>
+                                    <el-option
+                                        v-for="item in formData.column"
+                                        :key="item.id"
+                                        :value="item.columnName"
+                                        :label="`${item.columnName}：${item.columnComment}`"
+                                    />
+                                </el-select>
+                            </el-form-item>
                         </template>
                     </el-tab-pane>
                 </el-tabs>
@@ -301,7 +311,8 @@ const formData = reactive({
         subTableFk: '',
         subTableName: '',
         treeParent: '',
-        treePrimary: ''
+        treePrimary: '',
+        treeName: ''
     }
 })
 
@@ -312,7 +323,10 @@ const rules = reactive({
     ['base.entityName']: [{ required: true, message: '请输入实体类名称', trigger: 'blur' }],
     ['base.authorName']: [{ required: true, message: '请输入作者', trigger: 'blur' }],
     ['gen.moduleName']: [{ required: true, message: '请输入模块名', trigger: 'blur' }],
-    ['gen.functionName']: [{ required: true, message: '请输入功能名称', trigger: 'blur' }]
+    ['gen.functionName']: [{ required: true, message: '请输入功能名称', trigger: 'blur' }],
+    ['gen.treePrimary']: [{ required: true, message: '请选择树主键字段', trigger: 'blur' }],
+    ['gen.treeParent']: [{ required: true, message: '请选择树父级字段', trigger: 'blur' }],
+    ['gen.treeName']: [{ required: true, message: '请选择树名称字段', trigger: 'blur' }]
 })
 
 const getDetails = async () => {
