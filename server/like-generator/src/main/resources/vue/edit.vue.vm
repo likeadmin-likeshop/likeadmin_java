@@ -26,8 +26,7 @@
                         check-strictly
                     />
                 </el-form-item>
-            #end
-            #if($column.htmlType=="input")
+            #elseif($column.htmlType=="input")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
                     <el-input v-model="formData.name" placeholder="请输入${column.columnComment}" />
                 </el-form-item>
