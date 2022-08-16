@@ -56,7 +56,7 @@ public class GenParam implements Serializable {
 
     @NotNull(message = "genTpl参数缺失")
     @NotEmpty(message = "请选择生成模板")
-    @StringContains(values = {"curd", "tree"}, message = "选择的生成模板不符合")
+    @StringContains(values = {"crud", "tree"}, message = "选择的生成模板不符合")
     private String genTpl;
 
     @NotNull(message = "moduleName参数缺失")
