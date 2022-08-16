@@ -64,7 +64,8 @@
                     删除
                 </el-button>
             </div>
-            <el-table class="mt-4"
+            <el-table
+                class="mt-4"
                 size="large"
                 v-loading="pager.loading"
                 :data="pager.lists"
@@ -172,7 +173,7 @@ const { dictData } = useDictData<{
 
 const selectData = ref<any[]>([])
 const handleSelectionChange = (selection: any[]) => {
-    selectData.value = selection.map(item => item.${primaryKey})
+    selectData.value = selection.map((item) => item.${primaryKey})
 }
 
 const handleAdd = async () => {
