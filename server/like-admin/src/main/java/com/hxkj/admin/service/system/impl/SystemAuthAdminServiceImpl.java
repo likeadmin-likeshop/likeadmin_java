@@ -300,7 +300,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         model.setIsDisable(systemAuthAdminParam.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
 
-        if (systemAuthAdminParam.getPassword() != null) {
+        if (systemAuthAdminParam.getPassword() != null && !systemAuthAdminParam.getPassword().equals("")) {
             String salt   = ToolsUtil.randomString(5);
             String pwd    = ToolsUtil.makeMd5( systemAuthAdminParam.getPassword().trim() + salt);
             model.setPassword(pwd);
