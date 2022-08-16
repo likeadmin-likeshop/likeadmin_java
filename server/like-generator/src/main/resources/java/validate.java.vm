@@ -24,8 +24,11 @@ public class ${EntityName}Param implements Serializable {
     public interface update{}
     public interface delete{}
 
+    @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
+    private Integer id;
+
 #foreach ($column in $columns)
-  #if($column.isInsert || $column.isEdit)
+  #if(($column.isInsert || $column.isEdit) && $column.javaField!="id")
     #if($column.isPk)
     @IDMust(message = "${column.javaField}参数必传且需大于0", groups = {update.class, delete.class})
     #end
