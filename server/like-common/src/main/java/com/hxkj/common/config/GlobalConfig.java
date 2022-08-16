@@ -27,7 +27,7 @@ public class GlobalConfig {
     public static String publicPrefix = "uploads";
 
     // 上传映射目录
-    public static String uploadDirectory = "/www/wwwroot/uploads/";
+    public static String uploadDirectory = "/www/like-admin/uploads/";
 
     // 上传图片限制
     public static Integer uploadImageSize = 1024 * 1024 * 10;
