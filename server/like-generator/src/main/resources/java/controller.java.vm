@@ -1,13 +1,20 @@
 package ${packageName}.admin.controller.${moduleName};
 
+#if(!$table.genTpl.equals("crud"))
+import com.alibaba.fastjson.JSONArray;
+#end
 import ${packageName}.admin.config.aop.Log;
 import ${packageName}.admin.service.${moduleName}.I${EntityName}Service;
-import ${packageName}.admin.validate.common.PageParam;
 import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
+#if($table.genTpl.equals("crud"))
+import ${packageName}.admin.validate.common.PageParam;
 import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
+#end
 import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
 import ${packageName}.common.core.AjaxResult;
+#if($table.genTpl.equals("crud"))
 import ${packageName}.common.core.PageResult;
+#end
 import ${packageName}.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +38,26 @@ public class ${EntityName}Controller {
      #if(!$authorName.equals(""))
      * @author ${authorName}
      #end
+     #if($table.genTpl.equals("crud"))
      * @param pageParam 分页参数
+     #end
      * @param params 搜索参数
      * @return Object
      */
+    #if($table.genTpl.equals("crud"))
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
         PageResult<${EntityName}ListVo> list = i${EntityName}Service.list(pageParam, params);
         return AjaxResult.success(list);
     }
-
+    #else
+    @GetMapping("/list")
+    public Object list(@RequestParam Map<String, String> params) {
+        JSONArray list = i${EntityName}Service.list(params);
+        return AjaxResult.success(list);
+    }
+    #end
     /**
      * ${functionName}详情
      *

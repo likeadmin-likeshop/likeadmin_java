@@ -1,5 +1,8 @@
 package ${packageName}.admin.service.${moduleName}.impl;
 
+#if(!$table.genTpl.equals("crud"))
+import com.alibaba.fastjson.JSONArray;
+#end
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,9 +15,10 @@ import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
 import ${packageName}.common.core.PageResult;
 import ${packageName}.common.entity.${moduleName}.${EntityName};
 import ${packageName}.common.mapper.${moduleName}.${EntityName}Mapper;
+import ${packageName}.common.utils.ArrayUtil;
 import ${packageName}.common.utils.TimeUtil;
 import ${packageName}.common.utils.UrlUtil;
-import com.hxkj.common.config.GlobalConfig;
+import ${packageName}.common.config.GlobalConfig;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -61,7 +65,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      #if($isAuthor)
      * @author ${authorName}
      #end
+     #if($table.genTpl.equals("crud"))
      * ${pageParam}
+     #end
      #if($isSearchParam)
      * ${searchparams}
      #end

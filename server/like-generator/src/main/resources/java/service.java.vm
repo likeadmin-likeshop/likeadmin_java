@@ -1,5 +1,8 @@
 package ${packageName}.admin.service.${moduleName};
 
+#if(!$table.genTpl.equals("crud"))
+import com.alibaba.fastjson.JSONArray;
+#end
 import ${packageName}.admin.validate.common.PageParam;
 import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
 import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
