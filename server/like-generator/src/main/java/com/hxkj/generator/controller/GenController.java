@@ -102,7 +102,7 @@ public class GenController {
      * @param genParam 参数
      * @return Object
      */
-    @PostMapping("/deleteTable")
+    @PostMapping("/delTable")
     public Object deleteTable(@Validated(value = GenParam.delete.class) @RequestBody GenParam genParam) {
         iGenerateService.deleteTable(genParam.getIds());
         return AjaxResult.success();
