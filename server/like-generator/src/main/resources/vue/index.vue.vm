@@ -152,12 +152,13 @@
         params: queryParams
     })
     #if($dictFields.size()>=1)
+    #set($dictSize = $dictFields.size() - 1)
 
     const { dictData } = useDictData<{
         #foreach ($dict in $dictFields)
         ${dict}: any[]
         #end
-    }>([#foreach ($dict in $dictFields)'${dict}'#if($dictFields.size()>1),#end#end])
+    }>([#foreach ($dict in $dictFields)'${dict}'#if($dictFields[$dictSize] != ${dict}),#end#end])
     #end
 
     const selectData = ref<any[]>([])
