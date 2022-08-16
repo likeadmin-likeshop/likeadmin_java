@@ -1,6 +1,6 @@
 <template>
     <div class="logo">
-        <ImageContain :width="szie" :height="szie" :src="config.webLogo" />
+        <image-contain :width="szie" :height="szie" :src="config.webLogo" />
         <transition name="title-width">
             <div
                 v-show="showTitle"
