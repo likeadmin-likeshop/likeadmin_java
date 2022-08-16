@@ -62,7 +62,7 @@
                 </el-form-item>
             #elseif($column.htmlType=="select")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
-                    <el-select v-model="formData.${column.javaField}" placeholder="请选择${column.columnComment}">
+                    <el-select class="flex-1" v-model="formData.${column.javaField}" placeholder="请选择${column.columnComment}">
                         #if($column.dictType!="")
                         <el-option
                             v-for="(item, index) in dictData.${column.dictType}"
@@ -164,6 +164,9 @@ const formData = reactive({
     #if($column.htmlType=="checkbox")
     ${column.javaField}: [],
     #else
+    #if($column.htmlType=="number")
+    ${column.javaField}: 0,
+    #else
     ${column.javaField}: '',
     #end
     #end
@@ -190,7 +193,7 @@ const formRules = {
 
 const handleSubmit = async () => {
     await formRef.value?.validate()
-    const data = {...formData}
+    const data: any = { ...formData }
     #foreach ($column in $columns)
     #if($column.htmlType == "checkbox")
     data.${column.javaField} = data.${column.javaField}.join(",");
@@ -207,7 +210,7 @@ const open = (type = 'add') => {
     popupRef.value?.open()
 }
 
-const setFormData = (row: Record<string, any>) => {
+const setFormData = async (row: Record<string, any>) => {
     const data = await ${moduleName}Detail({
         ${primaryKey}: row.${primaryKey}
     })

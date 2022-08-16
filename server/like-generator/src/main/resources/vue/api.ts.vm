@@ -7,7 +7,7 @@ export function ${moduleName}Lists(params?: Record<string, any>) {
 
 // ${functionName}详情
 export function ${moduleName}Detail(params: Record<string, any>) {
-    return request.post({ url: '/${moduleName}/detail', params })
+    return request.get({ url: '/${moduleName}/detail', params })
 }
 
 // ${functionName}新增
