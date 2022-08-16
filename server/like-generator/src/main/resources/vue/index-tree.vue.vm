@@ -2,42 +2,42 @@
     <div class="index-tree">
         <el-card class="!border-none mb-4" shadow="never">
             <el-form ref="formRef" class="mb-[-16px]" :model="queryParams" :inline="true">
-                #foreach ($column in $columns)
-                #if($column.isQuery==1)
-                    #if($column.htmlType=="datetime")
-                    <el-form-item label="${column.columnComment}" prop="${column.javaField}">
-                        <data-picker
-                            v-model:startTime="queryParams.startTime"
-                            v-model:endTime="queryParams.endTime"
-                        />
-                    </el-form-item>
-                    #elseif($column.htmlType=="select")
-                    <el-form-item label="${column.columnComment}" prop="${column.javaField}">
-                        <el-select
-                            v-model="queryParams.${column.javaField}"
-                            class="w-56"
-                            clearable
-                        >
-                            #if($column.dictType=="")
-                                <el-option label="请选择字典生成" value="" />
-                            #else
-                                <el-option label="全部" value="" />
-                                <el-option
-                                    v-for="(item, index) in dictData.${column.dictType}"
-                                    :key="index"
-                                    :label="item.name"
-                                    :value="item.value"
-                                />
-                            #end
-                        </el-select>
-                    </el-form-item>
-                    #elseif($column.htmlType=="input")
-                    <el-form-item label="${column.columnComment}" prop="${column.javaField}">
-                        <el-input class="w-56" v-model="queryParams.${column.javaField}" />
-                    </el-form-item>
-                   #end
+            #foreach ($column in $columns)
+            #if($column.isQuery==1)
+                #if($column.htmlType=="datetime")
+                <el-form-item label="${column.columnComment}" prop="${column.javaField}">
+                    <data-picker
+                        v-model:startTime="queryParams.startTime"
+                        v-model:endTime="queryParams.endTime"
+                    />
+                </el-form-item>
+                #elseif($column.htmlType=="select")
+                <el-form-item label="${column.columnComment}" prop="${column.javaField}">
+                    <el-select
+                        v-model="queryParams.${column.javaField}"
+                        class="w-56"
+                        clearable
+                    >
+                        #if($column.dictType=="")
+                            <el-option label="请选择字典生成" value="" />
+                        #else
+                            <el-option label="全部" value="" />
+                            <el-option
+                                v-for="(item, index) in dictData.${column.dictType}"
+                                :key="index"
+                                :label="item.name"
+                                :value="item.value"
+                            />
+                        #end
+                    </el-select>
+                </el-form-item>
+                #elseif($column.htmlType=="input")
+                <el-form-item label="${column.columnComment}" prop="${column.javaField}">
+                    <el-input class="w-56" v-model="queryParams.${column.javaField}" />
+                </el-form-item>
                 #end
-                #end
+            #end
+            #end
                 <el-form-item>
                     <el-button type="primary" @click="getLists">查询</el-button>
                     <el-button @click="getLists">重置</el-button>
@@ -63,27 +63,27 @@
                 row-key="${table.treePrimary}"
                 :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
             >
-            #foreach ($column in $columns)
-            #if($column.isList)
-                #if($column.htmlType=="imageUpload")
-                    #if($column.htmlType=="select" || $column.htmlType=="radio" || $column.htmlType=="checkbox")
-                    <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="100">
-                        <template #default="{ row }">
-                            <dict-value :options="dictData.${column.dictType}" :value="row.${column.javaField}" />
-                        </template>
-                    </el-table-column>
-                    #elseif($column.htmlType=="imageUpload")
-                    <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="60">
-                        <template #default="{ row }">
-                            <image-contain width="50px" height="50px" :src="row.${column.javaField}" />
-                        </template>
-                    </el-table-column>
-                    #else
-                    <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="100" />
-                    #end
+        #foreach ($column in $columns)
+        #if($column.isList)
+            #if($column.htmlType=="imageUpload")
+                #if($column.htmlType=="select" || $column.htmlType=="radio" || $column.htmlType=="checkbox")
+                <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="100">
+                    <template #default="{ row }">
+                        <dict-value :options="dictData.${column.dictType}" :value="row.${column.javaField}" />
+                    </template>
+                </el-table-column>
+                #elseif($column.htmlType=="imageUpload")
+                <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="60">
+                    <template #default="{ row }">
+                        <image-contain width="50px" height="50px" :src="row.${column.javaField}" />
+                    </template>
+                </el-table-column>
+                #else
+                <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="100" />
                 #end
             #end
-            #end
+        #end
+        #end
                 <el-table-column label="操作" width="160" fixed="right">
                     <template #default="{ row }">
                         <el-button
@@ -114,20 +114,30 @@
                 </el-table-column>
             </el-table>
         </el-card>
-        <edit-popup v-if="showEdit" ref="editRef" @success="getLists" @close="showEdit = false" />
+        <edit-popup
+            v-if="showEdit"
+            ref="editRef"
+            #if($dictFields!="")
+            :dict-data="dictData"
+            #end
+            @success="getLists"
+            @close="showEdit = false"
+        />
     </div>
 </template>
 <script lang="ts" setup>
     import { ${moduleName}Edit, ${moduleName}Delete, ${moduleName}Lists } from '@/api/${moduleName}'
     import EditPopup from './edit.vue'
     import feedback from '@/utils/feedback'
+    import { useDictData } from '@/hooks/useDictOptions'
+
     const tableRef = shallowRef<InstanceType<typeof ElTable>>()
     const editRef = shallowRef<InstanceType<typeof EditPopup>>()
     let isExpand = false
     const showEdit = ref(false)
     const loading = ref(false)
     const lists = ref<any[]>([])
-
+    
     const queryParams = reactive({
         #foreach ($column in $columns)
         #if($column.isQuery)
@@ -146,6 +156,16 @@
             loading.value = false
         }
     }
+
+    #if($dictFields!="")
+    const { dictData } = useDictData<{
+        #foreach ($column in $columns)
+        #if($column.dictType!="")
+        ${column.dictType}: any[]
+        #end
+        #end
+    }>([${dictFields}])
+    #end
 
     const handleAdd = async (${table.treePrimary}?: number) => {
         showEdit.value = true

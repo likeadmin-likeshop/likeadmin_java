@@ -31,14 +31,8 @@
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
                     <el-input v-model="formData.name" placeholder="请输入${column.columnComment}" />
                 </el-form-item>
-            #elseif($column.htmlType=="number")
-                <el-form-item label="${column.columnComment}" prop="${column.javaField}">
-                    <div>
-                        <el-input-number v-model="formData.sort" />
-                    </div>
-                </el-form-item>
             #elseif($column.htmlType=="textarea")
-                <el-form-item label="备注" prop="remark">
+                <el-form-item label="${column.columnComment}" prop="${column.javaField}">
                     <el-input
                         v-model="formData.${column.javaField}"
                         placeholder="请输入${column.columnComment}"
@@ -51,10 +45,10 @@
                     <el-checkbox-group v-model="formData.${column.javaField}" placeholder="请选择${column.columnComment}">
                         #if($column.dictType!="")
                         <el-checkbox
-                                v-for="(item, index) in dictData.${column.dictType}"
-                                :key="index"
-                                :label="item.value"
-                                :disabled="!item.status"
+                            v-for="(item, index) in dictData.${column.dictType}"
+                            :key="index"
+                            :label="item.value"
+                            :disabled="!item.status"
                         >
                             {{ item.name }}
                         </el-checkbox>
@@ -135,9 +129,10 @@
     })
 
     const formData = reactive({
-        ${primaryKey}: '',
         #foreach ($column in $columns)
-        #if($column.isEdit)
+        #if($column.javaField==$primaryKey)
+        ${primaryKey}: '',
+        #elseif($column.isEdit)
         #if($column.htmlType=="checkbox")
         ${column.javaField}: [],
         #else

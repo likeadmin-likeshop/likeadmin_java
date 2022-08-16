@@ -117,7 +117,9 @@
         <edit-popup
             v-if="showEdit"
             ref="editRef"
+            #if($dictFields!="")
             :dict-data="dictData"
+            #end
             @success="getLists"
             @close="showEdit = false"
         />
