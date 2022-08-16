@@ -28,7 +28,7 @@ import java.util.*;
 @Service
 public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     ## 设置模板方式的变量
-    #if($table.genTpl.equals("curd"))
+    #if($table.genTpl.equals("crud"))
         #set($genTpl = "PageResult<${EntityName}ListVo>")
         #if($isSearch)
             #set($isSearchParam = true)
@@ -69,7 +69,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      */
     @Override
     public $genTpl list($genParam) {
-    #if($table.genTpl.equals("curd"))
+    #if($table.genTpl.equals("crud"))
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
     #end
@@ -131,9 +131,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
 
     #if(!$table.subTableName.equals("") && !$table.subTableFk.equals(""))
         #set($isJoin = true)
-        #set($joinCurdList = "${EntityName}ListVo")
-        #set($joinCurdName = "iPage.getRecords()")
-        #if($table.genTpl.equals("curd"))
+        #set($joinCrudList = "${EntityName}ListVo")
+        #set($joinCrudName = "iPage.getRecords()")
+        #if($table.genTpl.equals("crud"))
         IPage<${EntityName}ListVo> iPage = ${entityName}Mapper.selectJoinPage(
                 new Page<>(page, limit),
                 ${EntityName}ListVo.class,
@@ -145,12 +145,12 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #end
     #else
         #set($isJoin = false)
-        #set($joinCurdList = "${EntityName}")
-        #if($table.genTpl.equals("curd"))
-        #set($joinCurdName = "iPage.getRecords()")
+        #set($joinCrudList = "${EntityName}")
+        #if($table.genTpl.equals("crud"))
+        #set($joinCrudName = "iPage.getRecords()")
         IPage<${EntityName}> iPage = ${entityName}Mapper.selectPage(new Page<>(page, limit), $queryWrapper);
         #else
-        #set($joinCurdName = "array")
+        #set($joinCrudName = "array")
         List<${EntityName}> array = ${entityName}Mapper.selectList($queryWrapper);
         #end
     #end
@@ -165,7 +165,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #if(!$isJoin)
         List<${EntityName}ListVo> list = new LinkedList<>();
         #end
-        for($joinCurdList item : $joinCurdName) {
+        for($joinCrudList item : $joinCrudName) {
         #if(!$isJoin)
             ${EntityName}ListVo vo = new ${EntityName}ListVo();
             BeanUtils.copyProperties(item, vo);
@@ -229,7 +229,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         }
     #end
 
-    #if($table.genTpl.equals("curd"))
+    #if($table.genTpl.equals("crud"))
         #if($isJoin)
         return PageResult.iPageHandle(iPage);
         #else

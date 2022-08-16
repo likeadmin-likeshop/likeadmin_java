@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface I${EntityName}Service {
 
- #if($table.genTpl=="curd")
+ #if($table.genTpl=="crud")
     /**
      * ${functionName}列表
      *
