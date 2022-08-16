@@ -151,15 +151,13 @@
         fetchFun: ${moduleName}Lists,
         params: queryParams
     })
+    #if($dictFields.size()>=1)
 
-    #if($dictFields!="")
     const { dictData } = useDictData<{
-        #foreach ($column in $columns)
-        #if($column.dictType!="")
-        ${column.dictType}: any[]
+        #foreach ($dict in $dictFields)
+        ${dict}: any[]
         #end
-        #end
-    }>([${dictFields}])
+    }>([#foreach ($dict in $dictFields)'${dict}'#if($dictFields.size()>1),#end#end])
     #end
 
     const selectData = ref<any[]>([])

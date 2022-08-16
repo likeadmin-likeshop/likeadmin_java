@@ -61,7 +61,7 @@ public class VelocityUtil {
             if (column.getIsPk() == 1) {
                 primaryKey = column.getJavaField();
             }
-            if (StringUtil.isNotEmpty(column.getDictType())) {
+            if (StringUtil.isNotEmpty(column.getDictType()) && !dictFields.contains(column.getDictType())) {
                 dictFields.add(column.getDictType());
             }
         }
@@ -83,7 +83,7 @@ public class VelocityUtil {
         velocityContext.put("allFields", allFields);
         velocityContext.put("listFields", listFields);
         velocityContext.put("detailFields", detailFields);
-        velocityContext.put("dictFields", ArrayUtil.listToStringByStr(dictFields,","));
+        velocityContext.put("dictFields", dictFields);
         velocityContext.put("isSearch", isSearch);
         return velocityContext;
     }

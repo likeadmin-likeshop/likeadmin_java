@@ -372,7 +372,7 @@ public class GenerateServiceImpl implements IGenerateService {
             Template tpl = Velocity.getTemplate(template, GenConstants.UTF8);
             tpl.merge(context, sw);
             map.put(template.replace(".vm", ""), sw.toString());
-            System.out.println(sw);
+            // System.out.println(sw);
         }
 
         return map;
