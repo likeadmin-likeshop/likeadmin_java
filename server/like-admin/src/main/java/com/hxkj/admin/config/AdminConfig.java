@@ -27,6 +27,7 @@ public class AdminConfig {
             "system:menu:route",     // 菜单路由
             "system:admin:upInfo",   // 管理员更新
             "system:admin:self",     // 管理员信息
+            "system:role:all",       // 管理员信息
             "setting:dict:type:all", // 所有字典类型
             "setting:dict:data:all", // 所有字典数据
     };
