@@ -357,11 +357,18 @@ const { optionsData } = useDictOptions<{
 })
 
 const handleSave = async () => {
-    await formRef.value?.validate()
-    const { base, column, gen } = formData
-    await generateEdit({ ...base, ...gen, column })
-    feedback.msgSuccess('操作成功')
-    router.back()
+    try {
+        await formRef.value?.validate()
+        const { base, column, gen } = formData
+        await generateEdit({ ...base, ...gen, column })
+        feedback.msgSuccess('操作成功')
+        router.back()
+    } catch (error: any) {
+        for (const err in error) {
+            const isInRules = Object.keys(rules).includes(err)
+            isInRules && feedback.msgError(error[err][0]?.message)
+        }
+    }
 }
 
 getDetails()

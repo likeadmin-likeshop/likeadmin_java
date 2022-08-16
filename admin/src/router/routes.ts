@@ -35,19 +35,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/views/account/login.vue')
     },
     {
-        path: '/permission',
-        component: LAYOUT,
-        children: [
-            {
-                path: 'menu',
-                component: () => import('@/views/permission/menu/index.vue'),
-                meta: {
-                    title: '个人设置'
-                }
-            }
-        ]
-    },
-    {
         path: '/user',
         component: LAYOUT,
         children: [

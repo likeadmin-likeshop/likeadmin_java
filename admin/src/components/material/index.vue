@@ -66,6 +66,19 @@
             <div class="operate-btn flex">
                 <div class="flex-1 flex">
                     <upload
+                        v-if="type == 'image'"
+                        v-perms="['common:upload:image']"
+                        class="mr-3"
+                        :data="{ cid: cateId }"
+                        :type="type"
+                        :show-progress="true"
+                        @change="refresh"
+                    >
+                        <el-button type="primary">本地上传</el-button>
+                    </upload>
+                    <upload
+                        v-if="type == 'video'"
+                        v-perms="['common:upload:video']"
                         class="mr-3"
                         :data="{ cid: cateId }"
                         :type="type"
@@ -281,6 +294,7 @@
                             删除
                         </el-button>
                         <popup
+                            v-perms="['common:album:albumMove']"
                             class="ml-3 inline"
                             @confirm="batchFileMove"
                             :disabled="!select.length"

@@ -231,6 +231,8 @@ const setFormData = async (row: any) => {
             //@ts-ignore
             formData[key] = data[key]
         }
+        Number(formData.deptId) == 0 && (formData.deptId = '')
+        Number(formData.postId) == 0 && (formData.postId = '')
     }
     formRules.password = []
     formRules.passwordConfirm = []
