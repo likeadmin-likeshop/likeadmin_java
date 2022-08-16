@@ -136,7 +136,7 @@
     const queryParams = reactive({
     #foreach ($column in $columns)
     #if($column.isQuery)
-        #if($column.isHtmlType=="datetime")
+        #if($column.htmlType=="datetime")
         ${column.javaField}Start: '',
         ${column.javaField}End: '',
         #else
