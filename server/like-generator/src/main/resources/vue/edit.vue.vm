@@ -163,8 +163,7 @@ const formData = reactive({
     #elseif($column.isEdit)
     #if($column.htmlType=="checkbox")
     ${column.javaField}: [],
-    #else
-    #if($column.htmlType=="number")
+    #elseif($column.htmlType=="number")
     ${column.javaField}: 0,
     #else
     ${column.javaField}: '',
