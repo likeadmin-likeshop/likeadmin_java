@@ -159,6 +159,7 @@ const { dictData } = useDictData<{
     ${dict}: any[]
     #end
 }>([#foreach ($dict in $dictFields)'${dict}'#if($dictFields[$dictSize] != ${dict}),#end#end])
+#end
 
 const selectData = ref<any[]>([])
 const handleSelectionChange = (selection: any[]) => {
