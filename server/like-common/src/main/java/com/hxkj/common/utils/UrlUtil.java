@@ -32,7 +32,7 @@ public class UrlUtil {
             url = "/" + url;
         }
 
-        if (url.startsWith(YmlUtil.get("/static/"))) {
+        if (url.startsWith("/static/")) {
             return RequestUtil.uri() + url;
         }
 
@@ -66,14 +66,17 @@ public class UrlUtil {
         String engine = ConfigUtil.get("storage", "default", "local");
         engine = engine.equals("") ? "local" : engine;
         if (engine.equals("local")) {
-            return url.replace(RequestUtil.uri() + "/" + uploadPrefix + "/", "");
+            return url.replace(RequestUtil.uri(), "")
+                      .replace("/" + uploadPrefix + "/", "");
         }
 
         Map<String, String> config = ConfigUtil.getMap("storage", engine);
         if (config != null) {
-            return url.replace(config.getOrDefault("domain", "") + "/" + uploadPrefix + "/", "");
+            return url.replace(config.getOrDefault("domain", ""), "")
+                    .replace( "/" + uploadPrefix + "/", "");
         }
-        return url.replace("/" + uploadPrefix + "/", "");
+
+        return url;
     }
 
     /**

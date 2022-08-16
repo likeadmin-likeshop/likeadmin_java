@@ -75,6 +75,8 @@ public class IndexServiceImpl implements IIndexService {
         Map<String, String> website   = ConfigUtil.get("website");
         String copyright = ConfigUtil.get("website", "copyright", "");
 
+        System.out.println(UrlUtil.toRelativeUrl("http://127.0.0.1:8082/uploads/image/20220426/8984bec1-57d6-4635-a110-fb4b26335879.png"));
+
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("webName", website.getOrDefault("name", ""));
         map.put("webLogo", UrlUtil.toAbsoluteUrl(website.getOrDefault("logo", "")));
