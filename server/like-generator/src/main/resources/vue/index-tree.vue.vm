@@ -6,9 +6,9 @@
             #if($column.isQuery==1)
                 #if($column.htmlType=="datetime")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
-                    <data-picker
-                        v-model:startTime="queryParams.${column.javaField}Start"
-                        v-model:endTime="queryParams.${column.javaField}End"
+                    <daterange-picker
+                        v-model:startTime="queryParams.createTimeStart"
+                        v-model:endTime="queryParams.createTimeEnd"
                     />
                 </el-form-item>
                 #elseif($column.htmlType=="select" || $column.htmlType == "radio")
@@ -124,88 +124,88 @@
     </div>
 </template>
 <script lang="ts" setup>
-    import { ${moduleName}Edit, ${moduleName}Delete, ${moduleName}Lists } from '@/api/${moduleName}'
-    import EditPopup from './edit.vue'
-    import feedback from '@/utils/feedback'
-    import { useDictData } from '@/hooks/useDictOptions'
+import { ${moduleName}Edit, ${moduleName}Delete, ${moduleName}Lists } from '@/api/${moduleName}'
+import EditPopup from './edit.vue'
+import feedback from '@/utils/feedback'
+import { useDictData } from '@/hooks/useDictOptions'
 
-    const tableRef = shallowRef<InstanceType<typeof ElTable>>()
-    const editRef = shallowRef<InstanceType<typeof EditPopup>>()
-    let isExpand = false
-    const showEdit = ref(false)
-    const loading = ref(false)
-    const lists = ref<any[]>([])
-    
-    const queryParams = reactive({
-    #foreach ($column in $columns)
-    #if($column.isQuery)
-        #if($column.htmlType=="datetime")
-        ${column.javaField}Start: '',
-        ${column.javaField}End: '',
-        #else
-        ${column.javaField}: '',
-        #end
+const tableRef = shallowRef<InstanceType<typeof ElTable>>()
+const editRef = shallowRef<InstanceType<typeof EditPopup>>()
+let isExpand = false
+const showEdit = ref(false)
+const loading = ref(false)
+const lists = ref<any[]>([])
+
+const queryParams = reactive({
+#foreach ($column in $columns)
+#if($column.isQuery)
+    #if($column.htmlType=="datetime")
+    ${column.javaField}Start: '',
+    ${column.javaField}End: '',
+    #else
+    ${column.javaField}: '',
     #end
-    #end
-    })
+#end
+#end
+})
 
-    const getLists = async () => {
-        loading.value = true
-        try {
-            const data = await ${moduleName}Lists(queryParams)
-            lists.value = data
-            loading.value = false
-        } catch (error) {
-            loading.value = false
-        }
+const getLists = async () => {
+    loading.value = true
+    try {
+        const data = await ${moduleName}Lists(queryParams)
+        lists.value = data
+        loading.value = false
+    } catch (error) {
+        loading.value = false
     }
-    #if($dictFields.size()>=1)
-    #set($dictSize = $dictFields.size() - 1)
+}
 
-    const { dictData } = useDictData<{
-    #foreach ($dict in $dictFields)
-        ${dict}: any[]
-    #end
-    }>([#foreach ($dict in $dictFields)'${dict}'#if($dictFields[$dictSize] != ${dict}),#end#end])
-    #end
+#if($dictFields.size()>=1)
+#set($dictSize = $dictFields.size() - 1)
+const { dictData } = useDictData<{
+#foreach ($dict in $dictFields)
+    ${dict}: any[]
+#end
+}>([#foreach ($dict in $dictFields)'${dict}'#if($dictFields[$dictSize] != ${dict}),#end#end])
 
-    const handleAdd = async (${table.treePrimary}?: number) => {
-        showEdit.value = true
-        await nextTick()
-        if (${table.treePrimary}) {
-            editRef.value?.setFormData({
-                ${table.treeParent}: ${table.treePrimary}
-            })
-        }
-        editRef.value?.open('add')
+
+const handleAdd = async (${table.treePrimary}?: number) => {
+    showEdit.value = true
+    await nextTick()
+    if (${table.treePrimary}) {
+        editRef.value?.setFormData({
+            ${table.treeParent}: ${table.treePrimary}
+        })
     }
+    editRef.value?.open('add')
+}
 
-    const handleEdit = async (data: any) => {
-        showEdit.value = true
-        await nextTick()
-        editRef.value?.open('edit')
-        editRef.value?.setFormData(data)
-    }
+const handleEdit = async (data: any) => {
+    showEdit.value = true
+    await nextTick()
+    editRef.value?.open('edit')
+    editRef.value?.setFormData(data)
+}
 
-    const handleDelete = async (${primaryKey}: number) => {
-        await feedback.confirm('确定要删除？')
-        await menuDelete({ ${primaryKey} })
-        getLists()
-    }
-
-    const handleExpand = () => {
-        isExpand = !isExpand
-        toggleExpand(lists.value, isExpand)
-    }
-
-    const toggleExpand = (children: any[], unfold = true) => {
-        for (const key in children) {
-            tableRef.value?.toggleRowExpansion(children[key], unfold)
-            if (children[key].children) {
-                toggleExpand(children[key].children!, unfold)
-            }
-        }
-    }
-
+const handleDelete = async (${primaryKey}: number) => {
+    await feedback.confirm('确定要删除？')
+    await menuDelete({ ${primaryKey} })
     getLists()
+}
+
+const handleExpand = () => {
+    isExpand = !isExpand
+    toggleExpand(lists.value, isExpand)
+}
+
+const toggleExpand = (children: any[], unfold = true) => {
+    for (const key in children) {
+        tableRef.value?.toggleRowExpansion(children[key], unfold)
+        if (children[key].children) {
+            toggleExpand(children[key].children!, unfold)
+        }
+    }
+}
+
+getLists()
 </script>

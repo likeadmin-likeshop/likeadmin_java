@@ -5,6 +5,11 @@ export function ${moduleName}Lists(params?: Record<string, any>) {
     return request.get({ url: '/${moduleName}/list', params })
 }
 
+// ${functionName}详情
+export function ${moduleName}Detail(params: Record<string, any>) {
+    return request.post({ url: '/${moduleName}/detail', params })
+}
+
 // ${functionName}新增
 export function ${moduleName}Add(params: Record<string, any>) {
     return request.post({ url: '/${moduleName}/add', params })

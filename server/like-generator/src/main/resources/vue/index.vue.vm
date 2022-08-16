@@ -6,9 +6,9 @@
             #if($column.isQuery==1)
                 #if($column.htmlType=="datetime")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
-                    <data-picker
-                        v-model:startTime="queryParams.${column.javaField}Start"
-                        v-model:endTime="queryParams.${column.javaField}End"
+                    <daterange-picker
+                        v-model:startTime="queryParams.createTimeStart"
+                        v-model:endTime="queryParams.createTimeEnd"
                     />
                 </el-form-item>
                 #elseif($column.htmlType=="select" || $column.htmlType == "radio")
@@ -104,7 +104,7 @@
                             v-perms="['${moduleName}:del']"
                             type="danger"
                             link
-                            @click="handleDelete(row.${primaryKey})"
+                            @click="handleDelete([row.${primaryKey}])"
                         >
                             删除
                         </el-button>
@@ -127,63 +127,62 @@
     </div>
 </template>
 <script lang="ts" setup>
-    import { ${moduleName}Delete, ${moduleName}Lists } from '@/api/${moduleName}'
-    import { useDictData } from '@/hooks/useDictOptions'
-    import { usePaging } from '@/hooks/usePaging'
-    import feedback from '@/utils/feedback'
-    import EditPopup from './edit.vue'
-    const editRef = shallowRef<InstanceType<typeof EditPopup>>()
-    const showEdit = ref(false)
-    const queryParams = reactive({
-    #foreach ($column in $columns)
-    #if($column.isQuery)
-        #if($column.htmlType=="datetime")
-        ${column.javaField}Start: '',
-        ${column.javaField}End: '',
-        #else
-        ${column.javaField}: '',
-        #end
+import { ${moduleName}Delete, ${moduleName}Lists } from '@/api/${moduleName}'
+import { useDictData } from '@/hooks/useDictOptions'
+import { usePaging } from '@/hooks/usePaging'
+import feedback from '@/utils/feedback'
+import EditPopup from './edit.vue'
+const editRef = shallowRef<InstanceType<typeof EditPopup>>()
+const showEdit = ref(false)
+const queryParams = reactive({
+#foreach ($column in $columns)
+#if($column.isQuery)
+    #if($column.htmlType=="datetime")
+    ${column.javaField}Start: '',
+    ${column.javaField}End: '',
+    #else
+    ${column.javaField}: '',
     #end
+#end
+#end
+})
+
+const { pager, getLists, resetPage, resetParams } = usePaging({
+    fetchFun: ${moduleName}Lists,
+    params: queryParams
+})
+
+#if($dictFields.size()>=1)
+#set($dictSize = $dictFields.size() - 1)
+const { dictData } = useDictData<{
+    #foreach ($dict in $dictFields)
+    ${dict}: any[]
     #end
-    })
+}>([#foreach ($dict in $dictFields)'${dict}'#if($dictFields[$dictSize] != ${dict}),#end#end])
 
-    const { pager, getLists, resetPage, resetParams } = usePaging({
-        fetchFun: ${moduleName}Lists,
-        params: queryParams
-    })
-    #if($dictFields.size()>=1)
-    #set($dictSize = $dictFields.size() - 1)
+const selectData = ref<any[]>([])
+const handleSelectionChange = (selection: any[]) => {
+    selectData.value = selection.map(item => item.${primaryKey})
+}
 
-    const { dictData } = useDictData<{
-        #foreach ($dict in $dictFields)
-        ${dict}: any[]
-        #end
-    }>([#foreach ($dict in $dictFields)'${dict}'#if($dictFields[$dictSize] != ${dict}),#end#end])
-    #end
+const handleAdd = async () => {
+    showEdit.value = true
+    await nextTick()
+    editRef.value?.open('add')
+}
 
-    const selectData = ref<any[]>([])
-    const handleSelectionChange = (selection: any[]) => {
-        selectData.value = selection.map(item => item.${primaryKey})
-    }
+const handleEdit = async (data: any) => {
+    showEdit.value = true
+    await nextTick()
+    editRef.value?.open('edit')
+    editRef.value?.setFormData(data)
+}
 
-    const handleAdd = async () => {
-        showEdit.value = true
-        await nextTick()
-        editRef.value?.open('add')
-    }
-
-    const handleEdit = async (data: any) => {
-        showEdit.value = true
-        await nextTick()
-        editRef.value?.open('edit')
-        editRef.value?.setFormData(data)
-    }
-
-    const handleDelete = async (${primaryKey}: number || number[]) => {
-        await ${moduleName}Delete({ ${primaryKey} })
-        feedback.msgSuccess('删除成功')
-        getLists()
-    }
-
+const handleDelete = async (${primaryKey}: number[]) => {
+    await ${moduleName}Delete({ ${primaryKey} })
+    feedback.msgSuccess('删除成功')
     getLists()
+}
+
+getLists()
 </script>

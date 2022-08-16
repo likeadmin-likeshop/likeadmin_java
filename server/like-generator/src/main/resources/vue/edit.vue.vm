@@ -60,6 +60,26 @@
                         #end
                     </el-checkbox-group>
                 </el-form-item>
+            #elseif($column.htmlType=="select")
+                <el-form-item label="${column.columnComment}" prop="${column.javaField}">
+                    <el-select v-model="formData.${column.javaField}" placeholder="请选择${column.columnComment}">
+                        #if($column.dictType!="")
+                        <el-option
+                            v-for="(item, index) in dictData.${column.dictType}"
+                            :key="index"
+                            :label="item.name"
+                            #if($column.javaType == "Integer")
+                            :value="parseInt(item.value)"
+                            #else
+                            :value="item.value"
+                            #end
+                            :disabled="!item.status"
+                        />
+                        #else
+                        <el-option label="请选择字典生成" value="" />
+                        #end
+                    </el-select>
+                </el-form-item>
             #elseif($column.htmlType=="radio")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
                     <el-radio-group v-model="formData.${column.javaField}" placeholder="请选择${column.columnComment}">
@@ -67,7 +87,11 @@
                         <el-radio
                             v-for="(item, index) in dictData.${column.dictType}"
                             :key="index"
+                            #if($column.javaType == "Integer")
+                            :label="parseInt(item.value)"
+                            #else
                             :label="item.value"
+                            #end
                             :disabled="!item.status"
                         >
                             {{ item.name }}
@@ -103,117 +127,122 @@
     </div>
 </template>
 <script lang="ts" setup>
-    import type { FormInstance } from 'element-plus'
-    import { 
-        ${moduleName}Edit,
-        ${moduleName}Add, 
-        #if($table.treePrimary && $table.treeParent)
-        ${moduleName}Lists
-        #end
-    } from '@/api/${moduleName}'
-    import Popup from '@/components/popup/index.vue'
-    import feedback from '@/utils/feedback'
-    import type { PropType } from 'vue'
-    defineProps({
-        dictData: {
-            type: Object as PropType<Record<string, any[]>>,
-            default: () => ({})
-        }
-    })
-    const emit = defineEmits(['success', 'close'])
-    const formRef = shallowRef<FormInstance>()
-    const popupRef = shallowRef<InstanceType<typeof Popup>>()
+import type { FormInstance } from 'element-plus'
+import {
     #if($table.treePrimary && $table.treeParent)
-    const treeList = ref<any[]>([])
+    ${moduleName}Lists,
     #end
-    const mode = ref('add')
-    const popupTitle = computed(() => {
-        return mode.value == 'edit' ? '编辑${functionName}' : '新增${functionName}'
+    ${moduleName}Edit,
+    ${moduleName}Add,
+    ${moduleName}Detail
+} from '@/api/${moduleName}'
+import Popup from '@/components/popup/index.vue'
+import feedback from '@/utils/feedback'
+import type { PropType } from 'vue'
+defineProps({
+    dictData: {
+        type: Object as PropType<Record<string, any[]>>,
+        default: () => ({})
+    }
+})
+const emit = defineEmits(['success', 'close'])
+const formRef = shallowRef<FormInstance>()
+const popupRef = shallowRef<InstanceType<typeof Popup>>()
+#if($table.treePrimary && $table.treeParent)
+const treeList = ref<any[]>([])
+#end
+const mode = ref('add')
+const popupTitle = computed(() => {
+    return mode.value == 'edit' ? '编辑${functionName}' : '新增${functionName}'
+})
+
+const formData = reactive({
+    #foreach ($column in $columns)
+    #if($column.javaField==$primaryKey)
+    ${primaryKey}: '',
+    #elseif($column.isEdit)
+    #if($column.htmlType=="checkbox")
+    ${column.javaField}: [],
+    #else
+    ${column.javaField}: '',
+    #end
+    #end
+    #end
+})
+
+const formRules = {
+    #foreach ($column in $columns)
+    #if($column.isEdit && $column.isRequired)
+    ${column.javaField}: [
+        {
+            required: true,
+            #if($column.htmlType=="checkbox" || $column.htmlType=="datetime" || $column.htmlType=="radio" || $column.htmlType=="select")
+            message: '请选择${column.columnComment}',
+            #else
+            message: '请输入${column.columnComment}',
+            #end
+            trigger: ['blur']
+        }
+    ],
+    #end
+    #end
+}
+
+const handleSubmit = async () => {
+    await formRef.value?.validate()
+    const data = {...formData}
+    #foreach ($column in $columns)
+    #if($column.htmlType == "checkbox")
+    data.${column.javaField} = data.${column.javaField}.join(",");
+    #end
+    #end
+    mode.value == 'edit' ? await ${moduleName}Edit(data) : await ${moduleName}Add(data)
+    popupRef.value?.close()
+    feedback.msgSuccess('操作成功')
+    emit('success')
+}
+
+const open = (type = 'add') => {
+    mode.value = type
+    popupRef.value?.open()
+}
+
+const setFormData = (row: Record<string, any>) => {
+    const data = await ${moduleName}Detail({
+        ${primaryKey}: row.${primaryKey}
     })
-
-    const formData = reactive({
-        #foreach ($column in $columns)
-        #if($column.javaField==$primaryKey)
-        ${primaryKey}: '',
-        #elseif($column.isEdit)
-        #if($column.htmlType=="checkbox")
-        ${column.javaField}: [],
-        #else
-        ${column.javaField}: '',
-        #end
-        #end
-        #end
-    })
-
-    const formRules = {
-        #foreach ($column in $columns)
-        #if($column.isEdit && $column.isRequired)
-        ${column.javaField}: [
-            {
-                required: true,
-                #if($column.htmlType=="checkbox" || $column.htmlType=="datetime" || $column.htmlType=="radio" || $column.htmlType=="select")
-                message: '请选择${column.columnComment}',
-                #else
-                message: '请输入${column.columnComment}',
-                #end
-                trigger: ['blur']
-            }
-        ],
-        #end
-        #end
-    }
-
-    const handleSubmit = async () => {
-        await formRef.value?.validate()
-        const data = {...formData}
-        #foreach ($column in $columns)
-        #if($column.htmlType == "checkbox")
-        data.${column.javaField} = data.${column.javaField}.join(",");
-        #end
-        #end
-        mode.value == 'edit' ? await ${moduleName}Edit(data) : await ${moduleName}Add(data)
-        popupRef.value?.close()
-        feedback.msgSuccess('操作成功')
-        emit('success')
-    }
-
-    const open = (type = 'add') => {
-        mode.value = type
-        popupRef.value?.open()
-    }
-
-    const setFormData = (data: Record<string, any>) => {
-        for (const key in formData) {
-            if (data[key] != null && data[key] != undefined) {
-                //@ts-ignore
-                formData[key] = data[key]
-                #foreach ($column in $columns)
-                #if($column.htmlType == "checkbox")
-                formData.${column.javaField} = form.${column.javaField}.split(',')
-                #end
-                #end
-            }
+    for (const key in formData) {
+        if (data[key] != null && data[key] != undefined) {
+            //@ts-ignore
+            formData[key] = data[key]
+            #foreach ($column in $columns)
+            #if($column.htmlType == "checkbox")
+            //@ts-ignore
+            formData.${column.javaField} = String(data.${column.javaField}).split(',')
+            #end
+            #end
         }
     }
+}
 
-    const handleClose = () => {
-        emit('close')
-    }
-    #if($table.treePrimary && $table.treeParent)
+const handleClose = () => {
+    emit('close')
+}
+#if($table.treePrimary && $table.treeParent)
 
-    // 树表
-    const getLists = async () => {
-        const data: any = await ${moduleName}List()
-        const item = { ${table.treePrimary}: 0, ${table.treeName}: '顶级', children: [] }
-        item.children = data
-        treeList.value.push(item)
-    }
+// 树表
+const getLists = async () => {
+    const data: any = await ${moduleName}List()
+    const item = { ${table.treePrimary}: 0, ${table.treeName}: '顶级', children: [] }
+    item.children = data
+    treeList.value.push(item)
+}
 
-    getLists()
-    #end
+getLists()
+#end
 
-    defineExpose({
-        open,
-        setFormData
-    })
+defineExpose({
+    open,
+    setFormData
+})
 </script>
