@@ -159,15 +159,14 @@
             loading.value = false
         }
     }
+    #if($dictFields.size()>=1)
+    #set($dictSize = $dictFields.size() - 1)
 
-    #if($dictFields!="")
     const { dictData } = useDictData<{
-        #foreach ($column in $columns)
-        #if($column.dictType!="")
-        ${column.dictType}: any[]
-        #end
-        #end
-    }>([${dictFields}])
+    #foreach ($dict in $dictFields)
+        ${dict}: any[]
+    #end
+    }>([#foreach ($dict in $dictFields)'${dict}'#if($dictFields[$dictSize] != ${dict}),#end#end])
     #end
 
     const handleAdd = async (${table.treePrimary}?: number) => {
