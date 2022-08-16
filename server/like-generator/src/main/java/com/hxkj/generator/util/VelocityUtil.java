@@ -173,19 +173,19 @@ public class VelocityUtil {
         }
 
         else if (template.contains("vue/api.ts.vm")) {
-            fileName = StringUtil.format("vue/api.ts");
+            fileName = StringUtil.format("vue/api/{}.ts", moduleName);
         }
 
         else if (template.contains("vue/edit.vue.vm")) {
-            fileName = StringUtil.format("vue/edit.vue");
+            fileName = StringUtil.format("vue/views/{}/edit.vue", moduleName);
         }
 
         else if (template.contains("vue/index.vue.vm")) {
-            fileName = StringUtil.format("vue/index.vue");
+            fileName = StringUtil.format("vue/views/{}/index.vue", moduleName);
         }
 
         else if (template.contains("vue/index-tree.vue.vm")) {
-            fileName = StringUtil.format("vue/index.vue");
+            fileName = StringUtil.format("vue/views/{}/index.vue", moduleName);
         }
 
         return fileName;
