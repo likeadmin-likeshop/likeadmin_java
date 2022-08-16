@@ -13,19 +13,19 @@
             #foreach ($column in $columns)
             #if($column.isEdit)
             #if($table.treeParent!="" && $column.javaField==$table.treeParent)
-            <el-form-item label="${column.columnComment}" prop="${column.javaField}">
-                <el-tree-select
-                    class="flex-1"
-                    v-model="formData.${column.javaField}"
-                    :data="treeList"
-                    clearable
-                    node-key="${table.treePrimary}"
-                    :props="{label: ${table.treeName}, value: ${table.treePrimary}, children: 'children'}"
-                    :default-expand-all="true"
-                    placeholder="请选择${column.columnComment}"
-                    check-strictly
-                />
-            </el-form-item>
+                <el-form-item label="${column.columnComment}" prop="${column.javaField}">
+                    <el-tree-select
+                        class="flex-1"
+                        v-model="formData.${column.javaField}"
+                        :data="treeList"
+                        clearable
+                        node-key="${table.treePrimary}"
+                        :props="{label: ${table.treeName}, value: ${table.treePrimary}, children: 'children'}"
+                        :default-expand-all="true"
+                        placeholder="请选择${column.columnComment}"
+                        check-strictly
+                    />
+                </el-form-item>
             #end
             #if($column.htmlType=="input")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
@@ -100,6 +100,7 @@
                 </el-form-item>
             #end
             #end
+            #end
             </el-form>
         </popup>
     </div>
@@ -141,7 +142,6 @@
         ${column.javaField}: [],
         #else
         ${column.javaField}: '',
-        #end
         #end
         #end
         #end
