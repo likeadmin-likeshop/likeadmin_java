@@ -119,13 +119,15 @@ public class VelocityUtil {
         templates.add("java/validate.java.vm");
         templates.add("java/voList.java.vm");
         templates.add("java/voDetail.java.vm");
-        templates.add("vue/api.ts.vm");
-        templates.add("vue/edit.vue.vm");
         if (GenConstants.TPL_CRUD.equals(genTpl)) {
+            templates.add("vue/api.ts.vm");
+            templates.add("vue/edit.vue.vm");
             templates.add("vue/index.vue.vm");
         }
 
         else if (GenConstants.TPL_TREE.equals(genTpl)) {
+            templates.add("vue/api.ts.vm");
+            templates.add("vue/edit.vue.vm");
             templates.add("vue/index-tree.vue.vm");
         }
 
@@ -162,10 +164,6 @@ public class VelocityUtil {
 
         else if (template.contains("validate.java.vm")) {
             fileName = StringUtil.format("{}/validate/{}/{}Param.java", GenConfig.adminPackage, moduleName, entityName);
-        }
-
-        else if (template.contains("vo.java.vm")) {
-            fileName = StringUtil.format("{}/vo/{}/{}Vo.java", GenConfig.adminPackage, moduleName, entityName);
         }
 
         else if (template.contains("voList.java.vm")) {
