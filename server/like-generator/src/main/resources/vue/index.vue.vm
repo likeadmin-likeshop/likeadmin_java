@@ -125,7 +125,7 @@
         <edit-popup
             v-if="showEdit"
             ref="editRef"
-            #if($dictFields!="")
+            #if($dictFields.size()>=1)
             :dict-data="dictData"
             #end
             @success="getLists"
@@ -135,7 +135,9 @@
 </template>
 <script lang="ts" setup>
 import { ${moduleName}Delete, ${moduleName}Lists } from '@/api/${moduleName}'
+#if($dictFields.size()>=1)
 import { useDictData } from '@/hooks/useDictOptions'
+#end
 import { usePaging } from '@/hooks/usePaging'
 import feedback from '@/utils/feedback'
 import EditPopup from './edit.vue'

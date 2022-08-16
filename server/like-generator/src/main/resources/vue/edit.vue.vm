@@ -128,14 +128,7 @@
 </template>
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import {
-    #if($table.treePrimary && $table.treeParent)
-    ${moduleName}Lists,
-    #end
-    ${moduleName}Edit,
-    ${moduleName}Add,
-    ${moduleName}Detail
-} from '@/api/${moduleName}'
+import { #if($table.treePrimary && $table.treeParent)${moduleName}Lists,#end ${moduleName}Edit,${moduleName}Add, ${moduleName}Detail } from '@/api/${moduleName}'
 import Popup from '@/components/popup/index.vue'
 import feedback from '@/utils/feedback'
 import type { PropType } from 'vue'
@@ -196,7 +189,7 @@ const handleSubmit = async () => {
     const data: any = { ...formData }
     #foreach ($column in $columns)
     #if($column.htmlType == "checkbox")
-    data.${column.javaField} = data.${column.javaField}.join(",");
+    data.${column.javaField} = data.${column.javaField}.join(',')
     #end
     #end
     mode.value == 'edit' ? await ${moduleName}Edit(data) : await ${moduleName}Add(data)
@@ -235,7 +228,7 @@ const handleClose = () => {
 
 // 树表
 const getLists = async () => {
-    const data: any = await ${moduleName}List()
+    const data: any = await ${moduleName}Lists()
     const item = { ${table.treePrimary}: 0, ${table.treeName}: '顶级', children: [] }
     item.children = data
     treeList.value.push(item)

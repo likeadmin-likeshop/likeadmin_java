@@ -122,7 +122,7 @@
         <edit-popup
             v-if="showEdit"
             ref="editRef"
-            #if($dictFields!="")
+            #if($dictFields.size()>=1)
             :dict-data="dictData"
             #end
             @success="getLists"
@@ -131,10 +131,13 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ${moduleName}Edit, ${moduleName}Delete, ${moduleName}Lists } from '@/api/${moduleName}'
+import { ${moduleName}Delete, ${moduleName}Lists } from '@/api/${moduleName}'
 import EditPopup from './edit.vue'
 import feedback from '@/utils/feedback'
+#if($dictFields.size()>=1)
 import { useDictData } from '@/hooks/useDictOptions'
+#end
+import type { ElTable } from 'element-plus'
 
 const tableRef = shallowRef<InstanceType<typeof ElTable>>()
 const editRef = shallowRef<InstanceType<typeof EditPopup>>()
@@ -197,7 +200,7 @@ const handleEdit = async (data: any) => {
 
 const handleDelete = async (${primaryKey}: number) => {
     await feedback.confirm('确定要删除？')
-    await menuDelete({ ${primaryKey} })
+    await ${moduleName}Delete({ ${primaryKey} })
     getLists()
 }
 
