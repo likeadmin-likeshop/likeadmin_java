@@ -15,6 +15,7 @@ import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
 import ${packageName}.common.core.PageResult;
 import ${packageName}.common.entity.${moduleName}.${EntityName};
 import ${packageName}.common.mapper.${moduleName}.${EntityName}Mapper;
+import com.hxkj.common.utils.ArrayUtil;
 import ${packageName}.common.utils.TimeUtil;
 import ${packageName}.common.utils.UrlUtil;
 import com.hxkj.common.config.GlobalConfig;

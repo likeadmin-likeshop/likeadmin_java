@@ -38,7 +38,9 @@ public class ${EntityName}Controller {
      #if(!$authorName.equals(""))
      * @author ${authorName}
      #end
+     #if($table.genTpl.equals("crud"))
      * @param pageParam 分页参数
+     #end
      * @param params 搜索参数
      * @return Object
      */
