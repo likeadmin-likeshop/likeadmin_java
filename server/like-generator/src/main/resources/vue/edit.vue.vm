@@ -172,7 +172,7 @@ const formRules = {
     ${column.javaField}: [
         {
             required: true,
-            #if($column.htmlType=="checkbox" || $column.htmlType=="datetime" || $column.htmlType=="radio" || $column.htmlType=="select")
+            #if($column.htmlType=="checkbox" || $column.htmlType=="datetime" || $column.htmlType=="radio" || $column.htmlType=="select" || $column.htmlType=="imageUpload")
             message: '请选择${column.columnComment}',
             #else
             message: '请输入${column.columnComment}',
@@ -226,7 +226,6 @@ const handleClose = () => {
 }
 #if($table.treePrimary && $table.treeParent)
 
-// 树表
 const getLists = async () => {
     const data: any = await ${moduleName}Lists()
     const item = { ${table.treePrimary}: 0, ${table.treeName}: '顶级', children: [] }
