@@ -70,9 +70,10 @@
                 :data="pager.lists"
                 @selection-change="handleSelectionChange"
             >
+                <el-table-column type="selection" width="50" align="center" />
             #foreach ($column in $columns)
             #if($column.isList)
-                #if($column.htmlType=="select" || $column.htmlType=="radio" || $column.htmlType=="checkbox")
+                #if($column.dictType!="" && ($column.htmlType=="select" || $column.htmlType=="radio" || $column.htmlType=="checkbox"))
                 <el-table-column label="${column.columnComment}" prop="${column.javaField}" min-width="100">
                     <template #default="{ row }">
                         <dict-value :options="dictData.${column.dictType}" :value="row.${column.javaField}" />
