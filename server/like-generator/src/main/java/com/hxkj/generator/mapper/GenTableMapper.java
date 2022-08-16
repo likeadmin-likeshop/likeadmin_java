@@ -28,7 +28,7 @@ public interface GenTableMapper extends IBaseMapper<GenTable> {
         "FROM information_schema.tables " +
         "WHERE table_schema = (SELECT database()) " +
         "AND table_name NOT LIKE 'qrtz_%' AND table_name NOT LIKE 'gen_%' " +
-        "AND table_name NOT IN (select table_name from ls_gen_table)",
+        "AND table_name NOT IN (select table_name from la_gen_table)",
         "<if test=\"tableName != null and tableName != ''\">" +
             "AND lower(table_name) like lower(concat('%', #{tableName}, '%'))" +
         "</if>",
