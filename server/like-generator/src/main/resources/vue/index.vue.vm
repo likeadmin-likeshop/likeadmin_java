@@ -7,8 +7,8 @@
                 #if($column.htmlType=="datetime")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
                     <data-picker
-                        v-model:startTime="queryParams.startTime"
-                        v-model:endTime="queryParams.endTime"
+                        v-model:startTime="queryParams.${column.javaField}Start"
+                        v-model:endTime="queryParams.${column.javaField}End"
                     />
                 </el-form-item>
                 #elseif($column.htmlType=="select")
@@ -134,11 +134,16 @@
     const editRef = shallowRef<InstanceType<typeof EditPopup>>()
     const showEdit = ref(false)
     const queryParams = reactive({
-        #foreach ($column in $columns)
-        #if($column.isQuery)
+    #foreach ($column in $columns)
+    #if($column.isQuery)
+        #if($column.isHtmlType=="datetime")
+        ${column.javaField}Start: '',
+        ${column.javaField}End: '',
+        #else
         ${column.javaField}: '',
         #end
-        #end
+    #end
+    #end
     })
 
     const { pager, getLists, resetPage, resetParams } = usePaging({
