@@ -10,6 +10,8 @@ server:
 spring:
   profiles:
     active: pro
+  mvc:
+    static-path-pattern: /static/**
   # 数据源配置
   datasource:
     url: jdbc:mysql://localhost:3306/local_admin_java?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
