@@ -28,7 +28,11 @@
                 </el-form-item>
             #elseif($column.htmlType=="input")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
-                    <el-input v-model="formData.name" placeholder="请输入${column.columnComment}" />
+                    <el-input v-model="formData.${column.javaField}" placeholder="请输入${column.columnComment}" />
+                </el-form-item>
+            #elseif($column.htmlType=="number")
+                <el-form-item label="${column.columnComment}" prop="${column.javaField}">
+                    <el-input-number v-model="formData.${column.javaField}" />
                 </el-form-item>
             #elseif($column.htmlType=="textarea")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">

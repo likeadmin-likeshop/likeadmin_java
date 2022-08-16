@@ -11,7 +11,7 @@
                         v-model:endTime="queryParams.${column.javaField}End"
                     />
                 </el-form-item>
-                #elseif($column.htmlType=="select")
+                #elseif($column.htmlType=="select" || $column.htmlType == "radio")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
                     <el-select
                         v-model="queryParams.${column.javaField}"
