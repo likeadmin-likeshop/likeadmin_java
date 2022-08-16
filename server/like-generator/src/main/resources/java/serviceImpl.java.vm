@@ -1,5 +1,8 @@
 package ${packageName}.admin.service.${moduleName}.impl;
 
+#if(!$table.genTpl.equals("crud"))
+import com.alibaba.fastjson.JSONArray;
+#end
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -61,7 +64,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      #if($isAuthor)
      * @author ${authorName}
      #end
+     #if($table.genTpl.equals("crud"))
      * ${pageParam}
+     #end
      #if($isSearchParam)
      * ${searchparams}
      #end
