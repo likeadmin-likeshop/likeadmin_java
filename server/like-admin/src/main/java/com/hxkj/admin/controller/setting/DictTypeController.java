@@ -99,7 +99,7 @@ public class DictTypeController {
      */
     @PostMapping("/del")
     public Object del(@Validated(value = DictTypeParam.delete.class) @RequestBody DictTypeParam dictTypeParam) {
-        iSettingDictTypeService.del(dictTypeParam.getId());
+        iSettingDictTypeService.del(dictTypeParam.getIds());
         return AjaxResult.success();
     }
 

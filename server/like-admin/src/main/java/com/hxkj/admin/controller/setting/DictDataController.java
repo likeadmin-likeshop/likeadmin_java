@@ -103,7 +103,7 @@ public class DictDataController {
      */
     @PostMapping("/del")
     public Object del(@Validated(value = DictDataParam.delete.class) @RequestBody DictDataParam dictDataParam) {
-        iSettingDictDataService.del(dictDataParam.getId());
+        iSettingDictDataService.del(dictDataParam.getIds());
         return AjaxResult.success();
     }
 

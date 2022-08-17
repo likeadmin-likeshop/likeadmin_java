@@ -189,21 +189,17 @@ public class SettingDictTypeServiceImpl implements ISettingDictTypeService {
      * 字典类型删除
      *
      * @author fzr
-     * @param id 主键
+     * @param ids 主键
      */
     @Override
-    public void del(Integer id) {
-        DictType model = dictTypeMapper.selectOne(new QueryWrapper<DictType>()
-                .select("id")
-                .eq("id", id)
-                .eq("is_delete", 0)
-                .last("limit 1"));
-
-        Assert.notNull(model, "字典类型不存在！");
-
-        model.setIsDelete(1);
-        model.setDeleteTime(System.currentTimeMillis() / 1000);
-        dictTypeMapper.updateById(model);
+    public void del(List<Integer> ids) {
+        for(Integer id : ids) {
+            DictType model = new DictType();
+            model.setId(id);
+            model.setIsDelete(1);
+            model.setDeleteTime(System.currentTimeMillis() / 1000);
+            dictTypeMapper.updateById(model);
+        }
     }
 
 }

@@ -60,8 +60,8 @@ public interface ISettingDictTypeService {
      * 字典类型删除
      *
      * @author fzr
-     * @param id 主键
+     * @param ids 主键
      */
-    void del(Integer id);
+    void del(List<Integer> ids);
 
 }

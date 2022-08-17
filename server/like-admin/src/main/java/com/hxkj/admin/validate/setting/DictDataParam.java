@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 字典数据参数
@@ -25,8 +26,11 @@ public class DictDataParam implements Serializable {
     public interface update{}
     public interface delete{}
 
-    @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
+    @IDMust(message = "id参数必传且需大于0", groups = {update.class})
     private Integer id;
+
+    @NotNull(message = "ids参数缺失", groups = {DictDataParam.delete.class})
+    private List<Integer> ids;
 
     @IDMust(message = "typeId参数必传且需大于0", groups = {create.class, update.class})
     private Integer typeId;
