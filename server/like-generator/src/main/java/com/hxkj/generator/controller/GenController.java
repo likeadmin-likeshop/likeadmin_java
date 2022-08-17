@@ -145,6 +145,11 @@ public class GenController {
      */
     @GetMapping("/genCode")
     public Object genCode(String tables) {
+        String production = YmlUtil.get("like.production");
+        if (StringUtil.isNotEmpty(production) && production.equals("true")) {
+            throw new OperateException("抱歉,演示环境不允许操作！");
+        }
+
         Assert.notNull(tables, "请选择要生成的表");
         String[] tableNames = tables.split(",");
         for (String tableName : tableNames) {
@@ -162,11 +167,6 @@ public class GenController {
      */
     @GetMapping("/downloadCode")
     public void downloadCode(HttpServletResponse response, String tables) throws IOException {
-        String production = YmlUtil.get("like.production");
-        if (StringUtil.isNotEmpty(production) && production.equals("true")) {
-            throw new OperateException("抱歉,演示环境不允许操作！");
-        }
-
         Assert.notNull(tables, "请选择要生成的表");
         String[] tableNames = tables.split(",");
         byte[] data = iGenerateService.downloadCode(tableNames);
