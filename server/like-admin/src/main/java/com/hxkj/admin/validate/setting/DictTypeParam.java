@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 字典类型参数
@@ -26,6 +27,9 @@ public class DictTypeParam implements Serializable {
 
     @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
     private Integer id;
+
+    @NotNull(message = "ids参数缺失", groups = {DictDataParam.delete.class})
+    private List<Integer> ids;
 
     @NotNull(message = "dictName参数缺失", groups = {create.class, update.class})
     @Length(max = 200, message = "名称不能超出200个字符", groups = {create.class, update.class})

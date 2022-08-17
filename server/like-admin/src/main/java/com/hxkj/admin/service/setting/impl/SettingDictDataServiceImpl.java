@@ -208,21 +208,17 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
      * 字典数据删除
      *
      * @author fzr
-     * @param id 主键
+     * @param ids 主键
      */
     @Override
-    public void del(Integer id) {
-        DictData model = dictDataMapper.selectOne(new QueryWrapper<DictData>()
-                .eq("id", id)
-                .eq("is_delete", 0)
-                .last("limit 1"));
-
-        Assert.notNull(model, "字典数据不存在！");
-
-        model.setId(id);
-        model.setIsDelete(1);
-        model.setDeleteTime(System.currentTimeMillis() / 1000);
-        dictDataMapper.updateById(model);
+    public void del(List<Integer> ids) {
+        for (Integer id : ids) {
+            DictData model = new DictData();
+            model.setId(id);
+            model.setIsDelete(1);
+            model.setDeleteTime(System.currentTimeMillis() / 1000);
+            dictDataMapper.updateById(model);
+        }
     }
 
 }
