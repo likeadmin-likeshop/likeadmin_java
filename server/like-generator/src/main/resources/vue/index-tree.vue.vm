@@ -199,7 +199,8 @@ const handleEdit = async (data: any) => {
 
 const handleDelete = async (${primaryKey}: number) => {
     await feedback.confirm('确定要删除？')
-    await ${moduleName}Delete({ id: ${primaryKey} })
+    await ${moduleName}Delete({ ${primaryKey} })
+    feedback.msgSuccess('删除成功')
     getLists()
 }
 
