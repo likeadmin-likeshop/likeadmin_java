@@ -25,10 +25,10 @@ public class DictTypeParam implements Serializable {
     public interface update{}
     public interface delete{}
 
-    @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
+    @IDMust(message = "id参数必传且需大于0", groups = {update.class})
     private Integer id;
 
-    @NotNull(message = "ids参数缺失", groups = {DictDataParam.delete.class})
+    @NotNull(message = "ids参数缺失", groups = {delete.class})
     private List<Integer> ids;
 
     @NotNull(message = "dictName参数缺失", groups = {create.class, update.class})

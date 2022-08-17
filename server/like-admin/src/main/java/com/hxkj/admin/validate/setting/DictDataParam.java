@@ -29,7 +29,7 @@ public class DictDataParam implements Serializable {
     @IDMust(message = "id参数必传且需大于0", groups = {update.class})
     private Integer id;
 
-    @NotNull(message = "ids参数缺失", groups = {DictDataParam.delete.class})
+    @NotNull(message = "ids参数缺失", groups = {delete.class})
     private List<Integer> ids;
 
     @IDMust(message = "typeId参数必传且需大于0", groups = {create.class, update.class})
