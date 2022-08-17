@@ -41,7 +41,11 @@ public class ${EntityName}Param implements Serializable {
     #if(!$column.isPk && $column.javaField.substring(0,2)=="is" && $column.javaType.equals("Integer"))
     @IntegerContains(values = {0, 1}, message = "${column.javaField}参数值不在符合范围", groups = {#if($column.isInsert)create.class#end#if($column.isInsert&&$column.isEdit), #end#if($column.isEdit)update.class#end})
     #end
+    #if($column.htmlType=="datetime")
+    private String ${column.javaField};
+    #else
     private ${column.javaType} ${column.javaField};
+    #end
 
   #end
 #end

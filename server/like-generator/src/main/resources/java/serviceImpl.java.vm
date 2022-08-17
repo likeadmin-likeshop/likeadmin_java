@@ -329,7 +329,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #elseif(!$dateFields.contains($column.columnName) and !$column.javaField.equals("isDelete"))
         model.set${AttrName}(${entityName}Param.get${AttrName}());
         #elseif($dateFields.contains($column.columnName))
-        model.set${AttrName}(System.currentTimeMillis() / 1000);
+        model.set${AttrName}(TimeUtil.dateToTimestamp(${entityName}Param.get${AttrName}()));
         #end
     #end
     #end
@@ -364,7 +364,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #elseif(!$dateFields.contains($column.columnName) and !$column.javaField.equals("isDelete"))
         model.set${AttrName}(${entityName}Param.get${AttrName}());
         #elseif($dateFields.contains($column.columnName))
-        model.set${AttrName}(System.currentTimeMillis() / 1000);
+        model.set${AttrName}(TimeUtil.dateToTimestamp(${entityName}Param.get${AttrName}()));
         #end
     #end
     #end
