@@ -31,7 +31,7 @@
                 <el-button
                     v-perms="['gen:delTable']"
                     :disabled="!selectData.length"
-                    @click="handleDelete(selectData)"
+                    @click="handleDelete()"
                     type="danger"
                 >
                     <template #icon>
@@ -177,11 +177,14 @@ const handleSelectionChange = (val: any[]) => {
 const handleSync = async (id: number) => {
     await feedback.confirm('确定要同步表结构？')
     await syncColumn({ id })
+    feedback.msgSuccess('操作成功')
 }
 
-const handleDelete = async (id: number | any[]) => {
+const handleDelete = async (ids?: number[]) => {
+    if (!ids) ids = selectData.value.map(({ id }) => id)
     await feedback.confirm('确定要删除？')
-    await generateDelete({ id })
+    await generateDelete({ ids })
+    feedback.msgSuccess('删除成功')
     getLists()
 }
 
@@ -220,7 +223,7 @@ const handleCommand = (command: any, row: any) => {
             handleSync(row.id)
             break
         case 'delete':
-            handleDelete(row.id)
+            handleDelete([row.id])
     }
 }
 
