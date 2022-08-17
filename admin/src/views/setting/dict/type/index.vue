@@ -89,7 +89,7 @@
                                     v-perms="['setting:dict:type:del']"
                                     link
                                     type="danger"
-                                    @click="handleDelete(row.id)"
+                                    @click="handleDelete([row.id])"
                                 >
                                     删除
                                 </el-button>
@@ -144,9 +144,9 @@ const handleEdit = async (data: any) => {
 }
 
 // 删除角色
-const handleDelete = async (id: any[] | number) => {
+const handleDelete = async (ids: any[]) => {
     await feedback.confirm('确定要删除？')
-    await dictTypeDelete({ id })
+    await dictTypeDelete({ ids })
     feedback.msgSuccess('删除成功')
     getLists()
 }
