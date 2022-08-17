@@ -12,7 +12,7 @@ public class GlobalConfig {
     public static Boolean isAddressEnabled = false;
 
     // 当前代码版本
-    public static String version = "v1.0.1";
+    public static String version = "v1.2.0";
 
     // 系统加密字符
     public static String secret = "UVTIyzCy";
