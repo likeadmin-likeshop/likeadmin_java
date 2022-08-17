@@ -24,7 +24,7 @@ public class GlobalConfig {
     public static String redisPrefix = "Like:";
 
     // 资源访问前缀
-    public static String publicPrefix = "uploads";
+    public static String publicPrefix = "api/uploads";
 
     // 上传映射目录
     public static String uploadDirectory = "/www/like-admin/uploads/";

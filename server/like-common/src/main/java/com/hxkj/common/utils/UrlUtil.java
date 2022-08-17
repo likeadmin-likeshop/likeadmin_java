@@ -32,7 +32,7 @@ public class UrlUtil {
             url = "/" + url;
         }
 
-        if (url.startsWith("/static/")) {
+        if (url.startsWith("/api/static/")) {
             return RequestUtil.uri() + url;
         }
 
@@ -94,7 +94,10 @@ public class UrlUtil {
         }
 
         Map<String, String> config = ConfigUtil.getMap("storage", engine);
-        return config.getOrDefault("domain", "") + "/";
+        if (config != null) {
+            return config.getOrDefault("domain", "") + "/";
+        }
+        return "";
     }
 
 }
