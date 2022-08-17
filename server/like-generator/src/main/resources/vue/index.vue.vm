@@ -69,9 +69,7 @@
                 size="large"
                 v-loading="pager.loading"
                 :data="pager.lists"
-                @selection-change="handleSelectionChange"
             >
-                <el-table-column type="selection" width="50" align="center" />
             #foreach ($column in $columns)
             #if($column.isList)
                 #if($column.dictType!="" && ($column.htmlType=="select" || $column.htmlType=="radio" || $column.htmlType=="checkbox"))
@@ -112,7 +110,7 @@
                             v-perms="['${moduleName}:del']"
                             type="danger"
                             link
-                            @click="handleDelete([row.${primaryKey}])"
+                            @click="handleDelete(row.${primaryKey})"
                         >
                             删除
                         </el-button>
@@ -171,10 +169,6 @@ const { dictData } = useDictData<{
 }>([#foreach ($dict in $dictFields)'${dict}'#if($dictFields[$dictSize] != ${dict}),#end#end])
 #end
 
-const selectData = ref<any[]>([])
-const handleSelectionChange = (selection: any[]) => {
-    selectData.value = selection.map((item) => item.${primaryKey})
-}
 
 const handleAdd = async () => {
     showEdit.value = true
@@ -189,8 +183,9 @@ const handleEdit = async (data: any) => {
     editRef.value?.setFormData(data)
 }
 
-const handleDelete = async (${primaryKey}: number[]) => {
-    await ${moduleName}Delete({ ids: ${primaryKey} })
+const handleDelete = async (${primaryKey}: number) => {
+    await feedback.confirm('确定要删除？')
+    await ${moduleName}Delete({ ${primaryKey} })
     feedback.msgSuccess('删除成功')
     getLists()
 }
