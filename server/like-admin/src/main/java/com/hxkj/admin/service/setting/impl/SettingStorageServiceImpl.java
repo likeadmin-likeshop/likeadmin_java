@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * 存储配置实现类
+ * 存储配置服务实现类
  */
 @Service
 public class SettingStorageServiceImpl implements ISettingStorageService {
@@ -26,24 +26,28 @@ public class SettingStorageServiceImpl implements ISettingStorageService {
         List<Map<String, Object>> list = new LinkedList<>();
 
         Map<String, Object> local = new LinkedHashMap<>();
+        local.put("name", "本地存储");
         local.put("alias", "local");
         local.put("describe", "存储在本地服务器");
         local.put("status", engine.equals("local") ? 1 : 0);
         list.add(local);
 
         Map<String, Object> qiniu = new LinkedHashMap<>();
+        qiniu.put("name", "七牛云存储");
         qiniu.put("alias", "qiniu");
         qiniu.put("describe", "存储在七牛云，请前往七牛云开通存储服务");
         qiniu.put("status", engine.equals("qiniu") ? 1 : 0);
         list.add(qiniu);
 
         Map<String, Object> aliyun = new LinkedHashMap<>();
+        aliyun.put("name", "阿里云才能出");
         aliyun.put("alias", "aliyun");
         aliyun.put("describe", "存储在阿里云，请前往阿里云开通存储服务");
         aliyun.put("status", engine.equals("aliyun") ? 1 : 0);
         list.add(aliyun);
 
         Map<String, Object> qcloud = new LinkedHashMap<>();
+        qcloud.put("name", "腾讯云存储");
         qcloud.put("alias", "qcloud");
         qcloud.put("describe", "存储在腾讯云，请前往腾讯云开通存储服务");
         qcloud.put("status", engine.equals("qcloud") ? 1 : 0);

@@ -42,6 +42,22 @@ public class RequestUtil {
     }
 
     /**
+     * 获取带端口的请求地址
+     * 示例: https://127.0.0.1:8082
+     *
+     * @author fzr
+     * @return String
+     */
+    public static String uri() {
+        String domain = RequestUtil.domain();
+        if (!Arrays.asList(443,80,0).contains(RequestUtil.port())) {
+            domain += ":" + RequestUtil.port();
+        }
+
+        return domain;
+    }
+
+    /**
      * 获取请求路由
      * 示例: /api/system/menu/menus
      *
@@ -54,6 +70,21 @@ public class RequestUtil {
             return request.getRequestURI();
         }
         return "";
+    }
+
+    /**
+     * 获取请求端口
+     * 示例: 443/80
+     *
+     * @author fzr
+     * @return Integer
+     */
+    public static Integer port() {
+        HttpServletRequest request = RequestUtil.handler();
+        if (request != null) {
+            return request.getServerPort();
+        }
+        return 0;
     }
 
     /**

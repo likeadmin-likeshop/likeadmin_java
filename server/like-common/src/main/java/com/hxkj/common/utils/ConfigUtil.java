@@ -97,7 +97,11 @@ public class ConfigUtil {
                         .eq("type", type)
                         .eq("name", name));
 
-        if (config.getValue().equals("") || config.getValue().equals("[]")) {
+        if (config == null) {
+            return null;
+        }
+
+        if (config.getValue().equals("") || config.getValue().equals("[]") || config.getValue().equals("{}")) {
             return new LinkedHashMap<>();
         }
 

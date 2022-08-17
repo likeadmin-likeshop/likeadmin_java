@@ -24,9 +24,9 @@
             :modal="false"
             :before-close="handleClose"
         >
-            <div class="file-list">
+            <div class="file-list p-4">
                 <template v-for="(item, index) in fileList" :key="index">
-                    <div class="m-b-20">
+                    <div class="mb-5">
                         <div>{{ item.name }}</div>
                         <div class="flex-1">
                             <el-progress :percentage="parseInt(item.percentage)"></el-progress>
@@ -39,93 +39,96 @@
 </template>
 
 <script lang="ts">
-    import { computed, defineComponent, Ref, ref } from 'vue'
-    import { ElMessage, ElUpload } from 'element-plus'
-    import { useStore } from '@/store'
-    import { version } from '@/config/app'
-    export default defineComponent({
-        components: {},
-        props: {
-            // 上传文件类型
-            type: {
-                type: String,
-                default: 'image',
-            },
-            // 是否支持多选
-            multiple: {
-                type: Boolean,
-                default: true,
-            },
-            // 多选时最多选择几条
-            limit: {
-                type: Number,
-                default: 10,
-            },
-            // 上传时的额外参数
-            data: {
-                type: Object,
-                default: () => ({}),
-            },
-            // 是否显示上传进度
-            showProgress: {
-                type: Boolean,
-                default: false,
-            },
+import { computed, defineComponent, ref, shallowRef } from 'vue'
+import useUserStore from '@/stores/modules/user'
+import config from '@/config'
+import feedback from '@/utils/feedback'
+import type { ElUpload } from 'element-plus'
+export default defineComponent({
+    components: {},
+    props: {
+        // 上传文件类型
+        type: {
+            type: String,
+            default: 'image'
         },
-        emits: ['change', 'error'],
-        setup(props, { emit }) {
-            const store = useStore()
-            const uploadRefs: Ref<typeof ElUpload | null> = ref(null)
-            const action = ref(`${import.meta.env.VITE_APP_BASE_URL}/api/common/upload/${props.type}`)
-            const headers = computed(() => ({
-                token: store.getters.token,
-                version: version,
-            }))
-            const visible = ref(false)
-            const fileList: Ref<any[]> = ref([])
+        // 是否支持多选
+        multiple: {
+            type: Boolean,
+            default: true
+        },
+        // 多选时最多选择几条
+        limit: {
+            type: Number,
+            default: 10
+        },
+        // 上传时的额外参数
+        data: {
+            type: Object,
+            default: () => ({})
+        },
+        // 是否显示上传进度
+        showProgress: {
+            type: Boolean,
+            default: false
+        }
+    },
+    emits: ['change', 'error'],
+    setup(props, { emit }) {
+        const userStore = useUserStore()
+        const uploadRefs = shallowRef<InstanceType<typeof ElUpload>>()
+        const action = ref(`${config.baseUrl}${config.urlPrefix}/common/upload/${props.type}`)
+        const headers = computed(() => ({
+            token: userStore.token,
+            version: config.version
+        }))
+        const visible = ref(false)
+        const fileList = ref<any[]>([])
 
-            const handleProgress = (event: any, file: any, fileLists: any[]) => {
-                visible.value = true
-                fileList.value = fileLists
-            }
+        const handleProgress = (event: any, file: any, fileLists: any[]) => {
+            visible.value = true
+            fileList.value = fileLists
+        }
 
-            const handleSuccess = (event: any, file: any, fileLists: any[]) => {
-                const allSuccess = fileLists.every((item) => item.status == 'success')
-                if (allSuccess) {
-                    uploadRefs.value?.clearFiles()
-                    visible.value = false
-                    emit('change')
-                }
-            }
-            const handleError = (event: any, file: any, fileLists: any[]) => {
-                ElMessage.error(`${file.name}文件上传失败`)
-                uploadRefs.value?.abort()
-                visible.value = false
-                emit('change')
-                emit('error')
-            }
-            const handleExceed = () => {
-                ElMessage.error('超出上传上限，请重新上传')
-            }
-            const handleClose = () => {
-                uploadRefs.value?.abort()
+        const handleSuccess = (response: any, file: any, fileLists: any[]) => {
+            const allSuccess = fileLists.every((item) => item.status == 'success')
+            if (allSuccess) {
                 uploadRefs.value?.clearFiles()
                 visible.value = false
             }
-            return {
-                uploadRefs,
-                action,
-                headers,
-                visible,
-                fileList,
-                handleProgress,
-                handleSuccess,
-                handleError,
-                handleExceed,
-                handleClose,
+            emit('change')
+            if (response.code == 0 && response.show && response.msg) {
+                feedback.msgError(response.msg)
             }
-        },
-    })
+        }
+        const handleError = (event: any, file: any) => {
+            feedback.msgError(`${file.name}文件上传失败`)
+            uploadRefs.value?.abort(file)
+            visible.value = false
+            emit('change')
+            emit('error')
+        }
+        const handleExceed = () => {
+            feedback.msgError('超出上传上限，请重新上传')
+        }
+        const handleClose = () => {
+            uploadRefs.value?.clearFiles()
+            visible.value = false
+        }
+        return {
+            uploadRefs,
+            action,
+            headers,
+            visible,
+            fileList,
+            handleProgress,
+            handleSuccess,
+            handleError,
+            handleExceed,
+            handleClose
+        }
+    }
+})
 </script>
 
 <style lang="scss"></style>

@@ -1,110 +1,134 @@
 <!-- 系统缓存 -->
 <template>
     <div class="cache">
-        <el-card shadow="never">
-            <el-alert
-                class="xxl"
-                title="温馨提示：管理系统运行过程中产生的缓存"
-                type="primary"
-                :closable="false"
-                show-icon
-            >
-            </el-alert>
-        </el-card>
-
-        <el-card class="m-t-15" shadow="never">
+        <el-card class="!border-none" shadow="never">
             <div>
-                <div class="m-b-20 lg">基本信息</div>
+                <div class="mb-4 lg">基本信息</div>
 
-                <el-form :inline="true" :model="formData" size="small">
-                    <div class="flex basic-information">
-                        <div class="flex-1">
-                            <span class="m-r-40 nr">Redis版本</span>
-                            <span>{{ formData.redis_version || '-' }}</span>
-                        </div>
-
-                        <div class="flex-1">
-                            <span class="m-r-40 nr">运行模式</span>
-                            <span>{{ formData.redis_mode || '-' }}</span>
-                        </div>
-
-                        <div class="flex-1">
-                            <span class="m-r-40 nr">端口</span>
-                            <span>{{ formData.tcp_port || '-' }}</span>
-                        </div>
-
-                        <div class="flex-1">
-                            <span class="m-r-40 nr">客户端数</span>
-                            <span>{{ formData.connected_clients || '-' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="flex basic-information">
-                        <div class="flex-1">
-                            <span class="m-r-40 nr">运行时间(天)</span>
-                            <span>{{ formData.uptime_in_days || '-' }}</span>
-                        </div>
-                        <div class="flex-1">
-                            <span class="m-r-40 nr">使用内存</span>
-                            <span>{{ formData.used_memory_human || '-' }}</span>
-                        </div>
-                        <div class="flex-1">
-                            <span class="m-r-40 nr">使用CPU</span>
-                            <span>{{ formData.used_cpu_user_children || '-' }}</span>
-                        </div>
-                        <div class="flex-1">
-                            <span class="m-r-40 nr">内存配置</span>
-                            <span>{{ formData.maxmemory_human || '-' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="flex basic-information">
-                        <div class="flex-1">
-                            <span class="m-r-40 nr">AOF是否开启</span>
-                            <span>{{ formData.aof_enabled == '0' ? '开启' : '关闭' || '-' }}</span>
-                        </div>
-                        <div class="flex-1">
-                            <span class="m-r-40 nr">RDB是否成功</span>
-                            <span>
-                                {{
-                                    formData.rdb_last_bgsave_status == 'ok' ? '成功' : '失败' || '-'
-                                }}
-                            </span>
-                        </div>
-                        <div class="flex-1">
-                            <span class="m-r-40 nr">Key数量</span>
-                            <span>{{ formData.dbSize || '-' }}</span>
-                        </div>
-                        <div class="flex-1">
-                            <span class="m-r-40 nr">网络入口/出口</span>
-                            <span>
-                                {{ formData.instantaneous_input_kbps || '-' }}
-                                <span>/</span>
-                                {{ formData.instantaneous_output_kbps || '-' }}
-                            </span>
-                        </div>
-                    </div>
-                </el-form>
+                <div class="el-table--enable-row-transition el-table--large el-table">
+                    <el-scrollbar>
+                        <table class="el-table__body" cellspacing="0">
+                            <tbody>
+                                <tr class="el-table__row">
+                                    <td class="el-table__cell">
+                                        <div class="cell">Redis版本</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">{{ baseInfo.redis_version }}</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">运行模式</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">
+                                            {{
+                                                baseInfo.redis_mode == 'standalone'
+                                                    ? '单机'
+                                                    : '集群'
+                                            }}
+                                        </div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">端口</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">{{ baseInfo.tcp_port }}</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">客户端数</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">{{ baseInfo.connected_clients }}</div>
+                                    </td>
+                                </tr>
+                                <tr class="el-table__row">
+                                    <td class="el-table__cell">
+                                        <div class="cell">运行时间(天)</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">{{ baseInfo.uptime_in_days }}</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">使用内存</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">
+                                            {{ baseInfo.used_memory_human }}
+                                        </div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">使用CPU</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">
+                                            {{ baseInfo.used_cpu_user_children }}
+                                        </div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">内存配置</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">{{ baseInfo.maxmemory_human }}</div>
+                                    </td>
+                                </tr>
+                                <tr class="el-table__row">
+                                    <td class="el-table__cell">
+                                        <div class="cell">AOF是否开启</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">
+                                            {{ baseInfo.aof_enabled == 0 ? '开启' : '关闭' }}
+                                        </div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">RDB是否成功</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">
+                                            {{ baseInfo.aof_enabled == 'ok' ? '成功' : '失败' }}
+                                        </div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">Key数量</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">{{ baseInfo.dbSize }}</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">网络入口/出口</div>
+                                    </td>
+                                    <td class="el-table__cell">
+                                        <div class="cell">
+                                            {{ baseInfo.instantaneous_input_kbps }}
+                                            /
+                                            {{ baseInfo.instantaneous_output_kbps }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </el-scrollbar>
+                </div>
             </div>
         </el-card>
 
-        <div class="m-t-15 flex">
+        <div class="sm:flex">
             <!-- 命令统计 -->
-            <el-card class="m-r-15 flex-1 test" shadow="never">
+            <el-card class="sm:mr-4 flex-1 !border-none mt-4" shadow="never">
                 <div>
-                    <div class="p-b-60 lg">命令统计</div>
-                    <div class="statistical-chart">
-                        <v-chart class="chart" :option="statisticalData.commandChartOption" />
+                    <div class="mb-10">命令统计</div>
+                    <div class="flex h-[300px] items-center">
+                        <v-charts autoresize :option="chartOptions.commandChartOption" />
                     </div>
                 </div>
             </el-card>
 
             <!-- 内存信息 -->
-            <el-card class="flex-1" shadow="never">
+            <el-card class="flex-1 !border-none mt-4" shadow="never">
                 <div>
-                    <div class="p-b-40 lg">内存信息</div>
-                    <div class="statistical-chart">
-                        <v-chart class="chart" :option="statisticalData.memoryChartOption" />
+                    <div class="mb-10">内存信息</div>
+                    <div class="flex h-[300px] items-center">
+                        <v-charts autoresize :option="chartOptions.memoryChartOption" />
                     </div>
                 </div>
             </el-card>
@@ -113,21 +137,14 @@
 </template>
 
 <script setup lang="ts">
-import { apiSystemCache } from '@/api/setting'
-import { reactive, ref, onMounted } from 'vue'
-import Popup from '@/components/Popup/index.vue'
+import { systemCache } from '@/api/setting/system'
+import vCharts from 'vue-echarts'
+import { reactive } from 'vue'
+import { ElTable } from 'element-plus'
 
-// 列表数据
-let cacheDate = ref<Array<object>>([
-    {
-        content: '系统缓存',
-        desc: '系统运行过程中产生的各类缓存数据'
-    }
-])
+const baseInfo = ref<any>({})
 
-const formData = ref<any>({})
-
-const statisticalData = reactive({
+const chartOptions = reactive({
     commandChartOption: {
         tooltip: {
             trigger: 'item'
@@ -219,41 +236,25 @@ const statisticalData = reactive({
 })
 
 const getSystemCache = async () => {
-    apiSystemCache({})
-        .then((res: any) => {
-            console.log(res)
-            formData.value = res.info
-            formData.value.dbSize = res.dbSize || ''
+    const data = await systemCache()
+    baseInfo.value = data.info
+    baseInfo.value.dbSize = data.dbSize
 
-            statisticalData.commandChartOption.series[0].data = res.commandStats
+    chartOptions.commandChartOption.series[0].data = data.commandStats
 
-            statisticalData.memoryChartOption.series[0].data[0].value = (
-                res.info.used_memory /
-                1024 /
-                1024
-            ).toFixed(2)
-            statisticalData.memoryChartOption.series[0].detail.formatter = '{value}' + 'M'
-        })
-        .catch((err: any) => {
-            console.log('err', err)
-        })
+    chartOptions.memoryChartOption.series[0].data[0].value = (
+        data.info.used_memory /
+        1024 /
+        1024
+    ).toFixed(2)
+    chartOptions.memoryChartOption.series[0].detail.formatter = '{value}' + 'M'
 }
 
-onMounted(() => {
-    getSystemCache()
-})
+getSystemCache()
 </script>
 
-<style lang="scss" scoped>
-.statistical-chart {
-    display: flex;
-    justify-content: center;
-    height: 240px;
-}
-
-.basic-information {
-    padding-bottom: 20px;
-    margin-top: 20px;
-    border-bottom: 1px solid #dfdfdf;
+<style scoped>
+.el-table .el-table__cell {
+    min-width: 120px;
 }
 </style>

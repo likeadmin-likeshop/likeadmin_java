@@ -5,7 +5,7 @@ import com.hxkj.admin.config.aop.Log;
 import com.hxkj.admin.service.common.IAlbumService;
 import com.hxkj.admin.validate.common.AlbumParam;
 import com.hxkj.admin.validate.common.PageParam;
-import com.hxkj.admin.vo.common.album.AlbumVo;
+import com.hxkj.admin.vo.album.AlbumVo;
 import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.utils.ArrayUtil;
@@ -27,7 +27,7 @@ public class AlbumController {
     IAlbumService iAlbumService;
 
     /**
-     * 相册列表
+     * 相册文件列表
      *
      * @author fzr
      * @return Object
@@ -40,12 +40,12 @@ public class AlbumController {
     }
 
     /**
-     * 相册重命名
+     * 相册文件重命名
      *
      * @author fzr
      * @return Object
      */
-    @Log(title = "相册重命名")
+    @Log(title = "相册文件重命名")
     @PostMapping("/albumRename")
     public Object albumRename(@Validated(value = AlbumParam.rename.class) @RequestBody AlbumParam albumParam) {
         iAlbumService.albumRename(albumParam.getId(), albumParam.getName());
@@ -53,12 +53,12 @@ public class AlbumController {
     }
 
     /**
-     * 相册移动
+     * 相册文件移动
      *
      * @author fzr
      * @return Object
      */
-    @Log(title = "相册移动")
+    @Log(title = "相册文件移动")
     @PostMapping("/albumMove")
     public Object albumMove(@RequestBody Map<String, Object> params) {
         if (params.get("ids") == null) {
@@ -70,17 +70,21 @@ public class AlbumController {
         }
 
         List<Integer> ids = ArrayUtil.objectToListAsInt(params.get("ids"));
+        if (ids.size() <= 0) {
+            return AjaxResult.failed("请至少选择一个文件");
+        }
+
         iAlbumService.albumMove(ids, Integer.parseInt(params.get("cid").toString()));
         return AjaxResult.success();
     }
 
     /**
-     * 相册删除
+     * 相册文件删除
      *
      * @author fzr
      * @return Object
      */
-    @Log(title = "相册删除")
+    @Log(title = "相册文件删除")
     @PostMapping("/albumDel")
     public Object albumDel(@RequestBody Map<String, List<Integer>> params) {
         if (params.get("ids") == null) {
@@ -92,7 +96,7 @@ public class AlbumController {
     }
 
     /**
-     * 分类列表
+     * 相册分类列表
      *
      * @author fzr
      * @return Object
@@ -104,7 +108,7 @@ public class AlbumController {
     }
 
     /**
-     * 分类新增
+     * 相册分类新增
      *
      * @author fzr
      * @return Object
@@ -117,7 +121,7 @@ public class AlbumController {
     }
 
     /**
-     * 分类重命名
+     * 相册分类重命名
      *
      * @author fzr
      * @return Object
@@ -130,7 +134,7 @@ public class AlbumController {
     }
 
     /**
-     * 分类删除
+     * 相册分类删除
      *
      * @author fzr
      * @return Object

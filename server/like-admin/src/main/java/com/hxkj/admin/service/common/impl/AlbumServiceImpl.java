@@ -8,17 +8,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hxkj.admin.service.common.IAlbumService;
 import com.hxkj.admin.validate.common.AlbumParam;
 import com.hxkj.admin.validate.common.PageParam;
-import com.hxkj.admin.vo.common.album.AlbumCateVo;
-import com.hxkj.admin.vo.common.album.AlbumVo;
+import com.hxkj.admin.vo.album.AlbumCateVo;
+import com.hxkj.admin.vo.album.AlbumVo;
 import com.hxkj.common.core.PageResult;
 import com.hxkj.common.entity.album.Album;
 import com.hxkj.common.entity.album.AlbumCate;
 import com.hxkj.common.mapper.album.AlbumCateMapper;
 import com.hxkj.common.mapper.album.AlbumMapper;
-import com.hxkj.common.utils.ArrayUtil;
-import com.hxkj.common.utils.TimeUtil;
-import com.hxkj.common.utils.ToolsUtil;
-import com.hxkj.common.utils.UrlUtil;
+import com.hxkj.common.utils.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +38,7 @@ public class AlbumServiceImpl implements IAlbumService {
     AlbumCateMapper albumCateMapper;
 
     /**
-     * 文件列表
+     * 相册文件列表
      *
      * @author fzr
      * @param pageParam 分页参数
@@ -54,21 +51,21 @@ public class AlbumServiceImpl implements IAlbumService {
 
         QueryWrapper<Album> queryWrapper = new QueryWrapper<>();
         queryWrapper.select(Album.class, info->
-                !info.getColumn().equals("type") &&
-                        !info.getColumn().equals("aid") &&
-                        !info.getColumn().equals("uid") &&
-                        !info.getColumn().equals("is_delete") &&
-                        !info.getColumn().equals("delete_time"))
+                    !info.getColumn().equals("type") &&
+                    !info.getColumn().equals("aid") &&
+                    !info.getColumn().equals("uid") &&
+                    !info.getColumn().equals("is_delete") &&
+                    !info.getColumn().equals("delete_time"))
                 .eq("is_delete", 0)
                 .orderByDesc("id");
 
-        if (params.get("cid") != null && Integer.parseInt(params.get("cid")) >= 0) {
+        if (StringUtil.isNotEmpty(params.get("cid"))) {
             queryWrapper.eq("cid", Integer.parseInt(params.get("cid")));
         }
 
         albumMapper.setSearch(queryWrapper, params, new String[]{
-                "like:keyword:str",
-                "=:type:int"
+                "=:type:int",
+                "like:keyword@name:str"
         });
 
         IPage<Album> iPage = albumMapper.selectPage(new Page<>(page, limit), queryWrapper);
@@ -89,7 +86,7 @@ public class AlbumServiceImpl implements IAlbumService {
     }
 
     /**
-     * 文件重命名
+     * 相册文件重命名
      *
      * @author fzr
      * @param id 文件ID
@@ -110,7 +107,7 @@ public class AlbumServiceImpl implements IAlbumService {
     }
 
     /**
-     * 文件移动
+     * 相册文件移动
      *
      * @author fzr
      * @param ids 文件ID
@@ -139,7 +136,7 @@ public class AlbumServiceImpl implements IAlbumService {
     }
 
     /**
-     * 文件新增
+     * 相册文件新增
      *
      * @author fzr
      * @param params 文件信息参数
@@ -147,9 +144,9 @@ public class AlbumServiceImpl implements IAlbumService {
     @Override
     public Integer albumAdd(Map<String, String> params) {
         Album album = new Album();
-        album.setCid(Integer.parseInt(params.get("cid") == null ? "0" :  params.get("cid")));
-        album.setAid(Integer.parseInt(params.get("aid") == null ? "0" :  params.get("aid")));
-        album.setUid(Integer.parseInt(params.get("uid") == null ? "0" :  params.get("uid")));
+        album.setCid(Integer.parseInt(params.get("cid") == null ? "0" : params.get("cid")));
+        album.setAid(Integer.parseInt(params.get("aid") == null ? "0" : params.get("aid")));
+        album.setUid(Integer.parseInt(params.get("uid") == null ? "0" : params.get("uid")));
         album.setType(Integer.parseInt(params.get("type")));
         album.setName(params.get("name"));
         album.setExt(params.get("ext"));
@@ -162,7 +159,7 @@ public class AlbumServiceImpl implements IAlbumService {
     }
 
     /**
-     * 文件删除
+     * 相册文件删除
      *
      * @author fzr
      * @param ids 文件ID
@@ -184,7 +181,7 @@ public class AlbumServiceImpl implements IAlbumService {
     }
 
     /**
-     * 分类列表
+     * 相册分类列表
      *
      * @param params 搜索参数
      * @return JSONArray
@@ -198,7 +195,7 @@ public class AlbumServiceImpl implements IAlbumService {
                 .eq("is_delete", 0)
                 .orderByDesc("id");
 
-        long type      = Integer.parseInt(params.getOrDefault("type", "0"));
+        long type = Integer.parseInt(params.getOrDefault("type", "0"));
         String keyword = params.getOrDefault("keyword", "");
         if (type > 0) {
             queryWrapper.eq("type", type);

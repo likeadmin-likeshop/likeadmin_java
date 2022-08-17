@@ -1,15 +1,15 @@
 package com.hxkj.admin.service.system.impl;
 
 import com.hxkj.admin.config.AdminConfig;
-import com.hxkj.admin.service.system.ISystemAdminService;
+import com.hxkj.admin.service.system.ISystemAuthAdminService;
 import com.hxkj.admin.service.system.ISystemLoginService;
 import com.hxkj.admin.validate.system.SystemLoginParam;
-import com.hxkj.common.entity.system.SystemAdmin;
+import com.hxkj.common.entity.system.SystemAuthAdmin;
 import com.hxkj.common.entity.system.SystemLogLogin;
 import com.hxkj.common.enums.HttpEnum;
 import com.hxkj.common.exception.LoginException;
 import com.hxkj.common.exception.OperateException;
-import com.hxkj.common.mapper.system.SystemAdminMapper;
+import com.hxkj.common.mapper.system.SystemAuthAdminMapper;
 import com.hxkj.common.mapper.system.SystemLogLoginMapper;
 import com.hxkj.common.utils.*;
 import nl.bitwalker.useragentutils.UserAgent;
@@ -33,10 +33,10 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
     SystemLogLoginMapper systemLogLoginMapper;
 
     @Resource
-    SystemAdminMapper systemAdminMapper;
+    SystemAuthAdminMapper systemAuthAdminMapper;
 
     @Resource
-    ISystemAdminService iSystemAdminService;
+    ISystemAuthAdminService iSystemAuthAdminService;
 
 
     private static final Logger log = LoggerFactory.getLogger(SystemLoginServiceImpl.class);
@@ -53,7 +53,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
         String username = systemLoginParam.getUsername();
         String password = systemLoginParam.getPassword();
 
-        SystemAdmin sysAdmin = iSystemAdminService.findByUsername(username);
+        SystemAuthAdmin sysAdmin = iSystemAuthAdminService.findByUsername(username);
         if (sysAdmin == null || sysAdmin.getIsDelete() == 1) {
             this.recordLoginLog(0, systemLoginParam.getUsername(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
             throw new LoginException(HttpEnum.LOGIN_ACCOUNT_ERROR.getCode(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
@@ -74,12 +74,12 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
         try {
             sysAdmin.setLastLoginIp(IpUtil.getIpAddress());
             sysAdmin.setLastLoginTime(System.currentTimeMillis() / 1000);
-            systemAdminMapper.updateById(sysAdmin);
+            systemAuthAdminMapper.updateById(sysAdmin);
 
             // 缓存登录信息
             String token = ToolsUtil.makeToken();
             RedisUtil.set(AdminConfig.backstageTokenKey+token, sysAdmin.getId(), 7200);
-            iSystemAdminService.cacheAdminUserByUid(sysAdmin.getId());
+            iSystemAuthAdminService.cacheAdminUserByUid(sysAdmin.getId());
 
             // 返回登录信息
             Map<String, Object> response = new LinkedHashMap<>();
@@ -88,7 +88,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
             // 更新登录信息
             sysAdmin.setLastLoginIp(IpUtil.getIpAddress());
             sysAdmin.setLastLoginTime(TimeUtil.timestamp());
-            systemAdminMapper.updateById(sysAdmin);
+            systemAuthAdminMapper.updateById(sysAdmin);
 
             // 记录登录日志
             this.recordLoginLog(sysAdmin.getId(), systemLoginParam.getUsername(), "");

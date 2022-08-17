@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.hxkj.admin.LikeAdminThreadLocal;
 import com.hxkj.common.entity.system.SystemLogOperate;
 import com.hxkj.common.mapper.system.SystemLogOperateMapper;
-import com.hxkj.common.utils.HttpUtil;
 import com.hxkj.common.utils.IpUtil;
 import com.hxkj.common.utils.RequestUtil;
 import org.aspectj.lang.JoinPoint;

@@ -1,0 +1,124 @@
+package ${packageName}.admin.controller.${moduleName};
+
+#if(!$table.genTpl.equals("crud"))
+import com.alibaba.fastjson.JSONArray;
+#end
+import ${packageName}.admin.config.aop.Log;
+import ${packageName}.admin.service.${moduleName}.I${EntityName}Service;
+import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
+#if($table.genTpl.equals("crud"))
+import ${packageName}.admin.validate.common.PageParam;
+import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
+#end
+import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
+import ${packageName}.common.core.AjaxResult;
+#if($table.genTpl.equals("crud"))
+import ${packageName}.common.core.PageResult;
+#end
+import ${packageName}.common.validator.annotation.IDMust;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * ${functionName}管理
+ */
+@RestController
+@RequestMapping("api/${moduleName}")
+public class ${EntityName}Controller {
+
+    @Resource
+    I${EntityName}Service i${EntityName}Service;
+
+    /**
+     * ${functionName}列表
+     *
+     #if(!$authorName.equals(""))
+     * @author ${authorName}
+     #end
+     #if($table.genTpl.equals("crud"))
+     * @param pageParam 分页参数
+     #end
+     * @param params 搜索参数
+     * @return Object
+     */
+    #if($table.genTpl.equals("crud"))
+    @GetMapping("/list")
+    public Object list(@Validated PageParam pageParam,
+                       @RequestParam Map<String, String> params) {
+        PageResult<${EntityName}ListVo> list = i${EntityName}Service.list(pageParam, params);
+        return AjaxResult.success(list);
+    }
+    #else
+    @GetMapping("/list")
+    public Object list(@RequestParam Map<String, String> params) {
+        JSONArray list = i${EntityName}Service.list(params);
+        return AjaxResult.success(list);
+    }
+    #end
+    /**
+     * ${functionName}详情
+     *
+     #if(!$authorName.equals(""))
+     * @author ${authorName}
+     #end
+     * @param id 主键ID
+     * @return Object
+     */
+    @GetMapping("/detail")
+    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+        ${EntityName}DetailVo detail = i${EntityName}Service.detail(id);
+        return AjaxResult.success(detail);
+    }
+
+    /**
+     * ${functionName}新增
+     *
+     #if(!$authorName.equals(""))
+     * @author ${authorName}
+     #end
+     * @param ${entityName}Param 参数
+     * @return Object
+     */
+    @Log(title = "${functionName}新增")
+    @PostMapping("/add")
+    public Object add(@Validated(value = ${EntityName}Param.create.class) @RequestBody ${EntityName}Param ${entityName}Param) {
+        i${EntityName}Service.add(${entityName}Param);
+        return AjaxResult.success();
+    }
+
+    /**
+     * ${functionName}编辑
+     *
+     #if(!$authorName.equals(""))
+     * @author ${authorName}
+     #end
+     * @param ${entityName}Param 参数
+     * @return Object
+     */
+    @Log(title = "${functionName}编辑")
+    @PostMapping("/edit")
+    public Object edit(@Validated(value = ${EntityName}Param.update.class) @RequestBody ${EntityName}Param ${entityName}Param) {
+        i${EntityName}Service.edit(${entityName}Param);
+        return AjaxResult.success();
+    }
+
+    /**
+     * ${functionName}删除
+     *
+     #if(!$authorName.equals(""))
+     * @author ${authorName}
+     #end
+     * @param ${entityName}Param 参数
+     * @return Object
+     */
+    @Log(title = "${functionName}删除")
+    @PostMapping("/del")
+    public Object del(@Validated(value = ${EntityName}Param.delete.class) @RequestBody ${EntityName}Param ${entityName}Param) {
+        i${EntityName}Service.del(${entityName}Param.getId());
+        return AjaxResult.success();
+    }
+
+}

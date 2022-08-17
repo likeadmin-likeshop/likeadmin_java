@@ -1,0 +1,24 @@
+package ${packageName}.common.entity.${moduleName};
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.Data;
+
+import java.io.Serializable;
+
+/**
+ * ${functionName}实体
+ */
+@Data
+public class ${EntityName} implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+ #foreach ($column in $columns)
+    #if($column.isPk)
+    @TableId(value="${column.columnName}", type= IdType.AUTO)
+    #end
+    private ${column.javaType} ${column.javaField}; // ${column.columnComment}
+ #end
+
+}

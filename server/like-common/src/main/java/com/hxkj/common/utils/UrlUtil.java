@@ -32,14 +32,21 @@ public class UrlUtil {
             url = "/" + url;
         }
 
+        if (url.startsWith("/api/static/")) {
+            return RequestUtil.uri() + url;
+        }
+
         String engine = ConfigUtil.get("storage", "default", "local");
         engine = engine.equals("") ? "local" : engine;
         if (engine.equals("local")) {
-            return RequestUtil.domain() + "/" + uploadPrefix + url;
+            return RequestUtil.uri() + "/" + uploadPrefix + url;
         }
 
         Map<String, String> config = ConfigUtil.getMap("storage", engine);
-        return config.getOrDefault("domain", "") + url;
+        if (config != null) {
+            return config.getOrDefault("domain", "") + url;
+        }
+        return url;
     }
 
     /**
@@ -59,11 +66,17 @@ public class UrlUtil {
         String engine = ConfigUtil.get("storage", "default", "local");
         engine = engine.equals("") ? "local" : engine;
         if (engine.equals("local")) {
-            return url.replace(RequestUtil.domain() + "/" + uploadPrefix + "/", "");
+            return url.replace(RequestUtil.uri(), "")
+                      .replace("/" + uploadPrefix + "/", "");
         }
 
         Map<String, String> config = ConfigUtil.getMap("storage", engine);
-        return url.replace(config.getOrDefault("domain", "") + "/" + uploadPrefix + "/", "");
+        if (config != null) {
+            return url.replace(config.getOrDefault("domain", ""), "")
+                    .replace( "/" + uploadPrefix + "/", "");
+        }
+
+        return url;
     }
 
     /**
@@ -77,11 +90,14 @@ public class UrlUtil {
         String engine = ConfigUtil.get("storage", "default", "local");
         engine = engine.equals("") ? "local" : engine;
         if (engine.equals("local")) {
-            return RequestUtil.domain() + "/";
+            return RequestUtil.uri() + "/";
         }
 
         Map<String, String> config = ConfigUtil.getMap("storage", engine);
-        return config.getOrDefault("domain", "") + "/";
+        if (config != null) {
+            return config.getOrDefault("domain", "") + "/";
+        }
+        return "";
     }
 
 }

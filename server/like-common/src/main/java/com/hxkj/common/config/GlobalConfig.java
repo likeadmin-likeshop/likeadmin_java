@@ -12,19 +12,22 @@ public class GlobalConfig {
     public static Boolean isAddressEnabled = false;
 
     // 当前代码版本
-    public static String version = "v1.0.1";
+    public static String version = "v1.2.0";
 
     // 系统加密字符
     public static String secret = "UVTIyzCy";
+
+    // Mysql表前缀
+    public static String tablePrefix = "la_";
 
     // Redis键前缀
     public static String redisPrefix = "Like:";
 
     // 资源访问前缀
-    public static String publicPrefix = "uploads";
+    public static String publicPrefix = "api/uploads";
 
     // 上传映射目录
-    public static String uploadDirectory = "/www/wwwroot/uploads/";
+    public static String uploadDirectory = "/www/like-admin/uploads/";
 
     // 上传图片限制
     public static Integer uploadImageSize = 1024 * 1024 * 10;

@@ -16,16 +16,23 @@ public class AdminConfig {
 
     // 免登录验证
     public static String[] notLoginUri = new String[]{
-            "system:login",        // 登录接口
-            "common:index:config"  // 配置接口
+            "system:login",         // 登录接口
+            "common:index:config",  // 配置接口
+            "gen:downloadCode",  // 配置接口
     };
 
     // 免权限验证
     public static String[] notAuthUri = new String[]{
-            "system:admin:upInfo", // 管理员更新
-            "system:admin:self",   // 管理员信息
-            "system:logout",       // 退出登录
-            "system:menu:menus",   // 系统菜单
+            "system:logout",         // 退出登录
+            "system:menu:menus",     // 系统菜单
+            "system:menu:route",     // 菜单路由
+            "system:admin:upInfo",   // 管理员更新
+            "system:admin:self",     // 管理员信息
+            "system:role:all",       // 所有角色
+            "system:post:all",       // 所有岗位
+            "system:dept:list",      // 所有部门
+            "setting:dict:type:all", // 所有字典类型
+            "setting:dict:data:all", // 所有字典数据
     };
 
 }

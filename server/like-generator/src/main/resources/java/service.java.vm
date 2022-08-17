@@ -1,0 +1,85 @@
+package ${packageName}.admin.service.${moduleName};
+
+#if(!$table.genTpl.equals("crud"))
+import com.alibaba.fastjson.JSONArray;
+#end
+import ${packageName}.admin.validate.common.PageParam;
+import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
+import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
+import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
+import ${packageName}.common.core.PageResult;
+
+import java.util.Map;
+
+/**
+ * ${functionName}服务接口类
+ */
+public interface I${EntityName}Service {
+
+ #if($table.genTpl=="crud")
+    /**
+     * ${functionName}列表
+     *
+     #if(!$authorName.equals(""))
+     * @author ${authorName}
+     #end
+     * @param pageParam 分页参数
+     * @param params 搜索参数
+     * @return PageResult<${EntityName}Vo>
+     */
+    PageResult<${EntityName}ListVo> list(PageParam pageParam, Map<String, String> params);
+#elseif($table.genTpl=="tree")
+    /**
+     * ${functionName}列表
+     *
+     #if(!$authorName.equals(""))
+     * @author ${authorName}
+     #end
+     * @param params 搜索参数
+     * @return JSONArray
+    */
+    JSONArray list(Map<String, String> params);
+ #end
+
+    /**
+     * ${functionName}详情
+     *
+     #if(!$authorName.equals(""))
+     * @author ${authorName}
+     #end
+     * @param id 主键ID
+     * @return ${EntityName}
+     */
+    ${EntityName}DetailVo detail(Integer id);
+
+    /**
+     * ${functionName}新增
+     *
+     #if(!$authorName.equals(""))
+     * @author ${authorName}
+     #end
+     * @param ${entityName}Param 参数
+     */
+    void add(${EntityName}Param ${entityName}Param);
+
+    /**
+     * ${functionName}编辑
+     *
+     #if(!$authorName.equals(""))
+     * @author ${authorName}
+     #end
+     * @param ${entityName}Param 参数
+     */
+    void edit(${EntityName}Param ${entityName}Param);
+
+    /**
+     * ${functionName}删除
+     *
+     #if(!$authorName.equals(""))
+     * @author ${authorName}
+     #end
+     * @param id 主键ID
+     */
+    void del(Integer id);
+
+}

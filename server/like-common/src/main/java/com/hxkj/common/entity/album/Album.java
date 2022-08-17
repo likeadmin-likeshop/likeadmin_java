@@ -15,18 +15,18 @@ public class Album implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value="id", type= IdType.AUTO)
-    private Integer id;
-    private Integer cid;
-    private Integer aid;
-    private Integer uid;
-    private Integer type;
-    private String name;
-    private String uri;
-    private String ext;
-    private Long size;
-    private Integer isDelete;
-    private Long createTime;
-    private Long updateTime;
-    private Long deleteTime;
+    private Integer id;        // 主键ID
+    private Integer cid;       // 类目ID
+    private Integer aid;       // 管理ID
+    private Integer uid;       // 用户ID
+    private Integer type;      // 文件类型: [10=图片, 20=视频]
+    private String name;       // 文件名称
+    private String uri;        // 文件路径
+    private String ext;        // 文件扩展
+    private Long size;         // 文件大小
+    private Integer isDelete;  // 是否删除: [0=否, 1=是]
+    private Long createTime;   // 创建时间
+    private Long updateTime;   // 更新时间
+    private Long deleteTime;   // 删除时间
 
 }

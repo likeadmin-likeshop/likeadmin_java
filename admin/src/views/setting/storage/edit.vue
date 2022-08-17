@@ -1,197 +1,185 @@
 <template>
-    <div class="storage-setting">
-        <!-- 导航头部 -->
-        <el-card shadow="never">
-            <el-page-header @back="$router.go(-1)" content="存储设置" />
-        </el-card>
-
-        <!-- 提示 -->
-        <el-card shadow="never" class="m-t-15" v-if="alias !== storage.LOCAL">
-            <el-alert
-                v-if="alias == storage.QINIU"
-                title="温馨提示：切换七牛云存储后，素材库需要重新上传至七牛云。"
-                type="primary"
-                :closable="false"
-                show-icon
-            />
-            <el-alert
-                v-if="alias == storage.ALIYUN"
-                title="温馨提示：切换阿里云OSS后，素材库需要重新上传至阿里云OSS。"
-                type="primary"
-                :closable="false"
-                show-icon
-            />
-            <el-alert
-                v-if="alias == storage.QCLOUD"
-                title="温馨提示：切换腾讯云OSS后，素材库需要重新上传至腾讯云OSS。"
-                type="primary"
-                :closable="false"
-                show-icon
-            />
-        </el-card>
-
-        <!-- 表单 -->
-        <el-card shadow="never" class="m-t-15">
-            <el-form
-                ref="formRef"
-                :model="form"
-                :rules="formRules"
-                label-width="240px"
-                size="small"
-                class="ls-form"
-            >
-                <!-- 存储设置 -->
-                <div class="card-content m-t-24">
-                    <el-form-item label="存储方式">
-                        <div v-if="alias === storage.LOCAL">本地存储</div>
-                        <div v-if="alias === storage.QINIU">七牛云存储</div>
-                        <div v-if="alias === storage.ALIYUN">阿里云OSS</div>
-                        <div v-if="alias === storage.QCLOUD">腾讯云OSS</div>
-                        <div v-if="alias === storage.LOCAL" class="muted xs m-r-16">
-                            本地存储方式不需要配置其他参数
+    <div class="edit-popup">
+        <popup
+            ref="popupRef"
+            title="设置存储"
+            :async="true"
+            width="550px"
+            :clickModalClose="true"
+            @confirm="handleSubmit"
+            @close="handleClose"
+        >
+            <el-form ref="formRef" :model="formData" label-width="120px" :rules="formRules">
+                <el-form-item label="存储方式" prop="alias">
+                    <div>
+                        <el-radio model-value>{{ getStorageInfo?.name }} </el-radio>
+                        <div class="form-tips">{{ getStorageInfo?.tips }}</div>
+                    </div>
+                </el-form-item>
+                <div v-if="formData.alias !== 'local'">
+                    <el-form-item label=" 存储空间名称" prop="bucket">
+                        <div class="flex-1">
+                            <el-input
+                                v-model="formData.bucket"
+                                placeholder="请输入存储空间名称(Bucket)"
+                            />
                         </div>
                     </el-form-item>
-                </div>
-                <div v-if="alias !== 'local'">
-                    <el-form-item label=" 存储空间名称(Bucket)" prop="bucket">
-                        <el-input v-model="form.bucket" placeholder="请输入存储空间名称(Bucket)"></el-input>
+                    <el-form-item label="ACCESS_KEY" prop="accessKey">
+                        <el-input v-model="formData.accessKey" placeholder="请输入ACCESS_KEY(AK)" />
                     </el-form-item>
-                    <el-form-item label="ACCESS_KEY（AK）" prop="accessKey">
-                        <el-input v-model="form.accessKey" placeholder="请输入ACCESS_KEY"></el-input>
+                    <el-form-item label="SECRET_KEY" prop="secretKey">
+                        <el-input v-model="formData.secretKey" placeholder="请输入SECRET_KEY(SK)" />
                     </el-form-item>
-                    <el-form-item label="SECRET_KEY（SK）" prop="secretKey">
-                        <el-input v-model="form.secretKey" placeholder="请输入SECRET_KEY"></el-input>
-                    </el-form-item>
-                    <el-form-item label="空间域名（Domain）" prop="domain">
-                        <!-- <el-select class="ls-select" v-model="form" placeholder="https://">
-							<el-option label="https://" value="https://"></el-option>
-							<el-option label="http://" value="http://"></el-option>
-						</el-select> -->
-                        <el-input v-model="form.domain" placeholder="请输入空间域名"></el-input>
-                        <div class="muted xs m-r-16">
-                            请补全http://或https://，例如https://static.cloud.com
+                    <el-form-item label="空间域名" prop="domain">
+                        <div class="flex-1">
+                            <div>
+                                <el-input
+                                    v-model="formData.domain"
+                                    placeholder="请输入空间域名(Domain)"
+                                />
+                            </div>
+                            <div class="form-tips">
+                                请补全http://或https://，例如https://static.cloud.com
+                            </div>
                         </div>
                     </el-form-item>
-                    <el-form-item v-if="alias == storage.QCLOUD" label="REGION" prop="region">
-                        <el-input v-model="form.region" placeholder="请输入region"></el-input>
+                    <el-form-item
+                        v-if="formData.alias == StorageEnum.QCLOUD"
+                        label="REGION"
+                        prop="region"
+                    >
+                        <el-input v-model="formData.region" placeholder="请输入region" />
                     </el-form-item>
                 </div>
                 <el-form-item label="状态" prop="status">
-                    <el-radio-group class="m-r-16" v-model="form.status">
-                        <el-radio :label="0">停用</el-radio>
-                        <el-radio :label="1">启用</el-radio>
+                    <el-radio-group v-model="formData.status">
+                        <el-radio :label="0">关闭</el-radio>
+                        <el-radio :label="1">开启</el-radio>
                     </el-radio-group>
                 </el-form-item>
             </el-form>
-        </el-card>
-
-        <!--  保存  -->
-        <footer-btns>
-            <el-button type="primary" size="small" @click="onSubmit">保存</el-button>
-        </footer-btns>
+        </popup>
     </div>
 </template>
+<script lang="ts" setup>
+import { storageSetup } from '@/api/setting/storage'
+import type { FormInstance } from 'element-plus'
+import Popup from '@/components/popup/index.vue'
+import { storageDetail } from '@/api/setting/storage'
+enum StorageEnum {
+    LOCAL = 'local', // 本地
+    QINIU = 'qiniu', // 七牛云
+    ALIYUN = 'aliyun', // 阿里云OSS
+    QCLOUD = 'qcloud' // 腾讯云OSS
+}
 
-<script setup lang="ts">
-    import { ref, onMounted } from 'vue'
-    import { ElMessage, ElForm } from 'element-plus'
-    import { storage } from '@/utils/type'
-    import { useAdmin } from '@/core/hooks/app'
-    import FooterBtns from '@/components/footer-btns/index.vue'
-    import { apiStorageDetail, apiStorageEdit } from '@/api/setting'
+const emit = defineEmits(['success'])
+const formRef = shallowRef<FormInstance>()
+const popupRef = shallowRef<InstanceType<typeof Popup>>()
+const formData = reactive({
+    alias: '',
+    bucket: '',
+    accessKey: '',
+    secretKey: '',
+    domain: '',
+    region: '', // 腾讯云需要
+    status: 0
+})
 
-    const { route, router } = useAdmin()
-
-    // 存储方式
-    let alias = ref<any>('') // 存储引擎名称：local-本地，qiniu-七牛云,aliyun-阿里云OSS,qcloud-腾讯云OS:
-
-    // 设置表单
-    let form = ref<object>({
-        bucket: '',
-        accessKey: '',
-        secretKey: '',
-        domain: '',
-        region: '', // 腾讯云需要
-        status: 0,
-    })
-
-    let formRules = ref({
-        bucket: [
-            {
-                required: true,
-                message: '请输入存储空间名称',
-                trigger: 'blur',
-            },
-        ],
-        accessKey: [
-            {
-                required: true,
-                message: '请输入ACCESS_KEY',
-                trigger: 'blur',
-            },
-        ],
-        secretKey: [
-            {
-                required: true,
-                message: '请输入SECRET_KEY',
-                trigger: 'blur',
-            },
-        ],
-        domain: [
-            {
-                required: true,
-                message: '请输入空间域名',
-                trigger: 'blur',
-            },
-        ],
-        region: [
-            {
-                required: true,
-                message: '请输入REGION',
-                trigger: 'blur',
-            },
-        ],
-    })
-
-    const formRef: Ref<typeof ElForm | null> = ref(null)
-
-    const onSubmit = () => {
-        // 验证表单格式是否正确
-        formRef.value?.validate((valid: boolean) => {
-            if (!valid) {
-                return
-            }
-            // 请求发送
-            apiStorageEdit({
-                ...form.value,
-                alias: alias.value,
-            })
-                .then((res: any) => {
-                    setTimeout(() => router.back(), 500)
-                    ElMessage({ type: 'success', message: '设置成功' })
-                })
-                .catch((err: any) => {
-                    console.log('err', err)
-                })
-        })
+const storageArr = [
+    {
+        name: '本地存储',
+        type: StorageEnum.LOCAL,
+        tips: '本地存储方式不需要配置其他参数'
+    },
+    {
+        name: '七牛云存储',
+        type: StorageEnum.QINIU,
+        tips: '切换七牛云存储后，素材库需要重新上传至七牛云'
+    },
+    {
+        name: '阿里云OSS',
+        type: StorageEnum.ALIYUN,
+        tips: '切换阿里云OSS后，素材库需要重新上传至阿里云OSS'
+    },
+    {
+        name: '腾讯云OSS',
+        type: StorageEnum.QCLOUD,
+        tips: '切换腾讯云OSS后，素材库需要重新上传至腾讯云OSS'
     }
+]
 
-    // 获取详情
-    const getStorageDetail = async () => {
-        form.value = await apiStorageDetail({
-            alias: alias.value,
-        })
-    }
-
-    onMounted(async () => {
-        if (route.query.alias) {
-            console.log('route.query.alias', route.query.alias)
-            alias.value = route.query.alias
-            console.log('alias.value', alias.value)
+const formRules = {
+    bucket: [
+        {
+            required: true,
+            message: '请输入存储空间名称',
+            trigger: 'blur'
         }
+    ],
+    accessKey: [
+        {
+            required: true,
+            message: '请输入ACCESS_KEY',
+            trigger: 'blur'
+        }
+    ],
+    secretKey: [
+        {
+            required: true,
+            message: '请输入SECRET_KEY',
+            trigger: 'blur'
+        }
+    ],
+    domain: [
+        {
+            required: true,
+            message: '请输入空间域名',
+            trigger: 'blur'
+        }
+    ],
+    region: [
+        {
+            required: true,
+            message: '请输入REGION',
+            trigger: 'blur'
+        }
+    ]
+}
 
-        await getStorageDetail()
+const getStorageInfo = computed(() => {
+    return storageArr.find((item) => item.type == formData.alias)
+})
+
+const handleSubmit = async () => {
+    await formRef.value?.validate()
+    await storageSetup(formData)
+    popupRef.value?.close()
+    emit('success')
+}
+
+const getDetail = async () => {
+    const data = await storageDetail({
+        alias: formData.alias
     })
-</script>
+    for (const key in data) {
+        //@ts-ignore
+        formData[key] = data[key]
+    }
+}
 
-<style lang="scss" scoped></style>
+const open = (type: string) => {
+    formData.alias = type
+    popupRef.value?.open()
+    getDetail()
+}
+
+const handleClose = () => {
+    formRef.value?.resetFields()
+}
+
+defineExpose({
+    open
+})
+</script>

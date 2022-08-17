@@ -1,8 +1,7 @@
 /**
- * @description 判断字符串是否是id=1&name=2这种类型
- * @param { String } str 
- * @returns { Boolean }
+ * @param {string} path
+ * @returns {Boolean}
  */
-export function isQuery(str: string) {
-    return /([^?&=]+)=([^?&=]*)/g.test(str)
+export function isExternal(path: string) {
+    return /^(https?:|mailto:|tel:)/.test(path)
 }

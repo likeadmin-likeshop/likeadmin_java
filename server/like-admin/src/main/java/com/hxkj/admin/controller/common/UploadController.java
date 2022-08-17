@@ -7,6 +7,7 @@ import com.hxkj.common.core.AjaxResult;
 import com.hxkj.common.enums.AlbumEnum;
 import com.hxkj.common.exception.OperateException;
 import com.hxkj.common.plugin.storage.StorageDriver;
+import com.hxkj.common.utils.StringUtil;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +39,13 @@ public class UploadController {
     @Log(title = "上传图片")
     @PostMapping("/image")
     public Object image(HttpServletRequest request) {
-        MultipartFile multipartFile = ((MultipartRequest) request).getFile("file");
+        MultipartFile multipartFile;
+        try {
+            multipartFile = ((MultipartRequest) request).getFile("file");
+        } catch (Exception e) {
+            return AjaxResult.failed("请正确选择上传图片");
+        }
+
         if (multipartFile == null) {
             return AjaxResult.failed("请选择上传图片");
         }
@@ -46,10 +53,11 @@ public class UploadController {
         try {
             StorageDriver storageDriver = new StorageDriver();
             Map<String, Object> map = storageDriver.upload(multipartFile, "image", AlbumEnum.IMAGE.getCode());
+            String cid = StringUtil.isNotEmpty(request.getParameter("cid")) ? request.getParameter("cid") : "0";
 
             Map<String, String> album = new LinkedHashMap<>();
             album.put("aid", String.valueOf(LikeAdminThreadLocal.getAdminId()));
-            album.put("cid", request.getParameter("cid"));
+            album.put("cid", cid);
             album.put("type", String.valueOf(AlbumEnum.IMAGE.getCode()));
             album.put("size", map.get("size").toString());
             album.put("ext", map.get("ext").toString());
@@ -75,7 +83,13 @@ public class UploadController {
     @Log(title = "上传视频")
     @PostMapping("/video")
     public Object video(HttpServletRequest request) {
-        MultipartFile multipartFile = ((MultipartRequest) request).getFile("file");
+        MultipartFile multipartFile;
+        try {
+            multipartFile = ((MultipartRequest) request).getFile("file");
+        } catch (Exception e) {
+            return AjaxResult.failed("请正确选择上传视频");
+        }
+
         if (multipartFile == null) {
             return AjaxResult.failed("请选择上传视频");
         }
@@ -83,9 +97,10 @@ public class UploadController {
         try {
             StorageDriver storageDriver = new StorageDriver();
             Map<String, Object> map = storageDriver.upload(multipartFile, "video", AlbumEnum.Video.getCode());
+            String cid = StringUtil.isNotEmpty(request.getParameter("cid")) ? request.getParameter("cid") : "0";
 
             Map<String, String> album = new LinkedHashMap<>();
-            album.put("cid", request.getParameter("cid"));
+            album.put("cid", cid);
             album.put("aid", String.valueOf(LikeAdminThreadLocal.getAdminId()));
             album.put("type", String.valueOf(AlbumEnum.Video.getCode()));
             album.put("ext", map.get("ext").toString());

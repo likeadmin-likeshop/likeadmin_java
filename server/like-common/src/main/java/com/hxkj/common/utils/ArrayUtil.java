@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.*;
 
@@ -239,6 +240,9 @@ public class ArrayUtil {
      * @return Map<String, Object>
      */
     public static List<Map<String, Object>> stringToListAsMapObj(String s) {
+        if (StringUtil.isEmpty(s)) {
+            return Collections.emptyList();
+        }
         Type type = new TypeToken<List<Map<String, Object>>>() {}.getType();
         return JSON.parseObject(s, type);
     }
@@ -251,6 +255,9 @@ public class ArrayUtil {
      * @return Map<String, String>
      */
     public static List<Map<String, String>> stringToListAsMapStr(String s) {
+        if (StringUtil.isEmpty(s)) {
+            return Collections.emptyList();
+        }
         Type type = new TypeToken<List<Map<String, String>>>() {}.getType();
         return JSON.parseObject(s, type);
     }
@@ -263,6 +270,9 @@ public class ArrayUtil {
      * @return List<Long>
      */
     public static List<Integer> objectToListAsLong(Object object) {
+        if (StringUtil.isNull(object)) {
+            return Collections.emptyList();
+        }
         Type type = new TypeToken<List<Long>>() {}.getType();
         return JSON.parseObject(JSONObject.toJSONString(object), type);
     }
@@ -275,6 +285,9 @@ public class ArrayUtil {
      * @return List<Integer>
      */
     public static List<Integer> objectToListAsInt(Object object) {
+        if (StringUtil.isNull(object)) {
+            return Collections.emptyList();
+        }
         Type type = new TypeToken<List<Integer>>() {}.getType();
         return JSON.parseObject(JSONObject.toJSONString(object), type);
     }
@@ -287,6 +300,9 @@ public class ArrayUtil {
      * @return List<String>
      */
     public static List<Integer> objectToListAsStr(Object object) {
+        if (StringUtil.isNull(object)) {
+            return Collections.emptyList();
+        }
         Type type = new TypeToken<List<String>>() {}.getType();
         return JSON.parseObject(JSONObject.toJSONString(object), type);
     }
