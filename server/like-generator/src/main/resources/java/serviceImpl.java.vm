@@ -84,10 +84,10 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #set($queryWrapper = "mpjQueryWrapper")
         MPJQueryWrapper<${EntityName}> mpjQueryWrapper = new MPJQueryWrapper<>();
         mpjQueryWrapper.innerJoin("?_$table.subTableName f ON f.$table.SubTableFk=t.id".replace("?_", GlobalConfig.tablePrefix));
-        #if($fields.contains("is_delete"))
+        #if($allFields.contains("is_delete"))
         mpjQueryWrapper.eq("is_delete", 0);
         #end
-        #if($fields.contains("sort"))
+        #if($allFields.contains("sort"))
          mpjQueryWrapper.orderByDesc(Arrays.asList("sort", "id"));
         #else
         mpjQueryWrapper.orderByDesc("id");
@@ -95,10 +95,10 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     #else
         #set($queryWrapper = "queryWrapper")
         QueryWrapper<${EntityName}> queryWrapper = new QueryWrapper<>();
-        #if($fields.contains("is_delete"))
+        #if($allFields.contains("is_delete"))
         queryWrapper.eq("is_delete", 0);
         #end
-        #if($fields.contains("sort"))
+        #if($allFields.contains("sort"))
         queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
         #else
         queryWrapper.orderByDesc("id");
