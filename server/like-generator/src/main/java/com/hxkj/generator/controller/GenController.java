@@ -163,7 +163,7 @@ public class GenController {
     @GetMapping("/downloadCode")
     public void downloadCode(HttpServletResponse response, String tables) throws IOException {
         String production = YmlUtil.get("like.production");
-        if (StringUtil.isNull(production) || StringUtil.isEmpty(production) || production.equals("true")) {
+        if (StringUtil.isNotEmpty(production) && production.equals("true")) {
             throw new OperateException("抱歉,演示环境不允许操作！");
         }
 
