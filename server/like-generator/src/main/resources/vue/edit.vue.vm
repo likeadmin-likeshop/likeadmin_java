@@ -105,6 +105,7 @@
             #elseif($column.htmlType=="datetime")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
                     <el-date-picker
+                        class="flex-1 !flex"
                         v-model="formData.${column.javaField}"
                         type="date"
                         clearable

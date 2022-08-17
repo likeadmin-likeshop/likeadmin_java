@@ -190,7 +190,7 @@ const handleEdit = async (data: any) => {
 }
 
 const handleDelete = async (${primaryKey}: number[]) => {
-    await ${moduleName}Delete({ ${primaryKey} })
+    await ${moduleName}Delete({ ids: ${primaryKey} })
     feedback.msgSuccess('删除成功')
     getLists()
 }
