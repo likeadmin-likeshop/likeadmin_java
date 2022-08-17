@@ -52,17 +52,6 @@
                     </template>
                     新增
                 </el-button>
-                 <el-button
-                    v-perms="['${moduleName}:del']"
-                    :disabled="!selectData.length"
-                    type="danger"
-                    @click="handleDelete(selectData)"
-                >
-                    <template #icon>
-                        <icon name="el-icon-Delete" />
-                    </template>
-                    删除
-                </el-button>
             </div>
             <el-table
                 class="mt-4"
