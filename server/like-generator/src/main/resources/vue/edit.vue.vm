@@ -204,10 +204,7 @@ const open = (type = 'add') => {
     popupRef.value?.open()
 }
 
-const setFormData = async (row: Record<string, any>) => {
-    const data = await ${moduleName}Detail({
-        ${primaryKey}: row.${primaryKey}
-    })
+const setFormData = async (data: Record<string, any>) => {
     for (const key in formData) {
         if (data[key] != null && data[key] != undefined) {
             //@ts-ignore
@@ -221,6 +218,14 @@ const setFormData = async (row: Record<string, any>) => {
         }
     }
 }
+
+const getDetail = (row: Record<string, any>) => {
+    const data = await ${moduleName}Detail({
+        ${primaryKey}: row.${primaryKey}
+    })
+    setFormData(data)
+}
+
 
 const handleClose = () => {
     emit('close')
@@ -239,6 +244,7 @@ getLists()
 
 defineExpose({
     open,
-    setFormData
+    setFormData,
+    getDetail
 })
 </script>
