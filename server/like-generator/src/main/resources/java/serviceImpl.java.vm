@@ -110,7 +110,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     #foreach ($column in $columns)
     #if($column.isQuery)
         #if($dateFields.contains($column.columnName))
-            "datetime:${column.javaField}Start-${column.javaField}End@${column.columnName}:str"
+            "datetime:${column.javaField}Start-${column.javaField}End@${column.columnName}:str",
         #elseif($column.javaType=="Integer")
             #if($column.javaField.equals($column.columnName))
             "${column.queryType.toLowerCase()}:${column.javaField}:int",
