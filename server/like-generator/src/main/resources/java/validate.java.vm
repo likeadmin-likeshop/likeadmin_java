@@ -35,7 +35,7 @@ public class ${EntityName}Param implements Serializable {
     #if(!$column.isPk && $column.javaType.equals("String") && !$column.columnType.equals('text'))
     @Length(max = ${column.columnLength}, message = "${column.javaField}参数不能超出${column.columnLength}个字符", groups = {#if($column.isInsert)create.class#end#if($column.isInsert&&$column.isEdit), #end#if($column.isEdit)update.class#end})
     #end
-    #if(!$column.isPk && $column.javaField.substring(0,2)!="is" && ($column.javaType.equals("Integer") || $column.javaType.equals("Long")))
+    #if(!$column.isPk && $column.javaField.substring(0,2)!="is" && $column.htmlType!="datetime" && ($column.javaType.equals("Integer") || $column.javaType.equals("Long")))
     @DecimalMin(value = "0", message = "${column.javaField}参数值不能少于0", groups = {#if($column.isInsert)create.class#end#if($column.isInsert&&$column.isEdit), #end#if($column.isEdit)update.class#end})
     #end
     #if(!$column.isPk && $column.javaField.substring(0,2)=="is" && $column.javaType.equals("Integer"))

@@ -328,7 +328,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         model.set${AttrName}(UrlUtil.toRelativeUrl(${entityName}Param.get${AttrName}()));
         #elseif(!$dateFields.contains($column.columnName) and !$column.javaField.equals("isDelete"))
         model.set${AttrName}(${entityName}Param.get${AttrName}());
-        #elseif($dateFields.contains($column.columnName))
+        #elseif($column.htmlType=="datetime")
         model.set${AttrName}(TimeUtil.dateToTimestamp(${entityName}Param.get${AttrName}()));
         #end
     #end
@@ -363,7 +363,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         model.set${AttrName}(UrlUtil.toRelativeUrl(${entityName}Param.get${AttrName}()));
         #elseif(!$dateFields.contains($column.columnName) and !$column.javaField.equals("isDelete"))
         model.set${AttrName}(${entityName}Param.get${AttrName}());
-        #elseif($dateFields.contains($column.columnName))
+        #elseif($column.htmlType=="datetime")
         model.set${AttrName}(TimeUtil.dateToTimestamp(${entityName}Param.get${AttrName}()));
         #end
     #end
