@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController(value = "monitorServerController")
 @RequestMapping("api/monitor")
 public class ServerController {
+
     /**
      * 服务器信息
      *
