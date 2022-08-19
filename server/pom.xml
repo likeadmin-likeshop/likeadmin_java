@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <!-- 模块信息 -->
-    <groupId>org.hxkj</groupId>
+    <groupId>org.mdd</groupId>
     <artifactId>likeadmin-java</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
@@ -159,7 +159,7 @@
             </dependency>
             <!--通用工具-->
             <dependency>
-                <groupId>org.hxkj</groupId>
+                <groupId>org.mdd</groupId>
                 <artifactId>like-common</artifactId>
                 <version>${like.version}</version>
             </dependency>

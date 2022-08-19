@@ -5,7 +5,7 @@
 
     <!-- 父工程 -->
     <parent>
-        <groupId>org.hxkj</groupId>
+        <groupId>org.mdd</groupId>
         <artifactId>likeadmin-java</artifactId>
         <version>1.0.0</version>
     </parent>
