@@ -235,7 +235,9 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
 
         String salt   = ToolsUtil.randomString(5);
         String pwd    = ToolsUtil.makeMd5(systemAuthAdminParam.getPassword().trim() + salt);
-        String avatar = UrlUtil.toRelativeUrl(systemAuthAdminParam.getAvatar());
+        String avatar = StringUtil.isNotEmpty(systemAuthAdminParam.getAvatar()) ?
+                UrlUtil.toRelativeUrl(systemAuthAdminParam.getAvatar()) :
+                "/api/static/backend_avatar.jpg";
 
         SystemAuthAdmin model = new SystemAuthAdmin();
         model.setDeptId(systemAuthAdminParam.getDeptId());
@@ -328,8 +330,12 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
 
         Assert.notNull(model, "账号不存在了!");
 
+        String avatar = StringUtil.isNotEmpty(systemAuthAdminParam.getAvatar()) ?
+                UrlUtil.toRelativeUrl(systemAuthAdminParam.getAvatar()) :
+                "/api/static/backend_avatar.jpg";
+
+        model.setAvatar(avatar);
         model.setNickname(systemAuthAdminParam.getNickname());
-        model.setAvatar( UrlUtil.toRelativeUrl(systemAuthAdminParam.getAvatar()));
         model.setUpdateTime(System.currentTimeMillis() / 1000);
 
         if (systemAuthAdminParam.getPassword() != null && !systemAuthAdminParam.getPassword().equals("")) {

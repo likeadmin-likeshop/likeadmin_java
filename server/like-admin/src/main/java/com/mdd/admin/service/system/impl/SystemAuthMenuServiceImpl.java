@@ -49,7 +49,8 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         QueryWrapper<SystemAuthMenu> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("menu_type", Arrays.asList("M", "C"));
         queryWrapper.eq("is_disable", 0);
-        queryWrapper.orderByAsc(Arrays.asList("menu_sort", "id"));
+        queryWrapper.orderByDesc("menu_sort");
+        queryWrapper.orderByAsc("id");
         if (adminId != 1 && menuIds.size() > 0) {
             queryWrapper.in("id", menuIds);
         }
@@ -79,7 +80,8 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
     @Override
     public JSONArray list() {
         QueryWrapper<SystemAuthMenu> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByAsc(Arrays.asList("menu_sort", "id"));
+        queryWrapper.orderByDesc("menu_sort");
+        queryWrapper.orderByAsc("id");
 
         List<SystemAuthMenu> systemAuthMenus = systemAuthMenuMapper.selectList(queryWrapper);
 
