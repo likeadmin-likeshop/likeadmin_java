@@ -5,7 +5,6 @@ import com.mdd.admin.validate.common.PageParam;
 import com.mdd.admin.vo.user.UserVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
-import com.mdd.common.entity.user.User;
 import com.mdd.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
