@@ -16,6 +16,7 @@ public class ArticleListVo implements Serializable {
     private String category;   // 分类
     private String title;      // 标题
     private String image;      // 图片
+    private String author;     // 作者
     private Integer visit;     // 访问
     private Integer sort;      // 排序
     private Integer isShow;    // 是否显示: [0=否, 1=是]

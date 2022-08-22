@@ -21,6 +21,7 @@ public class Article implements Serializable {
     private String intro;      // 简介
     private String image;      // 封面
     private String content;    // 内容
+    private String author;     // 作者
     private Integer visit;     // 浏览
     private Integer sort;      // 排序
     private Integer isShow;    // 是否显示: [0=否, 1=是]
