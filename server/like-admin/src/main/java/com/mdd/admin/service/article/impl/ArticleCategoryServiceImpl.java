@@ -8,8 +8,10 @@ import com.mdd.admin.validate.article.CategoryParam;
 import com.mdd.admin.validate.common.PageParam;
 import com.mdd.admin.vo.article.ArticleCateVo;
 import com.mdd.common.core.PageResult;
+import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.article.ArticleCategory;
 import com.mdd.common.mapper.article.ArticleCategoryMapper;
+import com.mdd.common.mapper.article.ArticleMapper;
 import com.mdd.common.utils.TimeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,9 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
 
     @Resource
     ArticleCategoryMapper articleCategoryMapper;
+
+    @Resource
+    ArticleMapper articleMapper;
 
     /**
      * 分类所有
@@ -84,6 +89,11 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
             ArticleCateVo vo = new ArticleCateVo();
             BeanUtils.copyProperties(category, vo);
 
+            Integer number = articleMapper.selectCount(new QueryWrapper<Article>()
+                    .eq("cid", category.getId())
+                    .eq("is_delete", 0));
+
+            vo.setNumber(number);
             vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
             vo.setUpdateTime(TimeUtil.timestampToDate(vo.getUpdateTime()));
             list.add(vo);
@@ -170,9 +180,7 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
     public void del(Integer id) {
         ArticleCategory model = articleCategoryMapper.selectOne(
                 new QueryWrapper<ArticleCategory>()
-                        .select(ArticleCategory.class, info->
-                          !info.getColumn().equals("is_delete") &&
-                          !info.getColumn().equals("delete_time"))
+                        .select("id,is_show")
                         .eq("id", id)
                         .eq("is_delete", 0));
 
@@ -183,5 +191,25 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
         articleCategoryMapper.updateById(model);
     }
 
+    /**
+     * 分类状态
+     *
+     * @author fzr
+     * @param id 分类ID
+     */
+    @Override
+    public void change(Integer id) {
+        ArticleCategory model = articleCategoryMapper.selectOne(
+                new QueryWrapper<ArticleCategory>()
+                        .select("id,is_show")
+                        .eq("id", id)
+                        .eq("is_delete", 0));
+
+        Assert.notNull(model, "分类不存在");
+
+        model.setIsShow(model.getIsShow()==0?1:0);
+        model.setUpdateTime(TimeUtil.timestamp());
+        articleCategoryMapper.updateById(model);
+    }
 
 }

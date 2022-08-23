@@ -99,4 +99,19 @@ public class ArticleController {
         return AjaxResult.success();
     }
 
+    /**
+     * 文章状态
+     *
+     * @author fzr
+     * @param articleParam 文章参数
+     * @return Object
+     */
+    @Log(title = "文章状态")
+    @PostMapping("/change")
+    public Object change(@Validated(value = ArticleParam.change.class)
+                         @RequestBody ArticleParam articleParam) {
+        iArticleArchivesService.change(articleParam.getId());
+        return AjaxResult.success();
+    }
+
 }

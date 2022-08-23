@@ -63,4 +63,12 @@ public interface IArticleCategoryService {
      */
     void del(Integer id);
 
+    /**
+     * 分类状态
+     *
+     * @author fzr
+     * @param id 分类ID
+     */
+    void change(Integer id);
+
 }

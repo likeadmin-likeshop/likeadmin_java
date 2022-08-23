@@ -172,6 +172,7 @@ public class ArticleArchivesServiceImpl implements IArticleArchivesService {
     public void del(Integer id) {
         Article article = articleMapper.selectOne(
                 new QueryWrapper<Article>()
+                        .select("id,is_show")
                         .eq("id", id)
                         .eq("is_delete", 0));
 
@@ -179,6 +180,27 @@ public class ArticleArchivesServiceImpl implements IArticleArchivesService {
 
         article.setIsDelete(1);
         article.setDeleteTime(TimeUtil.timestamp());
+        articleMapper.updateById(article);
+    }
+
+    /**
+     * 文章状态
+     *
+     * @author fzr
+     * @param id 文章主键
+     */
+    @Override
+    public void change(Integer id) {
+        Article article = articleMapper.selectOne(
+                new QueryWrapper<Article>()
+                        .select("id,is_show")
+                        .eq("id", id)
+                        .eq("is_delete", 0));
+
+        Assert.notNull(article, "文章不存在!");
+
+        article.setIsShow(article.getIsShow()==0?1:0);
+        article.setUpdateTime(TimeUtil.timestamp());
         articleMapper.updateById(article);
     }
 

@@ -110,4 +110,19 @@ public class CategoryController {
         return AjaxResult.success();
     }
 
+    /**
+     * 分类状态
+     *
+     * @author fzr
+     * @param categoryParam 分类参数
+     * @return Object
+     */
+    @Log(title = "文章分类状态")
+    @PostMapping("/change")
+    public Object change(@Validated(value = CategoryParam.change.class)
+                         @RequestBody CategoryParam categoryParam) {
+        iArticleCategoryService.change(categoryParam.getId());
+        return AjaxResult.success();
+    }
+
 }

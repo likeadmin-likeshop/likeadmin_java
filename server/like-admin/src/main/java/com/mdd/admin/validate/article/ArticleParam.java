@@ -25,8 +25,9 @@ public class ArticleParam implements Serializable {
     public interface create{}
     public interface update{}
     public interface delete{}
+    public interface change{}
 
-    @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
+    @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class, change.class})
     private Integer id;
 
     @IDMust(message = "id参数必传且需大于0", groups = {create.class, update.class})

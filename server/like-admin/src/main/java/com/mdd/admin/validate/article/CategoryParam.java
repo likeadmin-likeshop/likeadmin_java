@@ -25,8 +25,9 @@ public class CategoryParam implements Serializable {
     public interface create{}
     public interface update{}
     public interface delete{}
+    public interface change{}
 
-    @IDMust(message = "id参数必传且需大于0", groups = {ArticleParam.create.class, ArticleParam.delete.class})
+    @IDMust(message = "id参数必传且需大于0", groups = {create.class, delete.class, change.class})
     private Integer id;
 
     @NotEmpty(message = "分类名称不能为空", groups = {create.class, update.class})

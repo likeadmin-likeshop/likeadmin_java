@@ -55,4 +55,12 @@ public interface IArticleArchivesService {
      */
     void del(Integer id);
 
+    /**
+     * 文章状态
+     *
+     * @author fzr
+     * @param id 文章主键
+     */
+    void change(Integer id);
+
 }
