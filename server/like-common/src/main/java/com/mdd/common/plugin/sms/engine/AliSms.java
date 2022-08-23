@@ -16,6 +16,7 @@ import java.util.Map;
  */
 public class AliSms {
 
+    private Integer sendResult;     // 发送结果
     private String mobile;          // 手机号码
     private String templateId;      // 短信模板
     private String templateParams;  // 短信参数
@@ -68,13 +69,23 @@ public class AliSms {
     }
 
     /**
+     * 获取发送结果
+     *
+     * @author fzr
+     * @return Integer [1=成功, 2=失败]
+     */
+    public Integer getSendResult() {
+        return this.sendResult;
+    }
+
+    /**
      * 发送短信
      *
      * @author fzr
      * @return String
      */
     public String send() {
-        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", this.config.get("app_key"), this.config.get("secret_key"));
+        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", this.config.get("appKey"), this.config.get("secretKey"));
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();
@@ -87,19 +98,19 @@ public class AliSms {
         request.putQueryParameter("TemplateCode", this.templateId);
         request.putQueryParameter("TemplateParam", this.templateParams);
         try {
-            System.out.println("来来来来来");
             CommonResponse response = client.getCommonResponse(request);
-            System.out.println(response);
             JSONObject res = JSONObject.parseObject(response.getData());
 
             if (!res.get("Code").equals("OK") || !res.get("Message").equals("OK")) {
-                throw new OperateException(res.get("Message").toString());
+                this.sendResult = 2;
+                return res.get("Message").toString();
             }
 
+            this.sendResult = 1;
             return response.getData();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw new OperateException("短信发送异常：" + e.getMessage());
+            this.sendResult = 2;
+            return e.getMessage();
         }
     }
 

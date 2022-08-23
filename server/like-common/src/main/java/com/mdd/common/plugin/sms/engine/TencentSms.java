@@ -15,10 +15,10 @@ import java.util.Map;
  */
 public class TencentSms {
 
-
-    private String mobile;
-    private String templateId;
-    private String[] templateParams;
+    private Integer sendResult;       // 发送结果
+    private String mobile;            // 手机号码
+    private String templateId;        // 模板编号
+    private String[] templateParams;  // 模板参数
     private final Map<String, String> config;
 
     public TencentSms(Map<String, String> config) {
@@ -59,15 +59,24 @@ public class TencentSms {
     }
 
     /**
+     * 获取发送结果
+     *
+     * @author fzr
+     * @return Integer [1=成功, 2=失败]
+     */
+    public Integer getSendResult() {
+        return this.sendResult;
+    }
+
+    /**
      * 发送短信
      *
-     * @param config 配置
      * @return String
      */
     public String send() {
         try {
             /*认证对象*/
-            Credential cred = new Credential(this.config.get("secret_id").toString(), config.get("secret_key").toString());
+            Credential cred = new Credential(this.config.get("secretId"), config.get("secretKey"));
             HttpProfile httpProfile = new HttpProfile();
             httpProfile.setReqMethod("POST");
             httpProfile.setConnTimeout(60);
@@ -81,8 +90,8 @@ public class TencentSms {
             /*参数配置*/
             SmsClient client = new SmsClient(cred, "ap-guangzhou",clientProfile);
             SendSmsRequest req = new SendSmsRequest();
-            req.setSignName(config.get("sign").toString());
-            req.setSmsSdkAppId(config.get("app_id").toString());
+            req.setSignName(config.get("sign"));
+            req.setSmsSdkAppId(config.get("appId"));
             req.setTemplateId(this.templateId);
 
             /*手机号码*/
@@ -96,12 +105,15 @@ public class TencentSms {
             /*发起请求*/
             SendSmsResponse res = client.SendSms(req);
             if (!res.getSendStatusSet()[0].getCode().equals("Ok")) {
-                throw new Exception(res.getSendStatusSet()[0].getMessage());
+                this.sendResult = 2;
+                return res.getSendStatusSet()[0].getMessage();
             }
 
+            this.sendResult = 1;
             return res.getSendStatusSet()[0].getMessage();
         } catch (Exception e) {
-            throw new OperateException("短信发送异常：" + e.getMessage());
+            this.sendResult = 2;
+            return e.getMessage();
         }
     }
 
