@@ -123,6 +123,7 @@ public class ArticleArchivesServiceImpl implements IArticleArchivesService {
         model.setContent(articleParam.getContent());
         model.setSort(articleParam.getSort());
         model.setIsShow(articleParam.getIsShow());
+        model.setAuthor(articleParam.getAuthor());
         model.setVisit(0);
         model.setCreateTime(TimeUtil.timestamp());
         model.setUpdateTime(TimeUtil.timestamp());
@@ -155,6 +156,7 @@ public class ArticleArchivesServiceImpl implements IArticleArchivesService {
         model.setIntro(articleParam.getIntro());
         model.setContent(articleParam.getContent());
         model.setIsShow(articleParam.getIsShow());
+        model.setAuthor(articleParam.getAuthor());
         model.setSort(articleParam.getSort());
         model.setUpdateTime(TimeUtil.timestamp());
         articleMapper.updateById(model);

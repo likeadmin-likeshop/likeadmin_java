@@ -18,6 +18,7 @@ public class ArticleDetailVo implements Serializable {
     private String image;      // 图片
     private String intro;      // 简介
     private String content;    // 内容
+    private String author;     // 作者
     private Integer visit;     // 访问
     private Integer sort;      // 排序
     private Integer isShow;    // 是否显示: [0=否, 1=是]

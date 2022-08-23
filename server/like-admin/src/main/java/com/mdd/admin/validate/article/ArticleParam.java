@@ -44,6 +44,9 @@ public class ArticleParam implements Serializable {
 
     private String content = "";
 
+    @Length(max = 32, message = "作者名称不能超32个字符", groups = {create.class, update.class})
+    private String author = "";
+
     @NotNull(message = "排序号不能为空", groups = {create.class, update.class})
     @DecimalMin(value = "0", message = "排序号值不能少于0", groups = {create.class, update.class})
     private Integer sort;
