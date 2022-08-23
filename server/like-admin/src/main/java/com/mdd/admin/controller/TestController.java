@@ -19,11 +19,11 @@ public class TestController {
 
         Map<String, String> params = new LinkedHashMap<>();
         // 阿里云的
-        params.put("user_name", "小明");
-        params.put("order_sn", "22026655656");
-        params.put("ff", "eee");
-        params.put("gg", "gg");
-        params.put("eee", "ee");
+        params.put("user_name", "刘明");
+        params.put("sex", "先生");
+        params.put("order_sn", "2202665565668741");
+        params.put("gg", "YT8314171250428");
+        params.put("eee", "圆通快递");
 
         // 腾讯云的
 
