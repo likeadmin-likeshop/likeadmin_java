@@ -101,13 +101,14 @@ public class SettingSmsServiceImpl implements ISettingSmsService {
                 map.put("secretKey", params.getOrDefault("secretKey", ""));
                 break;
             case "tencent":
-                System.out.println("来了吗");
                 map.put("name", "腾讯云短信");
                 map.put("alias", "aliyun");
                 map.put("sign", params.getOrDefault("sign", ""));
                 map.put("appId", params.getOrDefault("appId", ""));
                 map.put("secretId", params.getOrDefault("secretId", ""));
                 map.put("secretKey", params.getOrDefault("secretKey", ""));
+                break;
+            case "huawei":
                 break;
         }
 
