@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.admin.service.setting.ISettingStorageService;
 import com.mdd.common.utils.ConfigUtil;
+import com.mdd.common.utils.StringUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -67,6 +68,7 @@ public class SettingStorageServiceImpl implements ISettingStorageService {
     public Map<String, Object> detail(String alias) {
         String engine = ConfigUtil.get("storage", "default", "local");
         Map<String, String> config = ConfigUtil.getMap("storage", alias);
+        config = StringUtil.isNotNull(config) ? config : Collections.emptyMap();
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("name", config.getOrDefault("name", ""));
@@ -96,8 +98,7 @@ public class SettingStorageServiceImpl implements ISettingStorageService {
         Assert.notNull(params.get("alias"), "alias参数缺失");
         Assert.notNull(params.get("status"), "status参数缺失");
         Map<String, String> map = new LinkedHashMap<>();
-        System.out.println("斤斤计较");
-        System.out.println(params);
+
         map.put("name", "本地存储");
         if (!params.get("alias").equals("local")) {
             map.put("bucket", params.getOrDefault("bucket", ""));
@@ -124,7 +125,7 @@ public class SettingStorageServiceImpl implements ISettingStorageService {
         if (Integer.parseInt(params.get("status")) == 1) {
             ConfigUtil.set("storage", "default", params.get("alias"));
         } else if (engine.equals(params.get("alias")) && Integer.parseInt(params.get("status")) == 0) {
-            ConfigUtil.set("storage", "default", params.get(""));
+            ConfigUtil.set("storage", "default", "");
         }
     }
 
