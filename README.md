@@ -7,9 +7,10 @@ a931"> </a><a href="https://www.tslang.cn/"><img src="https://img.shields.io/bad
   <img  width="80%"  src="https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=9cf02b831e49d6a411bafbc4d79f51d4" /><br>
 </div>
  <br>
- ##  👀体验后台
-**地址：https://demo-java.likeadmin.cn/admin
+##  👀体验后台
+**地址：https://demo-java.likeadmin.cn/admin <br>
 账号：admin 密码：123456**
+
 
 ## 👨‍💻‍简介
 我们希望能够为开源社区做出更多的贡献，推出永久免费开源的likeadmin通用前后端分离管理后台系统。遵循MIT开源许可协议，您可以免费使用，甚至允许把你基于likeadmin开发的软件应用开源、发布、销售。
