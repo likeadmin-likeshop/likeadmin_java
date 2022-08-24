@@ -140,6 +140,18 @@ public class ToolsUtil {
     }
 
     /**
+     * JSON转 Map<String, Object>
+     *
+     * @author fzr
+     * @param json 对象
+     * @return Map<String, String>
+     */
+    public static Map<String, Object> jsonToMapAsObj(String json){
+        Type type = new TypeToken<Map<String, Object>>() {}.getType();
+        return JSON.parseObject(json, type);
+    }
+
+    /**
      * JSON转Map<String, String>
      *
      * @author fzr
