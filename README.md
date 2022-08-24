@@ -8,7 +8,7 @@ a931"> </a><a href="https://www.tslang.cn/"><img src="https://img.shields.io/bad
 </div>
  <br>
  ##  👀体验后台
-**地址：[https://demo-java.likeadmin.cn/admin](https://demo-java.likeadmin.cn/admin "https://demo-java.likeadmin.cn/admin")
+**地址：https://demo-java.likeadmin.cn/admin
 账号：admin 密码：123456**
 
 ## 👨‍💻‍简介
@@ -32,7 +32,6 @@ a931"> </a><a href="https://www.tslang.cn/"><img src="https://img.shields.io/bad
 一键生成前后端业务代码，大大提示开发效率。
 
 ### 🖥️界面预览
-![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=c8f9673f87634d8a2f7f927fb4beff26)<br>
 ![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=9cf02b831e49d6a411bafbc4d79f51d4)<br>
 ![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=eb83547d55b4f41f0d92fd6a3e01d87e)
 ![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=818d843fb9cba396226e32dad1a58f3c)<br>
