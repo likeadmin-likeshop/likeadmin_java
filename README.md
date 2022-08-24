@@ -7,9 +7,10 @@ a931"> </a><a href="https://www.tslang.cn/"><img src="https://img.shields.io/bad
   <img  width="80%"  src="https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=9cf02b831e49d6a411bafbc4d79f51d4" /><br>
 </div>
  <br>
-##  👀体验后台
-**地址：https://demo-java.likeadmin.cn/admin <br>
-账号：admin 密码：123456**
+
+## 👀体验后台
+地址：https://demo-java.likeadmin.cn/admin <br>
+账号：admin 密码：123456
 
 
 ## 👨‍💻‍简介
