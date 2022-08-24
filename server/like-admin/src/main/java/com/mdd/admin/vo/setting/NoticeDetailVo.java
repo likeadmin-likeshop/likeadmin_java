@@ -1,11 +1,11 @@
-package com.mdd.admin.vo.notice;
+package com.mdd.admin.vo.setting;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class NoticeSettingDetailVo implements Serializable {
+public class NoticeDetailVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

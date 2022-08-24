@@ -1,10 +1,9 @@
 package com.mdd.admin.controller.setting;
 
-import com.mdd.admin.service.notice.INoticeSettingService;
-import com.mdd.admin.vo.notice.NoticeSettingDetailVo;
-import com.mdd.admin.vo.notice.NoticeSettingListVo;
+import com.mdd.admin.service.setting.ISettingNoticeService;
+import com.mdd.admin.vo.setting.NoticeDetailVo;
+import com.mdd.admin.vo.setting.NoticeListVo;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.utils.ToolsUtil;
 import com.mdd.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +20,7 @@ import java.util.Map;
 public class NoticeController {
 
     @Resource
-    INoticeSettingService iNoticeSettingService;
+    ISettingNoticeService iSettingNoticeService;
 
     /**
      * 通知设置列表
@@ -31,7 +30,7 @@ public class NoticeController {
      */
     @GetMapping("/list")
     public Object list() {
-        List<NoticeSettingListVo> list = iNoticeSettingService.list();
+        List<NoticeListVo> list = iSettingNoticeService.list();
         return AjaxResult.success(list);
     }
 
@@ -44,7 +43,7 @@ public class NoticeController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        NoticeSettingDetailVo vo = iNoticeSettingService.detail(id);
+        NoticeDetailVo vo = iSettingNoticeService.detail(id);
         return AjaxResult.success(vo);
     }
 
@@ -57,8 +56,7 @@ public class NoticeController {
      */
     @PostMapping("/save")
     public Object save(@RequestBody Map<String, Object> params) {
-        System.out.println(ToolsUtil.objectToMap(params.get("systemNotice")));
-        iNoticeSettingService.save(params);
+        iSettingNoticeService.save(params);
         return AjaxResult.success();
     }
 
