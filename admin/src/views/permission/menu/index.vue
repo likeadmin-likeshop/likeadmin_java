@@ -135,6 +135,7 @@ const handleEdit = async (data: any) => {
 const handleDelete = async (id: number) => {
     await feedback.confirm('确定要删除？')
     await menuDelete({ id })
+    feedback.msgSuccess('删除成功')
     getLists()
 }
 
