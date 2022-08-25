@@ -152,6 +152,7 @@ import type { FormInstance } from 'element-plus'
 import { menuLists, menuEdit, menuAdd } from '@/api/perms/menu'
 import { MenuEnum } from '@/enums/appEnums'
 import Popup from '@/components/popup/index.vue'
+import feedback from '@/utils/feedback'
 
 const emit = defineEmits(['success', 'close'])
 const formRef = shallowRef<FormInstance>()
@@ -234,6 +235,7 @@ const handleSubmit = async () => {
     await formRef.value?.validate()
     mode.value == 'edit' ? await menuEdit(formData) : await menuAdd(formData)
     popupRef.value?.close()
+    feedback.msgSuccess('操作成功')
     emit('success')
 }
 
