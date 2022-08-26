@@ -19,7 +19,7 @@ public class H5Controller {
     IChannelH5Service iChannelH5Service;
 
     /**
-     * H5渠道配置详情
+     * H5渠道设置详情
      *
      * @author fzr
      * @return Object
@@ -31,13 +31,13 @@ public class H5Controller {
     }
 
     /**
-     * H5渠道配置保存
+     * H5渠道设置保存
      *
      * @author fzr
      * @param param 参数
      * @return Object
      */
-    @Log(title = "H5渠道保存")
+    @Log(title = "H5渠道设置保存")
     @PostMapping("/save")
     public Object save(@RequestBody Map<String, String> param) {
         iChannelH5Service.save(param);

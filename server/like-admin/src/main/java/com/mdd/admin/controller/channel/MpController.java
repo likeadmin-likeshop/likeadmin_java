@@ -19,7 +19,7 @@ public class MpController {
     IChannelMpService iChannelMpService;
 
     /**
-     * 微信小程序渠道配置详情
+     * 微信小程序渠道设置详情
      *
      * @author fzr
      * @return Object
@@ -31,13 +31,13 @@ public class MpController {
     }
 
     /**
-     * 微信小程序渠道配置保存
+     * 微信小程序渠道设置保存
      *
      * @author fzr
      * @param param 参数
      * @return Object
      */
-    @Log(title = "微信小程序渠道保存")
+    @Log(title = "微信小程序渠道设置保存")
     @PostMapping("/save")
     public Object save(@RequestBody Map<String, String> param) {
         iChannelMpService.save(param);

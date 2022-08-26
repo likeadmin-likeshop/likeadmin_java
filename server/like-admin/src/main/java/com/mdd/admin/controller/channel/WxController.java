@@ -20,7 +20,7 @@ public class WxController {
     IChannelWxService iChannelWxService;
 
     /**
-     * H5渠道配置详情
+     * 开放平台渠道设置详情
      *
      * @author fzr
      * @return Object
@@ -32,13 +32,13 @@ public class WxController {
     }
 
     /**
-     * H5渠道配置保存
+     * 开放平台渠道设置保存
      *
      * @author fzr
      * @param param 参数
      * @return Object
      */
-    @Log(title = "微信开放平台渠道保存")
+    @Log(title = "开放平台渠道设置保存")
     @PostMapping("/save")
     public Object save(@RequestBody Map<String, String> param) {
         iChannelWxService.save(param);
