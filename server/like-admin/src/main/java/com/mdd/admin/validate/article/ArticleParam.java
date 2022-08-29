@@ -30,7 +30,7 @@ public class ArticleParam implements Serializable {
     @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class, change.class})
     private Integer id;
 
-    @IDMust(message = "id参数必传且需大于0", groups = {create.class, update.class})
+    @IDMust(message = "cid参数必传且需大于0", groups = {create.class, update.class})
     private Integer cid;
 
     @NotEmpty(message = "文章标题不能为空", groups = {create.class, update.class})
