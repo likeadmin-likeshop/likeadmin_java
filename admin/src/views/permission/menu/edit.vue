@@ -149,7 +149,7 @@
 </template>
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { menuLists, menuEdit, menuAdd } from '@/api/perms/menu'
+import { menuLists, menuEdit, menuAdd, menuDetail } from '@/api/perms/menu'
 import { MenuEnum } from '@/enums/appEnums'
 import Popup from '@/components/popup/index.vue'
 import feedback from '@/utils/feedback'
@@ -253,6 +253,13 @@ const setFormData = (data: Record<any, any>) => {
     }
 }
 
+const getDetail = async (row: Record<string, any>) => {
+    const data = await menuDetail({
+        id: row.id
+    })
+    setFormData(data)
+}
+
 const handleClose = () => {
     emit('close')
 }
@@ -261,6 +268,7 @@ getMenu()
 
 defineExpose({
     open,
-    setFormData
+    setFormData,
+    getDetail
 })
 </script>

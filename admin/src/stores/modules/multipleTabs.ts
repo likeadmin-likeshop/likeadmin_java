@@ -28,10 +28,11 @@ const getHasTabIndex = (path: string, tabList: TabItem[]) => {
     return tabList.findIndex((item) => item.path == path)
 }
 
-const isCannotAddRoute = (route: RouteLocationNormalized) => {
-    const { path, meta } = route
+const isCannotAddRoute = (route: RouteLocationNormalized, router: Router) => {
+    const { path, meta, name } = route
     if (!path || isExternal(path)) return true
     if (meta?.hideTab) return true
+    if (!router.hasRoute(name!)) return true
     if (([PageEnum.LOGIN, PageEnum.ERROR_403] as string[]).includes(path)) {
         return true
     }
@@ -74,9 +75,9 @@ const useTabsStore = defineStore({
             this.tasMap = {}
             this.indexRouteName = ''
         },
-        addTab(route: RouteLocationNormalized) {
+        addTab(route: RouteLocationNormalized, router: Router) {
             const { name, path, query, meta, params } = route
-            if (isCannotAddRoute(route)) return
+            if (isCannotAddRoute(route, router)) return
             const hasTabIndex = getHasTabIndex(path!, this.tabList)
 
             const tabItem = {

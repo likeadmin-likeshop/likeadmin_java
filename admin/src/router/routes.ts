@@ -40,6 +40,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: 'setting',
+                name: Symbol(),
                 component: () => import('@/views/user/setting.vue'),
                 meta: {
                     title: '个人设置'
@@ -53,10 +54,12 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: 'code/edit',
+                name: Symbol(),
                 component: () => import('@/views/dev_tools/code/edit.vue'),
                 meta: {
                     title: '编辑数据表',
-                    activeMenu: '/dev_tools/code'
+                    activeMenu: '/dev_tools/code',
+                    name: Symbol()
                 }
             }
         ]
@@ -67,10 +70,26 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: 'dict/data',
+                name: Symbol(),
                 component: () => import('@/views/setting/dict/data/index.vue'),
                 meta: {
                     title: '数据管理',
                     activeMenu: '/setting/dict'
+                }
+            }
+        ]
+    },
+    {
+        path: '/article',
+        component: LAYOUT,
+        children: [
+            {
+                path: 'lists/edit',
+                name: Symbol(),
+                component: () => import('@/views/article/lists/edit.vue'),
+                meta: {
+                    title: '文章编辑',
+                    activeMenu: '/article/lists'
                 }
             }
         ]

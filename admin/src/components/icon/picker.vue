@@ -1,6 +1,10 @@
 <template>
     <div class="icon-select">
-        <el-popover v-model:visible="state.popoverVisible" :width="state.popoverWidth">
+        <el-popover
+            trigger="contextmenu"
+            v-model:visible="state.popoverVisible"
+            :width="state.popoverWidth"
+        >
             <div
                 @mouseover.stop="state.mouseoverSelect = true"
                 @mouseout.stop="state.mouseoverSelect = false"
@@ -41,6 +45,7 @@
                     ref="inputRef"
                     v-model.trim="state.inputValue"
                     placeholder="搜索图标"
+                    :autofocus="false"
                     :disabled="disabled"
                     @focus="handleFocus"
                     @blur="handleBlur"
@@ -112,7 +117,7 @@ const handleFocus = () => {
     state.inputFocus = state.popoverVisible = true
 }
 
-// // input 框失去焦点
+// input 框失去焦点
 const handleBlur = () => {
     state.inputFocus = false
     state.popoverVisible = state.mouseoverSelect

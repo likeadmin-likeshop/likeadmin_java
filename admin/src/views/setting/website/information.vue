@@ -42,6 +42,7 @@
 
 <script lang="ts" setup>
 import { getWebsite, setWebsite } from '@/api/setting/website'
+import feedback from '@/utils/feedback'
 import type { FormInstance } from 'element-plus'
 const formRef = ref<FormInstance>()
 
@@ -77,6 +78,7 @@ const getData = async () => {
 const handleSubmit = async () => {
     await formRef.value?.validate()
     await setWebsite(formData)
+    feedback.msgSuccess('操作成功')
     getData()
 }
 

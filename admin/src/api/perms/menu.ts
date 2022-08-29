@@ -19,3 +19,8 @@ export function menuEdit(params: Record<string, any>) {
 export function menuDelete(params: Record<string, any>) {
     return request.post({ url: '/system/menu/del', params })
 }
+
+// 菜单删除
+export function menuDetail(params: Record<string, any>) {
+    return request.get({ url: '/system/menu/detail', params })
+}
