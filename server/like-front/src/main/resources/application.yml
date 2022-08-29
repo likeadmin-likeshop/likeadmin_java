@@ -4,7 +4,7 @@ like:
 
 # 服务配置
 server:
-  port: 8083
+  port: 8084
 
 # 框架配置
 spring:
@@ -50,9 +50,11 @@ spring:
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml # 映射文件路径
   typeAliasesPackage: com.mdd.**.mapper
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #  configuration:
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
     db-config:
-      table-prefix: ls_ # 设置表前缀
+      table-prefix: la_ # 设置表前缀
+  configuration-properties:
+    prefix: la_ # 自定义表前缀标签${prefix}
