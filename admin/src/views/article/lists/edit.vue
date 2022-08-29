@@ -1,0 +1,146 @@
+<template>
+    <div class="article-edit">
+        <el-card class="!border-none" shadow="never">
+            <el-page-header content="文章编辑" @back="$router.back()" />
+        </el-card>
+        <el-card class="mt-4 !border-none" shadow="never">
+            <el-form
+                ref="formRef"
+                class="ls-form"
+                :model="formData"
+                label-width="85px"
+                :rules="rules"
+            >
+                <div class="xl:flex">
+                    <div>
+                        <el-form-item label="文章标题" prop="title">
+                            <div class="w-80">
+                                <el-input v-model="formData.title" placeholder="请输入文章标题" />
+                            </div>
+                        </el-form-item>
+                        <el-form-item label="文章标题" prop="cid">
+                            <el-select class="w-80" v-model="formData.cid">
+                                <el-option
+                                    v-for="item in optionsData.articleCate"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"
+                                />
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="文章简介" prop="intro">
+                            <div class="w-80">
+                                <el-input v-model="formData.intro" placeholder="请输入文章简介" />
+                            </div>
+                        </el-form-item>
+                        <el-form-item label="摘要" prop="intro">
+                            <div class="w-80">
+                                <el-input type="textarea" :rows="6" v-model="formData.intro" />
+                            </div>
+                        </el-form-item>
+                        <el-form-item label="文章封面" prop="image">
+                            <div>
+                                <div>
+                                    <material-picker v-model="formData.image" :limit="1" />
+                                </div>
+                                <div class="form-tips">建议尺寸：240*180px</div>
+                            </div>
+                        </el-form-item>
+                        <el-form-item label="作者" prop="author">
+                            <div class="w-80">
+                                <el-input v-model="formData.author" placeholder="请输入作者名称" />
+                            </div>
+                        </el-form-item>
+                        <el-form-item label="排序" prop="sort">
+                            <div>
+                                <el-input-number v-model="formData.sort" />
+                                <div class="form-tips">默认为0， 数值越大越排前</div>
+                            </div>
+                        </el-form-item>
+                        <el-form-item label="初始浏览量" prop="visit">
+                            <div>
+                                <el-input-number v-model="formData.visit" />
+                            </div>
+                        </el-form-item>
+                        <el-form-item label="文章状态" required prop="isShow">
+                            <el-radio-group v-model="formData.isShow">
+                                <el-radio :label="1">显示</el-radio>
+                                <el-radio :label="0">隐藏</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </div>
+                    <div class="xl:ml-20">
+                        <el-form-item label="文章内容" required prop="content">
+                            <editor v-model="formData.content" :height="667" :width="375" />
+                        </el-form-item>
+                    </div>
+                </div>
+            </el-form>
+        </el-card>
+        <footer-btns>
+            <el-button type="primary" @click="handleSave">保存</el-button>
+        </footer-btns>
+    </div>
+</template>
+
+<script lang="ts" setup>
+import type { FormInstance } from 'element-plus'
+import feedback from '@/utils/feedback'
+import { useDictOptions } from '@/hooks/useDictOptions'
+import { articleCateAll, articleDetail, articleEdit } from '@/api/article'
+
+const route = useRoute()
+const router = useRouter()
+const formData = reactive({
+    id: '',
+    title: '',
+    image: '',
+    cid: '',
+    intro: '',
+    author: '',
+    content: '',
+    visit: 0,
+    sort: 0,
+    isShow: ''
+})
+
+const formRef = shallowRef<FormInstance>()
+const rules = reactive({
+    ['base.tableName']: [{ required: true, message: '请输入表名称', trigger: 'blur' }],
+    ['base.tableComment']: [{ required: true, message: '请输入表描述', trigger: 'blur' }],
+    ['base.entityName']: [{ required: true, message: '请输入实体类名称', trigger: 'blur' }],
+    ['base.authorName']: [{ required: true, message: '请输入作者', trigger: 'blur' }],
+    ['gen.moduleName']: [{ required: true, message: '请输入模块名', trigger: 'blur' }],
+    ['gen.functionName']: [{ required: true, message: '请输入功能名称', trigger: 'blur' }],
+    ['gen.treePrimary']: [{ required: true, message: '请选择树主键字段', trigger: 'blur' }],
+    ['gen.treeParent']: [{ required: true, message: '请选择树父级字段', trigger: 'blur' }],
+    ['gen.treeName']: [{ required: true, message: '请选择树名称字段', trigger: 'blur' }]
+})
+
+const getDetails = async () => {
+    const data = await articleDetail({
+        id: route.query.id
+    })
+    Object.keys(formData).forEach((key) => {
+        //@ts-ignore
+        formData[key] = data[key]
+    })
+}
+
+const { optionsData } = useDictOptions<{
+    articleCate: any[]
+}>({
+    articleCate: {
+        api: articleCateAll
+    }
+})
+
+const handleSave = async () => {
+    await formRef.value?.validate()
+    await articleEdit(formData)
+    feedback.msgSuccess('操作成功')
+    router.back()
+}
+
+route.query.id && getDetails()
+</script>
