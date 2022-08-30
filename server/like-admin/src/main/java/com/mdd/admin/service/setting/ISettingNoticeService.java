@@ -15,9 +15,10 @@ public interface ISettingNoticeService {
      * 通知设置列表
      *
      * @author fzr
+     * @param recipient 1=用户, 2=平台
      * @return List<NoticeSettingListVo>
      */
-    List<NoticeListVo> list();
+    List<NoticeListVo> list(Integer recipient);
 
     /**
      * 通知设置详情

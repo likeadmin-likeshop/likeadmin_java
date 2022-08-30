@@ -31,11 +31,13 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
      * 通知设置列表
      *
      * @author fzr
+     * @param recipient 1=用户, 2=平台
      * @return List<NoticeSettingListVo>
      */
     @Override
-    public List<NoticeListVo> list() {
+    public List<NoticeListVo> list(Integer recipient) {
         QueryWrapper<NoticeSetting> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("recipient", recipient);
         queryWrapper.eq("is_delete", 0);
         queryWrapper.orderByAsc("id");
 

@@ -26,11 +26,13 @@ public class NoticeController {
      * 通知设置列表
      *
      * @author fzr
+     * @param recipient 类型: 1=用户, 2=平台
      * @return Object
      */
     @GetMapping("/list")
-    public Object list() {
-        List<NoticeListVo> list = iSettingNoticeService.list();
+    public Object list(@RequestParam Integer recipient) {
+        System.out.println(recipient);
+        List<NoticeListVo> list = iSettingNoticeService.list(recipient);
         return AjaxResult.success(list);
     }
 
