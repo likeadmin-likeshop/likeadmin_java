@@ -1,11 +1,15 @@
 <template>
-    <div class="article-lists">
+    <div>
         <el-card class="!border-none" shadow="never">
             <el-form ref="formRef" class="mb-[-16px]" :model="queryParams" :inline="true">
-                <el-form-item label="文章标题">
-                    <el-input class="w-56" v-model="queryParams.title" />
+                <el-form-item label="用户信息">
+                    <el-input
+                        class="w-56"
+                        v-model="queryParams.title"
+                        placeholder="用户编号/昵称/手机号码"
+                    />
                 </el-form-item>
-                <el-form-item label="栏目名称">
+                <el-form-item label="注册时间">
                     <el-select class="w-56" v-model="queryParams.cid">
                         <el-option label="全部" value />
                         <el-option
@@ -16,7 +20,7 @@
                         />
                     </el-select>
                 </el-form-item>
-                <el-form-item label="文章状态">
+                <el-form-item label="注册来源">
                     <el-select class="w-56" v-model="queryParams.isShow">
                         <el-option label="全部" value />
                         <el-option label="显示" :value="1" />
@@ -30,24 +34,9 @@
             </el-form>
         </el-card>
         <el-card class="!border-none mt-4" shadow="never">
-            <div>
-                <router-link
-                    v-perms="['article:add']"
-                    :to="{
-                        path: '/article/lists/edit'
-                    }"
-                >
-                    <el-button type="primary" class="mb-4">
-                        <template #icon>
-                            <icon name="el-icon-Plus" />
-                        </template>
-                        发布文章
-                    </el-button>
-                </router-link>
-            </div>
             <el-table size="large" v-loading="pager.loading" :data="pager.lists">
-                <el-table-column label="ID" prop="id" min-width="80" />
-                <el-table-column label="封面" min-width="100">
+                <el-table-column label="用户编号" prop="id" min-width="80" />
+                <el-table-column label="头像" min-width="100">
                     <template #default="{ row }">
                         <image-contain
                             :src="row.image"
@@ -57,10 +46,10 @@
                         />
                     </template>
                 </el-table-column>
-                <el-table-column label="栏目" prop="category" min-width="100" />
-                <el-table-column label="作者" prop="author" min-width="120" />
-                <el-table-column label="浏览量" prop="visit" min-width="100" />
-                <el-table-column label="状态" min-width="100">
+                <el-table-column label="昵称" prop="category" min-width="100" />
+                <el-table-column label="账号" prop="author" min-width="120" />
+                <el-table-column label="手机号码" prop="visit" min-width="100" />
+                <el-table-column label="性别" min-width="100">
                     <template #default="{ row }">
                         <el-switch
                             v-perms="['article:cate:change']"
@@ -72,29 +61,21 @@
                         />
                     </template>
                 </el-table-column>
-                <el-table-column label="排序" prop="sort" min-width="100" />
-                <el-table-column label="发布时间" prop="createTime" min-width="120" />
+                <el-table-column label="注册来源" prop="sort" min-width="100" />
+                <el-table-column label="注册时间" prop="createTime" min-width="120" />
                 <el-table-column label="操作" width="120" fixed="right">
                     <template #default="{ row }">
-                        <el-button v-perms="['article:edit']" type="primary" link>
+                        <el-button v-perms="['consumer:lists:detail']" type="primary" link>
                             <router-link
                                 :to="{
-                                    path: getRoutePath('article:edit'),
+                                    path: getRoutePath('consumer:lists:detail'),
                                     query: {
                                         id: row.id
                                     }
                                 }"
                             >
-                                编辑
+                                详情
                             </router-link>
-                        </el-button>
-                        <el-button
-                            v-perms="['article:del']"
-                            type="danger"
-                            link
-                            @click="handleDelete(row.id)"
-                        >
-                            删除
                         </el-button>
                     </template>
                 </el-table-column>
@@ -109,8 +90,8 @@
 import { articleLists, articleDelete, articleStatus, articleCateAll } from '@/api/article'
 import { useDictOptions } from '@/hooks/useDictOptions'
 import { usePaging } from '@/hooks/usePaging'
-import { getRoutePath } from '@/router'
 import feedback from '@/utils/feedback'
+import { getRoutePath } from '@/router'
 const queryParams = reactive({
     title: '',
     cid: '',

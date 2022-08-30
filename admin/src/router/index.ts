@@ -7,6 +7,11 @@ import useUserStore from '@/stores/modules/user'
 // 匹配views里面所有的.vue文件，动态引入
 const modules = import.meta.glob('/src/views/**/*.vue')
 
+//
+export function getModulesKey() {
+    return Object.keys(modules).map((item) => item.replace('/src/views/', '').replace('.vue', ''))
+}
+
 // 过滤路由所需要的数据
 export function filterAsyncRoutes(routes: any[], firstRoute = true) {
     return routes.map((route) => {
@@ -31,7 +36,8 @@ export function createRouteRecord(route: any, firstRoute: boolean): RouteRecordR
             perms: route.perms,
             query: route.params,
             icon: route.menuIcon,
-            type: route.menuType
+            type: route.menuType,
+            activeMenu: route.selected
         }
     }
     switch (route.menuType) {
@@ -77,6 +83,10 @@ export function findFirstValidRoute(routes: RouteRecordRaw[]): string | undefine
             }
         }
     }
+}
+
+export function getRoutePath(perms: string) {
+    return router.getRoutes().find((item) => item.meta?.perms == perms)?.path || ''
 }
 
 // 重置路由

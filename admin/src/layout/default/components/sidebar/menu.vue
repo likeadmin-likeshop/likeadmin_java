@@ -48,7 +48,8 @@ const props = defineProps({
 defineEmits(['select'])
 
 const route = useRoute()
-const activeMenu = computed<string>(() => (route.meta?.activeMenu as string) ?? route.path)
+console.log(route)
+const activeMenu = computed<string>(() => route.meta?.activeMenu || route.path)
 const themeClass = computed(() => `theme-${props.theme}`)
 </script>
 

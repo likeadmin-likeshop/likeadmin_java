@@ -8,7 +8,7 @@
                 show-icon
             />
         </el-card>
-        <el-form ref="formRef" :model="formData" label-width="120px">
+        <el-form ref="formRef" :model="formData" label-width="160px">
             <el-card class="!border-none mt-4" shadow="never">
                 <div class="font-medium mb-7">微信公众号</div>
                 <el-form-item label="公众号名称" prop="name">
@@ -42,23 +42,27 @@
                         <div class="w-80">
                             <el-input v-model="formData.appSecret" placeholder="请输入AppSecret" />
                         </div>
-                        <div class="form-tips">
-                            登录微信公众平台，点击开发>基本配置>公众号开发信息，设置AppID和AppSecret
-                        </div>
+                    </div>
+                </el-form-item>
+                <el-form-item>
+                    <div class="form-tips">
+                        小程序账号登录微信公众平台，点击开发>开发设置->开发者ID，设置AppID和AppSecret
                     </div>
                 </el-form-item>
             </el-card>
             <el-card class="!border-none mt-4" shadow="never">
                 <div class="font-medium mb-7">服务器配置</div>
                 <el-form-item label="URL" prop="appId">
-                    <div class="flex">
-                        <div class="w-80 mr-4">
-                            <el-input v-model="formData.appId" disabled />
+                    <div>
+                        <div class="flex">
+                            <div class="w-80 mr-4">
+                                <el-input v-model="formData.appId" disabled />
+                            </div>
+                            <el-button>复制</el-button>
                         </div>
-                        <el-button>复制</el-button>
-                    </div>
-                    <div class="form-tips">
-                        登录微信公众平台，点击开发>基本配置>服务器配置，填写服务器地址（URL）
+                        <div class="form-tips">
+                            登录微信公众平台，点击开发>基本配置>服务器配置，填写服务器地址（URL）
+                        </div>
                     </div>
                 </el-form-item>
                 <el-form-item label="Token" prop="Token">
@@ -150,7 +154,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { getOaConfig, setOaConfig } from '@/api/channel/wechat_oa'
+import { getOaConfig, setOaConfig } from '@/api/channel/wx_oa'
 import feedback from '@/utils/feedback'
 
 const formData = reactive({

@@ -62,9 +62,28 @@
                         prop="component"
                     >
                         <div class="flex-1">
-                            <el-input v-model="formData.component" placeholder="请输入组件路径" />
+                            <el-autocomplete
+                                class="w-full"
+                                v-model="formData.component"
+                                :fetch-suggestions="querySearch"
+                                clearable
+                                placeholder="请输入组件路径"
+                            />
+                            <!-- <el-input v-model="formData.component" placeholder="请输入组件路径" /> -->
                             <div class="form-tips">
                                 访问的组件路径，如：`permission/admin/index`，默认在`views`目录下
+                            </div>
+                        </div>
+                    </el-form-item>
+                    <el-form-item
+                        label="选中菜单"
+                        prop="p"
+                        v-if="formData.menuType == MenuEnum.MENU"
+                    >
+                        <div class="flex-1">
+                            <el-input v-model="formData.selected" placeholder="请输入路由路径" />
+                            <div class="form-tips">
+                                访问详情页面，编辑页面时，菜单高亮显示，如`/consumer/lists`
                             </div>
                         </div>
                     </el-form-item>
@@ -95,15 +114,20 @@
                             </div>
                         </div>
                     </el-form-item>
-                    <!-- <el-form-item v-if="formData.type == MenuEnum.MENU" label="是否缓存" prop="isCache" required>
-              <div>
-                <el-radio-group v-model="formData.isCache">
-                  <el-radio :label="1">缓存</el-radio>
-                  <el-radio :label="0">不缓存</el-radio>
-                </el-radio-group>
-                <div class="form-tips">选择缓存则会被`keep-alive`缓存</div>
-              </div>
-            </el-form-item>-->
+                    <!-- <el-form-item
+                        v-if="formData.menuType == MenuEnum.MENU"
+                        label="是否缓存"
+                        prop="isCache"
+                        required
+                    >
+                        <div>
+                            <el-radio-group v-model="formData.isCache">
+                                <el-radio :label="1">缓存</el-radio>
+                                <el-radio :label="0">不缓存</el-radio>
+                            </el-radio-group>
+                            <div class="form-tips">选择缓存则会被`keep-alive`缓存</div>
+                        </div>
+                    </el-form-item> -->
                     <el-form-item
                         v-if="formData.menuType != MenuEnum.BUTTON"
                         label="是否显示"
@@ -150,9 +174,11 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
 import { menuLists, menuEdit, menuAdd, menuDetail } from '@/api/perms/menu'
+import { getModulesKey } from '@/router'
 import { MenuEnum } from '@/enums/appEnums'
 import Popup from '@/components/popup/index.vue'
 import feedback from '@/utils/feedback'
+import { arrayToTree, treeToArray } from '@/utils/util'
 
 const emit = defineEmits(['success', 'close'])
 const formRef = shallowRef<FormInstance>()
@@ -161,6 +187,16 @@ const mode = ref('add')
 const popupTitle = computed(() => {
     return mode.value == 'edit' ? '编辑菜单' : '新增菜单'
 })
+
+const componentsOptions = ref(getModulesKey())
+const querySearch = (queryString: string, cb: any) => {
+    const results = queryString
+        ? componentsOptions.value.filter((item) =>
+              item.toLowerCase().includes(queryString.toLowerCase())
+          )
+        : componentsOptions.value
+    cb(results.map((item) => ({ value: item })))
+}
 
 const formData = reactive({
     id: '',
@@ -224,9 +260,14 @@ const formRules = {
 }
 const menuOptions = ref<any[]>([])
 
+const pageOptions = ref<any[]>([])
+
 const getMenu = async () => {
     const data: any = await menuLists()
     const menu = { id: 0, menuName: '顶级', children: [] }
+    pageOptions.value = arrayToTree(
+        treeToArray(data).filter((item) => item.menuType != MenuEnum.BUTTON)
+    )
     menu.children = data
     menuOptions.value.push(menu)
 }

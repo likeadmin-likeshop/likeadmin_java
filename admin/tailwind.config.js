@@ -30,6 +30,7 @@ module.exports = {
             'br-extra-light': 'var(--el-border-color-extra-light)',
             'br-dark': 'var( --el-border-color-dark)',
             fill: 'var(--el-fill-color)',
+            'fill-lighter': 'var(--el-fill-color-lighter)',
             mask: 'var(--el-mask-color)'
         },
         fontFamily: {

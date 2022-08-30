@@ -73,7 +73,7 @@
                                 <el-button type="primary" link v-perms="['gen:editTable']">
                                     <router-link
                                         :to="{
-                                            path: '/dev_tools/code/edit',
+                                            path: getRoutePath('gen:editTable'),
                                             query: {
                                                 id: row.id
                                             }
@@ -152,6 +152,7 @@ import DataTable from '../components/data-table.vue'
 import CodePreview from '../components/code-preview.vue'
 import feedback from '@/utils/feedback'
 import { streamFileDownload } from '@/utils/file'
+import { getRoutePath } from '@/router'
 
 const formData = reactive({
     tableName: '',

@@ -4,7 +4,7 @@
             <el-alert type="warning" title="温馨提示：H5商城设置" :closable="false" show-icon />
         </el-card>
         <el-card class="!border-none mt-4" shadow="never">
-            <el-form ref="formRef" :model="formData" label-width="120px">
+            <el-form ref="formRef" :model="formData" label-width="160px">
                 <el-form-item label="渠道状态" required prop="status">
                     <div>
                         <el-radio-group v-model="formData.status">

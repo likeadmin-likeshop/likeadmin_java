@@ -11,7 +11,7 @@
                     :show-close="formData.length > 1"
                     @close="handleDelete(index)"
                 >
-                    <div class="bg-page py-4">
+                    <div class="bg-fill-lighter py-4">
                         <el-form-item label="显示名称" prop="name">
                             <div class="w-80">
                                 <div>
