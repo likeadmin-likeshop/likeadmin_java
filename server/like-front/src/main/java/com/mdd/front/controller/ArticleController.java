@@ -1,10 +1,17 @@
 package com.mdd.front.controller;
 
 import com.mdd.common.core.AjaxResult;
+import com.mdd.common.core.PageResult;
+import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.front.service.IArticleService;
+import com.mdd.front.validate.PageParam;
 import com.mdd.front.vo.article.ArticleCateVo;
+import com.mdd.front.vo.article.ArticleDetailVo;
+import com.mdd.front.vo.article.ArticleListVo;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -26,7 +33,7 @@ public class ArticleController {
     @GetMapping("/category")
     public Object category() {
         List<ArticleCateVo> list = iArticleService.category();
-        return  AjaxResult.success(list);
+        return AjaxResult.success(list);
     }
 
     /**
@@ -36,8 +43,10 @@ public class ArticleController {
      * @return Object
      */
     @GetMapping("/list")
-    public Object list() {
-        return AjaxResult.success();
+    public Object list(@Validated PageParam pageParam,
+                      @RequestParam(value = "cid", defaultValue = "0") Integer cid) {
+        PageResult<ArticleListVo> list = iArticleService.list(pageParam, cid);
+        return AjaxResult.success(list);
     }
 
     /**
@@ -47,8 +56,9 @@ public class ArticleController {
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail() {
-        return AjaxResult.success();
+    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+        ArticleDetailVo vo = iArticleService.detail(id);
+        return AjaxResult.success(vo);
     }
 
 }
