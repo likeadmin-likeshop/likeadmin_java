@@ -41,4 +41,4 @@ a931"> </a><a href="https://www.tslang.cn/"><img src="https://img.shields.io/bad
 ![](https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=f6770e2a8069d7b6ea3d83b91204b9d6)<br>
 <br>
 ### 🪐接口文档
-[点击这里进入更多更详细文档。](http://doc.likeadmin.cn/java "点击这里进入更多更详细文档。")
+[点击这里进入更多更详细文档。](https://www.likeadmin.cn "点击这里进入更多更详细文档。")
