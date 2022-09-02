@@ -41,7 +41,7 @@ public class ArticleController {
     }
 
     /**
-     * 文章列表
+     * 文章详情
      *
      * @author fzr
      * @param id 文章ID

@@ -17,6 +17,7 @@ public class ArticleDetailVo implements Serializable {
     private String title;      // 标题
     private String image;      // 图片
     private String intro;      // 简介
+    private String summary;    // 摘要
     private String content;    // 内容
     private String author;     // 作者
     private Integer visit;     // 访问

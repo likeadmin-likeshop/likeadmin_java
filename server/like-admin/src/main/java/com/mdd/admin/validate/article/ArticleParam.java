@@ -45,6 +45,8 @@ public class ArticleParam implements Serializable {
 
     private String content = "";
 
+    private String summary = "";
+
     @Length(max = 32, message = "作者名称不能超32个字符", groups = {create.class, update.class})
     private String author = "";
 

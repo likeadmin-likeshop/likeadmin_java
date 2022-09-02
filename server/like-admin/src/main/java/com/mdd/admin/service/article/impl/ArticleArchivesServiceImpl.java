@@ -121,6 +121,7 @@ public class ArticleArchivesServiceImpl implements IArticleArchivesService {
         model.setImage(UrlUtil.toRelativeUrl(articleParam.getImage()));
         model.setIntro(articleParam.getIntro());
         model.setContent(articleParam.getContent());
+        model.setSummary(articleParam.getSummary());
         model.setSort(articleParam.getSort());
         model.setIsShow(articleParam.getIsShow());
         model.setAuthor(articleParam.getAuthor());
@@ -155,6 +156,7 @@ public class ArticleArchivesServiceImpl implements IArticleArchivesService {
         model.setImage(UrlUtil.toRelativeUrl(articleParam.getImage()));
         model.setIntro(articleParam.getIntro());
         model.setContent(articleParam.getContent());
+        model.setSummary(articleParam.getSummary());
         model.setIsShow(articleParam.getIsShow());
         model.setAuthor(articleParam.getAuthor());
         model.setSort(articleParam.getSort());

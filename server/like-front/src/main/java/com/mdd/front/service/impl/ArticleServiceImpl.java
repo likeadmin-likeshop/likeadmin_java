@@ -104,7 +104,7 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     public ArticleDetailVo detail(Integer id) {
         Article article = articleMapper.selectOne(new QueryWrapper<Article>()
-                .select("id,title,image,intro,visit,author,content,create_time")
+                .select("id,title,image,intro,summary,visit,author,content,create_time")
                 .eq("id", id)
                 .eq("is_show", 1)
                 .eq("is_delete", 0)

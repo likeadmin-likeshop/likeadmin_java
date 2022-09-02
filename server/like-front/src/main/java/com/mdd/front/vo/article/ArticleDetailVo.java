@@ -13,6 +13,7 @@ public class ArticleDetailVo implements Serializable {
     private String title;
     private String image;
     private String intro;
+    private String summary;
     private Integer visit;
     private String author;
     private String content;
