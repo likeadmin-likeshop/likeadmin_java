@@ -40,7 +40,7 @@ services:
 
 
   redis:
-    container_name: likeadmin-redis
+    container_name: likeadmin-java-redis
     image: redis:7.0.4
     restart: always
     volumes:
