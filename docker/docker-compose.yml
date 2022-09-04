@@ -31,6 +31,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
     volumes:
+      - ../sql:/likeadmin_java/sql
       - ./data/mysql5.7.29/lib:/var/lib/mysql
       - ./config/mysql/mysqld.cnf:/etc/mysql/my.cnf
     networks:
