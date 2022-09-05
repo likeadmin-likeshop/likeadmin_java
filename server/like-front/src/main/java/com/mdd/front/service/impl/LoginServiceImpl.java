@@ -12,10 +12,8 @@ import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.IpUtil;
-import com.mdd.common.utils.StringUtil;
-import com.mdd.common.utils.ToolsUtil;
+import com.mdd.common.utils.*;
+import com.mdd.front.config.FrontConfig;
 import com.mdd.front.service.ILoginService;
 import com.mdd.front.validate.RegisterParam;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -163,6 +161,8 @@ public class LoginServiceImpl implements ILoginService {
             }
 
             String token = ToolsUtil.makeToken();
+            RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), 7200);
+
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("id", userId);
             response.put("token", token);
@@ -183,13 +183,22 @@ public class LoginServiceImpl implements ILoginService {
     public Map<String, Object> mobileLogin(Map<String, String> params) {
         Assert.notNull(params.get("mobile"), "mobile参数缺失!");
         Assert.notNull(params.get("code"), "code参数缺失!");
+        String mobile = params.get("mobile");
+        String code   = params.get("code").toLowerCase();
 
         // 校验验证码
+        Object smsCode = RedisUtil.get(FrontConfig.frontendSmsCode+mobile);
+        if (StringUtil.isNull(smsCode) || !smsCode.toString().equals(code)) {
+            throw new OperateException("验证码错误!");
+        }
+
+        // 删除验证码
+        RedisUtil.del(FrontConfig.frontendSmsCode+code);
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()
                 .select("id,username,mobile,is_disable")
-                .eq("mobile", params.get("mobile"))
+                .eq("mobile", mobile)
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
@@ -197,6 +206,8 @@ public class LoginServiceImpl implements ILoginService {
         Assert.isFalse(user.getIsDisable() != 0, "账号已禁用!");
 
         String token = ToolsUtil.makeToken();
+        RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), 7200);
+
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("id", user.getId());
         response.put("token", token);
@@ -229,6 +240,8 @@ public class LoginServiceImpl implements ILoginService {
         Assert.isFalse(user.getIsDisable() != 0, "账号已被禁用!");
 
         String token = ToolsUtil.makeToken();
+        RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), 7201);
+
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("id", user.getId());
         response.put("token", token);

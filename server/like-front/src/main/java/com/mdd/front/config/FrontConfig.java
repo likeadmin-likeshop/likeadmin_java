@@ -5,6 +5,12 @@ package com.mdd.front.config;
  */
 public class FrontConfig {
 
+    // 登录缓存键
+    public static final String frontendTokenKey = "frontend:token:";
+
+    // 短信验证码
+    public static final String frontendSmsCode  = "frontend:smsCode:";
+
     // 免登录验证
     public static String[] notLoginUri = new String[]{
             "/api/login"

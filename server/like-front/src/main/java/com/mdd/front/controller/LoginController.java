@@ -12,6 +12,9 @@ import javax.annotation.Resource;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * 登录管理
+ */
 @RestController
 @RequestMapping("/api/login")
 public class LoginController {
@@ -32,10 +35,16 @@ public class LoginController {
         return AjaxResult.success();
     }
 
+    /**
+     * 登录验证
+     *
+     * @author fzr
+     * @param params 参数
+     * @return Object
+     */
     @PostMapping("/check")
     public Object check(@RequestBody Map<String, String> params) {
         Assert.notNull(params.get("scene"), "scene参数缺失!");
-
         Map<String, Object> map = new LinkedHashMap<>();
         switch (params.get("scene")) {
             case "mnp":
@@ -48,7 +57,6 @@ public class LoginController {
                 map = iLoginService.accountLogin(params);
                 break;
         }
-
         return AjaxResult.success(map);
     }
 
