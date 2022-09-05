@@ -1,0 +1,210 @@
+package com.mdd.front.service.impl;
+
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
+import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
+import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.mdd.common.entity.user.User;
+import com.mdd.common.entity.user.UserAuth;
+import com.mdd.common.enums.ClientEnum;
+import com.mdd.common.exception.OperateException;
+import com.mdd.common.mapper.user.UserAuthMapper;
+import com.mdd.common.mapper.user.UserMapper;
+import com.mdd.common.utils.ConfigUtil;
+import com.mdd.common.utils.IpUtil;
+import com.mdd.common.utils.StringUtil;
+import com.mdd.common.utils.ToolsUtil;
+import com.mdd.front.service.ILoginService;
+import com.mdd.front.validate.RegisterParam;
+import me.chanjar.weixin.common.error.WxErrorException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+/**
+ * 登录服务实现类
+ */
+@Service
+public class LoginServiceImpl implements ILoginService {
+
+    @Resource
+    UserMapper userMapper;
+
+    @Resource
+    UserAuthMapper userAuthMapper;
+
+
+    /**
+     * 注册账号
+     *
+     * @author fzr
+     * @param registerParam 参数
+     */
+    @Override
+    public void register(RegisterParam registerParam) {
+        User model = userMapper.selectOne(new QueryWrapper<User>()
+                .select("id,sn,username")
+                .eq("username", registerParam.getUsername())
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        Assert.isNull(model, "账号已存在,换一个吧!");
+
+        Integer sn  = this.randMakeSn();
+        String salt = ToolsUtil.randomString(5);
+        String pwd  = ToolsUtil.makeMd5(registerParam.getPassword()+salt);
+
+        User user = new User();
+        user.setSn(sn);
+        user.setNickname("用户"+sn);
+        user.setUsername(registerParam.getUsername());
+        user.setPassword(pwd);
+        user.setSalt(salt);
+        user.setChannel(0);
+        user.setCreateTime(System.currentTimeMillis() / 1000);
+        user.setUpdateTime(System.currentTimeMillis() / 1000);
+        userMapper.insert(user);
+    }
+
+    /**
+     * 微信小程序登录
+     *
+     * @author fzr
+     * @param params 参数
+     * @return Map<String, Object>
+     */
+    @Override
+    @Transactional
+    public Map<String, Object> mnpLogin(Map<String, String> params) {
+        Assert.notNull(params.get("code"), "code参数缺失!");
+        String scene     = params.get("scene");
+        String code      = params.get("code");
+        String avatarUrl = params.getOrDefault("avatarUrl", "");
+        String nickName  = params.getOrDefault("nickName", "");
+        String gender    = params.getOrDefault("gender", "0");
+        Integer client   = ClientEnum.getCodeByType(scene);
+
+        Map<String, String> config = ConfigUtil.get("mp_channel");
+        WxMaService wxMaService = new WxMaServiceImpl();
+        WxMaDefaultConfigImpl wxConfig = new WxMaDefaultConfigImpl();
+        wxConfig.setAppid(config.getOrDefault("appId", ""));
+        wxConfig.setSecret(config.getOrDefault("appSecret", ""));
+        wxMaService.setWxMaConfig(wxConfig);
+
+        try {
+            WxMaJscode2SessionResult sessionResult = wxMaService.getUserService().getSessionInfo(code);
+            String openId  = sessionResult.getOpenid();
+            String unionId = sessionResult.getUnionid();
+
+            UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
+                    .eq("client", client)
+                    .nested(wq->wq
+                        .eq("openid", openId).or()
+                        .eq("unionid", unionId)
+                    ).last("limit 1"));
+
+            User user = null;
+            Integer userId;
+            if (StringUtil.isNotNull(userAuth)) {
+                 user = userMapper.selectOne(new QueryWrapper<User>()
+                        .eq("id", userAuth.getUserId())
+                        .eq("is_delete", 0)
+                        .last("limit 1"));
+            }
+
+            if (StringUtil.isNull(user)) {
+                Integer sn  = this.randMakeSn();
+                User model = new User();
+                model.setSn(sn);
+                model.setAvatar(avatarUrl);
+                model.setNickname(nickName.equals("")?"用户"+sn:nickName);
+                model.setUsername("u"+sn);
+                model.setSex(Integer.parseInt(gender));
+                model.setChannel(client);
+                model.setLastLoginIp(IpUtil.getHostIp());
+                model.setLastLoginTime(System.currentTimeMillis() / 1000);
+                model.setCreateTime(System.currentTimeMillis() / 1000);
+                model.setUpdateTime(System.currentTimeMillis() / 1000);
+                userMapper.insert(model);
+                userId = model.getId();
+
+                UserAuth auth = new UserAuth();
+                auth.setUserId(model.getId());
+                auth.setOpenid(openId);
+                auth.setUnionid(unionId);
+                auth.setClient(client);
+                auth.setCreateTime(System.currentTimeMillis() / 1000);
+                auth.setUpdateTime(System.currentTimeMillis() / 1000);
+                userAuthMapper.insert(auth);
+            } else {
+                // 更新微信标识
+                userId = user.getId();
+                if (StringUtil.isEmpty(userAuth.getUnionid()) && StringUtil.isNotEmpty(sessionResult.getUnionid())) {
+                    userAuth.setUnionid(sessionResult.getUnionid());
+                    userAuthMapper.updateById(userAuth);
+                }
+
+                // 更新用户信息
+                if (StringUtil.isEmpty(user.getAvatar()) && StringUtil.isNotEmpty(avatarUrl)) {
+                    user.setAvatar(avatarUrl);
+                    user.setNickname(nickName);
+                    user.setSex(Integer.parseInt(gender));
+                }
+
+                // 更新登录信息
+                user.setLastLoginIp(IpUtil.getHostIp());
+                user.setLastLoginTime(System.currentTimeMillis() / 1000);
+                userMapper.updateById(user);
+            }
+
+            String token = ToolsUtil.makeToken();
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("id", userId);
+            response.put("token", token);
+            return response;
+        } catch (WxErrorException e) {
+            throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
+        }
+    }
+
+    @Override
+    public void smsLogin(Map<String, String> params) {
+
+    }
+
+    @Override
+    public void accountLogin(Map<String, String> params) {
+
+    }
+
+    @Override
+    public void forgotPassword(Map<String, String> params) {
+
+    }
+
+    /**
+     * 生成用户编号
+     *
+     * @author fzr
+     * @return Integer
+     */
+    private Integer randMakeSn() {
+        Integer sn;
+        while (true) {
+            sn = Integer.parseInt(ToolsUtil.randomInt(8));
+            User snModel = userMapper.selectOne(new QueryWrapper<User>()
+                    .select("id,sn,username")
+                    .eq("sn", sn)
+                    .last("limit 1"));
+            if (snModel == null) {
+                break;
+            }
+        }
+        return sn;
+    }
+}

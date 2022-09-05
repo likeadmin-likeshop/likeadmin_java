@@ -16,13 +16,14 @@ public class User implements Serializable {
 
     @TableId(value="id", type= IdType.AUTO)
     private Integer id;            // 主键
-    private String sn;             // 编号
+    private Integer sn;             // 编号
     private String avatar;         // 用户头像
     private String realName;       // 真实姓名
     private String nickname;       // 用户昵称
     private String username;       // 用户账号
     private String password;       // 用户密码
     private String mobile;         // 用户电话
+    private Integer channel;       // 注册渠道
     private String salt;           // 加密盐巴
     private Integer sex;           // 用户性别: [1=男, 2=女]
     private Integer is_delete;     // 是否删除: [0=否, 1=是]
