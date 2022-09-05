@@ -26,7 +26,8 @@ public class User implements Serializable {
     private Integer channel;       // 注册渠道
     private String salt;           // 加密盐巴
     private Integer sex;           // 用户性别: [1=男, 2=女]
-    private Integer is_delete;     // 是否删除: [0=否, 1=是]
+    private Integer isDisable;     // 是否禁用: [0=否, 1=是]
+    private Integer isDelete;      // 是否删除: [0=否, 1=是]
     private String lastLoginIp;    // 最后登录IP
     private Long lastLoginTime;    // 最后登录时间
     private Long createTime;       // 创建时间

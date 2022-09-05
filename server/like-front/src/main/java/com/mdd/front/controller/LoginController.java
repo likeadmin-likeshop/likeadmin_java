@@ -41,12 +41,11 @@ public class LoginController {
             case "mnp":
                 map = iLoginService.mnpLogin(params);
                 break;
-            case "sms":
-                Assert.isNull(params.get("code"), "code参数缺失!");
-                iLoginService.smsLogin(params);
+            case "mobile":
+                map = iLoginService.mobileLogin(params);
                 break;
             case "account":
-                iLoginService.accountLogin(params);
+                map = iLoginService.accountLogin(params);
                 break;
         }
 

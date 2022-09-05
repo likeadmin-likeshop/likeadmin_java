@@ -172,14 +172,67 @@ public class LoginServiceImpl implements ILoginService {
         }
     }
 
+    /**
+     * 手机号登录
+     *
+     * @author fzr
+     * @param params 参数
+     * @return Map<String, Object>
+     */
     @Override
-    public void smsLogin(Map<String, String> params) {
+    public Map<String, Object> mobileLogin(Map<String, String> params) {
+        Assert.notNull(params.get("mobile"), "mobile参数缺失!");
+        Assert.notNull(params.get("code"), "code参数缺失!");
 
+        // 校验验证码
+
+        // 查询手机号
+        User user = userMapper.selectOne(new QueryWrapper<User>()
+                .select("id,username,mobile,is_disable")
+                .eq("mobile", params.get("mobile"))
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        Assert.notNull(user, "账号不存在!");
+        Assert.isFalse(user.getIsDisable() != 0, "账号已禁用!");
+
+        String token = ToolsUtil.makeToken();
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("id", user.getId());
+        response.put("token", token);
+        return response;
     }
 
+    /**
+     * 账号登录
+     *
+     * @author fzr
+     * @param params 参数
+     * @return Map<String, Object>
+     */
     @Override
-    public void accountLogin(Map<String, String> params) {
+    public Map<String, Object> accountLogin(Map<String, String> params) {
+        Assert.notNull(params.get("username"), "username参数缺失!");
+        Assert.notNull(params.get("password"), "password参数缺失!");
+        String username = params.get("username");
+        String password = params.get("password");
 
+        User user = userMapper.selectOne(new QueryWrapper<User>()
+                .select("id,username,password,salt,mobile,is_disable")
+                .eq("username", username)
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        Assert.notNull(user, "账号不存在!");
+        String pwd = ToolsUtil.makeMd5(password+user.getSalt());
+        Assert.isFalse(!pwd.equals(user.getPassword()), "账号或密码错误!");
+        Assert.isFalse(user.getIsDisable() != 0, "账号已被禁用!");
+
+        String token = ToolsUtil.makeToken();
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("id", user.getId());
+        response.put("token", token);
+        return response;
     }
 
     @Override
@@ -207,4 +260,5 @@ public class LoginServiceImpl implements ILoginService {
         }
         return sn;
     }
+
 }

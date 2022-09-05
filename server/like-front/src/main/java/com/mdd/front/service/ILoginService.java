@@ -18,17 +18,38 @@ public interface ILoginService {
     void register(RegisterParam registerParam);
 
     /**
-     * 微信小程序登录
+     * 微信登录
      *
      * @author fzr
-     * @param scene 场景
-     * @param code 编码
+     * @param params 参数
+     * @return Map<String, Object>
      */
     Map<String, Object> mnpLogin(Map<String, String> params);
 
-    void smsLogin(Map<String, String> params);
+    /**
+     * 手机登录
+     *
+     * @author fzr
+     * @param params 参数
+     * @return Map<String, Object>
+     */
+    Map<String, Object> mobileLogin(Map<String, String> params);
 
-    void accountLogin(Map<String, String> params);
+    /**
+     * 账号登录
+     *
+     * @author fzr
+     * @param params 参数
+     * @return Map<String, Object>
+     */
+    Map<String, Object> accountLogin(Map<String, String> params);
 
+    /**
+     * 忘记密码
+     *
+     * @author fzr
+     * @param params 参数
+     */
     void forgotPassword(Map<String, String> params);
+
 }
