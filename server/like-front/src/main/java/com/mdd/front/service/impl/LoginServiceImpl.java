@@ -193,7 +193,7 @@ public class LoginServiceImpl implements ILoginService {
         }
 
         // 删除验证码
-        RedisUtil.del(FrontConfig.frontendSmsCode+code);
+        RedisUtil.del(FrontConfig.frontendSmsCode+mobile);
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()
@@ -248,9 +248,45 @@ public class LoginServiceImpl implements ILoginService {
         return response;
     }
 
+    /**
+     * 忘记密码
+     *
+     * @author fzr
+     * @param params 参数
+     */
     @Override
     public void forgotPassword(Map<String, String> params) {
+        Assert.notNull(params.get("mobile"), "mobile参数缺失!");
+        Assert.notNull(params.get("code"), "code参数缺失!");
+        Assert.notNull(params.get("password"), "password参数缺失!");
+        String mobile = params.get("mobile");
+        String code = params.get("code");
+        String password = params.get("password");
 
+        // 校验验证码
+        Object smsCode = RedisUtil.get(FrontConfig.frontendSmsCode+mobile);
+        if (StringUtil.isNull(smsCode) || !smsCode.toString().equals(code)) {
+            throw new OperateException("验证码错误!");
+        }
+
+        // 删除验证码
+        RedisUtil.del(FrontConfig.frontendSmsCode+mobile);
+
+        // 查询手机号
+        User user = userMapper.selectOne(new QueryWrapper<User>()
+                .select("id,username,mobile,is_disable")
+                .eq("is_delete", 0)
+                .eq("mobile", mobile)
+                .last("limit 1"));
+
+        // 验证账号
+        Assert.notNull(user, "账号不存在!");
+        String pwd = ToolsUtil.makeMd5(password+user.getSalt());
+
+        // 更新密码
+        user.setPassword(pwd);
+        user.setUpdateTime(System.currentTimeMillis() / 1000);
+        userMapper.updateById(user);
     }
 
     /**

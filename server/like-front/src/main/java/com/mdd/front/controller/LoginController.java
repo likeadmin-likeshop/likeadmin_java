@@ -2,7 +2,6 @@ package com.mdd.front.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.enums.ClientEnum;
 import com.mdd.front.service.ILoginService;
 import com.mdd.front.validate.RegisterParam;
 import org.springframework.validation.annotation.Validated;
@@ -58,6 +57,19 @@ public class LoginController {
                 break;
         }
         return AjaxResult.success(map);
+    }
+
+    /**
+     * 忘记密码
+     *
+     * @author fzr
+     * @param params 参数
+     * @return Object
+     */
+    @PostMapping("/forgotPassword")
+    public Object forgotPassword(@RequestBody Map<String, String> params) {
+            iLoginService.forgotPassword(params);
+            return AjaxResult.success();
     }
 
 }
