@@ -52,13 +52,13 @@
             </el-card>
             <el-card class="!border-none mt-4" shadow="never">
                 <div class="font-medium mb-7">服务器配置</div>
-                <el-form-item label="URL" prop="appId">
+                <el-form-item label="URL">
                     <div>
                         <div class="flex">
-                            <div class="w-80 mr-4">
-                                <el-input v-model="formData.appId" disabled />
+                            <div class="mr-4 w-80">
+                                <el-input v-model="formData.url" disabled />
                             </div>
-                            <el-button>复制</el-button>
+                            <el-button @click="copy(formData.url)">复制</el-button>
                         </div>
                         <div class="form-tips">
                             登录微信公众平台，点击开发>基本配置>服务器配置，填写服务器地址（URL）
@@ -68,7 +68,7 @@
                 <el-form-item label="Token" prop="Token">
                     <div>
                         <div class="w-80">
-                            <el-input v-model="formData.appSecret" placeholder="请输入Token" />
+                            <el-input v-model="formData.token" placeholder="请输入Token" />
                         </div>
                         <div class="form-tips">
                             登录微信公众平台，点击开发>基本配置>服务器配置，设置令牌Token。不填默认为“likeshop”
@@ -79,7 +79,7 @@
                     <div>
                         <div class="w-80">
                             <el-input
-                                v-model="formData.appSecret"
+                                v-model="formData.encodingAesKey"
                                 placeholder="请输入EncodingAESKey"
                             />
                         </div>
@@ -90,15 +90,15 @@
                 </el-form-item>
                 <el-form-item label="消息加密方式" required prop="status">
                     <div>
-                        <el-radio-group class="flex-col !items-start" v-model="formData.status">
+                        <el-radio-group class="flex-col !items-start" v-model="formData.encryptionType">
                             <el-radio :label="1">
                                 明文模式 (不使用消息体加解密功能，安全系数较低)
                             </el-radio>
 
-                            <el-radio :label="0">
+                            <el-radio :label="2">
                                 兼容模式 (明文、密文将共存，方便开发者调试和维护)
                             </el-radio>
-                            <el-radio :label="0">
+                            <el-radio :label="3">
                                 安全模式（推荐） (消息包为纯密文，需要开发者加密和解密，安全系数高)
                             </el-radio>
                         </el-radio-group>
@@ -107,39 +107,39 @@
             </el-card>
             <el-card class="!border-none mt-4" shadow="never">
                 <div class="font-medium mb-7">功能设置</div>
-                <el-form-item label="业务域名" prop="appId">
+                <el-form-item label="业务域名">
                     <div>
                         <div class="flex">
-                            <div class="w-80 mr-4">
-                                <el-input v-model="formData.appId" disabled />
+                            <div class="mr-4 w-80">
+                                <el-input v-model="formData.businessDomain" disabled />
                             </div>
-                            <el-button>复制</el-button>
+                            <el-button @click="copy(formData.businessDomain)">复制</el-button>
                         </div>
                         <div class="form-tips">
                             登录微信公众平台，点击设置>公众号设置>功能设置，填写业务域名
                         </div>
                     </div>
                 </el-form-item>
-                <el-form-item label="JS接口安全域名" prop="appId">
+                <el-form-item label="JS接口安全域名">
                     <div>
                         <div class="flex">
-                            <div class="w-80 mr-4">
-                                <el-input v-model="formData.appId" disabled />
+                            <div class="mr-4 w-80">
+                                <el-input v-model="formData.jsDomain" disabled />
                             </div>
-                            <el-button>复制</el-button>
+                            <el-button @click="copy(formData.jsDomain)">复制</el-button>
                         </div>
                         <div class="form-tips">
                             登录微信公众平台，点击设置>公众号设置>功能设置，填写JS接口安全域名
                         </div>
                     </div>
                 </el-form-item>
-                <el-form-item label="网页授权域名" prop="appId">
+                <el-form-item label="网页授权域名">
                     <div>
                         <div class="flex">
-                            <div class="w-80 mr-4">
-                                <el-input v-model="formData.appId" disabled />
+                            <div class="mr-4 w-80">
+                                <el-input v-model="formData.webDomain" disabled />
                             </div>
-                            <el-button>复制</el-button>
+                            <el-button @click="copy(formData.webDomain)">复制</el-button>
                         </div>
                         <div class="form-tips">
                             登录微信公众平台，点击设置>公众号设置>功能设置，填写网页授权域名
@@ -156,15 +156,17 @@
 <script lang="ts" setup>
 import { getOaConfig, setOaConfig } from '@/api/channel/wx_oa'
 import feedback from '@/utils/feedback'
+import { useClipboard } from '@vueuse/core'
 
 const formData = reactive({
-    name: '',
-    primaryId: '',
-    qrCode: '',
-    appId: '',
-    appSecret: ''
+    name: "",
+    primaryId: " ",
+    qrCode: "",
+    appId: "",
+    appSecret: "",
 })
 
+const { copy } = useClipboard()
 const getDetail = async () => {
     const data = await getOaConfig()
     for (const key in formData) {

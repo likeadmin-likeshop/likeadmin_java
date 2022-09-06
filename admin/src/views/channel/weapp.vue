@@ -55,62 +55,62 @@
                 <el-form-item label="request合法域名" prop="appId">
                     <div>
                         <div class="flex">
-                            <div class="w-80 mr-4">
-                                <el-input v-model="formData.appId" disabled />
+                            <div class="mr-4 w-80">
+                                <el-input v-model="formData.requestDomain" disabled />
                             </div>
-                            <el-button>复制</el-button>
+                            <el-button @click="copy(formData.requestDomain)">复制</el-button>
                         </div>
                         <div class="form-tips">
                             小程序账号登录微信公众平台，点击开发>开发设置->服务器域名，填写https协议域名
                         </div>
                     </div>
                 </el-form-item>
-                <el-form-item label="socket合法域名" prop="appId">
+                <el-form-item label="socket合法域名">
                     <div>
                         <div class="flex">
-                            <div class="w-80 mr-4">
-                                <el-input v-model="formData.appId" disabled />
+                            <div class="mr-4 w-80">
+                                <el-input v-model="formData.socketDomain" disabled />
                             </div>
-                            <el-button>复制</el-button>
+                            <el-button @click="copy(formData.socketDomain)">复制</el-button>
                         </div>
                         <div class="form-tips">
                             小程序账号登录微信公众平台，点击开发>开发设置->服务器域名，填写wss协议域名
                         </div>
                     </div>
                 </el-form-item>
-                <el-form-item label="uploadFile合法域名" prop="appId">
+                <el-form-item label="uploadFile合法域名">
                     <div>
                         <div class="flex">
-                            <div class="w-80 mr-4">
-                                <el-input v-model="formData.appId" disabled />
+                            <div class="mr-4 w-80">
+                                <el-input v-model="formData.uploadFileDomain" disabled />
                             </div>
-                            <el-button>复制</el-button>
+                            <el-button @click="copy(formData.uploadFileDomain)">复制</el-button>
                         </div>
                         <div class="form-tips">
                             小程序账号登录微信公众平台，点击开发>开发设置->服务器域名，填写https协议域名
                         </div>
                     </div>
                 </el-form-item>
-                <el-form-item label="downloadFile合法域名" prop="appId">
+                <el-form-item label="downloadFile合法域名">
                     <div>
                         <div class="flex">
-                            <div class="w-80 mr-4">
-                                <el-input v-model="formData.appId" disabled />
+                            <div class="mr-4 w-80">
+                                <el-input v-model="formData.downloadFileDomain" disabled />
                             </div>
-                            <el-button>复制</el-button>
+                            <el-button @click="copy(formData.downloadFileDomain)">复制</el-button>
                         </div>
                         <div class="form-tips">
                             小程序账号登录微信公众平台，点击开发>开发设置->服务器域名，填写https协议域名
                         </div>
                     </div>
                 </el-form-item>
-                <el-form-item label="udp合法域名" prop="appId">
+                <el-form-item label="udp合法域名">
                     <div>
                         <div class="flex">
-                            <div class="w-80 mr-4">
-                                <el-input v-model="formData.appId" disabled />
+                            <div class="mr-4 w-80">
+                                <el-input v-model="formData.udpDomain" disabled />
                             </div>
-                            <el-button>复制</el-button>
+                            <el-button @click="copy(formData.udpDomain)">复制</el-button>
                         </div>
                         <div class="form-tips">
                             小程序账号登录微信公众平台，点击开发>开发设置->服务器域名，填写udp协议域名
@@ -120,13 +120,13 @@
             </el-card>
             <el-card class="!border-none mt-4" shadow="never">
                 <div class="font-medium mb-7">业务域名</div>
-                <el-form-item label="业务域名" prop="appId">
+                <el-form-item label="业务域名">
                     <div>
                         <div class="flex">
-                            <div class="w-80 mr-4">
-                                <el-input v-model="formData.appId" disabled />
+                            <div class="mr-4 w-80">
+                                <el-input v-model="formData.businessDomain" disabled />
                             </div>
-                            <el-button>复制</el-button>
+                            <el-button @click="copy(formData.businessDomain)">复制</el-button>
                         </div>
                         <div class="form-tips">
                             小程序账号登录微信公众平台，点击开发>开发设置->业务域名，填写业务域名
@@ -143,15 +143,24 @@
 <script lang="ts" setup>
 import { getWeappConfig, setWeappConfig } from '@/api/channel/weapp'
 import feedback from '@/utils/feedback'
+import { useClipboard } from '@vueuse/core'
 
 const formData = reactive({
     name: '',
     primaryId: '',
     qrCode: '',
     appId: '',
-    appSecret: ''
+    appSecret: '',
+    businessDomain: '',
+    downloadFileDomain: '',
+    requestDomain: '',
+    socketDomain: '',
+    tcpDomain: '',
+    udpDomain: '',
+    uploadFileDomain: ''
 })
 
+const { copy } = useClipboard()
 const getDetail = async () => {
     const data = await getWeappConfig()
     for (const key in formData) {
