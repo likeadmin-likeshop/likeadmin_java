@@ -1,18 +1,25 @@
 package com.mdd.common.plugin.notice;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.gson.reflect.TypeToken;
 import com.mdd.common.entity.notice.NoticeSetting;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.notice.NoticeSettingMapper;
 import com.mdd.common.plugin.notice.engine.MpNotice;
 import com.mdd.common.plugin.notice.engine.OaNotice;
 import com.mdd.common.plugin.notice.engine.SmsNotice;
+import com.mdd.common.utils.ArrayUtil;
 import com.mdd.common.utils.SpringUtil;
 import com.mdd.common.utils.StringUtil;
 import com.mdd.common.utils.ToolsUtil;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 public class NoticeDriver {

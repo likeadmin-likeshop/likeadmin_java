@@ -2,6 +2,7 @@ package com.mdd.admin.service.channel.impl;
 
 import com.mdd.admin.service.channel.IChannelOaService;
 import com.mdd.common.utils.ConfigUtil;
+import com.mdd.common.utils.RequestUtil;
 import com.mdd.common.utils.UrlUtil;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,16 @@ public class ChannelOaServiceImpl implements IChannelOaService {
         map.put("qrCode", UrlUtil.toAbsoluteUrl(config.getOrDefault("qrCode", "")));
         map.put("appId", config.getOrDefault("appId", ""));
         map.put("appSecret", config.getOrDefault("appSecret", ""));
+        map.put("url", config.getOrDefault("url", ""));
+        map.put("token", config.getOrDefault("token", ""));
+        map.put("encodingAesKey", config.getOrDefault("encodingAesKey", ""));
+        map.put("encryptionType", Integer.parseInt(config.getOrDefault("encryptionType", "1")));
+
+        String domain = RequestUtil.domain();
+        map.put("businessDomain", domain);
+        map.put("jsDomain", domain);
+        map.put("webDomain", domain);
+
         return map;
     }
 
@@ -45,6 +56,10 @@ public class ChannelOaServiceImpl implements IChannelOaService {
         ConfigUtil.set("mp_channel", "qrCode", UrlUtil.toRelativeUrl(param.getOrDefault("qrCode", "")));
         ConfigUtil.set("mp_channel", "appId", param.getOrDefault("appId", ""));
         ConfigUtil.set("mp_channel", "appSecret", param.getOrDefault("appSecret", ""));
+        ConfigUtil.set("mp_channel", "url", param.getOrDefault("url", ""));
+        ConfigUtil.set("mp_channel", "token", param.getOrDefault("token", ""));
+        ConfigUtil.set("mp_channel", "encodingAesKey", param.getOrDefault("encodingAesKey", ""));
+        ConfigUtil.set("mp_channel", "encryptionType", param.getOrDefault("encryptionType", ""));
     }
 
 }

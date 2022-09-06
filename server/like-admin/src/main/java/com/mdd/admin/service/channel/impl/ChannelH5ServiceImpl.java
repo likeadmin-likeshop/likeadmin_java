@@ -2,6 +2,7 @@ package com.mdd.admin.service.channel.impl;
 
 import com.mdd.admin.service.channel.IChannelH5Service;
 import com.mdd.common.utils.ConfigUtil;
+import com.mdd.common.utils.RequestUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -26,6 +27,7 @@ public class ChannelH5ServiceImpl implements IChannelH5Service {
         map.put("status", Integer.parseInt(config.getOrDefault("status", "0")));
         map.put("close", Integer.parseInt(config.getOrDefault("close", "0")));
         map.put("url", config.getOrDefault("url", ""));
+        map.put("accessLink", RequestUtil.domain()+"/mobile");
         return map;
     }
 

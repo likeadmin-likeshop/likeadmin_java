@@ -1,8 +1,10 @@
 package com.mdd.common.plugin.notice.engine;
 
+import com.alibaba.fastjson.JSON;
 import com.mdd.common.plugin.sms.SmsDriver;
 import com.mdd.common.utils.ConfigUtil;
 import com.mdd.common.utils.StringUtil;
+import com.mdd.common.utils.ToolsUtil;
 
 import java.util.Map;
 
@@ -10,10 +12,15 @@ public class SmsNotice {
 
     public Boolean send(Map<String, Object> params, Map<String, String> smsTemplate) {
         String mobile = params.getOrDefault("mobile", "").toString();
-        String scene = params.getOrDefault("scene", "").toString();
+        String scene  = params.getOrDefault("scene", "").toString();
         if (!StringUtil.isNotEmpty(mobile) || !StringUtil.isNotEmpty(scene)) {
             return false;
         }
+
+//        if (StringUtil.isNotNull(params.get("params"))) {
+//            ToolsUtil.objectToMap(params.get("params"));
+//        }
+
 //        System.out.println(this.getContent(params, smsTemplate));
         // 发送短信
 //        (new SmsDriver())

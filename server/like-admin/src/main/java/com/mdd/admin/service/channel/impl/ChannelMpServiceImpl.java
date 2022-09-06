@@ -2,6 +2,7 @@ package com.mdd.admin.service.channel.impl;
 
 import com.mdd.admin.service.channel.IChannelMpService;
 import com.mdd.common.utils.ConfigUtil;
+import com.mdd.common.utils.RequestUtil;
 import com.mdd.common.utils.UrlUtil;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,15 @@ public class ChannelMpServiceImpl implements IChannelMpService {
         map.put("appId", config.getOrDefault("appId", ""));
         map.put("appSecret", config.getOrDefault("appSecret", ""));
         map.put("qrCode", UrlUtil.toAbsoluteUrl(config.getOrDefault("qrCode", "")));
+
+        String domain = RequestUtil.domain();
+        map.put("requestDomain", domain);
+        map.put("socketDomain", domain);
+        map.put("uploadFileDomain", domain);
+        map.put("downloadFileDomain", domain);
+        map.put("udpDomain", domain);
+        map.put("tcpDomain", domain);
+        map.put("businessDomain", domain);
         return map;
     }
 
