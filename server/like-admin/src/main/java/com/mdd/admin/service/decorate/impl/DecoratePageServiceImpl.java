@@ -34,7 +34,7 @@ public class DecoratePageServiceImpl implements IDecoratePageService {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("id", decoratePage.getId());
         map.put("pageType", decoratePage.getPageType());
-        map.put("pageData", ToolsUtil.jsonToMap(decoratePage.getPageData()));
+        map.put("pageData", decoratePage.getPageData());
         return map;
     }
 
@@ -49,7 +49,7 @@ public class DecoratePageServiceImpl implements IDecoratePageService {
         DecoratePage decoratePage = decoratePageMapper.selectById(decoratePageParam.getId());
         Assert.notNull(decoratePage, "数据不存在!");
 
-        decoratePage.setPageData(JSON.toJSONString(decoratePageParam.getPageData()));
+        decoratePage.setPageData(decoratePageParam.getPageData());
         decoratePage.setUpdateTime(System.currentTimeMillis() / 1000);
         decoratePageMapper.updateById(decoratePage);
     }

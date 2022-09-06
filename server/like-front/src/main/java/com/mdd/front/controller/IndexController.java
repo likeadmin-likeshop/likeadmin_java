@@ -29,18 +29,14 @@ public class IndexController {
      */
     @GetMapping("/index")
     public Object index() {
-        Map<String, Object> params = new LinkedHashMap<>();
-        params.put("scene", "101");
-        params.put("mobile", "12323");
-        params.put("params", new String[]{
-                "code:203",
-                "张三丰",
-                "张无忌",
-                "王二麻子",
-                "张富贵"
-        });
+        Map<String, String> config = new LinkedHashMap<>();
+        config.put("scene", "100");
+        config.put("mobile", "1222");
 
-        (new NoticeDriver()).handle(params);
+        Map<String, String> params = new LinkedHashMap<>();
+        params.put("code", "5522");
+//        params.put("order_sn", "27552210565677");
+        (new NoticeDriver()).handle(config, params);
 
 
         Map<String, Object> detail = IIndexService.index();

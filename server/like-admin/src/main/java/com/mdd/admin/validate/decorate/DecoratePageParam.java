@@ -15,6 +15,6 @@ public class DecoratePageParam {
     private Integer id;
 
     @NotNull(message = "pageData参数缺失")
-    private Object pageData;
+    private String pageData;
 
 }

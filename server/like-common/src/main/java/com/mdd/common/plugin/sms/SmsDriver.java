@@ -106,15 +106,10 @@ public class SmsDriver {
                 sendResult = aliSms.getSendResult();
                 break;
             case "tencent":
-                List<String> params = new LinkedList<>();
-                for (Map.Entry<String, String> MapString : this.templateParam.entrySet()) {
-                    params.add(MapString.getValue());
-                }
-
                 TencentSms tencentSms = new TencentSms(this.config);
                 results = tencentSms.setMobile(this.mobile)
                         .setTemplateId(this.templateCode)
-                        .setTemplateParams(params.toArray(new String[0]))
+                        .setTemplateParams(this.templateParam)
                         .send();
                 sendResult = tencentSms.getSendResult();
                 break;
