@@ -3,7 +3,7 @@ package com.mdd.front.controller;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.front.service.ILoginService;
-import com.mdd.front.validate.RegisterParam;
+import com.mdd.front.validate.RegParam;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +25,12 @@ public class LoginController {
      * 注册账号
      *
      * @author fzr
-     * @param registerParam 参数
+     * @param regParam 参数
      * @return Object
      */
     @PostMapping("/register")
-    public Object register(@Validated @RequestBody RegisterParam registerParam) {
-        iLoginService.register(registerParam);
+    public Object register(@Validated @RequestBody RegParam regParam) {
+        iLoginService.register(regParam);
         return AjaxResult.success();
     }
 

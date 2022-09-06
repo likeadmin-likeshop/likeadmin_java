@@ -6,6 +6,7 @@ import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
 import com.mdd.common.enums.ClientEnum;
@@ -15,7 +16,7 @@ import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.utils.*;
 import com.mdd.front.config.FrontConfig;
 import com.mdd.front.service.ILoginService;
-import com.mdd.front.validate.RegisterParam;
+import com.mdd.front.validate.RegParam;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,13 +42,13 @@ public class LoginServiceImpl implements ILoginService {
      * 注册账号
      *
      * @author fzr
-     * @param registerParam 参数
+     * @param regParam 参数
      */
     @Override
-    public void register(RegisterParam registerParam) {
+    public void register(RegParam regParam) {
         User model = userMapper.selectOne(new QueryWrapper<User>()
                 .select("id,sn,username")
-                .eq("username", registerParam.getUsername())
+                .eq("username", regParam.getUsername())
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
@@ -55,12 +56,12 @@ public class LoginServiceImpl implements ILoginService {
 
         Integer sn  = this.randMakeSn();
         String salt = ToolsUtil.randomString(5);
-        String pwd  = ToolsUtil.makeMd5(registerParam.getPassword()+salt);
+        String pwd  = ToolsUtil.makeMd5(regParam.getPassword()+salt);
 
         User user = new User();
         user.setSn(sn);
         user.setNickname("用户"+sn);
-        user.setUsername(registerParam.getUsername());
+        user.setUsername(regParam.getUsername());
         user.setPassword(pwd);
         user.setSalt(salt);
         user.setChannel(0);
@@ -187,13 +188,13 @@ public class LoginServiceImpl implements ILoginService {
         String code   = params.get("code").toLowerCase();
 
         // 校验验证码
-        Object smsCode = RedisUtil.get(FrontConfig.frontendSmsCode+mobile);
+        Object smsCode = RedisUtil.get(GlobalConfig.redisSmsCode+mobile);
         if (StringUtil.isNull(smsCode) || !smsCode.toString().equals(code)) {
             throw new OperateException("验证码错误!");
         }
 
         // 删除验证码
-        RedisUtil.del(FrontConfig.frontendSmsCode+mobile);
+        RedisUtil.del(GlobalConfig.redisSmsCode+mobile);
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()
@@ -264,13 +265,13 @@ public class LoginServiceImpl implements ILoginService {
         String password = params.get("password");
 
         // 校验验证码
-        Object smsCode = RedisUtil.get(FrontConfig.frontendSmsCode+mobile);
+        Object smsCode = RedisUtil.get(GlobalConfig.redisSmsCode+mobile);
         if (StringUtil.isNull(smsCode) || !smsCode.toString().equals(code)) {
             throw new OperateException("验证码错误!");
         }
 
         // 删除验证码
-        RedisUtil.del(FrontConfig.frontendSmsCode+mobile);
+        RedisUtil.del(GlobalConfig.redisSmsCode+mobile);
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()

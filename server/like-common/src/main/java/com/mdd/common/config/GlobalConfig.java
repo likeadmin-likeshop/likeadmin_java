@@ -23,6 +23,9 @@ public class GlobalConfig {
     // Redis键前缀
     public static String redisPrefix = "Like:";
 
+    // 短信验证码
+    public static String redisSmsCode  = "smsCode:";
+
     // 资源访问前缀
     public static String publicPrefix = "api/uploads";
 

@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.common.entity.notice.NoticeSetting;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.notice.NoticeSettingMapper;
-import com.mdd.common.plugin.notice.engine.MpNotice;
-import com.mdd.common.plugin.notice.engine.OaNotice;
 import com.mdd.common.plugin.notice.engine.SmsNotice;
 import com.mdd.common.utils.SpringUtil;
 import com.mdd.common.utils.StringUtil;
@@ -36,16 +34,16 @@ public class NoticeDriver {
         // 短信通知
         Map<String, String> smsTemplate = ToolsUtil.jsonToMap(noticeSetting.getSmsNotice());
         if (StringUtil.isNotEmpty(smsTemplate.get("status")) && Integer.parseInt(smsTemplate.get("status")) == 1) {
-            (new SmsNotice()).send(config, params, smsTemplate);
+            (new SmsNotice()).send(config, params, smsTemplate, noticeSetting);
         }
 
-        // 小程序订阅通知
-        Map<String, String> mnpTemplate = ToolsUtil.jsonToMap(noticeSetting.getMnpNotice());
-        if (StringUtil.isNotEmpty(mnpTemplate.get("status")) && Integer.parseInt(mnpTemplate.get("status")) == 1) {
-            (new MpNotice()).send(config, params, mnpTemplate);
-        }
+        // 小程序订阅通知 todo
+//        Map<String, String> mnpTemplate = ToolsUtil.jsonToMap(noticeSetting.getMnpNotice());
+//        if (StringUtil.isNotEmpty(mnpTemplate.get("status")) && Integer.parseInt(mnpTemplate.get("status")) == 1) {
+//            (new MpNotice()).send(config, params, mnpTemplate);
+//        }
 
-        // 公众号订阅通知
+        // 公众号订阅通知 todo
 //        Map<String, String> oaTemplate = ToolsUtil.jsonToMap(noticeSetting.getOaNotice());
 //        if (StringUtil.isNotEmpty(oaTemplate.get("status")) && Integer.parseInt(oaTemplate.get("status")) == 1) {
 //            (new OaNotice()).send(config, params, oaTemplate);

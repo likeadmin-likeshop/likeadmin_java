@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class RegisterParam implements Serializable {
+public class RegParam implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

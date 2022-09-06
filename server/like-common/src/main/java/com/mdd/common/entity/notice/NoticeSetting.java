@@ -25,7 +25,6 @@ public class NoticeSetting implements Serializable {
     private String smsNotice;    // 短信的通知设置
     private String oaNotice;     // 公众号通知设置
     private String mnpNotice;    // 小程序通知设置
-    private String support;      // 支持的发送类型
     private Integer isDelete;    // 是否删除: [0=否, 1=是]
     private Long createTime;     // 创建时间
     private Long updateTime;     // 更新时间

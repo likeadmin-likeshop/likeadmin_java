@@ -1,7 +1,10 @@
 package com.mdd.common.plugin.notice.engine;
 
+import com.mdd.common.config.GlobalConfig;
+import com.mdd.common.entity.notice.NoticeSetting;
 import com.mdd.common.plugin.sms.SmsDriver;
 import com.mdd.common.utils.ConfigUtil;
+import com.mdd.common.utils.RedisUtil;
 import com.mdd.common.utils.StringUtil;
 
 import java.util.*;
@@ -15,10 +18,12 @@ public class SmsNotice {
      * @param config 基础配置
      * @param params 短信参数
      * @param smsTemplate 短信模板
+     * @param noticeSetting 通知设置
      */
-    public void send(Map<String, String> config, Map<String, String> params, Map<String, String> smsTemplate) {
+    public void send(Map<String, String> config, Map<String, String> params, Map<String, String> smsTemplate, NoticeSetting noticeSetting) {
         String mobile = config.getOrDefault("mobile", "");
         String scene  = config.getOrDefault("scene", "");
+
         if (StringUtil.isNotEmpty(mobile) && StringUtil.isNotEmpty(scene)) {
             (new SmsDriver())
                     .setMobile(mobile)
@@ -26,6 +31,12 @@ public class SmsNotice {
                     .setTemplateParam(this.getSmsParams(params, smsTemplate))
                     .setSmsContent(this.getContent(params, smsTemplate))
                     .sendSms();
+
+            // 1=业务通知, 2=验证码
+            if (noticeSetting.getType() == 2 && StringUtil.isNotNull(params.get("code"))) {
+                String code = params.get("code").toLowerCase();
+                RedisUtil.set(GlobalConfig.redisSmsCode+mobile, code);
+            }
         }
     }
 
