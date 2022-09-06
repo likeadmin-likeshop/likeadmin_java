@@ -6,6 +6,7 @@ import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.front.service.IArticleService;
 import com.mdd.front.validate.PageParam;
 import com.mdd.front.vo.article.ArticleCateVo;
+import com.mdd.front.vo.article.ArticleCollectVo;
 import com.mdd.front.vo.article.ArticleDetailVo;
 import com.mdd.front.vo.article.ArticleListVo;
 import org.springframework.validation.annotation.Validated;
@@ -61,4 +62,16 @@ public class ArticleController {
         return AjaxResult.success(vo);
     }
 
+    /**
+     * 文章收藏
+     *
+     * @author fzr
+     * @param pageParam 分页参数
+     * @return Object
+     */
+    @GetMapping("/collect")
+    public Object collect(@Validated PageParam pageParam) {
+        PageResult<ArticleCollectVo> list = iArticleService.collect(pageParam);
+        return AjaxResult.success(list);
+    }
 }

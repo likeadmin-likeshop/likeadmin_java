@@ -3,6 +3,7 @@ package com.mdd.front.service;
 import com.mdd.common.core.PageResult;
 import com.mdd.front.validate.PageParam;
 import com.mdd.front.vo.article.ArticleCateVo;
+import com.mdd.front.vo.article.ArticleCollectVo;
 import com.mdd.front.vo.article.ArticleDetailVo;
 import com.mdd.front.vo.article.ArticleListVo;
 
@@ -39,5 +40,14 @@ public interface IArticleService {
      * @return ArticleDetailVo
      */
     ArticleDetailVo detail(Integer id);
+
+    /**
+     * 文章收藏
+     *
+     * @author fzr
+     * @param pageParam 分页参数
+     * @return PageResult<ArticleListVo>
+     */
+    PageResult<ArticleCollectVo> collect(PageParam pageParam);
 
 }

@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.yulichang.query.MPJQueryWrapper;
+import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.article.ArticleCategory;
+import com.mdd.common.entity.article.ArticleCollect;
 import com.mdd.common.mapper.article.ArticleCategoryMapper;
 import com.mdd.common.mapper.article.ArticleMapper;
 import com.mdd.common.utils.TimeUtil;
@@ -14,6 +17,7 @@ import com.mdd.common.utils.UrlUtil;
 import com.mdd.front.service.IArticleService;
 import com.mdd.front.validate.PageParam;
 import com.mdd.front.vo.article.ArticleCateVo;
+import com.mdd.front.vo.article.ArticleCollectVo;
 import com.mdd.front.vo.article.ArticleDetailVo;
 import com.mdd.front.vo.article.ArticleListVo;
 import org.springframework.beans.BeanUtils;
@@ -117,6 +121,31 @@ public class ArticleServiceImpl implements IArticleService {
         vo.setImage(UrlUtil.toAbsoluteUrl(article.getImage()));
         vo.setCreateTime(TimeUtil.timestampToDate(article.getCreateTime()));
         return vo;
+    }
+
+    @Override
+    public PageResult<ArticleCollectVo> collect(PageParam pageParam) {
+        Integer pageNo   = pageParam.getPageNo();
+        Integer pageSize = pageParam.getPageSize();
+
+        MPJQueryWrapper<ArticleCollect> mpjQueryWrapper = new MPJQueryWrapper<>();
+        mpjQueryWrapper.select("t.id,t.article_id,a.title,a.image,a.intro,a.visit,a.create_time")
+                .eq("t.user_id", 1)
+                .eq("t.is_delete", 0)
+                .orderByDesc("t.id")
+                .innerJoin("?_article a ON a.id=t.article_id".replace("?_", GlobalConfig.tablePrefix));
+
+        IPage<ArticleCollectVo> iPage = articleMapper.selectJoinPage(
+                new Page<>(pageNo, pageSize),
+                ArticleCollectVo.class,
+                mpjQueryWrapper);
+
+        for (ArticleCollectVo vo : iPage.getRecords()) {
+            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()));
+            vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
+        }
+
+        return PageResult.iPageHandle(iPage);
     }
 
 }
