@@ -36,17 +36,16 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { getH5Config, setH5Config } from '@/api/channel/h5'
+import { getWxDevConfig, setWxDevConfig } from '@/api/channel/wx_dev'
 import feedback from '@/utils/feedback'
 
 const formData = reactive({
-    status: 0,
-    close: 0,
-    url: ''
+    appId: '',
+    appSecret: ''
 })
 
 const getDetail = async () => {
-    const data = await getH5Config()
+    const data = await getWxDevConfig()
     for (const key in formData) {
         //@ts-ignore
         formData[key] = data[key]
@@ -54,7 +53,7 @@ const getDetail = async () => {
 }
 
 const handelSave = async () => {
-    await setH5Config(formData)
+    await setWxDevConfig(formData)
     getDetail()
     feedback.msgSuccess('操作成功')
 }

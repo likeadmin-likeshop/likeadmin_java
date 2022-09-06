@@ -33,9 +33,9 @@
                                 <el-input v-model="formData.intro" placeholder="请输入文章简介" />
                             </div>
                         </el-form-item>
-                        <el-form-item label="摘要" prop="intro">
+                        <el-form-item label="摘要" prop="summary">
                             <div class="w-80">
-                                <el-input type="textarea" :rows="6" v-model="formData.intro" />
+                                <el-input type="textarea" :rows="6" v-model="formData.summary" />
                             </div>
                         </el-form-item>
                         <el-form-item label="文章封面" prop="image">
@@ -101,7 +101,8 @@ const formData = reactive({
     content: '',
     visit: 0,
     sort: 0,
-    isShow: ''
+    isShow: '',
+    summary: ''
 })
 
 const formRef = shallowRef<FormInstance>()

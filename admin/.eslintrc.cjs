@@ -34,7 +34,8 @@ module.exports = {
         'no-prototype-builtins': 'off',
         'prefer-spread': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
-        '@typescript-eslint/no-non-null-asserted-optional-chain': 'off'
+        '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
+        'vue/no-mutating-props': 'off'
     },
     globals: {
         module: 'readonly'
