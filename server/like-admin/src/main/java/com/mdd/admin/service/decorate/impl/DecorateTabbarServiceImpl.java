@@ -1,11 +1,11 @@
 package com.mdd.admin.service.decorate.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.admin.service.decorate.IDecorateTabbarService;
 import com.mdd.common.entity.decorate.DecorateTabbar;
 import com.mdd.common.mapper.decorate.DecorateTabbarMapper;
-import com.mdd.common.utils.TimeUtil;
-import com.mdd.common.utils.UrlUtil;
+import com.mdd.common.utils.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,15 +28,16 @@ public class DecorateTabbarServiceImpl implements IDecorateTabbarService {
      * 底部导航详情
      *
      * @author fzr
-     * @return List<Map<String, Object>>
+     * @return Map<String, Object>
      */
     @Override
-    public List<Map<String, Object>> detail() {
-        List<Map<String, Object>> response = new LinkedList<>();
+    public Map<String, Object> detail() {
+        Map<String, Object> response = new LinkedHashMap<>();
         List<DecorateTabbar> list = decorateTabbarMapper.selectList(
                 new QueryWrapper<DecorateTabbar>()
                     .orderByAsc("id"));
 
+        List<Map<String, Object>> tabList = new LinkedList<>();
         for (DecorateTabbar tab: list) {
             Map<String, Object> map = new LinkedHashMap<>();
             map.put("id", tab.getId());
@@ -46,8 +47,12 @@ public class DecorateTabbarServiceImpl implements IDecorateTabbarService {
             map.put("link", tab.getLink());
             map.put("createTime", TimeUtil.timestampToDate(tab.getCreateTime()));
             map.put("updateTime", TimeUtil.timestampToDate(tab.getUpdateTime()));
-            response.add(map);
+            tabList.add(map);
         }
+
+        String tabbar = ConfigUtil.get("tabbar", "style", "{}");
+        response.put("style", ToolsUtil.jsonToMap(tabbar));
+        response.put("list", tabList);
         return response;
     }
 
@@ -59,10 +64,10 @@ public class DecorateTabbarServiceImpl implements IDecorateTabbarService {
      */
     @Override
     @Transactional
-    public void save(List<Map<String, String>> params) {
+    public void save(Map<String, Object> params) {
         decorateTabbarMapper.delete(new QueryWrapper<DecorateTabbar>().gt("id", 0));
 
-        for (Map<String, String> item: params) {
+        for (Map<String, String> item: ArrayUtil.stringToListAsMapStr(params.get("list").toString())) {
             DecorateTabbar model = new DecorateTabbar();
             model.setName(item.get("name"));
             model.setSelected(UrlUtil.toRelativeUrl(item.get("selected")));
@@ -72,6 +77,11 @@ public class DecorateTabbarServiceImpl implements IDecorateTabbarService {
             model.setUpdateTime(System.currentTimeMillis() / 1000);
             decorateTabbarMapper.insert(model);
         }
+
+        if (StringUtil.isNotNull(params.get("style"))) {
+            ConfigUtil.set("tabbar", "style", JSON.toJSONString(params.get("style")));
+        }
+
     }
 
 }

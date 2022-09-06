@@ -12,9 +12,9 @@ public interface IDecorateTabbarService {
      * 底部导航详情
      *
      * @author fzr
-     * @return List<Map<String, Object>>
+     * @return  Map<String, Object>
      */
-    List<Map<String, Object>> detail();
+    Map<String, Object> detail();
 
     /**
      * 底部导航保存
@@ -22,6 +22,6 @@ public interface IDecorateTabbarService {
      * @author fzr
      * @param params 参数
      */
-    void save(List<Map<String, String>> params);
+    void save(Map<String, Object> params);
 
 }
