@@ -18,8 +18,11 @@
                 <el-form-item label="短信签名" prop="sign">
                     <el-input v-model="formData.sign" placeholder="请输入短信签名" />
                 </el-form-item>
-                <el-form-item label="APP_KEY" prop="appKey">
+                <el-form-item label="APP_KEY" prop="appKey" v-if="formData.alias == 'aliyun'">
                     <el-input v-model="formData.appKey" placeholder="请输入APP_KEY" />
+                </el-form-item>
+                <el-form-item label="APP_ID" prop="appId" v-if="formData.alias == 'tencent'">
+                    <el-input v-model="formData.appId" placeholder="请输入APP_ID" />
                 </el-form-item>
                 <el-form-item label="SECRET_ID" prop="secretId" v-if="formData.alias == 'tencent'">
                     <el-input v-model="formData.secretId" placeholder="请输入SECRET_ID" />
@@ -50,6 +53,7 @@ const formData = reactive({
     alias: '',
     sign: '',
     appKey: '',
+    appId: '',
     secretKey: '',
     secretId: '',
     status: 0
@@ -60,6 +64,13 @@ const formRules = {
         {
             required: true,
             message: '请输入短信签名',
+            trigger: 'blur'
+        }
+    ],
+    appId: [
+        {
+            required: true,
+            message: '请输入APP_ID',
             trigger: 'blur'
         }
     ],

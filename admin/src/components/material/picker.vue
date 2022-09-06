@@ -41,7 +41,8 @@
                         v-show="showUpload"
                         :class="{
                             'is-disabled': disabled,
-                            'is-one': limit == 1
+                            'is-one': limit == 1,
+                            [uploadClass]: true
                         }"
                     >
                         <slot name="upload">
@@ -123,6 +124,10 @@ export default defineComponent({
         hiddenUpload: {
             type: Boolean,
             default: false
+        },
+        uploadClass: {
+            type: String,
+            default: ''
         }
     },
 
@@ -269,8 +274,8 @@ export default defineComponent({
         }
     }
     .material-upload {
-        .upload-btn {
-            @apply box-border rounded border-br border-dashed border flex flex-col justify-center items-center;
+        :deep(.upload-btn) {
+            @apply text-tx-secondary box-border rounded border-br border-dashed border flex flex-col justify-center items-center;
         }
     }
 }
