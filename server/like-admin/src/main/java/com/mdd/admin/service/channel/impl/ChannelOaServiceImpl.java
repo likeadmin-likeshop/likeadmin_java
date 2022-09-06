@@ -51,15 +51,15 @@ public class ChannelOaServiceImpl implements IChannelOaService {
      */
     @Override
     public void save(Map<String, String> param) {
-        ConfigUtil.set("mp_channel", "name", param.getOrDefault("name", ""));
-        ConfigUtil.set("mp_channel", "primaryId", param.getOrDefault("primaryId", ""));
-        ConfigUtil.set("mp_channel", "qrCode", UrlUtil.toRelativeUrl(param.getOrDefault("qrCode", "")));
-        ConfigUtil.set("mp_channel", "appId", param.getOrDefault("appId", ""));
-        ConfigUtil.set("mp_channel", "appSecret", param.getOrDefault("appSecret", ""));
-        ConfigUtil.set("mp_channel", "url", param.getOrDefault("url", ""));
-        ConfigUtil.set("mp_channel", "token", param.getOrDefault("token", ""));
-        ConfigUtil.set("mp_channel", "encodingAesKey", param.getOrDefault("encodingAesKey", ""));
-        ConfigUtil.set("mp_channel", "encryptionType", param.getOrDefault("encryptionType", ""));
+        ConfigUtil.set("oa_channel", "name", param.getOrDefault("name", ""));
+        ConfigUtil.set("oa_channel", "primaryId", param.getOrDefault("primaryId", ""));
+        ConfigUtil.set("oa_channel", "qrCode", UrlUtil.toRelativeUrl(param.getOrDefault("qrCode", "")));
+        ConfigUtil.set("oa_channel", "appId", param.getOrDefault("appId", ""));
+        ConfigUtil.set("oa_channel", "appSecret", param.getOrDefault("appSecret", ""));
+        ConfigUtil.set("oa_channel", "url", param.getOrDefault("url", ""));
+        ConfigUtil.set("oa_channel", "token", param.getOrDefault("token", ""));
+        ConfigUtil.set("oa_channel", "encodingAesKey", param.getOrDefault("encodingAesKey", ""));
+        ConfigUtil.set("oa_channel", "encryptionType", param.getOrDefault("encryptionType", ""));
     }
 
 }
