@@ -1,35 +1,32 @@
 package com.mdd.common.plugin.notice.engine;
 
-import com.alibaba.fastjson.JSON;
 import com.mdd.common.plugin.sms.SmsDriver;
 import com.mdd.common.utils.ConfigUtil;
 import com.mdd.common.utils.StringUtil;
-import com.mdd.common.utils.ToolsUtil;
 
-import java.util.Map;
+import java.util.*;
 
 public class SmsNotice {
 
-    public Boolean send(Map<String, Object> params, Map<String, String> smsTemplate) {
-        String mobile = params.getOrDefault("mobile", "").toString();
-        String scene  = params.getOrDefault("scene", "").toString();
-        if (!StringUtil.isNotEmpty(mobile) || !StringUtil.isNotEmpty(scene)) {
-            return false;
+    /**
+     * 发送短信通知
+     *
+     * @author fzr
+     * @param config 基础配置
+     * @param params 短信参数
+     * @param smsTemplate 短信模板
+     */
+    public void send(Map<String, String> config, Map<String, String> params, Map<String, String> smsTemplate) {
+        String mobile = config.getOrDefault("mobile", "");
+        String scene  = config.getOrDefault("scene", "");
+        if (StringUtil.isNotEmpty(mobile) && StringUtil.isNotEmpty(scene)) {
+            (new SmsDriver())
+                    .setMobile(mobile)
+                    .setTemplateCode(smsTemplate.getOrDefault("templateId", ""))
+                    .setTemplateParam(this.getSmsParams(params, smsTemplate))
+                    .setSmsContent(this.getContent(params, smsTemplate))
+                    .sendSms();
         }
-
-//        if (StringUtil.isNotNull(params.get("params"))) {
-//            ToolsUtil.objectToMap(params.get("params"));
-//        }
-
-//        System.out.println(this.getContent(params, smsTemplate));
-        // 发送短信
-//        (new SmsDriver())
-//                .setMobile(mobile)
-//                .setTemplateCode(smsTemplate.getOrDefault("templateId", ""))
-//                .setTemplateParam(null)
-//                .setSmsContent(this.getContent(params, smsTemplate));
-
-        return  true;
     }
 
     /**
@@ -56,12 +53,49 @@ public class SmsNotice {
      * @author fzr
      * @return Map<String, String>
      */
-    private Map<String, String> getSmsParams(Map<String, String> params) {
+    private Map<String, String> getSmsParams(Map<String, String> params, Map<String, String> smsTemplate) {
         String engine = ConfigUtil.get("sms", "default", "");
         if (!engine.equals("tencent")) {
             return params;
         }
-        return null;
+
+        // 获取内容变量
+        List<String> arr = new LinkedList<>();
+        String content = smsTemplate.getOrDefault("content", "");
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            String search = "\\$\\{" + entry.getKey() + "}";
+           if (content.indexOf(search) != 1 && !arr.contains(entry.getKey())) {
+               arr.add(entry.getKey());
+           }
+        }
+
+        // 获取变量名称
+        List<Integer> arrIndex = new LinkedList<>();
+        Map<Integer, String> arr2 = new LinkedHashMap<>();
+        if (arr.size() > 0) {
+            for (String v: arr) {
+                int k = content.indexOf(v);
+                arrIndex.add(k);
+                arr2.put(k, v);
+            }
+        }
+
+        // 从小到大排序
+        List<String> arr3 = new LinkedList<>();
+        Collections.sort(arrIndex);
+        for (Integer i : arrIndex) {
+            arr3.add(arr2.get(i));
+        }
+
+        // 取变量对应值
+        Map<String, String> arr4 = new LinkedHashMap<>();
+        for (String v : arr3) {
+            if (StringUtil.isNotNull(params.get(v))) {
+                arr4.put(params.get(v), "");
+            }
+        }
+
+        return arr4;
     }
 
 }

@@ -1,6 +1,5 @@
 package com.mdd.common.plugin.sms.engine;
 
-import com.mdd.common.exception.OperateException;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
@@ -8,6 +7,9 @@ import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,8 +55,13 @@ public class TencentSms {
      * @param templateParams 模板参数
      * @return AliSms
      */
-    public TencentSms setTemplateParams(String[] templateParams) {
-        this.templateParams = templateParams;
+    public TencentSms setTemplateParams(Map<String, String> templateParams) {
+        List<String> params = new LinkedList<>();
+        for (Map.Entry<String, String> entry : templateParams.entrySet()) {
+            params.add(entry.getKey());
+
+        }
+        this.templateParams = params.toArray(String[]::new);
         return this;
     }
 
