@@ -7,7 +7,6 @@ import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +60,7 @@ public class TencentSms {
             params.add(entry.getKey());
 
         }
-        this.templateParams = params.toArray(String[]::new);
+        this.templateParams = params.toArray(new String[0]);
         return this;
     }
 
