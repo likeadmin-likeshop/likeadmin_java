@@ -1,9 +1,5 @@
 <template>
-    <div class="banner">
-        <div class="banner-image">
-            <image-contain width="100%" height="200px" :src="getImage" fit="contain" />
-        </div>
-    </div>
+    <div></div>
 </template>
 <script lang="ts" setup>
 import type { PropType } from 'vue'
@@ -18,13 +14,6 @@ const props = defineProps({
         type: Object as PropType<OptionsType['styles']>,
         default: () => ({})
     }
-})
-const getImage = computed(() => {
-    const { data } = props.content
-    if (Array.isArray(data)) {
-        return data[0] ? data[0].image : ''
-    }
-    return ''
 })
 </script>
 

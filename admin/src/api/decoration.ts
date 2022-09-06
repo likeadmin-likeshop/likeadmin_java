@@ -9,3 +9,13 @@ export function getDecoratePages(params: any) {
 export function setDecoratePages(params: any) {
     return request.post({ url: '/decorate/pages/save', params })
 }
+
+// 底部导航详情
+export function getDecorateTabbar(params?: any) {
+    return request.get({ url: '/decorate/tabbar/detail', params })
+}
+
+// 底部导航保存
+export function setDecorateTabbar(params: any) {
+    return request.post({ url: '/decorate/tabbar/save', params })
+}

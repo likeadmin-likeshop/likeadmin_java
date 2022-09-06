@@ -1,30 +1,32 @@
 <template>
-    <el-scrollbar class="shadow mx-[30px] pages-preview">
-        <div>
+    <div class="shadow mx-[30px] pages-preview">
+        <div
+            v-for="(widget, index) in pageData"
+            :key="widget"
+            class="relative"
+            :class="{
+                'cursor-pointer': !widget?.disabled
+            }"
+            @click="handleClick(widget, index)"
+        >
             <div
-                v-for="(widget, index) in pageData"
-                :key="widget"
-                class="relative"
+                class="absolute w-full h-full z-[100] border-dashed"
                 :class="{
-                    'cursor-pointer': !widget?.disabled
+                    select: index == modelValue,
+                    'border-br border-2': !widget?.disabled
                 }"
-                @click="handleClick(widget, index)"
-            >
-                <div
-                    class="absolute w-full h-full z-[100] border-dashed"
-                    :class="{
-                        select: index == modelValue,
-                        'border-br border-2': !widget?.disabled
-                    }"
-                ></div>
-                <component
-                    :is="widgets[widget?.name]?.content"
-                    :content="widget.content"
-                    :styles="widget.styles"
-                />
-            </div>
+            ></div>
+            <slot>
+                <keep-alive>
+                    <component
+                        :is="widgets[widget?.name]?.content"
+                        :content="widget.content"
+                        :styles="widget.styles"
+                    />
+                </keep-alive>
+            </slot>
         </div>
-    </el-scrollbar>
+    </div>
 </template>
 <script lang="ts" setup>
 import widgets from '../widgets'
@@ -55,8 +57,8 @@ const handleClick = (widget: any, index: number) => {
 .pages-preview {
     background-color: #f8f8f8;
     width: 360px;
-    max-height: 734px;
-    height: 100%;
+    height: 615px;
+    color: #333;
     .select {
         @apply border-primary border-solid;
     }

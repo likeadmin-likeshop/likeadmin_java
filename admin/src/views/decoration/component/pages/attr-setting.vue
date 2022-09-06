@@ -5,12 +5,14 @@
         >
             {{ widget?.title }}
         </div>
-        <component
-            class="pt-5 pr-4"
-            :is="widgets[widget?.name]?.attr"
-            :content="widget?.content"
-            :styles="widget?.styles"
-        />
+        <keep-alive>
+            <component
+                class="pt-5 pr-4"
+                :is="widgets[widget?.name]?.attr"
+                :content="widget?.content"
+                :styles="widget?.styles"
+            />
+        </keep-alive>
     </div>
 </template>
 <script lang="ts" setup>

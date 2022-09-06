@@ -1,7 +1,7 @@
 <template>
-    <div class="banner">
+    <div class="banner mx-[10px] mt-[10px]">
         <div class="banner-image">
-            <image-contain width="100%" height="200px" :src="getImage" fit="contain" />
+            <image-contain width="100%" height="100px" :src="getImage" fit="contain" />
         </div>
     </div>
 </template>

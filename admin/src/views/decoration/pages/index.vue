@@ -1,17 +1,13 @@
 <template>
-    <div class="decoration-pages">
+    <div class="decoration-pages min-w-[1100px]">
         <el-card shadow="never" class="!border-none flex-1" :body-style="{ height: '100%' }">
             <div class="flex h-full items-start">
-                <el-scrollbar>
-                    <Menu v-model="activeMenu" :menus="menus" />
-                </el-scrollbar>
+                <Menu v-model="activeMenu" :menus="menus" />
                 <preview v-model="selectWidgetIndex" :pageData="getPageData" />
-                <el-scrollbar class="flex-1">
-                    <attr-setting :widget="getSelectWidget" />
-                </el-scrollbar>
+                <attr-setting class="flex-1" :widget="getSelectWidget" />
             </div>
         </el-card>
-        <footer-btns>
+        <footer-btns class="mt-4" :fixed="false">
             <el-button type="primary" @click="setData">保存</el-button>
         </footer-btns>
     </div>
@@ -51,13 +47,13 @@ const menus: Record<
         id: 2,
         pageType: 2,
         name: '个人中心',
-        pageData: generatePageData(['banner'])
+        pageData: generatePageData(['user-info', 'my-service', 'user-banner'])
     },
     [pagesTypeEnum.SERVICE]: {
         id: 3,
         pageType: 3,
         name: '客服设置',
-        pageData: generatePageData(['banner'])
+        pageData: generatePageData(['customer-service'])
     }
 })
 
@@ -95,7 +91,7 @@ watch(
 </script>
 <style lang="scss" scoped>
 .decoration-pages {
-    height: calc(100vh - var(--navbar-height) - 80px);
+    min-height: calc(100vh - var(--navbar-height) - 80px);
     @apply flex flex-col;
 }
 </style>
