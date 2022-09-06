@@ -72,21 +72,26 @@ const getSelectWidget = computed(() => {
 
 const getData = async () => {
     const data = await getDecoratePages({ id: activeMenu.value })
+    menus[String(data.id)].pageData = JSON.parse(data.pageData)
 }
 const setData = async () => {
-    await setDecoratePages(menus[activeMenu.value])
-    feedback.msg('保存成功')
+    await setDecoratePages({
+        ...menus[activeMenu.value],
+        pageData: JSON.stringify(menus[activeMenu.value].pageData)
+    })
+    getData()
+    feedback.msgSuccess('保存成功')
 }
 watch(
     activeMenu,
     () => {
         selectWidgetIndex.value = getPageData.value.findIndex((item) => !item.disabled)
+        getData()
     },
     {
         immediate: true
     }
 )
-getData()
 </script>
 <style lang="scss" scoped>
 .decoration-pages {

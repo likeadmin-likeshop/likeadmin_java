@@ -1,7 +1,7 @@
 export default () => ({
     title: '搜索',
     name: 'search',
-    disabled: true,
+    disabled: 1,
     content: {},
     styles: {}
 })
