@@ -63,7 +63,7 @@ public class LoginServiceImpl implements ILoginService {
         user.setUsername(regParam.getUsername());
         user.setPassword(pwd);
         user.setSalt(salt);
-        user.setChannel(0);
+        user.setChannel(regParam.getClient());
         user.setCreateTime(System.currentTimeMillis() / 1000);
         user.setUpdateTime(System.currentTimeMillis() / 1000);
         userMapper.insert(user);
