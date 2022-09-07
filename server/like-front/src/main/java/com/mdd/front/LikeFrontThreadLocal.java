@@ -1,6 +1,7 @@
 package com.mdd.front;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class LikeFrontThreadLocal {
 
@@ -31,18 +32,22 @@ public class LikeFrontThreadLocal {
      * 获取本地线程
      */
     public static Object get(String key) {
-        return MY_LOCAL.get().getOrDefault(key, "");
+        Map<String, Object> map = MY_LOCAL.get();
+        if (map == null) {
+            return null;
+        }
+        return map.getOrDefault(key, "");
     }
 
     /**
      * 获取用户ID
      */
     public static Integer getUserId() {
-        String adminId = LikeFrontThreadLocal.get("userId").toString();
-        if (adminId.equals("")) {
+        Object adminId = LikeFrontThreadLocal.get("userId");
+        if (adminId == null || adminId.toString().equals("")) {
             return 0;
         }
-        return Integer.parseInt(adminId);
+        return Integer.parseInt(adminId.toString());
     }
 
     /**

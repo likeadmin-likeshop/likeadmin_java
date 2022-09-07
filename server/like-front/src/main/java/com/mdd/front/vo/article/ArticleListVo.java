@@ -14,6 +14,7 @@ public class ArticleListVo implements Serializable {
     private String image;
     private String intro;
     private Integer visit;
+    private Boolean collect;
     private String createTime;
 
 }

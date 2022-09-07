@@ -3,6 +3,7 @@ package com.mdd.front.controller;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
+import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IArticleService;
 import com.mdd.front.validate.PageParam;
 import com.mdd.front.vo.article.ArticleCateVo;
@@ -46,7 +47,8 @@ public class ArticleController {
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                       @RequestParam(value = "cid", defaultValue = "0") Integer cid) {
-        PageResult<ArticleListVo> list = iArticleService.list(pageParam, cid);
+        Integer userId = LikeFrontThreadLocal.getUserId();
+        PageResult<ArticleListVo> list = iArticleService.list(pageParam, cid, userId);
         return AjaxResult.success(list);
     }
 

@@ -28,9 +28,10 @@ public interface IArticleService {
      * @author fzr
      * @param pageParam 分页参数
      * @param cid 分类ID
+     * @param userId 用户ID
      * @return PageResult<ArticleListVo>
      */
-    PageResult<ArticleListVo> list(PageParam pageParam, Integer cid);
+    PageResult<ArticleListVo> list(PageParam pageParam, Integer cid, Integer userId);
 
     /**
      * 文章详情

@@ -11,6 +11,7 @@ import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.article.ArticleCategory;
 import com.mdd.common.entity.article.ArticleCollect;
 import com.mdd.common.mapper.article.ArticleCategoryMapper;
+import com.mdd.common.mapper.article.ArticleCollectMapper;
 import com.mdd.common.mapper.article.ArticleMapper;
 import com.mdd.common.utils.TimeUtil;
 import com.mdd.common.utils.UrlUtil;
@@ -20,6 +21,7 @@ import com.mdd.front.vo.article.ArticleCateVo;
 import com.mdd.front.vo.article.ArticleCollectVo;
 import com.mdd.front.vo.article.ArticleDetailVo;
 import com.mdd.front.vo.article.ArticleListVo;
+import net.sf.jsqlparser.statement.create.table.Index;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,9 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Resource
     ArticleCategoryMapper articleCategoryMapper;
+
+    @Resource
+    ArticleCollectMapper articleCollectMapper;
 
     /**
      * 文章分类
@@ -71,10 +76,11 @@ public class ArticleServiceImpl implements IArticleService {
      * @author fzr
      * @param pageParam 分页参数
      * @param cid 分类ID
+     * @param userId 用户ID
      * @return PageResult<ArticleListVo>
      */
     @Override
-    public PageResult<ArticleListVo> list(PageParam pageParam, Integer cid) {
+    public PageResult<ArticleListVo> list(PageParam pageParam, Integer cid, Integer userId) {
         Integer pageNo   = pageParam.getPageNo();
         Integer pageSize = pageParam.getPageSize();
 
@@ -86,13 +92,34 @@ public class ArticleServiceImpl implements IArticleService {
 
         IPage<Article> iPage = articleMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
 
+        List<Integer> ids = new LinkedList<>();
         List<ArticleListVo> list = new LinkedList<>();
         for (Article article : iPage.getRecords()) {
             ArticleListVo vo = new ArticleListVo();
             BeanUtils.copyProperties(article, vo);
+            vo.setCollect(false);
             vo.setImage(UrlUtil.toAbsoluteUrl(article.getImage()));
             vo.setCreateTime(TimeUtil.timestampToDate(article.getCreateTime()));
             list.add(vo);
+
+            ids.add(article.getId());
+        }
+
+        if (userId != null && userId > 0 && ids.size() > 0) {
+            List<ArticleCollect> articleCollects = articleCollectMapper.selectList(
+                    new QueryWrapper<ArticleCollect>()
+                            .eq("user_id", userId)
+                            .eq("is_delete", 0)
+                            .in("article_id", ids));
+
+            List<Integer> collects = new LinkedList<>();
+            for (ArticleCollect c : articleCollects) {
+                collects.add(c.getArticleId());
+            }
+
+            for (ArticleListVo vo : list) {
+                vo.setCollect(collects.contains(vo.getId()));
+            }
         }
 
         return  PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), list);
@@ -123,6 +150,13 @@ public class ArticleServiceImpl implements IArticleService {
         return vo;
     }
 
+    /**
+     * 收藏列表
+     *
+     * @author fzr
+     * @param pageParam 分页参数
+     * @return PageResult<ArticleCollectVo>
+     */
     @Override
     public PageResult<ArticleCollectVo> collect(PageParam pageParam) {
         Integer pageNo   = pageParam.getPageNo();
