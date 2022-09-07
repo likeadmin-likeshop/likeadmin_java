@@ -1,18 +1,11 @@
 <template>
     <view class="content">
-        <z-paging ref="paging" v-model="dataList">
-            <!-- 之后-vue3 -->
-            <template v-slot:top>
-                <view>我是固定在顶部的view</view>
-            </template>
-        </z-paging>
+        <navigator url="/pages/login/login" hover-class="navigator-hover">
+            <button type="default">跳转到新页面</button>
+        </navigator>
     </view>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-
-const dataList = ref([])
-</script>
+<script setup lang="ts"></script>
 
 <style></style>
