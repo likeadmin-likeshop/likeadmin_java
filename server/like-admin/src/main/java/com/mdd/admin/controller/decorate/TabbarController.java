@@ -40,8 +40,6 @@ public class TabbarController {
      */
     @PostMapping("/save")
     public Object save(@RequestBody Map<String, Object> params) {
-//        System.out.println(  ArrayUtil.objectToListAsStr(params.get("list")));
-
         iDecorateTabbarService.save(params);
         return AjaxResult.success();
     }
