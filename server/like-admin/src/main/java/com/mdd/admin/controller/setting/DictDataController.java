@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * 字典数据配置管理
  */
-@RestController
+@RestController("settingDictDataController")
 @RequestMapping("api/setting/dict/data")
 public class DictDataController {
 

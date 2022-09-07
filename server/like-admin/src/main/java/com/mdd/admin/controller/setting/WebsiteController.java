@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * 网站信息配置管理
  */
-@RestController
+@RestController("settingWebsiteController")
 @RequestMapping("api/setting/website")
 public class WebsiteController {
 

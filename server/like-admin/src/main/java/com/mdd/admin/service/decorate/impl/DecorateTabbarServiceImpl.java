@@ -69,7 +69,6 @@ public class DecorateTabbarServiceImpl implements IDecorateTabbarService {
 
         for (String obj : ArrayUtil.objectToListAsStr(params.get("list"))) {
             Map<String, String> item = ToolsUtil.jsonToMap(obj);
-            System.out.println(item);
             DecorateTabbar model = new DecorateTabbar();
             model.setName(item.get("name"));
             model.setSelected(UrlUtil.toRelativeUrl(item.get("selected")));

@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * 网站版权配置管理
  */
-@RestController
+@RestController("settingCopyrightController")
 @RequestMapping("api/setting/copyright")
 public class CopyrightController {
 

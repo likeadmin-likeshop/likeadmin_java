@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * 通知设置管理
  */
-@RestController
+@RestController("settingNoticeController")
 @RequestMapping("api/setting/notice")
 public class NoticeController {
 

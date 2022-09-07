@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * 存储方式配置管理
  */
-@RestController
+@RestController("settingStorageController")
 @RequestMapping("api/setting/storage")
 public class StorageController {
 

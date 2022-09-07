@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * 字典类型配置管理
  */
-@RestController
+@RestController("settingDictTypeController")
 @RequestMapping("api/setting/dict/type")
 public class DictTypeController {
 

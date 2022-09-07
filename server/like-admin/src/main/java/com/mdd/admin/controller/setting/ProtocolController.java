@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * 政策协议配置管理
  */
-@RestController
+@RestController("settingProtocolController")
 @RequestMapping("api/setting/protocol")
 public class ProtocolController {
 

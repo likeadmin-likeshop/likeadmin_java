@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * 短信设置管理
  */
-@RestController
+@RestController("settingSmsController")
 @RequestMapping("api/setting/sms")
 public class SmsController {
 
