@@ -6,7 +6,7 @@
             <el-form ref="formRef" :model="formData" label-width="120px">
                 <el-form-item label="用户默认头像">
                     <div>
-                        <material-picker v-model="formData.default_avatar" :limit="1" />
+                        <material-picker v-model="formData.defaultAvatar" :limit="1" />
                     </div>
                 </el-form-item>
                 <el-form-item>
@@ -24,19 +24,18 @@
 </template>
 
 <script lang="ts" setup>
-import { getWebsite, setWebsite } from '@/api/setting/website'
+import { getUserSetup, setUserSetup } from '@/api/setting/user'
 import feedback from '@/utils/feedback'
 import type { FormInstance } from 'element-plus'
-const formRef = ref<FormInstance>()
 
 // 表单数据
 const formData = reactive({
-    default_avatar: '', // 用户默认头像
+    defaultAvatar: '', // 用户默认头像
 })
 
 // 获取用户设置信息
 const getData = async () => {
-    const data = await getWebsite()
+    const data = await getUserSetup()
     for (const key in formData) {
         //@ts-ignore
         formData[key] = data[key]
@@ -45,8 +44,7 @@ const getData = async () => {
 
 // 设置备案信息
 const handleSubmit = async () => {
-    await formRef.value?.validate()
-    await setWebsite(formData)
+    await setUserSetup(formData)
     feedback.msgSuccess('操作成功')
     getData()
 }

@@ -1,12 +1,7 @@
 <template>
     <div>
         <el-card class="!border-none" shadow="never">
-            <el-alert
-                type="warning"
-                title="温馨提示：填写微信公众号开发配置，请前往微信公众平台申请服务号并完成认证"
-                :closable="false"
-                show-icon
-            />
+            <el-alert type="warning" title="温馨提示：填写微信公众号开发配置，请前往微信公众平台申请服务号并完成认证" :closable="false" show-icon />
         </el-card>
         <el-form ref="formRef" :model="formData" label-width="160px">
             <el-card class="!border-none mt-4" shadow="never">
@@ -78,10 +73,7 @@
                 <el-form-item label="EncodingAESKey" prop="EncodingAESKey">
                     <div>
                         <div class="w-80">
-                            <el-input
-                                v-model="formData.encodingAesKey"
-                                placeholder="请输入EncodingAESKey"
-                            />
+                            <el-input v-model="formData.encodingAesKey" placeholder="请输入EncodingAESKey" />
                         </div>
                         <div class="form-tips">
                             消息加密密钥由43位字符组成，字符范围为A-Z,a-z,0-9
@@ -164,6 +156,13 @@ const formData = reactive({
     qrCode: "",
     appId: "",
     appSecret: "",
+    url: "",
+    token: "",
+    encodingAesKey: "",
+    encryptionType: 1,
+    businessDomain: "",
+    jsDomain: "",
+    webDomain: ""
 })
 
 const { copy } = useClipboard()
