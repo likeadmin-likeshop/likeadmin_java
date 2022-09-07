@@ -26,27 +26,35 @@
 <script lang="ts" setup>
 import { getUserSetup, setUserSetup } from '@/api/setting/user'
 import feedback from '@/utils/feedback'
-import type { FormInstance } from 'element-plus'
+// import type { FormInstance } from 'element-plus'
 
 // 表单数据
 const formData = reactive({
     defaultAvatar: '', // 用户默认头像
 })
 
-// 获取用户设置信息
+// 获取用户设置数据
 const getData = async () => {
-    const data = await getUserSetup()
-    for (const key in formData) {
-        //@ts-ignore
-        formData[key] = data[key]
+    try {
+        const data = await getUserSetup()
+        for (const key in formData) {
+            //@ts-ignore
+            formData[key] = data[key]
+        }
+    } catch (error) {
+        console.log('获取=>', error)
     }
 }
 
-// 设置备案信息
+// 保存用户设置数据
 const handleSubmit = async () => {
-    await setUserSetup(formData)
-    feedback.msgSuccess('操作成功')
-    getData()
+    try {
+        await setUserSetup(formData)
+        feedback.msgSuccess('操作成功')
+        getData()
+    } catch (error) {
+        console.log('保存=>', error)
+    }
 }
 
 getData()

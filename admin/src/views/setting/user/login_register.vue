@@ -126,29 +126,37 @@ const rules = reactive<FormRules>({
     openOtherAuth: [{ required: true, trigger: "blur" }],
 });
 
-// 获取备案信息
+// 获取登录注册数据
 const getData = async () => {
-    const data = await getLogin();
-    for (const key in formData) {
-        //@ts-ignore
-        formData[key] = data[key];
+    try {
+        const data = await getLogin();
+        for (const key in formData) {
+            //@ts-ignore
+            formData[key] = data[key];
+        }
+    } catch (error) {
+        console.log('获取=>', error)
     }
 };
 
-// 设置备案信息
+// 保存登录注册数据
 const handleSubmit = async () => {
     const loginWay = formData.loginWay.join('')
     const autoLoginAuth = formData.autoLoginAuth.join('')
 
     await formRef.value?.validate();
-    await setLogin({
-        ...formData,
-        loginWay: loginWay.length == 2 ? `${loginWay[0]},${loginWay[1]}` : loginWay,
-        autoLoginAuth: autoLoginAuth.length == 2 ? `${autoLoginAuth[0]},${autoLoginAuth[1]}` : autoLoginAuth,
+    try {
+        await setLogin({
+            ...formData,
+            loginWay: loginWay.length == 2 ? `${loginWay[0]},${loginWay[1]}` : loginWay,
+            autoLoginAuth: autoLoginAuth.length == 2 ? `${autoLoginAuth[0]},${autoLoginAuth[1]}` : autoLoginAuth,
 
-    });
-    feedback.msgSuccess("操作成功");
-    getData();
+        });
+        feedback.msgSuccess("操作成功");
+        getData();
+    } catch (error) {
+        console.log('保存=>', error)
+    }
 };
 
 getData();

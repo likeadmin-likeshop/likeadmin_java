@@ -12,13 +12,13 @@
         </el-card>
 
         <footer-btns v-perms="['channel:h5:save']">
-            <el-button type="primary" @click="handelSave">保存</el-button>
+            <el-button type="primary" @click="">保存</el-button>
         </footer-btns>
     </div>
 </template>
 
 <script setup lang="ts">
-
+import OaPhone from "./menu_component/oa-phone.vue"
 
 </script>
 
