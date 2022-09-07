@@ -77,6 +77,8 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
 
         // 用户信息缓存
         Object uid = RedisUtil.get(token);
+        System.out.println(uid);
+        System.out.println("哈哈哈哈哈");
         Integer userId = Integer.parseInt(uid.toString());
         User user = userMapper.selectOne(new QueryWrapper<User>()
                 .select("id,sn,username,nickname,mobile,is_disable,is_delete")

@@ -23,7 +23,6 @@ public class FrontConfig {
             "/api/login/forgotPassword",
 
             "/api/article/category",
-            "/api/article/collect",
             "/api/article/detail",
             "/api/article/list",
     };

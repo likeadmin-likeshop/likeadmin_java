@@ -10,9 +10,11 @@ import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.article.ArticleCategory;
 import com.mdd.common.entity.article.ArticleCollect;
+import com.mdd.common.entity.server.Sys;
 import com.mdd.common.mapper.article.ArticleCategoryMapper;
 import com.mdd.common.mapper.article.ArticleCollectMapper;
 import com.mdd.common.mapper.article.ArticleMapper;
+import com.mdd.common.utils.StringUtil;
 import com.mdd.common.utils.TimeUtil;
 import com.mdd.common.utils.UrlUtil;
 import com.mdd.front.service.IArticleService;
@@ -155,21 +157,23 @@ public class ArticleServiceImpl implements IArticleService {
      *
      * @author fzr
      * @param pageParam 分页参数
+     * @param userId 用户ID
      * @return PageResult<ArticleCollectVo>
      */
     @Override
-    public PageResult<ArticleCollectVo> collect(PageParam pageParam) {
+    public PageResult<ArticleCollectVo> collect(PageParam pageParam, Integer userId) {
         Integer pageNo   = pageParam.getPageNo();
         Integer pageSize = pageParam.getPageSize();
 
         MPJQueryWrapper<ArticleCollect> mpjQueryWrapper = new MPJQueryWrapper<>();
         mpjQueryWrapper.select("t.id,t.article_id,a.title,a.image,a.intro,a.visit,a.create_time")
-                .eq("t.user_id", 1)
+                .eq("t.user_id", userId)
                 .eq("t.is_delete", 0)
+                .eq("a.is_delete", 0)
                 .orderByDesc("t.id")
                 .innerJoin("?_article a ON a.id=t.article_id".replace("?_", GlobalConfig.tablePrefix));
 
-        IPage<ArticleCollectVo> iPage = articleMapper.selectJoinPage(
+        IPage<ArticleCollectVo> iPage = articleCollectMapper.selectJoinPage(
                 new Page<>(pageNo, pageSize),
                 ArticleCollectVo.class,
                 mpjQueryWrapper);
@@ -180,6 +184,59 @@ public class ArticleServiceImpl implements IArticleService {
         }
 
         return PageResult.iPageHandle(iPage);
+    }
+
+    /**
+     * 加入收藏
+     *
+     * @author fzr
+     * @param articleId 主键
+     * @param userId 用户ID
+     */
+    @Override
+    public void addCollect(Integer articleId, Integer userId) {
+        ArticleCollect articleCollect = articleCollectMapper.selectOne(
+                new QueryWrapper<ArticleCollect>()
+                    .eq("article_id", articleId)
+                    .eq("user_id", userId)
+                    .last("limit 1"));
+
+        if (StringUtil.isNotNull(articleCollect)) {
+            articleCollect.setIsDelete(0);
+            articleCollect.setUpdateTime(System.currentTimeMillis() / 1000);
+            articleCollectMapper.updateById(articleCollect);
+        } else {
+            ArticleCollect model = new ArticleCollect();
+            model.setArticleId(articleId);
+            model.setUserId(userId);
+            model.setIsDelete(0);
+            model.setCreateTime(System.currentTimeMillis() / 1000);
+            model.setUpdateTime(System.currentTimeMillis() / 1000);
+            articleCollectMapper.insert(model);
+        }
+    }
+
+    /**
+     * 取消收藏
+     *
+     * @author fzr
+     * @param id 主键
+     * @param userId 用户ID
+     */
+    @Override
+    public void cancelCollect(Integer id, Integer userId) {
+        ArticleCollect articleCollect = articleCollectMapper.selectOne(
+                new QueryWrapper<ArticleCollect>()
+                        .eq("id", id)
+                        .eq("user_id", userId)
+                        .eq("is_delete", 0)
+                        .last("limit 1"));
+
+        Assert.notNull(articleCollect, "收藏不存在!");
+
+        articleCollect.setIsDelete(1);
+        articleCollect.setUpdateTime(System.currentTimeMillis() / 1000);
+        articleCollectMapper.updateById(articleCollect);
     }
 
 }
