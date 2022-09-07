@@ -24,6 +24,7 @@ public class ChannelMpServiceImpl implements IChannelMpService {
     @Override
     public Map<String, Object> detail() {
         Map<String, String> config = ConfigUtil.get("mp_channel");
+        System.out.println(config);
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("name", config.getOrDefault("name", ""));
         map.put("primaryId", config.getOrDefault("primaryId", ""));

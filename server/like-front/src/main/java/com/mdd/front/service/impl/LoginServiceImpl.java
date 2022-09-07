@@ -96,7 +96,8 @@ public class LoginServiceImpl implements ILoginService {
         try {
             WxMaJscode2SessionResult sessionResult = wxMaService.getUserService().getSessionInfo(code);
             String openId  = sessionResult.getOpenid();
-            String unionId = sessionResult.getUnionid();
+            String uniId = sessionResult.getUnionid();
+            String unionId = uniId == null ? "" : uniId;
 
             UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
                     .eq("client", client)

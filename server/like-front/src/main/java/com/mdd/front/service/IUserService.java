@@ -3,6 +3,8 @@ package com.mdd.front.service;
 import com.mdd.front.vo.user.UserCenterVo;
 import com.mdd.front.vo.user.UserInfoVo;
 
+import java.util.Map;
+
 /**
  * 用户服务接口类
  */
@@ -25,5 +27,7 @@ public interface IUserService {
      * @return UserInfoVo
      */
     UserInfoVo info(Integer userId);
+
+    void mnpMobile(Map<String, String> params);
 
 }

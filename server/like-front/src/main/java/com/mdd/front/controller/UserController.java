@@ -1,16 +1,15 @@
 package com.mdd.front.controller;
 
 import com.mdd.common.core.AjaxResult;
+import com.mdd.common.utils.ConfigUtil;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
 import com.mdd.front.vo.user.UserCenterVo;
 import com.mdd.front.vo.user.UserInfoVo;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/user")
@@ -61,7 +60,8 @@ public class UserController {
      * @return Object
      */
     @PostMapping("/mnpMobile")
-    public Object mnpMobile() {
+    public Object mnpMobile(@RequestBody Map<String, String> params) {
+        iUserService.mnpMobile(params);
         return AjaxResult.success();
     }
 
