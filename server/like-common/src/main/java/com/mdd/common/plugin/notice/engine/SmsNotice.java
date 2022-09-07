@@ -35,7 +35,7 @@ public class SmsNotice {
             // 1=业务通知, 2=验证码
             if (noticeSetting.getType() == 2 && StringUtil.isNotNull(params.get("code"))) {
                 String code = params.get("code").toLowerCase();
-                RedisUtil.set(GlobalConfig.redisSmsCode+mobile, code);
+                RedisUtil.set(GlobalConfig.redisSmsCode+scene+":"+mobile, code);
             }
         }
     }

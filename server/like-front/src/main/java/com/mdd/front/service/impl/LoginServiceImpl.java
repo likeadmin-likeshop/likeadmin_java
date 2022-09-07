@@ -188,13 +188,13 @@ public class LoginServiceImpl implements ILoginService {
         String code   = params.get("code").toLowerCase();
 
         // 校验验证码
-        Object smsCode = RedisUtil.get(GlobalConfig.redisSmsCode+mobile);
+        Object smsCode = RedisUtil.get(GlobalConfig.redisSmsCode+"101:"+mobile);
         if (StringUtil.isNull(smsCode) || !smsCode.toString().equals(code)) {
             throw new OperateException("验证码错误!");
         }
 
         // 删除验证码
-        RedisUtil.del(GlobalConfig.redisSmsCode+mobile);
+        RedisUtil.del(GlobalConfig.redisSmsCode+"101:"+mobile);
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()
@@ -265,13 +265,13 @@ public class LoginServiceImpl implements ILoginService {
         String password = params.get("password");
 
         // 校验验证码
-        Object smsCode = RedisUtil.get(GlobalConfig.redisSmsCode+mobile);
+        Object smsCode = RedisUtil.get(GlobalConfig.redisSmsCode+"104:"+mobile);
         if (StringUtil.isNull(smsCode) || !smsCode.toString().equals(code)) {
             throw new OperateException("验证码错误!");
         }
 
         // 删除验证码
-        RedisUtil.del(GlobalConfig.redisSmsCode+mobile);
+        RedisUtil.del(GlobalConfig.redisSmsCode+"104:"+mobile);
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()
