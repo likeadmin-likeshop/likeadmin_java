@@ -13,6 +13,7 @@ public class FrontConfig {
             "/api/login",
             "/api/index",
             "/api/config",
+            "/api/policy",
             "/api/decorate",
             "/api/sms/send",
 

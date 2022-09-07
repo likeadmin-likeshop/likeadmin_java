@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -54,6 +55,31 @@ public class IndexController {
     public Object config() {
         Map<String, Object> map = iIndexService.config();
         return AjaxResult.success(map);
+    }
+
+    /**
+     * 协议
+     *
+     * @author fzr
+     * @param type 类型 service=服务协议,privacy=隐私协议
+     * @return Object
+     */
+    @GetMapping("/policy")
+    public Object policy(@RequestParam String type) {
+        Map<String, String> map = iIndexService.policy(type);
+        return AjaxResult.success(map);
+    }
+
+    /**
+     * 热搜
+     *
+     * @author fzr
+     * @return Object
+     */
+    @GetMapping("/search")
+    public Object search() {
+        List<String> list = iIndexService.search();
+        return AjaxResult.success(list);
     }
 
 }

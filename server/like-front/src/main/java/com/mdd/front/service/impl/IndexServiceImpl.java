@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.entity.decorate.DecoratePage;
 import com.mdd.common.entity.decorate.DecorateTabbar;
+import com.mdd.common.entity.setting.HotSearch;
 import com.mdd.common.mapper.decorate.DecoratePageMapper;
 import com.mdd.common.mapper.decorate.DecorateTabbarMapper;
+import com.mdd.common.mapper.setting.HotSearchMapper;
 import com.mdd.common.utils.ConfigUtil;
 import com.mdd.common.utils.ToolsUtil;
 import com.mdd.common.utils.UrlUtil;
@@ -13,10 +15,7 @@ import com.mdd.front.service.IIndexService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 首页服务实现类
@@ -29,6 +28,9 @@ public class IndexServiceImpl implements IIndexService {
 
     @Resource
     DecorateTabbarMapper decorateTabbarMapper;
+
+    @Resource
+    HotSearchMapper hotSearchMapper;
 
     /**
      * 首页
@@ -98,6 +100,49 @@ public class IndexServiceImpl implements IIndexService {
         response.put("style", ToolsUtil.jsonToMap(tabbarStyle));
         response.put("tabbar", tabs);
         return response;
+    }
+
+    /**
+     * 政策
+     *
+     * @author fzr
+     * @param type 类型 service=服务协议,privacy=隐私协议
+     * @return Map<String, Object>
+     */
+    @Override
+    public Map<String, String> policy(String type) {
+        Map<String, String> map = ConfigUtil.getMap("protocol", type);
+        if (map == null) {
+            Map<String, String> m = new LinkedHashMap<>();
+            m.put("name", "");
+            m.put("content", "");
+            return m;
+        }
+        return map;
+    }
+
+    /**
+     * 热搜
+     *
+     * @author fzr
+     * @return List<String>
+     */
+    @Override
+    public List<String> search() {
+        String isHotSearch = ConfigUtil.get("search", "isHotSearch", "0");
+
+        List<String> list = new LinkedList<>();
+        if (Integer.parseInt(isHotSearch) == 1) {
+            List<HotSearch> hotSearches = hotSearchMapper.selectList(
+                    new QueryWrapper<HotSearch>()
+                        .orderByDesc(Arrays.asList("sort", "id")));
+
+            for (HotSearch hotSearch : hotSearches) {
+                list.add(hotSearch.getName());
+            }
+        }
+
+        return list;
     }
 
 }

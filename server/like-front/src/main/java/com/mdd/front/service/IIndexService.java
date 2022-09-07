@@ -1,5 +1,6 @@
 package com.mdd.front.service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,5 +31,22 @@ public interface IIndexService {
      * @return Map<String, Object>
      */
     Map<String, Object> config();
+
+    /**
+     * 政策
+     *
+     * @author fzr
+     * @param type 类型 service=服务协议,privacy=隐私协议
+     * @return Map<String, Object>
+     */
+    Map<String, String> policy(String type);
+
+    /**
+     * 热搜
+     *
+     * @author fzr
+     * @return List<String>
+     */
+    List<String> search();
 
 }
