@@ -17,7 +17,7 @@ import java.util.Map;
 public class IndexController {
 
     @Resource
-    IIndexService IIndexService;
+    IIndexService iIndexService;
 
     /**
      * 首页
@@ -27,7 +27,7 @@ public class IndexController {
      */
     @GetMapping("/index")
     public Object index() {
-        Map<String, Object> detail = IIndexService.index();
+        Map<String, Object> detail = iIndexService.index();
         return AjaxResult.success(detail);
     }
 
@@ -40,7 +40,7 @@ public class IndexController {
      */
     @GetMapping("/decorate")
     public Object decorate(@Validated @IDMust() @RequestParam("id") Integer id) {
-        Map<String, Object> detail = IIndexService.decorate(id);
+        Map<String, Object> detail = iIndexService.decorate(id);
         return AjaxResult.success(detail);
     }
 
@@ -52,6 +52,8 @@ public class IndexController {
      */
     @GetMapping("/config")
     public Object config() {
-        return AjaxResult.success();
+        Map<String, Object> map = iIndexService.config();
+        return AjaxResult.success(map);
     }
+
 }

@@ -39,28 +39,13 @@ public class IndexServiceImpl implements IIndexService {
     @Override
     public Map<String, Object> index() {
         Map<String, Object> response = new LinkedHashMap<>();
-
         DecoratePage decoratePage = decoratePageMapper.selectOne(
                 new QueryWrapper<DecoratePage>()
                     .eq("id", 1)
                     .last("limit 1"));
 
-        List<Map<String, String>> tabs = new LinkedList<>();
-        List<DecorateTabbar> decorateTabbars = decorateTabbarMapper.selectList(new QueryWrapper<DecorateTabbar>().orderByAsc("id"));
-        for (DecorateTabbar tab: decorateTabbars) {
-            Map<String, String> map = new LinkedHashMap<>();
-            map.put("name", tab.getName());
-            map.put("selected", UrlUtil.toAbsoluteUrl(tab.getSelected()));
-            map.put("unselected", UrlUtil.toAbsoluteUrl(tab.getUnselected()));
-            map.put("link", tab.getLink());
-            tabs.add(map);
-        }
-
-        String tabbarStyle = ConfigUtil.get("tabbar", "style", "{}");
-
+        response.put("domain", UrlUtil.domain());
         response.put("pages", decoratePage.getPageData());
-        response.put("style", ToolsUtil.jsonToMap(tabbarStyle));
-        response.put("tabbar", tabs);
         return response;
     }
 
@@ -95,7 +80,24 @@ public class IndexServiceImpl implements IIndexService {
      */
     @Override
     public Map<String, Object> config() {
-        return null;
+        Map<String, Object> response = new LinkedHashMap<>();
+
+        List<Map<String, String>> tabs = new LinkedList<>();
+        List<DecorateTabbar> decorateTabbars = decorateTabbarMapper.selectList(new QueryWrapper<DecorateTabbar>().orderByAsc("id"));
+        for (DecorateTabbar tab: decorateTabbars) {
+            Map<String, String> map = new LinkedHashMap<>();
+            map.put("name", tab.getName());
+            map.put("selected", UrlUtil.toAbsoluteUrl(tab.getSelected()));
+            map.put("unselected", UrlUtil.toAbsoluteUrl(tab.getUnselected()));
+            map.put("link", tab.getLink());
+            tabs.add(map);
+        }
+
+        String tabbarStyle = ConfigUtil.get("tabbar", "style", "{}");
+        response.put("domain", UrlUtil.domain());
+        response.put("style", ToolsUtil.jsonToMap(tabbarStyle));
+        response.put("tabbar", tabs);
+        return response;
     }
 
 }
