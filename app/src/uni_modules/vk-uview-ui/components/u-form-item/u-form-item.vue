@@ -429,7 +429,7 @@
 	.u-form-item {
 		@include vue-flex;
 		// align-items: flex-start;
-		padding: 10rpx 0;
+		padding: 15rpx 0;
 		font-size: 28rpx;
 		color: $u-main-color;
 		box-sizing: border-box;
@@ -485,10 +485,8 @@
 
 				&__slot {
 					flex: 1;
-					/* #ifndef MP */
 					@include vue-flex;
 					align-items: center;
-					/* #endif */
 				}
 
 				&__icon {
