@@ -1,5 +1,7 @@
 <template>
-    <view class="login min-h-full flex flex-col items-center px-[40rpx] pt-[80rpx] box-border">
+    <view
+        class="bg-white login min-h-full flex flex-col items-center px-[40rpx] pt-[80rpx] box-border"
+    >
         <view>
             <u-image src="" mode="widthFix" height="160" width="160" />
         </view>
@@ -138,7 +140,7 @@ const sendSms = async () => {
         uCodeRef.value?.start()
     }
 }
-const accountLogin = async (scene: LoginTypeEnum) => {
+const accountLogin = async (scene: LoginTypeEnum, code?: string) => {
     if (!isCheckAgreement.value) return uni.$u.toast('请勾选已阅读并同意《服务协议》和《隐私协议》')
     if (scene == LoginTypeEnum.ACCOUNT) {
         if (!formData.username) return uni.$u.toast('请输入账号/手机号码')
@@ -148,8 +150,12 @@ const accountLogin = async (scene: LoginTypeEnum) => {
         if (!formData.mobile) return uni.$u.toast('请输入手机号码')
         if (!formData.code) return uni.$u.toast('请输入验证码')
     }
-
-    await login({ ...formData, scene })
+    const params = {
+        ...formData,
+        scene
+    }
+    if (code) params.code = code
+    await login(params)
     uni.$u.toast('登录成功')
     uni.navigateBack()
 }
@@ -158,7 +164,8 @@ const wxLogin = async () => {
     const data: any = await uni.login({
         provider: 'weixin'
     })
-    accountLogin(LoginTypeEnum.MNP)
+    console.log(data)
+    accountLogin(LoginTypeEnum.MNP, data.code)
 }
 </script>
 
