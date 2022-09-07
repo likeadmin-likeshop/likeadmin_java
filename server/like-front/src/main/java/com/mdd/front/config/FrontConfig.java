@@ -10,10 +10,20 @@ public class FrontConfig {
 
     // 免登录验证
     public static String[] notLoginUri = new String[]{
-            "/api/login"
-    };
+            "/api/login",
+            "/api/index",
+            "/api/config",
+            "/api/decorate",
+            "/api/sms/send",
 
-    // 免权限验证
-    public static String[] notAuthUri = new String[]{};
+            "/api/login/check",
+            "/api/login/register",
+            "/api/login/forgotPassword",
+
+            "/api/article/category",
+            "/api/article/collect",
+            "/api/article/detail",
+            "/api/article/list",
+    };
 
 }

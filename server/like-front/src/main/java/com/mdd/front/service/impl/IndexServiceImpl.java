@@ -6,6 +6,7 @@ import com.mdd.common.entity.decorate.DecoratePage;
 import com.mdd.common.entity.decorate.DecorateTabbar;
 import com.mdd.common.mapper.decorate.DecoratePageMapper;
 import com.mdd.common.mapper.decorate.DecorateTabbarMapper;
+import com.mdd.common.utils.ConfigUtil;
 import com.mdd.common.utils.ToolsUtil;
 import com.mdd.common.utils.UrlUtil;
 import com.mdd.front.service.IIndexService;
@@ -55,7 +56,10 @@ public class IndexServiceImpl implements IIndexService {
             tabs.add(map);
         }
 
-        response.put("pages", ToolsUtil.jsonToMap(decoratePage.getPageData()));
+        String tabbarStyle = ConfigUtil.get("tabbar", "style", "{}");
+
+        response.put("pages", decoratePage.getPageData());
+        response.put("style", ToolsUtil.jsonToMap(tabbarStyle));
         response.put("tabbar", tabs);
         return response;
     }
@@ -79,7 +83,7 @@ public class IndexServiceImpl implements IIndexService {
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("type", decoratePage.getPageType());
         response.put("name", decoratePage.getPageName());
-        response.put("pages", ToolsUtil.jsonToMap(decoratePage.getPageData()));
+        response.put("pages", decoratePage.getPageData());
         return response;
     }
 
