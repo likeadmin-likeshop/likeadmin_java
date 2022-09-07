@@ -6,6 +6,7 @@ import com.mdd.front.service.IUserService;
 import com.mdd.front.vo.user.UserCenterVo;
 import com.mdd.front.vo.user.UserInfoVo;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,13 +44,24 @@ public class UserController {
     }
 
     /**
-     * 政策协议
+     * 绑定手机号
      *
      * @author fzr
      * @return Object
      */
-    @GetMapping("/agreement")
-    public Object agreement() {
+    @PostMapping("/bindMobile")
+    public Object bindMobile() {
+        return AjaxResult.success();
+    }
+
+    /**
+     * 微信手机号
+     *
+     * @author fzr
+     * @return Object
+     */
+    @PostMapping("/mnpMobile")
+    public Object mnpMobile() {
         return AjaxResult.success();
     }
 

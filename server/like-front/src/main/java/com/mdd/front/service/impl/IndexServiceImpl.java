@@ -8,6 +8,7 @@ import com.mdd.common.entity.setting.HotSearch;
 import com.mdd.common.mapper.decorate.DecoratePageMapper;
 import com.mdd.common.mapper.decorate.DecorateTabbarMapper;
 import com.mdd.common.mapper.setting.HotSearchMapper;
+import com.mdd.common.utils.ArrayUtil;
 import com.mdd.common.utils.ConfigUtil;
 import com.mdd.common.utils.ToolsUtil;
 import com.mdd.common.utils.UrlUtil;
@@ -84,6 +85,7 @@ public class IndexServiceImpl implements IIndexService {
     public Map<String, Object> config() {
         Map<String, Object> response = new LinkedHashMap<>();
 
+        // 底部导航
         List<Map<String, String>> tabs = new LinkedList<>();
         List<DecorateTabbar> decorateTabbars = decorateTabbarMapper.selectList(new QueryWrapper<DecorateTabbar>().orderByAsc("id"));
         for (DecorateTabbar tab: decorateTabbars) {
@@ -95,10 +97,31 @@ public class IndexServiceImpl implements IIndexService {
             tabs.add(map);
         }
 
+        // 导航颜色
         String tabbarStyle = ConfigUtil.get("tabbar", "style", "{}");
+
+        // 登录配置
+        Map<String, Object> loginMap = new LinkedHashMap<>();
+        Map<String, String> loginConfig = ConfigUtil.get("login");
+        loginMap.put("loginWay", ArrayUtil.stringToListAsInt(loginConfig.getOrDefault("loginWay", ""), ","));
+        loginMap.put("forceBindMobile", Integer.parseInt(loginConfig.getOrDefault("forceBindMobile", "0")));
+        loginMap.put("openAgreement", Integer.parseInt(loginConfig.getOrDefault("openAgreement", "0")));
+        loginMap.put("openOtherAuth", Integer.parseInt(loginConfig.getOrDefault("openOtherAuth", "0")));
+        loginMap.put("autoLoginAuth", ArrayUtil.stringToListAsInt(loginConfig.getOrDefault("autoLoginAuth", ""), ","));
+
+        // 网址信息
+        Map<String, Object> websiteMap = new LinkedHashMap<>();
+        Map<String, String> websiteConfig = ConfigUtil.get("website");
+        websiteMap.put("name", websiteConfig.getOrDefault("name", "LikeAdmin"));
+        websiteMap.put("logo", UrlUtil.toAbsoluteUrl(websiteConfig.getOrDefault("logo", "")));
+        websiteMap.put("favicon", UrlUtil.toAbsoluteUrl(websiteConfig.getOrDefault("favicon", "")));
+
+        // 响应数据
         response.put("domain", UrlUtil.domain());
         response.put("style", ToolsUtil.jsonToMap(tabbarStyle));
         response.put("tabbar", tabs);
+        response.put("login", loginMap);
+        response.put("website", websiteMap);
         return response;
     }
 
