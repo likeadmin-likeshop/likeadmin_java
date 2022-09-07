@@ -15,10 +15,12 @@ import com.mdd.front.vo.user.UserCenterVo;
 import com.mdd.front.vo.user.UserInfoVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.Resource;
 
+/**
+ * 用户服务实现类
+ */
 @Service
 public class UserServiceImpl implements IUserService {
 

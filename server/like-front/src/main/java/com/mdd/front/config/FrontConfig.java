@@ -14,6 +14,7 @@ public class FrontConfig {
             "/api/index",
             "/api/config",
             "/api/policy",
+            "/api/search",
             "/api/decorate",
             "/api/sms/send",
 
@@ -22,7 +23,6 @@ public class FrontConfig {
             "/api/login/forgotPassword",
 
             "/api/article/category",
-            "/api/article/collect",
             "/api/article/detail",
             "/api/article/list",
     };

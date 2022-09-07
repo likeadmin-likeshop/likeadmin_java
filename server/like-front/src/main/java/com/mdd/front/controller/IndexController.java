@@ -13,6 +13,9 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 主页管理
+ */
 @RestController
 @RequestMapping("/api")
 public class IndexController {

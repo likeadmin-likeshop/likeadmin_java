@@ -1,5 +1,6 @@
 package com.mdd.front.validate;
 
+import com.mdd.common.validator.annotation.IntegerContains;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -31,5 +32,10 @@ public class RegParam implements Serializable {
     @NotEmpty(message = "密码不能为空")
     @Length(min = 6, max = 12, message = "密码必须在6~12个字符内")
     private String password;
+
+    @NotNull(message = "client参数缺失")
+    @NotEmpty(message = "客户端不能为空")
+    @IntegerContains(values = {1, 2, 3, 4, 5, 6}, message = "不是合法客户端")
+    private Integer client;
 
 }

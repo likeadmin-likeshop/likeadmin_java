@@ -37,7 +37,6 @@ public class LoginServiceImpl implements ILoginService {
     @Resource
     UserAuthMapper userAuthMapper;
 
-
     /**
      * 注册账号
      *
@@ -64,7 +63,7 @@ public class LoginServiceImpl implements ILoginService {
         user.setUsername(regParam.getUsername());
         user.setPassword(pwd);
         user.setSalt(salt);
-        user.setChannel(0);
+        user.setChannel(regParam.getClient());
         user.setCreateTime(System.currentTimeMillis() / 1000);
         user.setUpdateTime(System.currentTimeMillis() / 1000);
         userMapper.insert(user);
@@ -81,12 +80,11 @@ public class LoginServiceImpl implements ILoginService {
     @Transactional
     public Map<String, Object> mnpLogin(Map<String, String> params) {
         Assert.notNull(params.get("code"), "code参数缺失!");
-        String scene     = params.get("scene");
         String code      = params.get("code");
         String avatarUrl = params.getOrDefault("avatarUrl", "");
         String nickName  = params.getOrDefault("nickName", "");
         String gender    = params.getOrDefault("gender", "0");
-        Integer client   = ClientEnum.getCodeByType(scene);
+        Integer client   = Integer.parseInt(params.getOrDefault("client", "1"));
 
         Map<String, String> config = ConfigUtil.get("mp_channel");
         WxMaService wxMaService = new WxMaServiceImpl();

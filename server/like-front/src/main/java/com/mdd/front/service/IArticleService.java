@@ -28,9 +28,10 @@ public interface IArticleService {
      * @author fzr
      * @param pageParam 分页参数
      * @param cid 分类ID
+     * @param userId 用户ID
      * @return PageResult<ArticleListVo>
      */
-    PageResult<ArticleListVo> list(PageParam pageParam, Integer cid);
+    PageResult<ArticleListVo> list(PageParam pageParam, Integer cid, Integer userId);
 
     /**
      * 文章详情
@@ -46,8 +47,27 @@ public interface IArticleService {
      *
      * @author fzr
      * @param pageParam 分页参数
+     * @param userId 用户ID
      * @return PageResult<ArticleListVo>
      */
-    PageResult<ArticleCollectVo> collect(PageParam pageParam);
+    PageResult<ArticleCollectVo> collect(PageParam pageParam, Integer userId);
+
+    /**
+     * 加入收藏
+     *
+     * @author fzr
+     * @param articleId 文章ID
+     * @param userId 用户ID
+     */
+    void addCollect(Integer articleId, Integer userId);
+
+    /**
+     * 取消收藏
+     *
+     * @author fzr
+     * @param id 主键
+     * @param userId 用户ID
+     */
+    void cancelCollect(Integer id, Integer userId);
 
 }

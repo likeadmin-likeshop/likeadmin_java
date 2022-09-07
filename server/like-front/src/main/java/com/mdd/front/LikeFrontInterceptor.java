@@ -8,6 +8,7 @@ import com.mdd.common.entity.user.User;
 import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.utils.RedisUtil;
+import com.mdd.common.utils.StringUtil;
 import com.mdd.front.config.FrontConfig;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -45,13 +46,21 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
         }
 
         // 免登录接口
+        String token = request.getHeader("token");
         List<String> notLoginUri = Arrays.asList(FrontConfig.notLoginUri);
         if (notLoginUri.contains(request.getRequestURI())) {
+            if (StringUtil.isNotEmpty(token)) {
+                Object uid = RedisUtil.get(token);
+                if (uid != null) {
+                    Integer userId = Integer.parseInt(uid.toString());
+                    LikeFrontThreadLocal.put("userId", userId);
+                }
+            }
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
 
         // Token是否为空
-        String token = request.getHeader("token");
+
         if (StringUtils.isBlank(token)) {
             AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_EMPTY.getCode(), HttpEnum.TOKEN_EMPTY.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
@@ -68,6 +77,8 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
 
         // 用户信息缓存
         Object uid = RedisUtil.get(token);
+        System.out.println(uid);
+        System.out.println("哈哈哈哈哈");
         Integer userId = Integer.parseInt(uid.toString());
         User user = userMapper.selectOne(new QueryWrapper<User>()
                 .select("id,sn,username,nickname,mobile,is_disable,is_delete")
