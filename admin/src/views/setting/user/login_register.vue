@@ -5,20 +5,20 @@
             <el-card shadow="never" class="!border-none">
                 <div class="font-medium mb-7">通用设置</div>
 
-                <el-form-item label="登录方式" prop="methods">
+                <el-form-item label="登录方式" prop="loginWay">
                     <div>
-                        <el-checkbox v-model="formData.methods" true-label="1" false-label="2" label="登录" />
-                        <el-checkbox v-model="formData.methods" true-label="1" false-label="2" label="注册" />
+                        <el-checkbox v-model="formData.loginWay[0]" :true-label="1" false-label="" label="登录" />
+                        <el-checkbox v-model="formData.loginWay[1]" :true-label="2" false-label="" label="注册" />
 
                         <div class="form-tips">系统通用登录方式，至少选择一项</div>
                     </div>
                 </el-form-item>
 
-                <el-form-item label="强制绑定手机" prop="favicon" required>
+                <el-form-item label="强制绑定手机" prop="forceBindMobile">
                     <div>
-                        <el-switch v-model="formData.isBindMobile" />
+                        <el-switch v-model="formData.forceBindMobile" :active-value="1" :inactive-value="0" />
                         <span class="mt-1 ml-2">{{
-                                formData.isBindMobile ? "开启" : "关闭"
+                        formData.forceBindMobile ? "开启" : "关闭"
                         }}</span>
 
                         <div class="form-tips">
@@ -28,11 +28,11 @@
                     </div>
                 </el-form-item>
 
-                <el-form-item label="政策协议" prop="favicon" required>
+                <el-form-item label="政策协议" prop="openAgreement">
                     <div>
-                        <el-switch v-model="formData.isBindMobile" />
+                        <el-switch v-model="formData.openAgreement" :active-value="1" :inactive-value="0" />
                         <span class="mt-1 ml-2">{{
-                                formData.isBindMobile ? "开启" : "关闭"
+                        formData.openAgreement ? "开启" : "关闭"
                         }}</span>
 
                         <div class="form-tips">
@@ -45,23 +45,25 @@
             <el-card shadow="never" class="!border-none mt-4">
                 <div class="font-medium mb-7">第三方设置</div>
 
-                <el-form-item label="第三方登录" prop="methods">
+                <el-form-item label="第三方登录" prop="openOtherAuth">
                     <div>
-                        <el-switch v-model="formData.isBindMobile" />
+                        <el-switch v-model="formData.openOtherAuth" :active-value="1" :inactive-value="0" />
                         <span class="mt-1 ml-2">{{
-                                formData.isBindMobile ? "开启" : "关闭"
+                        formData.openOtherAuth ? "开启" : "关闭"
                         }}</span>
 
                         <div class="form-tips">登录时支持第三方登录，新用户授权即自动注册账号</div>
 
                         <div>
-                            <el-checkbox v-model="formData.methods" true-label="1" false-label="2" label="登录" />
-                            <el-checkbox v-model="formData.methods" true-label="1" false-label="2" label="注册" />
+                            <el-checkbox v-model="formData.autoLoginAuth[0]" :true-label="1" false-label=""
+                                label="微信登录" />
+                            <el-checkbox v-model="formData.autoLoginAuth[1]" :true-label="2" false-label=""
+                                label="QQ登录" />
                         </div>
                     </div>
                 </el-form-item>
 
-                <el-form-item label="微信开放平台" prop="favicon" required>
+                <el-form-item label="微信开放平台">
                     <div>
                         <a href="https://baidu.com" target="_blank">
                             <el-button type="primary" link class="underline">前往微信开放平台</el-button>
@@ -84,34 +86,49 @@
 </template>
 
 <script lang="ts" setup>
-import { getWebsite, setWebsite } from "@/api/setting/website";
+import type { LoginSetup } from "@/api/setting/user";
+import { getLogin, setLogin } from "@/api/setting/user";
 import feedback from "@/utils/feedback";
-import type { FormInstance } from "element-plus";
+import type { FormInstance, FormRules } from 'element-plus'
 const formRef = ref<FormInstance>();
 
 // 表单数据
-const formData = reactive({
-    methods: 1, // 登录方式
-    isBindMobile: 1, // 是否强制绑定手机号码
-    favicon: "", // 网站图标
-    logo: "", // 网站logo
-    backdrop: "", // 登录页广告图
+const formData = reactive<LoginSetup>({
+    loginWay: [],
+    forceBindMobile: 0,
+    openAgreement: 0,
+    openOtherAuth: 0,
+    autoLoginAuth: [1, 2]
 });
 
 // 表单验证
-const rules = {
-    name: [
+const rules = reactive<FormRules>({
+    loginWay: [
         {
             required: true,
-            message: "请输入网站名称",
-            trigger: ["blur"],
-        },
+            validator: (rule: any, value: any, callback: any) => {
+                const loginWay = formData.loginWay.join('').length
+                if (loginWay === 0) {
+                    callback(new Error('登录方式至少选择一项！'))
+                } else {
+                    if (formData.loginWay !== '') {
+                        if (!formRef.value) return
+                        formRef.value.validateField('checkPass', () => null)
+                    }
+                    callback()
+                }
+            },
+            trigger: 'change'
+        }
     ],
-};
+    forceBindMobile: [{ required: true, trigger: "blur" }],
+    openAgreement: [{ required: true, trigger: "blur" }],
+    openOtherAuth: [{ required: true, trigger: "blur" }],
+});
 
 // 获取备案信息
 const getData = async () => {
-    const data = await getWebsite();
+    const data = await getLogin();
     for (const key in formData) {
         //@ts-ignore
         formData[key] = data[key];
@@ -120,8 +137,16 @@ const getData = async () => {
 
 // 设置备案信息
 const handleSubmit = async () => {
+    const loginWay = formData.loginWay.join('')
+    const autoLoginAuth = formData.autoLoginAuth.join('')
+
     await formRef.value?.validate();
-    await setWebsite(formData);
+    await setLogin({
+        ...formData,
+        loginWay: loginWay.length == 2 ? `${loginWay[0]},${loginWay[1]}` : loginWay,
+        autoLoginAuth: autoLoginAuth.length == 2 ? `${autoLoginAuth[0]},${autoLoginAuth[1]}` : autoLoginAuth,
+
+    });
     feedback.msgSuccess("操作成功");
     getData();
 };
