@@ -298,7 +298,7 @@ public class ArrayUtil {
      * @param object 对象
      * @return List<String>
      */
-    public static List<Integer> objectToListAsStr(Object object) {
+    public static List<String> objectToListAsStr(Object object) {
         if (StringUtil.isNull(object)) {
             return Collections.emptyList();
         }
