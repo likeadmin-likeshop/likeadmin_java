@@ -2,16 +2,15 @@ package com.mdd.front.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.decorate.DecoratePage;
 import com.mdd.common.entity.decorate.DecorateTabbar;
 import com.mdd.common.entity.setting.HotSearch;
+import com.mdd.common.mapper.article.ArticleMapper;
 import com.mdd.common.mapper.decorate.DecoratePageMapper;
 import com.mdd.common.mapper.decorate.DecorateTabbarMapper;
 import com.mdd.common.mapper.setting.HotSearchMapper;
-import com.mdd.common.utils.ArrayUtil;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.ToolsUtil;
-import com.mdd.common.utils.UrlUtil;
+import com.mdd.common.utils.*;
 import com.mdd.front.service.IIndexService;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +32,9 @@ public class IndexServiceImpl implements IIndexService {
     @Resource
     HotSearchMapper hotSearchMapper;
 
+    @Resource
+    ArticleMapper articleMapper;
+
     /**
      * 首页
      *
@@ -47,8 +49,30 @@ public class IndexServiceImpl implements IIndexService {
                     .eq("id", 1)
                     .last("limit 1"));
 
+        List<Map<String, Object>> articleList = new LinkedList<>();
+        List<Article> articles = articleMapper.selectList(new QueryWrapper<Article>()
+                .eq("is_show", 1)
+                .eq("is_delete", 0)
+                .orderByDesc("id")
+                .last("limit 20"));
+
+        for (Article article : articles) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("id", article.getId());
+            map.put("title", article.getTitle());
+            map.put("intro", article.getIntro());
+            map.put("summary", article.getSummary());
+            map.put("image", UrlUtil.toAbsoluteUrl(article.getImage()));
+            map.put("author", article.getAuthor());
+            map.put("visit", article.getVisit());
+            map.put("content", article.getContent());
+            map.put("createTime", TimeUtil.timestampToDate(article.getCreateTime()));
+            articleList.add(map);
+        }
+
         response.put("domain", UrlUtil.domain());
         response.put("pages", decoratePage.getPageData());
+        response.put("article", articleList);
         return response;
     }
 
