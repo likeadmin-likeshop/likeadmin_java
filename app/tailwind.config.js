@@ -17,6 +17,17 @@ module.exports = {
             error: '#f56c6c',
             info: '#909399',
             page: '#f6f6f6'
+        },
+        fontSize: {
+            xs: '24rpx',
+            sm: '26rpx',
+            base: '28rpx',
+            lg: '30rpx',
+            xl: '32rpx',
+            '2xl': '34rpx',
+            '3xl': '38rpx',
+            '4xl': '40rpx',
+            '5xl': '44rpx'
         }
     },
     plugins: [],
