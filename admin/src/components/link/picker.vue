@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Link } from '.'
+import { LinkTypeEnum, type Link } from '.'
 import LinkContent from './index.vue'
 import Popup from '@/components/popup/index.vue'
 const props = defineProps({
@@ -31,14 +31,16 @@ const emit = defineEmits<{
 }>()
 
 const popupRef = shallowRef<InstanceType<typeof Popup>>()
-const activeLink = ref<Link>()
+const activeLink = ref<Link>({ path: '', type: LinkTypeEnum.SHOP_PAGES })
 const handleConfirm = () => {
     emit('update:modelValue', activeLink.value)
 }
 watch(
     () => props.modelValue,
     (value) => {
-        activeLink.value = value as Link
+        if (value?.type) {
+            activeLink.value = value as Link
+        }
     },
     {
         immediate: true

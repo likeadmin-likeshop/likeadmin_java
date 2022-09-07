@@ -2,7 +2,7 @@
     <div class="shop-pages">
         <div class="link-list flex flex-wrap">
             <div
-                class="link-item border border-br px-5 py-[5px] rounded-[3px] cursor-pointer"
+                class="link-item border border-br px-5 py-[5px] rounded-[3px] cursor-pointer mr-[10px] mb-[10px]"
                 v-for="(item, index) in linkList"
                 :class="{ 'border-primary text-primary': modelValue.path == item.path }"
                 :key="index"
@@ -32,6 +32,16 @@ const linkList = ref([
     {
         path: '/pages/index/index',
         name: '商城首页',
+        type: LinkTypeEnum.SHOP_PAGES
+    },
+    {
+        path: '/pages/news/news',
+        name: '文章资讯',
+        type: LinkTypeEnum.SHOP_PAGES
+    },
+    {
+        path: '/pages/user/user',
+        name: '个人中心',
         type: LinkTypeEnum.SHOP_PAGES
     }
 ])
