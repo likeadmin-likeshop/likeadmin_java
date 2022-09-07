@@ -6,9 +6,9 @@
                     <div class="tabbar flex">
                         <div
                             class="tabbar-item flex flex-col justify-center items-center flex-1"
-                            v-for="(item, index) in tabbar.data"
+                            v-for="(item, index) in tabbar.list"
                             :key="index"
-                            :style="{ color: tabbar.color }"
+                            :style="{ color: tabbar.style.defaultColor }"
                         >
                             <img class="w-[22px] h-[22px]" :src="item.unselected" alt="" />
                             <div class="leading-3 text-[12px] mt-[4px]">{{ item.name }}</div>
@@ -29,7 +29,7 @@
                             <el-tab-pane label="导航图片" name="content">
                                 <div class="mb-[18px]">
                                     <del-wrap
-                                        v-for="(item, index) in tabbar.data"
+                                        v-for="(item, index) in tabbar.list"
                                         :key="index"
                                         @close="handleDelete(index)"
                                         class="max-w-[400px]"
@@ -78,7 +78,7 @@
                                     </del-wrap>
                                 </div>
 
-                                <el-form-item v-if="tabbar.data?.length < max" label-width="0">
+                                <el-form-item v-if="tabbar.list?.length < max" label-width="0">
                                     <el-button type="primary" @click="handleAdd">
                                         添加导航
                                     </el-button>
@@ -86,10 +86,16 @@
                             </el-tab-pane>
                             <el-tab-pane label="样式设置" name="styles">
                                 <el-form-item label="默认颜色">
-                                    <color-picker class="max-w-[400px]" v-model="tabbar.color" />
+                                    <color-picker
+                                        class="max-w-[400px]"
+                                        v-model="tabbar.style.defaultColor"
+                                    />
                                 </el-form-item>
                                 <el-form-item label="选中颜色">
-                                    <color-picker class="max-w-[400px]" v-model="tabbar.color" />
+                                    <color-picker
+                                        class="max-w-[400px]"
+                                        v-model="tabbar.style.selectedColor"
+                                    />
                                 </el-form-item>
                             </el-tab-pane>
                         </el-tabs>
@@ -108,8 +114,11 @@ import feedback from '@/utils/feedback'
 const max = 5
 const min = 2
 const tabbar = reactive({
-    color: '',
-    data: [
+    style: {
+        defaultColor: '',
+        selectedColor: ''
+    },
+    list: [
         {
             name: '',
             selected: '',
@@ -120,8 +129,8 @@ const tabbar = reactive({
 })
 
 const handleAdd = () => {
-    if (tabbar.data?.length < max) {
-        tabbar.data.push({
+    if (tabbar.list?.length < max) {
+        tabbar.list.push({
             name: '',
             selected: '',
             unselected: '',
@@ -132,18 +141,19 @@ const handleAdd = () => {
     }
 }
 const handleDelete = (index: number) => {
-    if (tabbar.data?.length <= min) {
+    if (tabbar.list?.length <= min) {
         return feedback.msgError(`最少保留${min}个`)
     }
-    tabbar.data.splice(index, 1)
+    tabbar.list.splice(index, 1)
 }
 
 const getData = async () => {
     const data = await getDecorateTabbar()
-    // tabbar.value = data
+    tabbar.list = data.list
+    tabbar.style = data.style
 }
 const setData = async () => {
-    // await setDecorateTabbar(tabbar.value)
+    await setDecorateTabbar(toRaw(tabbar))
     getData()
     feedback.msgSuccess('保存成功')
 }

@@ -2,7 +2,7 @@
     <div class="link flex">
         <el-menu
             :default-active="activeMenu"
-            class="w-[160px] min-h-[400px] link-menu"
+            class="w-[160px] min-h-[350px] link-menu"
             @select="handleSelect"
         >
             <el-menu-item v-for="(item, index) in menus" :index="item.type" :key="index">
@@ -10,8 +10,16 @@
             </el-menu-item>
         </el-menu>
         <div class="flex-1 pl-4">
-            <shop-pages v-model="activeLink" v-if="LinkTypeEnum.SHOP_PAGES == activeMenu" />
-            <custom-link v-model="activeLink" v-if="LinkTypeEnum.CUSTOM_LINK == activeMenu" />
+            <shop-pages
+                v-model="activeLink"
+                v-if="LinkTypeEnum.SHOP_PAGES == activeMenu"
+                @update:model-value="updateLink"
+            />
+            <custom-link
+                v-model="activeLink"
+                v-if="LinkTypeEnum.CUSTOM_LINK == activeMenu"
+                @update:model-value="updateLink"
+            />
         </div>
     </div>
 </template>
@@ -24,36 +32,60 @@ import CustomLink from './custom-link.vue'
 
 const props = defineProps({
     modelValue: {
-        type: Object as PropType<Link>
+        type: Object as PropType<Link>,
+        required: true
     }
 })
 const emit = defineEmits<{
     (event: 'update:modelValue', value: any): void
 }>()
 
-const activeLink = computed({
-    get() {
-        return props.modelValue
-    },
-    set(value) {
-        emit('update:modelValue', value)
-    }
-})
 const menus = ref([
     {
         name: '商城页面',
-        type: LinkTypeEnum.SHOP_PAGES
+        type: LinkTypeEnum.SHOP_PAGES,
+        link: {}
     },
     {
         name: '自定义链接',
-        type: LinkTypeEnum.CUSTOM_LINK
+        type: LinkTypeEnum.CUSTOM_LINK,
+        link: {}
     }
 ])
+
+const activeLink = computed({
+    get() {
+        return menus.value.find((item) => item.type == activeMenu.value)?.link as Link
+    },
+    set(value) {
+        menus.value.forEach((item) => {
+            if (item.type == activeMenu.value) {
+                item.link = value
+            }
+        })
+    }
+})
+
 const activeMenu = ref<string>(LinkTypeEnum.SHOP_PAGES)
 
 const handleSelect = (index: string) => {
     activeMenu.value = index
 }
+
+const updateLink = (value: any) => {
+    emit('update:modelValue', value)
+}
+
+watch(
+    () => props.modelValue,
+    (value) => {
+        activeMenu.value = value.type
+        activeLink.value = value
+    },
+    {
+        immediate: true
+    }
+)
 </script>
 
 <style lang="scss" scoped>

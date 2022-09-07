@@ -47,7 +47,6 @@
         "@dcloudio/uni-quickapp-webview": "^3.0.0-alpha-3050520220824001",
         "lodash-es": "^4.17.21",
         "pinia": "^2.0.20",
-        "uview-plus": "^3.1.6",
         "vconsole": "^3.14.6",
         "vue": "^3.2.37",
         "vue-i18n": "^9.2.2",
