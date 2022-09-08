@@ -15,3 +15,38 @@ export function getArticleCate() {
 export function getArticleList(data: Record<string, any>) {
     return request.get({ url: '/article/list', data: data })
 }
+
+/**
+ * @description 获取文章详情
+ * @param { number } id 
+ * @return { Promise } 
+ */
+export function getArticleDetail(data: { id: number }) {
+    return request.get({ url: '/article/detail', data: data })
+}
+
+/**
+ * @description 加入收藏
+ * @param { number } articleId 
+ * @return { Promise } 
+ */
+export function addCollect(data: { articleId: number }) {
+    return request.post({ url: '/article/addCollect', data: data })
+}
+
+/**
+ * @description 取消收藏
+ * @param { number } id 
+ * @return { Promise } 
+ */
+export function cancelCollect(data: { articleId: number }) {
+    return request.post({ url: '/article/cancelCollect', data: data })
+}
+
+/**
+ * @description 获取收藏列表
+ * @return { Promise } 
+ */
+export function getCollect() {
+    return request.get({ url: '/article/collect' })
+}

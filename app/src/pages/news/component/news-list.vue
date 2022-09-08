@@ -2,7 +2,7 @@
 	<z-paging ref="paging" v-model="dataList" v-if="i == index" @query="queryList" :fixed="false" height="100%"
 		use-page-scroll>
 		<block v-for="(newsItem,newsIndex) in dataList" :key="newsIndex">
-			<news-card :item="newsItem"></news-card>
+			<news-card :item="newsItem" :newsId="newsItem.id"></news-card>
 		</block>
 	</z-paging>
 </template>
