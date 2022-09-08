@@ -12,7 +12,7 @@ const cache = {
             data = JSON.stringify(data)
         }
         try {
-            window.localStorage.setItem(key, data)
+            uni.setStorageSync(key, data)
         } catch (e) {
             return null
         }
@@ -20,13 +20,13 @@ const cache = {
     get(key: string) {
         key = this.getKey(key)
         try {
-            const data = window.localStorage.getItem(key)
+            const data = uni.getStorageSync(key)
             if (!data) {
                 return null
             }
             const { value, expire } = JSON.parse(data)
             if (expire && expire < this.time()) {
-                window.localStorage.removeItem(key)
+                uni.removeStorageSync(key)
                 return null
             }
             return value
@@ -40,7 +40,7 @@ const cache = {
     },
     remove(key: string) {
         key = this.getKey(key)
-        window.localStorage.removeItem(key)
+        uni.removeStorageSync(key)
     },
     getKey(key: string) {
         return this.key + key

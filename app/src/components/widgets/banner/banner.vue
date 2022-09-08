@@ -1,19 +1,29 @@
 <template>
-    <view class="banner h-[400rpx] bg-white">
+    <view
+        class="banner h-[340rpx] bg-white translate-y-0"
+        v-if="content.data.length && content.enabled"
+    >
         <swiper
             class="swiper h-full"
-            indicator-dots
+            :indicator-dots="content.data.length > 1"
             indicator-active-color="#4173ff"
             :autoplay="true"
         >
             <swiper-item v-for="(item, index) in content.data" :key="index">
-                <u-image mode="aspectFit" width="100%" height="100%" :src="item.image" />
+                <u-image
+                    mode="aspectFit"
+                    width="100%"
+                    height="100%"
+                    :src="getImageUrl(item.image)"
+                />
             </swiper-item>
         </swiper>
     </view>
 </template>
 
 <script setup lang="ts">
+import { useAppStore } from '@/stores/app'
+
 const props = defineProps({
     content: {
         type: Object,
@@ -24,6 +34,7 @@ const props = defineProps({
         default: () => ({})
     }
 })
+const { getImageUrl } = useAppStore()
 </script>
 
 <style></style>

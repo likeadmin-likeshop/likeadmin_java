@@ -12,7 +12,7 @@
             </el-form-item>
             <el-form-item label="客服二维码">
                 <div>
-                    <material-picker v-model="content.qrcode" />
+                    <material-picker v-model="content.qrcode" exclude-domain />
                     <div class="form-tips">建议图片尺寸：200*200像素；图片格式：jpg、png、jpeg</div>
                 </div>
             </el-form-item>

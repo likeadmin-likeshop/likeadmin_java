@@ -1,11 +1,12 @@
 <template>
     <div class="banner">
         <div class="banner-image">
-            <image-contain width="100%" height="200px" :src="getImage" fit="contain" />
+            <image-contain width="100%" height="170px" :src="getImageUrl(getImage)" fit="contain" />
         </div>
     </div>
 </template>
 <script lang="ts" setup>
+import useAppStore from '@/stores/modules/app'
 import type { PropType } from 'vue'
 import type options from './options'
 type OptionsType = ReturnType<typeof options>
@@ -19,6 +20,7 @@ const props = defineProps({
         default: () => ({})
     }
 })
+const { getImageUrl } = useAppStore()
 const getImage = computed(() => {
     const { data } = props.content
     if (Array.isArray(data)) {

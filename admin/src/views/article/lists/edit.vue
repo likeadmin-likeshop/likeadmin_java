@@ -18,8 +18,12 @@
                                 <el-input v-model="formData.title" placeholder="请输入文章标题" />
                             </div>
                         </el-form-item>
-                        <el-form-item label="文章标题" prop="cid">
-                            <el-select class="w-80" v-model="formData.cid">
+                        <el-form-item label="文章栏目" prop="cid">
+                            <el-select
+                                class="w-80"
+                                v-model="formData.cid"
+                                placeholder="请选择文章栏目"
+                            >
                                 <el-option
                                     v-for="item in optionsData.articleCate"
                                     :key="item.id"
@@ -107,15 +111,8 @@ const formData = reactive({
 
 const formRef = shallowRef<FormInstance>()
 const rules = reactive({
-    ['base.tableName']: [{ required: true, message: '请输入表名称', trigger: 'blur' }],
-    ['base.tableComment']: [{ required: true, message: '请输入表描述', trigger: 'blur' }],
-    ['base.entityName']: [{ required: true, message: '请输入实体类名称', trigger: 'blur' }],
-    ['base.authorName']: [{ required: true, message: '请输入作者', trigger: 'blur' }],
-    ['gen.moduleName']: [{ required: true, message: '请输入模块名', trigger: 'blur' }],
-    ['gen.functionName']: [{ required: true, message: '请输入功能名称', trigger: 'blur' }],
-    ['gen.treePrimary']: [{ required: true, message: '请选择树主键字段', trigger: 'blur' }],
-    ['gen.treeParent']: [{ required: true, message: '请选择树父级字段', trigger: 'blur' }],
-    ['gen.treeName']: [{ required: true, message: '请选择树名称字段', trigger: 'blur' }]
+    title: [{ required: true, message: '请输入文章标题', trigger: 'blur' }],
+    cid: [{ required: true, message: '请输入表描述', trigger: 'blur' }]
 })
 
 const getDetails = async () => {

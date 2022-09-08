@@ -10,7 +10,7 @@
             <u-form borderBottom>
                 <template v-if="scene == LoginTypeEnum.ACCOUNT">
                     <u-form-item borderBottom>
-                        <u-icon class="mr-2" :size="36" name="/static/images/icon_user.png" />
+                        <u-icon class="mr-2" :size="36" name="/static/images/icon/icon_user.png" />
                         <u-input
                             class="flex-1"
                             v-model="formData.username"
@@ -19,7 +19,11 @@
                         />
                     </u-form-item>
                     <u-form-item borderBottom>
-                        <u-icon class="mr-2" :size="36" name="/static/images/icon_password.png" />
+                        <u-icon
+                            class="mr-2"
+                            :size="36"
+                            name="/static/images/icon/icon_password.png"
+                        />
                         <u-input
                             class="flex-1"
                             v-model="formData.password"
@@ -36,7 +40,11 @@
                 </template>
                 <template v-if="scene == LoginTypeEnum.MOBILE">
                     <u-form-item borderBottom>
-                        <u-icon class="mr-2" :size="36" name="/static/images/icon_mobile.png" />
+                        <u-icon
+                            class="mr-2"
+                            :size="36"
+                            name="/static/images/icon/icon_mobile.png"
+                        />
                         <u-input
                             class="flex-1"
                             v-model="formData.mobile"
@@ -45,7 +53,7 @@
                         />
                     </u-form-item>
                     <u-form-item borderBottom>
-                        <u-icon class="mr-2" :size="36" name="/static/images/icon_code.png" />
+                        <u-icon class="mr-2" :size="36" name="/static/images/icon/icon_code.png" />
                         <u-input
                             class="flex-1"
                             v-model="formData.code"
@@ -77,7 +85,7 @@
                 </u-checkbox>
             </view>
             <view class="mt-[40rpx]">
-                <u-button type="primary" shape="circle" @click="accountLogin(scene)">
+                <u-button type="primary" shape="circle" @click="handleLogin(scene)">
                     登 录
                 </u-button>
             </view>
@@ -95,7 +103,7 @@
                 <u-divider>第三方登录</u-divider>
                 <div class="flex justify-center mt-[40rpx]">
                     <div class="flex flex-col items-center" @click="wxLogin">
-                        <u-icon name="/static/images/icon_wx.png" size="80" />
+                        <u-icon name="/static/images/icon/icon_wx.png" size="80" />
                         <div class="text-sm mt-[10px]">微信登录</div>
                     </div>
                 </div>
@@ -108,7 +116,9 @@
 import { login } from '@/api/account'
 import { smsSend } from '@/api/app'
 import { SMSEnum } from '@/enums/appEnums'
-import { reactive, ref, shallowRef } from 'vue'
+import { useLockFn } from '@/hooks/useLockFn'
+import { useUserStore } from '@/stores/user'
+import { reactive, ref, shallowRef, watch } from 'vue'
 enum LoginTypeEnum {
     MOBILE = 'mobile',
     ACCOUNT = 'account',
@@ -118,6 +128,8 @@ const uCodeRef = shallowRef()
 const scene = ref(LoginTypeEnum.ACCOUNT)
 const codeTips = ref('')
 const isCheckAgreement = ref(false)
+
+const userStore = useUserStore()
 const formData = reactive({
     username: '',
     password: '',
@@ -140,7 +152,8 @@ const sendSms = async () => {
         uCodeRef.value?.start()
     }
 }
-const accountLogin = async (scene: LoginTypeEnum, code?: string) => {
+
+const loginFun = async (scene: LoginTypeEnum, code?: string) => {
     if (!isCheckAgreement.value) return uni.$u.toast('请勾选已阅读并同意《服务协议》和《隐私协议》')
     if (scene == LoginTypeEnum.ACCOUNT) {
         if (!formData.username) return uni.$u.toast('请输入账号/手机号码')
@@ -155,17 +168,29 @@ const accountLogin = async (scene: LoginTypeEnum, code?: string) => {
         scene
     }
     if (code) params.code = code
-    await login(params)
-    uni.$u.toast('登录成功')
-    uni.navigateBack()
+    uni.showLoading({
+        title: '请稍后...'
+    })
+    try {
+        const data = await login(params)
+        userStore.login(data.token)
+        await userStore.getUser()
+        uni.$u.toast('登录成功')
+        uni.hideLoading()
+        uni.navigateBack()
+    } catch (error: any) {
+        uni.hideLoading()
+        throw new Error(error)
+    }
 }
+
+const { isLock, lockFn: handleLogin } = useLockFn(loginFun)
 
 const wxLogin = async () => {
     const data: any = await uni.login({
         provider: 'weixin'
     })
-    console.log(data)
-    accountLogin(LoginTypeEnum.MNP, data.code)
+    handleLogin(LoginTypeEnum.MNP, data.code)
 }
 </script>
 

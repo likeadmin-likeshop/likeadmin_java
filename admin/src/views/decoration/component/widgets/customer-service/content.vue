@@ -1,6 +1,6 @@
 <template>
     <div class="customer-service">
-        <image-contain width="140px" height="140px" :src="content.qrcode" alt="" />
+        <image-contain width="140px" height="140px" :src="getImageUrl(content.qrcode)" alt="" />
         <div class="text-[15px] mt-[7px] font-medium">{{ content.title }}</div>
         <div class="text-[#666] mt-[20px]">服务时间：{{ content.time }}</div>
         <div class="text-[#666] mt-[7px]">客服电话：{{ content.mobile }}</div>
@@ -12,6 +12,7 @@
     </div>
 </template>
 <script lang="ts" setup>
+import useAppStore from '@/stores/modules/app'
 import type { PropType } from 'vue'
 import type options from './options'
 type OptionsType = ReturnType<typeof options>
@@ -25,6 +26,7 @@ defineProps({
         default: () => ({})
     }
 })
+const { getImageUrl } = useAppStore()
 </script>
 
 <style lang="scss" scoped>

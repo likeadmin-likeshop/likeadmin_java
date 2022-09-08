@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
-import request from './utils/request'
+import { onLaunch } from '@dcloudio/uni-app'
+import { useAppStore } from './stores/app'
+import { useUserStore } from './stores/user'
+const { getConfig } = useAppStore()
+const { getUser } = useUserStore()
+console.log(useUserStore())
 onLaunch(() => {
-    console.log('App Launch')
-})
-onShow(() => {
-    console.log('App Show')
-})
-onHide(() => {
-    console.log('App Hide')
+    getConfig()
+    getUser()
 })
 </script>
 <style lang="scss">

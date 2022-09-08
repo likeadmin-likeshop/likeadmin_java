@@ -29,7 +29,19 @@
             "style": {
                 "navigationBarTitleText": "注册"
             }
-        }
+        },
+        {
+            "path": "pages/customer_service/customer_service",
+            "style": {
+                "navigationBarTitleText": "联系客服"
+            }
+        },
+        {
+            "path": "pages/news_detail/news_detail",
+            "style": {
+                "navigationBarTitleText": "详情"
+            }
+        },
     ],
     "globalStyle": {
         "navigationBarTextStyle": "black",
@@ -38,20 +50,26 @@
         "backgroundColor": "#F8F8F8"
     },
     "tabBar": {
-        "color": "#7A7E83",
-        "selectedColor": "#3cc51f",
+        "color": "#666666",
+        "selectedColor": "#4173FF",
         "borderStyle": "black",
         "backgroundColor": "#ffffff",
         "list": [
             {
+                "iconPath": "/static/images/tabs/home.png",
+                "selectedIconPath": "/static/images/tabs/home_s.png",
                 "pagePath": "pages/index/index",
                 "text": "首页"
             },
             {
+                "iconPath": "/static/images/tabs/news.png",
+                "selectedIconPath": "/static/images/tabs/news_s.png",
                 "pagePath": "pages/news/news",
                 "text": "资讯"
             },
             {
+                "iconPath": "/static/images/tabs/user.png",
+                "selectedIconPath": "/static/images/tabs/user_s.png",
                 "pagePath": "pages/user/user",
                 "text": "我的"
             }

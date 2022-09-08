@@ -1,8 +1,22 @@
 import { defineStore } from 'pinia'
+import { getConfig } from '@/api/app'
 
+interface AppSate {
+    config: Record<string, any>
+}
 export const useAppStore = defineStore({
-    id: 'userStore',
-    state: () => ({}),
+    id: 'appStore',
+    state: (): AppSate => ({
+        config: {}
+    }),
     getters: {},
-    actions: {}
+    actions: {
+        getImageUrl(url: string) {
+            return url ? `${this.config.domain}${url}` : ''
+        },
+        async getConfig() {
+            const data = await getConfig()
+            this.config = data
+        }
+    }
 })
