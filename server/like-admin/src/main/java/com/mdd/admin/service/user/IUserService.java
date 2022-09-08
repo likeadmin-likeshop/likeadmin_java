@@ -21,6 +21,13 @@ public interface IUserService {
      */
     PageResult<UserVo> list(PageParam pageParam, Map<String, String> params);
 
+    /**
+     * 用户详情
+     *
+     * @author fzr
+     * @param id 主键
+     * @return UserVo
+     */
     UserVo detail(Integer id);
 
 }

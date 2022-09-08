@@ -1,6 +1,6 @@
 # 项目配置
 like:
-  upload-directory: D:\www\frame\
+  upload-directory: /www/like-admin/uploads/
 
 # 服务配置
 server:

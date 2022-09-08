@@ -4,6 +4,7 @@ import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.utils.YmlUtil;
 import com.mdd.front.LikeFrontInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -41,7 +42,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
      * 资源目录映射
      */
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
         String directory = YmlUtil.get("like.upload-directory");
         if (directory == null || directory.equals("")) {
             directory = GlobalConfig.uploadDirectory;

@@ -13,7 +13,7 @@ public class UserVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
-    private String sn;
+    private Integer sn;
     private String avatar;
     private String realName;
     private String nickname;
@@ -24,5 +24,19 @@ public class UserVo implements Serializable {
     private String lastLoginIp;
     private String lastLoginTime;
     private String createTime;
+
+    public void setSex(Integer sex) {
+        switch (sex) {
+            case 0:
+                this.sex = "未知";
+                break;
+            case 1:
+                this.sex = "男";
+                break;
+            case 2:
+                this.sex = "女";
+                break;
+        }
+    }
 
 }

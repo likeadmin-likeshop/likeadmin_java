@@ -54,6 +54,23 @@ public enum ClientEnum {
         return null;
     }
 
+    /**
+     * 根据编码获取Msg
+     *
+     * @author fzr
+     * @param code 类型
+     * @return String
+     */
+    public static String getMsgByCode(Integer code){
+        for(ClientEnum enumItem: ClientEnum.values()) {
+            if (enumItem.getCode() == code) {
+                return enumItem.getMsg();
+            }
+        }
+        return null;
+    }
+
+
 
 
     /**

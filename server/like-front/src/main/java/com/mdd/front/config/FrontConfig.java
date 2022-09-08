@@ -17,6 +17,7 @@ public class FrontConfig {
             "/api/search",
             "/api/decorate",
             "/api/sms/send",
+            "/api/upload/image",
 
             "/api/login/check",
             "/api/login/register",

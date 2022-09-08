@@ -10,6 +10,7 @@ import com.mdd.admin.vo.article.ArticleListVo;
 import com.mdd.admin.vo.user.UserVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.user.User;
+import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.utils.StringUtil;
 import com.mdd.common.utils.TimeUtil;
@@ -31,6 +32,14 @@ public class UserServiceImpl implements IUserService {
     @Resource
     UserMapper userMapper;
 
+    /**
+     * 用户列表
+     *
+     * @author fzr
+     * @param pageParam (分页参数)
+     * @param params (搜索参数)
+     * @return PageResult<UserVo>
+     */
     @Override
     public PageResult<UserVo> list(PageParam pageParam, Map<String, String> params) {
         Integer pageNo   = pageParam.getPageNo();
@@ -67,6 +76,8 @@ public class UserServiceImpl implements IUserService {
             UserVo vo = new UserVo();
             BeanUtils.copyProperties(user, vo);
 
+            vo.setSex(user.getSex());
+            vo.setChannel(ClientEnum.getMsgByCode(user.getChannel()));
             vo.setAvatar(UrlUtil.toAbsoluteUrl(user.getAvatar()));
             vo.setLastLoginTime(TimeUtil.timestampToDate(user.getLastLoginTime()));
             vo.setCreateTime(TimeUtil.timestampToDate(user.getCreateTime()));
@@ -109,6 +120,8 @@ public class UserServiceImpl implements IUserService {
         UserVo vo = new UserVo();
         BeanUtils.copyProperties(user, vo);
 
+        vo.setSex(user.getSex());
+        vo.setChannel(ClientEnum.getMsgByCode(user.getChannel()));
         vo.setAvatar(UrlUtil.toAbsoluteUrl(user.getAvatar()));
         vo.setLastLoginTime(TimeUtil.timestampToDate(user.getLastLoginTime()));
         vo.setCreateTime(TimeUtil.timestampToDate(user.getCreateTime()));
