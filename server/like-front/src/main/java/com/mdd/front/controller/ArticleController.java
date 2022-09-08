@@ -62,7 +62,8 @@ public class ArticleController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        ArticleDetailVo vo = iArticleService.detail(id);
+        Integer userId = LikeFrontThreadLocal.getUserId();
+        ArticleDetailVo vo = iArticleService.detail(id, userId);
         return AjaxResult.success(vo);
     }
 

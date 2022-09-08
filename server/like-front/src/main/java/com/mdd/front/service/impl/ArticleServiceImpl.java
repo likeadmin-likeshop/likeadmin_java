@@ -134,10 +134,11 @@ public class ArticleServiceImpl implements IArticleService {
      *
      * @author fzr
      * @param id 文章主键
+     * @param userId 用户ID
      * @return ArticleDetailVo
      */
     @Override
-    public ArticleDetailVo detail(Integer id) {
+    public ArticleDetailVo detail(Integer id, Integer userId) {
         Article article = articleMapper.selectOne(new QueryWrapper<Article>()
                 .select("id,title,image,intro,summary,visit,author,content,create_time")
                 .eq("id", id)
@@ -147,8 +148,15 @@ public class ArticleServiceImpl implements IArticleService {
 
         Assert.notNull(article, "数据不存在!");
 
+        ArticleCollect articleCollect = articleCollectMapper.selectOne(new QueryWrapper<ArticleCollect>()
+                .eq("user_id", userId)
+                .eq("article_id", article.getId())
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
         ArticleDetailVo vo = new ArticleDetailVo();
         BeanUtils.copyProperties(article, vo);
+        vo.setCollect(articleCollect != null);
         vo.setImage(UrlUtil.toAbsoluteUrl(article.getImage()));
         vo.setCreateTime(TimeUtil.timestampToDate(article.getCreateTime()));
         return vo;

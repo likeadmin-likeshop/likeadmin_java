@@ -16,6 +16,7 @@ public class ArticleDetailVo implements Serializable {
     private String summary;
     private Integer visit;
     private String author;
+    private Boolean collect;
     private String content;
     private String createTime;
 

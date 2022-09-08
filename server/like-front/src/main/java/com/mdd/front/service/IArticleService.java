@@ -38,9 +38,10 @@ public interface IArticleService {
      *
      * @author fzr
      * @param id 文章主键
+     * @param userId 用户ID
      * @return ArticleDetailVo
      */
-    ArticleDetailVo detail(Integer id);
+    ArticleDetailVo detail(Integer id, Integer userId);
 
     /**
      * 文章收藏
