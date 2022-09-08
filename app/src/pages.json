@@ -53,7 +53,13 @@
             "style": {
                 "navigationBarTitleText": "我的收藏"
             }
-        }
+        },
+		{
+		    "path": "pages/as_us/as_us",
+		    "style": {
+		        "navigationBarTitleText": "关于我们"
+		    }
+		}
     ],
     "globalStyle": {
         "navigationBarTextStyle": "black",
