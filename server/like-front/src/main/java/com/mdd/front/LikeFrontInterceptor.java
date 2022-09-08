@@ -47,6 +47,7 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
 
         // 免登录接口
         String token = request.getHeader("token");
+        token = FrontConfig.frontendTokenKey + token;
         List<String> notLoginUri = Arrays.asList(FrontConfig.notLoginUri);
         if (notLoginUri.contains(request.getRequestURI())) {
             if (StringUtil.isNotEmpty(token)) {
@@ -60,7 +61,6 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
         }
 
         // Token是否为空
-
         if (StringUtils.isBlank(token)) {
             AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_EMPTY.getCode(), HttpEnum.TOKEN_EMPTY.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
@@ -68,7 +68,6 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
         }
 
         // Token是否过期
-        token = FrontConfig.frontendTokenKey + token;
         if (!RedisUtil.exists(token)) {
             AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
