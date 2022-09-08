@@ -136,9 +136,8 @@ public class IndexServiceImpl implements IIndexService {
         // 网址信息
         Map<String, Object> websiteMap = new LinkedHashMap<>();
         Map<String, String> websiteConfig = ConfigUtil.get("website");
-        websiteMap.put("name", websiteConfig.getOrDefault("name", "LikeAdmin"));
-        websiteMap.put("logo", UrlUtil.toAbsoluteUrl(websiteConfig.getOrDefault("logo", "")));
-        websiteMap.put("favicon", UrlUtil.toAbsoluteUrl(websiteConfig.getOrDefault("favicon", "")));
+        websiteMap.put("name", websiteConfig.getOrDefault("shopName", "LikeAdmin"));
+        websiteMap.put("logo", UrlUtil.toAbsoluteUrl(websiteConfig.getOrDefault("shopLogo", "")));
 
         // 响应数据
         response.put("domain", UrlUtil.domain());

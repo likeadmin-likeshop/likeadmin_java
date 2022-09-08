@@ -29,6 +29,10 @@ public class SettingWebsiteServiceImpl implements ISettingWebsiteService {
         map.put("logo", UrlUtil.toAbsoluteUrl(config.getOrDefault("logo", "")));
         map.put("favicon", UrlUtil.toAbsoluteUrl(config.getOrDefault("favicon", "")));
         map.put("backdrop", UrlUtil.toAbsoluteUrl(config.getOrDefault("backdrop", "")));
+
+        map.put("shopName", config.getOrDefault("shopName", ""));
+        map.put("shopLogo",  UrlUtil.toAbsoluteUrl(config.getOrDefault("shopLogo", "")));
+
         return map;
     }
 
@@ -44,6 +48,9 @@ public class SettingWebsiteServiceImpl implements ISettingWebsiteService {
         ConfigUtil.set("website", "logo", UrlUtil.toRelativeUrl(params.getOrDefault("logo", "")));
         ConfigUtil.set("website", "favicon", UrlUtil.toRelativeUrl(params.getOrDefault("favicon", "")));
         ConfigUtil.set("website", "backdrop", UrlUtil.toRelativeUrl(params.getOrDefault("backdrop", "")));
+
+        ConfigUtil.set("website", "shopName", params.getOrDefault("shopName", ""));
+        ConfigUtil.set("website", "shopLogo", UrlUtil.toRelativeUrl(params.getOrDefault("shopLogo", "")));
     }
 
 }
