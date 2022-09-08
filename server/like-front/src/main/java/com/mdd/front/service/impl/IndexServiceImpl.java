@@ -2,6 +2,7 @@ package com.mdd.front.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.decorate.DecoratePage;
 import com.mdd.common.entity.decorate.DecorateTabbar;
@@ -140,6 +141,7 @@ public class IndexServiceImpl implements IIndexService {
         websiteMap.put("logo", UrlUtil.toAbsoluteUrl(websiteConfig.getOrDefault("shopLogo", "")));
 
         // 响应数据
+        response.put("version", GlobalConfig.version);
         response.put("domain", UrlUtil.domain());
         response.put("style", ToolsUtil.jsonToMap(tabbarStyle));
         response.put("tabbar", tabs);
