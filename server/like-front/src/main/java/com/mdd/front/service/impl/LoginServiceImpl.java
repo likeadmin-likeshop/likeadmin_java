@@ -131,14 +131,16 @@ public class LoginServiceImpl implements ILoginService {
                 userMapper.insert(model);
                 userId = model.getId();
 
-                UserAuth auth = new UserAuth();
-                auth.setUserId(model.getId());
-                auth.setOpenid(openId);
-                auth.setUnionid(unionId);
-                auth.setClient(client);
-                auth.setCreateTime(System.currentTimeMillis() / 1000);
-                auth.setUpdateTime(System.currentTimeMillis() / 1000);
-                userAuthMapper.insert(auth);
+                if (StringUtil.isNull(userAuth)) {
+                    UserAuth auth = new UserAuth();
+                    auth.setUserId(model.getId());
+                    auth.setOpenid(openId);
+                    auth.setUnionid(unionId);
+                    auth.setClient(client);
+                    auth.setCreateTime(System.currentTimeMillis() / 1000);
+                    auth.setUpdateTime(System.currentTimeMillis() / 1000);
+                    userAuthMapper.insert(auth);
+                }
             } else {
                 // 更新微信标识
                 userId = user.getId();
@@ -161,7 +163,7 @@ public class LoginServiceImpl implements ILoginService {
             }
 
             String token = ToolsUtil.makeToken();
-            RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), 7200);
+            RedisUtil.set(FrontConfig.frontendTokenKey+token, userId, 7200);
 
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("id", userId);

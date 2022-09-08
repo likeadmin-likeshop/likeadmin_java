@@ -35,7 +35,7 @@ public class GlobalException {
             System.out.println(e.getMessage());
         }
         log.error("系统异常 {}", e.getMessage());
-        return AjaxResult.failed(HttpEnum.SYSTEM_ERROR.getCode(), HttpEnum.SYSTEM_ERROR.getMsg());
+        return AjaxResult.failed(HttpEnum.SYSTEM_ERROR.getCode(), e.getMessage());
     }
 
     /**

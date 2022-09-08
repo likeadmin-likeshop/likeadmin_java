@@ -115,12 +115,12 @@ public class UserServiceImpl implements IUserService {
         wxMaService.setWxMaConfig(wxConfig);
 
         try {
-            String sessionKey = "";
-            String encryptedData = params.get("encryptedData");
-            String ivStr = params.get("iv");
+//            String sessionKey = "";
+//            String encryptedData = params.get("encryptedData");
+//            String ivStr = params.get("iv");
             WxMaPhoneNumberInfo wxMaPhoneNumberInfo = wxMaService.getUserService()
-                    .getNewPhoneNoInfo("093bd81w3n9ocZ2KZu2w3XBZ034bd81S");
-
+                    .getNewPhoneNoInfo("0330FG000I3kwO1Ui81000ZRkr00FG0Y");
+            System.out.println(wxMaPhoneNumberInfo);
 
         } catch (WxErrorException e) {
             System.out.println(e.getError());
