@@ -22,7 +22,7 @@
                             >
                                 <del-wrap @close="deleteImg(index)">
                                     <file-item
-                                        :uri="element"
+                                        :uri="excludeDomain ? getImageUrl(element) : element"
                                         :file-size="size"
                                         :type="type"
                                     ></file-item>
@@ -82,6 +82,7 @@ import Popup from '@/components/popup/index.vue'
 import FileItem from './file.vue'
 import Material from './index.vue'
 import Preview from './preview.vue'
+import useAppStore from '@/stores/modules/app'
 export default defineComponent({
     components: {
         Popup,
@@ -128,6 +129,11 @@ export default defineComponent({
         uploadClass: {
             type: String,
             default: ''
+        },
+        //选择的url排出域名
+        excludeDomain: {
+            type: Boolean,
+            default: false
         }
     },
 
@@ -142,6 +148,7 @@ export default defineComponent({
         const isAdd = ref(true)
         const currentIndex = ref(-1)
         const { disabled, limit, modelValue } = toRefs(props)
+        const { getImageUrl } = useAppStore()
         const tipsText = computed(() => {
             switch (props.type) {
                 case 'image':
@@ -164,7 +171,9 @@ export default defineComponent({
             return limit.value - fileList.value.length
         })
         const handleConfirm = () => {
-            const selectUri = select.value.map((item) => item.uri)
+            const selectUri = select.value.map((item) =>
+                props.excludeDomain ? item.path : item.uri
+            )
             if (!isAdd.value) {
                 fileList.value.splice(currentIndex.value, 1, selectUri.shift())
             } else {
@@ -234,7 +243,8 @@ export default defineComponent({
             previewUrl,
             showPreview,
             handlePreview,
-            handleClose
+            handleClose,
+            getImageUrl
         }
     }
 })

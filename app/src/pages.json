@@ -29,6 +29,12 @@
             "style": {
                 "navigationBarTitleText": "注册"
             }
+        },
+        {
+            "path": "pages/customer_service/customer_service",
+            "style": {
+                "navigationBarTitleText": "联系客服"
+            }
         }
     ],
     "globalStyle": {

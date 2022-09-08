@@ -49,10 +49,10 @@
                 <el-table-column label="ID" prop="id" min-width="80" />
                 <el-table-column label="封面" min-width="100">
                     <template #default="{ row }">
-                        <image-contain
+                        <el-image
+                            v-if="row.image"
                             :src="row.image"
-                            :width="60"
-                            height="45"
+                            class="w-[60px] h-[45px]"
                             :preview-src-list="[row.image]"
                         />
                     </template>

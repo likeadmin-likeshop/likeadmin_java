@@ -12,12 +12,5 @@
     height: 115px;
     background-position: bottom;
     background-size: 100% auto;
-    .search-con {
-        height: 100%;
-        height: 36px;
-        border-radius: 36px;
-        background: #f4f4f4;
-        color: #999999;
-    }
 }
 </style>

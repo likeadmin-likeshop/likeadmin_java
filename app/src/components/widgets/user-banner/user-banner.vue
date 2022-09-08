@@ -1,6 +1,6 @@
 <template>
     <view
-        class="banner h-[340rpx] bg-white translate-y-0"
+        class="banner h-[200rpx] mx-[20rpx] mt-[20rpx] translate-y-0"
         v-if="content.data.length && content.enabled"
     >
         <swiper
@@ -15,6 +15,7 @@
                     width="100%"
                     height="100%"
                     :src="getImageUrl(item.image)"
+                    :border-radius="14"
                 />
             </swiper-item>
         </swiper>

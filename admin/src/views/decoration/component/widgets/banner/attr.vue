@@ -9,7 +9,7 @@
             </el-form-item>
             <el-form-item label="图片设置">
                 <div class="flex-1">
-                    <div class="form-tips">最多添加5张，建议图片尺寸：750px*400px</div>
+                    <div class="form-tips">最多添加5张，建议图片尺寸：750px*240px</div>
                     <del-wrap
                         v-for="(item, index) in content.data"
                         :key="index"
@@ -17,7 +17,11 @@
                         class="max-w-[400px]"
                     >
                         <div class="bg-fill-light flex items-center w-full p-4 mt-4">
-                            <material-picker v-model="item.image" upload-class="bg-body" />
+                            <material-picker
+                                v-model="item.image"
+                                upload-class="bg-body"
+                                exclude-domain
+                            />
                             <div class="ml-3 flex-1">
                                 <el-form-item label="图片名称">
                                     <el-input v-model="item.name" placeholder="请输入名称" />
