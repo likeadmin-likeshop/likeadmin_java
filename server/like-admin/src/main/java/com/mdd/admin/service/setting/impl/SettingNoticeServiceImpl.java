@@ -42,7 +42,6 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
         queryWrapper.orderByAsc("id");
 
         List<NoticeSetting> noticeSettings = noticeSettingMapper.selectList(queryWrapper);
-        System.out.println(noticeSettings);
         List<NoticeListVo> list = new LinkedList<>();
         for (NoticeSetting n : noticeSettings) {
             NoticeListVo vo = new NoticeListVo();
