@@ -107,10 +107,10 @@ public class ArticleController {
      */
     @PostMapping("/cancelCollect")
     public Object cancelCollect(@RequestBody Map<String, String> params) {
-        Assert.notNull(params.get("id"), "id参数缺失");
-        Integer id = Integer.parseInt(params.get("id"));
+        Assert.notNull(params.get("articleId"), "id参数缺失");
+        Integer id = Integer.parseInt(params.get("articleId"));
         Integer userId = LikeFrontThreadLocal.getUserId();
-        iArticleService.cancelCollect(id, userId);
+        iArticleService.cancelCollect(articleId, userId);
         return AjaxResult.success();
     }
 

@@ -66,9 +66,9 @@ public interface IArticleService {
      * 取消收藏
      *
      * @author fzr
-     * @param id 主键
+     * @param articleId 主键
      * @param userId 用户ID
      */
-    void cancelCollect(Integer id, Integer userId);
+    void cancelCollect(Integer articleId, Integer userId);
 
 }
