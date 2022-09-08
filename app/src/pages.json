@@ -59,6 +59,12 @@
 		    "style": {
 		        "navigationBarTitleText": "关于我们"
 		    }
+		},
+		{
+		    "path": "pages/agreement/agreement",
+		    "style": {
+		        "navigationBarTitleText": "协议"
+		    }
 		}
     ],
     "globalStyle": {
