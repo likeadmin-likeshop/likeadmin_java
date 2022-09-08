@@ -86,6 +86,7 @@ export function findFirstValidRoute(routes: RouteRecordRaw[]): string | undefine
 }
 
 export function getRoutePath(perms: string) {
+    console.log(router.getRoutes())
     console.log(router.getRoutes().find((item) => item.meta?.perms == perms)?.path)
     return router.getRoutes().find((item) => item.meta?.perms == perms)?.path || ''
 }

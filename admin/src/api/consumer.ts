@@ -9,3 +9,8 @@ export function getUserList(params: any) {
 export function getUserDetail(params: any) {
     return request.get({ url: '/user/detail', params })
 }
+
+// 用户编辑
+export function userEdit(params: any) {
+    return request.post({ url: '/user/edit', params })
+}

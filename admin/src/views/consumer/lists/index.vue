@@ -47,10 +47,10 @@
                 <el-table-column label="注册时间" prop="createTime" min-width="120" />
                 <el-table-column label="操作" width="120" fixed="right">
                     <template #default="{ row }">
-                        <el-button v-perms="['consumer:lists:detail']" type="primary" link>
+                        <el-button v-perms="['user:detail']" type="primary" link>
                             <router-link
                                 :to="{
-                                    path: getRoutePath('consumer:lists:detail'),
+                                    path: getRoutePath('user:detail'),
                                     query: {
                                         id: row.id
                                     }
