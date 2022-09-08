@@ -64,6 +64,7 @@ public class LoginServiceImpl implements ILoginService {
         user.setUsername(regParam.getUsername());
         user.setPassword(pwd);
         user.setSalt(salt);
+        user.setAvatar("/api/static/default_avatar.png");
         user.setChannel(regParam.getClient());
         user.setCreateTime(System.currentTimeMillis() / 1000);
         user.setUpdateTime(System.currentTimeMillis() / 1000);
@@ -82,8 +83,8 @@ public class LoginServiceImpl implements ILoginService {
     public Map<String, Object> mnpLogin(Map<String, String> params) {
         Assert.notNull(params.get("code"), "code参数缺失!");
         String code      = params.get("code");
-        String avatarUrl = params.getOrDefault("avatarUrl", "");
-        String nickName  = params.getOrDefault("nickName", "");
+        String avatarUrl = params.getOrDefault("avatarUrl", "/api/static/default_avatar.png");
+        String nickName  = params.getOrDefault("nickName", "微信用户");
         String gender    = params.getOrDefault("gender", "0");
         Integer client   = Integer.parseInt(params.getOrDefault("client", "1"));
 
