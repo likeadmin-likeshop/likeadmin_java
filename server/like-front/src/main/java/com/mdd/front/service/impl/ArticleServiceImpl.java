@@ -88,6 +88,8 @@ public class ArticleServiceImpl implements IArticleService {
 
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id,title,image,intro,visit,create_time");
+        queryWrapper.eq("is_delete", 0);
+        queryWrapper.eq("is_show", 1);
         if (cid > 0) {
             queryWrapper.eq("cid", cid);
         }
