@@ -47,7 +47,13 @@
 		    "style": {
 		        "navigationBarTitleText": "个人设置"
 		    }
-		}
+		},
+        {
+            "path": "pages/collection/collection",
+            "style": {
+                "navigationBarTitleText": "我的收藏"
+            }
+        }
     ],
     "globalStyle": {
         "navigationBarTextStyle": "black",

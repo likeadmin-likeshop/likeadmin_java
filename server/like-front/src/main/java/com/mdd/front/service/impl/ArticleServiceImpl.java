@@ -230,14 +230,14 @@ public class ArticleServiceImpl implements IArticleService {
      * 取消收藏
      *
      * @author fzr
-     * @param id 主键
+     * @param articleId 文章ID
      * @param userId 用户ID
      */
     @Override
-    public void cancelCollect(Integer id, Integer userId) {
+    public void cancelCollect(Integer articleId, Integer userId) {
         ArticleCollect articleCollect = articleCollectMapper.selectOne(
                 new QueryWrapper<ArticleCollect>()
-                        .eq("id", id)
+                        .eq("article_id", articleId)
                         .eq("user_id", userId)
                         .eq("is_delete", 0)
                         .last("limit 1"));

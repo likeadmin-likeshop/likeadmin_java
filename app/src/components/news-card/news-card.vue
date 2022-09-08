@@ -1,5 +1,5 @@
 <template>
-	<navigator :url="`/pages/news_detail/news_detail?id=${item.id}`">
+	<navigator :url="`/pages/news_detail/news_detail?id=${ newsId }`">
 		<view class="news-card flex bg-white px-[20rpx] py-[32rpx]">
 			<view class="mr-[20rpx]" v-if="item.image">
 				<u-image :src="item.image" width="240" height="180"></u-image>
@@ -24,9 +24,11 @@
 	import { ref } from 'vue';
 	
 	const props = withDefaults(defineProps < {
-		item: any
+		item: any,
+		newsId: number
 	} > (), {
-		item: {}
+		item: {},
+		newsId: ''
 	})
 </script>
 
