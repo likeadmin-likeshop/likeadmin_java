@@ -1,6 +1,7 @@
 package com.mdd.admin.service.user;
 
 import com.mdd.admin.validate.common.PageParam;
+import com.mdd.admin.validate.user.UserInfoParam;
 import com.mdd.admin.vo.user.UserVo;
 import com.mdd.common.core.PageResult;
 
@@ -29,5 +30,13 @@ public interface IUserService {
      * @return UserVo
      */
     UserVo detail(Integer id);
+
+    /**
+     * 用户编辑
+     *
+     * @author fzr
+     * @param userInfoParam 参数
+     */
+    void edit(UserInfoParam userInfoParam);
 
 }

@@ -2,15 +2,13 @@ package com.mdd.admin.controller.user;
 
 import com.mdd.admin.service.user.IUserService;
 import com.mdd.admin.validate.common.PageParam;
+import com.mdd.admin.validate.user.UserInfoParam;
 import com.mdd.admin.vo.user.UserVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -51,6 +49,19 @@ public class UserController {
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         UserVo vo = iUserService.detail(id);
         return AjaxResult.success(vo);
+    }
+
+    /**
+     * 用户编辑
+     *
+     * @author fzr
+     * @param userInfoParam 用户参数
+     * @return Object
+     */
+    @PostMapping("/edit")
+    public Object edit(@Validated @RequestBody UserInfoParam userInfoParam) {
+        iUserService.edit(userInfoParam);
+        return AjaxResult.success();
     }
 
 }
