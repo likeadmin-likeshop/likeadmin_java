@@ -42,6 +42,12 @@
                 "navigationBarTitleText": "详情"
             }
         },
+		{
+		    "path": "pages/user_set/user_set",
+		    "style": {
+		        "navigationBarTitleText": "个人设置"
+		    }
+		}
     ],
     "globalStyle": {
         "navigationBarTextStyle": "black",
