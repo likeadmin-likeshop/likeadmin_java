@@ -10,6 +10,7 @@ import com.mdd.common.entity.system.SystemConfig;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
 import com.mdd.common.enums.ClientEnum;
+import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.system.SystemConfigMapper;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
@@ -24,6 +25,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -104,9 +106,13 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 微信手机号
+     *
+     * @author fzr
+     * @param code 获取手机号的Code
+     * @return Map<String, Object>
      */
     @Override
-    public void mnpMobile(Map<String, String> params) {
+    public Map<String, Object> mnpMobile(String code) {
         Map<String, String> config = ConfigUtil.get("mp_channel");
         WxMaService wxMaService = new WxMaServiceImpl();
         WxMaDefaultConfigImpl wxConfig = new WxMaDefaultConfigImpl();
@@ -115,17 +121,15 @@ public class UserServiceImpl implements IUserService {
         wxMaService.setWxMaConfig(wxConfig);
 
         try {
-//            String sessionKey = "";
-//            String encryptedData = params.get("encryptedData");
-//            String ivStr = params.get("iv");
-            WxMaPhoneNumberInfo wxMaPhoneNumberInfo = wxMaService.getUserService()
-                    .getNewPhoneNoInfo("0330FG000I3kwO1Ui81000ZRkr00FG0Y");
-            System.out.println(wxMaPhoneNumberInfo);
+            WxMaPhoneNumberInfo wxMaPhoneNumberInfo = wxMaService.getUserService().getNewPhoneNoInfo(code);
 
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("countryCode", wxMaPhoneNumberInfo.getCountryCode());
+            response.put("phoneNumber", wxMaPhoneNumberInfo.getPhoneNumber());
+            return response;
         } catch (WxErrorException e) {
-            System.out.println(e.getError());
+            throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
-
     }
 
 }

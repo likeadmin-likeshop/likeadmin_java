@@ -28,6 +28,13 @@ public interface IUserService {
      */
     UserInfoVo info(Integer userId);
 
-    void mnpMobile(Map<String, String> params);
+    /**
+     * 微信手机
+     *
+     * @author fzr
+     * @param code 获取手机号的Code
+     * @return Map<String, Object>
+     */
+    Map<String, Object> mnpMobile(String code);
 
 }

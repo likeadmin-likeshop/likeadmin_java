@@ -1,5 +1,6 @@
 package com.mdd.front.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.utils.ConfigUtil;
 import com.mdd.front.LikeFrontThreadLocal;
@@ -61,8 +62,9 @@ public class UserController {
      */
     @PostMapping("/mnpMobile")
     public Object mnpMobile(@RequestBody Map<String, String> params) {
-        iUserService.mnpMobile(params);
-        return AjaxResult.success();
+        Assert.notNull(params.get("code"), "code参数缺失");
+        Map<String, Object> map = iUserService.mnpMobile(params.get("code").trim());
+        return AjaxResult.success(map);
     }
 
 }
