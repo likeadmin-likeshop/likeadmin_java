@@ -15,6 +15,7 @@ import com.mdd.common.mapper.system.SystemConfigMapper;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.utils.ConfigUtil;
+import com.mdd.common.utils.StringUtil;
 import com.mdd.common.utils.TimeUtil;
 import com.mdd.common.utils.UrlUtil;
 import com.mdd.front.service.IUserService;
@@ -102,6 +103,65 @@ public class UserServiceImpl implements IUserService {
         }
 
         return vo;
+    }
+
+    /**
+     * 编辑信息
+     *
+     * @author fzr
+     * @param params 参数
+     * @param userId 用户ID
+     */
+    @Override
+    public void edit(Map<String, String> params, Integer userId) {
+        String field = params.getOrDefault("field", "").trim();
+        String value =  params.getOrDefault("value", "").trim();
+
+        switch (field) {
+            case "avatar":
+                User avatarUser = new User();
+                avatarUser.setId(userId);
+                avatarUser.setAvatar(UrlUtil.toRelativeUrl(value));
+                avatarUser.setUpdateTime(System.currentTimeMillis() / 1000);
+                userMapper.updateById(avatarUser);
+                break;
+            case "username":
+                User usernameUser = userMapper.selectOne(new QueryWrapper<User>()
+                        .select("id,username")
+                        .eq("username", value)
+                        .eq("is_delete", 0)
+                        .last("limit 1"));
+
+                if (StringUtil.isNotNull(usernameUser) && !usernameUser.getId().equals(userId)) {
+                    throw new OperateException("账号已被使用!");
+                }
+
+                if (StringUtil.isNotNull(usernameUser) && usernameUser.getUsername().equals(value)) {
+                    throw new OperateException("新账号与旧账号一致,修改失败!");
+                }
+
+                usernameUser.setId(userId);
+                usernameUser.setUsername(value);
+                usernameUser.setUpdateTime(System.currentTimeMillis() / 1000);
+                userMapper.updateById(usernameUser);
+                break;
+            case "nickname":
+                User nicknameUser = new User();
+                nicknameUser.setId(userId);
+                nicknameUser.setNickname(value);
+                nicknameUser.setUpdateTime(System.currentTimeMillis() / 1000);
+                userMapper.updateById(nicknameUser);
+                break;
+            case "sex":
+                User sexUser = new User();
+                sexUser.setId(userId);
+                sexUser.setSex(Integer.parseInt(value));
+                sexUser.setUpdateTime(System.currentTimeMillis() / 1000);
+                userMapper.updateById(sexUser);
+                break;
+            default:
+                throw new OperateException("不被支持的类型");
+        }
     }
 
     /**

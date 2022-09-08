@@ -44,6 +44,22 @@ public class UserController {
     }
 
     /**
+     * 编辑信息
+     *
+     * @author fzr
+     * @param params 参数
+     * @return Object
+     */
+    @PostMapping("/edit")
+    public Object edit(@RequestBody Map<String, String> params) {
+        Assert.notNull(params.get("field"), "field参数缺失");
+        Assert.notNull(params.get("value"), "value参数缺失");
+        Integer userId = LikeFrontThreadLocal.getUserId();
+        iUserService.edit(params, userId);
+        return AjaxResult.success();
+    }
+
+    /**
      * 绑定手机号
      *
      * @author fzr

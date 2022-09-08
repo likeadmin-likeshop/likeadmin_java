@@ -29,6 +29,15 @@ public interface IUserService {
     UserInfoVo info(Integer userId);
 
     /**
+     * 编辑信息
+     *
+     * @author fzr
+     * @param params 参数
+     * @param userId 用户ID
+     */
+    void edit(Map<String, String> params, Integer userId);
+
+    /**
      * 微信手机
      *
      * @author fzr
