@@ -25,7 +25,7 @@ public class RegParam implements Serializable {
     @NotEmpty(message = "账号不能为空")
     @Length(min = 3, max = 12, message = "账号必须在3~12个字符内")
     @Pattern(message = "账号只允许是字母和数字", regexp="^[A-Za-z0-9]+$")
-    @Pattern(message = "账号应该为3-12位字母、数字组合", regexp="^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{3,12}$")
+    @Pattern(message = "账号应该为3-12位数字、字母组合", regexp="^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{3,12}$")
     private String username;
 
     @NotNull(message = "password参数缺失")

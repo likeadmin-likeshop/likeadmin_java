@@ -65,6 +65,24 @@ public class UserController {
     }
 
     /**
+     * 修改密码
+     *
+     * @author fzr
+     * @param params 参数
+     * @return Object
+     */
+    @PostMapping("/changePwd")
+    public Object changePwd(@RequestBody Map<String, String> params) {
+        Assert.notNull(params.get("password"), "password参数缺失");
+        if(!Pattern.matches("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$", params.get("password"))){
+            throw new OperateException("密码必须是6-20字母+数字组合!");
+        }
+        Integer userId = LikeFrontThreadLocal.getUserId();
+        iUserService.changePwd(params.get("password"), userId);
+        return AjaxResult.success();
+    }
+
+    /**
      * 绑定手机号
      *
      * @author fzr

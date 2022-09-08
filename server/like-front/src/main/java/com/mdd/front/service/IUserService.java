@@ -38,6 +38,15 @@ public interface IUserService {
     void edit(Map<String, String> params, Integer userId);
 
     /**
+     * 修改密码
+     *
+     * @author fzr
+     * @param password 新密码
+     * @param userId 用户ID
+     */
+    void changePwd(String password, Integer userId);
+
+    /**
      * 绑定手机
      *
      * @author fzr

@@ -164,6 +164,25 @@ public class UserServiceImpl implements IUserService {
     }
 
     /**
+     * 修改密码
+     *
+     * @author fzr
+     * @param password 新密码
+     * @param userId 用户ID
+     */
+    @Override
+    public void changePwd(String password, Integer userId) {
+        String salt = ToolsUtil.randomString(5);
+        String pwd  = ToolsUtil.makeMd5(password.trim()+salt);
+
+        User user = new User();
+        user.setPassword(pwd);
+        user.setSalt(salt);
+        user.setUpdateTime(System.currentTimeMillis() / 1000);
+        userMapper.updateById(user);
+    }
+
+    /**
      * 绑定手机
      *
      * @author fzr
