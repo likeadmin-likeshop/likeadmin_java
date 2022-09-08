@@ -32,11 +32,11 @@ const requestHooks: RequestHooks = {
         if (!isTransformResponse) {
             return response.data
         }
+        console.log(response.data)
         const { code, data, msg } = response.data as any
         switch (code) {
             case RequestCodeEnum.SUCCESS:
                 return data
-
             case RequestCodeEnum.PARAMS_TYPE_ERROR:
             case RequestCodeEnum.PARAMS_VALID_ERROR:
             case RequestCodeEnum.REQUEST_METHOD_ERROR:
@@ -47,7 +47,8 @@ const requestHooks: RequestHooks = {
             case RequestCodeEnum.NO_PERMISSTION:
             case RequestCodeEnum.FAILED:
             case RequestCodeEnum.SYSTEM_ERROR:
-                return Promise.reject(data)
+                uni.$u.toast(msg)
+                return Promise.reject(msg)
 
             case RequestCodeEnum.TOKEN_INVALID:
             case RequestCodeEnum.TOKEN_EMPTY:
@@ -63,13 +64,13 @@ const defaultOptions: HttpRequestOptions = {
     requestOptions: {
         timeout: 10 * 1000
     },
-    baseUrl: 'https://likeadmin-java.yixiangonline.com',
+    baseUrl: import.meta.env.VITE_APP_BASE_URL,
     //是否返回默认的响应
     isReturnDefaultResponse: false,
     // 需要对返回数据进行处理
     isTransformResponse: true,
     // 接口拼接地址
-    urlPrefix: '/api',
+    urlPrefix: 'api',
     // 忽略重复请求
     ignoreCancel: false,
     // 是否携带token

@@ -1,11 +1,22 @@
 <template>
-    <view class="content">
-        <navigator url="/pages/login/login" hover-class="navigator-hover">
-            <button type="default">跳转到新页面</button>
-        </navigator>
+    <view class="index">
+        <decoration :pages="state.pages" />
+        <view class="article"> </view>
     </view>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { getIndex } from '@/api/shop'
+import { reactive } from 'vue'
+const state = reactive({
+    pages: []
+})
+const getData = async () => {
+    const data = await getIndex()
+    state.pages = JSON.parse(data.pages)
+    console.log(state.pages)
+}
+getData()
+</script>
 
 <style></style>

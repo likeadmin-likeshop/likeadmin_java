@@ -157,6 +157,7 @@ const setData = async () => {
     getData()
     feedback.msgSuccess('保存成功')
 }
+getData()
 </script>
 <style lang="scss" scoped>
 .decoration-tabbar {
