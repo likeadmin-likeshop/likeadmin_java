@@ -3,6 +3,7 @@ package com.mdd.front.controller;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.AlbumEnum;
 import com.mdd.common.plugin.storage.StorageDriver;
+import com.mdd.common.utils.StringUtil;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,8 @@ public class UploadController {
      */
     @PostMapping("/image")
     public Object image(HttpServletRequest request) {
+
+        System.out.println(request.getParameter("dir"));
         MultipartFile multipartFile;
         try {
             multipartFile = ((MultipartRequest) request).getFile("file");
@@ -39,8 +42,13 @@ public class UploadController {
             return AjaxResult.failed("请选择上传图片");
         }
 
+        String folder = "image";
+        if (StringUtil.isNotEmpty(request.getParameter("dir"))) {
+            folder += "/" + request.getParameter("dir");
+        }
+
         StorageDriver storageDriver = new StorageDriver();
-        Map<String, Object> map = storageDriver.upload(multipartFile, "image", AlbumEnum.IMAGE.getCode());
+        Map<String, Object> map = storageDriver.upload(multipartFile, folder, AlbumEnum.IMAGE.getCode());
         return AjaxResult.success(map);
     }
 

@@ -121,8 +121,8 @@ public class UserServiceImpl implements IUserService {
         BeanUtils.copyProperties(user, vo);
 
         vo.setSex(user.getSex());
-        vo.setChannel(ClientEnum.getMsgByCode(user.getChannel()));
         vo.setAvatar(UrlUtil.toAbsoluteUrl(user.getAvatar()));
+        vo.setChannel(ClientEnum.getMsgByCode(user.getChannel()));
         vo.setLastLoginTime(TimeUtil.timestampToDate(user.getLastLoginTime()));
         vo.setCreateTime(TimeUtil.timestampToDate(user.getCreateTime()));
         return vo;
