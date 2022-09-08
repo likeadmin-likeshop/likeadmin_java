@@ -35,7 +35,13 @@
             "style": {
                 "navigationBarTitleText": "联系客服"
             }
-        }
+        },
+        {
+            "path": "pages/news_detail/news_detail",
+            "style": {
+                "navigationBarTitleText": "详情"
+            }
+        },
     ],
     "globalStyle": {
         "navigationBarTextStyle": "black",
