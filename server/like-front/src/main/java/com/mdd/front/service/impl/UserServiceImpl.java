@@ -6,18 +6,17 @@ import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.common.config.GlobalConfig;
+import com.mdd.common.entity.server.Sys;
 import com.mdd.common.entity.system.SystemConfig;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
 import com.mdd.common.enums.ClientEnum;
+import com.mdd.common.enums.NoticeEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.system.SystemConfigMapper;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.StringUtil;
-import com.mdd.common.utils.TimeUtil;
-import com.mdd.common.utils.UrlUtil;
+import com.mdd.common.utils.*;
 import com.mdd.front.service.IUserService;
 import com.mdd.front.vo.user.UserCenterVo;
 import com.mdd.front.vo.user.UserInfoVo;
@@ -162,6 +161,40 @@ public class UserServiceImpl implements IUserService {
             default:
                 throw new OperateException("不被支持的类型");
         }
+    }
+
+    /**
+     * 绑定手机
+     *
+     * @author fzr
+     * @param params 参数
+     * @param userId 用户ID
+     */
+    @Override
+    public void bindMobile(Map<String, String> params, Integer userId) {
+        String mobile = params.getOrDefault("mobile", "");
+        String code = params.getOrDefault("code", "").toLowerCase();
+
+        // 校验验证码
+        int typeCode = NoticeEnum.SMS_BIND_MOBILE_CODE.getCode();
+        Object smsCode = RedisUtil.get(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
+        if (StringUtil.isNull(smsCode) || !smsCode.toString().equals(code)) {
+            throw new OperateException("验证码错误!");
+        }
+
+        User user = userMapper.selectOne(new QueryWrapper<User>()
+                .select("id,username,mobile")
+                .eq("mobile", mobile)
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        if (StringUtil.isNotNull(user) && user.getId().equals(userId)) {
+            throw new OperateException("手机号已被其它账号绑定!");
+        }
+
+        user.setMobile(mobile);
+        user.setUpdateTime(System.currentTimeMillis() / 1000);
+        userMapper.updateById(user);
     }
 
     /**

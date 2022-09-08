@@ -66,7 +66,11 @@ public class UserController {
      * @return Object
      */
     @PostMapping("/bindMobile")
-    public Object bindMobile() {
+    public Object bindMobile(@RequestBody Map<String, String> params) {
+        Assert.notNull(params.get("mobile"), "mobile参数缺失");
+        Assert.notNull(params.get("code"), "code参数缺失");
+        Integer userId = LikeFrontThreadLocal.getUserId();
+        iUserService.bindMobile(params, userId);
         return AjaxResult.success();
     }
 

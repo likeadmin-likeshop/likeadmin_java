@@ -10,6 +10,7 @@ import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
 import com.mdd.common.enums.ClientEnum;
+import com.mdd.common.enums.NoticeEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
@@ -189,7 +190,8 @@ public class LoginServiceImpl implements ILoginService {
         String code   = params.get("code").toLowerCase();
 
         // 校验验证码
-        Object smsCode = RedisUtil.get(GlobalConfig.redisSmsCode+"101:"+mobile);
+        int typeCode = NoticeEnum.SMS_LOGIN_CODE.getCode();
+        Object smsCode = RedisUtil.get(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
         if (StringUtil.isNull(smsCode) || !smsCode.toString().equals(code)) {
             throw new OperateException("验证码错误!");
         }
@@ -266,7 +268,8 @@ public class LoginServiceImpl implements ILoginService {
         String password = params.get("password");
 
         // 校验验证码
-        Object smsCode = RedisUtil.get(GlobalConfig.redisSmsCode+"104:"+mobile);
+        int typeCode = NoticeEnum.SMS_FORGOT_PASSWORD_CODE.getCode();
+        Object smsCode = RedisUtil.get(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
         if (StringUtil.isNull(smsCode) || !smsCode.toString().equals(code)) {
             throw new OperateException("验证码错误!");
         }

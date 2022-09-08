@@ -38,6 +38,15 @@ public interface IUserService {
     void edit(Map<String, String> params, Integer userId);
 
     /**
+     * 绑定手机
+     *
+     * @author fzr
+     * @param params 参数
+     * @param userId 用户ID
+     */
+    void bindMobile(Map<String, String> params, Integer userId);
+
+    /**
      * 微信手机
      *
      * @author fzr
