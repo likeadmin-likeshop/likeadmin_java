@@ -172,11 +172,12 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public void bindMobile(Map<String, String> params, Integer userId) {
+        String type   = params.getOrDefault("type", "");
         String mobile = params.getOrDefault("mobile", "");
-        String code = params.getOrDefault("code", "").toLowerCase();
+        String code   = params.getOrDefault("code", "").toLowerCase();
 
         // 校验验证码
-        int typeCode = NoticeEnum.SMS_BIND_MOBILE_CODE.getCode();
+        int typeCode = type.equals("bind") ? NoticeEnum.SMS_BIND_MOBILE_CODE.getCode() : NoticeEnum.SMS_CHANGE_MOBILE_CODE.getCode() ;
         Object smsCode = RedisUtil.get(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
         if (StringUtil.isNull(smsCode) || !smsCode.toString().equals(code)) {
             throw new OperateException("验证码错误!");

@@ -2,7 +2,7 @@ package com.mdd.front.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.utils.ConfigUtil;
+import com.mdd.common.exception.OperateException;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
 import com.mdd.front.vo.user.UserCenterVo;
@@ -10,8 +10,13 @@ import com.mdd.front.vo.user.UserInfoVo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.regex.Pattern;
 
+/**
+ * 用户管理表
+ */
 @RestController
 @RequestMapping("api/user")
 public class UserController {
@@ -67,8 +72,15 @@ public class UserController {
      */
     @PostMapping("/bindMobile")
     public Object bindMobile(@RequestBody Map<String, String> params) {
+        Assert.notNull(params.get("type"), "type参数缺失");
         Assert.notNull(params.get("mobile"), "mobile参数缺失");
         Assert.notNull(params.get("code"), "code参数缺失");
+        boolean type = Arrays.asList("bind", "change").contains(params.get("type"));
+        Assert.isTrue(type, "type类型只能是[bind/change]");
+        if(!Pattern.matches("^[1][3,4,5,6,7,8,9][0-9]{9}$", params.get("mobile"))){
+            throw new OperateException("手机号格式不正确!");
+        }
+
         Integer userId = LikeFrontThreadLocal.getUserId();
         iUserService.bindMobile(params, userId);
         return AjaxResult.success();
