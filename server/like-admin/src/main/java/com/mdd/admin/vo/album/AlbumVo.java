@@ -15,6 +15,7 @@ public class AlbumVo implements Serializable {
     private Integer id;        // 主键
     private Integer cid;       // 所属类目
     private String name;       // 文件名称
+    private String path;       // 相对路径
     private String uri;        // 文件路径
     private String ext;        // 文件扩展
     private String size;       // 文件大小

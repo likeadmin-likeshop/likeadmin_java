@@ -10,6 +10,7 @@ import com.mdd.admin.validate.common.AlbumParam;
 import com.mdd.admin.validate.common.PageParam;
 import com.mdd.admin.vo.album.AlbumCateVo;
 import com.mdd.admin.vo.album.AlbumVo;
+import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.album.Album;
 import com.mdd.common.entity.album.AlbumCate;
@@ -70,11 +71,19 @@ public class AlbumServiceImpl implements IAlbumService {
 
         IPage<Album> iPage = albumMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
+        String engine = ConfigUtil.get("storage", "default", "local");
+        engine = engine.equals("") ? "local" : engine;
+
         List<AlbumVo> list = new ArrayList<>();
         for (Album album : iPage.getRecords()) {
             AlbumVo vo = new AlbumVo();
             BeanUtils.copyProperties(album, vo);
 
+            if (engine.equals("local")) {
+                 vo.setPath(GlobalConfig.publicPrefix + "/" + album.getUri());
+            } else {
+                vo.setPath(album.getUri());
+            }
             vo.setUri(UrlUtil.toAbsoluteUrl(album.getUri()));
             vo.setSize(ToolsUtil.storageUnit(album.getSize()));
             vo.setCreateTime(TimeUtil.timestampToDate(album.getCreateTime()));
