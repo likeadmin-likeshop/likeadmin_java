@@ -160,7 +160,6 @@ public class UserServiceImpl implements IUserService {
                         throw new OperateException("当前账号已存在!");
                     }
                 }
-
                 user.setUsername(value);
                 break;
             case "realName":
