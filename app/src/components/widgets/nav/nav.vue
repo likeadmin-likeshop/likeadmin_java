@@ -5,6 +5,7 @@
                 v-for="(item, index) in content.data"
                 :key="index"
                 class="flex flex-col items-center w-1/5 mb-[30rpx]"
+                @click="handleClick(item.link)"
             >
                 <u-image width="41px" height="41px" :src="getImageUrl(item.image)" alt="" />
                 <view class="mt-[14rpx]">{{ item.name }}</view>
@@ -15,6 +16,7 @@
 
 <script setup lang="ts">
 import { useAppStore } from '@/stores/app'
+import { navigateTo } from '@/utils/util'
 
 const props = defineProps({
     content: {
@@ -27,6 +29,9 @@ const props = defineProps({
     }
 })
 
+const handleClick = (link: any) => {
+    navigateTo(link)
+}
 const { getImageUrl } = useAppStore()
 </script>
 

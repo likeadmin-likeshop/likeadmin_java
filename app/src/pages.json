@@ -90,6 +90,9 @@
             "style": {
                 "navigationBarTitleText": "搜索"
             }
+        },
+        {
+            "path": "pages/webview/webview"
         }
     ],
     "globalStyle": {

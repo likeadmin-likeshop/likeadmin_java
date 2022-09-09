@@ -23,7 +23,7 @@ const requestHooks: RequestHooks = {
         return options
     },
     responseInterceptorsHook(response, config) {
-        const { isTransformResponse, isReturnDefaultResponse } = config
+        const { isTransformResponse, isReturnDefaultResponse, isAuth } = config
 
         //返回默认响应，当需要获取响应头及其他数据时可使用
         if (isReturnDefaultResponse) {
@@ -54,6 +54,11 @@ const requestHooks: RequestHooks = {
             case RequestCodeEnum.TOKEN_INVALID:
             case RequestCodeEnum.TOKEN_EMPTY:
                 logout()
+                if (isAuth && !getToken()) {
+                    uni.navigateTo({
+                        url: '/pages/login/login'
+                    })
+                }
                 return Promise.reject()
 
             default:
@@ -77,6 +82,7 @@ const defaultOptions: HttpRequestOptions = {
     ignoreCancel: false,
     // 是否携带token
     withToken: true,
+    isAuth: false,
     requestHooks: requestHooks
 }
 
