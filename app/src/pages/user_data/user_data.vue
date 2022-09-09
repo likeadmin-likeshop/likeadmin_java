@@ -134,10 +134,6 @@
 		onUnload
 	} from '@dcloudio/uni-app'
 	import {
-		// apiUserInfoGet,
-		// apiUserInfoSet,
-		// apiWechatMobileGet,
-		// apiHasPassword,
 		getUserInfo,
 		userEdit,
 		userBindMobile,
@@ -151,38 +147,42 @@
 	import {
 		uploadFile
 	} from '@/utils/util.ts'
-	import {
-		getWxCode
-	} from '@/utils/util'
 
-	let wxCode = ref < any | null > ('')
 	// 用户信息
 	let userInfo = ref < any | null > (null)
 	// 用户信息的枚举
 	const fieldType = ref(FieldType.NONE)
-	//显示昵称输入框
-	const showNickName = ref < boolean | null > (false)
-	//显示昵称输入框
-	const showUserName = ref < boolean | null > (false)
+	//选择性别数据
+	const sexList = ref < Array < string > | null > (['男', '女'])
+	
+	//显示昵称弹窗
+	const showNickName = ref < boolean | null >(false)
+	//显示账户弹窗
+	const showUserName = ref < boolean | null >(false)
+	//显示性别选择弹窗
+	const showPicker = ref < boolean | null >(false)
+	// 显示手机号验证码调整弹窗 非小程序才需要
+	const showMobilePop = ref < boolean | null > (false)
+	
 	//新昵称
 	const newNickname = ref < string > ('')
 	//新账号
 	const newUsername = ref < string > ('')
-	//手机号码
-	const mobile = ref < string > ('')
-	//显示性别选择
-	const showPicker = ref < boolean | null > (false)
-	//选择性别数据
-	const sexList = ref < Array < string > | null > (['男', '女'])
-	
-	//显示昵称输入框
-	const showMobilePop = ref < boolean | null > (true)
 	//新的手机号码
 	const newMobile = ref < string > ('')
+	
 	//修改手机验证码
 	const mobileCode = ref <string > ('')
 	const codeTips = ref('')
 	const uCodeRef = shallowRef()
+	
+	
+	// 获取用户信息
+	const getUser = async (): Promise < void > => {
+		userInfo.value = await getUserInfo()
+	}
+	
+	// 获取验证码显示字段
 	const codeChange = (text: string) => {
 	    codeTips.value = text
 	}
@@ -200,7 +200,7 @@
 	    }
 	}
 	
-	// 验证码修改手机号
+	// 验证码修改手机号-非微信小程序
 	const changeCodeMobile = async () => {
 		await userBindMobile({
 			type: userInfo.mobile ? 'change' : 'bind',
@@ -210,11 +210,6 @@
 		getUser()
 	}
 	
-	
-	// 获取用户信息
-	const getUser = async (): Promise < void > => {
-		userInfo.value = await getUserInfo()
-	}
 	
 	// 修改用户信息
 	const setUserInfoFun = async (value: string): Promise < void > => {
@@ -229,27 +224,8 @@
 	const uploaderAvatar = () => {
 		fieldType.value = FieldType.AVATAR
 		uni.navigateTo({
-			url: '/uni_modules/uview-ui/components/u-avatar-cropper/u-avatar-cropper?destWidth=300&rectWidth=200&fileType=jpg',
+			url: '/uni_modules/vk-uview-ui/components/u-avatar-cropper/u-avatar-cropper?destWidth=300&rectWidth=200&fileType=jpg',
 		})
-	}
-	
-	// 修改用户昵称
-	const changeNameConfirm = () => {
-		if (newNickname.value == '') return toast('昵称不能为空')
-		if (newNickname.value.length > 10) return toast('昵称长度不得超过十位数')
-		showNickName.value = false
-		fieldType.value = FieldType.NICKNAME
-		setUserInfoFun(newNickname.value)
-	}
-	
-	// 修改用户账号
-	const changeUserNameConfirm = () => {
-		if (newUsername.value == '') return toast('账号不能为空')
-		if (newUsername.value.length > 10) return toast('账号长度不得超过十位数')
-		
-		fieldType.value = FieldType.USERNAME
-		setUserInfoFun(newUsername.value)
-		showUserName.value = false
 	}
 	
 	// 显示修改用户性别弹窗
@@ -264,17 +240,35 @@
 		showPicker.value = false
 	}
 	
-	// 绑定｜｜修改用户手机号
+	// 修改用户账号
+	const changeUserNameConfirm = () => {
+		if (newUsername.value == '') return toast('账号不能为空')
+		if (newUsername.value.length > 10) return toast('账号长度不得超过十位数')
+		
+		fieldType.value = FieldType.USERNAME
+		setUserInfoFun(newUsername.value)
+		showUserName.value = false
+	}
+	
+	// 修改用户昵称
+	const changeNameConfirm = () => {
+		if (newNickname.value == '') return toast('昵称不能为空')
+		if (newNickname.value.length > 10) return toast('昵称长度不得超过十位数')
+		showNickName.value = false
+		fieldType.value = FieldType.NICKNAME
+		setUserInfoFun(newNickname.value)
+	}
+	
+	// 微信小程序 绑定｜｜修改用户手机号
 	const getPhoneNumber = async (e): Promise < void > => {
-		// wxCode.value = await getWxCode()
-		console.log('wxCode.value', wxCode.value)
 		fieldType.value = FieldType.MOBILE
 		const {
 			encryptedData,
-			iv
+			iv,
+			code,
 		} = e.detail
 		let data = {
-			code: wxCode.value,
+			code,
 			encrypted_data: encryptedData,
 			iv,
 		}
@@ -311,7 +305,6 @@
 
 	onShow(async () => {
 		getUser()
-		wxCode.value = await getWxCode()
 	})
 	
 	onUnload(() => {

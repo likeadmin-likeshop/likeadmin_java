@@ -136,12 +136,3 @@ export function uploadFile(path: any) {
         })
     })
 }
-
-export const getWxCode = (): Promise<void> => {
-    return new Promise((resolve, reject) => {
-        uni.login({
-            desc: '获取用户信息，完善用户资料',
-            success: (res: Event) => resolve(res.code)
-        })
-    })
-}
