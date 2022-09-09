@@ -3,11 +3,7 @@
  * (c) 2020 dlhandsome
  * @license MIT
  */
-(function(global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-		typeof define === 'function' && define.amd ? define(factory) :
-		(global.WeCropper = factory());
-}(this, (function() {
+
 	'use strict';
 
 	var device = void 0;
@@ -1260,6 +1256,6 @@
 	WeCropper.prototype.cutt = cut;
 	WeCropper.prototype.update = update;
 
-	return WeCropper;
+	export default WeCropper
 
-})));
+

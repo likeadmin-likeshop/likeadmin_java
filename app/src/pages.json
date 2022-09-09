@@ -93,6 +93,13 @@
         },
         {
             "path": "pages/webview/webview"
+        },
+        {
+            "path": "uni_modules/vk-uview-ui/components/u-avatar-cropper/u-avatar-cropper",
+            "style": {
+                "navigationBarTitleText": "头像裁剪",
+                "navigationBarBackgroundColor": "#000000"
+            }
         }
     ],
     "globalStyle": {
