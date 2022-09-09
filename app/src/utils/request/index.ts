@@ -54,9 +54,6 @@ const requestHooks: RequestHooks = {
             case RequestCodeEnum.TOKEN_INVALID:
             case RequestCodeEnum.TOKEN_EMPTY:
                 logout()
-                uni.navigateTo({
-                    url: '/pages/login/login'
-                })
                 return Promise.reject()
 
             default:

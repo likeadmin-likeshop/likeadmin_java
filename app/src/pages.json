@@ -52,7 +52,8 @@
             "path": "pages/collection/collection",
             "style": {
                 "navigationBarTitleText": "我的收藏"
-            }
+            },
+            "auth": true
         },
         {
             "path": "pages/search/search",

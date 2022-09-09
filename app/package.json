@@ -60,7 +60,7 @@
         "@dcloudio/vite-plugin-uni": "^3.0.0-alpha-3050520220824001",
         "@rushstack/eslint-patch": "^1.1.4",
         "@types/lodash-es": "^4.17.6",
-        "@types/node": "^18.7.13",
+        "@types/node": "^18.7.16",
         "@vue/eslint-config-prettier": "^7.0.0",
         "@vue/eslint-config-typescript": "^11.0.0",
         "autoprefixer": "^10.4.8",
