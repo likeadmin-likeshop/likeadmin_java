@@ -39,8 +39,9 @@
 </template>
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { postEdit, postAdd } from '@/api/org/post'
+import { postEdit, postAdd, postDetail } from '@/api/org/post'
 import Popup from '@/components/popup/index.vue'
+import feedback from '@/utils/feedback'
 const emit = defineEmits(['success', 'close'])
 const formRef = shallowRef<FormInstance>()
 const popupRef = shallowRef<InstanceType<typeof Popup>>()
@@ -77,6 +78,7 @@ const formRules = {
 const handleSubmit = async () => {
     await formRef.value?.validate()
     mode.value == 'edit' ? await postEdit(formData) : await postAdd(formData)
+    feedback.msgSuccess('操作成功')
     popupRef.value?.close()
     emit('success')
 }
@@ -95,12 +97,20 @@ const setFormData = (data: Record<any, any>) => {
     }
 }
 
+const getDetail = async (row: Record<string, any>) => {
+    const data = await postDetail({
+        id: row.id
+    })
+    setFormData(data)
+}
+
 const handleClose = () => {
     emit('close')
 }
 
 defineExpose({
     open,
-    setFormData
+    setFormData,
+    getDetail
 })
 </script>

@@ -6,7 +6,7 @@
     <!-- 父工程 -->
     <parent>
         <artifactId>likeadmin-java</artifactId>
-        <groupId>org.hxkj</groupId>
+        <groupId>org.mdd</groupId>
         <version>1.0.0</version>
     </parent>
 
@@ -19,7 +19,7 @@
     <dependencies>
         <!-- 公共依赖 -->
         <dependency>
-            <groupId>org.hxkj</groupId>
+            <groupId>org.mdd</groupId>
             <artifactId>like-common</artifactId>
         </dependency>
     </dependencies>

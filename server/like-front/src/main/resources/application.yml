@@ -1,15 +1,19 @@
 # 项目配置
 like:
-  upload-directory: D:\www\frame\
+  upload-directory: /www/like-admin/uploads/
 
 # 服务配置
 server:
-  port: 8083
+  port: 8084
+  servlet:
+    context-path: /
 
 # 框架配置
 spring:
   profiles:
     active: pro
+  mvc:
+    static-path-pattern: /api/static/**
   # 数据源配置
   datasource:
     url: jdbc:mysql://localhost:3306/local_frame?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
@@ -49,10 +53,12 @@ spring:
 # Mybatis-plus配置
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml # 映射文件路径
-  typeAliasesPackage: com.hxkj.**.mapper
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  typeAliasesPackage: com.mdd.**.mapper
+  #  configuration:
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
     db-config:
-      table-prefix: ls_ # 设置表前缀
+      table-prefix: la_ # 设置表前缀
+  configuration-properties:
+    prefix: la_ # 自定义表前缀标签${prefix}

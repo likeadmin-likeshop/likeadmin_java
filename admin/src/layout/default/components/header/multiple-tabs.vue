@@ -33,7 +33,7 @@ import useTabsStore, { getRouteParams } from '@/stores/modules/multipleTabs'
 const router = useRouter()
 const tabsStore = useTabsStore()
 const { route } = useWatchRoute((route) => {
-    tabsStore.addTab(route)
+    tabsStore.addTab(route, router)
 })
 
 const currentTab = computed(() => {

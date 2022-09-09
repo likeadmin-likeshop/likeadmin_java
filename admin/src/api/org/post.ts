@@ -23,3 +23,8 @@ export function postEdit(params: any) {
 export function postDelete(params: any) {
     return request.post({ url: '/system/post/del', params })
 }
+
+// 岗位详情
+export function postDetail(params: any) {
+    return request.get({ url: '/system/post/detail', params })
+}

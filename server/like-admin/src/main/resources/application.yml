@@ -51,7 +51,7 @@ spring:
 # Mybatis-plus配置
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml # 映射文件路径
-  typeAliasesPackage: com.hxkj.**.mapper
+  typeAliasesPackage: com.mdd.**.mapper
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:

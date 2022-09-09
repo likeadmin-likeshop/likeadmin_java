@@ -32,6 +32,7 @@
 
 <script setup lang="ts">
 import { getProtocol, setProtocol } from '@/api/setting/website'
+import feedback from '@/utils/feedback'
 
 const formData = ref({
     privacy: {
@@ -48,6 +49,7 @@ const getProtocolDetail = async () => {
 }
 const handelSave = async () => {
     await setProtocol(formData.value)
+    feedback.msgSuccess('操作成功')
     getProtocolDetail()
 }
 getProtocolDetail()

@@ -40,37 +40,10 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: 'setting',
+                name: Symbol(),
                 component: () => import('@/views/user/setting.vue'),
                 meta: {
                     title: '个人设置'
-                }
-            }
-        ]
-    },
-    {
-        path: '/dev_tools',
-        component: LAYOUT,
-        children: [
-            {
-                path: 'code/edit',
-                component: () => import('@/views/dev_tools/code/edit.vue'),
-                meta: {
-                    title: '编辑数据表',
-                    activeMenu: '/dev_tools/code'
-                }
-            }
-        ]
-    },
-    {
-        path: '/setting',
-        component: LAYOUT,
-        children: [
-            {
-                path: 'dict/data',
-                component: () => import('@/views/setting/dict/data/index.vue'),
-                meta: {
-                    title: '数据管理',
-                    activeMenu: '/setting/dict'
                 }
             }
         ]

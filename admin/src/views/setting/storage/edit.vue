@@ -67,6 +67,7 @@ import { storageSetup } from '@/api/setting/storage'
 import type { FormInstance } from 'element-plus'
 import Popup from '@/components/popup/index.vue'
 import { storageDetail } from '@/api/setting/storage'
+import feedback from '@/utils/feedback'
 enum StorageEnum {
     LOCAL = 'local', // 本地
     QINIU = 'qiniu', // 七牛云
@@ -155,6 +156,7 @@ const getStorageInfo = computed(() => {
 const handleSubmit = async () => {
     await formRef.value?.validate()
     await storageSetup(formData)
+    feedback.msgSuccess('操作成功')
     popupRef.value?.close()
     emit('success')
 }

@@ -50,7 +50,7 @@
 </template>
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { deptLists, deptEdit, deptAdd } from '@/api/org/department'
+import { deptLists, deptEdit, deptAdd, deptDetail } from '@/api/org/department'
 import Popup from '@/components/popup/index.vue'
 import { useDictOptions } from '@/hooks/useDictOptions'
 import feedback from '@/utils/feedback'
@@ -118,12 +118,20 @@ const setFormData = (data: Record<any, any>) => {
     }
 }
 
+const getDetail = async (row: Record<string, any>) => {
+    const data = await deptDetail({
+        id: row.id
+    })
+    setFormData(data)
+}
+
 const handleClose = () => {
     emit('close')
 }
 
 defineExpose({
     open,
-    setFormData
+    setFormData,
+    getDetail
 })
 </script>

@@ -19,3 +19,8 @@ export function deptEdit(params: any) {
 export function deptDelete(params: any) {
     return request.post({ url: '/system/dept/del', params })
 }
+
+// 部门详情
+export function deptDetail(params?: any) {
+    return request.get({ url: '/system/dept/detail', params })
+}

@@ -1,8 +1,7 @@
 package ${packageName}.common.mapper.${moduleName};
 
-import com.hxkj.common.core.basics.IBaseMapper;
-import com.hxkj.common.entity.${moduleName}.${EntityName};
-import org.apache.ibatis.annotations.Mapper;
+import com.mdd.common.core.basics.IBaseMapper;
+import com.mdd.common.entity.${moduleName}.${EntityName};
 
 /**
  * ${functionName}Mapper

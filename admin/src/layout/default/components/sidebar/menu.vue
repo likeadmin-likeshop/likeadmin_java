@@ -1,5 +1,9 @@
 <template>
-    <div class="menu flex-1 min-h-0" :class="themeClass" :style="`--aside-width: ${width}px`">
+    <div
+        class="menu flex-1 min-h-0"
+        :class="themeClass"
+        :style="isCollapsed ? '' : `--aside-width: ${width}px`"
+    >
         <el-scrollbar>
             <el-menu
                 v-bind="config"
@@ -48,7 +52,7 @@ const props = defineProps({
 defineEmits(['select'])
 
 const route = useRoute()
-const activeMenu = computed<string>(() => (route.meta?.activeMenu as string) ?? route.path)
+const activeMenu = computed<string>(() => route.meta?.activeMenu || route.path)
 const themeClass = computed(() => `theme-${props.theme}`)
 </script>
 

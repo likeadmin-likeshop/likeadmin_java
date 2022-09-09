@@ -1,4 +1,5 @@
 import { isObject } from '@vue/shared'
+import { cloneDeep } from 'lodash'
 
 /**
  * @description 添加单位
@@ -25,7 +26,7 @@ export const isEmpty = (value: unknown) => {
  */
 
 export const treeToArray = (data: any[], props = { children: 'children' }) => {
-    data = JSON.parse(JSON.stringify(data))
+    data = cloneDeep(data)
     const { children } = props
     const newData = []
     const queue: any[] = []
@@ -39,6 +40,33 @@ export const treeToArray = (data: any[], props = { children: 'children' }) => {
         newData.push(item)
     }
     return newData
+}
+
+/**
+ * @description 数组转
+ * @param {Array} data  数据
+ * @param {Object} props `{ parent: 'pid', children: 'children' }`
+ */
+
+export const arrayToTree = (
+    data: any[],
+    props = { id: 'id', parentId: 'pid', children: 'children' }
+) => {
+    data = cloneDeep(data)
+    const { id, parentId, children } = props
+    const result: any[] = []
+    const map = new Map()
+    data.forEach((item) => {
+        map.set(item[id], item)
+        const parent = map.get(item[parentId])
+        if (parent) {
+            parent[children] = parent[children] ?? []
+            parent[children].push(item)
+        } else {
+            result.push(item)
+        }
+    })
+    return result
 }
 
 /**

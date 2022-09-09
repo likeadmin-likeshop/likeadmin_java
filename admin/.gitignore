@@ -30,7 +30,3 @@ components.d.ts
 *.sln
 *.sw?
 
-# lock
-
-package-lock.json
-yarn.lock

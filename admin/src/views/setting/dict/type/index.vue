@@ -76,7 +76,7 @@
                                     link
                                     @click="
                                         $router.push({
-                                            path: '/setting/dict/data',
+                                            path: getRoutePath('setting:dict:data:list'),
                                             query: {
                                                 type: row.dictType
                                             }
@@ -109,6 +109,7 @@
 <script lang="ts" setup>
 import { dictTypeDelete, dictTypeLists } from '@/api/setting/dict'
 import { usePaging } from '@/hooks/usePaging'
+import { getRoutePath } from '@/router'
 import feedback from '@/utils/feedback'
 import EditPopup from './edit.vue'
 const editRef = shallowRef<InstanceType<typeof EditPopup>>()

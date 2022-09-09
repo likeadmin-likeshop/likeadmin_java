@@ -5,7 +5,6 @@
  */
 
 import useUserStore from '@/stores/modules/user'
-
 export default {
     mounted: (el: HTMLElement, binding: any) => {
         const { value } = binding

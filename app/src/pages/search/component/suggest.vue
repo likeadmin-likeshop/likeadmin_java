@@ -1,0 +1,67 @@
+<template>
+	<view class="suggest bg-white">
+		
+		<!-- 热门搜索 -->
+		<view class="hot" v-if="hot_search.length">
+			<view class="text-base font-medium pl-[24rpx] pt-[26rpx] pb-[6rpx]">热门搜索</view>
+			
+			<view class="w-full pl-[24rpx] pr-[8rpx]">
+				<block v-for="hotItem in hot_search">
+					<view class="keyword" @click="handleHistoreSearch(hotItem)">{{ hotItem }}</view>
+				</block>
+			</view>
+		</view>
+		
+		<view class="mx-[24rpx] my-[40rpx] border-b border-solid border-0 border-light" v-if="hot_search.length && his_search.length"></view>
+		
+		<!-- 历史搜索 -->
+		<view class="history" v-if="his_search.length">
+			<view class="flex justify-between px-[24rpx] pb-[6rpx]">
+				<view class="text-base font-medium">历史搜索</view>
+				<view class="text-xs text-muted" @click="() => emit('clear')">清空</view>
+			</view>
+			
+			<view class="w-full pl-[24rpx] pr-[8rpx]">
+				<block v-for="hisItem in his_search">
+					<view class="keyword" @click="handleHistoreSearch(hisItem)">{{ hisItem }}</view>
+				</block>
+			</view>
+		</view>
+	</view>
+</template>
+
+
+<script lang="ts" setup>
+    import { ref, reactive, nextTick } from "vue"
+    
+	const emit = defineEmits<{
+	    (event: 'search', value: string): void
+		(event: 'clear', value: void): void
+	}>()
+	
+    const props = withDefaults(defineProps < {
+		hot_search?: string[],
+		his_search?: string[]
+		
+    } > (), {
+        hot_search: [],
+		his_search: []
+    })
+    
+    const handleHistoreSearch = (text: string) => {
+		emit('search', text)
+    }
+</script>
+
+<style lang="scss" scoped>
+	.suggest {
+		height: 100%;
+		.keyword {
+			display: inline-block;
+			margin: 24rpx 16rpx 0 0;
+			padding: 8rpx 24rpx;
+			border-radius: 26rpx;
+			background-color: #F4F4F4;
+		}
+	}
+</style>

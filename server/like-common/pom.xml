@@ -5,7 +5,7 @@
 
     <!-- 父工程 -->
     <parent>
-        <groupId>org.hxkj</groupId>
+        <groupId>org.mdd</groupId>
         <artifactId>likeadmin-java</artifactId>
         <version>1.0.0</version>
     </parent>
@@ -14,6 +14,18 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>like-common</artifactId>
     <name>like-common</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <!-- 依赖管理 -->
     <dependencies>
@@ -144,6 +156,12 @@
         <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
+        </dependency>
+        <!-- 微信小程序 -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-miniapp</artifactId>
+            <version>4.4.0</version>
         </dependency>
     </dependencies>
 

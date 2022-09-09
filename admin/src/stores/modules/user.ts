@@ -10,6 +10,7 @@ export interface UserState {
     token: string
     userInfo: Record<string, any>
     routes: RouteRecordRaw[]
+    menu: any[]
     perms: string[]
 }
 
@@ -21,6 +22,7 @@ const useUserStore = defineStore({
         userInfo: {},
         // 路由
         routes: [],
+        menu: [],
         // 权限
         perms: []
     }),
@@ -30,6 +32,7 @@ const useUserStore = defineStore({
             this.token = ''
             this.userInfo = {}
             this.perms = []
+            this.menu = []
         },
         login(playload: any) {
             const { account, password } = playload
@@ -78,6 +81,7 @@ const useUserStore = defineStore({
             return new Promise((resolve, reject) => {
                 getMenu()
                     .then((data) => {
+                        this.menu = data
                         this.routes = filterAsyncRoutes(data)
                         resolve(data)
                     })

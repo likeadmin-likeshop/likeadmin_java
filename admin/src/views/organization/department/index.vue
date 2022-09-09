@@ -128,10 +128,11 @@ const handleEdit = async (data: any) => {
     showEdit.value = true
     await nextTick()
     editRef.value?.open('edit')
-    editRef.value?.setFormData(data)
+    editRef.value?.getDetail(data)
 }
 
 const handleDelete = async (id: number) => {
+    await feedback.confirm('确定要删除？')
     await deptDelete({ id })
     feedback.msgSuccess('删除成功')
     getLists()
