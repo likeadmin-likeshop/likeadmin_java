@@ -97,13 +97,17 @@
 	}
 
 	const queryList = async (pageNo, pageSize) => {
-		const { lists } = await getSearch({
-			keyword: keyword.value,
-			pageNo, pageSize
-		})
-		
-		search.result = lists
-		paging.value.complete(lists);
+		try{
+			const { lists } = await getSearch({
+				keyword: keyword.value,
+				pageNo, pageSize
+			})
+			paging.value.complete(lists);
+		}catch(e){
+			console.log('报错=>',e)
+			//TODO handle the exception
+			paging.value.complete(false);
+		}
 	}
 	
 	getHotSearchFunc()

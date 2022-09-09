@@ -24,16 +24,17 @@
 	}])
 
 	const queryList = async (pageNo, pageSize) => {
-		// console.log(pageNo, pageSize)
-		const {
-			lists
-		} = await getArticleList({
-			cid: props.cid,
-			pageNo,
-			pageSize
-		})
-		console.log(lists)
-		paging.value.complete(lists);
+		try{
+			const { lists } = await getArticleList({
+				cid: props.cid,
+				pageNo, pageSize
+			})
+			paging.value.complete(lists);
+		}catch(e){
+			console.log('报错=>',e)
+			//TODO handle the exception
+			paging.value.complete(false);
+		}
 	}
 </script>
 
