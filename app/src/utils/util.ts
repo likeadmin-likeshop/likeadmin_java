@@ -1,4 +1,5 @@
 import { isObject } from '@vue/shared'
+import { getToken } from './auth'
 
 /**
  * @description 获取元素节点信息（在组件中的元素必须要传ctx）
@@ -27,6 +28,7 @@ export const getRect = (selector: string, all = false, context?: any) => {
 }
 
 /**
+<<<<<<< HEAD
  * @description 获取当前页面实例
  */
 export function currentPage() {
@@ -51,7 +53,6 @@ export enum LinkTypeEnum {
     'CUSTOM_LINK' = 'custom'
 }
 export function navigateTo(link: Link) {
-    console.log(objectToQuery(link.query), link)
     let url: string
     switch (link.type) {
         case LinkTypeEnum.SHOP_PAGES:
@@ -103,4 +104,44 @@ export function objectToQuery(params: Record<string, any>): string {
         }
     }
     return query.slice(0, -1)
+}
+/**
+ * @description 上传图片
+ * @param  { String } path 选择的本地地址
+ */
+export function uploadFile(path: any) {
+    return new Promise((resolve, reject) => {
+        const token = getToken()
+        uni.uploadFile({
+            url: `${import.meta.env.VITE_APP_BASE_URL}/api/Upload/image`,
+            filePath: path,
+            name: 'file',
+            header: {
+                token
+            },
+            fileType: 'image',
+            success: (res) => {
+                console.log('uploadFile res ==> ', res)
+                const data = JSON.parse(res.data)
+                if (data.code == 1) {
+                    resolve(data.data)
+                } else {
+                    reject()
+                }
+            },
+            fail: (err) => {
+                console.log(err)
+                reject()
+            }
+        })
+    })
+}
+
+export const getWxCode = (): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        uni.login({
+            desc: '获取用户信息，完善用户资料',
+            success: (res: Event) => resolve(res.code)
+        })
+    })
 }

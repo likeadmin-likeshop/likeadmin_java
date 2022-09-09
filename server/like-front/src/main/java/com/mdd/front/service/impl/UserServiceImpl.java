@@ -139,10 +139,11 @@ public class UserServiceImpl implements IUserService {
                     throw new OperateException("新账号与旧账号一致,修改失败!");
                 }
 
-                usernameUser.setId(userId);
-                usernameUser.setUsername(value);
-                usernameUser.setUpdateTime(System.currentTimeMillis() / 1000);
-                userMapper.updateById(usernameUser);
+                User u = new User();
+                u.setId(userId);
+                u.setUsername(value);
+                u.setUpdateTime(System.currentTimeMillis() / 1000);
+                userMapper.updateById(u);
                 break;
             case "nickname":
                 User nicknameUser = new User();
