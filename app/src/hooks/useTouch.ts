@@ -1,13 +1,13 @@
-import { reactive } from "vue"
+import { reactive } from 'vue'
 
 /**
  * @description 触碰屏幕钩子函数
  * @return { Function } 暴露钩子
  */
-export function useTouch () {
+export function useTouch() {
     // 最小移动距离
-    const MIN_DISTANCE = 10;
-    
+    const MIN_DISTANCE = 10
+
     const touch = reactive({
         direction: '',
         deltaX: 0,
@@ -22,48 +22,47 @@ export function useTouch () {
      */
     const getDirection = (x: number, y: number) => {
         if (x > y && x > MIN_DISTANCE) {
-            return 'horizontal';
+            return 'horizontal'
         }
         if (y > x && y > MIN_DISTANCE) {
-            return 'vertical';
+            return 'vertical'
         }
-        return '';
+        return ''
     }
-    
+
     /**
      * @description 重置参数
      */
     const resetTouchStatus = () => {
-        touch.direction = '';
-        touch.deltaX = 0;
-        touch.deltaY = 0;
-        touch.offsetX = 0;
-        touch.offsetY = 0;
+        touch.direction = ''
+        touch.deltaX = 0
+        touch.deltaY = 0
+        touch.offsetX = 0
+        touch.offsetY = 0
     }
-    
+
     /**
      * @description 触发
      */
     const touchStart = (event: any) => {
-        resetTouchStatus();
-        const events = event.touches[0];
-        touch.startX = events.clientX;
-        touch.startY = events.clientY;
+        resetTouchStatus()
+        const events = event.touches[0]
+        touch.startX = events.clientX
+        touch.startY = events.clientY
     }
-    
+
     /**
      * @description 移动
      */
     const touchMove = (event: any) => {
-        const events = event.touches[0];
-        touch.deltaX = events.clientX - touch.startX;
-        touch.deltaY = events.clientY - touch.startY;
-        touch.offsetX = Math.abs(touch.deltaX);
-        touch.offsetY = Math.abs(touch.deltaY);
-        touch.direction =
-            touch.direction || getDirection(touch.offsetX, touch.offsetY);
+        const events = event.touches[0]
+        touch.deltaX = events.clientX - touch.startX
+        touch.deltaY = events.clientY - touch.startY
+        touch.offsetX = Math.abs(touch.deltaX)
+        touch.offsetY = Math.abs(touch.deltaY)
+        touch.direction = touch.direction || getDirection(touch.offsetX, touch.offsetY)
     }
-    
+
     return {
         touch,
         resetTouchStatus,
