@@ -31,7 +31,6 @@
 					@query="queryList" 
 					:fixed="false" 
 					height="100%"
-					use-page-scroll
 				>
 					<block v-for="(item, index) in search.result" :key="item.id">
 					    <news-card :item="item" :newsId="item.id"></news-card>

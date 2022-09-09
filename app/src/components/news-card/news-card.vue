@@ -11,7 +11,7 @@
 				<view class="text-muted text-xs w-full flex justify-between mt-[12rpx]">
 					<view>{{ item.createTime }}</view>
 					<view class="flex items-center">
-						<image src="/static/images/icon_visit.png" class="w-[30rpx] h-[30rpx]"></image>
+						<image src="/static/images/icon/icon_visit.png" class="w-[30rpx] h-[30rpx]"></image>
 						<view class="ml-[10rpx]">{{ item.visit }}</view>
 					</view>
 				</view>
