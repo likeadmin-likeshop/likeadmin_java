@@ -3,9 +3,9 @@
         class="bg-white login min-h-full flex flex-col items-center px-[40rpx] pt-[80rpx] box-border"
     >
         <view>
-            <u-image src="" mode="widthFix" height="160" width="160" />
+            <u-image :src="appStore.config.website.logo" mode="widthFix" height="160" width="160" />
         </view>
-        <view class="mt-4">这里是商城名称</view>
+        <view class="mt-4">{{ appStore.config.website.name }}</view>
         <view class="w-full mt-[60rpx]">
             <u-form borderBottom>
                 <template v-if="scene == LoginTypeEnum.ACCOUNT">
@@ -117,8 +117,9 @@ import { login } from '@/api/account'
 import { smsSend } from '@/api/app'
 import { SMSEnum } from '@/enums/appEnums'
 import { useLockFn } from '@/hooks/useLockFn'
+import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
-import { reactive, ref, shallowRef, watch } from 'vue'
+import { reactive, ref, shallowRef } from 'vue'
 enum LoginTypeEnum {
     MOBILE = 'mobile',
     ACCOUNT = 'account',
@@ -130,6 +131,7 @@ const codeTips = ref('')
 const isCheckAgreement = ref(false)
 
 const userStore = useUserStore()
+const appStore = useAppStore()
 const formData = reactive({
     username: '',
     password: '',

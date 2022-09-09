@@ -1,8 +1,11 @@
 package com.mdd.front.controller;
 
 import com.mdd.common.core.AjaxResult;
+import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.front.service.IIndexService;
+import com.mdd.front.validate.PageParam;
+import com.mdd.front.vo.article.ArticleListVo;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,9 +82,22 @@ public class IndexController {
      * @author fzr
      * @return Object
      */
+    @GetMapping("/hotSearch")
+    public Object hotSearch() {
+        List<String> list = iIndexService.hotSearch();
+        return AjaxResult.success(list);
+    }
+
+    /**
+     * 搜索
+     *
+     * @author fzr
+     * @return Object
+     */
     @GetMapping("/search")
-    public Object search() {
-        List<String> list = iIndexService.search();
+    public Object search(@Validated PageParam pageParam,
+                         @RequestParam Map<String, String> params) {
+        PageResult<ArticleListVo> list = iIndexService.search(pageParam, params);
         return AjaxResult.success(list);
     }
 

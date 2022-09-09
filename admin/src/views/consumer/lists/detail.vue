@@ -10,11 +10,59 @@
                     <el-avatar :src="formData.avatar" :size="58" />
                 </div>
                 <el-form-item label="用户编号："> {{ formData.sn }} </el-form-item>
-                <el-form-item label="用户昵称："> {{ formData.nickname }} </el-form-item>
-                <el-form-item label="账号："> {{ formData.username }} </el-form-item>
-                <el-form-item label="真实姓名："> {{ formData.realName || '-' }} </el-form-item>
-                <el-form-item label="性别："> {{ formData.sex }} </el-form-item>
-                <el-form-item label="联系电话："> {{ formData.mobile || '-' }} </el-form-item>
+                <el-form-item label="用户昵称：">
+                    {{ formData.nickname }}
+                </el-form-item>
+                <el-form-item label="账号：">
+                    {{ formData.username }}
+                    <popover-input class="ml-[10px]" @confirm="handleEdit($event, 'username')">
+                        <el-button type="primary" link v-perms="['user:edit']">
+                            <icon name="el-icon-EditPen" />
+                        </el-button>
+                    </popover-input>
+                </el-form-item>
+                <el-form-item label="真实姓名：">
+                    {{ formData.realName || '-' }}
+                    <popover-input class="ml-[10px]" @confirm="handleEdit($event, 'realName')">
+                        <el-button type="primary" link v-perms="['user:edit']">
+                            <icon name="el-icon-EditPen" />
+                        </el-button>
+                    </popover-input>
+                </el-form-item>
+                <el-form-item label="性别：">
+                    {{ formData.sex }}
+                    <popover-input
+                        class="ml-[10px]"
+                        type="select"
+                        :options="[
+                            {
+                                label: '未知',
+                                value: 0
+                            },
+                            {
+                                label: '男',
+                                value: 1
+                            },
+                            {
+                                label: '女',
+                                value: 0
+                            }
+                        ]"
+                        @confirm="handleEdit($event, 'sex')"
+                    >
+                        <el-button type="primary" link v-perms="['user:edit']">
+                            <icon name="el-icon-EditPen" />
+                        </el-button>
+                    </popover-input>
+                </el-form-item>
+                <el-form-item label="联系电话：">
+                    {{ formData.mobile || '-' }}
+                    <popover-input class="ml-[10px]" @confirm="handleEdit($event, 'mobile')">
+                        <el-button type="primary" link v-perms="['user:edit']">
+                            <icon name="el-icon-EditPen" />
+                        </el-button>
+                    </popover-input>
+                </el-form-item>
                 <el-form-item label="注册来源："> {{ formData.channel }} </el-form-item>
                 <el-form-item label="注册时间："> {{ formData.createTime }} </el-form-item>
                 <el-form-item label="最近登录时间："> {{ formData.lastLoginTime }} </el-form-item>
@@ -25,7 +73,8 @@
 
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { getUserDetail } from '@/api/consumer'
+import { getUserDetail, userEdit } from '@/api/consumer'
+import feedback from '@/utils/feedback'
 
 const route = useRoute()
 const formData = reactive({
@@ -52,6 +101,16 @@ const getDetails = async () => {
         //@ts-ignore
         formData[key] = data[key]
     })
+}
+
+const handleEdit = async (value: string, field: string) => {
+    await userEdit({
+        id: route.query.id,
+        field,
+        value
+    })
+    feedback.msgSuccess('编辑成功')
+    getDetails()
 }
 
 getDetails()

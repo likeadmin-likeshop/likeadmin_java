@@ -1,0 +1,1 @@
+import{r as t}from"./index.ab5c8d8d.js";function r(e){return t.get({url:"/decorate/pages/detail",params:e},{ignoreCancelToken:!0})}function o(e){return t.post({url:"/decorate/pages/save",params:e})}function s(e){return t.get({url:"/decorate/tabbar/detail",params:e})}function n(e){return t.post({url:"/decorate/tabbar/save",params:e})}export{s as a,n as b,r as g,o as s};

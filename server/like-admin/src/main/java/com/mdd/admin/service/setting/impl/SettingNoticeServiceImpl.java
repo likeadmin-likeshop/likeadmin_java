@@ -42,7 +42,6 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
         queryWrapper.orderByAsc("id");
 
         List<NoticeSetting> noticeSettings = noticeSettingMapper.selectList(queryWrapper);
-
         List<NoticeListVo> list = new LinkedList<>();
         for (NoticeSetting n : noticeSettings) {
             NoticeListVo vo = new NoticeListVo();
@@ -54,10 +53,10 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
             Map<String, String> mnpMap = ToolsUtil.jsonToMap(n.getMnpNotice());
 
             vo.setType(n.getType()==1?"业务通知":"验证码");
-            vo.setSystemStatus(Integer.parseInt(systemMap.get("status")));
-            vo.setSmsStatus(Integer.parseInt(smsMap.get("status")));
-            vo.setOaStatus(Integer.parseInt(oaMap.get("status")));
-            vo.setMnpStatus(Integer.parseInt(mnpMap.get("status")));
+            vo.setSystemStatus(Integer.parseInt(systemMap.getOrDefault("status", "0")));
+            vo.setSmsStatus(Integer.parseInt(smsMap.getOrDefault("status", "0")));
+            vo.setOaStatus(Integer.parseInt(oaMap.getOrDefault("status", "0")));
+            vo.setMnpStatus(Integer.parseInt(mnpMap.getOrDefault("status", "0")));
             vo.setCreateTime(TimeUtil.timestampToDate(n.getCreateTime()));
             vo.setUpdateTime(TimeUtil.timestampToDate(n.getUpdateTime()));
             list.add(vo);

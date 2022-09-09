@@ -31,7 +31,6 @@ public class NoticeController {
      */
     @GetMapping("/list")
     public Object list(@RequestParam Integer recipient) {
-        System.out.println(recipient);
         List<NoticeListVo> list = iSettingNoticeService.list(recipient);
         return AjaxResult.success(list);
     }

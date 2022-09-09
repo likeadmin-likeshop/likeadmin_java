@@ -1,8 +1,12 @@
 package com.mdd.front.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.common.config.GlobalConfig;
+import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.decorate.DecoratePage;
 import com.mdd.common.entity.decorate.DecorateTabbar;
@@ -13,6 +17,8 @@ import com.mdd.common.mapper.decorate.DecorateTabbarMapper;
 import com.mdd.common.mapper.setting.HotSearchMapper;
 import com.mdd.common.utils.*;
 import com.mdd.front.service.IIndexService;
+import com.mdd.front.validate.PageParam;
+import com.mdd.front.vo.article.ArticleListVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -176,7 +182,7 @@ public class IndexServiceImpl implements IIndexService {
      * @return List<String>
      */
     @Override
-    public List<String> search() {
+    public List<String> hotSearch() {
         String isHotSearch = ConfigUtil.get("search", "isHotSearch", "0");
 
         List<String> list = new LinkedList<>();
@@ -191,6 +197,40 @@ public class IndexServiceImpl implements IIndexService {
         }
 
         return list;
+    }
+
+    /**
+     * 搜索
+     *
+     * @author fzr
+     * @param pageParam 分页参数
+     * @param params 搜索参数
+     * @return PageResult<ArticleListVo>
+     */
+    public PageResult<ArticleListVo> search(PageParam pageParam, Map<String, String> params) {
+        Integer pageNo   = pageParam.getPageNo();
+        Integer pageSize = pageParam.getPageSize();
+
+        MPJQueryWrapper<Article> mpjQueryWrapper = new MPJQueryWrapper<Article>()
+                .selectAll(Article.class)
+                .select("ac.name as category")
+                .innerJoin("?_article_category ac ON ac.id=t.cid".replace("?_", GlobalConfig.tablePrefix))
+                .eq("t.is_delete", 0)
+                .like("t.title", params.get("keyword"))
+                .orderByDesc(Arrays.asList("t.sort", "t.id"));
+
+        IPage<ArticleListVo> iPage = articleMapper.selectJoinPage(
+                new Page<>(pageNo, pageSize),
+                ArticleListVo.class,
+                mpjQueryWrapper);
+
+        for (ArticleListVo vo : iPage.getRecords()) {
+            vo.setCollect(false);
+            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()));
+            vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
+        }
+
+        return PageResult.iPageHandle(iPage);
     }
 
 }

@@ -34,7 +34,7 @@
                 <router-link
                     v-perms="['article:add']"
                     :to="{
-                        path: '/article/lists/edit'
+                        path: getRoutePath('article:edit')
                     }"
                 >
                     <el-button type="primary" class="mb-4">
@@ -57,6 +57,12 @@
                         />
                     </template>
                 </el-table-column>
+                <el-table-column
+                    label="标题"
+                    prop="title"
+                    min-width="160"
+                    show-tooltip-when-overflow
+                />
                 <el-table-column label="栏目" prop="category" min-width="100" />
                 <el-table-column label="作者" prop="author" min-width="120" />
                 <el-table-column label="浏览量" prop="visit" min-width="100" />
@@ -64,10 +70,9 @@
                     <template #default="{ row }">
                         <el-switch
                             v-perms="['article:cate:change']"
-                            v-if="row.id != 1"
                             v-model="row.isShow"
-                            :active-value="0"
-                            :inactive-value="1"
+                            :active-value="1"
+                            :inactive-value="0"
                             @change="changeStatus(row.id)"
                         />
                     </template>
