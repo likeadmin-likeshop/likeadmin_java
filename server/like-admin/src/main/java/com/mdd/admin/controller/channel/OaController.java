@@ -1,7 +1,6 @@
 package com.mdd.admin.controller.channel;
 
 import com.mdd.admin.config.aop.Log;
-import com.mdd.admin.service.channel.IChannelH5Service;
 import com.mdd.admin.service.channel.IChannelOaService;
 import com.mdd.common.core.AjaxResult;
 import org.springframework.web.bind.annotation.*;

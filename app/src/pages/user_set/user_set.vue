@@ -1,15 +1,17 @@
 <template>
 	<view class="user-set">
-		<view class="item flex bg-white mt-[20rpx]">
-			<u-avatar :src="src" shape="square"></u-avatar>
-			<view class="ml-[20rpx] flex flex-1 justify-between">
-				<view>
-					<view class="mb-[15rpx] text-xl font-medium">闻喜的小贾</view>
-					<view class="text-content text-xs">账号：tt54541512</view>
+		<navigator :url="`/pages/user_data/user_data`">
+			<view class="item flex bg-white mt-[20rpx]">
+				<u-avatar :src="userInfo.avatar" shape="square"></u-avatar>
+				<view class="ml-[20rpx] flex flex-1 justify-between">
+					<view>
+						<view class="mb-[15rpx] text-xl font-medium">{{ userInfo.nickname }}</view>
+						<view class="text-content text-xs">账号：{{ userInfo.username }}</view>
+					</view>
+					<u-icon name="arrow-right" color="#666"></u-icon>
 				</view>
-				<u-icon name="arrow-right" color="#666"></u-icon>
 			</view>
-		</view>
+		</navigator>
 		<view class="item bg-white mt-[20rpx] btn-border flex flex-1 justify-between">
 			<view class="text-xl">登录密码</view>
 			<u-icon name="arrow-right" color="#666"></u-icon>
@@ -18,25 +20,29 @@
 			<view class="text-xl">绑定微信</view>
 			<view class=" flex justify-between">
 				<view class="text-muted mr-[20rpx]">
-					未绑定
+					{{ userInfo.isBindMnp ? '已绑定' : '未绑定' }}
 				</view>
 				<u-icon name="arrow-right" color="#666"></u-icon>
 			</view>
 		</view>
-		
-		<view class="item bg-white mt-[20rpx] btn-border flex flex-1 justify-between">
-			<view class="text-xl">隐私政策</view>
-			<u-icon name="arrow-right" color="#666"></u-icon>
-		</view>
-		<view class="item bg-white btn-border flex flex-1 justify-between">
-			<view class="text-xl">服务协议</view>
-			<u-icon name="arrow-right" color="#666"></u-icon>
-		</view>
+
+		<navigator :url="`/pages/agreement/agreement?type=${ AgreementEnum.PRIVACY }`">
+			<view class="item bg-white mt-[20rpx] btn-border flex flex-1 justify-between">
+				<view class="text-xl">隐私政策</view>
+				<u-icon name="arrow-right" color="#666"></u-icon>
+			</view>
+		</navigator>
+		<navigator :url="`/pages/agreement/agreement?type=${ AgreementEnum.SERVICE }`">
+			<view class="item bg-white btn-border flex flex-1 justify-between">
+				<view class="text-xl">服务协议</view>
+				<u-icon name="arrow-right" color="#666"></u-icon>
+			</view>
+		</navigator>
 		<view class="item bg-white btn-border flex flex-1 justify-between">
 			<view class="text-xl">关于我们</view>
 			<view class="flex justify-between">
 				<view class="text-muted mr-[20rpx]">
-					v10.2.0
+					{{ appStore.config.version }}
 				</view>
 				<u-icon name="arrow-right" color="#666"></u-icon>
 			</view>
@@ -46,40 +52,36 @@
 
 <script setup lang="ts">
 	import {
-		getDecorate
-	} from '@/api/shop'
-	import {
-		useUserStore
-	} from '@/stores/user'
+		getUserInfo
+	} from '@/api/user'
 	import {
 		onShow
 	} from '@dcloudio/uni-app'
 	import {
-		storeToRefs
-	} from 'pinia'
-	import {
-		reactive
+		reactive,
+		ref,
 	} from 'vue'
-	const state = reactive < {
-		pages: any[]
-	} > ({
-		pages: []
-	})
-	const getData = async () => {
-		const data = await getDecorate({
-			id: 2
-		})
-		state.pages = JSON.parse(data.pages)
+	import {
+		useAppStore
+	} from '@/stores/app'
+	import {
+		AgreementEnum
+	} from '@/enums/agreementEnums'
+
+	const appStore = useAppStore()
+	let userInfo = ref({})
+
+	const getUser = async () => {
+		let res = await getUserInfo()
+		console.log(res, 'res')
+
+		userInfo.value = res
+
 	}
-	const userStore = useUserStore()
-	const {
-		userInfo,
-		isLogin
-	} = storeToRefs(userStore)
+
 	onShow(() => {
-		userStore.getUser()
+		getUser()
 	})
-	getData()
 </script>
 
 <style lang="scss" scoped>
