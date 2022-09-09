@@ -21,14 +21,14 @@ export enum SMSEnum {
 }
 
 export enum SearchTypeEnum {
-	HISTORY = 'history'
+    HISTORY = 'history'
 }
 
 // 用户资料
 export enum FieldType {
     NONE = '',
-	AVATAR = 'avatar',
-	USERNAME = 'username',
+    AVATAR = 'avatar',
+    USERNAME = 'username',
     NICKNAME = 'nickname',
-	SEX = 'sex',
+    SEX = 'sex'
 }

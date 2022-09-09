@@ -3,4 +3,3 @@ export enum AgreementEnum {
     PRIVACY = 'privacy',
     SERVICE = 'service'
 }
-
