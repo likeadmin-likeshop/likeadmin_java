@@ -19,3 +19,7 @@ export enum SMSEnum {
     CHANGE_MOBILE = 103,
     FIND_PASSWORD = 104
 }
+
+export enum SearchTypeEnum {
+	HISTORY = 'history'
+}

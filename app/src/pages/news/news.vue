@@ -1,9 +1,11 @@
 <template>
     <view class="news" >
 		<!-- 搜索 -->
-		<view class="news-search px-[24rpx] py-[14rpx] bg-white">
-		    <u-search placeholder="请输入关键词搜索" disabled :show-action="false"></u-search>
-		</view>
+		<navigator url="/pages/search/search">
+			<view class="news-search px-[24rpx] py-[14rpx] bg-white">
+				<u-search placeholder="请输入关键词搜索" disabled :show-action="false"></u-search>
+			</view>
+		</navigator>
 		
 		<!-- 内容 -->
         <tabs 
