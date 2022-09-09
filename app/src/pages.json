@@ -53,6 +53,12 @@
             "style": {
                 "navigationBarTitleText": "我的收藏"
             }
+        },
+        {
+            "path": "pages/search/search",
+            "style": {
+                "navigationBarTitleText": "搜索"
+            }
         }
     ],
     "globalStyle": {
