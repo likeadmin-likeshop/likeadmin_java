@@ -213,9 +213,11 @@ public class UserServiceImpl implements IUserService {
             throw new OperateException("手机号已被其它账号绑定!");
         }
 
-        user.setMobile(mobile);
-        user.setUpdateTime(System.currentTimeMillis() / 1000);
-        userMapper.updateById(user);
+        User u = new User();
+        u.setId(userId);
+        u.setMobile(mobile);
+        u.setUpdateTime(System.currentTimeMillis() / 1000);
+        userMapper.updateById(u);
     }
 
     /**
