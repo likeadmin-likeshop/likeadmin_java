@@ -1,21 +1,11 @@
 <template>
     <div>
         <el-card class="!border-none" shadow="never">
-            <el-alert
-                type="warning"
-                title="温馨提示：用于管理网站的分类，只可添加到一级"
-                :closable="false"
-                show-icon
-            />
+            <el-alert type="warning" title="温馨提示：用于管理网站的分类，只可添加到一级" :closable="false" show-icon />
         </el-card>
         <el-card class="!border-none mt-4" shadow="never" v-loading="pager.loading">
             <div>
-                <el-button
-                    class="mb-4"
-                    v-perms="['article:cate:add']"
-                    type="primary"
-                    @click="handleAdd()"
-                >
+                <el-button class="mb-4" v-perms="['article:cate:add']" type="primary" @click="handleAdd()">
                     <template #icon>
                         <icon name="el-icon-Plus" />
                     </template>
@@ -27,32 +17,17 @@
                 <el-table-column label="文章数" prop="number" min-width="120" />
                 <el-table-column label="状态" min-width="120">
                     <template #default="{ row }">
-                        <el-switch
-                            v-perms="['article:cate:change']"
-                            v-model="row.isShow"
-                            :active-value="0"
-                            :inactive-value="1"
-                            @change="changeStatus(row.id)"
-                        />
+                        <el-switch v-perms="['article:cate:change']" v-model="row.isShow" :active-value="1"
+                            :inactive-value="0" @change="changeStatus(row.id)" />
                     </template>
                 </el-table-column>
                 <el-table-column label="排序" prop="sort" min-width="120" />
                 <el-table-column label="操作" width="120" fixed="right">
                     <template #default="{ row }">
-                        <el-button
-                            v-perms="['article:cate:edit']"
-                            type="primary"
-                            link
-                            @click="handleEdit(row)"
-                        >
+                        <el-button v-perms="['article:cate:edit']" type="primary" link @click="handleEdit(row)">
                             编辑
                         </el-button>
-                        <el-button
-                            v-perms="['article:cate:del']"
-                            type="danger"
-                            link
-                            @click="handleDelete(row.id)"
-                        >
+                        <el-button v-perms="['article:cate:del']" type="danger" link @click="handleDelete(row.id)">
                             删除
                         </el-button>
                     </template>
