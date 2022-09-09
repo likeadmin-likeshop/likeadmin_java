@@ -11,7 +11,19 @@
                 <w-nav :content="item.content" :styles="item.styles" />
             </template>
         </view>
-        <view class="article"> </view>
+        <view class="article" v-if="state.article.length">
+            <view
+                class="flex items-center article-title mx-[20rpx] my-[30rpx] text-2xl font-medium"
+            >
+                最新资讯
+            </view>
+            <news-card
+                v-for="item in state.article"
+                :key="item.id"
+                :news-id="item.id"
+                :item="item"
+            />
+        </view>
     </view>
 </template>
 
@@ -20,15 +32,26 @@ import { getIndex } from '@/api/shop'
 import { reactive, ref } from 'vue'
 const state = reactive<{
     pages: any[]
+    article: any[]
 }>({
-    pages: []
+    pages: [],
+    article: []
 })
 const getData = async () => {
     const data = await getIndex()
     state.pages = JSON.parse(data.pages)
-    console.log(state.pages)
+    state.article = data.article
 }
 getData()
 </script>
 
-<style></style>
+<style lang="scss">
+.article-title {
+    &::before {
+        width: 8rpx;
+        height: 34rpx;
+        display: block;
+        background: $u-type-primary;
+    }
+}
+</style>
