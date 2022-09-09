@@ -3,6 +3,7 @@ import { merge } from 'lodash-es'
 import { HttpRequestOptions, RequestHooks } from './type'
 import { getToken } from '../auth'
 import { RequestCodeEnum } from '@/enums/requestEnums'
+import { useUserStore } from '@/stores/user'
 
 const requestHooks: RequestHooks = {
     requestInterceptorsHook(options, config) {
@@ -32,7 +33,7 @@ const requestHooks: RequestHooks = {
         if (!isTransformResponse) {
             return response.data
         }
-        console.log(response.data)
+        const { logout } = useUserStore()
         const { code, data, msg } = response.data as any
         switch (code) {
             case RequestCodeEnum.SUCCESS:
@@ -52,6 +53,10 @@ const requestHooks: RequestHooks = {
 
             case RequestCodeEnum.TOKEN_INVALID:
             case RequestCodeEnum.TOKEN_EMPTY:
+                logout()
+                uni.navigateTo({
+                    url: '/pages/login/login'
+                })
                 return Promise.reject()
 
             default:
