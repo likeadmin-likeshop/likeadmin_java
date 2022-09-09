@@ -4,13 +4,7 @@
             <el-page-header content="文章编辑" @back="$router.back()" />
         </el-card>
         <el-card class="mt-4 !border-none" shadow="never">
-            <el-form
-                ref="formRef"
-                class="ls-form"
-                :model="formData"
-                label-width="85px"
-                :rules="rules"
-            >
+            <el-form ref="formRef" class="ls-form" :model="formData" label-width="85px" :rules="rules">
                 <div class="xl:flex">
                     <div>
                         <el-form-item label="文章标题" prop="title">
@@ -19,17 +13,9 @@
                             </div>
                         </el-form-item>
                         <el-form-item label="文章栏目" prop="cid">
-                            <el-select
-                                class="w-80"
-                                v-model="formData.cid"
-                                placeholder="请选择文章栏目"
-                            >
-                                <el-option
-                                    v-for="item in optionsData.articleCate"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id"
-                                />
+                            <el-select class="w-80" v-model="formData.cid" placeholder="请选择文章栏目">
+                                <el-option v-for="item in optionsData.articleCate" :key="item.id" :label="item.name"
+                                    :value="item.id" />
                             </el-select>
                         </el-form-item>
                         <el-form-item label="文章简介" prop="intro">
@@ -91,7 +77,7 @@
 import type { FormInstance } from 'element-plus'
 import feedback from '@/utils/feedback'
 import { useDictOptions } from '@/hooks/useDictOptions'
-import { articleCateAll, articleDetail, articleEdit } from '@/api/article'
+import { articleCateAll, articleDetail, articleEdit, articleAdd } from '@/api/article'
 
 const route = useRoute()
 const router = useRouter()
@@ -105,7 +91,7 @@ const formData = reactive({
     content: '',
     visit: 0,
     sort: 0,
-    isShow: '',
+    isShow: 1,
     summary: ''
 })
 
@@ -135,7 +121,11 @@ const { optionsData } = useDictOptions<{
 
 const handleSave = async () => {
     await formRef.value?.validate()
-    await articleEdit(formData)
+    if (route.query.id) {
+        await articleEdit(formData)
+    } else {
+        await articleAdd(formData)
+    }
     feedback.msgSuccess('操作成功')
     router.back()
 }
