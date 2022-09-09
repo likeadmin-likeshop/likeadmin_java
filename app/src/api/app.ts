@@ -8,3 +8,7 @@ export function smsSend(data: any) {
 export function getConfig() {
     return request.get({ url: '/config' })
 }
+
+export function getPolicy(data: any) {
+    return request.get({ url: '/policy', data: data })
+}

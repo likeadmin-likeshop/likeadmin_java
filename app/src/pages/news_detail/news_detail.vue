@@ -7,7 +7,7 @@
 				<view class="mr-[40rpx]" v-if="newsData.author">作者: {{ newsData.author }}</view>
 				<view class="text-muted mr-[40rpx]">{{ newsData.createTime }}</view>
 				<view class="flex items-center text-muted ">
-					<image src="/static/images/icon_visit.png" class="w-[30rpx] h-[30rpx]"></image>
+					<image src="/static/images/icon/icon_visit.png" class="w-[30rpx] h-[30rpx]"></image>
 					<view class="ml-[10rpx]">{{ newsData.visit }}</view>
 				</view>
 			</view>

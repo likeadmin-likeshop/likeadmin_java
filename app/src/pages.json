@@ -49,11 +49,41 @@
             }
         },
         {
+            "path": "pages/user_set/user_set",
+            "style": {
+                "navigationBarTitleText": "个人设置"
+            }
+        },
+        {
             "path": "pages/collection/collection",
             "style": {
                 "navigationBarTitleText": "我的收藏"
             },
             "auth": true
+        },
+        {
+            "path": "pages/as_us/as_us",
+            "style": {
+                "navigationBarTitleText": "关于我们"
+            }
+        },
+        {
+            "path": "pages/agreement/agreement",
+            "style": {
+                "navigationBarTitleText": "协议"
+            }
+        },
+        {
+            "path": "pages/change_password/change_password",
+            "style": {
+                "navigationBarTitleText": "修改密码"
+            }
+        },
+        {
+            "path": "pages/user_data/user_data",
+            "style": {
+                "navigationBarTitleText": "个人资料"
+            }
         },
         {
             "path": "pages/search/search",
