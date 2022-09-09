@@ -42,6 +42,7 @@ const getData = async () => {
     state.pages = JSON.parse(data.pages)
     state.article = data.article
 }
+
 getData()
 </script>
 

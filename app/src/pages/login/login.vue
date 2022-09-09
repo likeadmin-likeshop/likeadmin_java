@@ -137,6 +137,7 @@ import { SMSEnum } from '@/enums/appEnums'
 import { useLockFn } from '@/hooks/useLockFn'
 import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
+import { currentPage } from '@/utils/util'
 import { reactive, ref, shallowRef } from 'vue'
 enum LoginTypeEnum {
     MOBILE = 'mobile',
@@ -197,7 +198,14 @@ const loginFun = async (scene: LoginTypeEnum, code?: string) => {
         await userStore.getUser()
         uni.$u.toast('登录成功')
         uni.hideLoading()
-        uni.navigateBack()
+        uni.navigateBack({
+            success: () => {
+                // @ts-ignore
+                const { onLoad, options } = currentPage()
+                // 刷新上一个页面
+                onLoad && onLoad(options)
+            }
+        })
     } catch (error: any) {
         uni.hideLoading()
         throw new Error(error)
