@@ -3,8 +3,7 @@
 	<!-- 头部修改头像 -->
 	<view class="header bg-white pt-[30rpx]">
 		<view class="flex justify-center">
-			<image @click="uploaderAvatar"
-				:src="userInfo?.avatar ? userInfo?.avatar : '/static/images/icon_default_user.png'"></image>
+			<image @click="uploaderAvatar" :src="userInfo?.avatar"></image>
 		</view>
 		<view class="mt-[20rpx] text-center text-muted text-xs" @click="uploaderAvatar">点击修改头像</view>
 	</view>
@@ -242,8 +241,8 @@
 	
 	// 修改用户账号
 	const changeUserNameConfirm = () => {
-		if (newUsername.value == '') return toast('账号不能为空')
-		if (newUsername.value.length > 10) return toast('账号长度不得超过十位数')
+		if (newUsername.value == '') return uni.$u.toast('账号不能为空')
+		if (newUsername.value.length > 10) return uni.$u.toast('账号长度不得超过十位数')
 		
 		fieldType.value = FieldType.USERNAME
 		setUserInfoFun(newUsername.value)
@@ -252,8 +251,8 @@
 	
 	// 修改用户昵称
 	const changeNameConfirm = () => {
-		if (newNickname.value == '') return toast('昵称不能为空')
-		if (newNickname.value.length > 10) return toast('昵称长度不得超过十位数')
+		if (newNickname.value == '') return uni.$u.toast('昵称不能为空')
+		if (newNickname.value.length > 10) return uni.$u.toast('昵称长度不得超过十位数')
 		showNickName.value = false
 		fieldType.value = FieldType.NICKNAME
 		setUserInfoFun(newNickname.value)
@@ -295,11 +294,11 @@
 		uploadFile(path)
 			.then((res) => {
 				uni.hideLoading()
-				setUserInfoFun(res.uri)
+				setUserInfoFun(res.url)
 			})
 			.catch(() => {
 				uni.hideLoading()
-				toast('上传失败')
+				uni.$u.toast('上传失败')
 			})
 	})
 
