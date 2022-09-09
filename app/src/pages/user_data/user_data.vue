@@ -12,6 +12,7 @@
 	
 	let agreementType = ref('') // 协议类型
 	let agreementContent = ref('') // 协议内容
+	// let agreementName = ref('') // 协议名称
 		
 	const getData = async (type) => {
 		let res = await getPolicy({ type })
@@ -26,7 +27,7 @@
 	    
 	onLoad((options: any) => {
 		if(options.type) {
-			agreementType = options.type
+			agreementType.value = options.type
 			getData(agreementType)
 		}
 	})

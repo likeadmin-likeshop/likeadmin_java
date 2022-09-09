@@ -65,6 +65,18 @@
 		    "style": {
 		        "navigationBarTitleText": "协议"
 		    }
+		},
+		{
+		    "path": "pages/change_password/change_password",
+		    "style": {
+		        "navigationBarTitleText": "修改密码"
+		    }
+		},
+		{
+		    "path": "pages/user_data/user_data",
+		    "style": {
+		        "navigationBarTitleText": "个人资料"
+		    }
 		}
     ],
     "globalStyle": {
