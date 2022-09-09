@@ -42,9 +42,10 @@ public interface IUserService {
      *
      * @author fzr
      * @param password 新密码
+     * @param oldPassword 旧密码
      * @param userId 用户ID
      */
-    void changePwd(String password, Integer userId);
+    void changePwd(String password, String oldPassword, Integer userId);
 
     /**
      * 绑定手机
