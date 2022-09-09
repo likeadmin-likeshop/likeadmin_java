@@ -31,11 +31,13 @@
                             placeholder="请输入密码"
                             :border="false"
                         />
-                        <view
-                            class="border-l border-solid border-0 border-light pl-3 text-muted leading-4 ml-3"
-                        >
-                            忘记密码？
-                        </view>
+                        <navigator url="/pages/forget_pwd/forget_pwd" hover-class="none">
+                            <view
+                                class="border-l border-solid border-0 border-light pl-3 text-muted leading-4 ml-3"
+                            >
+                                忘记密码？
+                            </view>
+                        </navigator>
                     </u-form-item>
                 </template>
                 <template v-if="scene == LoginTypeEnum.MOBILE">
@@ -79,8 +81,10 @@
                 <u-checkbox v-model="isCheckAgreement" shape="circle">
                     <view class="text-xs flex">
                         已阅读并同意
-                        <navigator class="text-primary">《服务协议》</navigator>
-                        和<navigator class="text-primary">《隐私协议》</navigator>
+                        <navigator class="text-primary" hover-class="none">《服务协议》</navigator>
+                        和<navigator class="text-primary" hover-class="none">
+                            《隐私协议》
+                        </navigator>
                     </view>
                 </u-checkbox>
             </view>
@@ -97,8 +101,9 @@
                 <view v-if="scene == LoginTypeEnum.ACCOUNT" @click="scene = LoginTypeEnum.MOBILE">
                     短信验证码登录
                 </view>
-                <navigator url="/pages/register/register">注册账号</navigator>
+                <navigator url="/pages/register/register" hover-class="none">注册账号</navigator>
             </view>
+            <!-- #ifdef MP-WEIXIN -->
             <view class="mt-[80rpx]">
                 <u-divider>第三方登录</u-divider>
                 <div class="flex justify-center mt-[40rpx]">
@@ -108,6 +113,7 @@
                     </div>
                 </div>
             </view>
+            <!-- #endif -->
         </view>
     </view>
 </template>

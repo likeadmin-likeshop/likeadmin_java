@@ -31,6 +31,12 @@
             }
         },
         {
+            "path": "pages/forget_pwd/forget_pwd",
+            "style": {
+                "navigationBarTitleText": "忘记密码"
+            }
+        },
+        {
             "path": "pages/customer_service/customer_service",
             "style": {
                 "navigationBarTitleText": "联系客服"

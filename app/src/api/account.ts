@@ -10,3 +10,8 @@ export function login(data: Record<string, any>) {
 export function register(data: Record<string, any>) {
     return request.post({ url: '/login/register', data: { ...data, client } })
 }
+
+//忘记密码
+export function forgotPassword(data: Record<string, any>) {
+    return request.post({ url: '/login/forgotPassword', data })
+}
