@@ -113,7 +113,7 @@ export function uploadFile(path: any) {
     return new Promise((resolve, reject) => {
         const token = getToken()
         uni.uploadFile({
-            url: `${import.meta.env.VITE_APP_BASE_URL}/api/Upload/image`,
+            url: `${import.meta.env.VITE_APP_BASE_URL}/api/upload/image`,
             filePath: path,
             name: 'file',
             header: {
@@ -123,7 +123,8 @@ export function uploadFile(path: any) {
             success: (res) => {
                 console.log('uploadFile res ==> ', res)
                 const data = JSON.parse(res.data)
-                if (data.code == 1) {
+				console.log('data.code', data.code)
+                if (data.code == 200) {
                     resolve(data.data)
                 } else {
                     reject()

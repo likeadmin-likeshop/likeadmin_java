@@ -243,7 +243,6 @@ export default {
 .u-image {
 	position: relative;
 	transition: opacity 0.5s ease-in-out;
-
 	&__image {
 		width: 100%;
 		height: 100%;

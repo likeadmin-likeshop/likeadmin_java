@@ -81,8 +81,20 @@
                 <u-checkbox v-model="isCheckAgreement" shape="circle">
                     <view class="text-xs flex">
                         已阅读并同意
-                        <navigator class="text-primary" hover-class="none">《服务协议》</navigator>
-                        和<navigator class="text-primary" hover-class="none">
+                        <navigator
+                            @click.stop=""
+                            class="text-primary"
+                            hover-class="none"
+                            url="/pages/agreement/agreement?type=service"
+                        >
+                            《服务协议》
+                        </navigator>
+                        和<navigator
+                            @click.stop=""
+                            class="text-primary"
+                            hover-class="none"
+                            url="/pages/agreement/agreement?type=privacy"
+                        >
                             《隐私协议》
                         </navigator>
                     </view>
