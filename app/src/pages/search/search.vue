@@ -50,8 +50,8 @@
     import cache from "@/utils/cache"
 	
 	interface Search {
-		hot_search: any
-		his_search: any
+		hot_search: string[]
+		his_search:string[]
 		result: any
 		searching: boolean
 	}
@@ -82,6 +82,7 @@
 			search.hot_search = await getHotSearch()
 		}catch(e){
 			//TODO handle the exception
+			console.log('获取热门搜索失败=>', e)
 		}
 	}
 	
