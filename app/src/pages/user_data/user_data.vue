@@ -17,7 +17,7 @@
     >
         <view class="label">账号</view>
         <view class="content">{{ userInfo?.username }}</view>
-        <u-icon name="arrow-right" size="22"></u-icon>
+        <u-icon name="arrow-right" size="22" color="#666"></u-icon>
     </view>
 
     <!-- 昵称 -->
@@ -27,14 +27,14 @@
     >
         <view class="label">昵称</view>
         <view class="content">{{ userInfo?.nickname }}</view>
-        <u-icon name="arrow-right" size="22"></u-icon>
+        <u-icon name="arrow-right" size="22" color="#666"></u-icon>
     </view>
 
     <!-- 性别 -->
     <view class="item text-nr flex justify-between" @click="changeSex">
         <view class="label">性别</view>
         <view class="content">{{ userInfo?.sex }}</view>
-        <u-icon name="arrow-right" size="22"></u-icon>
+        <u-icon name="arrow-right" size="22" color="#666"></u-icon>
     </view>
 
     <!-- 手机号 -->
