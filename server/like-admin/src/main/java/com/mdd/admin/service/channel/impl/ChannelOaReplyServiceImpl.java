@@ -124,7 +124,7 @@ public class ChannelOaReplyServiceImpl implements IChannelOaReplyService {
                 officialReply.setStatus(Integer.parseInt(params.get("status")));
                 officialReply.setCreateTime(System.currentTimeMillis() / 1000);
                 officialReply.setUpdateTime(System.currentTimeMillis() / 1000);
-                officialReplyMapper.insert(officialReply);
+                officialReplyMapper.updateById(officialReply);
                 break;
             case 2:
                 Assert.notNull(params.get("name"), "规则名称不能为空");
@@ -143,7 +143,7 @@ public class ChannelOaReplyServiceImpl implements IChannelOaReplyService {
                 officialReply.setStatus(Integer.parseInt(params.get("status")));
                 officialReply.setCreateTime(System.currentTimeMillis() / 1000);
                 officialReply.setUpdateTime(System.currentTimeMillis() / 1000);
-                officialReplyMapper.insert(officialReply);
+                officialReplyMapper.updateById(officialReply);
                 break;
             case 3:
                 Assert.notNull(params.get("name"), "规则名称不能为空");
@@ -158,16 +158,31 @@ public class ChannelOaReplyServiceImpl implements IChannelOaReplyService {
                 officialReply.setStatus(Integer.parseInt(params.get("status")));
                 officialReply.setCreateTime(System.currentTimeMillis() / 1000);
                 officialReply.setUpdateTime(System.currentTimeMillis() / 1000);
-                officialReplyMapper.insert(officialReply);
+                officialReplyMapper.updateById(officialReply);
                 break;
             default:
                 throw new OperateException("不被支持的类型");
         }
     }
 
+    /**
+     * 回复删除
+     *
+     * @author fzr
+     * @param id 主键
+     */
     @Override
-    public void del() {
+    public void del(Integer id) {
+        OfficialReply officialReply =officialReplyMapper.selectOne(new QueryWrapper<OfficialReply>()
+                .eq("id", id)
+                .eq("is_delete", 0)
+                .last("limit 1"));
 
+        Assert.notNull(officialReply, "数据不存在!");
+
+        officialReply.setIsDelete(1);
+        officialReply.setDeleteTime(System.currentTimeMillis() / 1000);
+        officialReplyMapper.updateById(officialReply);
     }
 
 }

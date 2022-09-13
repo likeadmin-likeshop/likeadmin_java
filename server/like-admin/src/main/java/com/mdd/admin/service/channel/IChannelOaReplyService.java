@@ -24,6 +24,12 @@ public interface IChannelOaReplyService {
      */
     void edit(Map<String, String> params);
 
-    void del();
+    /**
+     * 回复删除
+     *
+     * @author fzr
+     * @param id 主键
+     */
+    void del(Integer id);
 
 }

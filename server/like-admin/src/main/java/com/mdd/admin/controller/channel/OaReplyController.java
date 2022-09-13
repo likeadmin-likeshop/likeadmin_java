@@ -1,7 +1,10 @@
 package com.mdd.admin.controller.channel;
 
+import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.admin.service.channel.IChannelOaReplyService;
 import com.mdd.common.core.AjaxResult;
+import com.mdd.common.validator.IDMustValidator;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -59,7 +62,8 @@ public class OaReplyController {
      * @return Object
      */
     @PostMapping("/edit")
-    public Object edit() {
+    public Object edit(@RequestBody Map<String, String> params) {
+        iChannelOaReplyService.edit(params);
         return AjaxResult.success();
     }
 
@@ -70,7 +74,9 @@ public class OaReplyController {
      * @return Object
      */
     @PostMapping("/del")
-    public Object del() {
+    public Object del(@RequestBody Map<String, String> params) {
+        Assert.notNull(params.get("id"), "id参数缺失");
+        iChannelOaReplyService.del(Integer.parseInt(params.get("id")));
         return AjaxResult.success();
     }
 
