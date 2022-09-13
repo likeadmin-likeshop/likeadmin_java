@@ -15,9 +15,9 @@ const requestHooks: RequestHooks = {
         if (baseUrl) {
             options.url = `${baseUrl}${options.url}`
         }
+        const token = getToken()
         // 添加token
-        if (withToken) {
-            const token = getToken()
+        if (withToken && token) {
             options.header.token = token
         }
         return options

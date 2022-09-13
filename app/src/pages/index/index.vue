@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { getIndex } from '@/api/shop'
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 const state = reactive<{
     pages: any[]
     article: any[]

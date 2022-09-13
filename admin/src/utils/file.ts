@@ -4,7 +4,6 @@
  */
 export function streamFileDownload(file: any, fileName = '文件名称.zip') {
     const blob = new Blob([file], { type: 'application/octet-stream;charset=UTF-8' })
-    console.log(blob.text())
     const url = window.URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.style.display = 'none'
