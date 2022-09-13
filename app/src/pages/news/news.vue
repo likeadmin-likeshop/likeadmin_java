@@ -19,6 +19,7 @@
                 </view>
             </tab>
         </tabs>
+        <tabbar />
     </view>
 </template>
 

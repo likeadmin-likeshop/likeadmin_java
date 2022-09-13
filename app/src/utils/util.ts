@@ -28,7 +28,6 @@ export const getRect = (selector: string, all = false, context?: any) => {
 }
 
 /**
-<<<<<<< HEAD
  * @description 获取当前页面实例
  */
 export function currentPage() {
@@ -52,19 +51,16 @@ export enum LinkTypeEnum {
     'SHOP_PAGES' = 'shop',
     'CUSTOM_LINK' = 'custom'
 }
-export function navigateTo(link: Link) {
+
+export function navigateTo(link: Link, navigateType: 'navigateTo' | 'reLaunch' = 'navigateTo') {
     let url: string
     switch (link.type) {
         case LinkTypeEnum.SHOP_PAGES:
             url = link.query ? `${link.path}?${objectToQuery(link.query)}` : link.path
-            if (link.isTab) {
-                uni.switchTab({ url })
-            } else {
-                uni.navigateTo({ url })
-            }
+            uni[navigateType]({ url })
             break
         case LinkTypeEnum.CUSTOM_LINK:
-            uni.navigateTo({ url: `/pages/webview/webview?url=${link.path}` })
+            uni[navigateType]({ url: `/pages/webview/webview?url=${link.path}` })
     }
 }
 

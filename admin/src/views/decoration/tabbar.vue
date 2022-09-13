@@ -28,54 +28,76 @@
                         <el-tabs model-value="content">
                             <el-tab-pane label="导航图片" name="content">
                                 <div class="mb-[18px]">
-                                    <del-wrap
-                                        v-for="(item, index) in tabbar.list"
-                                        :key="index"
-                                        @close="handleDelete(index)"
-                                        class="max-w-[400px]"
+                                    <draggable
+                                        class="draggable"
+                                        v-model="tabbar.list"
+                                        animation="300"
+                                        draggable=".draggable"
+                                        :move="onMove"
                                     >
-                                        <div class="bg-fill-light w-full p-4 mt-4">
-                                            <el-form-item label="导航图标">
-                                                <material-picker
-                                                    v-model="item.unselected"
-                                                    upload-class="bg-body"
-                                                    size="60px"
-                                                >
-                                                    <template #upload>
-                                                        <div class="upload-btn w-[60px] h-[60px]">
-                                                            <icon name="el-icon-Plus" :size="16" />
-                                                            <span class="text-xs leading-5">
-                                                                未选中
-                                                            </span>
-                                                        </div>
-                                                    </template>
-                                                </material-picker>
-                                                <material-picker
-                                                    v-model="item.selected"
-                                                    upload-class="bg-body"
-                                                    size="60px"
-                                                >
-                                                    <template #upload>
-                                                        <div class="upload-btn w-[60px] h-[60px]">
-                                                            <icon name="el-icon-Plus" :size="16" />
-                                                            <span class="text-xs leading-5">
-                                                                选中
-                                                            </span>
-                                                        </div>
-                                                    </template>
-                                                </material-picker>
-                                            </el-form-item>
-                                            <el-form-item label="导航名称">
-                                                <el-input
-                                                    v-model="item.name"
-                                                    placeholder="请输入名称"
-                                                />
-                                            </el-form-item>
-                                            <el-form-item label="链接地址">
-                                                <link-picker v-model="item.link" />
-                                            </el-form-item>
-                                        </div>
-                                    </del-wrap>
+                                        <template v-slot:item="{ element, index }">
+                                            <del-wrap
+                                                @close="handleDelete(index)"
+                                                class="max-w-[400px]"
+                                                :class="{ draggable: index != 0 }"
+                                            >
+                                                <div class="bg-fill-light w-full p-4 mt-4">
+                                                    <el-form-item label="导航图标">
+                                                        <material-picker
+                                                            v-model="element.unselected"
+                                                            upload-class="bg-body"
+                                                            size="60px"
+                                                        >
+                                                            <template #upload>
+                                                                <div
+                                                                    class="upload-btn w-[60px] h-[60px]"
+                                                                >
+                                                                    <icon
+                                                                        name="el-icon-Plus"
+                                                                        :size="16"
+                                                                    />
+                                                                    <span class="text-xs leading-5">
+                                                                        未选中
+                                                                    </span>
+                                                                </div>
+                                                            </template>
+                                                        </material-picker>
+                                                        <material-picker
+                                                            v-model="element.selected"
+                                                            upload-class="bg-body"
+                                                            size="60px"
+                                                        >
+                                                            <template #upload>
+                                                                <div
+                                                                    class="upload-btn w-[60px] h-[60px]"
+                                                                >
+                                                                    <icon
+                                                                        name="el-icon-Plus"
+                                                                        :size="16"
+                                                                    />
+                                                                    <span class="text-xs leading-5">
+                                                                        选中
+                                                                    </span>
+                                                                </div>
+                                                            </template>
+                                                        </material-picker>
+                                                    </el-form-item>
+                                                    <el-form-item label="导航名称">
+                                                        <el-input
+                                                            v-model="element.name"
+                                                            placeholder="请输入名称"
+                                                        />
+                                                    </el-form-item>
+                                                    <el-form-item label="链接地址">
+                                                        <link-picker
+                                                            v-model="element.link"
+                                                            :disabled="index == 0"
+                                                        />
+                                                    </el-form-item>
+                                                </div>
+                                            </del-wrap>
+                                        </template>
+                                    </draggable>
                                 </div>
 
                                 <el-form-item v-if="tabbar.list?.length < max" label-width="0">
@@ -111,6 +133,8 @@
 <script lang="ts" setup>
 import { getDecorateTabbar, setDecorateTabbar } from '@/api/decoration'
 import feedback from '@/utils/feedback'
+import Draggable from 'vuedraggable'
+
 const max = 5
 const min = 2
 const tabbar = reactive({
@@ -119,6 +143,12 @@ const tabbar = reactive({
         selectedColor: ''
     },
     list: [
+        {
+            name: '',
+            selected: '',
+            unselected: '',
+            link: {}
+        },
         {
             name: '',
             selected: '',
@@ -147,9 +177,16 @@ const handleDelete = (index: number) => {
     tabbar.list.splice(index, 1)
 }
 
+const onMove = (e: any) => {
+    if (e.relatedContext.index == 0) {
+        return false
+    }
+    return true
+}
+
 const getData = async () => {
     const data = await getDecorateTabbar()
-    tabbar.list = data.list
+    tabbar.list = data.list.map((item: any) => ({ ...item, link: JSON.parse(item.link) }))
     tabbar.style = data.style
 }
 const setData = async () => {

@@ -9,16 +9,16 @@ export const useAppStore = defineStore({
     state: (): AppSate => ({
         config: {
             website: {},
-            login: {}
+            login: {},
+            tabbar: [],
+            style: {}
         }
     }),
     getters: {
-        getWebsiteConfig(state) {
-            return state.config.website
-        },
-        getLoginConfig(state) {
-            return state.config.login
-        }
+        getWebsiteConfig: (state) => state.config.website,
+        getLoginConfig: (state) => state.config.login,
+        getTabbarConfig: (state) => state.config.tabbar,
+        getStyleConfig: (state) => state.config.style
     },
     actions: {
         getImageUrl(url: string) {

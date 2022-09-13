@@ -117,32 +117,6 @@
         "navigationBarBackgroundColor": "#FFFFFF",
         "backgroundColor": "#F8F8F8"
     },
-    "tabBar": {
-        "color": "#666666",
-        "selectedColor": "#4173FF",
-        "borderStyle": "black",
-        "backgroundColor": "#ffffff",
-        "list": [
-            {
-                "iconPath": "/static/images/tabs/home.png",
-                "selectedIconPath": "/static/images/tabs/home_s.png",
-                "pagePath": "pages/index/index",
-                "text": "首页"
-            },
-            {
-                "iconPath": "/static/images/tabs/news.png",
-                "selectedIconPath": "/static/images/tabs/news_s.png",
-                "pagePath": "pages/news/news",
-                "text": "资讯"
-            },
-            {
-                "iconPath": "/static/images/tabs/user.png",
-                "selectedIconPath": "/static/images/tabs/user_s.png",
-                "pagePath": "pages/user/user",
-                "text": "我的"
-            }
-        ]
-    },
     "easycom": {
         "custom": {
             "^(?!z-paging-refresh|z-paging-load-more)z-paging(.*)": "z-paging/components/z-paging$1/z-paging$1.vue",

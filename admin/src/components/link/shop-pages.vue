@@ -35,20 +35,17 @@ const linkList = ref([
     {
         path: '/pages/index/index',
         name: '商城首页',
-        type: LinkTypeEnum.SHOP_PAGES,
-        isTab: true
+        type: LinkTypeEnum.SHOP_PAGES
     },
     {
         path: '/pages/news/news',
         name: '文章资讯',
-        type: LinkTypeEnum.SHOP_PAGES,
-        isTab: true
+        type: LinkTypeEnum.SHOP_PAGES
     },
     {
         path: '/pages/user/user',
         name: '个人中心',
-        type: LinkTypeEnum.SHOP_PAGES,
-        isTab: true
+        type: LinkTypeEnum.SHOP_PAGES
     },
     {
         path: '/pages/collection/collection',

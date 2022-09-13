@@ -57,7 +57,11 @@
                 </el-form-item>
                 <el-form-item label="联系电话：">
                     {{ formData.mobile || '-' }}
-                    <popover-input class="ml-[10px]" @confirm="handleEdit($event, 'mobile')">
+                    <popover-input
+                        class="ml-[10px]"
+                        type="number"
+                        @confirm="handleEdit($event, 'mobile')"
+                    >
                         <el-button type="primary" link v-perms="['user:edit']">
                             <icon name="el-icon-EditPen" />
                         </el-button>
@@ -104,6 +108,7 @@ const getDetails = async () => {
 }
 
 const handleEdit = async (value: string, field: string) => {
+    if (!value) return
     await userEdit({
         id: route.query.id,
         field,

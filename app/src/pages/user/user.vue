@@ -16,6 +16,7 @@
                 <w-user-banner :content="item.content" :styles="item.styles" />
             </template>
         </view>
+        <tabbar />
     </view>
 </template>
 

@@ -24,6 +24,7 @@
                 :item="item"
             />
         </view>
+        <tabbar />
     </view>
 </template>
 
