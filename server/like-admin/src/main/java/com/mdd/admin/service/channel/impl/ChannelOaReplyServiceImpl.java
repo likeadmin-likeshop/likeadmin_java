@@ -7,13 +7,18 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mdd.admin.service.channel.IChannelOaReplyService;
 import com.mdd.admin.validate.common.PageParam;
 import com.mdd.common.entity.OfficialReply;
+import com.mdd.common.entity.server.Sys;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.OfficialReplyMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
 
+/**
+ * 公众号回复服务实现类
+ */
 @Service
 public class ChannelOaReplyServiceImpl implements IChannelOaReplyService {
 
@@ -155,18 +160,30 @@ public class ChannelOaReplyServiceImpl implements IChannelOaReplyService {
      * @author fzr
      * @param params 参数
      */
+    @Transactional
     @Override
     public void add(Map<String, String> params) {
         String type = params.getOrDefault("type", "");
+
+        if (!type.equals("keyword")) {
+            OfficialReply reply = new OfficialReply();
+            reply.setStatus(0);
+            Integer t = type.equals("follow") ? 1 : 3;
+            officialReplyMapper.update(reply,  new QueryWrapper<OfficialReply>()
+                    .eq("reply_type", t));
+        }
+
         OfficialReply officialReply = new OfficialReply();
         switch (type) {
             case "follow":
                 Assert.notNull(params.get("name"), "规则名称不能为空");
                 Assert.notNull(params.get("contentType"), "请正确选择回复类型");
                 Assert.notNull(params.get("content"), "回复内容不能为空");
+                Assert.notNull(params.get("sort"), "排序号不能为空");
                 Assert.notNull(params.get("status"), "请正确选择状态");
                 officialReply.setName(params.get("name"));
                 officialReply.setReplyType(1);
+                officialReply.setSort(Integer.parseInt(params.get("sort")));
                 officialReply.setContentType(Integer.parseInt(params.get("contentType")));
                 officialReply.setContent(params.get("content"));
                 officialReply.setStatus(Integer.parseInt(params.get("status")));
@@ -217,6 +234,7 @@ public class ChannelOaReplyServiceImpl implements IChannelOaReplyService {
      * @author fzr
      * @param params 参数
      */
+    @Transactional
     @Override
     public void edit(Map<String, String> params) {
         Assert.notNull(params.get("id"), "id参数缺失");
@@ -229,15 +247,24 @@ public class ChannelOaReplyServiceImpl implements IChannelOaReplyService {
 
         Assert.notNull(officialReply, "数据不存在!");
 
+        if (officialReply.getReplyType() != 2) {
+            OfficialReply reply = new OfficialReply();
+            reply.setStatus(0);
+            officialReplyMapper.update(reply,  new QueryWrapper<OfficialReply>()
+                    .eq("reply_type", officialReply.getReplyType() ));
+        }
+
         switch (officialReply.getReplyType()) {
             case 1:
                 Assert.notNull(params.get("name"), "规则名称不能为空");
                 Assert.notNull(params.get("contentType"), "请正确选择回复类型");
                 Assert.notNull(params.get("content"), "回复内容不能为空");
+                Assert.notNull(params.get("sort"), "排序号不能为空");
                 Assert.notNull(params.get("status"), "请正确选择状态");
                 officialReply.setId(id);
                 officialReply.setName(params.get("name"));
                 officialReply.setReplyType(1);
+                officialReply.setSort(Integer.parseInt(params.get("sort")));
                 officialReply.setContentType(Integer.parseInt(params.get("contentType")));
                 officialReply.setContent(params.get("content"));
                 officialReply.setStatus(Integer.parseInt(params.get("status")));
@@ -303,5 +330,34 @@ public class ChannelOaReplyServiceImpl implements IChannelOaReplyService {
         officialReply.setDeleteTime(System.currentTimeMillis() / 1000);
         officialReplyMapper.updateById(officialReply);
     }
+
+    /**
+     * 回复状态
+     *
+     * @author fzr
+     * @param id 主键
+     */
+    @Override
+    public void status(Integer id) {
+        OfficialReply officialReply = officialReplyMapper.selectOne(new QueryWrapper<OfficialReply>()
+                .eq("is_delete", 0)
+                .eq("id", id)
+                .last("limit 1"));
+
+        Assert.notNull(officialReply, "数据不存在!");
+
+        if (officialReply.getReplyType() != 2 && officialReply.getStatus() == 1) {
+            OfficialReply reply = new OfficialReply();
+            reply.setStatus(0);
+            officialReplyMapper.update(reply,  new QueryWrapper<OfficialReply>()
+                    .eq("reply_type", officialReply.getReplyType()));
+        }
+
+        officialReply.setId(id);
+        officialReply.setStatus(officialReply.getStatus() == 1 ? 0 : 1);
+        officialReply.setUpdateTime(System.currentTimeMillis() / 1000);
+        officialReplyMapper.updateById(officialReply);
+    }
+
 
 }

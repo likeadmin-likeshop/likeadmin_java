@@ -85,4 +85,18 @@ public class OaReplyController {
         return AjaxResult.success();
     }
 
+    /**
+     * 回复状态
+     *
+     * @author fzr
+     * @return Object
+     */
+    @PostMapping("/status")
+    public Object status(@RequestBody Map<String, String> params) {
+        Assert.notNull(params.get("id"), "id参数缺失");
+        iChannelOaReplyService.status(Integer.parseInt(params.get("id")));
+        return AjaxResult.success();
+    }
+
+
 }

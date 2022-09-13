@@ -5,6 +5,9 @@ import com.mdd.admin.validate.common.PageParam;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 公众号回复服务接口类
+ */
 public interface IChannelOaReplyService {
 
     /**
@@ -49,5 +52,13 @@ public interface IChannelOaReplyService {
      * @param id 主键
      */
     void del(Integer id);
+
+    /**
+     * 回复状态
+     *
+     * @author fzr
+     * @param id 主键
+     */
+    void status(Integer id);
 
 }
