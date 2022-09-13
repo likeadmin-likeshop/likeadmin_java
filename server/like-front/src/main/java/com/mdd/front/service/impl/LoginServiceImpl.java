@@ -131,6 +131,7 @@ public class LoginServiceImpl implements ILoginService {
                 model.setCreateTime(System.currentTimeMillis() / 1000);
                 model.setUpdateTime(System.currentTimeMillis() / 1000);
                 userMapper.insert(model);
+                user = model;
                 userId = model.getId();
 
                 if (StringUtil.isNull(userAuth)) {
@@ -169,6 +170,7 @@ public class LoginServiceImpl implements ILoginService {
 
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("id", userId);
+            response.put("isBindMobile", !user.getMobile().equals(""));
             response.put("token", token);
             return response;
         } catch (WxErrorException e) {
@@ -215,6 +217,7 @@ public class LoginServiceImpl implements ILoginService {
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("id", user.getId());
+        response.put("isBindMobile", !user.getMobile().equals(""));
         response.put("token", token);
         return response;
     }
@@ -249,6 +252,7 @@ public class LoginServiceImpl implements ILoginService {
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("id", user.getId());
+        response.put("isBindMobile", !user.getMobile().equals(""));
         response.put("token", token);
         return response;
     }
