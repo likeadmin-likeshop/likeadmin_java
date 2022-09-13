@@ -1,4 +1,4 @@
-package com.mdd.admin.controller.channel.oa;
+package com.mdd.admin.controller.channel;
 
 import com.mdd.admin.service.channel.IChannelOaMenuService;
 import com.mdd.common.core.AjaxResult;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * 公众号菜单
+ * 公众号菜单管理
  */
 @RestController
 @RequestMapping("api/channel/oa/menu")
