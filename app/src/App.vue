@@ -4,7 +4,6 @@ import { useAppStore } from './stores/app'
 import { useUserStore } from './stores/user'
 const { getConfig } = useAppStore()
 const { getUser } = useUserStore()
-console.log(useUserStore())
 onLaunch(() => {
     getConfig()
     getUser()

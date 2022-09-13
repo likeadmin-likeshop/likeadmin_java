@@ -24,7 +24,7 @@
                 class="flex items-center border-light border-solid border-0 border-b h-[100rpx] px-[24rpx]"
                 @click="handleClick(item.link)"
             >
-                <u-image width="48" height="48" :src="item.image" alt="" />
+                <u-image width="48" height="48" :src="getImageUrl(item.image)" alt="" />
                 <div class="ml-[20rpx] flex-1">{{ item.name }}</div>
                 <div class="text-muted">
                     <u-icon name="arrow-right" />
