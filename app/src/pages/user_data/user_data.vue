@@ -73,7 +73,14 @@
     <u-popup v-model="showNickName" :closeable="true" mode="center" border-radius="20">
         <view class="px-[50rpx] py-[40rpx] bg-white" style="width: 85vw">
             <view class="mb-[70rpx] text-xl text-center">修改昵称</view>
-            <u-field v-model="newNickname" label="新昵称" placeholder="请输入新的昵称"> </u-field>
+			<u-form-item borderBottom>
+			    <u-input
+			        class="flex-1"
+			        v-model="newNickname"
+			        placeholder="请输入昵称"
+			        :border="false"
+			    />
+			</u-form-item>
             <view class="mt-[80rpx]">
                 <u-button @click="changeNameConfirm" type="primary" shape="circle"> 确定 </u-button>
             </view>
@@ -84,7 +91,14 @@
     <u-popup v-model="showUserName" :closeable="true" mode="center" border-radius="20">
         <view class="px-[50rpx] py-[40rpx] bg-white" style="width: 85vw">
             <view class="mb-[70rpx] text-xl text-center">修改账号</view>
-            <u-field v-model="newUsername" label="新账号" placeholder="请输入新的账号"> </u-field>
+			<u-form-item borderBottom>
+			    <u-input
+			        class="flex-1"
+			        v-model="newUsername"
+			        placeholder="请输入账号"
+			        :border="false"
+			    />
+			</u-form-item>
             <view class="mt-[80rpx]">
                 <u-button @click="changeUserNameConfirm" type="primary" shape="circle">
                     确定
@@ -312,7 +326,6 @@ onUnload(() => {
 .header {
     width: 100%;
     height: 240rpx;
-    // border-radius: 14rpx;
 
     image {
         width: 120rpx;
@@ -323,8 +336,7 @@ onUnload(() => {
 
 .item {
     margin-top: 2rpx;
-    padding: 30rpx 20rpx;
-    // border-radius: 14rpx;
+    padding: 30rpx;
     background-color: #ffffff;
 
     .label {
@@ -335,16 +347,5 @@ onUnload(() => {
         flex: 1;
         width: 80%;
     }
-
-    .bind {
-        height: 56rpx;
-        border-width: 1rpx;
-        border-style: solid;
-    }
-}
-
-.license {
-    margin-top: 80rpx;
-    color: #a7a7a7;
 }
 </style>
