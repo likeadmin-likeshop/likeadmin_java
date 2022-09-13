@@ -321,9 +321,8 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
      */
     @Override
     public void upInfo(SystemAuthAdminParam systemAuthAdminParam, Integer adminId) {
-        String[] field = {"id", "username", "nickname", "password", "salt"};
         SystemAuthAdmin model = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
-                .select(field)
+                .select("id,username,nickname,password,salt")
                 .eq("id", adminId)
                 .eq("is_delete", 0)
                 .last("limit 1"));
