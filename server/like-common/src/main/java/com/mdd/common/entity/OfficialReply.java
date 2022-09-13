@@ -24,6 +24,7 @@ public class OfficialReply implements Serializable {
     private Integer status;       // 启动状态: [1=启动, 0=关闭]
     private String content;       // 回复内容
     private Integer sort;         // 排序编号
+    private Integer isDelete;     // 是否删除
     private Long createTime;      // 创建时间
     private Long updateTime;      // 更新时间
     private Long deleteTime;      // 删除时间
