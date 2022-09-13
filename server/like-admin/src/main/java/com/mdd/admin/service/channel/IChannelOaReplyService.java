@@ -1,12 +1,30 @@
 package com.mdd.admin.service.channel;
 
+import com.mdd.admin.validate.common.PageParam;
+
+import java.util.List;
 import java.util.Map;
 
 public interface IChannelOaReplyService {
 
-    Object list();
+    /**
+     * 回复列表
+     *
+     * @author fzr
+     * @param pageParam 分页参数
+     * @param params 参数
+     * @return List<Map<String, Object>>
+     */
+    List<Map<String, Object>> list(PageParam pageParam, Map<String, String> params);
 
-    Object detail();
+    /**
+     * 回复详情
+     *
+     * @author fzr
+     * @param id 主键
+     * @return Map<String, Object>
+     */
+    Map<String, Object> detail(Integer id);
 
     /**
      * 回复新增

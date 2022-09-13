@@ -2,12 +2,14 @@ package com.mdd.admin.controller.channel;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.admin.service.channel.IChannelOaReplyService;
+import com.mdd.admin.validate.common.PageParam;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.validator.IDMustValidator;
+import com.mdd.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,8 +29,10 @@ public class OaReplyController {
      * @return Object
      */
     @GetMapping("/list")
-    public Object list() {
-        return AjaxResult.success();
+    public Object list(@Validated PageParam pageParam,
+                       @RequestParam Map<String, String> params) {
+        List<Map<String, Object>> list = iChannelOaReplyService.list(pageParam, params);
+        return AjaxResult.success(list);
     }
 
     /**
@@ -38,8 +42,9 @@ public class OaReplyController {
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail() {
-        return AjaxResult.success();
+    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+        Map<String, Object> map = iChannelOaReplyService.detail(id);
+        return AjaxResult.success(map);
     }
 
     /**

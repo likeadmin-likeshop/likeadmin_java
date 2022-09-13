@@ -1,17 +1,18 @@
 package com.mdd.admin.service.channel.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mdd.admin.service.channel.IChannelOaReplyService;
+import com.mdd.admin.validate.common.PageParam;
 import com.mdd.common.entity.OfficialReply;
-import com.mdd.common.entity.server.Sys;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.OfficialReplyMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ChannelOaReplyServiceImpl implements IChannelOaReplyService {
@@ -19,15 +20,133 @@ public class ChannelOaReplyServiceImpl implements IChannelOaReplyService {
     @Resource
     OfficialReplyMapper officialReplyMapper;
 
-
+    /**
+     * 回复列表
+     *
+     * @author fzr
+     * @param pageParam 分页参数
+     * @param params 参数
+     * @return List<Map<String, Object>>
+     */
     @Override
-    public Object list() {
-        return null;
+    public List<Map<String, Object>> list(PageParam pageParam, Map<String, String> params) {
+        Integer pageNo   = pageParam.getPageNo();
+        Integer pageSize = pageParam.getPageSize();
+
+        Assert.notNull(params.get("type"), "type参数缺失");
+        int type;
+        switch (params.get("type")) {
+            case "follow":
+                type = 1;
+                break;
+            case "keyword":
+                type = 2;
+                break;
+            case "default":
+                type = 3;
+                break;
+            default:
+                throw new OperateException("不被支持的类型!");
+        }
+
+        QueryWrapper<OfficialReply> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("is_delete", 0);
+        queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
+        queryWrapper.eq("reply_type", type);
+        IPage<OfficialReply> iPage = officialReplyMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
+
+        List<Map<String, Object>> list = new LinkedList<>();
+        for (OfficialReply officialReply : iPage.getRecords()) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            switch (params.get("type")) {
+                case "follow":
+                    map.put("id", officialReply.getId());
+                    map.put("name", officialReply.getName());
+                    map.put("replyType", officialReply.getReplyType());
+                    map.put("contentType", officialReply.getContentType());
+                    map.put("content", officialReply.getContent());
+                    map.put("sort", officialReply.getSort());
+                    map.put("status", officialReply.getStatus());
+                    break;
+                case "keyword":
+                    map.put("id", officialReply.getId());
+                    map.put("name", officialReply.getName());
+                    map.put("keyword", officialReply.getKeyword());
+                    map.put("matchingType", officialReply.getMatchingType());
+                    map.put("replyType", officialReply.getReplyType());
+                    map.put("contentType", officialReply.getContentType());
+                    map.put("content", officialReply.getContent());
+                    map.put("sort", officialReply.getSort());
+                    map.put("status", officialReply.getStatus());
+                    break;
+                case "default":
+                    map.put("id", officialReply.getId());
+                    map.put("name", officialReply.getName());
+                    map.put("replyType", officialReply.getReplyType());
+                    map.put("content", officialReply.getContent());
+                    map.put("sort", officialReply.getSort());
+                    map.put("status", officialReply.getStatus());
+                    break;
+                default:
+                    throw new OperateException("不被支持的类型!");
+            }
+            list.add(map);
+        }
+
+        return list;
     }
 
+    /**
+     * 回复详情
+     *
+     * @author fzr
+     * @param id 主键
+     * @return Map<String, Object>
+     */
     @Override
-    public Object detail() {
-        return null;
+    public Map<String, Object> detail(Integer id) {
+        OfficialReply officialReply = officialReplyMapper.selectOne(new QueryWrapper<OfficialReply>()
+                .eq("id", id)
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        Assert.notNull(officialReply, "数据不存在!");
+
+        Map<String, Object> map = new LinkedHashMap<>();
+        switch (officialReply.getReplyType()) {
+            case 1:
+                map.put("id", officialReply.getId());
+                map.put("name", officialReply.getName());
+                map.put("replyType", officialReply.getReplyType());
+                map.put("contentType", officialReply.getContentType());
+                map.put("content", officialReply.getContent());
+                map.put("sort", officialReply.getSort());
+                map.put("status", officialReply.getStatus());
+                break;
+            case 2:
+                map.put("id", officialReply.getId());
+                map.put("name", officialReply.getName());
+                map.put("keyword", officialReply.getKeyword());
+                map.put("replyType", officialReply.getReplyType());
+                map.put("matchingType", officialReply.getMatchingType());
+                map.put("contentType", officialReply.getContentType());
+                map.put("content", officialReply.getContent());
+                map.put("sort", officialReply.getSort());
+                map.put("status", officialReply.getStatus());
+                break;
+            case 3:
+                map.put("id", officialReply.getId());
+                map.put("name", officialReply.getName());
+                map.put("replyType", officialReply.getReplyType());
+                map.put("content", officialReply.getContent());
+                map.put("sort", officialReply.getSort());
+                map.put("status", officialReply.getStatus());
+                break;
+            default:
+                throw new OperateException("不被支持的类型!");
+        }
+
+        return map;
     }
 
     /**
