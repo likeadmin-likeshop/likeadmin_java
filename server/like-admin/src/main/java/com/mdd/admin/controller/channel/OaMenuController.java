@@ -2,36 +2,56 @@ package com.mdd.admin.controller.channel;
 
 import com.mdd.admin.service.channel.IChannelOaMenuService;
 import com.mdd.common.core.AjaxResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 公众号菜单管理
  */
 @RestController
-@RequestMapping("api/channel/oa/menu")
+@RequestMapping("api/channel/oaMenu")
 public class OaMenuController {
 
     @Resource
     IChannelOaMenuService iChannelOaMenuService;
 
-    @GetMapping("/list")
-    public Object list() {
+    /**
+     * 菜单详情
+     *
+     * @author fzr
+     * @return Object
+     */
+    @GetMapping("/detail")
+    public Object detail() {
         iChannelOaMenuService.list();
         return AjaxResult.success();
     }
 
-    @PostMapping("/add")
-    public Object add() {
+    /**
+     * 仅是保存菜单
+     *
+     * @author fzr
+     * @param params 参数
+     * @return Object
+     */
+    @PostMapping("/save")
+    public Object save(@RequestBody List<Object> params) {
+        iChannelOaMenuService.save(params, false);
         return AjaxResult.success();
     }
 
-    @PostMapping("/del")
-    public Object del() {
+    /**
+     * 保存并发布菜单
+     *
+     * @author fzr
+     * @param params 参数
+     * @return Object
+     */
+    @PostMapping("/publish")
+    public Object publish(@RequestBody List<Object> params) {
+        iChannelOaMenuService.save(params, true);
         return AjaxResult.success();
     }
 
