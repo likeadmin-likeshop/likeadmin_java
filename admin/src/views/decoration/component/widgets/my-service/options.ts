@@ -7,7 +7,7 @@ export default () => ({
         data: [
             {
                 image: '',
-                name: '',
+                name: '导航名称',
                 link: {}
             }
         ]

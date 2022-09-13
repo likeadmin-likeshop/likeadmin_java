@@ -40,8 +40,7 @@ const styles = computed<CSSProperties>(() => {
 
 <style lang="scss" scoped>
 .el-image {
-    font-size: 0;
-    @apply bg-page;
+    display: block;
     .el-image__error {
         @apply text-xs;
     }

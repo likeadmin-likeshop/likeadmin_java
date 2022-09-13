@@ -61,7 +61,7 @@ const handleAdd = () => {
     if (props.modelValue?.length < props.max) {
         props.modelValue.push({
             image: '',
-            name: '',
+            name: '导航名称',
             link: {}
         })
     } else {

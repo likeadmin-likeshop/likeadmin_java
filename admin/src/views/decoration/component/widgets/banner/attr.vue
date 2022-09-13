@@ -9,7 +9,7 @@
             </el-form-item>
             <el-form-item label="图片设置">
                 <div class="flex-1">
-                    <div class="form-tips">最多添加5张，建议图片尺寸：750px*240px</div>
+                    <div class="form-tips">最多添加5张，建议图片尺寸：750px*340px</div>
                     <del-wrap
                         v-for="(item, index) in content.data"
                         :key="index"
