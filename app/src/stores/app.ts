@@ -8,10 +8,18 @@ export const useAppStore = defineStore({
     id: 'appStore',
     state: (): AppSate => ({
         config: {
-            website: {}
+            website: {},
+            login: {}
         }
     }),
-    getters: {},
+    getters: {
+        getWebsiteConfig(state) {
+            return state.config.website
+        },
+        getLoginConfig(state) {
+            return state.config.login
+        }
+    },
     actions: {
         getImageUrl(url: string) {
             return url ? `${this.config.domain}${url}` : ''

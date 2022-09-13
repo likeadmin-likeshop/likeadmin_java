@@ -98,6 +98,12 @@
             "path": "pages/webview/webview"
         },
         {
+            "path": "pages/bind_mobile/bind_mobile",
+            "style": {
+                "navigationBarTitleText": "绑定手机号"
+            }
+        },
+        {
             "path": "uni_modules/vk-uview-ui/components/u-avatar-cropper/u-avatar-cropper",
             "style": {
                 "navigationBarTitleText": "头像裁剪",

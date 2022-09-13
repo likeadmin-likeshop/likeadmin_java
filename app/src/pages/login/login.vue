@@ -8,7 +8,9 @@
         <view class="mt-4">{{ appStore.config.website.name }}</view>
         <view class="w-full mt-[60rpx]">
             <u-form borderBottom>
-                <template v-if="scene == LoginTypeEnum.ACCOUNT">
+                <template
+                    v-if="loginWay == LoginWayEnum.ACCOUNT && includeLoginWay(LoginWayEnum.ACCOUNT)"
+                >
                     <u-form-item borderBottom>
                         <u-icon class="mr-2" :size="36" name="/static/images/icon/icon_user.png" />
                         <u-input
@@ -40,7 +42,9 @@
                         </navigator>
                     </u-form-item>
                 </template>
-                <template v-if="scene == LoginTypeEnum.MOBILE">
+                <template
+                    v-if="loginWay == LoginWayEnum.MOBILE && includeLoginWay(LoginWayEnum.MOBILE)"
+                >
                     <u-form-item borderBottom>
                         <u-icon
                             class="mr-2"
@@ -77,7 +81,7 @@
                     </u-form-item>
                 </template>
             </u-form>
-            <view class="mt-[60rpx]">
+            <view class="mt-[40rpx]" v-if="isOpenAgreement">
                 <u-checkbox v-model="isCheckAgreement" shape="circle">
                     <view class="text-xs flex">
                         已阅读并同意
@@ -100,26 +104,43 @@
                     </view>
                 </u-checkbox>
             </view>
-            <view class="mt-[40rpx]">
-                <u-button type="primary" shape="circle" @click="handleLogin(scene)">
+            <view class="mt-[60rpx]">
+                <u-button type="primary" shape="circle" @click="handleLogin(formData.scene)">
                     登 录
                 </u-button>
             </view>
 
             <view class="text-content flex justify-between mt-[40rpx]">
-                <view v-if="scene == LoginTypeEnum.MOBILE" @click="scene = LoginTypeEnum.ACCOUNT">
-                    账号密码登录
+                <view class="flex-1">
+                    <view
+                        v-if="
+                            loginWay == LoginWayEnum.MOBILE && includeLoginWay(LoginWayEnum.ACCOUNT)
+                        "
+                        @click="changeLoginWay(LoginTypeEnum.ACCOUNT, LoginWayEnum.ACCOUNT)"
+                    >
+                        账号密码登录
+                    </view>
+                    <view
+                        v-if="
+                            loginWay == LoginWayEnum.ACCOUNT && includeLoginWay(LoginWayEnum.MOBILE)
+                        "
+                        @click="changeLoginWay(LoginTypeEnum.MOBILE, LoginWayEnum.MOBILE)"
+                    >
+                        短信验证码登录
+                    </view>
                 </view>
-                <view v-if="scene == LoginTypeEnum.ACCOUNT" @click="scene = LoginTypeEnum.MOBILE">
-                    短信验证码登录
-                </view>
+
                 <navigator url="/pages/register/register" hover-class="none">注册账号</navigator>
             </view>
             <!-- #ifdef MP-WEIXIN -->
-            <view class="mt-[80rpx]">
+            <view class="mt-[80rpx]" v-if="isOpenOtherAuth">
                 <u-divider>第三方登录</u-divider>
                 <div class="flex justify-center mt-[40rpx]">
-                    <div class="flex flex-col items-center" @click="wxLogin">
+                    <div
+                        v-if="includeAuthWay(LoginAuthEnum.WX)"
+                        class="flex flex-col items-center"
+                        @click="wxLogin"
+                    >
                         <u-icon name="/static/images/icon/icon_wx.png" size="80" />
                         <div class="text-sm mt-[10px]">微信登录</div>
                     </div>
@@ -138,20 +159,34 @@ import { useLockFn } from '@/hooks/useLockFn'
 import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
 import { currentPage } from '@/utils/util'
-import { reactive, ref, shallowRef } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
+import { computed, reactive, ref, shallowRef, watch } from 'vue'
 enum LoginTypeEnum {
     MOBILE = 'mobile',
     ACCOUNT = 'account',
     MNP = 'mnp'
 }
-const uCodeRef = shallowRef()
-const scene = ref(LoginTypeEnum.ACCOUNT)
-const codeTips = ref('')
-const isCheckAgreement = ref(false)
+
+enum LoginWayEnum {
+    ACCOUNT = 1,
+    MOBILE = 2
+}
+
+enum LoginAuthEnum {
+    WX = 1,
+    QQ = 2
+}
 
 const userStore = useUserStore()
 const appStore = useAppStore()
+
+const uCodeRef = shallowRef()
+const loginWay = ref<LoginWayEnum>()
+const codeTips = ref('')
+const isCheckAgreement = ref(false)
+
 const formData = reactive({
+    scene: '',
     username: '',
     password: '',
     code: '',
@@ -174,8 +209,27 @@ const sendSms = async () => {
     }
 }
 
+const changeLoginWay = (type: LoginTypeEnum, way: LoginWayEnum) => {
+    formData.scene = type
+    loginWay.value = way
+}
+
+const includeLoginWay = (way: LoginWayEnum) => {
+    return appStore.getLoginConfig.loginWay.includes(way)
+}
+
+const includeAuthWay = (way: LoginAuthEnum) => {
+    return appStore.getLoginConfig.autoLoginAuth.includes(way)
+}
+
+const isOpenAgreement = computed(() => appStore.getLoginConfig.openAgreement == 1)
+
+const isOpenOtherAuth = computed(() => appStore.getLoginConfig.openOtherAuth == 1)
+const isForceBindMobile = computed(() => appStore.getLoginConfig.forceBindMobile == 1)
+
 const loginFun = async (scene: LoginTypeEnum, code?: string) => {
-    if (!isCheckAgreement.value) return uni.$u.toast('请勾选已阅读并同意《服务协议》和《隐私协议》')
+    if (!isCheckAgreement.value && isOpenAgreement.value)
+        return uni.$u.toast('请勾选已阅读并同意《服务协议》和《隐私协议》')
     if (scene == LoginTypeEnum.ACCOUNT) {
         if (!formData.username) return uni.$u.toast('请输入账号/手机号码')
         if (!formData.password) return uni.$u.toast('请输入密码')
@@ -194,6 +248,15 @@ const loginFun = async (scene: LoginTypeEnum, code?: string) => {
     })
     try {
         const data = await login(params)
+        const { token, isBindMobile } = data
+        if (!isBindMobile && isForceBindMobile.value) {
+            userStore.temToken = token
+            uni.navigateTo({
+                url: '/pages/bind_mobile/bind_mobile'
+            })
+            uni.hideLoading()
+            return
+        }
         userStore.login(data.token)
         await userStore.getUser()
         uni.$u.toast('登录成功')
@@ -212,7 +275,7 @@ const loginFun = async (scene: LoginTypeEnum, code?: string) => {
     }
 }
 
-const { isLock, lockFn: handleLogin } = useLockFn(loginFun)
+const { lockFn: handleLogin } = useLockFn(loginFun)
 
 const wxLogin = async () => {
     const data: any = await uni.login({
@@ -220,6 +283,35 @@ const wxLogin = async () => {
     })
     handleLogin(LoginTypeEnum.MNP, data.code)
 }
+
+watch(
+    () => appStore.getLoginConfig,
+    (value) => {
+        if (value.loginWay) {
+            loginWay.value = value.loginWay[0]
+            //@ts-ignore
+            formData.scene = LoginTypeEnum[LoginWayEnum[loginWay.value]]
+        }
+    },
+    {
+        immediate: true
+    }
+)
+
+onShow(async () => {
+    try {
+        if (userStore.isLogin) {
+            uni.showLoading({
+                title: '请稍后...'
+            })
+            await userStore.getUser()
+            uni.hideLoading()
+            uni.navigateBack()
+        }
+    } catch (error) {
+        uni.hideLoading()
+    }
+})
 </script>
 
 <style lang="scss">

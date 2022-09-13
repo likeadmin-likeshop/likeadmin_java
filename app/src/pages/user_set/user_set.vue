@@ -41,40 +41,47 @@
                 <u-icon name="arrow-right" color="#666"></u-icon>
             </view>
         </navigator>
-		<navigator url="/pages/as_us/as_us">
-			<view class="item bg-white flex flex-1 justify-between">
-				<view class="">关于我们</view>
-				<view class="flex justify-between">
-					<view class="text-muted mr-[20rpx]">
-						{{ appStore.config.version }}
-					</view>
-					<u-icon name="arrow-right" color="#666"></u-icon>
-				</view>
-			</view>
-		</navigator>
-		
-		<view class="mt-[60rpx] mx-[26rpx]">
-			<u-button type="primary" shape="circle" @click="logoutHandle">
-			    退出登录
-			</u-button>
-		</view>
-		
-		
-        <u-action-sheet :list="list" v-model="show" @click="handleClick" :safe-area-inset-bottom="true"></u-action-sheet>
+        <navigator url="/pages/as_us/as_us">
+            <view class="item bg-white flex flex-1 justify-between">
+                <view class="">关于我们</view>
+                <view class="flex justify-between">
+                    <view class="text-muted mr-[20rpx]">
+                        {{ appStore.config.version }}
+                    </view>
+                    <u-icon name="arrow-right" color="#666"></u-icon>
+                </view>
+            </view>
+        </navigator>
+
+        <view class="mt-[60rpx] mx-[26rpx]">
+            <u-button type="primary" shape="circle" @click="logoutHandle"> 退出登录 </u-button>
+        </view>
+
+        <u-action-sheet
+            :list="list"
+            v-model="show"
+            @click="handleClick"
+            :safe-area-inset-bottom="true"
+        ></u-action-sheet>
     </view>
 </template>
 
 <script setup lang="ts">
 import { getUserInfo } from '@/api/user'
 import { onShow } from '@dcloudio/uni-app'
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
 import { AgreementEnum } from '@/enums/agreementEnums'
 
 const appStore = useAppStore()
 const userStore = useUserStore()
-const userInfo = ref({})
+const userInfo = ref({
+    avatar: '',
+    nickname: '',
+    username: '',
+    isBindMnp: ''
+})
 const list = ref([
     {
         text: '修改密码'
@@ -105,17 +112,15 @@ const handleClick = (index: number) => {
 
 // 退出登录
 const logoutHandle = () => {
-	uni.showModal({
-		content: '是否退出登录？',
-		confirmColor: '#4173FF',
-		success: ({
-			cancel
-		}) => {
-			if (cancel) return
-			userStore.login()
-			uni.redirectTo({ url: '/pages/login/login' })
-		}
-	})
+    uni.showModal({
+        content: '是否退出登录？',
+        confirmColor: '#4173FF',
+        success: ({ cancel }) => {
+            if (cancel) return
+            userStore.logout()
+            uni.redirectTo({ url: '/pages/login/login' })
+        }
+    })
 }
 
 onShow(() => {
@@ -126,11 +131,11 @@ onShow(() => {
 <style lang="scss" scoped>
 .user-set {
     .item {
-		padding: 30rpx;
+        padding: 30rpx;
     }
 
     .btn-border {
-        border-bottom: 2rpx solid #F8F8F8;
+        border-bottom: 2rpx solid #f8f8f8;
     }
 }
 </style>
