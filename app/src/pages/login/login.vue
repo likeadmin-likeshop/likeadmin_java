@@ -81,8 +81,20 @@
                 <u-checkbox v-model="isCheckAgreement" shape="circle">
                     <view class="text-xs flex">
                         已阅读并同意
-                        <navigator class="text-primary" hover-class="none">《服务协议》</navigator>
-                        和<navigator class="text-primary" hover-class="none">
+                        <navigator
+                            @click.stop=""
+                            class="text-primary"
+                            hover-class="none"
+                            url="/pages/agreement/agreement?type=service"
+                        >
+                            《服务协议》
+                        </navigator>
+                        和<navigator
+                            @click.stop=""
+                            class="text-primary"
+                            hover-class="none"
+                            url="/pages/agreement/agreement?type=privacy"
+                        >
                             《隐私协议》
                         </navigator>
                     </view>
@@ -125,6 +137,7 @@ import { SMSEnum } from '@/enums/appEnums'
 import { useLockFn } from '@/hooks/useLockFn'
 import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
+import { currentPage } from '@/utils/util'
 import { reactive, ref, shallowRef } from 'vue'
 enum LoginTypeEnum {
     MOBILE = 'mobile',
@@ -185,7 +198,14 @@ const loginFun = async (scene: LoginTypeEnum, code?: string) => {
         await userStore.getUser()
         uni.$u.toast('登录成功')
         uni.hideLoading()
-        uni.navigateBack()
+        uni.navigateBack({
+            success: () => {
+                // @ts-ignore
+                const { onLoad, options } = currentPage()
+                // 刷新上一个页面
+                onLoad && onLoad(options)
+            }
+        })
     } catch (error: any) {
         uni.hideLoading()
         throw new Error(error)

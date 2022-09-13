@@ -7,5 +7,6 @@ export interface Link {
     path: string
     name?: string
     type: string
-    params?: Record<string, any>
+    isTab: boolean
+    query?: Record<string, any>
 }

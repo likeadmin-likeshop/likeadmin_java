@@ -9,7 +9,7 @@
                 :key="index"
                 class="flex flex-col items-center w-1/4 mb-[15px]"
             >
-                <image-contain width="26px" height="26px" :src="item.image" alt="" />
+                <image-contain width="26px" height="26px" :src="getImageUrl(item.image)" alt="" />
                 <div class="mt-[7px]">{{ item.name }}</div>
             </div>
         </div>

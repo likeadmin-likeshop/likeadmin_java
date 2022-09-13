@@ -14,6 +14,7 @@ export interface RequestConfig {
     urlPrefix: string
     ignoreCancel: boolean
     withToken: boolean
+    isAuth: boolean
 }
 
 export interface RequestHooks {

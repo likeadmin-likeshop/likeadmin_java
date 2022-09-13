@@ -23,4 +23,6 @@ export function userBindMobile(data: any) {
 export function userMnpMobile(data: any) {
     return request.post({ url: '/user/mnpMobile', data: data })
 }
-
+export function userChangePwd(data: any) {
+    return request.post({ url: '/user/changePwd', data: data })
+}

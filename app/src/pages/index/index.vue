@@ -42,15 +42,18 @@ const getData = async () => {
     state.pages = JSON.parse(data.pages)
     state.article = data.article
 }
+
 getData()
 </script>
 
 <style lang="scss">
 .article-title {
     &::before {
+        content: '';
         width: 8rpx;
         height: 34rpx;
         display: block;
+        margin-right: 10rpx;
         background: $u-type-primary;
     }
 }

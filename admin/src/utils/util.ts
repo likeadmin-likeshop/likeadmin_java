@@ -16,7 +16,7 @@ export const addUnit = (value: string | number, unit = 'px') => {
  * @return {Boolean}
  */
 export const isEmpty = (value: unknown) => {
-    return value !== null && value !== '' && typeof value !== 'undefined'
+    return value == null && typeof value == 'undefined'
 }
 
 /**

@@ -52,7 +52,8 @@
             "path": "pages/user_set/user_set",
             "style": {
                 "navigationBarTitleText": "个人设置"
-            }
+            },
+            "auth": true
         },
         {
             "path": "pages/collection/collection",
@@ -77,18 +78,30 @@
             "path": "pages/change_password/change_password",
             "style": {
                 "navigationBarTitleText": "修改密码"
-            }
+            },
+            "auth": true
         },
         {
             "path": "pages/user_data/user_data",
             "style": {
                 "navigationBarTitleText": "个人资料"
-            }
+            },
+            "auth": true
         },
         {
             "path": "pages/search/search",
             "style": {
                 "navigationBarTitleText": "搜索"
+            }
+        },
+        {
+            "path": "pages/webview/webview"
+        },
+        {
+            "path": "uni_modules/vk-uview-ui/components/u-avatar-cropper/u-avatar-cropper",
+            "style": {
+                "navigationBarTitleText": "头像裁剪",
+                "navigationBarBackgroundColor": "#000000"
             }
         }
     ],
