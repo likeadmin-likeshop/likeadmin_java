@@ -2,6 +2,7 @@ package com.mdd.front.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.config.GlobalConfig;
@@ -15,6 +16,7 @@ import com.mdd.common.utils.*;
 import com.mdd.front.config.FrontConfig;
 import com.mdd.front.service.ILoginService;
 import com.mdd.front.validate.RegParam;
+import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -31,6 +33,7 @@ import java.util.Map;
 /**
  * 登录服务实现类
  */
+@Slf4j
 @Service
 public class LoginServiceImpl implements ILoginService {
 
@@ -268,6 +271,7 @@ public class LoginServiceImpl implements ILoginService {
             WxMpService wxMpService = WeChatUtil.official();
             WxOAuth2AccessToken wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(code);
             WxMpUser wxMpUser = wxMpService.getUserService().userInfo(wxOAuth2AccessToken.getAccessToken());
+            log.error(JSON.toJSONString(wxMpUser));
             System.out.println(wxMpUser);
         } catch (WxErrorException e) {
             System.out.println(e.getError());
