@@ -85,23 +85,21 @@ public class ChannelOaMenuServiceImpl implements IChannelOaMenuService {
                 }
                 for (Map<String, String> subItem : subButtons) {
                     WxMenuButton subMenuButton = new WxMenuButton();
-                    if (Integer.parseInt(subItem.get("menuType")) == 1) {
-                        Assert.notNull(subItem.get("visitType"), "子级菜单visitType参数缺失!");
-                        if (subItem.get("visitType").equals("miniprogram")) {
-                            Assert.notNull(subItem.get("appId"), "子级菜单appId参数缺失!");
-                            Assert.notNull(subItem.get("url"), "子级菜单url数缺失!");
-                            Assert.notNull(subItem.get("pagePath"), "子级菜单pagePath数缺失!");
-                            wxMenuButton.setType(subItem.get("visitType"));
-                            wxMenuButton.setAppId(subItem.get("appId"));
-                            wxMenuButton.setUrl(subItem.get("url"));
-                            wxMenuButton.setPagePath(subItem.get("pagePath"));
-                        } else {
-                            Assert.notNull(subItem.get("url"), "子级菜单url数缺失");
-                            wxMenuButton.setType(subItem.get("visitType"));
-                            wxMenuButton.setUrl(subItem.get("url"));
-                        }
-                        menuButtons.add(subMenuButton);
+                    Assert.notNull(subItem.get("visitType"), "子级菜单visitType参数缺失!");
+                    if (subItem.get("visitType").equals("miniprogram")) {
+                        Assert.notNull(subItem.get("appId"), "子级菜单appId参数缺失!");
+                        Assert.notNull(subItem.get("url"), "子级菜单url数缺失!");
+                        Assert.notNull(subItem.get("pagePath"), "子级菜单pagePath数缺失!");
+                        wxMenuButton.setType(subItem.get("visitType"));
+                        wxMenuButton.setAppId(subItem.get("appId"));
+                        wxMenuButton.setUrl(subItem.get("url"));
+                        wxMenuButton.setPagePath(subItem.get("pagePath"));
+                    } else {
+                        Assert.notNull(subItem.get("url"), "子级菜单url数缺失");
+                        wxMenuButton.setType(subItem.get("visitType"));
+                        wxMenuButton.setUrl(subItem.get("url"));
                     }
+                    menuButtons.add(subMenuButton);
                 }
             }
         }
