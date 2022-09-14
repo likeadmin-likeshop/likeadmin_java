@@ -2,12 +2,12 @@ package com.mdd.front.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
+import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.enums.NoticeEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.user.UserAuthMapper;
@@ -22,7 +22,6 @@ import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.impl.WxMpOAuth2ServiceImpl;
-import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -101,7 +100,6 @@ public class LoginServiceImpl implements ILoginService {
             String unionId = uniId == null ? "0" : uniId;
 
             UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
-                    .eq("client", client)
                     .nested(wq->wq
                         .eq("openid", openId).or()
                         .eq("unionid", unionId)
@@ -121,7 +119,7 @@ public class LoginServiceImpl implements ILoginService {
                 User model = new User();
                 model.setSn(sn);
                 model.setAvatar(avatarUrl);
-                model.setNickname(nickName.equals("")?"用户"+sn:nickName);
+                model.setNickname(nickName.equals("") ? "用户"+sn : nickName);
                 model.setUsername("u"+sn);
                 model.setSex(Integer.parseInt(gender));
                 model.setChannel(client);
@@ -270,13 +268,78 @@ public class LoginServiceImpl implements ILoginService {
         try {
             WxMpService wxMpService = WeChatUtil.official();
             WxOAuth2AccessToken wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(code);
+            String uniId = wxOAuth2AccessToken.getUnionId();
+            String openId  = wxOAuth2AccessToken.getOpenId();
+            String unionId = uniId == null ? "0" : uniId;
 
-//            WxMpUser wxMpUser = wxMpService.getUserService().userInfo(wxOAuth2AccessToken.getAccessToken());
-            System.out.println(wxOAuth2AccessToken.getOpenId());
+            UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
+                    .nested(wq->wq
+                        .eq("unionid", unionId).or()
+                        .eq("openid", openId)
+                    ).last("limit 1"));
+
+            Integer userId;
+            User user = null;
+            if (StringUtil.isNotNull(userAuth)) {
+                user = userMapper.selectOne(new QueryWrapper<User>()
+                        .eq("is_delete", 0)
+                        .eq("id", userAuth.getUserId())
+                        .last("limit 1"));
+            }
+
+            if (StringUtil.isNull(user)) {
+                Integer sn  = this.randMakeSn();
+                User model = new User();
+                model.setSn(sn);
+                model.setAvatar("/api/static/default_avatar.png");
+                model.setNickname("用户" + sn);
+                model.setUsername("u"+sn);
+                model.setChannel(ClientEnum.OA.getCode());
+                model.setSex(0);
+                model.setLastLoginIp(IpUtil.getHostIp());
+                model.setLastLoginTime(System.currentTimeMillis() / 1000);
+                model.setUpdateTime(System.currentTimeMillis() / 1000);
+                model.setCreateTime(System.currentTimeMillis() / 1000);
+                userMapper.insert(model);
+                userId = model.getId();
+                user = model;
+
+                if (StringUtil.isNull(userAuth)) {
+                    UserAuth auth = new UserAuth();
+                    auth.setUserId(model.getId());
+                    auth.setUnionid(unionId);
+                    auth.setOpenid(openId);
+                    auth.setClient(ClientEnum.OA.getCode());
+                    auth.setCreateTime(System.currentTimeMillis() / 1000);
+                    auth.setUpdateTime(System.currentTimeMillis() / 1000);
+                    userAuthMapper.insert(auth);
+                }
+            } else {
+                // 更新微信标识
+                userId = user.getId();
+                if (StringUtil.isEmpty(userAuth.getUnionid()) && StringUtil.isNotEmpty(unionId)) {
+                    userAuth.setUnionid(unionId);
+                    userAuthMapper.updateById(userAuth);
+                }
+
+                // 更新登录信息
+                user.setLastLoginIp(IpUtil.getHostIp());
+                user.setLastLoginTime(System.currentTimeMillis() / 1000);
+                userMapper.updateById(user);
+            }
+
+            String token = ToolsUtil.makeToken();
+            RedisUtil.set(FrontConfig.frontendTokenKey+token, userId, 7201);
+
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("id", userId);
+            response.put("isBindMobile", !user.getMobile().equals(""));
+            response.put("token", token);
+
+            return response;
         } catch (WxErrorException e) {
-            System.out.println(e.getError());
+            throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
-        return null;
     }
 
     /**

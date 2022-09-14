@@ -1,18 +1,10 @@
 package com.mdd.front.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.WeChatUtil;
 import com.mdd.front.service.ILoginService;
 import com.mdd.front.validate.RegParam;
 import lombok.extern.slf4j.Slf4j;
-import me.chanjar.weixin.common.api.WxConsts;
-import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.api.impl.WxMpOAuth2ServiceImpl;
-import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
-import me.chanjar.weixin.mp.enums.WxMpApiUrl;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,12 +61,17 @@ public class LoginController {
         return AjaxResult.success(map);
     }
 
+    /**
+     * 公众号登录
+     *
+     * @author fzr
+     * @param params 参数
+     * @return Object
+     */
     @GetMapping("/oaLogin")
     public Object oaLogin(@RequestParam Map<String, String> params) {
-//        log.error("微信公众号 ===================");
-        log.error(JSON.toJSONString(params));
-        //iLoginService.officeLogin(params);
-        return AjaxResult.success();
+        Map<String, Object> map = iLoginService.officeLogin(params);
+        return AjaxResult.success(map);
     }
 
     /**
