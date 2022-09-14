@@ -34,6 +34,7 @@
                 <el-table-column label="岗位编码" prop="code" min-width="100" />
                 <el-table-column label="岗位名称" prop="name" min-width="100" />
                 <el-table-column label="排序" prop="sort" min-width="100" />
+                <el-table-column label="备注" prop="remarks" min-width="100" />
                 <el-table-column label="添加时间" prop="createTime" min-width="180" />
                 <el-table-column label="部门状态" prop="isStop" min-width="100">
                     <template #default="{ row }">

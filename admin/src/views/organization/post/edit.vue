@@ -18,13 +18,13 @@
                 </el-form-item>
                 <el-form-item label="排序" prop="sort">
                     <div>
-                        <el-input-number v-model="formData.sort" />
+                        <el-input-number v-model="formData.sort" :min="0"/>
                         <div class="form-tips">默认为0， 数值越大越排前</div>
                     </div>
                 </el-form-item>
-                <el-form-item label="备注" prop="remark">
+                <el-form-item label="备注" prop="remarks">
                     <el-input
-                        v-model="formData.remark"
+                        v-model="formData.remarks"
                         placeholder="请输入备注"
                         type="textarea"
                         :autosize="{ minRows: 4, maxRows: 6 }"
@@ -54,7 +54,7 @@ const formData = reactive({
     name: '',
     code: '',
     sort: 0,
-    remark: '',
+    remarks: '',
     isStop: 1
 })
 
