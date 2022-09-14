@@ -72,7 +72,6 @@ public class IndexServiceImpl implements IIndexService {
             map.put("image", UrlUtil.toAbsoluteUrl(article.getImage()));
             map.put("author", article.getAuthor());
             map.put("visit", article.getVisit());
-            map.put("content", article.getContent());
             map.put("createTime", TimeUtil.timestampToDate(article.getCreateTime()));
             articleList.add(map);
         }
