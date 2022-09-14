@@ -21,6 +21,7 @@ public class FrontConfig {
 
             "/api/login/check",
             "/api/login/codeUrl",
+            "/api/login/oaLogin",
             "/api/login/register",
             "/api/login/forgotPassword",
 
