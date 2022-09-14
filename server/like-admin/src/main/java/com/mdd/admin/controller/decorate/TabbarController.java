@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * 装修底部导航管理
  */
-@RestController
+@RestController("decorateTabbarController")
 @RequestMapping("api/decorate/tabbar")
 public class TabbarController {
 
