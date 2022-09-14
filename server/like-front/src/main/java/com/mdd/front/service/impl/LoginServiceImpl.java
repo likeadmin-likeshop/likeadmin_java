@@ -90,14 +90,8 @@ public class LoginServiceImpl implements ILoginService {
         String gender    = params.getOrDefault("gender", "0");
         Integer client   = Integer.parseInt(params.getOrDefault("client", "1"));
 
-        Map<String, String> config = ConfigUtil.get("mp_channel");
-        WxMaService wxMaService = new WxMaServiceImpl();
-        WxMaDefaultConfigImpl wxConfig = new WxMaDefaultConfigImpl();
-        wxConfig.setAppid(config.getOrDefault("appId", ""));
-        wxConfig.setSecret(config.getOrDefault("appSecret", ""));
-        wxMaService.setWxMaConfig(wxConfig);
-
         try {
+            WxMaService wxMaService = WeChatUtil.mnp();
             WxMaJscode2SessionResult sessionResult = wxMaService.getUserService().getSessionInfo(code);
             String openId = sessionResult.getOpenid();
             String uniId = sessionResult.getUnionid();
