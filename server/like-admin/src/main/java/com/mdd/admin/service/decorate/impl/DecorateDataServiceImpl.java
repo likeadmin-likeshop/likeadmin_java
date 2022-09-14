@@ -37,7 +37,7 @@ public class DecorateDataServiceImpl implements IDecorateDataService {
                 .eq("is_show", 1)
                 .eq("is_delete", 0)
                 .orderByDesc("id")
-                .last("limit 20"));
+                .last("limit " + limit));
 
         for (Article article : articles) {
             Map<String, Object> map = new LinkedHashMap<>();
