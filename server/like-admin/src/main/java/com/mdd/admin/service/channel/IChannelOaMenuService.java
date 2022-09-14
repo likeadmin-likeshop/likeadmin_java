@@ -1,5 +1,7 @@
 package com.mdd.admin.service.channel;
 
+import com.alibaba.fastjson.JSONArray;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +10,7 @@ import java.util.Map;
  */
 public interface IChannelOaMenuService {
 
-    Object list();
+    JSONArray detail();
 
     /**
      * 保存菜单

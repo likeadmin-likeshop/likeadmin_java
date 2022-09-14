@@ -2,6 +2,7 @@ package com.mdd.admin.service.channel.impl;
 
 import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.google.common.collect.Maps;
 import com.mdd.admin.service.channel.IChannelOaMenuService;
@@ -31,28 +32,31 @@ import java.util.Map;
 public class ChannelOaMenuServiceImpl implements IChannelOaMenuService {
 
     @Override
-    public Object list() {
+    public JSONArray detail() {
+        String json = ConfigUtil.get("oa_channel", "menus", "[]");
+        return JSONArray.parseArray(json);
 
-        WxMpDefaultConfigImpl wxMpDefaultConfig = new WxMpDefaultConfigImpl();
-        wxMpDefaultConfig.setAppId("");
-        wxMpDefaultConfig.setSecret("");
-        wxMpDefaultConfig.setToken("");
-        wxMpDefaultConfig.setAesKey("");
 
-        WxMpService service = new WxMpServiceImpl();
-        service.setWxMpConfigStorage(wxMpDefaultConfig);
+//        WxMpDefaultConfigImpl wxMpDefaultConfig = new WxMpDefaultConfigImpl();
+//        wxMpDefaultConfig.setAppId("");
+//        wxMpDefaultConfig.setSecret("");
+//        wxMpDefaultConfig.setToken("");
+//        wxMpDefaultConfig.setAesKey("");
+//
+//        WxMpService service = new WxMpServiceImpl();
+//        service.setWxMpConfigStorage(wxMpDefaultConfig);
+//
+//        try {
+//            WxMpMenuService wxMpMenuService = new WxMpMenuServiceImpl(service);
+//
+//            WxMpGetSelfMenuInfoResult result = wxMpMenuService.getSelfMenuInfo();
+//            System.out.println(result);
+//        } catch (WxErrorException e) {
+//            System.out.println("哈哈哈哈哈");
+//            System.out.println(e.getError());
+//        }
 
-        try {
-            WxMpMenuService wxMpMenuService = new WxMpMenuServiceImpl(service);
-
-            WxMpGetSelfMenuInfoResult result = wxMpMenuService.getSelfMenuInfo();
-            System.out.println(result);
-        } catch (WxErrorException e) {
-            System.out.println("哈哈哈哈哈");
-            System.out.println(e.getError());
-        }
-
-        return null;
+//        return null;
     }
 
     @Override
@@ -71,6 +75,7 @@ public class ChannelOaMenuServiceImpl implements IChannelOaMenuService {
             // 一级菜单
             Assert.notNull(item.get("name"), "一级菜单名称不能为空");
             WxMenuButton wxMenuButton = new WxMenuButton();
+            wxMenuButton.setName(item.get("name"));
             if (Integer.parseInt(item.get("menuType")) == 1) {
                 Assert.notNull(item.get("visitType"), "一级菜单visitType数缺失");
                 if (item.get("visitType").equals("miniprogram")) {
@@ -120,7 +125,7 @@ public class ChannelOaMenuServiceImpl implements IChannelOaMenuService {
             }
         }
 
-        ConfigUtil.set("oa_channel", "menus", JSON.toJSONString(menuButtons));
+        ConfigUtil.set("oa_channel", "menus", JSON.toJSONString(objs));
 
         if (isPublish) {
             WxMenu wxMenu = new WxMenu();

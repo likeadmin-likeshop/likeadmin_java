@@ -1,5 +1,6 @@
 package com.mdd.admin.controller.channel;
 
+import com.alibaba.fastjson.JSONArray;
 import com.mdd.admin.service.channel.IChannelOaMenuService;
 import com.mdd.common.core.AjaxResult;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,8 @@ public class OaMenuController {
      */
     @GetMapping("/detail")
     public Object detail() {
-        iChannelOaMenuService.list();
-        return AjaxResult.success();
+        JSONArray detail = iChannelOaMenuService.detail();
+        return AjaxResult.success(detail);
     }
 
     /**
