@@ -145,6 +145,13 @@ public class IndexServiceImpl implements IIndexService {
         websiteMap.put("name", websiteConfig.getOrDefault("shopName", "LikeAdmin"));
         websiteMap.put("logo", UrlUtil.toAbsoluteUrl(websiteConfig.getOrDefault("shopLogo", "")));
 
+        // H5配置
+        Map<String, Object> h5Map = new LinkedHashMap<>();
+        Map<String, String> h5Config = ConfigUtil.get("h5_channel");
+        h5Map.put("status", Integer.parseInt(h5Config.getOrDefault("status", "0")));
+        h5Map.put("close", Integer.parseInt(h5Config.getOrDefault("close", "0")));
+        h5Map.put("url", RequestUtil.uri() + "/mobile");
+
         // 响应数据
         response.put("version", GlobalConfig.version);
         response.put("domain", UrlUtil.domain());
@@ -152,6 +159,7 @@ public class IndexServiceImpl implements IIndexService {
         response.put("tabbar", tabs);
         response.put("login", loginMap);
         response.put("website", websiteMap);
+        response.put("h5", h5Map);
         return response;
     }
 
