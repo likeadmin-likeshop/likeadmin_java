@@ -150,7 +150,8 @@ public class IndexServiceImpl implements IIndexService {
         Map<String, String> h5Config = ConfigUtil.get("h5_channel");
         h5Map.put("status", Integer.parseInt(h5Config.getOrDefault("status", "0")));
         h5Map.put("close", Integer.parseInt(h5Config.getOrDefault("close", "0")));
-        h5Map.put("url", RequestUtil.uri() + "/mobile");
+        h5Map.put("url", h5Config.getOrDefault("url", "0"));
+        h5Map.put("accessLink", RequestUtil.uri() + "/mobile");
 
         // 响应数据
         response.put("version", GlobalConfig.version);
