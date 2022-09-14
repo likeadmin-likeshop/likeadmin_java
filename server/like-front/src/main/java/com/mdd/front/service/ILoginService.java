@@ -45,6 +45,14 @@ public interface ILoginService {
     Map<String, Object> accountLogin(Map<String, String> params);
 
     /**
+     * 公众号登录
+     *
+     * @author fzr
+     * @return Map<String, Object>
+     */
+    Map<String, Object> officeLogin();
+
+    /**
      * 忘记密码
      *
      * @author fzr

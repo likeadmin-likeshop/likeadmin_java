@@ -17,7 +17,10 @@ import com.mdd.common.utils.*;
 import com.mdd.front.config.FrontConfig;
 import com.mdd.front.service.ILoginService;
 import com.mdd.front.validate.RegParam;
+import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
 import me.chanjar.weixin.common.error.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -254,6 +257,25 @@ public class LoginServiceImpl implements ILoginService {
         response.put("isBindMobile", !user.getMobile().equals(""));
         response.put("token", token);
         return response;
+    }
+
+    /**
+     * 公众号登录
+     *
+     * @author fzr
+     * @return Map<String, Object>
+     */
+    @Override
+    public Map<String, Object> officeLogin() {
+        WxMpService wxMpService = WeChatUtil.official();
+        try {
+            WxOAuth2AccessToken wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken("aaa");
+            WxMpUser wxMpUser = wxMpService.getUserService().userInfo(wxOAuth2AccessToken.getAccessToken());
+            System.out.println(wxMpUser);
+        } catch (WxErrorException e) {
+            System.out.println(e.getError());
+        }
+        return null;
     }
 
     /**

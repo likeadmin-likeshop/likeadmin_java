@@ -55,6 +55,9 @@ public class LoginController {
             case "account":
                 map = iLoginService.accountLogin(params);
                 break;
+            case "office":
+                map = iLoginService.officeLogin();
+                break;
         }
         return AjaxResult.success(map);
     }
