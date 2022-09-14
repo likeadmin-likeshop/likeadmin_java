@@ -37,7 +37,7 @@
                 </el-form-item>
                 <el-form-item label="排序" prop="sort">
                     <div>
-                        <el-input-number v-model="formData.sort" />
+                        <el-input-number v-model="formData.sort" :min="0"/>
                         <div class="form-tips">默认为0， 数值越大越排前</div>
                     </div>
                 </el-form-item>
@@ -70,7 +70,19 @@ const formData = reactive({
     sort: 0,
     isStop: 0
 })
-
+const checkMobile = (rule: any, value: any, callback: any) => {
+  if (!value) {
+    return callback(new Error('手机号不能为空'));
+  } else {
+    const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
+    console.log(reg.test(value));
+    if (reg.test(value)) {
+      callback();
+    } else {
+      return callback(new Error('请输入正确的手机号'));
+    }
+  }
+}
 const formRules = {
     pid: [
         {
@@ -85,7 +97,25 @@ const formRules = {
             message: '请输入部门名称',
             trigger: ['blur']
         }
-    ]
+    ],
+  duty: [
+        {
+            required: true,
+            message: '请输入负责人姓名',
+            trigger: ['blur']
+        }
+    ],
+  mobile: [
+    {
+      required: true,
+      message: '请输入联系电话',
+      trigger: ['blur']
+    },
+    {
+      validator: checkMobile,
+      trigger: ['blur']
+    }
+  ]
 }
 
 const { optionsData } = useDictOptions<{

@@ -2,6 +2,7 @@ package com.mdd.admin.service.system.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mdd.admin.service.system.ISystemAuthPostService;
@@ -86,7 +87,9 @@ public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
                 "=:isStop@is_stop:int"
         });
 
-        IPage<SystemAuthPost> iPage = systemAuthPostMapper.selectPage(new Page<>(page, limit), queryWrapper);
+        Page<SystemAuthPost> objectPage = new Page<>(page, limit);
+        objectPage.addOrder(OrderItem.asc("sort"));
+        IPage<SystemAuthPost> iPage = systemAuthPostMapper.selectPage(objectPage, queryWrapper);
 
         List<SystemAuthPostVo> list = new ArrayList<>();
         for (SystemAuthPost systemAuthPost : iPage.getRecords()) {

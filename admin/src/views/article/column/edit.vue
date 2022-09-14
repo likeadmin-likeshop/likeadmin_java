@@ -13,7 +13,7 @@
                 <el-form-item label="栏目名称" prop="name">
                     <el-input v-model="formData.name" placeholder="请输入栏目名称" />
                 </el-form-item>
-                <el-form-item label="排序" prop="sort">
+                <el-form-item label="排序" prop="sort" :min="0">
                     <div>
                         <el-input-number v-model="formData.sort" />
                         <div class="form-tips">默认为0， 数值越大越排前</div>

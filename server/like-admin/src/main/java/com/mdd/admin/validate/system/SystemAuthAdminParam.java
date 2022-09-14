@@ -2,12 +2,15 @@ package com.mdd.admin.validate.system;
 
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IntegerContains;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
-import lombok.Data;
-import javax.validation.constraints.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -55,6 +58,7 @@ public class SystemAuthAdminParam implements Serializable {
     @IntegerContains(values = {0, 1}, message = "isMultipoint参数不在合法值内", groups = {create.class, update.class})
     private Integer isMultipoint;
 
+    @NotNull(message = "排序号不能为空", groups = {SystemAuthRoleParam.create.class, SystemAuthRoleParam.update.class})
     @DecimalMin(value = "0", message = "排序号值不能少于0", groups = {create.class, update.class})
     private Integer sort = 0;
 
