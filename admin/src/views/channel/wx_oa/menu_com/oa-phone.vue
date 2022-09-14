@@ -6,7 +6,7 @@ import useSettingStore from "@/stores/modules/setting";
 const settingStore = useSettingStore();
 const themeColor = computed(() => settingStore.theme || "#4A5DFF");
 
-const { menuList, menuIndex, handleAddMenu } = useMenuOa();
+const { menuList, menuIndex, handleAddMenu } = useMenuOa(useMenuOa);
 </script>
 
 <template>
@@ -21,20 +21,25 @@ const { menuList, menuIndex, handleAddMenu } = useMenuOa();
                 </el-icon>
             </div>
 
-            <template v-for="(menuItem, index) in menuList">
-                <div class="relative flex-1" @click="menuIndex = index">
+            <template v-for="(menuItem, i) in menuList" :key="i">
+                <div class="relative flex-1" @click="menuIndex = i">
                     <!-- 一级菜单 -->
                     <div
                         class="flex items-center justify-center flex-1 text-sm oa-phone-menu-item"
-                        :class="{ 'active-menu': menuIndex === index }"
+                        :class="{ 'active-menu': menuIndex === i }"
                     >
                         {{ menuItem.name }}
                     </div>
 
                     <!-- 二级菜单 -->
-                    <div class="oa-phone-menu-subitem">
+                    <div
+                        class="oa-phone-menu-subitem"
+                        v-show="
+                            menuItem.subButtons.length && menuItem.menuType != 1
+                        "
+                    >
                         <template
-                            v-for="(subItem, index2) in menuItem.children"
+                            v-for="(subItem, index2) in menuItem.subButtons"
                         >
                             <div class="oa-phone-menu-subitem-title">
                                 {{ subItem.name }}

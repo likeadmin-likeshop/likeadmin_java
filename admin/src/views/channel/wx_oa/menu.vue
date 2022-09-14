@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import OaPhone from "./menu_com/oa-phone.vue";
+import OaAttr from "./menu_com/oa-attr.vue";
+import { useMenuOa } from "./menu_com/useMenuOa";
+
+const { getOaMenuFunc, handleSave, handlePublish } = useMenuOa(undefined);
+getOaMenuFunc();
+</script>
+
 <template>
     <div class="menu-oa">
         <el-card class="!border-none" shadow="never">
@@ -20,15 +29,11 @@
         </el-card>
 
         <footer-btns v-perms="['channel:h5:save']">
-            <el-button type="primary" @click="">保存</el-button>
+            <el-button type="primary" @click="handleSave">保存</el-button>
+            <el-button type="primary" @click="handlePublish">发布</el-button>
         </footer-btns>
     </div>
 </template>
-
-<script setup lang="ts">
-import OaPhone from "./menu_com/oa-phone.vue";
-import OaAttr from "./menu_com/oa-attr.vue";
-</script>
 
 <style lang="scss" scoped>
 .menu-oa {

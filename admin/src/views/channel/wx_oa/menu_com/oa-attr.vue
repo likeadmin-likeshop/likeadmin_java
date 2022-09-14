@@ -1,61 +1,104 @@
 <script lang="ts" setup>
 import { useMenuOa } from "./useMenuOa";
+import oaMenuForm from "./oa-menu-form.vue";
+import oaMenuFormEdit from "./oa-menu-form-edit.vue";
 
-const { menuList, menuIndex, handleAddMenu } = useMenuOa();
-const curMenu = computed(() => menuList.value[menuIndex.value] || {});
-console.log(curMenu);
-const rules = [];
+const menuRef = shallowRef();
+
+const {
+    menuList,
+    menuIndex,
+    handleAddSubMenu,
+    handleEditSubMenu,
+    handleDelMenu,
+    handleDelSubMenu,
+} = useMenuOa(menuRef);
 </script>
 
 <template>
     <!-- Attr -->
-    <div class="flex-1 oa-attr">
-        <div class="text-base oa-attr-title">菜单配置</div>
+    <template v-for="(attrItem, attrIndex) in menuList" :key="attrIndex">
+        <div class="flex-1 oa-attr" v-show="attrIndex === menuIndex">
+            <div class="text-base oa-attr-title">菜单配置</div>
 
-        <del-wrap class="w-2/4">
-            <div
-                class="flex items-center w-full p-4 mt-4 rounded bg-fill-light"
-            >
-                <el-form ref="ruleFormRef" :model="curMenu" label-width="120px">
-                    <!-- 菜单名称 -->
-                    <el-form-item label="菜单名称" prop="name">
-                        <el-input v-model="curMenu.name" />
-                    </el-form-item>
+            <del-wrap class="w-3/4" @close="handleDelMenu(menuIndex)">
+                <div
+                    class="flex items-center w-full p-4 mt-4 rounded bg-fill-light"
+                >
+                    <oa-menu-form
+                        ref="menuRef"
+                        modular="master"
+                        v-model:name="attrItem.name"
+                        v-model:menuType="attrItem.menuType"
+                        v-model:visitType="attrItem.visitType"
+                        v-model:url="attrItem.url"
+                        v-model:appId="attrItem.appId"
+                        v-model:pagePath="attrItem.pagePath"
+                    >
+                        <div class="flex-1">
+                            <!-- 编辑子菜单 -->
+                            <ul>
+                                <li
+                                    class="flex"
+                                    v-for="(
+                                        subItem, subIndex
+                                    ) in attrItem.subButtons"
+                                    :key="subIndex"
+                                    style="padding: 8px"
+                                >
+                                    <span class="mr-auto">{{
+                                        subItem.name
+                                    }}</span>
+                                    <!-- 编辑子菜单 -->
+                                    <oa-menu-form-edit
+                                        modular="edit"
+                                        :subItem="subItem"
+                                        @edit="
+                                            handleEditSubMenu($event, subIndex)
+                                        "
+                                    >
+                                        <el-icon><EditPen /></el-icon>
+                                    </oa-menu-form-edit>
 
-                    <!-- 菜单类型 -->
-                    <el-form-item label="主菜单类型" prop="name">
-                        <el-radio-group v-model="curMenu.type">
-                            <el-radio :label="1">不配置子菜单</el-radio>
-                            <el-radio :label="2">配置子菜单</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
+                                    <!-- 删除子菜单 -->
+                                    <popup
+                                        @confirm="
+                                            handleDelSubMenu(
+                                                menuIndex,
+                                                subIndex
+                                            )
+                                        "
+                                    >
+                                        是否删除当前子菜单？
+                                        <template #trigger>
+                                            <el-icon class="ml-5"
+                                                ><Delete
+                                            /></el-icon>
+                                        </template>
+                                    </popup>
+                                </li>
+                            </ul>
 
-                    <!-- 跳转链接 -->
-                    <el-form-item label="跳转链接" prop="name">
-                        <el-radio-group v-model="curMenu.jump_link">
-                            <el-radio :label="1">网页</el-radio>
-                            <el-radio :label="2">小程序</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-
-                    <!-- 网址 -->
-                    <el-form-item label="网址" prop="name">
-                        <el-input v-model="curMenu.url" />
-                    </el-form-item>
-
-                    <!-- AppId -->
-                    <el-form-item label="AppId" prop="name">
-                        <el-input v-model="curMenu.app_id" />
-                    </el-form-item>
-
-                    <!-- 路径 -->
-                    <el-form-item label="路径" prop="name">
-                        <el-input v-model="curMenu.pages" />
-                    </el-form-item>
-                </el-form>
-            </div>
-        </del-wrap>
-    </div>
+                            <!-- 新增子菜单 -->
+                            <oa-menu-form-edit
+                                modular="add"
+                                @add="handleAddSubMenu"
+                            >
+                                <el-button
+                                    type="primary"
+                                    link
+                                    :disabled="attrItem.subButtons.length >= 5"
+                                    >添加子菜单({{
+                                        attrItem.subButtons.length
+                                    }}/5)</el-button
+                                >
+                            </oa-menu-form-edit>
+                        </div>
+                    </oa-menu-form>
+                </div>
+            </del-wrap>
+        </div>
+    </template>
 </template>
 
 <style lang="scss" scoped>
