@@ -15,9 +15,11 @@ import com.mdd.common.utils.*;
 import com.mdd.front.config.FrontConfig;
 import com.mdd.front.service.ILoginService;
 import com.mdd.front.validate.RegParam;
+import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.api.impl.WxMpOAuth2ServiceImpl;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -258,16 +260,33 @@ public class LoginServiceImpl implements ILoginService {
      * @return Map<String, Object>
      */
     @Override
-    public Map<String, Object> officeLogin() {
-        WxMpService wxMpService = WeChatUtil.official();
+    public Map<String, Object> officeLogin(Map<String, String> params) {
+        Assert.notNull(params.get("code"), "code参数缺失!");
+        String code = params.get("code");
+
         try {
-            WxOAuth2AccessToken wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken("aaa");
+            WxMpService wxMpService = WeChatUtil.official();
+            WxOAuth2AccessToken wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(code);
             WxMpUser wxMpUser = wxMpService.getUserService().userInfo(wxOAuth2AccessToken.getAccessToken());
             System.out.println(wxMpUser);
         } catch (WxErrorException e) {
             System.out.println(e.getError());
         }
         return null;
+    }
+
+    /**
+     * 公众号跳转url
+     *
+     * @author fzr
+     * @param url 连接
+     * @return String
+     */
+    @Override
+    public String codeUrl(String url) {
+        WxMpService wxMpService = WeChatUtil.official();
+        WxMpOAuth2ServiceImpl wxMpOAuth2Service = new WxMpOAuth2ServiceImpl(wxMpService);
+        return wxMpOAuth2Service.buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
     }
 
     /**

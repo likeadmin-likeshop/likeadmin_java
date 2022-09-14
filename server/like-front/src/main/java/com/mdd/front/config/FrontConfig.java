@@ -10,7 +10,6 @@ public class FrontConfig {
 
     // 免登录验证
     public static String[] notLoginUri = new String[]{
-            "/api/login",
             "/api/index",
             "/api/config",
             "/api/policy",
@@ -21,6 +20,7 @@ public class FrontConfig {
             "/api/upload/image",
 
             "/api/login/check",
+            "/api/login/codeUrl",
             "/api/login/register",
             "/api/login/forgotPassword",
 
