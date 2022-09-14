@@ -1,27 +1,17 @@
 package com.mdd.admin.service.channel.impl;
 
-import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
-import com.google.common.collect.Maps;
 import com.mdd.admin.service.channel.IChannelOaMenuService;
 import com.mdd.common.exception.OperateException;
-import com.mdd.common.utils.ArrayUtil;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.StringUtil;
-import com.mdd.common.utils.ToolsUtil;
+import com.mdd.common.utils.*;
 import me.chanjar.weixin.common.bean.menu.WxMenu;
 import me.chanjar.weixin.common.bean.menu.WxMenuButton;
 import me.chanjar.weixin.common.error.WxErrorException;
-import me.chanjar.weixin.common.service.WxService;
 import me.chanjar.weixin.mp.api.WxMpMenuService;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.impl.WxMpMenuServiceImpl;
-import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
-import me.chanjar.weixin.mp.bean.menu.WxMpGetSelfMenuInfoResult;
-import me.chanjar.weixin.mp.config.WxMpConfigStorage;
-import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -31,34 +21,25 @@ import java.util.Map;
 @Service
 public class ChannelOaMenuServiceImpl implements IChannelOaMenuService {
 
+    /**
+     * 菜单详情
+     *
+     * @author fzr
+     * @return JSONArray
+     */
     @Override
     public JSONArray detail() {
         String json = ConfigUtil.get("oa_channel", "menus", "[]");
         return JSONArray.parseArray(json);
-
-
-//        WxMpDefaultConfigImpl wxMpDefaultConfig = new WxMpDefaultConfigImpl();
-//        wxMpDefaultConfig.setAppId("");
-//        wxMpDefaultConfig.setSecret("");
-//        wxMpDefaultConfig.setToken("");
-//        wxMpDefaultConfig.setAesKey("");
-//
-//        WxMpService service = new WxMpServiceImpl();
-//        service.setWxMpConfigStorage(wxMpDefaultConfig);
-//
-//        try {
-//            WxMpMenuService wxMpMenuService = new WxMpMenuServiceImpl(service);
-//
-//            WxMpGetSelfMenuInfoResult result = wxMpMenuService.getSelfMenuInfo();
-//            System.out.println(result);
-//        } catch (WxErrorException e) {
-//            System.out.println("哈哈哈哈哈");
-//            System.out.println(e.getError());
-//        }
-
-//        return null;
     }
 
+    /**
+     * 菜单保存
+     *
+     * @author fzr
+     * @param objs 参数
+     * @param isPublish 是否发布
+     */
     @Override
     public void save(List<Object> objs, Boolean isPublish) {
         if (objs.size() > 3) {
@@ -128,8 +109,16 @@ public class ChannelOaMenuServiceImpl implements IChannelOaMenuService {
         ConfigUtil.set("oa_channel", "menus", JSON.toJSONString(objs));
 
         if (isPublish) {
-            WxMenu wxMenu = new WxMenu();
-            wxMenu.setButtons(menuButtons);
+            try {
+                WxMenu wxMenu = new WxMenu();
+                wxMenu.setButtons(menuButtons);
+
+                WxMpService wxMpService = WeChatUtil.official();
+                WxMpMenuService wxMpMenuService = new WxMpMenuServiceImpl(wxMpService);
+                wxMpMenuService.menuCreate(wxMenu);
+            } catch (WxErrorException e) {
+                throw new OperateException(e.getError().getErrorCode() + ": " + e.getError().getErrorMsg());
+            }
         }
     }
 

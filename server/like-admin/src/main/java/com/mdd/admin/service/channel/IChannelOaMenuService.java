@@ -10,10 +10,16 @@ import java.util.Map;
  */
 public interface IChannelOaMenuService {
 
+    /**
+     * 菜单详情
+     *
+     * @author fzr
+     * @return JSONArray
+     */
     JSONArray detail();
 
     /**
-     * 保存菜单
+     * 菜单保存
      *
      * @author fzr
      * @param params 参数
