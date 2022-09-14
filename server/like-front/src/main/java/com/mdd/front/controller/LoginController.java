@@ -69,8 +69,8 @@ public class LoginController {
         return AjaxResult.success(map);
     }
 
-    @PostMapping("/oaLogin")
-    public Object oaLogin(@RequestBody Map<String, String> params) {
+    @GetMapping("/oaLogin")
+    public Object oaLogin(@RequestParam Map<String, String> params) {
         log.error("微信公众号 ===================");
         log.error(JSON.toJSONString(params));
 //        iLoginService.officeLogin(params);
