@@ -85,7 +85,9 @@ public class LoginController {
     public Object codeUrl(@RequestParam String url) {
         Assert.notNull(url, "url参数不能为空");
         String uri = iLoginService.codeUrl(url);
-        return AjaxResult.success(uri);
+        Map<String, String> response = new LinkedHashMap<>();
+        response.put("url", uri);
+        return AjaxResult.success(response);
     }
 
     /**
