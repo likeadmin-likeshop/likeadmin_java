@@ -266,15 +266,14 @@ public class LoginServiceImpl implements ILoginService {
     public Map<String, Object> officeLogin(Map<String, String> params) {
         Assert.notNull(params.get("code"), "code参数缺失!");
         String code = params.get("code");
-        log.error("好好好好来了: " + code);
+
         try {
             WxMpService wxMpService = WeChatUtil.official();
             WxOAuth2AccessToken wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(code);
-            WxMpUser wxMpUser = wxMpService.getUserService().userInfo(wxOAuth2AccessToken.getAccessToken());
-            log.error(JSON.toJSONString(wxMpUser));
-            System.out.println(wxMpUser);
+
+//            WxMpUser wxMpUser = wxMpService.getUserService().userInfo(wxOAuth2AccessToken.getAccessToken());
+            System.out.println(wxOAuth2AccessToken.getOpenId());
         } catch (WxErrorException e) {
-            log.error("错了e"+ e.getError());
             System.out.println(e.getError());
         }
         return null;
