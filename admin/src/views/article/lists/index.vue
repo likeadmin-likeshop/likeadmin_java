@@ -54,6 +54,8 @@
                             :src="row.image"
                             class="w-[60px] h-[45px]"
                             :preview-src-list="[row.image]"
+                            preview-teleported
+                            fit="contain"
                         />
                     </template>
                 </el-table-column>

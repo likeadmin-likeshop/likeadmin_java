@@ -9,7 +9,7 @@
                 :key="index"
                 class="flex flex-col items-center w-1/4 mb-[15px]"
             >
-                <image-contain width="26px" height="26px" :src="getImageUrl(item.image)" alt="" />
+                <decoration-img width="26px" height="26px" :src="item.image" alt="" />
                 <div class="mt-[7px]">{{ item.name }}</div>
             </div>
         </div>
@@ -19,7 +19,7 @@
                 :key="index"
                 class="flex items-center border-b border-[#e5e5e5] h-[50px] px-[12px]"
             >
-                <image-contain width="24px" height="24px" :src="getImageUrl(item.image)" alt="" />
+                <decoration-img width="24px" height="24px" :src="item.image" alt="" />
                 <div class="ml-[10px] flex-1">{{ item.name }}</div>
                 <div>
                     <icon name="el-icon-ArrowRight" />
@@ -29,9 +29,9 @@
     </div>
 </template>
 <script lang="ts" setup>
-import useAppStore from '@/stores/modules/app'
 import type { PropType } from 'vue'
 import type options from './options'
+import DecorationImg from '../../decoration-img.vue'
 type OptionsType = ReturnType<typeof options>
 defineProps({
     content: {
@@ -43,7 +43,6 @@ defineProps({
         default: () => ({})
     }
 })
-const { getImageUrl } = useAppStore()
 </script>
 
 <style lang="scss" scoped>

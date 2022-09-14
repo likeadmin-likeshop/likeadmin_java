@@ -10,16 +10,8 @@
             </el-menu-item>
         </el-menu>
         <div class="flex-1 pl-4">
-            <shop-pages
-                v-model="activeLink"
-                v-if="LinkTypeEnum.SHOP_PAGES == activeMenu"
-                @update:model-value="updateLink"
-            />
-            <custom-link
-                v-model="activeLink"
-                v-if="LinkTypeEnum.CUSTOM_LINK == activeMenu"
-                @update:model-value="updateLink"
-            />
+            <shop-pages v-model="activeLink" v-if="LinkTypeEnum.SHOP_PAGES == activeMenu" />
+            <custom-link v-model="activeLink" v-if="LinkTypeEnum.CUSTOM_LINK == activeMenu" />
         </div>
     </div>
 </template>
@@ -72,9 +64,10 @@ const handleSelect = (index: string) => {
     activeMenu.value = index
 }
 
-const updateLink = (value: any) => {
+watch(activeLink, (value) => {
+    if (!value.type) return
     emit('update:modelValue', value)
-}
+})
 
 watch(
     () => props.modelValue,

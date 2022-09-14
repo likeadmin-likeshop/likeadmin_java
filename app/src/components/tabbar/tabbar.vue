@@ -1,21 +1,30 @@
 <template>
-    <u-tabbar v-bind="tabbarStyle" :list="tabbarList" @change="handleChange"></u-tabbar>
+    <u-tabbar
+        v-model="current"
+        v-bind="tabbarStyle"
+        :list="tabbarList"
+        @change="handleChange"
+        :hide-tab-bar="false"
+    ></u-tabbar>
 </template>
 
 <script lang="ts" setup>
 import { useAppStore } from '@/stores/app'
-import { currentPage, navigateTo } from '@/utils/util'
-import { onLoad } from '@dcloudio/uni-app'
-import { computed, onMounted, ref } from 'vue'
+import { navigateTo } from '@/utils/util'
+import { computed, ref } from 'vue'
+const current = ref()
 const appStore = useAppStore()
 const tabbarList = computed(() => {
-    return appStore.getTabbarConfig.map((item: any) => ({
-        iconPath: item.unselected,
-        selectedIconPath: item.selected,
-        text: item.name,
-        link: JSON.parse(item.link),
-        pagePath: JSON.parse(item.link).path
-    }))
+    return appStore.getTabbarConfig.map((item: any) => {
+        const link = JSON.parse(item.link)
+        return {
+            iconPath: item.unselected,
+            selectedIconPath: item.selected,
+            text: item.name,
+            link,
+            pagePath: link.path
+        }
+    })
 })
 
 const tabbarStyle = computed(() => ({
@@ -26,8 +35,4 @@ const handleChange = (index: number) => {
     const selectTab = tabbarList.value[index]
     navigateTo(selectTab.link, 'reLaunch')
 }
-// onMounted(() => {
-//     const page = currentPage()
-//     console.log(page)
-// })
 </script>

@@ -1,11 +1,6 @@
 <template>
     <div class="link-picker flex-1" @click="!disabled && popupRef?.open()">
-        <el-input
-            :model-value="modelValue?.name ?? modelValue?.path"
-            placeholder="请选择链接"
-            readonly
-            :disabled="disabled"
-        >
+        <el-input :model-value="getLink" placeholder="请选择链接" readonly :disabled="disabled">
             <template #suffix>
                 <icon v-if="!modelValue?.path" name="el-icon-ArrowRight" />
                 <icon
@@ -43,6 +38,17 @@ const activeLink = ref<Link>({ path: '', type: LinkTypeEnum.SHOP_PAGES })
 const handleConfirm = () => {
     emit('update:modelValue', activeLink.value)
 }
+
+const getLink = computed(() => {
+    switch (props.modelValue?.type) {
+        case LinkTypeEnum.SHOP_PAGES:
+            return props.modelValue.name
+        case LinkTypeEnum.CUSTOM_LINK:
+            return props.modelValue.query?.url
+        default:
+            return props.modelValue?.name
+    }
+})
 watch(
     () => props.modelValue,
     (value) => {

@@ -53,15 +53,8 @@ export enum LinkTypeEnum {
 }
 
 export function navigateTo(link: Link, navigateType: 'navigateTo' | 'reLaunch' = 'navigateTo') {
-    let url: string
-    switch (link.type) {
-        case LinkTypeEnum.SHOP_PAGES:
-            url = link.query ? `${link.path}?${objectToQuery(link.query)}` : link.path
-            uni[navigateType]({ url })
-            break
-        case LinkTypeEnum.CUSTOM_LINK:
-            uni[navigateType]({ url: `/pages/webview/webview?url=${link.path}` })
-    }
+    const url = link.query ? `${link.path}?${objectToQuery(link.query)}` : link.path
+    uni[navigateType]({ url })
 }
 
 /**

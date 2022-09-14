@@ -1,5 +1,14 @@
 <template>
-    <el-image :style="styles" v-bind="props"> </el-image>
+    <el-image :style="styles" v-bind="props" :src="getImageUrl(src)">
+        <template #placeholder>
+            <div class="image-slot"></div>
+        </template>
+        <template #error>
+            <div class="image-slot">
+                <icon name="el-icon-Picture" :size="30" />
+            </div>
+        </template>
+    </el-image>
 </template>
 
 <script lang="ts" setup>
@@ -7,6 +16,7 @@ import { computed } from 'vue'
 import type { CSSProperties } from 'vue'
 import { addUnit } from '@/utils/util'
 import { imageProps } from 'element-plus'
+import useAppStore from '@/stores/modules/app'
 const props = defineProps({
     width: {
         type: [String, Number],
@@ -23,6 +33,7 @@ const props = defineProps({
     ...imageProps
 })
 
+const { getImageUrl } = useAppStore()
 const styles = computed<CSSProperties>(() => {
     return {
         width: addUnit(props.width),
@@ -35,8 +46,14 @@ const styles = computed<CSSProperties>(() => {
 <style lang="scss" scoped>
 .el-image {
     display: block;
-    .el-image__error {
-        @apply text-xs;
+    .image-slot {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background: #fafafa;
+        color: #909399;
     }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div class="decoration-pages min-w-[1100px]">
-        <el-card shadow="never" class="!border-none flex-1" :body-style="{ height: '100%' }">
+        <el-card shadow="never" class="!border-none flex-1 flex" :body-style="{ flex: 1 }">
             <div class="flex h-full items-start">
                 <Menu v-model="activeMenu" :menus="menus" />
                 <preview v-model="selectWidgetIndex" :pageData="getPageData" />
@@ -19,6 +19,7 @@ import AttrSetting from '../component/pages/attr-setting.vue'
 import widgets from '../component/widgets'
 import { getDecoratePages, setDecoratePages } from '@/api/decoration'
 import feedback from '@/utils/feedback'
+import { getNonDuplicateID } from '@/utils/util'
 enum pagesTypeEnum {
     HOME = '1',
     USER = '2',
@@ -26,7 +27,13 @@ enum pagesTypeEnum {
 }
 
 const generatePageData = (widgetNames: string[]) => {
-    return widgetNames.map((widgetName) => widgets[widgetName]?.options() || {})
+    return widgetNames.map((widgetName) => {
+        const options = {
+            id: getNonDuplicateID(),
+            ...(widgets[widgetName]?.options() || {})
+        }
+        return options
+    })
 }
 
 const menus: Record<
@@ -41,7 +48,7 @@ const menus: Record<
         id: 1,
         pageType: 1,
         name: '商城首页',
-        pageData: generatePageData(['search', 'banner', 'nav'])
+        pageData: generatePageData(['search', 'banner', 'nav', 'news'])
     },
     [pagesTypeEnum.USER]: {
         id: 2,
@@ -70,6 +77,7 @@ const getData = async () => {
     const data = await getDecoratePages({ id: activeMenu.value })
     menus[String(data.id)].pageData = JSON.parse(data.pageData)
 }
+
 const setData = async () => {
     await setDecoratePages({
         ...menus[activeMenu.value],

@@ -149,3 +149,14 @@ export const timeFormat = (dateTime: number, fmt = 'yyyy-mm-dd') => {
     }
     return fmt
 }
+
+/**
+ * @description 获取不重复的id
+ * @param length { Number } id的长度
+ * @return { String } id
+ */
+export const getNonDuplicateID = (length = 8) => {
+    let idStr = Date.now().toString(36)
+    idStr += Math.random().toString(36).substring(3, length)
+    return idStr
+}
