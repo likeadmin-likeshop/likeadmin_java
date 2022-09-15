@@ -68,6 +68,7 @@
 <script setup lang="ts">
 import { setUserInfo } from '@/api/user'
 import useUserStore from '@/stores/modules/user'
+import feedback from '@/utils/feedback'
 import type { FormInstance } from 'element-plus'
 const formRef = ref<FormInstance>()
 const userStore = useUserStore()
@@ -136,7 +137,6 @@ const rules = reactive<object>({
 // 获取个人设置
 const getUser = async () => {
     const userInfo = userStore.userInfo
-    console.log(userInfo)
     for (const key in formData) {
         //@ts-ignore
         formData[key] = userInfo[key]
@@ -146,6 +146,7 @@ const getUser = async () => {
 // 设置个人设置
 const setUser = async () => {
     await setUserInfo(formData)
+    feedback.msgSuccess('保存成功')
     userStore.getUserInfo()
 }
 

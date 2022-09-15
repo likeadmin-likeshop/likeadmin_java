@@ -76,12 +76,16 @@
                 </el-form-item>
 
                 <el-form-item label="密码" prop="password">
-                    <el-input v-model="formData.password" show-password placeholder="请输入密码" />
+                    <el-input
+                        v-model.trim="formData.password"
+                        show-password
+                        placeholder="请输入密码"
+                    />
                 </el-form-item>
 
                 <el-form-item label="确认密码" prop="passwordConfirm">
                     <el-input
-                        v-model="formData.passwordConfirm"
+                        v-model.trim="formData.passwordConfirm"
                         show-password
                         placeholder="请输入确认密码"
                     />
@@ -137,6 +141,13 @@ const isRoot = computed(() => {
     return formData.role == '0'
 })
 
+const passwordConfirmValidator = (rule: object, value: string, callback: any) => {
+    if (formData.password) {
+        if (!value) callback(new Error('请再次输入密码'))
+        if (value !== formData.password) callback(new Error('两次输入密码不一致!'))
+    }
+    callback()
+}
 const formRules = reactive({
     username: [
         {
@@ -163,13 +174,6 @@ const formRules = reactive({
         {
             required: true,
             message: '请输入密码',
-            trigger: 'blur',
-            pattern: /(^[^\s]*$)/ // 不能输入空格
-        },
-        {
-            validator: (rule: object, value: string, callback: any) => {
-                !value ? callback(new Error('请输入密码')) : callback()
-            },
             trigger: 'blur'
         }
     ] as any[],
@@ -177,17 +181,10 @@ const formRules = reactive({
         {
             required: true,
             message: '请再次输入密码',
-            trigger: 'blur',
-            pattern: /(^[^\s]*$)/ // 不能输入空格
+            trigger: 'blur'
         },
         {
-            validator: (rule: object, value: string, callback: any) => {
-                if (formData.password) {
-                    if (!value) callback(new Error('请再次输入密码'))
-                    if (value !== formData.password) callback(new Error('两次输入密码不一致!'))
-                }
-                callback()
-            },
+            validator: passwordConfirmValidator,
             trigger: 'blur'
         }
     ] as any[]
@@ -235,7 +232,12 @@ const setFormData = async (row: any) => {
         Number(formData.postId) == 0 && (formData.postId = '')
     }
     formRules.password = []
-    formRules.passwordConfirm = []
+    formRules.passwordConfirm = [
+        {
+            validator: passwordConfirmValidator,
+            trigger: 'blur'
+        }
+    ]
 }
 
 const handleClose = () => {
