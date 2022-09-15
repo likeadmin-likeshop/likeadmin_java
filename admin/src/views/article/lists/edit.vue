@@ -112,7 +112,7 @@ const formData = reactive({
 const formRef = shallowRef<FormInstance>()
 const rules = reactive({
     title: [{ required: true, message: '请输入文章标题', trigger: 'blur' }],
-    cid: [{ required: true, message: '请输入文章简介', trigger: 'blur' }]
+    cid: [{ required: true, message: '请选择文章栏目', trigger: 'blur' }]
 })
 
 const getDetails = async () => {
