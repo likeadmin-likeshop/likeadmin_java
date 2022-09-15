@@ -34,6 +34,7 @@ export function setupRouter() {
     // #ifdef H5
     const app = getApp()
     app.$router.afterEach((to: any, from: any) => {
+        console.log(to, from)
         const index = whiteList.findIndex((item) => from.path.includes(item))
         const userStore = useUserStore()
         if (index == -1 && !userStore.isLogin) {
