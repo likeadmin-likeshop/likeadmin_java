@@ -346,15 +346,16 @@ public class ChannelOaReplyServiceImpl implements IChannelOaReplyService {
 
         Assert.notNull(officialReply, "数据不存在!");
 
+        Integer status = officialReply.getStatus() == 1 ? 0 : 1;
         if (officialReply.getReplyType() != 2 && officialReply.getStatus() == 1) {
             OfficialReply reply = new OfficialReply();
             reply.setStatus(0);
-            officialReplyMapper.update(reply,  new QueryWrapper<OfficialReply>()
+            officialReplyMapper.update(reply, new QueryWrapper<OfficialReply>()
                     .eq("reply_type", officialReply.getReplyType()));
         }
 
         officialReply.setId(id);
-        officialReply.setStatus(officialReply.getStatus() == 1 ? 0 : 1);
+        officialReply.setStatus(status);
         officialReply.setUpdateTime(System.currentTimeMillis() / 1000);
         officialReplyMapper.updateById(officialReply);
     }
