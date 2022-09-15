@@ -71,8 +71,7 @@
     "vueVersion": "3",
     "h5": {
         "router": {
-            "mode": "history",
-            "base": "/mobile"
+            "mode": "history"
         },
         "title": "加载中"
     }
