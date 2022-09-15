@@ -1,1 +1,0 @@
-import{D as r}from"./index.4f50f7aa.js";function t(){return r.get({url:"/index"})}function a(t){return r.get({url:"/decorate",data:t})}function e(){return r.get({url:"/hotSearch"})}function n(t){return r.get({url:"/search",data:t})}export{a,e as b,n as c,t as g};
