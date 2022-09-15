@@ -4,6 +4,7 @@ import { useAppStore } from './stores/app'
 import { useUserStore } from './stores/user'
 const appStore = useAppStore()
 const { getUser } = useUserStore()
+
 onLaunch(async () => {
     await appStore.getConfig()
     // #ifdef H5

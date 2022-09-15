@@ -1,6 +1,10 @@
+import { BACK_URL } from '@/enums/cacheEnums'
+import { useUserStore } from '@/stores/user'
 import { getToken } from '@/utils/auth'
+import cache from '@/utils/cache'
 import { generateRoutes } from './transformPages'
 export const routes = generateRoutes()
+const whiteList = ['register', 'login', 'forget_pwd']
 const list = ['navigateTo', 'redirectTo', 'reLaunch', 'switchTab']
 list.forEach((item) => {
     uni.addInterceptor(item, {
@@ -25,3 +29,18 @@ list.forEach((item) => {
         }
     })
 })
+
+export function setupRouter() {
+    // #ifdef H5
+    const app = getApp()
+    app.$router.beforeEach((to: any, from: any) => {
+        const index = whiteList.findIndex((item) => from.path.includes(item))
+        const userStore = useUserStore()
+        if (index == -1 && !userStore.isLogin) {
+            //保存登录前的路径
+            cache.set(BACK_URL, from.fullPath)
+        }
+    })
+
+    // #endif
+}

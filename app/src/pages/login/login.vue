@@ -155,9 +155,11 @@
 import { login } from '@/api/account'
 import { smsSend } from '@/api/app'
 import { SMSEnum } from '@/enums/appEnums'
+import { BACK_URL } from '@/enums/cacheEnums'
 import { useLockFn } from '@/hooks/useLockFn'
 import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
+import cache from '@/utils/cache'
 import { isWeixinClient } from '@/utils/client'
 import { currentPage } from '@/utils/util'
 // #ifdef H5
@@ -182,7 +184,7 @@ enum LoginAuthEnum {
 }
 const isWeixin = ref(true)
 // #ifdef H5
-// isWeixin.value = isWeixinClient()
+isWeixin.value = isWeixinClient()
 // #endif
 
 const userStore = useUserStore()
@@ -277,14 +279,23 @@ const loginHandle = async (data: any) => {
     await userStore.getUser()
     uni.$u.toast('登录成功')
     uni.hideLoading()
-    uni.navigateBack({
-        success: () => {
-            // @ts-ignore
-            const { onLoad, options } = currentPage()
-            // 刷新上一个页面
-            onLoad && onLoad(options)
-        }
-    })
+    if (getCurrentPages().length > 1) {
+        uni.navigateBack({
+            success: () => {
+                // @ts-ignore
+                const { onLoad, options } = currentPage()
+                // 刷新上一个页面
+                onLoad && onLoad(options)
+            }
+        })
+    } else if (cache.get(BACK_URL)) {
+        uni.redirectTo({ url: cache.get(BACK_URL) })
+    } else {
+        uni.reLaunch({
+            url: '/pages/index/index'
+        })
+    }
+    cache.remove(BACK_URL)
 }
 
 const { lockFn: handleLogin } = useLockFn(loginFun)
