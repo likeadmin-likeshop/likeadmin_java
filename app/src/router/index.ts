@@ -33,7 +33,7 @@ list.forEach((item) => {
 export function setupRouter() {
     // #ifdef H5
     const app = getApp()
-    app.$router.beforeEach((to: any, from: any) => {
+    app.$router.afterEach((to: any, from: any) => {
         const index = whiteList.findIndex((item) => from.path.includes(item))
         const userStore = useUserStore()
         if (index == -1 && !userStore.isLogin) {
