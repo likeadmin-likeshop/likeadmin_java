@@ -19,6 +19,7 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,8 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
     public List<ArticleCateVo> all() {
         QueryWrapper<ArticleCategory> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id", "name", "sort", "is_show", "create_time", "update_time")
-                .eq("is_delete", 0);
+                .eq("is_delete", 0)
+                .orderByDesc(Arrays.asList("sort", "id"));
 
         List<ArticleCategory> lists = articleCategoryMapper.selectList(queryWrapper);
 
@@ -75,7 +77,8 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
 
         QueryWrapper<ArticleCategory> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id", "name", "sort", "is_show", "create_time", "update_time")
-                .eq("is_delete", 0);
+                .eq("is_delete", 0)
+                .orderByDesc(Arrays.asList("sort", "id"));
 
         articleCategoryMapper.setSearch(queryWrapper, params, new String[]{
                 "like:name:str",
