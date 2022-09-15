@@ -289,7 +289,7 @@ const loginHandle = async (data: any) => {
             }
         })
     } else if (cache.get(BACK_URL)) {
-        console.log(BACK_URL)
+        console.log(BACK_URL, cache.get(BACK_URL))
         uni.redirectTo({ url: cache.get(BACK_URL) })
     } else {
         uni.reLaunch({
@@ -332,7 +332,6 @@ watch(
 onShow(async () => {
     try {
         if (userStore.isLogin) {
-            console.log('hasLogin1')
             uni.showLoading({
                 title: '请稍后...'
             })
@@ -348,8 +347,6 @@ onShow(async () => {
 onLoad(async (options) => {
     if (userStore.isLogin) {
         // 已经登录 => 首页
-
-        console.log('hasLogin2')
         uni.reLaunch({
             url: '/pages/index/index'
         })
