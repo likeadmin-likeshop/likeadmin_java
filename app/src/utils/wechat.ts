@@ -19,15 +19,17 @@ const wechatOa = {
         return new Promise((resolve, reject) => {
             OALogin({
                 code
-            }).then((res) => {
-                const userStore = useUserStore()
-                userStore.login(res.token)
-                resolve(res)
             })
+                .then((res) => {
+                    resolve(res)
+                })
+                .catch((err) => {
+                    reject(err)
+                })
         })
     },
     ready() {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             weixin.ready(() => {
                 resolve('success')
             })

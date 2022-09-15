@@ -121,7 +121,10 @@
         "navigationBarTextStyle": "black",
         "navigationBarTitleText": "商城",
         "navigationBarBackgroundColor": "#FFFFFF",
-        "backgroundColor": "#F8F8F8"
+        "backgroundColor": "#F8F8F8",
+        "h5": {
+            "navigationStyle": "custom"
+        }
     },
     "easycom": {
         "custom": {
