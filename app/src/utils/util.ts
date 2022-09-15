@@ -54,7 +54,8 @@ export enum LinkTypeEnum {
 
 export function navigateTo(link: Link, navigateType: 'navigateTo' | 'reLaunch' = 'navigateTo') {
     const url = link.query ? `${link.path}?${objectToQuery(link.query)}` : link.path
-    uni[navigateType]({ url })
+    navigateType == 'navigateTo' && uni.navigateTo({ url })
+    navigateType == 'reLaunch' && uni.reLaunch({ url })
 }
 
 /**
