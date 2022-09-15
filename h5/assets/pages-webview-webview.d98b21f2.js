@@ -1,1 +1,0 @@
-import{d as a,A as s,Z as e,o as r,c as t,aH as n}from"./index.4f50f7aa.js";const u=a({__name:"webview",setup(a){const u=s("");return e((a=>{u.value=a.url})),(a,s)=>{const e=n;return r(),t(e,{src:u.value},null,8,["src"])}}});export{u as default};
