@@ -5,7 +5,6 @@
             title="设置存储"
             :async="true"
             width="550px"
-            :clickModalClose="true"
             @confirm="handleSubmit"
             @close="handleClose"
         >

@@ -45,7 +45,7 @@
                             },
                             {
                                 label: '女',
-                                value: 0
+                                value: 2
                             }
                         ]"
                         @confirm="handleEdit($event, 'sex')"
@@ -79,6 +79,7 @@
 import type { FormInstance } from 'element-plus'
 import { getUserDetail, userEdit } from '@/api/consumer'
 import feedback from '@/utils/feedback'
+import { isEmpty } from '@/utils/util'
 
 const route = useRoute()
 const formData = reactive({
@@ -108,7 +109,7 @@ const getDetails = async () => {
 }
 
 const handleEdit = async (value: string, field: string) => {
-    if (!value) return
+    if (isEmpty(value)) return
     await userEdit({
         id: route.query.id,
         field,
