@@ -67,7 +67,7 @@ public class UserServiceImpl implements IUserService {
 
         userMapper.setSearch(queryWrapper, params, new String[]{
                 "=:channel:int",
-                "datetime:startTime-endTime@t.create_time:str"
+                "datetime:startTime-endTime@create_time:str"
         });
 
         IPage<User> iPage = userMapper.selectPage( new Page<>(pageNo, pageSize), queryWrapper);
