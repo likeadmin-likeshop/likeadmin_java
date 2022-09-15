@@ -133,7 +133,7 @@
                 <navigator url="/pages/register/register" hover-class="none">注册账号</navigator>
             </view>
             <!-- #ifdef MP-WEIXIN || H5 -->
-            <view class="mt-[80rpx]" v-if="isOpenOtherAuth">
+            <view class="mt-[80rpx]" v-if="isOpenOtherAuth && isWeixin">
                 <u-divider>第三方登录</u-divider>
                 <div class="flex justify-center mt-[40rpx]">
                     <div
