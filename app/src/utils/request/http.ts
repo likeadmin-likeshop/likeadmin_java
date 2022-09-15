@@ -60,7 +60,6 @@ export default class HttpRequest {
                     reject(err)
                 },
                 complete(err) {
-                    console.log(err)
                     if (err.errMsg !== 'request:fail abort') {
                         requestCancel.remove(options.url)
                     }

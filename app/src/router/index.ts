@@ -35,11 +35,11 @@ export function setupRouter() {
     const app = getApp()
     app.$router.afterEach((to: any, from: any) => {
         console.log(to, from)
-        const index = whiteList.findIndex((item) => from.path.includes(item))
+        const index = whiteList.findIndex((item) => to.path.includes(item))
         const userStore = useUserStore()
         if (index == -1 && !userStore.isLogin) {
             //保存登录前的路径
-            cache.set(BACK_URL, from.fullPath)
+            cache.set(BACK_URL, to.fullPath)
         }
     })
 
