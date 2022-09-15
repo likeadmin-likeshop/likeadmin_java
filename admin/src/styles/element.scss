@@ -112,6 +112,9 @@
     .el-button--danger {
         --el-button-hover-link-text-color: var(--el-color-danger-light-3);
     }
+    .el-image__error {
+        font-size: 12px;
+    }
 }
 @media (max-width: 768px) {
     .el-pagination > .el-pagination__jump {

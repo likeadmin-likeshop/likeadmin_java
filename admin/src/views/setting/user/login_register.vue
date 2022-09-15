@@ -68,7 +68,7 @@
                         <div>
                             <el-checkbox-group v-model="formData.autoLoginAuth">
                                 <el-checkbox :label="1">微信登录</el-checkbox>
-                                <el-checkbox :label="2">QQ登录</el-checkbox>
+                                <!-- <el-checkbox :label="2">QQ登录</el-checkbox> -->
                             </el-checkbox-group>
                         </div>
                     </div>

@@ -36,7 +36,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column label="操作" min-width="80" fixed="right">
-                            <template #default="{ row, $index }">
+                            <template #default="{ $index }">
                                 <el-button
                                     v-perms="['setting:storage:edit']"
                                     type="danger"

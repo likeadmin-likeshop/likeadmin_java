@@ -111,12 +111,14 @@
                                     <color-picker
                                         class="max-w-[400px]"
                                         v-model="tabbar.style.defaultColor"
+                                        default-color="#999999"
                                     />
                                 </el-form-item>
                                 <el-form-item label="选中颜色">
                                     <color-picker
                                         class="max-w-[400px]"
                                         v-model="tabbar.style.selectedColor"
+                                        default-color="#999999"
                                     />
                                 </el-form-item>
                             </el-tab-pane>
