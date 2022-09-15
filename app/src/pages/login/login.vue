@@ -289,6 +289,7 @@ const loginHandle = async (data: any) => {
             }
         })
     } else if (cache.get(BACK_URL)) {
+        console.log(BACK_URL)
         uni.redirectTo({ url: cache.get(BACK_URL) })
     } else {
         uni.reLaunch({
@@ -331,6 +332,7 @@ watch(
 onShow(async () => {
     try {
         if (userStore.isLogin) {
+            console.log('hasLogin1')
             uni.showLoading({
                 title: '请稍后...'
             })
@@ -346,18 +348,20 @@ onShow(async () => {
 onLoad(async (options) => {
     if (userStore.isLogin) {
         // 已经登录 => 首页
+
+        console.log('hasLogin2')
         uni.reLaunch({
             url: '/pages/index/index'
         })
         return
     }
-
+    // #ifdef H5
     const { code } = options
     if (code) {
         uni.showLoading({
             title: '请稍后...'
         })
-        // #ifdef H5
+
         try {
             const data = await wechatOa.authLogin(code)
             loginHandle(data)
@@ -365,8 +369,8 @@ onLoad(async (options) => {
             uni.hideLoading()
             throw new Error(error)
         }
-        // #endif
     }
+    // #endif
 })
 </script>
 
