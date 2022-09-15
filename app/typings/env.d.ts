@@ -7,4 +7,9 @@ declare module '*.vue' {
     export default component
 }
 
+declare interface Window {
+    signLink: string
+}
+
 declare module 'uview-plus'
+declare module 'weixin-js-sdk'

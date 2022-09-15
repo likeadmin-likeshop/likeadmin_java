@@ -15,3 +15,12 @@ export function register(data: Record<string, any>) {
 export function forgotPassword(data: Record<string, any>) {
     return request.post({ url: '/login/forgotPassword', data })
 }
+
+//向微信请求code的链接
+export function getWxCodeUrl() {
+    return request.get({ url: '/login/codeUrl', data: { url: location.href } })
+}
+
+export function OALogin(data: Record<string, any>) {
+    return request.get({ url: '/login/oaLogin', data })
+}

@@ -132,7 +132,7 @@
 
                 <navigator url="/pages/register/register" hover-class="none">注册账号</navigator>
             </view>
-            <!-- #ifdef MP-WEIXIN -->
+            <!-- #ifdef MP-WEIXIN || H5 -->
             <view class="mt-[80rpx]" v-if="isOpenOtherAuth">
                 <u-divider>第三方登录</u-divider>
                 <div class="flex justify-center mt-[40rpx]">
@@ -141,7 +141,7 @@
                         class="flex flex-col items-center"
                         @click="wxLogin"
                     >
-                        <u-icon name="/static/images/icon/icon_wx.png" size="80" />
+                        <img src="@/static/images/icon/icon_wx.png" class="w-[80rpx] h-[80rpx]" />
                         <div class="text-sm mt-[10px]">微信登录</div>
                     </div>
                 </div>
@@ -158,8 +158,12 @@ import { SMSEnum } from '@/enums/appEnums'
 import { useLockFn } from '@/hooks/useLockFn'
 import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
+import { isWeixinClient } from '@/utils/client'
 import { currentPage } from '@/utils/util'
-import { onShow } from '@dcloudio/uni-app'
+// #ifdef H5
+import wechatOa from '@/utils/wechat'
+// #endif
+import { onLoad, onShow } from '@dcloudio/uni-app'
 import { computed, reactive, ref, shallowRef, watch } from 'vue'
 enum LoginTypeEnum {
     MOBILE = 'mobile',
@@ -176,6 +180,10 @@ enum LoginAuthEnum {
     WX = 1,
     QQ = 2
 }
+const isWeixin = ref(true)
+// #ifdef H5
+// isWeixin.value = isWeixinClient()
+// #endif
 
 const userStore = useUserStore()
 const appStore = useAppStore()
@@ -248,40 +256,51 @@ const loginFun = async (scene: LoginTypeEnum, code?: string) => {
     })
     try {
         const data = await login(params)
-        const { token, isBindMobile } = data
-        if (!isBindMobile && isForceBindMobile.value) {
-            userStore.temToken = token
-            uni.navigateTo({
-                url: '/pages/bind_mobile/bind_mobile'
-            })
-            uni.hideLoading()
-            return
-        }
-        userStore.login(data.token)
-        await userStore.getUser()
-        uni.$u.toast('登录成功')
-        uni.hideLoading()
-        uni.navigateBack({
-            success: () => {
-                // @ts-ignore
-                const { onLoad, options } = currentPage()
-                // 刷新上一个页面
-                onLoad && onLoad(options)
-            }
-        })
+        loginHandle(data)
     } catch (error: any) {
         uni.hideLoading()
         throw new Error(error)
     }
 }
 
+const loginHandle = async (data: any) => {
+    const { token, isBindMobile } = data
+    if (!isBindMobile && isForceBindMobile.value) {
+        userStore.temToken = token
+        uni.navigateTo({
+            url: '/pages/bind_mobile/bind_mobile'
+        })
+        uni.hideLoading()
+        return
+    }
+    userStore.login(data.token)
+    await userStore.getUser()
+    uni.$u.toast('登录成功')
+    uni.hideLoading()
+    uni.navigateBack({
+        success: () => {
+            // @ts-ignore
+            const { onLoad, options } = currentPage()
+            // 刷新上一个页面
+            onLoad && onLoad(options)
+        }
+    })
+}
+
 const { lockFn: handleLogin } = useLockFn(loginFun)
 
 const wxLogin = async () => {
+    // #ifdef MP-WEIXIN
     const data: any = await uni.login({
         provider: 'weixin'
     })
     handleLogin(LoginTypeEnum.MNP, data.code)
+    // #endif
+    // #ifdef H5
+    if (isWeixin.value) {
+        wechatOa.getUrl()
+    }
+    // #endif
 }
 
 watch(
@@ -310,6 +329,32 @@ onShow(async () => {
         }
     } catch (error) {
         uni.hideLoading()
+    }
+})
+
+onLoad(async (options) => {
+    if (userStore.isLogin) {
+        // 已经登录 => 首页
+        uni.reLaunch({
+            url: '/pages/index/index'
+        })
+        return
+    }
+
+    const { code } = options
+    if (code) {
+        uni.showLoading({
+            title: '请稍后...'
+        })
+        // #ifdef H5
+        try {
+            const data = await wechatOa.authLogin(code)
+            loginHandle(data)
+        } catch (error: any) {
+            uni.hideLoading()
+            throw new Error(error)
+        }
+        // #endif
     }
 })
 </script>

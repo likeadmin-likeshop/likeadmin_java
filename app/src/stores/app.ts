@@ -7,18 +7,14 @@ interface AppSate {
 export const useAppStore = defineStore({
     id: 'appStore',
     state: (): AppSate => ({
-        config: {
-            website: {},
-            login: {},
-            tabbar: [],
-            style: {}
-        }
+        config: {}
     }),
     getters: {
-        getWebsiteConfig: (state) => state.config.website,
-        getLoginConfig: (state) => state.config.login,
-        getTabbarConfig: (state) => state.config.tabbar,
-        getStyleConfig: (state) => state.config.style
+        getWebsiteConfig: (state) => state.config.website || {},
+        getLoginConfig: (state) => state.config.login || {},
+        getTabbarConfig: (state) => state.config.tabbar || [],
+        getStyleConfig: (state) => state.config.style || {},
+        getH5Config: (state) => state.config.h5 || {}
     },
     actions: {
         getImageUrl(url: string) {
