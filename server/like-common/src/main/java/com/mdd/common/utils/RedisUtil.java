@@ -1,15 +1,16 @@
 package com.mdd.common.utils;
 
 import com.mdd.common.config.GlobalConfig;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -181,6 +182,34 @@ public class RedisUtil {
     /* ***************** common end *************** */
 
     /**
+     * 按匹配获取或有KEY
+     *
+     * @author fzr
+     * @param pattern 规则
+     * @return Set<String>
+     */
+    public static Set<String> matchSet(String pattern) {
+        Set<String> keys = new LinkedHashSet<>();
+        RedisUtil.handler().execute((RedisConnection connection) -> {
+            try (Cursor<byte[]> cursor = connection.scan(
+                    ScanOptions.scanOptions()
+                            .count(Long.MAX_VALUE)
+                            .match(pattern)
+                            .build()
+            )) {
+                cursor.forEachRemaining(item -> {
+                    keys.add(RedisSerializer.string().deserialize(item));
+                });
+                return null;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        return keys;
+    }
+
+    /**
      * 获取key的值
      *
      * @author fzr
@@ -341,7 +370,6 @@ public class RedisUtil {
      * @param key 键
      * @param item 项
      * @param value 值
-     * @return true 成功 false失败
      */
     public static void hSet(String key, String item, Object value) {
         key = redisPrefix + key;
@@ -455,7 +483,7 @@ public class RedisUtil {
      * @param values 值 可以是多个
      * @return 成功个数
      */
-    public Long sSet(String key, Object... values) {
+    public static Long sSet(String key, Object... values) {
         key = redisPrefix + key;
         return redisTemplate.opsForSet().add(key, values);
     }

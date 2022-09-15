@@ -19,9 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 系统登录服务实现类
@@ -76,8 +74,18 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
             sysAdmin.setLastLoginTime(System.currentTimeMillis() / 1000);
             systemAuthAdminMapper.updateById(sysAdmin);
 
-            // 缓存登录信息
+            // 非多处登录
             String token = ToolsUtil.makeToken();
+            if (sysAdmin.getIsMultipoint() == 0) {
+                Set<Object> ts = RedisUtil.sGet(AdminConfig.backstageTokenSet + sysAdmin.getId());
+                for (Object t: ts) {
+                    RedisUtil.del(t.toString());
+                }
+                RedisUtil.del(AdminConfig.backstageTokenSet + sysAdmin.getId());
+                RedisUtil.sSet(AdminConfig.backstageTokenSet + sysAdmin.getId(), token);
+            }
+
+            // 缓存登录信息
             RedisUtil.set(AdminConfig.backstageTokenKey+token, sysAdmin.getId(), 7200);
             iSystemAuthAdminService.cacheAdminUserByUid(sysAdmin.getId());
 

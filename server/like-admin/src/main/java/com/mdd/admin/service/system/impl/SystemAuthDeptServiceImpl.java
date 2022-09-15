@@ -44,7 +44,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
         List<SystemAuthDept> systemAuthDeptList = systemAuthDeptMapper.selectList(new QueryWrapper<SystemAuthDept>()
                 .gt("pid", 0)
                 .eq("is_delete", 0)
-                .orderByDesc((Arrays.asList("id", "sort"))));
+                .orderByDesc((Arrays.asList("sort", "id"))));
 
         List<SystemAuthDeptVo> adminVoArrayList = new ArrayList<>();
         for (SystemAuthDept systemAuthDept : systemAuthDeptList) {
@@ -73,7 +73,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
         queryWrapper.orderByAsc(Arrays.asList("sort", "id"));
         queryWrapper.select(SystemAuthDept.class, info ->
                 !info.getColumn().equals("is_delete") &&
-                        !info.getColumn().equals("delete_time"));
+                !info.getColumn().equals("delete_time"));
 
         systemAuthDeptMapper.setSearch(queryWrapper, params, new String[]{
                 "like:name:str",
