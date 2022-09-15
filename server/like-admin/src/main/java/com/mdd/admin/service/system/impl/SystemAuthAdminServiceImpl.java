@@ -303,6 +303,9 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         model.setUpdateTime(System.currentTimeMillis() / 1000);
 
         if (systemAuthAdminParam.getPassword() != null && !systemAuthAdminParam.getPassword().equals("")) {
+            if (systemAuthAdminParam.getPassword().length() < 6 || systemAuthAdminParam.getPassword().length() > 20) {
+                throw new OperateException("密码必须在6~20位");
+            }
             String salt   = ToolsUtil.randomString(5);
             String pwd    = ToolsUtil.makeMd5( systemAuthAdminParam.getPassword().trim() + salt);
             model.setPassword(pwd);
@@ -311,6 +314,12 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
 
         systemAuthAdminMapper.updateById(model);
         this.cacheAdminUserByUid(systemAuthAdminParam.getId());
+
+        Integer id = LikeAdminThreadLocal.getAdminId();
+        if (systemAuthAdminParam.getPassword() != null && systemAuthAdminParam.getId().equals(id)) {
+            String token = Objects.requireNonNull(RequestUtil.handler()).getHeader("token");
+            RedisUtil.del(AdminConfig.backstageTokenKey + token);
+        }
     }
 
     /**
@@ -341,6 +350,10 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
             String currPassword = ToolsUtil.makeMd5(systemAuthAdminParam.getCurrPassword() + model.getSalt());
             if (!currPassword.equals(model.getPassword())) {
                 throw new OperateException("当前密码不正确!");
+            }
+
+            if (systemAuthAdminParam.getPassword().length() > 20 || systemAuthAdminParam.getPassword().length() < 6) {
+                throw new OperateException("密码必须在6~20位!");
             }
 
             String salt   = ToolsUtil.randomString(5);
