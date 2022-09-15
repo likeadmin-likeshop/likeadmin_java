@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, shallowRef } from 'vue'
 import { getArticleList } from '@/api/news'
 
 const props = withDefaults(
@@ -30,7 +30,7 @@ const props = withDefaults(
     }
 )
 
-const paging = ref(null)
+const paging = shallowRef<any>(null)
 const dataList = ref([])
 const isFirst = ref<boolean>(true)
 

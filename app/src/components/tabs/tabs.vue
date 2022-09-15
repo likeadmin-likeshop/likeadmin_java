@@ -142,7 +142,7 @@ const barFirstTimeMove = ref<boolean>(true) // 滑块第一次移动时(页面�
 const swiping = ref<boolean>(false)
 
 //@ts-ignore
-const { ctx } = getCurrentInstance()
+const ctx = getCurrentInstance()
 
 // 监听tab的变化，重新计算tab菜单的布局信息，因为实际使用中菜单可能是通过
 // 后台获取的（如新闻app顶部的菜单），获取返回需要一定时间，所以list变化时，重新获取布局信息
@@ -232,7 +232,7 @@ const updateTabs = () => {
         }
     })
     // nextTick(() => {
-    // 	init()
+    //     init()
     // })
 }
 

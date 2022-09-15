@@ -33,7 +33,7 @@ const handleChange: any = inject('handleChange')
 const updateRender = (value) => {
     inited.value = inited.value || value
     active.value = value
-    shouldRender.value = inited.value
+    shouldRender.value = inited.value!
     shouldShow.value = value
 }
 const update = () => {
@@ -42,8 +42,9 @@ const update = () => {
     }
 }
 
-const { ctx } = getCurrentInstance()
-handleChange(ctx, updateRender)
+const instance = getCurrentInstance()
+console.log(instance)
+handleChange(instance?.props, updateRender)
 
 onMounted(() => {
     update()
