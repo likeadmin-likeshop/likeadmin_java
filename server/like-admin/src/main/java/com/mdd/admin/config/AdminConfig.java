@@ -32,6 +32,7 @@ public class AdminConfig {
             "system:dept:list",      // 所有部门
             "setting:dict:type:all", // 所有字典类型
             "setting:dict:data:all", // 所有字典数据
+            "article:cate:all",      // 所有文章分类
     };
 
 }
