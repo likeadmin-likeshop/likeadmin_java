@@ -148,6 +148,7 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
         SystemAuthRole model = new SystemAuthRole();
         model.setName(systemAuthRoleParam.getName().trim());
         model.setRemark(systemAuthRoleParam.getRemark());
+        model.setSort(systemAuthRoleParam.getSort());
         model.setIsDisable(systemAuthRoleParam.getIsDisable());
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
