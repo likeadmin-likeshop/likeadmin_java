@@ -4,7 +4,13 @@
             <el-page-header content="文章编辑" @back="$router.back()" />
         </el-card>
         <el-card class="mt-4 !border-none" shadow="never">
-            <el-form ref="formRef" class="ls-form" :model="formData" label-width="85px" :rules="rules">
+            <el-form
+                ref="formRef"
+                class="ls-form"
+                :model="formData"
+                label-width="85px"
+                :rules="rules"
+            >
                 <div class="xl:flex">
                     <div>
                         <el-form-item label="文章标题" prop="title">
@@ -13,9 +19,17 @@
                             </div>
                         </el-form-item>
                         <el-form-item label="文章栏目" prop="cid">
-                            <el-select class="w-80" v-model="formData.cid" placeholder="请选择文章栏目">
-                                <el-option v-for="item in optionsData.articleCate" :key="item.id" :label="item.name"
-                                    :value="item.id" />
+                            <el-select
+                                class="w-80"
+                                v-model="formData.cid"
+                                placeholder="请选择文章栏目"
+                            >
+                                <el-option
+                                    v-for="item in optionsData.articleCate"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"
+                                />
                             </el-select>
                         </el-form-item>
                         <el-form-item label="文章简介" prop="intro">
@@ -43,7 +57,7 @@
                         </el-form-item>
                         <el-form-item label="排序" prop="sort">
                             <div>
-                                <el-input-number v-model="formData.sort" :min="0"/>
+                                <el-input-number v-model="formData.sort" :min="0" />
                                 <div class="form-tips">默认为0， 数值越大越排前</div>
                             </div>
                         </el-form-item>
@@ -98,7 +112,7 @@ const formData = reactive({
 const formRef = shallowRef<FormInstance>()
 const rules = reactive({
     title: [{ required: true, message: '请输入文章标题', trigger: 'blur' }],
-    cid: [{ required: true, message: '请输入表描述', trigger: 'blur' }]
+    cid: [{ required: true, message: '请输入文章简介', trigger: 'blur' }]
 })
 
 const getDetails = async () => {
