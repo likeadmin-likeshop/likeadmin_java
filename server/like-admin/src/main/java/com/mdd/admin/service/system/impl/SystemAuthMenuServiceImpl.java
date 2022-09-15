@@ -51,7 +51,10 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         queryWrapper.eq("is_disable", 0);
         queryWrapper.orderByDesc("menu_sort");
         queryWrapper.orderByAsc("id");
-        if (adminId != 1 && menuIds.size() > 0) {
+        if (adminId != 1) {
+            if ( menuIds.size() <= 0) {
+                menuIds.add(0);
+            }
             queryWrapper.in("id", menuIds);
         }
 

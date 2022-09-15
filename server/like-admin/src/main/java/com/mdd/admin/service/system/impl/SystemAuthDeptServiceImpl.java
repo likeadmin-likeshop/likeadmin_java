@@ -167,8 +167,8 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
         SystemAuthDept model = systemAuthDeptMapper.selectOne(
                 new QueryWrapper<SystemAuthDept>()
                         .select(SystemAuthDept.class, info ->
-                                !info.getColumn().equals("is_delete") &&
-                                        !info.getColumn().equals("delete_time"))
+                           !info.getColumn().equals("is_delete") &&
+                           !info.getColumn().equals("delete_time"))
                         .eq("id", systemAuthDeptParam.getId())
                         .eq("is_delete", 0)
                         .last("limit 1"));
