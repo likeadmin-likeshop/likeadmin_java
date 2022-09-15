@@ -33,7 +33,7 @@ export enum ClientEnum {
 export const ClientMap = {
     [ClientEnum.MP_WEIXIN]: '微信小程序',
     [ClientEnum.OA_WEIXIN]: '微信公众号',
-    [ClientEnum.H5]: '手机H5Z',
+    [ClientEnum.H5]: '手机H5',
     [ClientEnum.PC]: '电脑PC',
     [ClientEnum.IOS]: '苹果APP',
     [ClientEnum.ANDROID]: '安卓APP'
