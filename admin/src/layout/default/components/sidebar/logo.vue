@@ -8,7 +8,13 @@
                 :class="{ 'text-white': theme == ThemeEnum.DARK }"
                 :style="{ left: `${szie + 16}px` }"
             >
-                {{ title || config.webName }}
+                <overflow-tooltip
+                    :content="title || config.webName"
+                    :teleported="true"
+                    placement="bottom"
+                    overflo-type="unset"
+                >
+                </overflow-tooltip>
             </div>
         </transition>
     </div>
