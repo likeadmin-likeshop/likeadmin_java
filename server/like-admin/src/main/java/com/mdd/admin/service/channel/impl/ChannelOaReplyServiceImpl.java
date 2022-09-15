@@ -346,8 +346,8 @@ public class ChannelOaReplyServiceImpl implements IChannelOaReplyService {
 
         Assert.notNull(officialReply, "数据不存在!");
 
-        Integer status = officialReply.getStatus() == 1 ? 0 : 1;
-        if (officialReply.getReplyType() != 2 && officialReply.getStatus() == 1) {
+        int status = officialReply.getStatus() == 1 ? 0 : 1;
+        if (officialReply.getReplyType() != 2 && status == 1) {
             OfficialReply reply = new OfficialReply();
             reply.setStatus(0);
             officialReplyMapper.update(reply, new QueryWrapper<OfficialReply>()
