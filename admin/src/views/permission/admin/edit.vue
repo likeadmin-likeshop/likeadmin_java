@@ -95,11 +95,14 @@
                 </el-form-item>
 
                 <el-form-item label="多处登录">
-                    <el-switch
-                        v-model="formData.isMultipoint"
-                        :active-value="1"
-                        :inactive-value="0"
-                    />
+                    <div>
+                        <el-switch
+                            v-model="formData.isMultipoint"
+                            :active-value="1"
+                            :inactive-value="0"
+                        />
+                        <div class="form-tips">允许多人同时在线登录</div>
+                    </div>
                 </el-form-item>
             </el-form>
         </popup>

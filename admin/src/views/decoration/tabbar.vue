@@ -127,7 +127,7 @@
                 </div>
             </div>
         </el-card>
-        <footer-btns class="mt-4" :fixed="false">
+        <footer-btns class="mt-4" :fixed="false" v-perms="['decorate:tabbar:save']">
             <el-button type="primary" @click="setData">保存</el-button>
         </footer-btns>
     </div>
