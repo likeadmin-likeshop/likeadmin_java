@@ -205,6 +205,15 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
         Assert.notNull(model, "部门不存在");
         Assert.isFalse((model.getPid() == 0), "顶级部门不能删除");
 
+        SystemAuthDept pModel = systemAuthDeptMapper.selectOne(
+                new QueryWrapper<SystemAuthDept>()
+                        .select("id,pid,name")
+                        .eq("pid", id)
+                        .eq("is_delete", 0)
+                        .last("limit 1"));
+
+        Assert.isNull(pModel, "请先删除子级部门");
+
         SystemAuthAdmin systemAuthAdmin = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select("id,nickname")
                 .eq("dept_id", id)
