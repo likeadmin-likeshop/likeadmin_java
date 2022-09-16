@@ -67,7 +67,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
     public JSONArray list(Map<String, String> params) {
         QueryWrapper<SystemAuthDept> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("is_delete", 0);
-        queryWrapper.orderByAsc(Arrays.asList("sort", "id"));
+        queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
         queryWrapper.select(SystemAuthDept.class, info ->
                 !info.getColumn().equals("is_delete") &&
                 !info.getColumn().equals("delete_time"));
