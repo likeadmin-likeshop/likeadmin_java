@@ -2,7 +2,7 @@
     <div class="my-service bg-white mx-[20rpx] mt-[20rpx] rounded-lg">
         <div
             v-if="content.title"
-            class="title px-[30rpx] py-[20rpx] border-light border-solid border-0 border-b"
+            class="title px-[30rpx] py-[20rpx] font-medium text-xl border-light border-solid border-0 border-b"
         >
             <div>{{ content.title }}</div>
         </div>

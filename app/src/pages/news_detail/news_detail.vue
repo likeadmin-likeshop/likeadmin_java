@@ -22,10 +22,6 @@
             <view class="summary p-[20rpx] text-base" v-if="newsData.summary">
                 摘要: {{ newsData.summary }}
             </view>
-            <!-- 封面 -->
-            <view class="mt-[20rpx]" v-if="newsData.image">
-                <image class="w-full" :src="newsData.image" mode="widthFix"></image>
-            </view>
             <!-- 内容 -->
             <view class="mt-[20rpx]">
                 <u-parse :html="newsData.content"></u-parse>
