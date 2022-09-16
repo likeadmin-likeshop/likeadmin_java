@@ -1,19 +1,25 @@
 <template>
-    <div class="user-info flex items-center px-[50rpx]">
+    <view class="user-info flex px-[50rpx] justify-between py-[50rpx]">
         <navigator
             v-if="isLogin"
             class="flex items-center"
             hover-class="none"
-            url="/pages/login/login"
+            url="/pages/user_data/user_data"
         >
             <u-avatar :src="user.avatar" :size="120"></u-avatar>
-            <div class="text-white text-3xl ml-[20rpx]">{{ user.nickname }}</div>
+            <view class="text-white ml-[20rpx]">
+                <view class="text-2xl">{{ user.nickname }}</view>
+                <view class="text-xs mt-[18rpx]">账号：{{ user.username }}</view>
+            </view>
         </navigator>
         <navigator v-else class="flex items-center" hover-class="none" url="/pages/login/login">
             <u-avatar src="/static/images/user/default_avatar.png" :size="120"></u-avatar>
-            <div class="text-white text-3xl ml-[20rpx]">未登录</div>
+            <view class="text-white text-3xl ml-[20rpx]">未登录</view>
         </navigator>
-    </div>
+        <navigator v-if="isLogin" hover-class="none" url="/pages/user_set/user_set">
+            <u-icon name="setting" color="#fff" :size="48"></u-icon>
+        </navigator>
+    </view>
 </template>
 <script lang="ts" setup>
 const props = defineProps({

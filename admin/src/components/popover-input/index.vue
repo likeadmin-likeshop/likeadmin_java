@@ -26,7 +26,7 @@
                     </el-select>
                     <el-input
                         v-else
-                        v-model="inputValue"
+                        v-model.trim="inputValue"
                         :type="type"
                         size="small"
                         :placeholder="placeholder"

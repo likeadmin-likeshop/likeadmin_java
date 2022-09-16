@@ -30,8 +30,8 @@
                         <el-switch
                             v-perms="['article:cate:change']"
                             v-model="row.isShow"
-                            :active-value="0"
-                            :inactive-value="1"
+                            :active-value="1"
+                            :inactive-value="0"
                             @change="changeStatus(row.id)"
                         />
                     </template>

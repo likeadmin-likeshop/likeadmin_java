@@ -34,7 +34,7 @@ public class ArticleController {
      * @return Object
      */
     @GetMapping("/list")
-    public Object articleList(@Validated PageParam pageParam,
+    public Object list(@Validated PageParam pageParam,
                               @RequestParam Map<String, String> params) {
         PageResult<ArticleListVo> vos = iArticleArchivesService.list(pageParam, params);
         return AjaxResult.success(vos);

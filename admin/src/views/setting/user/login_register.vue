@@ -7,18 +7,23 @@
 
                 <el-form-item label="登录方式" prop="loginWay">
                     <div>
-                        <el-checkbox v-model="formData.loginWay[0]" :true-label="1" false-label="" label="登录" />
-                        <el-checkbox v-model="formData.loginWay[1]" :true-label="2" false-label="" label="注册" />
-
+                        <el-checkbox-group v-model="formData.loginWay">
+                            <el-checkbox :label="1">账号密码登录</el-checkbox>
+                            <el-checkbox :label="2">手机验证码登录</el-checkbox>
+                        </el-checkbox-group>
                         <div class="form-tips">系统通用登录方式，至少选择一项</div>
                     </div>
                 </el-form-item>
 
                 <el-form-item label="强制绑定手机" prop="forceBindMobile">
                     <div>
-                        <el-switch v-model="formData.forceBindMobile" :active-value="1" :inactive-value="0" />
+                        <el-switch
+                            v-model="formData.forceBindMobile"
+                            :active-value="1"
+                            :inactive-value="0"
+                        />
                         <span class="mt-1 ml-2">{{
-                        formData.forceBindMobile ? "开启" : "关闭"
+                            formData.forceBindMobile ? '开启' : '关闭'
                         }}</span>
 
                         <div class="form-tips">
@@ -30,14 +35,16 @@
 
                 <el-form-item label="政策协议" prop="openAgreement">
                     <div>
-                        <el-switch v-model="formData.openAgreement" :active-value="1" :inactive-value="0" />
-                        <span class="mt-1 ml-2">{{
-                        formData.openAgreement ? "开启" : "关闭"
-                        }}</span>
+                        <el-switch
+                            v-model="formData.openAgreement"
+                            :active-value="1"
+                            :inactive-value="0"
+                        />
+                        <span class="mt-1 ml-2">
+                            {{ formData.openAgreement ? '开启' : '关闭' }}
+                        </span>
 
-                        <div class="form-tips">
-                            登录/注册会员时，是否显示服务协议和隐私政策
-                        </div>
+                        <div class="form-tips">登录/注册会员时，是否显示服务协议和隐私政策</div>
                     </div>
                 </el-form-item>
             </el-card>
@@ -47,26 +54,32 @@
 
                 <el-form-item label="第三方登录" prop="openOtherAuth">
                     <div>
-                        <el-switch v-model="formData.openOtherAuth" :active-value="1" :inactive-value="0" />
-                        <span class="mt-1 ml-2">{{
-                        formData.openOtherAuth ? "开启" : "关闭"
-                        }}</span>
+                        <el-switch
+                            v-model="formData.openOtherAuth"
+                            :active-value="1"
+                            :inactive-value="0"
+                        />
+                        <span class="mt-1 ml-2">
+                            {{ formData.openOtherAuth ? '开启' : '关闭' }}
+                        </span>
 
                         <div class="form-tips">登录时支持第三方登录，新用户授权即自动注册账号</div>
 
                         <div>
-                            <el-checkbox v-model="formData.autoLoginAuth[0]" :true-label="1" false-label=""
-                                label="微信登录" />
-                            <el-checkbox v-model="formData.autoLoginAuth[1]" :true-label="2" false-label=""
-                                label="QQ登录" />
+                            <el-checkbox-group v-model="formData.autoLoginAuth">
+                                <el-checkbox :label="1">微信登录</el-checkbox>
+                                <!-- <el-checkbox :label="2">QQ登录</el-checkbox> -->
+                            </el-checkbox-group>
                         </div>
                     </div>
                 </el-form-item>
 
                 <el-form-item label="微信开放平台">
                     <div>
-                        <a href="https://baidu.com" target="_blank">
-                            <el-button type="primary" link class="underline">前往微信开放平台</el-button>
+                        <a href="https://open.weixin.qq.com/" target="_blank">
+                            <el-button type="primary" link class="underline">
+                                前往微信开放平台
+                            </el-button>
                         </a>
 
                         <div class="form-tips">
@@ -79,18 +92,18 @@
             </el-card>
         </el-form>
 
-        <footer-btns v-perms="['setting:website:save']">
+        <footer-btns v-perms="['setting:login:save']">
             <el-button type="primary" @click="handleSubmit">保存</el-button>
         </footer-btns>
     </div>
 </template>
 
 <script lang="ts" setup>
-import type { LoginSetup } from "@/api/setting/user";
-import { getLogin, setLogin } from "@/api/setting/user";
-import feedback from "@/utils/feedback";
+import type { LoginSetup } from '@/api/setting/user'
+import { getLogin, setLogin } from '@/api/setting/user'
+import feedback from '@/utils/feedback'
 import type { FormInstance, FormRules } from 'element-plus'
-const formRef = ref<FormInstance>();
+const formRef = ref<FormInstance>()
 
 // 表单数据
 const formData = reactive<LoginSetup>({
@@ -99,7 +112,7 @@ const formData = reactive<LoginSetup>({
     openAgreement: 0,
     openOtherAuth: 0,
     autoLoginAuth: [1, 2]
-});
+})
 
 // 表单验证
 const rules = reactive<FormRules>({
@@ -121,46 +134,47 @@ const rules = reactive<FormRules>({
             trigger: 'change'
         }
     ],
-    forceBindMobile: [{ required: true, trigger: "blur" }],
-    openAgreement: [{ required: true, trigger: "blur" }],
-    openOtherAuth: [{ required: true, trigger: "blur" }],
-});
+    forceBindMobile: [{ required: true, trigger: 'blur' }],
+    openAgreement: [{ required: true, trigger: 'blur' }],
+    openOtherAuth: [{ required: true, trigger: 'blur' }]
+})
 
 // 获取登录注册数据
 const getData = async () => {
     try {
-        const data = await getLogin();
+        const data = await getLogin()
         for (const key in formData) {
             //@ts-ignore
-            formData[key] = data[key];
+            formData[key] = data[key]
         }
     } catch (error) {
         console.log('获取=>', error)
     }
-};
+}
 
 // 保存登录注册数据
 const handleSubmit = async () => {
     const loginWay = formData.loginWay.join('')
     const autoLoginAuth = formData.autoLoginAuth.join('')
 
-    await formRef.value?.validate();
+    await formRef.value?.validate()
     try {
         await setLogin({
             ...formData,
             loginWay: loginWay.length == 2 ? `${loginWay[0]},${loginWay[1]}` : loginWay,
-            autoLoginAuth: autoLoginAuth.length == 2 ? `${autoLoginAuth[0]},${autoLoginAuth[1]}` : autoLoginAuth,
-
-        });
-        feedback.msgSuccess("操作成功");
-        getData();
+            autoLoginAuth:
+                autoLoginAuth.length == 2
+                    ? `${autoLoginAuth[0]},${autoLoginAuth[1]}`
+                    : autoLoginAuth
+        })
+        feedback.msgSuccess('操作成功')
+        getData()
     } catch (error) {
         console.log('保存=>', error)
     }
-};
+}
 
-getData();
+getData()
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

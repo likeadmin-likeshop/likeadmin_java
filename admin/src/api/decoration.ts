@@ -10,6 +10,11 @@ export function setDecoratePages(params: any) {
     return request.post({ url: '/decorate/pages/save', params })
 }
 
+// 获取首页文章数据
+export function getDecorateArticle(params?: any) {
+    return request.get({ url: '/decorate/data/article', params })
+}
+
 // 底部导航详情
 export function getDecorateTabbar(params?: any) {
     return request.get({ url: '/decorate/tabbar/detail', params })

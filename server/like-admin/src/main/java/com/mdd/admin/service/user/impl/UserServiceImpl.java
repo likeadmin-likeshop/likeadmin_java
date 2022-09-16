@@ -67,7 +67,7 @@ public class UserServiceImpl implements IUserService {
 
         userMapper.setSearch(queryWrapper, params, new String[]{
                 "=:channel:int",
-                "datetime:startTime-endTime@t.create_time:str"
+                "datetime:startTime-endTime@create_time:str"
         });
 
         IPage<User> iPage = userMapper.selectPage( new Page<>(pageNo, pageSize), queryWrapper);
@@ -124,8 +124,12 @@ public class UserServiceImpl implements IUserService {
         vo.setSex(user.getSex());
         vo.setAvatar(UrlUtil.toAbsoluteUrl(user.getAvatar()));
         vo.setChannel(ClientEnum.getMsgByCode(user.getChannel()));
-        vo.setLastLoginTime(TimeUtil.timestampToDate(user.getLastLoginTime()));
         vo.setCreateTime(TimeUtil.timestampToDate(user.getCreateTime()));
+        if (user.getLastLoginTime() <= 0) {
+            vo.setLastLoginTime("无");
+        } else {
+            vo.setLastLoginTime(TimeUtil.timestampToDate(user.getLastLoginTime()));
+        }
         return vo;
     }
 

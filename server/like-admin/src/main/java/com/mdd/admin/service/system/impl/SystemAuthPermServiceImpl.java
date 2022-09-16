@@ -5,8 +5,10 @@ import com.mdd.admin.config.AdminConfig;
 import com.mdd.admin.service.system.ISystemAuthPermService;
 import com.mdd.common.entity.system.SystemAuthMenu;
 import com.mdd.common.entity.system.SystemAuthPerm;
+import com.mdd.common.entity.system.SystemAuthRole;
 import com.mdd.common.mapper.system.SystemAuthMenuMapper;
 import com.mdd.common.mapper.system.SystemAuthPermMapper;
+import com.mdd.common.mapper.system.SystemAuthRoleMapper;
 import com.mdd.common.utils.ArrayUtil;
 import com.mdd.common.utils.RedisUtil;
 import com.mdd.common.utils.StringUtil;
@@ -30,6 +32,9 @@ public class SystemAuthPermServiceImpl implements ISystemAuthPermService {
     @Resource
     SystemAuthMenuMapper systemAuthMenuMapper;
 
+    @Resource
+    SystemAuthRoleMapper systemAuthRoleMapper;
+
     /**
      * 根据角色ID获取菜单ID
      *
@@ -39,11 +44,22 @@ public class SystemAuthPermServiceImpl implements ISystemAuthPermService {
     @Override
     public List<Integer> selectMenuIdsByRoleId(Integer roleId) {
         List<Integer> menus = new LinkedList<>();
+
+        SystemAuthRole systemAuthRole = systemAuthRoleMapper.selectOne(new QueryWrapper<SystemAuthRole>()
+                .eq("id", roleId)
+                .eq("is_disable", 0)
+                .last("limit 1"));
+
+        if (StringUtil.isNull(systemAuthRole)) {
+            return menus;
+        }
+
         List<SystemAuthPerm> systemAuthPerms = systemAuthPermMapper.selectList(
                 new QueryWrapper<SystemAuthPerm>().eq("role_id", roleId));
         for (SystemAuthPerm systemAuthPerm : systemAuthPerms) {
             menus.add(systemAuthPerm.getMenuId());
         }
+
         return menus;
     }
 

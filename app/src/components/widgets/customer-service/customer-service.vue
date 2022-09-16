@@ -19,7 +19,11 @@
             <!-- #endif -->
         </view>
         <view class="mt-[100rpx] w-full">
-            <u-button type="primary" shape="circle" @click="saveImageToPhotosAlbum(content.qrcode)">
+            <u-button
+                type="primary"
+                shape="circle"
+                @click="saveImageToPhotosAlbum(getImageUrl(content.qrcode))"
+            >
                 保存二维码图片
             </u-button>
         </view>

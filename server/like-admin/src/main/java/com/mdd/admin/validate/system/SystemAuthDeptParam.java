@@ -44,7 +44,7 @@ public class SystemAuthDeptParam {
     @NotNull(message = "请选择状态", groups = {create.class, update.class})
     @IntegerContains(values = {0, 1}, groups = {create.class, update.class})
     private Integer isStop = 0;
-    @NotNull(message = "排序号不能为空", groups = {SystemAuthRoleParam.create.class, SystemAuthRoleParam.update.class})
-    @DecimalMin(value = "0", message = "排序号值不能少于0", groups = {SystemAuthAdminParam.create.class, SystemAuthAdminParam.update.class})
+    @NotNull(message = "排序号不能为空", groups = {create.class, update.class})
+    @DecimalMin(value = "0", message = "排序号值不能少于0", groups = {create.class, update.class})
     private Integer sort = 0;
 }

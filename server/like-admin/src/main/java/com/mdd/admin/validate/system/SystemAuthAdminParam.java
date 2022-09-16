@@ -47,7 +47,6 @@ public class SystemAuthAdminParam implements Serializable {
     @Length(min = 6, max = 32, message = "密码必须在6~32个字符内", groups = {create.class})
     private String password;
 
-    @NotEmpty(message = "当前密码不能为空", groups = {upInfo.class})
     @Length(min = 6, max = 32, message = "当前密码错误", groups = {upInfo.class})
     private String currPassword;
 
@@ -59,7 +58,7 @@ public class SystemAuthAdminParam implements Serializable {
     @IntegerContains(values = {0, 1}, message = "isMultipoint参数不在合法值内", groups = {create.class, update.class})
     private Integer isMultipoint;
 
-    @NotNull(message = "排序号不能为空", groups = {SystemAuthRoleParam.create.class, SystemAuthRoleParam.update.class})
+    @NotNull(message = "排序号不能为空", groups = {create.class, update.class})
     @DecimalMin(value = "0", message = "排序号值不能少于0", groups = {create.class, update.class})
     private Integer sort = 0;
 

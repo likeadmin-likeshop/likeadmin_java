@@ -14,6 +14,9 @@ public class AdminConfig {
     // 令牌缓存键
     public static final String backstageTokenKey = "backstage:token:";
 
+    // 令牌的集合
+    public static final String backstageTokenSet = "backstage:token:set:";
+
     // 免登录验证
     public static String[] notLoginUri = new String[]{
             "system:login",         // 登录接口
@@ -32,6 +35,7 @@ public class AdminConfig {
             "system:dept:list",      // 所有部门
             "setting:dict:type:all", // 所有字典类型
             "setting:dict:data:all", // 所有字典数据
+            "article:cate:all",      // 所有文章分类
     };
 
 }

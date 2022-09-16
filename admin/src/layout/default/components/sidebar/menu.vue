@@ -10,6 +10,7 @@
                 :default-active="activeMenu"
                 :collapse="isCollapsed"
                 mode="vertical"
+                :unique-opened="true"
                 @select="$emit('select')"
             >
                 <menu-item

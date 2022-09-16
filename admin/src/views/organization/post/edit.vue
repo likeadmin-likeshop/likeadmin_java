@@ -5,20 +5,19 @@
             :title="popupTitle"
             :async="true"
             width="550px"
-            :clickModalClose="true"
             @confirm="handleSubmit"
             @close="handleClose"
         >
             <el-form ref="formRef" :model="formData" label-width="84px" :rules="formRules">
                 <el-form-item label="岗位名称" prop="name">
-                    <el-input v-model="formData.name" placeholder="请输入岗位名称" />
+                    <el-input v-model="formData.name" placeholder="请输入岗位名称" clearable />
                 </el-form-item>
                 <el-form-item label="岗位编码" prop="code">
-                    <el-input v-model="formData.code" placeholder="请输入岗位编码" />
+                    <el-input v-model="formData.code" placeholder="请输入岗位编码" clearable />
                 </el-form-item>
                 <el-form-item label="排序" prop="sort">
                     <div>
-                        <el-input-number v-model="formData.sort" :min="0"/>
+                        <el-input-number v-model="formData.sort" :min="0" />
                         <div class="form-tips">默认为0， 数值越大越排前</div>
                     </div>
                 </el-form-item>
@@ -55,7 +54,7 @@ const formData = reactive({
     code: '',
     sort: 0,
     remarks: '',
-    isStop: 1
+    isStop: 0
 })
 
 const formRules = {

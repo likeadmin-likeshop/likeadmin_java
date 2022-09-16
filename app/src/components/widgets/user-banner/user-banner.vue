@@ -9,7 +9,11 @@
             indicator-active-color="#4173ff"
             :autoplay="true"
         >
-            <swiper-item v-for="(item, index) in content.data" :key="index">
+            <swiper-item
+                v-for="(item, index) in content.data"
+                :key="index"
+                @click="handleClick(item.limk)"
+            >
                 <u-image
                     mode="aspectFit"
                     width="100%"
@@ -24,6 +28,7 @@
 
 <script setup lang="ts">
 import { useAppStore } from '@/stores/app'
+import { navigateTo } from '@/utils/util'
 
 const props = defineProps({
     content: {
@@ -35,6 +40,9 @@ const props = defineProps({
         default: () => ({})
     }
 })
+const handleClick = (link: any) => {
+    navigateTo(link)
+}
 const { getImageUrl } = useAppStore()
 </script>
 

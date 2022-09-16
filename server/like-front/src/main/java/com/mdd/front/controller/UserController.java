@@ -78,7 +78,7 @@ public class UserController {
             throw new OperateException("密码必须是6-20字母+数字组合!");
         }
         Integer userId = LikeFrontThreadLocal.getUserId();
-        iUserService.changePwd(params.get("password"), userId);
+        iUserService.changePwd(params.get("password"), params.getOrDefault("oldPassword", null), userId);
         return AjaxResult.success();
     }
 

@@ -16,10 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 系统部门服务实现类
@@ -44,7 +41,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
         List<SystemAuthDept> systemAuthDeptList = systemAuthDeptMapper.selectList(new QueryWrapper<SystemAuthDept>()
                 .gt("pid", 0)
                 .eq("is_delete", 0)
-                .orderByDesc((Arrays.asList("id", "sort"))));
+                .orderByDesc((Arrays.asList("sort", "id"))));
 
         List<SystemAuthDeptVo> adminVoArrayList = new ArrayList<>();
         for (SystemAuthDept systemAuthDept : systemAuthDeptList) {
@@ -70,10 +67,10 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
     public JSONArray list(Map<String, String> params) {
         QueryWrapper<SystemAuthDept> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("is_delete", 0);
-        queryWrapper.orderByAsc(Arrays.asList("sort", "id"));
+        queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
         queryWrapper.select(SystemAuthDept.class, info ->
                 !info.getColumn().equals("is_delete") &&
-                        !info.getColumn().equals("delete_time"));
+                !info.getColumn().equals("delete_time"));
 
         systemAuthDeptMapper.setSearch(queryWrapper, params, new String[]{
                 "like:name:str",
@@ -82,7 +79,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
 
         List<SystemAuthDept> systemAuthDeptList = systemAuthDeptMapper.selectList(queryWrapper);
 
-        List<SystemAuthDeptVo> lists = new ArrayList<>();
+        List<SystemAuthDeptVo> lists = new LinkedList<>();
         for (SystemAuthDept systemAuthDept : systemAuthDeptList) {
             SystemAuthDeptVo vo = new SystemAuthDeptVo();
             BeanUtils.copyProperties(systemAuthDept, vo);
@@ -167,8 +164,8 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
         SystemAuthDept model = systemAuthDeptMapper.selectOne(
                 new QueryWrapper<SystemAuthDept>()
                         .select(SystemAuthDept.class, info ->
-                                !info.getColumn().equals("is_delete") &&
-                                        !info.getColumn().equals("delete_time"))
+                           !info.getColumn().equals("is_delete") &&
+                           !info.getColumn().equals("delete_time"))
                         .eq("id", systemAuthDeptParam.getId())
                         .eq("is_delete", 0)
                         .last("limit 1"));
@@ -204,6 +201,15 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
 
         Assert.notNull(model, "部门不存在");
         Assert.isFalse((model.getPid() == 0), "顶级部门不能删除");
+
+        SystemAuthDept pModel = systemAuthDeptMapper.selectOne(
+                new QueryWrapper<SystemAuthDept>()
+                        .select("id,pid,name")
+                        .eq("pid", id)
+                        .eq("is_delete", 0)
+                        .last("limit 1"));
+
+        Assert.isNull(pModel, "请先删除子级部门");
 
         SystemAuthAdmin systemAuthAdmin = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select("id,nickname")

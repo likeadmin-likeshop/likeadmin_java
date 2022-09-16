@@ -57,11 +57,11 @@ public class SystemLogsServerImpl implements ISystemLogsServer {
 
         logOperateMapper.setSearch(mpjQueryWrapper, params, new String[]{
                 "like:title:str",
-                "like:username:str",
+                "like:username@sa.username:str",
+                "like:ip:str",
                 "=:type:str",
                 "=:status:int",
                 "=:url:str",
-                "=:ip:str",
                 "datetime:startTime-endTime@t.create_time:str"
         });
 

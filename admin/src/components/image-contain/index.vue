@@ -1,11 +1,5 @@
 <template>
-    <el-image :style="styles" v-bind="props">
-        <template v-slot:error>
-            <div class="text-tx-secondary flex items-center justify-center bg-white h-full">
-                <icon name="el-icon-Picture" :size="30" />
-            </div>
-        </template>
-    </el-image>
+    <el-image :style="styles" v-bind="props"> </el-image>
 </template>
 
 <script lang="ts" setup>
@@ -40,8 +34,7 @@ const styles = computed<CSSProperties>(() => {
 
 <style lang="scss" scoped>
 .el-image {
-    font-size: 0;
-    @apply bg-page;
+    display: block;
     .el-image__error {
         @apply text-xs;
     }

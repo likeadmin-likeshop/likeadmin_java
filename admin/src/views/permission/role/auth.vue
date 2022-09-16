@@ -5,7 +5,6 @@
             title="权限设置"
             :async="true"
             width="550px"
-            :clickModalClose="true"
             @confirm="handleSubmit"
             @close="handleClose"
         >

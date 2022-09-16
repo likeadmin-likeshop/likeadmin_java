@@ -238,16 +238,20 @@ export default {
 		},
 		// 切换tab
 		switchTab(index) {
-			// 发出事件和修改v-model绑定的值
-			this.$emit("change", index);
+           
+			let pagePath = this.list[index].pagePath;
 			// 如果有配置pagePath属性，使用uni.switchTab进行跳转
-			if (this.list[index].pagePath) {
+			if (pagePath) {
+                if(pagePath == this.pageUrl || pagePath == "/" + this.pageUrl) return
+                // 发出事件和修改v-model绑定的值
+			    this.$emit("change", index);
 				uni.switchTab({
-					url: this.list[index].pagePath
+					url: pagePath
 				});
 			} else {
 				// 如果配置了papgePath属性，将不会双向绑定v-model传入的value值
 				// 因为这个模式下，不再需要v-model绑定的value值了，而是通过getCurrentPages()适配
+                this.$emit("change", index);
 				this.$emit("input", index);
 				this.$emit("update:modelValue", index);
 			}
@@ -332,7 +336,7 @@ export default {
 
 			&__text {
 				color: $u-content-color;
-				font-size: 26rpx;
+				font-size: 22rpx;
 				line-height: 28rpx;
 				position: absolute;
 				bottom: 14rpx;

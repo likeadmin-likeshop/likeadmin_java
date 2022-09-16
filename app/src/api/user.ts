@@ -1,26 +1,28 @@
 import request from '@/utils/request'
 
-export function getUserCenter() {
-    return request.get({ url: '/user/center' })
+export function getUserCenter(header?: any) {
+    return request.get({ url: '/user/center', header })
 }
 
 // 个人信息
 export function getUserInfo() {
-    return request.get({ url: '/user/info' })
+    return request.get({ url: '/user/info' }, { isAuth: true })
 }
 
 // 个人编辑
 export function userEdit(data: any) {
-    return request.post({ url: '/user/edit', data: data })
+    return request.post({ url: '/user/edit', data }, { isAuth: true })
 }
 
 // 绑定手机
-export function userBindMobile(data: any) {
-    return request.post({ url: '/user/bindMobile', data: data })
+export function userBindMobile(data: any, header?: any) {
+    return request.post({ url: '/user/bindMobile', data, header }, { isAuth: true })
 }
 
 // 微信电话
 export function userMnpMobile(data: any) {
-    return request.post({ url: '/user/mnpMobile', data: data })
+    return request.post({ url: '/user/mnpMobile', data }, { isAuth: true })
 }
-
+export function userChangePwd(data: any) {
+    return request.post({ url: '/user/changePwd', data }, { isAuth: true })
+}

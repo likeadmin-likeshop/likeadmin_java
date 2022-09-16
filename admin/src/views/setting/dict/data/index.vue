@@ -14,7 +14,12 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="数据名称">
-                    <el-input class="w-56" v-model="queryParams.name" />
+                    <el-input
+                        class="w-56"
+                        v-model="queryParams.name"
+                        clearable
+                        @keyup.enter="resetPage"
+                    />
                 </el-form-item>
                 <el-form-item label="数据状态">
                     <el-select class="w-56" v-model="queryParams.status">

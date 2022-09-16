@@ -77,7 +77,6 @@ public class ArticleController {
     @GetMapping("/collect")
     public Object collect(@Validated PageParam pageParam) {
         Integer userId = LikeFrontThreadLocal.getUserId();
-        System.out.println(userId);
         PageResult<ArticleCollectVo> list = iArticleService.collect(pageParam, userId);
         return AjaxResult.success(list);
     }

@@ -10,6 +10,7 @@ import com.mdd.admin.vo.article.ArticleCateVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.article.ArticleCategory;
+import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.article.ArticleCategoryMapper;
 import com.mdd.common.mapper.article.ArticleMapper;
 import com.mdd.common.utils.TimeUtil;
@@ -19,6 +20,7 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +46,8 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
     public List<ArticleCateVo> all() {
         QueryWrapper<ArticleCategory> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id", "name", "sort", "is_show", "create_time", "update_time")
-                .eq("is_delete", 0);
+                .eq("is_delete", 0)
+                .orderByDesc(Arrays.asList("sort", "id"));
 
         List<ArticleCategory> lists = articleCategoryMapper.selectList(queryWrapper);
 
@@ -75,7 +78,8 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
 
         QueryWrapper<ArticleCategory> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id", "name", "sort", "is_show", "create_time", "update_time")
-                .eq("is_delete", 0);
+                .eq("is_delete", 0)
+                .orderByDesc(Arrays.asList("sort", "id"));
 
         articleCategoryMapper.setSearch(queryWrapper, params, new String[]{
                 "like:name:str",
@@ -137,23 +141,32 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
      */
     @Override
     public void add(CategoryParam categoryParam) {
+        if (categoryParam.getName().trim().equals("")) {
+            throw new OperateException("名称不允许为空值!");
+        }
+
         ArticleCategory model = new ArticleCategory();
         model.setId(categoryParam.getId());
         model.setName(categoryParam.getName());
         model.setSort(categoryParam.getSort());
+        model.setIsShow(model.getIsShow());
         model.setCreateTime(TimeUtil.timestamp());
         model.setUpdateTime(TimeUtil.timestamp());
         articleCategoryMapper.insert(model);
     }
 
     /**
-     * 文章编辑
+     * 分类编辑
      *
      * @author fzr
      * @param categoryParam 分类参数
      */
     @Override
     public void edit(CategoryParam categoryParam) {
+        if (categoryParam.getName().trim().equals("")) {
+            throw new OperateException("名称不允许为空值!");
+        }
+
         ArticleCategory model = articleCategoryMapper.selectOne(
                 new QueryWrapper<ArticleCategory>()
                         .select(ArticleCategory.class, info->
@@ -166,6 +179,7 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
 
         model.setName(categoryParam.getName());
         model.setSort(categoryParam.getSort());
+        model.setIsShow(categoryParam.getIsShow());
         model.setUpdateTime(TimeUtil.timestamp());
         articleCategoryMapper.updateById(model);
     }

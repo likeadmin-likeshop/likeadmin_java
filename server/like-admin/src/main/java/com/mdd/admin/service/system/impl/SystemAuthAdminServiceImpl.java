@@ -237,7 +237,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         String pwd    = ToolsUtil.makeMd5(systemAuthAdminParam.getPassword().trim() + salt);
         String avatar = StringUtil.isNotEmpty(systemAuthAdminParam.getAvatar()) ?
                 UrlUtil.toRelativeUrl(systemAuthAdminParam.getAvatar()) :
-                "/api/static/backend_avatar.jpg";
+                "/api/static/backend_avatar.png";
 
         SystemAuthAdmin model = new SystemAuthAdmin();
         model.setDeptId(systemAuthAdminParam.getDeptId());
@@ -303,6 +303,9 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         model.setUpdateTime(System.currentTimeMillis() / 1000);
 
         if (systemAuthAdminParam.getPassword() != null && !systemAuthAdminParam.getPassword().equals("")) {
+            if (systemAuthAdminParam.getPassword().length() < 6 || systemAuthAdminParam.getPassword().length() > 20) {
+                throw new OperateException("密码必须在6~20位");
+            }
             String salt   = ToolsUtil.randomString(5);
             String pwd    = ToolsUtil.makeMd5( systemAuthAdminParam.getPassword().trim() + salt);
             model.setPassword(pwd);
@@ -311,6 +314,19 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
 
         systemAuthAdminMapper.updateById(model);
         this.cacheAdminUserByUid(systemAuthAdminParam.getId());
+
+        Integer id = LikeAdminThreadLocal.getAdminId();
+        if (systemAuthAdminParam.getPassword() != null && systemAuthAdminParam.getId().equals(id)) {
+            String token = Objects.requireNonNull(RequestUtil.handler()).getHeader("token");
+            RedisUtil.del(AdminConfig.backstageTokenKey + token);
+
+            Set<Object> ts = RedisUtil.sGet(AdminConfig.backstageTokenSet + id);
+            for (Object t: ts) {
+                RedisUtil.del(AdminConfig.backstageTokenKey+t.toString());
+            }
+            RedisUtil.del(AdminConfig.backstageTokenSet + id);
+            RedisUtil.sSet(AdminConfig.backstageTokenSet + id, token);
+        }
     }
 
     /**
@@ -321,9 +337,8 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
      */
     @Override
     public void upInfo(SystemAuthAdminParam systemAuthAdminParam, Integer adminId) {
-        String[] field = {"id", "username", "nickname", "password", "salt"};
         SystemAuthAdmin model = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
-                .select(field)
+                .select("id,username,nickname,password,salt")
                 .eq("id", adminId)
                 .eq("is_delete", 0)
                 .last("limit 1"));
@@ -344,6 +359,10 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 throw new OperateException("当前密码不正确!");
             }
 
+            if (systemAuthAdminParam.getPassword().length() > 20 || systemAuthAdminParam.getPassword().length() < 6) {
+                throw new OperateException("密码必须在6~20位!");
+            }
+
             String salt   = ToolsUtil.randomString(5);
             String pwd    = ToolsUtil.makeMd5( systemAuthAdminParam.getPassword().trim() + salt);
             model.setPassword(pwd);
@@ -354,8 +373,17 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         this.cacheAdminUserByUid(adminId);
 
         if (systemAuthAdminParam.getPassword() != null) {
+
             String token = Objects.requireNonNull(RequestUtil.handler()).getHeader("token");
             RedisUtil.del(AdminConfig.backstageTokenKey + token);
+
+            int uid = model.getId();
+            Set<Object> ts = RedisUtil.sGet(AdminConfig.backstageTokenSet + uid);
+            for (Object t: ts) {
+                RedisUtil.del(AdminConfig.backstageTokenKey+t.toString());
+            }
+            RedisUtil.del(AdminConfig.backstageTokenSet + uid);
+            RedisUtil.sSet(AdminConfig.backstageTokenSet + model.getId(), token);
         }
     }
 
@@ -374,10 +402,10 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .eq("is_delete", 0)
                 .last("limit 1")), "账号已不存在!");
 
-        Assert.isFalse(id == 1, "系统管理员不允许删除");
+        Assert.isFalse(id == 1, "系统管理员不允许删除!");
 
         int adminId = Integer.parseInt(LikeAdminThreadLocal.getAdminId().toString());
-        Assert.isFalse(id == adminId, "不能删除自己");
+        Assert.isFalse(id == adminId, "不能删除自己!");
 
         SystemAuthAdmin model = new SystemAuthAdmin();
         model.setId(id);
@@ -403,6 +431,9 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .last("limit 1"));
 
         Assert.notNull(systemAuthAdmin, "账号已不存在!");
+
+        int adminId = Integer.parseInt(LikeAdminThreadLocal.getAdminId().toString());
+        Assert.isFalse(id == adminId, "不能禁用自己!");
 
         Integer disable = systemAuthAdmin.getIsDisable() == 1 ? 0 : 1;
         systemAuthAdmin.setIsDisable(disable);

@@ -45,7 +45,7 @@
                             },
                             {
                                 label: '女',
-                                value: 0
+                                value: 2
                             }
                         ]"
                         @confirm="handleEdit($event, 'sex')"
@@ -57,7 +57,11 @@
                 </el-form-item>
                 <el-form-item label="联系电话：">
                     {{ formData.mobile || '-' }}
-                    <popover-input class="ml-[10px]" @confirm="handleEdit($event, 'mobile')">
+                    <popover-input
+                        class="ml-[10px]"
+                        type="number"
+                        @confirm="handleEdit($event, 'mobile')"
+                    >
                         <el-button type="primary" link v-perms="['user:edit']">
                             <icon name="el-icon-EditPen" />
                         </el-button>
@@ -75,6 +79,7 @@
 import type { FormInstance } from 'element-plus'
 import { getUserDetail, userEdit } from '@/api/consumer'
 import feedback from '@/utils/feedback'
+import { isEmpty } from '@/utils/util'
 
 const route = useRoute()
 const formData = reactive({
@@ -104,6 +109,7 @@ const getDetails = async () => {
 }
 
 const handleEdit = async (value: string, field: string) => {
+    if (isEmpty(value)) return
     await userEdit({
         id: route.query.id,
         field,

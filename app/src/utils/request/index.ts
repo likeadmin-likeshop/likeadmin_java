@@ -15,15 +15,15 @@ const requestHooks: RequestHooks = {
         if (baseUrl) {
             options.url = `${baseUrl}${options.url}`
         }
+        const token = getToken()
         // 添加token
-        if (withToken) {
-            const token = getToken()
+        if (withToken && token) {
             options.header.token = token
         }
         return options
     },
     responseInterceptorsHook(response, config) {
-        const { isTransformResponse, isReturnDefaultResponse } = config
+        const { isTransformResponse, isReturnDefaultResponse, isAuth } = config
 
         //返回默认响应，当需要获取响应头及其他数据时可使用
         if (isReturnDefaultResponse) {
@@ -54,9 +54,11 @@ const requestHooks: RequestHooks = {
             case RequestCodeEnum.TOKEN_INVALID:
             case RequestCodeEnum.TOKEN_EMPTY:
                 logout()
-                uni.navigateTo({
-                    url: '/pages/login/login'
-                })
+                if (isAuth && !getToken()) {
+                    uni.navigateTo({
+                        url: '/pages/login/login'
+                    })
+                }
                 return Promise.reject()
 
             default:
@@ -69,7 +71,7 @@ const defaultOptions: HttpRequestOptions = {
     requestOptions: {
         timeout: 10 * 1000
     },
-    baseUrl: import.meta.env.VITE_APP_BASE_URL,
+    baseUrl: `${import.meta.env.VITE_APP_BASE_URL}/`,
     //是否返回默认的响应
     isReturnDefaultResponse: false,
     // 需要对返回数据进行处理
@@ -80,6 +82,7 @@ const defaultOptions: HttpRequestOptions = {
     ignoreCancel: false,
     // 是否携带token
     withToken: true,
+    isAuth: false,
     requestHooks: requestHooks
 }
 

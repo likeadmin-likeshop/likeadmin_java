@@ -46,7 +46,7 @@ public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
     public List<SystemAuthPostVo> all() {
         List<SystemAuthPost> systemAuthPostList = systemAuthPostMapper.selectList(new QueryWrapper<SystemAuthPost>()
                 .eq("is_delete", 0)
-                .orderByDesc((Arrays.asList("id", "sort"))));
+                .orderByDesc((Arrays.asList("sort", "id"))));
 
         List<SystemAuthPostVo> adminVoArrayList = new ArrayList<>();
         for (SystemAuthPost systemAuthPost : systemAuthPostList) {
@@ -79,7 +79,7 @@ public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
                     !info.getColumn().equals("is_delete") &&
                     !info.getColumn().equals("delete_time"))
                 .eq("is_delete", 0)
-                .orderByDesc(Arrays.asList("id", "sort"));
+                .orderByDesc(Arrays.asList("sort", "id"));
 
         systemAuthPostMapper.setSearch(queryWrapper, params, new String[]{
                 "like:code:str",
@@ -87,9 +87,9 @@ public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
                 "=:isStop@is_stop:int"
         });
 
-        Page<SystemAuthPost> objectPage = new Page<>(page, limit);
-        objectPage.addOrder(OrderItem.asc("sort"));
-        IPage<SystemAuthPost> iPage = systemAuthPostMapper.selectPage(objectPage, queryWrapper);
+//        Page<SystemAuthPost> objectPage = new Page<>(page, limit);
+//        objectPage.addOrder(OrderItem.asc("sort"));
+        IPage<SystemAuthPost> iPage = systemAuthPostMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
         List<SystemAuthPostVo> list = new ArrayList<>();
         for (SystemAuthPost systemAuthPost : iPage.getRecords()) {

@@ -23,6 +23,7 @@ import com.mdd.front.vo.user.UserInfoVo;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.LinkedHashMap;
@@ -139,10 +140,11 @@ public class UserServiceImpl implements IUserService {
                     throw new OperateException("新账号与旧账号一致,修改失败!");
                 }
 
-                usernameUser.setId(userId);
-                usernameUser.setUsername(value);
-                usernameUser.setUpdateTime(System.currentTimeMillis() / 1000);
-                userMapper.updateById(usernameUser);
+                User u = new User();
+                u.setId(userId);
+                u.setUsername(value);
+                u.setUpdateTime(System.currentTimeMillis() / 1000);
+                userMapper.updateById(u);
                 break;
             case "nickname":
                 User nicknameUser = new User();
@@ -171,15 +173,32 @@ public class UserServiceImpl implements IUserService {
      * @param userId 用户ID
      */
     @Override
-    public void changePwd(String password, Integer userId) {
+    public void changePwd(String password, String oldPassword, Integer userId) {
+        User user = userMapper.selectOne(new QueryWrapper<User>()
+                .select("id,password,salt")
+                .eq("id", userId)
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        Assert.notNull(user, "用户不存在");
+
+        if (!user.getPassword().equals("")) {
+            Assert.notNull(oldPassword, "oldPassword参数缺失");
+            String oldPwd = ToolsUtil.makeMd5(oldPassword.trim() + user.getSalt());
+            if (!oldPwd.equals(user.getPassword())) {
+                throw new OperateException("原密码不正确!");
+            }
+        }
+
         String salt = ToolsUtil.randomString(5);
         String pwd  = ToolsUtil.makeMd5(password.trim()+salt);
 
-        User user = new User();
-        user.setPassword(pwd);
-        user.setSalt(salt);
-        user.setUpdateTime(System.currentTimeMillis() / 1000);
-        userMapper.updateById(user);
+        User u = new User();
+        u.setId(userId);
+        u.setPassword(pwd);
+        u.setSalt(salt);
+        u.setUpdateTime(System.currentTimeMillis() / 1000);
+        userMapper.updateById(u);
     }
 
     /**
@@ -212,9 +231,11 @@ public class UserServiceImpl implements IUserService {
             throw new OperateException("手机号已被其它账号绑定!");
         }
 
-        user.setMobile(mobile);
-        user.setUpdateTime(System.currentTimeMillis() / 1000);
-        userMapper.updateById(user);
+        User u = new User();
+        u.setId(userId);
+        u.setMobile(mobile);
+        u.setUpdateTime(System.currentTimeMillis() / 1000);
+        userMapper.updateById(u);
     }
 
     /**

@@ -90,6 +90,7 @@ public class ArticleServiceImpl implements IArticleService {
         queryWrapper.select("id,title,image,intro,visit,create_time");
         queryWrapper.eq("is_delete", 0);
         queryWrapper.eq("is_show", 1);
+        queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
         if (cid > 0) {
             queryWrapper.eq("cid", cid);
         }
@@ -159,6 +160,10 @@ public class ArticleServiceImpl implements IArticleService {
         vo.setCollect(articleCollect != null);
         vo.setImage(UrlUtil.toAbsoluteUrl(article.getImage()));
         vo.setCreateTime(TimeUtil.timestampToDate(article.getCreateTime()));
+
+        article.setVisit(article.getVisit() + 1);
+        articleMapper.updateById(article);
+
         return vo;
     }
 

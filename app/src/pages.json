@@ -48,46 +48,72 @@
                 "navigationBarTitleText": "详情"
             }
         },
-		{
-		    "path": "pages/user_set/user_set",
-		    "style": {
-		        "navigationBarTitleText": "个人设置"
-		    }
-		},
+        {
+            "path": "pages/user_set/user_set",
+            "style": {
+                "navigationBarTitleText": "个人设置"
+            },
+            "auth": true
+        },
         {
             "path": "pages/collection/collection",
             "style": {
                 "navigationBarTitleText": "我的收藏"
+            },
+            "auth": true
+        },
+        {
+            "path": "pages/as_us/as_us",
+            "style": {
+                "navigationBarTitleText": "关于我们"
             }
         },
-		{
-		    "path": "pages/as_us/as_us",
-		    "style": {
-		        "navigationBarTitleText": "关于我们"
-		    }
-		},
-		{
-		    "path": "pages/agreement/agreement",
-		    "style": {
-		        "navigationBarTitleText": "协议"
-		    }
-		},
-		{
-		    "path": "pages/change_password/change_password",
-		    "style": {
-		        "navigationBarTitleText": "修改密码"
-		    }
-		},
-		{
-		    "path": "pages/user_data/user_data",
-		    "style": {
-		        "navigationBarTitleText": "个人资料"
-		    }
-		},
+        {
+            "path": "pages/agreement/agreement",
+            "style": {
+                "navigationBarTitleText": "协议"
+            }
+        },
+        {
+            "path": "pages/change_password/change_password",
+            "style": {
+                "navigationBarTitleText": "修改密码"
+            },
+            "auth": true
+        },
+        {
+            "path": "pages/user_data/user_data",
+            "style": {
+                "navigationBarTitleText": "个人资料"
+            },
+            "auth": true
+        },
         {
             "path": "pages/search/search",
             "style": {
                 "navigationBarTitleText": "搜索"
+            }
+        },
+        {
+            "path": "pages/webview/webview"
+        },
+        {
+            "path": "pages/bind_mobile/bind_mobile",
+            "style": {
+                "navigationBarTitleText": "绑定手机号"
+            }
+        },
+        {
+            "path": "pages/empty/empty",
+            "style": {
+                "navigationStyle": "custom"
+            }
+        },
+        {
+            "path": "uni_modules/vk-uview-ui/components/u-avatar-cropper/u-avatar-cropper",
+            "style": {
+                "navigationBarTitleText": "头像裁剪",
+                "navigationBarBackgroundColor": "#000000"
             }
         }
     ],
@@ -95,33 +121,10 @@
         "navigationBarTextStyle": "black",
         "navigationBarTitleText": "商城",
         "navigationBarBackgroundColor": "#FFFFFF",
-        "backgroundColor": "#F8F8F8"
-    },
-    "tabBar": {
-        "color": "#666666",
-        "selectedColor": "#4173FF",
-        "borderStyle": "black",
-        "backgroundColor": "#ffffff",
-        "list": [
-            {
-                "iconPath": "/static/images/tabs/home.png",
-                "selectedIconPath": "/static/images/tabs/home_s.png",
-                "pagePath": "pages/index/index",
-                "text": "首页"
-            },
-            {
-                "iconPath": "/static/images/tabs/news.png",
-                "selectedIconPath": "/static/images/tabs/news_s.png",
-                "pagePath": "pages/news/news",
-                "text": "资讯"
-            },
-            {
-                "iconPath": "/static/images/tabs/user.png",
-                "selectedIconPath": "/static/images/tabs/user_s.png",
-                "pagePath": "pages/user/user",
-                "text": "我的"
-            }
-        ]
+        "backgroundColor": "#F8F8F8",
+        "h5": {
+            "navigationStyle": "custom"
+        }
     },
     "easycom": {
         "custom": {

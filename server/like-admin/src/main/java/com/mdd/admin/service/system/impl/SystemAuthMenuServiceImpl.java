@@ -51,7 +51,10 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         queryWrapper.eq("is_disable", 0);
         queryWrapper.orderByDesc("menu_sort");
         queryWrapper.orderByAsc("id");
-        if (adminId != 1 && menuIds.size() > 0) {
+        if (adminId != 1) {
+            if ( menuIds.size() <= 0) {
+                menuIds.add(0);
+            }
             queryWrapper.in("id", menuIds);
         }
 
@@ -186,11 +189,17 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
      */
     @Override
     public void del(Integer id) {
-        SystemAuthMenu model = systemAuthMenuMapper.selectOne(new QueryWrapper<SystemAuthMenu>().eq("id", id));
+        SystemAuthMenu model = systemAuthMenuMapper.selectOne(
+                new QueryWrapper<SystemAuthMenu>()
+                        .eq("id", id)
+                        .last("limit 1"));
+
         Assert.notNull(model, "菜单已不存在!");
 
         Assert.isNull(systemAuthMenuMapper.selectOne(
-                new QueryWrapper<SystemAuthMenu>().eq("pid", id)),
+                new QueryWrapper<SystemAuthMenu>()
+                        .eq("pid", id)
+                        .last("limit 1")),
                 "请先删除子菜单再操作！");
 
         systemAuthMenuMapper.deleteById(id);

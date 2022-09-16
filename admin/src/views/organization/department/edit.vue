@@ -5,7 +5,6 @@
             :title="popupTitle"
             :async="true"
             width="550px"
-            :clickModalClose="true"
             @confirm="handleSubmit"
             @close="handleClose"
         >
@@ -27,17 +26,17 @@
                     />
                 </el-form-item>
                 <el-form-item label="部门名称" prop="name">
-                    <el-input v-model="formData.name" placeholder="请输入部门名称" />
+                    <el-input v-model="formData.name" placeholder="请输入部门名称" clearable />
                 </el-form-item>
                 <el-form-item label="负责人" prop="duty">
-                    <el-input v-model="formData.duty" placeholder="请输入负责人姓名" />
+                    <el-input v-model="formData.duty" placeholder="请输入负责人姓名" clearable />
                 </el-form-item>
                 <el-form-item label="联系电话" prop="mobile">
-                    <el-input v-model="formData.mobile" placeholder="请输入联系电话" />
+                    <el-input v-model="formData.mobile" placeholder="请输入联系电话" clearable />
                 </el-form-item>
                 <el-form-item label="排序" prop="sort">
                     <div>
-                        <el-input-number v-model="formData.sort" :min="0"/>
+                        <el-input-number v-model="formData.sort" :min="0" />
                         <div class="form-tips">默认为0， 数值越大越排前</div>
                     </div>
                 </el-form-item>
@@ -71,17 +70,17 @@ const formData = reactive({
     isStop: 0
 })
 const checkMobile = (rule: any, value: any, callback: any) => {
-  if (!value) {
-    return callback(new Error('手机号不能为空'));
-  } else {
-    const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
-    console.log(reg.test(value));
-    if (reg.test(value)) {
-      callback();
+    if (!value) {
+        return callback(new Error('手机号不能为空'))
     } else {
-      return callback(new Error('请输入正确的手机号'));
+        const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
+        console.log(reg.test(value))
+        if (reg.test(value)) {
+            callback()
+        } else {
+            return callback(new Error('请输入正确的手机号'))
+        }
     }
-  }
 }
 const formRules = {
     pid: [
@@ -98,24 +97,24 @@ const formRules = {
             trigger: ['blur']
         }
     ],
-  duty: [
+    duty: [
         {
             required: true,
             message: '请输入负责人姓名',
             trigger: ['blur']
         }
     ],
-  mobile: [
-    {
-      required: true,
-      message: '请输入联系电话',
-      trigger: ['blur']
-    },
-    {
-      validator: checkMobile,
-      trigger: ['blur']
-    }
-  ]
+    mobile: [
+        {
+            required: true,
+            message: '请输入联系电话',
+            trigger: ['blur']
+        },
+        {
+            validator: checkMobile,
+            trigger: ['blur']
+        }
+    ]
 }
 
 const { optionsData } = useDictOptions<{

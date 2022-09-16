@@ -171,6 +171,9 @@ public class ArrayUtil {
      */
     public static List<Integer> stringToListAsInt(String str, String regex){
         List<Integer> list = new ArrayList<>();
+        if (str.equals("")) {
+            return list;
+        }
         if (str.contains(regex)){
             String[] split = str.split(regex);
             for (String value : split) {

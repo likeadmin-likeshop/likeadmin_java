@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * 页面装修管理
  */
-@RestController
+@RestController("decoratePagesController")
 @RequestMapping("api/decorate/pages")
 public class PagesController {
 

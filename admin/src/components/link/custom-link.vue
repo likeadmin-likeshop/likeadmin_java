@@ -4,7 +4,7 @@
             自定义链接
             <div class="ml-4 flex-1 min-w-[100px]">
                 <el-input
-                    :model-value="modelValue.path"
+                    :model-value="modelValue.query?.url"
                     placeholder="请输入链接地址"
                     @input="handleInput"
                 />
@@ -32,7 +32,10 @@ const emit = defineEmits<{
 
 const handleInput = (value: string) => {
     emit('update:modelValue', {
-        path: value,
+        path: '/pages/webview/webview',
+        query: {
+            url: value
+        },
         type: LinkTypeEnum.CUSTOM_LINK
     })
 }

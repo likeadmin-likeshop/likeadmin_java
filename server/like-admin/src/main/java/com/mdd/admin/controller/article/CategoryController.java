@@ -103,7 +103,7 @@ public class CategoryController {
      * @return Object
      */
     @Log(title = "文章分类删除")
-    @PostMapping("/cateDel")
+    @PostMapping("/del")
     public Object del(@Validated(value = CategoryParam.delete.class)
                           @RequestBody CategoryParam categoryParam) {
         iArticleCategoryService.del(categoryParam.getId());

@@ -11,6 +11,15 @@ export const isWeixinClient = () => {
 }
 
 /**
+ * @description 判断是否为安卓环境
+ * @return { Boolean }
+ */
+export function isAndroid() {
+    const u = navigator.userAgent
+    return u.indexOf('Android') > -1 || u.indexOf('Adr') > -1
+}
+
+/**
  * @description 获取当前是什么端
  * @return { Object }
  */

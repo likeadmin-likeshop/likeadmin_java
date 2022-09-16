@@ -50,7 +50,6 @@
                     <el-table-column label="访问方式" prop="type" min-width="100" />
                     <el-table-column label="来源IP" prop="ip" min-width="160" />
                     <el-table-column label="错误信息" prop="error" min-width="160" />
-                    <el-table-column label="IP" prop="address" min-width="160" />
                     <el-table-column label="执行耗时(毫秒)" prop="taskTime" min-width="100" />
                     <el-table-column label="日志时间" prop="createTime" min-width="180" />
                 </el-table>

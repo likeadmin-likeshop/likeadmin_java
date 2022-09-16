@@ -3,10 +3,20 @@
         <el-card class="!border-none" shadow="never">
             <el-form ref="formRef" class="mb-[-16px]" :model="queryParams" :inline="true">
                 <el-form-item label="岗位编码">
-                    <el-input class="w-56" v-model="queryParams.code" />
+                    <el-input
+                        class="w-56"
+                        v-model="queryParams.code"
+                        clearable
+                        @keyup.enter="resetPage"
+                    />
                 </el-form-item>
                 <el-form-item label="岗位名称">
-                    <el-input class="w-56" v-model="queryParams.name" />
+                    <el-input
+                        class="w-56"
+                        v-model="queryParams.name"
+                        clearable
+                        @keyup.enter="resetPage"
+                    />
                 </el-form-item>
                 <el-form-item label="岗位状态">
                     <el-select class="w-56" v-model="queryParams.isStop">
@@ -34,7 +44,12 @@
                 <el-table-column label="岗位编码" prop="code" min-width="100" />
                 <el-table-column label="岗位名称" prop="name" min-width="100" />
                 <el-table-column label="排序" prop="sort" min-width="100" />
-                <el-table-column label="备注" prop="remarks" min-width="100" />
+                <el-table-column
+                    label="备注"
+                    prop="remarks"
+                    min-width="100"
+                    show-overflow-tooltip
+                />
                 <el-table-column label="添加时间" prop="createTime" min-width="180" />
                 <el-table-column label="部门状态" prop="isStop" min-width="100">
                     <template #default="{ row }">

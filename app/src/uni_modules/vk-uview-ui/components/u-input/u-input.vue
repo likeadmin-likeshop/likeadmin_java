@@ -410,14 +410,14 @@ export default {
 
 	&__input {
 		//height: $u-form-item-height;
-		font-size: 28rpx;
+		font-size: 30rpx;
 		color: $u-main-color;
 		flex: 1;
 	}
 
 	&__textarea {
 		width: auto;
-		font-size: 28rpx;
+		font-size: 30rpx;
 		color: $u-main-color;
 		padding: 10rpx 0;
 		line-height: normal;

@@ -1,31 +1,32 @@
 <template>
     <div class="shadow mx-[30px] pages-preview">
-        <div
-            v-for="(widget, index) in pageData"
-            :key="widget"
-            class="relative"
-            :class="{
-                'cursor-pointer': !widget?.disabled
-            }"
-            @click="handleClick(widget, index)"
-        >
+        <el-scrollbar>
             <div
-                class="absolute w-full h-full z-[100] border-dashed"
+                v-for="(widget, index) in pageData"
+                :key="widget.id"
+                class="relative"
                 :class="{
-                    select: index == modelValue,
-                    'border-br border-2': !widget?.disabled
+                    'cursor-pointer': !widget?.disabled
                 }"
-            ></div>
-            <slot>
-                <keep-alive>
+                @click="handleClick(widget, index)"
+            >
+                <div
+                    class="absolute w-full h-full z-[100] border-dashed"
+                    :class="{
+                        select: index == modelValue,
+                        'border-[#dcdfe6] border-2': !widget?.disabled
+                    }"
+                ></div>
+                <slot>
                     <component
                         :is="widgets[widget?.name]?.content"
                         :content="widget.content"
                         :styles="widget.styles"
+                        :key="widget.id"
                     />
-                </keep-alive>
-            </slot>
-        </div>
+                </slot>
+            </div>
+        </el-scrollbar>
     </div>
 </template>
 <script lang="ts" setup>

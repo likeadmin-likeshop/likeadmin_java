@@ -58,7 +58,7 @@
                             <div class="mr-4 w-80">
                                 <el-input v-model="formData.requestDomain" disabled />
                             </div>
-                            <el-button @click="copy(formData.requestDomain)">复制</el-button>
+                            <el-button v-copy="formData.requestDomain">复制</el-button>
                         </div>
                         <div class="form-tips">
                             小程序账号登录微信公众平台，点击开发>开发设置->服务器域名，填写https协议域名
@@ -71,7 +71,7 @@
                             <div class="mr-4 w-80">
                                 <el-input v-model="formData.socketDomain" disabled />
                             </div>
-                            <el-button @click="copy(formData.socketDomain)">复制</el-button>
+                            <el-button v-copy="formData.socketDomain">复制</el-button>
                         </div>
                         <div class="form-tips">
                             小程序账号登录微信公众平台，点击开发>开发设置->服务器域名，填写wss协议域名
@@ -84,7 +84,7 @@
                             <div class="mr-4 w-80">
                                 <el-input v-model="formData.uploadFileDomain" disabled />
                             </div>
-                            <el-button @click="copy(formData.uploadFileDomain)">复制</el-button>
+                            <el-button v-copy="formData.uploadFileDomain">复制</el-button>
                         </div>
                         <div class="form-tips">
                             小程序账号登录微信公众平台，点击开发>开发设置->服务器域名，填写https协议域名
@@ -97,7 +97,7 @@
                             <div class="mr-4 w-80">
                                 <el-input v-model="formData.downloadFileDomain" disabled />
                             </div>
-                            <el-button @click="copy(formData.downloadFileDomain)">复制</el-button>
+                            <el-button v-copy="formData.downloadFileDomain">复制</el-button>
                         </div>
                         <div class="form-tips">
                             小程序账号登录微信公众平台，点击开发>开发设置->服务器域名，填写https协议域名
@@ -110,7 +110,7 @@
                             <div class="mr-4 w-80">
                                 <el-input v-model="formData.udpDomain" disabled />
                             </div>
-                            <el-button @click="copy(formData.udpDomain)">复制</el-button>
+                            <el-button v-copy="formData.udpDomain">复制</el-button>
                         </div>
                         <div class="form-tips">
                             小程序账号登录微信公众平台，点击开发>开发设置->服务器域名，填写udp协议域名
@@ -126,7 +126,7 @@
                             <div class="mr-4 w-80">
                                 <el-input v-model="formData.businessDomain" disabled />
                             </div>
-                            <el-button @click="copy(formData.businessDomain)">复制</el-button>
+                            <el-button v-copy="formData.businessDomain">复制</el-button>
                         </div>
                         <div class="form-tips">
                             小程序账号登录微信公众平台，点击开发>开发设置->业务域名，填写业务域名
@@ -135,7 +135,7 @@
                 </el-form-item>
             </el-card>
         </el-form>
-        <footer-btns v-perms="['channel:h5:save']">
+        <footer-btns v-perms="['channel:mp:save']">
             <el-button type="primary" @click="handelSave">保存</el-button>
         </footer-btns>
     </div>
@@ -143,7 +143,6 @@
 <script lang="ts" setup>
 import { getWeappConfig, setWeappConfig } from '@/api/channel/weapp'
 import feedback from '@/utils/feedback'
-import { useClipboard } from '@vueuse/core'
 
 const formData = reactive({
     name: '',
@@ -160,7 +159,6 @@ const formData = reactive({
     uploadFileDomain: ''
 })
 
-const { copy } = useClipboard()
 const getDetail = async () => {
     const data = await getWeappConfig()
     for (const key in formData) {
