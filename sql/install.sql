@@ -502,13 +502,13 @@ CREATE TABLE `la_user`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `la_user_auth`;
 CREATE TABLE `la_user_auth`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `user_id` int(11) NOT NULL COMMENT '用户ID',
-  `openid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Openid',
-  `unionid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'Unionid',
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户ID',
+  `openid` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'Openid',
+  `unionid` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'Unionid',
   `client` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '客户端类型: [1=微信小程序, 2=微信公众号, 3=手机H5, 4=电脑PC, 5=苹果APP, 6=安卓APP]',
-  `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '创建时间',
-  `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
+  `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `openid`(`openid`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户授权表' ROW_FORMAT = Dynamic;

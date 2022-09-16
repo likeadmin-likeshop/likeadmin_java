@@ -2,6 +2,7 @@ package com.mdd.front.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.config.GlobalConfig;
@@ -165,9 +166,11 @@ public class LoginServiceImpl implements ILoginService {
             String token = ToolsUtil.makeToken();
             RedisUtil.set(FrontConfig.frontendTokenKey+token, userId, 7200);
 
+            String mobile = StringUtil.isNull(user.getMobile()) ? "" : user.getMobile();
+
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("id", userId);
-            response.put("isBindMobile", !user.getMobile().equals(""));
+            response.put("isBindMobile", !mobile.equals(""));
             response.put("token", token);
             return response;
         } catch (WxErrorException e) {
