@@ -9,7 +9,7 @@ import { ref } from 'vue'
 const url = ref('')
 
 onLoad((options) => {
-    url.value = options.url!
+    url.value = decodeURIComponent(options.url!)
 })
 </script>
 
