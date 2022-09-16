@@ -10,7 +10,7 @@
         >
             <el-form ref="formRef" :model="formData" label-width="84px" :rules="formRules">
                 <el-form-item label="栏目名称" prop="name">
-                    <el-input v-model="formData.name" placeholder="请输入栏目名称" />
+                    <el-input v-model="formData.name" placeholder="请输入栏目名称" clearable />
                 </el-form-item>
                 <el-form-item label="排序" prop="sort">
                     <div>

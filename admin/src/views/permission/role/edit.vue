@@ -16,7 +16,12 @@
                 label-width="60px"
             >
                 <el-form-item label="名称" prop="name">
-                    <el-input class="ls-input" v-model="formData.name" placeholder="请输入名称" />
+                    <el-input
+                        class="ls-input"
+                        v-model="formData.name"
+                        placeholder="请输入名称"
+                        clearable
+                    />
                 </el-form-item>
                 <el-form-item label="备注" prop="remark">
                     <el-input

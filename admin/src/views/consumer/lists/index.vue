@@ -7,6 +7,8 @@
                         class="w-56"
                         v-model="queryParams.keyword"
                         placeholder="用户编号/昵称/手机号码"
+                        clearable
+                        @keyup.enter="resetPage"
                     />
                 </el-form-item>
                 <el-form-item label="注册时间">

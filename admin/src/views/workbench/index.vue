@@ -7,15 +7,15 @@
                 </template>
                 <div>
                     <div class="flex leading-9">
-                        <div class="w-20">当前版本</div>
+                        <div class="w-20 flex-none">当前版本</div>
                         <span> {{ workbenchData.version.version }}</span>
                     </div>
                     <div class="flex leading-9">
-                        <div class="w-20">基于框架</div>
+                        <div class="w-20 flex-none">基于框架</div>
                         <span> {{ workbenchData.version.based }}</span>
                     </div>
                     <div class="flex leading-9">
-                        <div class="w-20">获取渠道</div>
+                        <div class="w-20 felx-none">获取渠道</div>
                         <div>
                             <a :href="workbenchData.version.channel.website" target="_blank">
                                 <el-button type="success" size="small">官网</el-button>

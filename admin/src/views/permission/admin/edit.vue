@@ -14,6 +14,7 @@
                         v-model="formData.username"
                         :disabled="isRoot"
                         placeholder="请输入账号"
+                        clearable
                     />
                 </el-form-item>
                 <el-form-item label="头像">
@@ -25,7 +26,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="名称" prop="nickname">
-                    <el-input v-model="formData.nickname" placeholder="请输入名称" />
+                    <el-input v-model="formData.nickname" placeholder="请输入名称" clearable />
                 </el-form-item>
                 <el-form-item label="归属部门" prop="deptId">
                     <el-tree-select
@@ -47,7 +48,12 @@
                     />
                 </el-form-item>
                 <el-form-item label="岗位" prop="deptId">
-                    <el-select class="flex-1" v-model="formData.postId" placeholder="请选择岗位">
+                    <el-select
+                        class="flex-1"
+                        clearable
+                        v-model="formData.postId"
+                        placeholder="请选择岗位"
+                    >
                         <el-option
                             v-for="(item, index) in optionsData.post"
                             :key="index"
@@ -62,6 +68,7 @@
                         v-model="formData.role"
                         :disabled="isRoot"
                         class="flex-1"
+                        clearable
                         placeholder="请选择角色"
                     >
                         <el-option v-if="isRoot" label="系统管理员" value="0" />
@@ -78,6 +85,7 @@
                     <el-input
                         v-model.trim="formData.password"
                         show-password
+                        clearable
                         placeholder="请输入密码"
                     />
                 </el-form-item>
@@ -86,6 +94,7 @@
                     <el-input
                         v-model.trim="formData.passwordConfirm"
                         show-password
+                        clearable
                         placeholder="请输入确认密码"
                     />
                 </el-form-item>

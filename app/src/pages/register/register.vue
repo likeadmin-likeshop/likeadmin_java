@@ -17,7 +17,7 @@
                         class="flex-1"
                         type="password"
                         v-model="formData.password"
-                        placeholder="请输入字母+数字组合的密码"
+                        placeholder="6-20位数字+字母或符号组合"
                         :border="false"
                     />
                 </u-form-item>

@@ -3,10 +3,20 @@
         <el-card class="!border-none" shadow="never">
             <el-form class="mb-[-16px]" :model="formData" inline>
                 <el-form-item label="管理员账号">
-                    <el-input v-model="formData.username" class="w-56" />
+                    <el-input
+                        v-model="formData.username"
+                        class="w-56"
+                        clearable
+                        @keyup.enter="resetPage"
+                    />
                 </el-form-item>
                 <el-form-item label="管理员名称">
-                    <el-input v-model="formData.nickname" class="w-56" />
+                    <el-input
+                        v-model="formData.nickname"
+                        class="w-56"
+                        clearable
+                        @keyup.enter="resetPage"
+                    />
                 </el-form-item>
                 <el-form-item label="管理员角色">
                     <el-select class="w-56" v-model="formData.role">

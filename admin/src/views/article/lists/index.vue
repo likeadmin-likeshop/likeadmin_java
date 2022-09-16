@@ -3,7 +3,12 @@
         <el-card class="!border-none" shadow="never">
             <el-form ref="formRef" class="mb-[-16px]" :model="queryParams" :inline="true">
                 <el-form-item label="文章标题">
-                    <el-input class="w-56" v-model="queryParams.title" />
+                    <el-input
+                        class="w-56"
+                        v-model="queryParams.title"
+                        clearable
+                        @keyup.enter="resetPage"
+                    />
                 </el-form-item>
                 <el-form-item label="栏目名称">
                     <el-select class="w-56" v-model="queryParams.cid">
