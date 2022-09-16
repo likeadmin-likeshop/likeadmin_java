@@ -14,21 +14,22 @@
         </navigator>
         <view
             class="item bg-white mt-[20rpx] btn-border flex flex-1 justify-between"
-            @click="show = true"
+            @click="handlePwd"
         >
             <view class="">登录密码</view>
             <u-icon name="arrow-right" color="#666"></u-icon>
         </view>
-        <view class="item bg-white flex flex-1 justify-between">
+        <!-- #ifdef MP-WEIXIN || H5 -->
+        <view class="item bg-white flex flex-1 justify-between" v-if="isWeixin">
             <view class="">绑定微信</view>
             <view class="flex justify-between">
                 <view class="text-muted mr-[20rpx]">
                     {{ userInfo.isBindMnp ? '已绑定' : '未绑定' }}
                 </view>
-                <u-icon name="arrow-right" color="#666"></u-icon>
+                <!-- <u-icon name="arrow-right" color="#666"></u-icon> -->
             </view>
         </view>
-
+        <!-- #endif -->
         <navigator :url="`/pages/agreement/agreement?type=${AgreementEnum.PRIVACY}`">
             <view class="item bg-white mt-[20rpx] btn-border flex flex-1 justify-between">
                 <view class="">隐私政策</view>
@@ -73,6 +74,7 @@ import { ref } from 'vue'
 import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
 import { AgreementEnum } from '@/enums/agreementEnums'
+import { isWeixinClient } from '@/utils/client'
 
 const appStore = useAppStore()
 const userStore = useUserStore()
@@ -80,7 +82,8 @@ const userInfo = ref({
     avatar: '',
     nickname: '',
     username: '',
-    isBindMnp: ''
+    isBindMnp: '',
+    isPassword: ''
 })
 const list = ref([
     {
@@ -90,6 +93,12 @@ const list = ref([
         text: '忘记密码'
     }
 ])
+
+const isWeixin = ref(true)
+// #ifdef H5
+isWeixin.value = isWeixinClient()
+// #endif
+
 const show = ref(false)
 
 // 获取用户信息
@@ -108,6 +117,12 @@ const handleClick = (index: number) => {
             uni.navigateTo({ url: '/pages/forget_pwd/forget_pwd' })
             break
     }
+}
+
+const handlePwd = () => {
+    if (!userInfo.value.isPassword)
+        return uni.navigateTo({ url: '/pages/change_password/change_password?type=set' })
+    show.value = true
 }
 
 // 退出登录

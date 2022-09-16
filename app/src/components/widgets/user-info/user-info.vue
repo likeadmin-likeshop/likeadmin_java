@@ -17,7 +17,7 @@
             <view class="text-white text-3xl ml-[20rpx]">未登录</view>
         </navigator>
         <navigator v-if="isLogin" hover-class="none" url="/pages/user_set/user_set">
-            <u-icon name="setting" color="#fff" :size="58"></u-icon>
+            <u-icon name="setting" color="#fff" :size="48"></u-icon>
         </navigator>
     </view>
 </template>

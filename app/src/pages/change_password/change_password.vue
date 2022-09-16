@@ -3,11 +3,14 @@
         class="register bg-white min-h-full flex flex-col items-center px-[40rpx] pt-[100rpx] box-border"
     >
         <view class="w-full">
-            <view class="text-2xl font-medium mb-[60rpx]">修改登录密码</view>
+            <view class="text-2xl font-medium mb-[60rpx]">
+                {{ type == 'set' ? '设置登录密码' : '修改登录密码' }}
+            </view>
             <u-form borderBottom :label-width="150">
-                <u-form-item label="原密码" borderBottom>
+                <u-form-item label="原密码" borderBottom v-if="type != 'set'">
                     <u-input
                         class="flex-1"
+                        type="password"
                         v-model="formData.oldPassword"
                         :border="false"
                         placeholder="请输入原来的密码"
@@ -41,16 +44,17 @@
 
 <script setup lang="ts">
 import { userChangePwd } from '@/api/user'
-import { reactive } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { reactive, ref } from 'vue'
 
-const formData = reactive({
-    oldPassword: '',
+const type = ref('')
+const formData = reactive<any>({
     password: '',
     password2: ''
 })
 
 const handleConfirm = async () => {
-    if (!formData.oldPassword) return uni.$u.toast('请输入原来的密码')
+    if (!formData.oldPassword && type.value != 'set') return uni.$u.toast('请输入原来的密码')
     if (!formData.password) return uni.$u.toast('请输入密码')
     if (!formData.password2) return uni.$u.toast('请输入确认密码')
     if (formData.password != formData.password2) return uni.$u.toast('两次输入的密码不一致')
@@ -58,6 +62,15 @@ const handleConfirm = async () => {
     uni.$u.toast('操作成功')
     uni.navigateBack()
 }
+
+onLoad((options) => {
+    type.value = options.type || ''
+    if (type.value == 'set') {
+        uni.setNavigationBarTitle({
+            title: '设置登录密码'
+        })
+    }
+})
 </script>
 
 <style lang="scss">
