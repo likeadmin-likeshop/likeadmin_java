@@ -61,8 +61,7 @@ public interface IUserService {
      *
      * @author fzr
      * @param code 获取手机号的Code
-     * @return Map<String, Object>
      */
-    Map<String, Object> mnpMobile(String code);
+    void mnpMobile(String code);
 
 }
