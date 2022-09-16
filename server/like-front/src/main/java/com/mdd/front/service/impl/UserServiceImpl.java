@@ -181,9 +181,12 @@ public class UserServiceImpl implements IUserService {
                 .last("limit 1"));
 
         Assert.notNull(user, "用户不存在");
-        String oldPwd = ToolsUtil.makeMd5(oldPassword.trim()+user.getSalt());
-        if (!oldPwd.equals(user.getPassword())) {
-            throw new OperateException("原密码不正确!");
+
+        if (!user.getPassword().equals("")) {
+            String oldPwd = ToolsUtil.makeMd5(oldPassword.trim() + user.getSalt());
+            if (!oldPwd.equals(user.getPassword())) {
+                throw new OperateException("原密码不正确!");
+            }
         }
 
         String salt = ToolsUtil.randomString(5);

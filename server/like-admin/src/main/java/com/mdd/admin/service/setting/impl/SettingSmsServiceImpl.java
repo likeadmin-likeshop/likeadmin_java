@@ -37,11 +37,12 @@ public class SettingSmsServiceImpl implements ISettingSmsService {
         tencent.put("status", engine.equals("tencent") ? 1 : 0);
         list.add(tencent);
 
-        Map<String, Object> huawei = new LinkedHashMap<>();
-        huawei.put("name", "华为云短信");
-        huawei.put("alias", "huawei");
-        huawei.put("status", engine.equals("huawei") ? 1 : 0);
-        list.add(huawei);
+        // todo 下个版本再实现
+//        Map<String, Object> huawei = new LinkedHashMap<>();
+//        huawei.put("name", "华为云短信");
+//        huawei.put("alias", "huawei");
+//        huawei.put("status", engine.equals("huawei") ? 1 : 0);
+//        list.add(huawei);
 
         return list;
     }
