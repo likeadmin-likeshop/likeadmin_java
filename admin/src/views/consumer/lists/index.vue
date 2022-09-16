@@ -36,7 +36,7 @@
                 <el-table-column label="用户编号" prop="sn" min-width="120" />
                 <el-table-column label="头像" min-width="100">
                     <template #default="{ row }">
-                        <el-avatar :src="row.image" :size="50" />
+                        <el-avatar :src="row.avatar" :size="50" />
                     </template>
                 </el-table-column>
                 <el-table-column label="昵称" prop="nickname" min-width="100" />
