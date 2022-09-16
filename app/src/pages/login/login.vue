@@ -261,7 +261,7 @@ const loginFun = async (scene: LoginTypeEnum, code?: string) => {
         loginHandle(data)
     } catch (error: any) {
         uni.hideLoading()
-        throw new Error(error)
+        uni.$u.toast(error)
     }
 }
 
@@ -339,7 +339,7 @@ onShow(async () => {
             uni.hideLoading()
             uni.navigateBack()
         }
-    } catch (error) {
+    } catch (error: any) {
         uni.hideLoading()
     }
 })
