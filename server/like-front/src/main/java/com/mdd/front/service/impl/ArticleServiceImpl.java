@@ -90,7 +90,7 @@ public class ArticleServiceImpl implements IArticleService {
         queryWrapper.select("id,title,image,intro,visit,create_time");
         queryWrapper.eq("is_delete", 0);
         queryWrapper.eq("is_show", 1);
-        queryWrapper.orderByDesc(Arrays.asList("t.sort", "t.id"));
+        queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
         if (cid > 0) {
             queryWrapper.eq("cid", cid);
         }
