@@ -48,16 +48,22 @@
         <u-button
             open-type="getPhoneNumber"
             @getphonenumber="getPhoneNumber"
-            size="mini"
             type="primary"
             shape="circle"
+            size="mini"
             :plain="true"
         >
             {{ userInfo?.mobile == '' ? '绑定手机号' : '更换手机号' }}
         </u-button>
         <!-- #endif -->
         <!-- #ifndef MP-WEIXIN -->
-        <u-button @click="" size="mini" type="primary" shape="circle" :plain="true">
+        <u-button
+            @click="showMobilePop = true"
+            size="mini"
+            type="primary"
+            shape="circle"
+            :plain="true"
+        >
             {{ userInfo?.mobile == '' ? '绑定手机号' : '更换手机号' }}
         </u-button>
         <!-- #endif -->
@@ -73,14 +79,14 @@
     <u-popup v-model="showNickName" :closeable="true" mode="center" border-radius="20">
         <view class="px-[50rpx] py-[40rpx] bg-white" style="width: 85vw">
             <view class="mb-[70rpx] text-xl text-center">修改昵称</view>
-			<u-form-item borderBottom>
-			    <u-input
-			        class="flex-1"
-			        v-model="newNickname"
-			        placeholder="请输入昵称"
-			        :border="false"
-			    />
-			</u-form-item>
+            <u-form-item borderBottom>
+                <u-input
+                    class="flex-1"
+                    v-model="newNickname"
+                    placeholder="请输入昵称"
+                    :border="false"
+                />
+            </u-form-item>
             <view class="mt-[80rpx]">
                 <u-button @click="changeNameConfirm" type="primary" shape="circle"> 确定 </u-button>
             </view>
@@ -91,14 +97,14 @@
     <u-popup v-model="showUserName" :closeable="true" mode="center" border-radius="20">
         <view class="px-[50rpx] py-[40rpx] bg-white" style="width: 85vw">
             <view class="mb-[70rpx] text-xl text-center">修改账号</view>
-			<u-form-item borderBottom>
-			    <u-input
-			        class="flex-1"
-			        v-model="newUsername"
-			        placeholder="请输入账号"
-			        :border="false"
-			    />
-			</u-form-item>
+            <u-form-item borderBottom>
+                <u-input
+                    class="flex-1"
+                    v-model="newUsername"
+                    placeholder="请输入账号"
+                    :border="false"
+                />
+            </u-form-item>
             <view class="mt-[80rpx]">
                 <u-button @click="changeUserNameConfirm" type="primary" shape="circle">
                     确定
@@ -159,10 +165,10 @@
 <script lang="ts" setup>
 import { ref, shallowRef } from 'vue'
 import { onShow, onUnload } from '@dcloudio/uni-app'
-import { getUserInfo, userEdit, userBindMobile, userMnpMobile } from '@/api/user.ts'
+import { getUserInfo, userEdit, userBindMobile, userMnpMobile } from '@/api/user'
 import { smsSend } from '@/api/app'
 import { FieldType, SMSEnum } from '@/enums/appEnums'
-import { uploadFile } from '@/utils/util.ts'
+import { uploadFile } from '@/utils/util'
 
 // 用户信息
 const userInfo = ref<any | null>(null)
@@ -222,6 +228,8 @@ const changeCodeMobile = async () => {
         mobile: newMobile.value,
         code: mobileCode.value
     })
+    uni.$u.toast('修改成功')
+    showMobilePop.value = false
     getUser()
 }
 

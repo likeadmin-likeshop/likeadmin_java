@@ -5,7 +5,7 @@
         <view>
             <u-image :src="appStore.config.website.logo" mode="widthFix" height="160" width="160" />
         </view>
-        <view class="mt-4">{{ appStore.config.website.name }}</view>
+        <view class="mt-4 text-xl font-medium">{{ appStore.config.website.name }}</view>
         <view class="w-full mt-[60rpx] pb-[60rpx]">
             <u-form borderBottom>
                 <template
