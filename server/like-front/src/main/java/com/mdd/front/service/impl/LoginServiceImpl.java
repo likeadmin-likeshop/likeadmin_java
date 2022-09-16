@@ -2,6 +2,7 @@ package com.mdd.front.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.config.GlobalConfig;
@@ -93,18 +94,22 @@ public class LoginServiceImpl implements ILoginService {
         Integer client   = Integer.parseInt(params.getOrDefault("client", "1"));
 
         try {
+            log.error("来登录了");
             WxMaService wxMaService = WeChatUtil.mnp();
             WxMaJscode2SessionResult sessionResult = wxMaService.getUserService().getSessionInfo(code);
             String openId = sessionResult.getOpenid();
             String uniId = sessionResult.getUnionid();
             String unionId = uniId == null ? "0" : uniId;
+            log.error("内容啊");
+            log.error(String.valueOf(sessionResult));
 
             UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
                     .nested(wq->wq
                         .eq("openid", openId).or()
                         .eq("unionid", unionId)
                     ).last("limit 1"));
-
+            log.error("有接口公共");
+            log.error(userAuth);
             User user = null;
             Integer userId;
             if (StringUtil.isNotNull(userAuth)) {
@@ -161,7 +166,7 @@ public class LoginServiceImpl implements ILoginService {
                 user.setLastLoginTime(System.currentTimeMillis() / 1000);
                 userMapper.updateById(user);
             }
-
+log.error("能来码");
             String token = ToolsUtil.makeToken();
             RedisUtil.set(FrontConfig.frontendTokenKey+token, userId, 7200);
 
