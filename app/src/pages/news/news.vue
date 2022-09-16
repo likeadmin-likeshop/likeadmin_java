@@ -38,7 +38,8 @@ const handleChange = (index: number) => {
 }
 
 const getData = async () => {
-    tabList.value = await getArticleCate()
+    const data = await getArticleCate()
+    tabList.value = [{ name: '全部', id: 0 }].concat(data)
 }
 
 onLoad((options) => {
