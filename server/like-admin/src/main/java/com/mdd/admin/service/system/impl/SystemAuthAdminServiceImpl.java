@@ -319,6 +319,13 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         if (systemAuthAdminParam.getPassword() != null && systemAuthAdminParam.getId().equals(id)) {
             String token = Objects.requireNonNull(RequestUtil.handler()).getHeader("token");
             RedisUtil.del(AdminConfig.backstageTokenKey + token);
+
+            Set<Object> ts = RedisUtil.sGet(AdminConfig.backstageTokenSet + id);
+            for (Object t: ts) {
+                RedisUtil.del(AdminConfig.backstageTokenKey+t.toString());
+            }
+            RedisUtil.del(AdminConfig.backstageTokenSet + id);
+            RedisUtil.sSet(AdminConfig.backstageTokenSet + id, token);
         }
     }
 
@@ -366,8 +373,17 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         this.cacheAdminUserByUid(adminId);
 
         if (systemAuthAdminParam.getPassword() != null) {
+
             String token = Objects.requireNonNull(RequestUtil.handler()).getHeader("token");
             RedisUtil.del(AdminConfig.backstageTokenKey + token);
+
+            int uid = model.getId();
+            Set<Object> ts = RedisUtil.sGet(AdminConfig.backstageTokenSet + uid);
+            for (Object t: ts) {
+                RedisUtil.del(AdminConfig.backstageTokenKey+t.toString());
+            }
+            RedisUtil.del(AdminConfig.backstageTokenSet + uid);
+            RedisUtil.sSet(AdminConfig.backstageTokenSet + model.getId(), token);
         }
     }
 
@@ -386,10 +402,10 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .eq("is_delete", 0)
                 .last("limit 1")), "账号已不存在!");
 
-        Assert.isFalse(id == 1, "系统管理员不允许删除");
+        Assert.isFalse(id == 1, "系统管理员不允许删除!");
 
         int adminId = Integer.parseInt(LikeAdminThreadLocal.getAdminId().toString());
-        Assert.isFalse(id == adminId, "不能删除自己");
+        Assert.isFalse(id == adminId, "不能删除自己!");
 
         SystemAuthAdmin model = new SystemAuthAdmin();
         model.setId(id);
@@ -415,6 +431,9 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .last("limit 1"));
 
         Assert.notNull(systemAuthAdmin, "账号已不存在!");
+
+        int adminId = Integer.parseInt(LikeAdminThreadLocal.getAdminId().toString());
+        Assert.isFalse(id == adminId, "不能禁用自己!");
 
         Integer disable = systemAuthAdmin.getIsDisable() == 1 ? 0 : 1;
         systemAuthAdmin.setIsDisable(disable);
