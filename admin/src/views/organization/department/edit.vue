@@ -126,6 +126,12 @@ const { optionsData } = useDictOptions<{
     }
 })
 
+watch(optionsData, (arr) => {
+    if (arr.dept) {
+        formData.pid = arr.dept[0].id
+    }
+})
+
 const handleSubmit = async () => {
     await formRef.value?.validate()
     mode.value == 'edit' ? await deptEdit(formData) : await deptAdd(formData)
