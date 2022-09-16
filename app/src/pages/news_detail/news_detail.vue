@@ -29,15 +29,19 @@
         </view>
 
         <view class="panel-btn flex items-center px-[34rpx]" @click="handleAddCollect(newsData.id)">
-            <u-icon :name="newsData.collect ? 'star-fill' : 'star'" size="36"></u-icon>
+            <u-icon
+                :name="newsData.collect ? 'star-fill' : 'star'"
+                size="34"
+                :color="newsData.collect ? '#4173ff' : '#333'"
+            ></u-icon>
             <text class="ml-[10rpx]">收藏</text>
         </view>
     </view>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed } from 'vue'
-import { onLoad, onShow, onReady } from '@dcloudio/uni-app'
+import { ref } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
 import { getArticleDetail, addCollect, cancelCollect } from '@/api/news'
 
 const newsData = ref<any>({})
@@ -51,7 +55,11 @@ const handleAddCollect = async (articleId: number) => {
     try {
         if (newsData.value.collect) {
             await cancelCollect({ articleId })
-        } else await addCollect({ articleId })
+            uni.$u.toast('取消收藏成功')
+        } else {
+            await addCollect({ articleId })
+            uni.$u.toast('收藏成功')
+        }
         getData(newsId)
     } catch (e) {
         //TODO handle the exception
