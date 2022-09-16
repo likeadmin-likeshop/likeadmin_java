@@ -16,10 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 系统部门服务实现类
@@ -82,7 +79,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
 
         List<SystemAuthDept> systemAuthDeptList = systemAuthDeptMapper.selectList(queryWrapper);
 
-        List<SystemAuthDeptVo> lists = new ArrayList<>();
+        List<SystemAuthDeptVo> lists = new LinkedList<>();
         for (SystemAuthDept systemAuthDept : systemAuthDeptList) {
             SystemAuthDeptVo vo = new SystemAuthDeptVo();
             BeanUtils.copyProperties(systemAuthDept, vo);
