@@ -237,7 +237,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         String pwd    = ToolsUtil.makeMd5(systemAuthAdminParam.getPassword().trim() + salt);
         String avatar = StringUtil.isNotEmpty(systemAuthAdminParam.getAvatar()) ?
                 UrlUtil.toRelativeUrl(systemAuthAdminParam.getAvatar()) :
-                "/api/static/backend_avatar.jpg";
+                "/api/static/backend_avatar.png";
 
         SystemAuthAdmin model = new SystemAuthAdmin();
         model.setDeptId(systemAuthAdminParam.getDeptId());
