@@ -5,8 +5,8 @@
             <view class="text-3xl font-medium">{{ newsData.title }}</view>
             <view class="flex mt-[20rpx] text-xs">
                 <view class="mr-[40rpx]" v-if="newsData.author">作者: {{ newsData.author }}</view>
-                <view class="text-muted mr-[40rpx]">{{ newsData.createTime }}</view>
-                <view class="flex items-center text-muted">
+                <view class="text-muted mr-[40rpx] flex-1">{{ newsData.createTime }}</view>
+                <view class="flex items-center text-muted flex-none">
                     <image
                         src="/static/images/icon/icon_visit.png"
                         class="w-[30rpx] h-[30rpx]"
@@ -17,10 +17,10 @@
         </view>
 
         <!-- 咨询内容 -->
-        <view class="news-detail-section bg-white p-[20rpx]">
+        <view class="news-detail-section bg-white p-[24rpx]">
             <!-- 摘要 -->
             <view class="summary p-[20rpx] text-base" v-if="newsData.summary">
-                摘要: {{ newsData.summary }}
+                <text class="font-medium">摘要: </text> {{ newsData.summary }}
             </view>
             <!-- 内容 -->
             <view class="mt-[20rpx]">
