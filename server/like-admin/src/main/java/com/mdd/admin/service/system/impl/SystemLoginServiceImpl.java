@@ -79,7 +79,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
             if (sysAdmin.getIsMultipoint() == 0) {
                 Set<Object> ts = RedisUtil.sGet(AdminConfig.backstageTokenSet + sysAdmin.getId());
                 for (Object t: ts) {
-                    RedisUtil.del(t.toString());
+                    RedisUtil.del(AdminConfig.backstageTokenKey+t.toString());
                 }
                 RedisUtil.del(AdminConfig.backstageTokenSet + sysAdmin.getId());
                 RedisUtil.sSet(AdminConfig.backstageTokenSet + sysAdmin.getId(), token);
