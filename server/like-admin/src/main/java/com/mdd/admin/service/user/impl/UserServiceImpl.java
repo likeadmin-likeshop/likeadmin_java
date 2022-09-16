@@ -124,8 +124,12 @@ public class UserServiceImpl implements IUserService {
         vo.setSex(user.getSex());
         vo.setAvatar(UrlUtil.toAbsoluteUrl(user.getAvatar()));
         vo.setChannel(ClientEnum.getMsgByCode(user.getChannel()));
-        vo.setLastLoginTime(TimeUtil.timestampToDate(user.getLastLoginTime()));
         vo.setCreateTime(TimeUtil.timestampToDate(user.getCreateTime()));
+        if (user.getLastLoginTime() <= 0) {
+            vo.setLastLoginTime("无");
+        } else {
+            vo.setLastLoginTime(TimeUtil.timestampToDate(user.getLastLoginTime()));
+        }
         return vo;
     }
 
