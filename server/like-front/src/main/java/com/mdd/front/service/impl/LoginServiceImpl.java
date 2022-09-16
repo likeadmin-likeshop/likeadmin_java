@@ -109,7 +109,7 @@ public class LoginServiceImpl implements ILoginService {
                         .eq("unionid", unionId)
                     ).last("limit 1"));
             log.error("有接口公共");
-            log.error(userAuth);
+            log.error(String.valueOf(userAuth));
             User user = null;
             Integer userId;
             if (StringUtil.isNotNull(userAuth)) {
