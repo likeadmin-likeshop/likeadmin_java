@@ -160,6 +160,10 @@ public class ArticleServiceImpl implements IArticleService {
         vo.setCollect(articleCollect != null);
         vo.setImage(UrlUtil.toAbsoluteUrl(article.getImage()));
         vo.setCreateTime(TimeUtil.timestampToDate(article.getCreateTime()));
+
+        article.setVisit(article.getVisit() + 1);
+        articleMapper.updateById(article);
+
         return vo;
     }
 
