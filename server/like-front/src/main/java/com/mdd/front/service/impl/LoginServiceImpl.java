@@ -167,6 +167,10 @@ public class LoginServiceImpl implements ILoginService {
                 userMapper.updateById(user);
             }
 log.error("能来码");
+            log.error(String.valueOf(user));
+            log.error(user.getMobile());
+
+
             String token = ToolsUtil.makeToken();
             RedisUtil.set(FrontConfig.frontendTokenKey+token, userId, 7200);
 
