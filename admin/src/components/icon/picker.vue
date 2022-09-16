@@ -49,13 +49,18 @@
                     :disabled="disabled"
                     @focus="handleFocus"
                     @blur="handleBlur"
+                    clearable
                 >
                     <template #prepend>
                         <div class="flex items-center" v-if="modelValue">
-                            <icon class="mr-1" :key="modelValue" :name="modelValue" :size="16" />
-                            <overflow-tooltip class="flex-1 w-20" :content="modelValue">
-                                {{ modelValue }}
-                            </overflow-tooltip>
+                            <el-tooltip class="flex-1 w-20" :content="modelValue" placement="top">
+                                <icon
+                                    class="mr-1"
+                                    :key="modelValue"
+                                    :name="modelValue"
+                                    :size="16"
+                                />
+                            </el-tooltip>
                         </div>
 
                         <template v-else>无</template>
