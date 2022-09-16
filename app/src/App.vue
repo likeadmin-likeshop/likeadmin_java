@@ -17,4 +17,6 @@ onLaunch(async () => {
     await getUser()
 })
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+//
+</style>
