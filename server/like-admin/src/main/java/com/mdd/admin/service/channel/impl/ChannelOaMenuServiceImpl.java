@@ -71,6 +71,7 @@ public class ChannelOaMenuServiceImpl implements IChannelOaMenuService {
                     Assert.notNull(item.get("url"), "一级菜单url数缺失");
                     wxMenuButton.setType(item.get("visitType"));
                     wxMenuButton.setUrl(item.get("url"));
+                    wxMenuButton.setAppId(item.getOrDefault("appId", ""));
                 }
                 menuButtons.add(wxMenuButton);
             }
