@@ -1,52 +1,52 @@
 <script lang="ts" setup>
-import oaMenuForm from "./oa-menu-form.vue";
+import oaMenuForm from './oa-menu-form.vue'
 
 const emit = defineEmits<{
-    (event: "add", value: any): void;
-    (event: "edit", value: any): void;
-}>();
+    (event: 'add', value: any): void
+    (event: 'edit', value: any): void
+}>()
 
 const props = withDefaults(
     defineProps<{
-        modular: string;
-        subItem?: any;
+        modular: string
+        subItem?: any
     }>(),
     {
-        modular: "edit",
-        subItem: {},
+        modular: 'edit',
+        subItem: {}
     }
-);
+)
 
-const menuFormEditRef = shallowRef();
-const menuFromPopupRef = shallowRef();
+const menuFormEditRef = shallowRef()
+const menuFromPopupRef = shallowRef()
 
 const form = {
-    name: "",
-    visitType: "view",
-    url: "",
-    appId: "",
-    pagePath: "",
-};
+    name: '',
+    visitType: 'view',
+    url: '',
+    appId: '',
+    pagePath: ''
+}
 
 watchEffect(() => {
     if (Object.keys(props.subItem).length != 0) {
         for (const key in form) {
             //@ts-ignore
-            form[key] = props.subItem[key];
+            form[key] = props.subItem[key]
         }
     }
-});
+})
 
 const handleRules = async () => {
-    await menuFormEditRef.value.menuFormRef.validate();
-    if (props.modular === "edit") {
-        emit("edit", { ...form });
+    await menuFormEditRef.value.menuFormRef.validate()
+    if (props.modular === 'edit') {
+        emit('edit', { ...form })
     } else {
-        emit("add", { ...form });
+        emit('add', { ...form })
     }
-    menuFromPopupRef.value.close();
-    menuFormEditRef.value.menuFormRef.resetFields();
-};
+    menuFromPopupRef.value.close()
+    menuFormEditRef.value.menuFormRef.resetFields()
+}
 </script>
 
 <template>

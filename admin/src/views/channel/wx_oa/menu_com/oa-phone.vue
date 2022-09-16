@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { useMenuOa } from "./useMenuOa";
-import useSettingStore from "@/stores/modules/setting";
+import { useMenuOa } from './useMenuOa'
+import useSettingStore from '@/stores/modules/setting'
 
 // 菜单颜色（这里采用全局颜色）
-const settingStore = useSettingStore();
-const themeColor = computed(() => settingStore.theme || "#4A5DFF");
+const settingStore = useSettingStore()
+const themeColor = computed(() => settingStore.theme || '#4A5DFF')
 
-const { menuList, menuIndex, handleAddMenu } = useMenuOa(useMenuOa);
+const { menuList, menuIndex, handleAddMenu } = useMenuOa(useMenuOa)
 </script>
 
 <template>
@@ -34,13 +34,9 @@ const { menuList, menuIndex, handleAddMenu } = useMenuOa(useMenuOa);
                     <!-- 二级菜单 -->
                     <div
                         class="oa-phone-menu-subitem"
-                        v-show="
-                            menuItem.subButtons.length && menuItem.menuType != 1
-                        "
+                        v-show="menuItem.subButtons.length && menuItem.menuType != 1"
                     >
-                        <template
-                            v-for="(subItem, index2) in menuItem.subButtons"
-                        >
+                        <template v-for="(subItem, index2) in menuItem.subButtons">
                             <div class="oa-phone-menu-subitem-title">
                                 {{ subItem.name }}
                             </div>
@@ -50,10 +46,7 @@ const { menuList, menuIndex, handleAddMenu } = useMenuOa(useMenuOa);
             </template>
             <!-- 新增菜单 -->
             <template v-if="menuList.length <= 2">
-                <div
-                    class="flex items-center justify-center flex-1 h-full"
-                    @click="handleAddMenu"
-                >
+                <div class="flex items-center justify-center flex-1 h-full" @click="handleAddMenu">
                     <el-icon>
                         <Plus />
                     </el-icon>
@@ -99,7 +92,7 @@ const { menuList, menuIndex, handleAddMenu } = useMenuOa(useMenuOa);
         }
 
         .active-menu::after {
-            content: "";
+            content: '';
             width: 100%;
             height: 41px;
             top: -1px;

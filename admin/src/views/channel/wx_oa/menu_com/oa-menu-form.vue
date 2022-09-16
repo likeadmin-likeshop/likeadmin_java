@@ -1,34 +1,18 @@
 <template>
-    <el-form
-        ref="menuFormRef"
-        :rules="rules"
-        :model="menuForm"
-        label-width="120px"
-        class="pr-10"
-    >
+    <el-form ref="menuFormRef" :rules="rules" :model="menuForm" label-width="120px" class="pr-10">
         <!-- 菜单名称 -->
-        <el-form-item
-            :label="modular === 'master' ? '主菜单名称' : '子菜单名称'"
-            prop="name"
-        >
+        <el-form-item :label="modular === 'master' ? '主菜单名称' : '子菜单名称'" prop="name">
             <el-input v-model="menuForm.name" />
         </el-form-item>
 
         <!-- 菜单类型 -->
-        <el-form-item
-            label="主菜单类型"
-            prop="menuType"
-            v-if="modular === 'master'"
-        >
+        <el-form-item label="主菜单类型" prop="menuType" v-if="modular === 'master'">
             <el-radio-group v-model="menuForm.menuType">
                 <el-radio :label="1">不配置子菜单</el-radio>
                 <el-radio :label="2">配置子菜单</el-radio>
             </el-radio-group>
         </el-form-item>
-        <el-form-item
-            label=""
-            v-if="menuForm.menuType === 2 && modular === 'master'"
-        >
+        <el-form-item label="" v-if="menuForm.menuType === 2 && modular === 'master'">
             <slot></slot>
         </el-form-item>
 
@@ -62,62 +46,62 @@
 </template>
 
 <script lang="ts" setup>
-import { rules } from "./useMenuOa";
-import type { FormInstance } from "element-plus";
+import { rules } from './useMenuOa'
+import type { FormInstance } from 'element-plus'
 
 const emit = defineEmits([
-    "update:name",
-    "update:menuType",
-    "update:visitType",
-    "update:url",
-    "update:pagePath",
-]);
+    'update:name',
+    'update:menuType',
+    'update:visitType',
+    'update:url',
+    'update:pagePath'
+])
 
 const props = withDefaults(
     defineProps<{
-        modular?: string;
-        name?: string;
-        menuType?: number;
-        visitType?: string;
-        url?: string;
-        appId?: string;
-        pagePath?: string;
+        modular?: string
+        name?: string
+        menuType?: number
+        visitType?: string
+        url?: string
+        appId?: string
+        pagePath?: string
     }>(),
     {
-        modular: "master",
-        name: "",
+        modular: 'master',
+        name: '',
         menuType: 1,
-        visitType: "view",
-        url: "",
-        appId: "",
-        pagePath: "",
+        visitType: 'view',
+        url: '',
+        appId: '',
+        pagePath: ''
     }
-);
+)
 
-const menuFormRef = shallowRef<FormInstance>();
+const menuFormRef = shallowRef<FormInstance>()
 // 表单数据
-const menuForm = ref({ ...props });
+const menuForm = ref({ ...props })
 
 watch(
     () => props,
     (value) => {
-        menuForm.value = value;
+        menuForm.value = value
     },
     { immediate: true }
-);
+)
 
 watchEffect(() => {
-    if (props.modular === "master") {
-        emit("update:menuType", menuForm.value.menuType);
+    if (props.modular === 'master') {
+        emit('update:menuType', menuForm.value.menuType)
     }
-    emit("update:name", menuForm.value.name);
-    emit("update:visitType", menuForm.value.visitType);
-    emit("update:url", menuForm.value.url);
-    emit("update:appId", menuForm.value.appId);
-    emit("update:pagePath", menuForm.value.pagePath);
-});
+    emit('update:name', menuForm.value.name)
+    emit('update:visitType', menuForm.value.visitType)
+    emit('update:url', menuForm.value.url)
+    emit('update:appId', menuForm.value.appId)
+    emit('update:pagePath', menuForm.value.pagePath)
+})
 
 defineExpose({
-    menuFormRef,
-});
+    menuFormRef
+})
 </script>

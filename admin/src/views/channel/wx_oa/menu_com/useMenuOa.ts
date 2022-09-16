@@ -1,11 +1,11 @@
-import { ref } from "vue"
+import { ref } from 'vue'
 import feedback from '@/utils/feedback'
-import type { FormRules } from "element-plus";
-import { setOaMenuSave, getOaMenu, setOaMenuPublish } from "@/api/channel/wx_oa"
-import type { Menu } from "@/api/channel/wx_oa"
+import type { FormRules } from 'element-plus'
+import { setOaMenuSave, getOaMenu, setOaMenuPublish } from '@/api/channel/wx_oa'
+import type { Menu } from '@/api/channel/wx_oa'
 
 // 菜单实例
-export const menuRef = shallowRef();
+export const menuRef = shallowRef()
 // 菜单数据
 const menuList = ref<Menu[]>([])
 const menuIndex = ref<number>(0)
@@ -15,56 +15,55 @@ export const rules = reactive<FormRules>({
     name: [
         {
             required: true,
-            message: "必填项不能为空",
-            trigger: ["blur", "change"],
+            message: '必填项不能为空',
+            trigger: ['blur', 'change']
         },
         {
             min: 1,
             max: 12,
-            message: "长度限制12个字符",
-            trigger: ["blur", "change"],
-        },
+            message: '长度限制12个字符',
+            trigger: ['blur', 'change']
+        }
     ],
     menuType: [
         {
             required: true,
-            message: "必填项不能为空",
-            trigger: ["blur", "change"],
-        },
+            message: '必填项不能为空',
+            trigger: ['blur', 'change']
+        }
     ],
     visitType: [
         {
             required: true,
-            message: "必填项不能为空",
-            trigger: ["blur", "change"],
-        },
+            message: '必填项不能为空',
+            trigger: ['blur', 'change']
+        }
     ],
     url: [
         {
             required: true,
-            message: "必填项不能为空",
-            trigger: ["blur", "change"],
-        },
+            message: '必填项不能为空',
+            trigger: ['blur', 'change']
+        }
     ],
     appId: [
         {
             required: true,
-            message: "必填项不能为空",
-            trigger: ["blur", "change"],
-        },
+            message: '必填项不能为空',
+            trigger: ['blur', 'change']
+        }
     ],
     pagePath: [
         {
             required: true,
-            message: "必填项不能为空",
-            trigger: ["blur", "change"],
-        },
-    ],
-});
-
+            message: '必填项不能为空',
+            trigger: ['blur', 'change']
+        }
+    ]
+})
 
 export const useMenuOa = (ref: any) => {
-    if( ref ) menuRef.value = ref
+    if (ref) menuRef.value = ref
 
     // 添加主菜单
     const handleAddMenu = () => {
@@ -73,7 +72,7 @@ export const useMenuOa = (ref: any) => {
             menuType: 1,
             visitType: 'view',
             url: '',
-            appId: "",
+            appId: '',
             pagePath: '',
             subButtons: []
         })
@@ -81,8 +80,8 @@ export const useMenuOa = (ref: any) => {
 
     // 添加子菜单
     const handleAddSubMenu = (event?: Menu) => {
-        const index = menuIndex.value;
-        if(menuList.value[index].subButtons.length>=5) {
+        const index = menuIndex.value
+        if (menuList.value[index].subButtons.length >= 5) {
             feedback.msgError('已添加上限～')
             return
         }
@@ -91,7 +90,7 @@ export const useMenuOa = (ref: any) => {
 
     // 编辑子菜单
     const handleEditSubMenu = (event: Menu, subIndex: number) => {
-        const index = menuIndex.value;
+        const index = menuIndex.value
         menuList.value[index].subButtons[subIndex] = event
     }
 
@@ -108,7 +107,7 @@ export const useMenuOa = (ref: any) => {
     // 获取菜单
     const getOaMenuFunc = async () => {
         try {
-            menuList.value = await getOaMenu();
+            menuList.value = await getOaMenu()
         } catch (error) {
             console.log('获取菜单=>', error)
         }
@@ -116,15 +115,15 @@ export const useMenuOa = (ref: any) => {
 
     // 保存菜单
     const handleSave = async () => {
-        const refs = menuRef.value.value;
+        const refs = menuRef.value.value
         for (let i = 0; i < refs.length; i++) {
             try {
                 await refs[i].menuFormRef.validate()
             } catch (error) {
                 menuIndex.value = i
-                feedback.msgError(`菜单${i+1}必填项不能为空～`)
+                feedback.msgError(`菜单${i + 1}必填项不能为空～`)
                 return
-            }            
+            }
         }
         await setOaMenuSave(menuList.value)
         feedback.msgSuccess('保存成功')
@@ -132,20 +131,20 @@ export const useMenuOa = (ref: any) => {
 
     // 保存菜单
     const handlePublish = async () => {
-        const refs = menuRef.value.value;
+        const refs = menuRef.value.value
         for (let i = 0; i < refs.length; i++) {
             try {
                 await refs[i].menuFormRef.validate()
             } catch (error) {
                 menuIndex.value = i
-                feedback.msgError(`菜单${i+1}必填项不能为空～`)
+                feedback.msgError(`菜单${i + 1}必填项不能为空～`)
                 return
-            }            
+            }
         }
         await setOaMenuPublish(menuList.value)
         feedback.msgSuccess('发布成功')
     }
-    
+
     return {
         menuList,
         menuIndex,
