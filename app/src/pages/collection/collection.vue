@@ -50,6 +50,7 @@ const handleCollect = async (index: number): Promise<void> => {
     try {
         const articleId: number = collectData.value[index].articleId
         await cancelCollect({ articleId })
+        uni.$u.toast('已取消收藏')
         paging.value.reload()
     } catch (err) {
         //TODO handle the exception
