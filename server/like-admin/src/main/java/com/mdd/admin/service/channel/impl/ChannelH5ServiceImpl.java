@@ -27,7 +27,7 @@ public class ChannelH5ServiceImpl implements IChannelH5Service {
         map.put("status", Integer.parseInt(config.getOrDefault("status", "0")));
         map.put("close", Integer.parseInt(config.getOrDefault("close", "0")));
         map.put("url", config.getOrDefault("url", ""));
-        map.put("accessLink", RequestUtil.domain()+"/mobile");
+        map.put("accessLink", RequestUtil.domain());
         return map;
     }
 
