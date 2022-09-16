@@ -27,7 +27,7 @@
                         </el-table-column>
                         <el-table-column label="关键词" prop="describe" min-width="160">
                             <template #default="{ row }">
-                                <el-input v-model="row.name" />
+                                <el-input v-model="row.name" clearable />
                             </template>
                         </el-table-column>
                         <el-table-column label="排序" prop="describe" min-width="160">

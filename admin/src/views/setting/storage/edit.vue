@@ -21,14 +21,23 @@
                             <el-input
                                 v-model="formData.bucket"
                                 placeholder="请输入存储空间名称(Bucket)"
+                                clearable
                             />
                         </div>
                     </el-form-item>
                     <el-form-item label="ACCESS_KEY" prop="accessKey">
-                        <el-input v-model="formData.accessKey" placeholder="请输入ACCESS_KEY(AK)" />
+                        <el-input
+                            v-model="formData.accessKey"
+                            placeholder="请输入ACCESS_KEY(AK)"
+                            clearable
+                        />
                     </el-form-item>
                     <el-form-item label="SECRET_KEY" prop="secretKey">
-                        <el-input v-model="formData.secretKey" placeholder="请输入SECRET_KEY(SK)" />
+                        <el-input
+                            v-model="formData.secretKey"
+                            placeholder="请输入SECRET_KEY(SK)"
+                            clearable
+                        />
                     </el-form-item>
                     <el-form-item label="空间域名" prop="domain">
                         <div class="flex-1">
@@ -36,6 +45,7 @@
                                 <el-input
                                     v-model="formData.domain"
                                     placeholder="请输入空间域名(Domain)"
+                                    clearable
                                 />
                             </div>
                             <div class="form-tips">
@@ -48,7 +58,7 @@
                         label="REGION"
                         prop="region"
                     >
-                        <el-input v-model="formData.region" placeholder="请输入region" />
+                        <el-input v-model="formData.region" placeholder="请输入region" clearable />
                     </el-form-item>
                 </div>
                 <el-form-item label="状态" prop="status">

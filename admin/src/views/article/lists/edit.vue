@@ -15,7 +15,11 @@
                     <div>
                         <el-form-item label="文章标题" prop="title">
                             <div class="w-80">
-                                <el-input v-model="formData.title" placeholder="请输入文章标题" />
+                                <el-input
+                                    v-model="formData.title"
+                                    placeholder="请输入文章标题"
+                                    clearable
+                                />
                             </div>
                         </el-form-item>
                         <el-form-item label="文章栏目" prop="cid">
@@ -23,6 +27,7 @@
                                 class="w-80"
                                 v-model="formData.cid"
                                 placeholder="请选择文章栏目"
+                                clearable
                             >
                                 <el-option
                                     v-for="item in optionsData.articleCate"
@@ -34,12 +39,21 @@
                         </el-form-item>
                         <el-form-item label="文章简介" prop="intro">
                             <div class="w-80">
-                                <el-input v-model="formData.intro" placeholder="请输入文章简介" />
+                                <el-input
+                                    v-model="formData.intro"
+                                    placeholder="请输入文章简介"
+                                    clearable
+                                />
                             </div>
                         </el-form-item>
                         <el-form-item label="摘要" prop="summary">
                             <div class="w-80">
-                                <el-input type="textarea" :rows="6" v-model="formData.summary" />
+                                <el-input
+                                    type="textarea"
+                                    :rows="6"
+                                    v-model="formData.summary"
+                                    clearable
+                                />
                             </div>
                         </el-form-item>
                         <el-form-item label="文章封面" prop="image">

@@ -20,13 +20,14 @@
                         :model-value="formData.typeValue"
                         placeholder="请输入字典类型"
                         disabled
+                        clearable
                     />
                 </el-form-item>
                 <el-form-item label="数据名称" prop="name">
-                    <el-input v-model="formData.name" placeholder="请输入数据名称" />
+                    <el-input v-model="formData.name" placeholder="请输入数据名称" clearable />
                 </el-form-item>
                 <el-form-item label="数据值" prop="value">
-                    <el-input v-model="formData.value" placeholder="请输入数据值" />
+                    <el-input v-model="formData.value" placeholder="请输入数据值" clearable />
                 </el-form-item>
                 <el-form-item label="排序" prop="sort">
                     <div>

@@ -16,10 +16,10 @@
                 label-width="84px"
             >
                 <el-form-item label="字典名称" prop="dictName">
-                    <el-input v-model="formData.dictName" placeholder="请输入字典名称" />
+                    <el-input v-model="formData.dictName" placeholder="请输入字典名称" clearable />
                 </el-form-item>
                 <el-form-item label="字典类型" prop="dictType">
-                    <el-input v-model="formData.dictType" placeholder="请输入字典类型" />
+                    <el-input v-model="formData.dictType" placeholder="请输入字典类型" clearable />
                 </el-form-item>
                 <el-form-item label="字典状态" required prop="dictStatus">
                     <el-radio-group v-model="formData.dictStatus">

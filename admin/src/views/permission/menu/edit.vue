@@ -32,7 +32,7 @@
                     />
                 </el-form-item>
                 <el-form-item label="菜单名称" prop="menuName">
-                    <el-input v-model="formData.menuName" placeholder="请输入菜单名称" />
+                    <el-input v-model="formData.menuName" placeholder="请输入菜单名称" clearable />
                 </el-form-item>
                 <el-form-item
                     v-if="formData.menuType != MenuEnum.BUTTON"
@@ -48,7 +48,7 @@
                     prop="paths"
                 >
                     <div class="flex-1">
-                        <el-input v-model="formData.paths" placeholder="请输入路由路径" />
+                        <el-input v-model="formData.paths" placeholder="请输入路由路径" clearable />
                         <div class="form-tips">
                             访问的路由地址，如：`admin`，如外网地址需内链访问则以`http(s)://`开头
                         </div>
@@ -75,7 +75,11 @@
                 </el-form-item>
                 <el-form-item label="选中菜单" prop="p" v-if="formData.menuType == MenuEnum.MENU">
                     <div class="flex-1">
-                        <el-input v-model="formData.selected" placeholder="请输入路由路径" />
+                        <el-input
+                            v-model="formData.selected"
+                            placeholder="请输入路由路径"
+                            clearable
+                        />
                         <div class="form-tips">
                             访问详情页面，编辑页面时，菜单高亮显示，如`/consumer/lists`
                         </div>
@@ -87,7 +91,7 @@
                     prop="perms"
                 >
                     <div class="flex-1">
-                        <el-input v-model="formData.perms" placeholder="请输入权限字符" />
+                        <el-input v-model="formData.perms" placeholder="请输入权限字符" clearable />
                         <div class="form-tips">
                             将作为server端API验权使用，如`system:admin:list`，请谨慎修改
                         </div>
@@ -100,7 +104,11 @@
                 >
                     <div>
                         <div class="flex-1">
-                            <el-input v-model="formData.params" placeholder="请输入路由参数" />
+                            <el-input
+                                v-model="formData.params"
+                                placeholder="请输入路由参数"
+                                clearable
+                            />
                         </div>
                         <div class="form-tips">
                             访问路由的默认传递参数，如：`{"id": 1, "name":
