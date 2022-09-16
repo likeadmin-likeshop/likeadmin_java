@@ -87,9 +87,9 @@ public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
                 "=:isStop@is_stop:int"
         });
 
-        Page<SystemAuthPost> objectPage = new Page<>(page, limit);
-        objectPage.addOrder(OrderItem.asc("sort"));
-        IPage<SystemAuthPost> iPage = systemAuthPostMapper.selectPage(objectPage, queryWrapper);
+//        Page<SystemAuthPost> objectPage = new Page<>(page, limit);
+//        objectPage.addOrder(OrderItem.asc("sort"));
+        IPage<SystemAuthPost> iPage = systemAuthPostMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
         List<SystemAuthPostVo> list = new ArrayList<>();
         for (SystemAuthPost systemAuthPost : iPage.getRecords()) {
