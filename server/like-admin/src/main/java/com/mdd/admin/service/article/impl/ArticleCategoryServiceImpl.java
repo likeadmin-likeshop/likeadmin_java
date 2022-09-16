@@ -10,6 +10,7 @@ import com.mdd.admin.vo.article.ArticleCateVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.article.ArticleCategory;
+import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.article.ArticleCategoryMapper;
 import com.mdd.common.mapper.article.ArticleMapper;
 import com.mdd.common.utils.TimeUtil;
@@ -140,6 +141,10 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
      */
     @Override
     public void add(CategoryParam categoryParam) {
+        if (categoryParam.getName().trim().equals("")) {
+            throw new OperateException("名称不允许为空值!");
+        }
+
         ArticleCategory model = new ArticleCategory();
         model.setId(categoryParam.getId());
         model.setName(categoryParam.getName());
@@ -157,6 +162,10 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
      */
     @Override
     public void edit(CategoryParam categoryParam) {
+        if (categoryParam.getName().trim().equals("")) {
+            throw new OperateException("名称不允许为空值!");
+        }
+
         ArticleCategory model = articleCategoryMapper.selectOne(
                 new QueryWrapper<ArticleCategory>()
                         .select(ArticleCategory.class, info->
