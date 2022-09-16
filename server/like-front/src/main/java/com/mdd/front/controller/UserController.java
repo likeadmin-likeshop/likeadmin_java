@@ -113,8 +113,8 @@ public class UserController {
     @PostMapping("/mnpMobile")
     public Object mnpMobile(@RequestBody Map<String, String> params) {
         Assert.notNull(params.get("code"), "code参数缺失");
-        Map<String, Object> map = iUserService.mnpMobile(params.get("code").trim());
-        return AjaxResult.success(map);
+        iUserService.mnpMobile(params.get("code").trim());
+        return AjaxResult.success();
     }
 
 }

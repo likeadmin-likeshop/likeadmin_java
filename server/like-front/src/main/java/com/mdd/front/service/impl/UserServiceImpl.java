@@ -17,6 +17,7 @@ import com.mdd.common.mapper.system.SystemConfigMapper;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.utils.*;
+import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
 import com.mdd.front.vo.user.UserCenterVo;
 import com.mdd.front.vo.user.UserInfoVo;
@@ -243,10 +244,9 @@ public class UserServiceImpl implements IUserService {
      *
      * @author fzr
      * @param code 获取手机号的Code
-     * @return Map<String, Object>
      */
     @Override
-    public Map<String, Object> mnpMobile(String code) {
+    public void mnpMobile(String code) {
         Map<String, String> config = ConfigUtil.get("mp_channel");
         WxMaService wxMaService = new WxMaServiceImpl();
         WxMaDefaultConfigImpl wxConfig = new WxMaDefaultConfigImpl();
@@ -257,10 +257,12 @@ public class UserServiceImpl implements IUserService {
         try {
             WxMaPhoneNumberInfo wxMaPhoneNumberInfo = wxMaService.getUserService().getNewPhoneNoInfo(code);
 
-            Map<String, Object> response = new LinkedHashMap<>();
-            response.put("countryCode", wxMaPhoneNumberInfo.getCountryCode());
-            response.put("phoneNumber", wxMaPhoneNumberInfo.getPhoneNumber());
-            return response;
+            Integer userId = LikeFrontThreadLocal.getUserId();
+            User user = new User();
+            user.setId(userId);
+            user.setMobile(wxMaPhoneNumberInfo.getPhoneNumber());
+            user.setCreateTime(System.currentTimeMillis() / 1000);
+            userMapper.updateById(user);
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
