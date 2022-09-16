@@ -239,9 +239,9 @@ CREATE TABLE `la_notice_record`  (
   `send_type` tinyint(1) NULL DEFAULT 0 COMMENT '通知发送类型 1-系统通知 2-短信通知 3-微信模板 4-微信小程序',
   `notice_type` tinyint(1) NULL DEFAULT NULL COMMENT '通知类型 1-业务通知 2-验证码',
   `extra` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '其他',
-  `create_time` int(10) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` int(10) NULL DEFAULT NULL COMMENT '更新时间',
-  `delete_time` int(10) NULL DEFAULT NULL COMMENT '删除时间',
+  `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '消息通知记录表' ROW_FORMAT = Dynamic;
 
