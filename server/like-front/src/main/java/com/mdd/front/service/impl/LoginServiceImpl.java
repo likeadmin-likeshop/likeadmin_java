@@ -94,22 +94,18 @@ public class LoginServiceImpl implements ILoginService {
         Integer client   = Integer.parseInt(params.getOrDefault("client", "1"));
 
         try {
-            log.error("来登录了");
             WxMaService wxMaService = WeChatUtil.mnp();
             WxMaJscode2SessionResult sessionResult = wxMaService.getUserService().getSessionInfo(code);
             String openId = sessionResult.getOpenid();
             String uniId = sessionResult.getUnionid();
             String unionId = uniId == null ? "0" : uniId;
-            log.error("内容啊");
-            log.error(String.valueOf(sessionResult));
 
             UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
                     .nested(wq->wq
                         .eq("openid", openId).or()
                         .eq("unionid", unionId)
                     ).last("limit 1"));
-            log.error("有接口公共");
-            log.error(String.valueOf(userAuth));
+
             User user = null;
             Integer userId;
             if (StringUtil.isNotNull(userAuth)) {
@@ -166,17 +162,15 @@ public class LoginServiceImpl implements ILoginService {
                 user.setLastLoginTime(System.currentTimeMillis() / 1000);
                 userMapper.updateById(user);
             }
-log.error("能来码");
-            log.error(String.valueOf(user));
-            log.error(user.getMobile());
-
 
             String token = ToolsUtil.makeToken();
             RedisUtil.set(FrontConfig.frontendTokenKey+token, userId, 7200);
 
+            String mobile = StringUtil.isNull(user.getMobile()) ? "" : user.getMobile();
+
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("id", userId);
-            response.put("isBindMobile", !user.getMobile().equals(""));
+            response.put("isBindMobile", !mobile.equals(""));
             response.put("token", token);
             return response;
         } catch (WxErrorException e) {
