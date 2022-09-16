@@ -1,7 +1,12 @@
 <template>
     <div>
         <el-card class="!border-none" shadow="never">
-            <el-alert type="warning" title="温馨提示：填写微信公众号开发配置，请前往微信公众平台申请服务号并完成认证" :closable="false" show-icon />
+            <el-alert
+                type="warning"
+                title="温馨提示：填写微信公众号开发配置，请前往微信公众平台申请服务号并完成认证"
+                :closable="false"
+                show-icon
+            />
         </el-card>
         <el-form ref="formRef" :model="formData" label-width="160px">
             <el-card class="!border-none mt-4" shadow="never">
@@ -53,7 +58,7 @@
                             <div class="mr-4 w-80">
                                 <el-input v-model="formData.url" disabled />
                             </div>
-                            <el-button @click="copy(formData.url)">复制</el-button>
+                            <el-button v-copy="formData.url">复制</el-button>
                         </div>
                         <div class="form-tips">
                             登录微信公众平台，点击开发>基本配置>服务器配置，填写服务器地址（URL）
@@ -73,7 +78,10 @@
                 <el-form-item label="EncodingAESKey" prop="EncodingAESKey">
                     <div>
                         <div class="w-80">
-                            <el-input v-model="formData.encodingAesKey" placeholder="请输入EncodingAESKey" />
+                            <el-input
+                                v-model="formData.encodingAesKey"
+                                placeholder="请输入EncodingAESKey"
+                            />
                         </div>
                         <div class="form-tips">
                             消息加密密钥由43位字符组成，字符范围为A-Z,a-z,0-9
@@ -82,7 +90,10 @@
                 </el-form-item>
                 <el-form-item label="消息加密方式" required prop="status">
                     <div>
-                        <el-radio-group class="flex-col !items-start" v-model="formData.encryptionType">
+                        <el-radio-group
+                            class="flex-col !items-start"
+                            v-model="formData.encryptionType"
+                        >
                             <el-radio :label="1">
                                 明文模式 (不使用消息体加解密功能，安全系数较低)
                             </el-radio>
@@ -105,7 +116,7 @@
                             <div class="mr-4 w-80">
                                 <el-input v-model="formData.businessDomain" disabled />
                             </div>
-                            <el-button @click="copy(formData.businessDomain)">复制</el-button>
+                            <el-button v-copy="formData.businessDomain">复制</el-button>
                         </div>
                         <div class="form-tips">
                             登录微信公众平台，点击设置>公众号设置>功能设置，填写业务域名
@@ -118,7 +129,7 @@
                             <div class="mr-4 w-80">
                                 <el-input v-model="formData.jsDomain" disabled />
                             </div>
-                            <el-button @click="copy(formData.jsDomain)">复制</el-button>
+                            <el-button v-copy="formData.jsDomain">复制</el-button>
                         </div>
                         <div class="form-tips">
                             登录微信公众平台，点击设置>公众号设置>功能设置，填写JS接口安全域名
@@ -131,7 +142,7 @@
                             <div class="mr-4 w-80">
                                 <el-input v-model="formData.webDomain" disabled />
                             </div>
-                            <el-button @click="copy(formData.webDomain)">复制</el-button>
+                            <el-button v-copy="formData.webDomain">复制</el-button>
                         </div>
                         <div class="form-tips">
                             登录微信公众平台，点击设置>公众号设置>功能设置，填写网页授权域名
@@ -151,18 +162,18 @@ import feedback from '@/utils/feedback'
 import { useClipboard } from '@vueuse/core'
 
 const formData = reactive({
-    name: "",
-    primaryId: " ",
-    qrCode: "",
-    appId: "",
-    appSecret: "",
-    url: "",
-    token: "",
-    encodingAesKey: "",
+    name: '',
+    primaryId: ' ',
+    qrCode: '',
+    appId: '',
+    appSecret: '',
+    url: '',
+    token: '',
+    encodingAesKey: '',
     encryptionType: 1,
-    businessDomain: "",
-    jsDomain: "",
-    webDomain: ""
+    businessDomain: '',
+    jsDomain: '',
+    webDomain: ''
 })
 
 const { copy } = useClipboard()

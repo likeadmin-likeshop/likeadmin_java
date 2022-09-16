@@ -118,7 +118,7 @@
                                     <color-picker
                                         class="max-w-[400px]"
                                         v-model="tabbar.style.selectedColor"
-                                        default-color="#999999"
+                                        default-color="#4173ff"
                                     />
                                 </el-form-item>
                             </el-tab-pane>
