@@ -228,7 +228,7 @@ const changeCodeMobile = async () => {
         mobile: newMobile.value,
         code: mobileCode.value
     })
-    uni.$u.toast('修改成功')
+    uni.$u.toast('操作成功')
     showMobilePop.value = false
     getUser()
 }
@@ -239,6 +239,7 @@ const setUserInfoFun = async (value: string): Promise<void> => {
         field: fieldType.value,
         value: value
     })
+    uni.$u.toast('操作成功')
     getUser()
 }
 
@@ -283,7 +284,6 @@ const changeNameConfirm = () => {
 
 // 微信小程序 绑定｜｜修改用户手机号
 const getPhoneNumber = async (e): Promise<void> => {
-    fieldType.value = FieldType.MOBILE
     const { encryptedData, iv, code } = e.detail
     const data = {
         code,
@@ -294,6 +294,7 @@ const getPhoneNumber = async (e): Promise<void> => {
         await userMnpMobile({
             ...data
         })
+        uni.$u.toast('操作成功')
         getUser()
     }
 }
