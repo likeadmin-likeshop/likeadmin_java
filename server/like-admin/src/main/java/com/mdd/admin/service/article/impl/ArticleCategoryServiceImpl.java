@@ -149,13 +149,14 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
         model.setId(categoryParam.getId());
         model.setName(categoryParam.getName());
         model.setSort(categoryParam.getSort());
+        model.setIsShow(model.getIsShow());
         model.setCreateTime(TimeUtil.timestamp());
         model.setUpdateTime(TimeUtil.timestamp());
         articleCategoryMapper.insert(model);
     }
 
     /**
-     * 文章编辑
+     * 分类编辑
      *
      * @author fzr
      * @param categoryParam 分类参数
@@ -178,6 +179,7 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
 
         model.setName(categoryParam.getName());
         model.setSort(categoryParam.getSort());
+        model.setIsShow(categoryParam.getIsShow());
         model.setUpdateTime(TimeUtil.timestamp());
         articleCategoryMapper.updateById(model);
     }
