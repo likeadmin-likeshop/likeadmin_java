@@ -25,10 +25,6 @@
                         <el-input v-model="formData.url" placeholder="请输入完整的url" />
                     </div>
                 </el-form-item>
-                <el-form-item label="访问链接">
-                    <div>{{ formData.accessLink }}</div>
-                    <el-button class="ml-4" v-copy="formData.accessLink">复制</el-button>
-                </el-form-item>
             </el-form>
         </el-card>
         <footer-btns v-perms="['channel:h5:save']">
@@ -47,7 +43,6 @@ const formData = reactive({
     accessLink: ''
 })
 
-// const { copy } = useClipboard()
 const getDetail = async () => {
     const data = await getH5Config()
     for (const key in formData) {
