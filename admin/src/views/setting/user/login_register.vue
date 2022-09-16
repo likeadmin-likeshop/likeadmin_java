@@ -92,7 +92,7 @@
             </el-card>
         </el-form>
 
-        <footer-btns v-perms="['setting:website:save']">
+        <footer-btns v-perms="['setting:login:save']">
             <el-button type="primary" @click="handleSubmit">保存</el-button>
         </footer-btns>
     </div>

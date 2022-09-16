@@ -70,7 +70,7 @@
             </div>
         </el-card>
 
-        <footer-btns v-perms="['setting:website:save']">
+        <footer-btns v-perms="['setting:search:save']">
             <el-button type="primary" @click="handleSave">保存</el-button>
         </footer-btns>
     </div>

@@ -135,7 +135,7 @@
                 </el-form-item>
             </el-card>
         </el-form>
-        <footer-btns v-perms="['channel:h5:save']">
+        <footer-btns v-perms="['channel:mp:save']">
             <el-button type="primary" @click="handelSave">保存</el-button>
         </footer-btns>
     </div>
