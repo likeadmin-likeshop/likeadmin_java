@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import OaPhone from "./menu_com/oa-phone.vue";
-import OaAttr from "./menu_com/oa-attr.vue";
-import { useMenuOa } from "./menu_com/useMenuOa";
+import OaPhone from './menu_com/oa-phone.vue'
+import OaAttr from './menu_com/oa-attr.vue'
+import { useMenuOa } from './menu_com/useMenuOa'
 
-const { getOaMenuFunc, handleSave, handlePublish } = useMenuOa(undefined);
-getOaMenuFunc();
+const { getOaMenuFunc, handleSave, handlePublish } = useMenuOa(undefined)
+getOaMenuFunc()
 </script>
 
 <template>
@@ -29,18 +29,12 @@ getOaMenuFunc();
         </el-card>
 
         <footer-btns>
-            <el-button
-                type="primary"
-                @click="handleSave"
-                v-perms="['channel:oaMenu:save']"
-                >保存</el-button
-            >
-            <el-button
-                type="primary"
-                @click="handlePublish"
-                v-perms="['channel:oaMenu:publish']"
-                >发布</el-button
-            >
+            <el-button type="primary" @click="handleSave" v-perms="['channel:oaMenu:save']">
+                保存
+            </el-button>
+            <el-button type="primary" @click="handlePublish" v-perms="['channel:oaMenu:publish']">
+                发布
+            </el-button>
         </footer-btns>
     </div>
 </template>
