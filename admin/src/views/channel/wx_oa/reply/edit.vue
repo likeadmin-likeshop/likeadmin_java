@@ -56,6 +56,8 @@
                             v-model="formData.content"
                             :autosize="{ minRows: 4, maxRows: 4 }"
                             type="textarea"
+                            maxlength="200"
+                            show-word-limit
                             placeholder="请输入回复内容"
                         />
                     </div>

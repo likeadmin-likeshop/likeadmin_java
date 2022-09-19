@@ -37,7 +37,7 @@
                         <div class="w-full max-w-[320px]">
                             <el-input
                                 type="textarea"
-                                :rows="6"
+                                :autosize="{ minRows: 6, maxRows: 6 }"
                                 v-model="formData.smsNotice.content"
                             />
                         </div>

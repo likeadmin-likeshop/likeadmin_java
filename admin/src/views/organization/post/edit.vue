@@ -27,6 +27,8 @@
                         placeholder="请输入备注"
                         type="textarea"
                         :autosize="{ minRows: 4, maxRows: 6 }"
+                        maxlength="200"
+                        show-word-limit
                     />
                 </el-form-item>
                 <el-form-item label="岗位状态" prop="isStop">

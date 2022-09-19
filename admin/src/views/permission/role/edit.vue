@@ -27,8 +27,10 @@
                     <el-input
                         v-model="formData.remark"
                         type="textarea"
-                        :rows="4"
+                        :autosize="{ minRows: 4, maxRows: 6 }"
                         placeholder="请输入备注"
+                        maxlength="200"
+                        show-word-limit
                     />
                 </el-form-item>
                 <el-form-item label="排序" prop="sort">

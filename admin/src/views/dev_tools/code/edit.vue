@@ -52,7 +52,9 @@
                                     v-model="formData.base.remarks"
                                     class="el-input"
                                     type="textarea"
-                                    :rows="4"
+                                    :autosize="{ minRows: 4, maxRows: 4 }"
+                                    maxlength="200"
+                                    show-word-limit
                                 />
                             </div>
                         </el-form-item>

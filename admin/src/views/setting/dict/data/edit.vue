@@ -42,7 +42,14 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="备注" prop="remark">
-                    <el-input v-model="formData.remark" type="textarea" rows="4" clearable />
+                    <el-input
+                        v-model="formData.remark"
+                        type="textarea"
+                        :autosize="{ minRows: 4, maxRows: 6 }"
+                        clearable
+                        maxlength="200"
+                        show-word-limit
+                    />
                 </el-form-item>
             </el-form>
         </popup>

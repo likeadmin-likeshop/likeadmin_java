@@ -18,6 +18,10 @@
                                 <el-input
                                     v-model="formData.title"
                                     placeholder="请输入文章标题"
+                                    type="textarea"
+                                    :autosize="{ minRows: 3, maxRows: 6 }"
+                                    maxlength="200"
+                                    show-word-limit
                                     clearable
                                 />
                             </div>
@@ -42,6 +46,10 @@
                                 <el-input
                                     v-model="formData.intro"
                                     placeholder="请输入文章简介"
+                                    type="textarea"
+                                    :autosize="{ minRows: 3, maxRows: 6 }"
+                                    :maxlength="200"
+                                    show-word-limit
                                     clearable
                                 />
                             </div>
@@ -50,8 +58,10 @@
                             <div class="w-80">
                                 <el-input
                                     type="textarea"
-                                    :rows="6"
+                                    :autosize="{ minRows: 6, maxRows: 6 }"
                                     v-model="formData.summary"
+                                    maxlength="200"
+                                    show-word-limit
                                     clearable
                                 />
                             </div>
