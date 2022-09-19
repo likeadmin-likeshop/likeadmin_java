@@ -6,14 +6,11 @@ import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.common.config.GlobalConfig;
-import com.mdd.common.entity.server.Sys;
-import com.mdd.common.entity.system.SystemConfig;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
 import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.enums.NoticeEnum;
 import com.mdd.common.exception.OperateException;
-import com.mdd.common.mapper.system.SystemConfigMapper;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.utils.*;
@@ -27,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
