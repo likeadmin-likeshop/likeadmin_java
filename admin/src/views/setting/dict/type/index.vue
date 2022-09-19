@@ -80,20 +80,17 @@
                                 >
                                     编辑
                                 </el-button>
-                                <el-button
-                                    v-perms="['setting:dict:data:list']"
-                                    type="primary"
-                                    link
-                                    @click="
-                                        $router.push({
+                                <el-button v-perms="['setting:dict:data:list']" type="primary" link>
+                                    <router-link
+                                        :to="{
                                             path: getRoutePath('setting:dict:data:list'),
                                             query: {
                                                 type: row.dictType
                                             }
-                                        })
-                                    "
-                                >
-                                    数据管理
+                                        }"
+                                    >
+                                        数据管理
+                                    </router-link>
                                 </el-button>
                                 <el-button
                                     v-perms="['setting:dict:type:del']"
