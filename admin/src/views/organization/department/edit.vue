@@ -71,7 +71,7 @@ const formData = reactive({
 })
 const checkMobile = (rule: any, value: any, callback: any) => {
     if (!value) {
-        callback()
+        return callback()
     } else {
         const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
         console.log(reg.test(value))
@@ -97,7 +97,19 @@ const formRules = {
             trigger: ['blur']
         }
     ],
+    duty: [
+        {
+            required: true,
+            message: '请输入负责人姓名',
+            trigger: ['blur']
+        }
+    ],
     mobile: [
+        {
+            required: true,
+            message: '请输入联系电话',
+            trigger: ['blur']
+        },
         {
             validator: checkMobile,
             trigger: ['blur']
