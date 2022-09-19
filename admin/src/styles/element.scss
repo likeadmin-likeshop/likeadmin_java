@@ -115,6 +115,9 @@
     .el-image__error {
         font-size: 12px;
     }
+    .el-tabs__nav-wrap::after {
+        height: 1px;
+    }
 }
 @media (max-width: 768px) {
     .el-pagination > .el-pagination__jump {

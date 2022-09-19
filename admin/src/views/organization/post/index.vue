@@ -51,7 +51,7 @@
                     show-overflow-tooltip
                 />
                 <el-table-column label="添加时间" prop="createTime" min-width="180" />
-                <el-table-column label="部门状态" prop="isStop" min-width="100">
+                <el-table-column label="岗位状态" prop="isStop" min-width="100">
                     <template #default="{ row }">
                         <el-tag class="ml-2" :type="row.isStop ? 'danger' : ''">
                             {{ row.isStop ? '停用' : '正常' }}
