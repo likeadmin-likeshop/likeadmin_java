@@ -228,7 +228,7 @@
                     </el-table-column>
                     <el-table-column label="图片" width="60">
                         <template #default="{ row }">
-                            <file-item :uri="row.uri" file-size="40px"></file-item>
+                            <file-item :uri="row.uri" file-size="40px" :type="type"></file-item>
                         </template>
                     </el-table-column>
                     <el-table-column label="名称" min-width="100" show-overflow-tooltip>
