@@ -20,11 +20,6 @@
                 <div class="flex-1 w-3/5">
                     <el-button type="primary" class="mb-4" @click="handleAdd">添加</el-button>
                     <el-table size="large" :data="formData.list">
-                        <el-table-column label="ID" prop="id" width="120">
-                            <template #default="{ $index }">
-                                {{ $index }}
-                            </template>
-                        </el-table-column>
                         <el-table-column label="关键词" prop="describe" min-width="160">
                             <template #default="{ row }">
                                 <el-input v-model="row.name" clearable />
