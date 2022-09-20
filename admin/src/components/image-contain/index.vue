@@ -20,7 +20,11 @@ const props = defineProps({
         type: [String, Number],
         default: 0
     },
-    ...imageProps
+    ...imageProps,
+    hideOnClickModal: {
+        type: Boolean,
+        default: true
+    }
 })
 
 const styles = computed<CSSProperties>(() => {
