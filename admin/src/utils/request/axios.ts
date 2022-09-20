@@ -71,7 +71,7 @@ export class Axios {
                     this.removeCancelToken(err.config?.url!)
                 }
 
-                if (err.code == AxiosError.ECONNABORTED) {
+                if (err.code == AxiosError.ECONNABORTED || err.code == AxiosError.ERR_NETWORK) {
                     setTimeout(() => {
                         console.log(err)
                         this.retryRequest(err)
