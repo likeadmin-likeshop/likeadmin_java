@@ -88,7 +88,6 @@ export function objectToQuery(params: Record<string, any>): string {
                     }
                 }
             } else {
-                console.log(part + encodeURIComponent(value), '####')
                 query += part + encodeURIComponent(value) + '&'
             }
         }
