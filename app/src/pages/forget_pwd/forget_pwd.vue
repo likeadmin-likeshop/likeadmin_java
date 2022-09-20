@@ -30,7 +30,9 @@
                             @change="codeChange"
                             change-text="x秒"
                         />
-                        {{ codeTips }}
+                        <text :class="formData.mobile ? 'text-primary' : 'text-muted'">
+                            {{ codeTips }}
+                        </text>
                     </view>
                 </u-form-item>
                 <u-form-item label="新密码" borderBottom>
@@ -79,7 +81,7 @@ const codeChange = (text: string) => {
 }
 
 const sendSms = async () => {
-    if (!formData.mobile) return uni.$u.toast('请输入手机号码')
+    if (!formData.mobile) return
     if (uCodeRef.value?.canGetCode) {
         await smsSend({
             scene: SMSEnum.FIND_PASSWORD,
