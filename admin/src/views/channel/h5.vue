@@ -32,7 +32,7 @@
         </footer-btns>
     </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="h5Config">
 import { getH5Config, setH5Config } from '@/api/channel/h5'
 import feedback from '@/utils/feedback'
 

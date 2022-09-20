@@ -132,7 +132,7 @@
         </footer-btns>
     </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="decorationTabbar">
 import { getDecorateTabbar, setDecorateTabbar } from '@/api/decoration'
 import feedback from '@/utils/feedback'
 import Draggable from 'vuedraggable'

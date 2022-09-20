@@ -61,7 +61,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="journal">
 import { systemLogLists } from '@/api/setting/system'
 import { usePaging } from '@/hooks/usePaging'
 

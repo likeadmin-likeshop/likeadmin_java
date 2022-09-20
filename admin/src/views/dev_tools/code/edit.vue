@@ -274,14 +274,14 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="tableEdit">
 import { generateEdit, tableDetail } from '@/api/tools/code'
 import { dictTypeAll } from '@/api/setting/dict'
 import type { FormInstance } from 'element-plus'
 import feedback from '@/utils/feedback'
 import { menuLists } from '@/api/perms/menu'
 import { useDictOptions } from '@/hooks/useDictOptions'
-
+import useMultipleTabs from '@/hooks/useMultipleTabs'
 enum GenTpl {
     CRUD = 'crud',
     TREE = 'tree'
@@ -294,6 +294,7 @@ enum GenType {
 
 const route = useRoute()
 const router = useRouter()
+const { removeTab } = useMultipleTabs()
 const activeName = ref('column')
 const formData = reactive({
     base: {
@@ -365,6 +366,7 @@ const handleSave = async () => {
         const { base, column, gen } = formData
         await generateEdit({ ...base, ...gen, column })
         feedback.msgSuccess('操作成功')
+        removeTab()
         router.back()
     } catch (error: any) {
         for (const err in error) {

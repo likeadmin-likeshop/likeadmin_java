@@ -86,7 +86,7 @@
         <edit-popup v-if="showEdit" ref="editRef" @success="getLists" @close="showEdit = false" />
     </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="post">
 import { postDelete, postLists } from '@/api/org/post'
 import { usePaging } from '@/hooks/usePaging'
 import feedback from '@/utils/feedback'

@@ -30,7 +30,7 @@
     </footer-btns>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" naem="webProtocol">
 import { getProtocol, setProtocol } from '@/api/setting/website'
 import feedback from '@/utils/feedback'
 

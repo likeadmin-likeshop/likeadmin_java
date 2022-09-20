@@ -19,8 +19,8 @@
                                     v-model="formData.title"
                                     placeholder="请输入文章标题"
                                     type="textarea"
-                                    :autosize="{ minRows: 3, maxRows: 6 }"
-                                    maxlength="200"
+                                    :autosize="{ minRows: 3, maxRows: 3 }"
+                                    maxlength="64"
                                     show-word-limit
                                     clearable
                                 />
@@ -111,11 +111,12 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="articleListsEdit">
 import type { FormInstance } from 'element-plus'
 import feedback from '@/utils/feedback'
 import { useDictOptions } from '@/hooks/useDictOptions'
 import { articleCateAll, articleDetail, articleEdit, articleAdd } from '@/api/article'
+import useMultipleTabs from '@/hooks/useMultipleTabs'
 
 const route = useRoute()
 const router = useRouter()
@@ -133,6 +134,7 @@ const formData = reactive({
     summary: ''
 })
 
+const { removeTab } = useMultipleTabs()
 const formRef = shallowRef<FormInstance>()
 const rules = reactive({
     title: [{ required: true, message: '请输入文章标题', trigger: 'blur' }],
@@ -165,6 +167,7 @@ const handleSave = async () => {
         await articleAdd(formData)
     }
     feedback.msgSuccess('操作成功')
+    removeTab()
     router.back()
 }
 

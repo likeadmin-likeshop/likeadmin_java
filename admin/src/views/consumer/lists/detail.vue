@@ -75,7 +75,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="consumerDetail">
 import type { FormInstance } from 'element-plus'
 import { getUserDetail, userEdit } from '@/api/consumer'
 import feedback from '@/utils/feedback'

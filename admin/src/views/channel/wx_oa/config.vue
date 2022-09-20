@@ -156,7 +156,7 @@
         </footer-btns>
     </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="wxOaConfig">
 import { getOaConfig, setOaConfig } from '@/api/channel/wx_oa'
 import feedback from '@/utils/feedback'
 import { useClipboard } from '@vueuse/core'

@@ -59,7 +59,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="webInformation">
 import { getWebsite, setWebsite } from '@/api/setting/website'
 import useAppStore from '@/stores/modules/app'
 import feedback from '@/utils/feedback'

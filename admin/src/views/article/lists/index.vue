@@ -117,7 +117,7 @@
         </el-card>
     </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="articleLists">
 import { articleLists, articleDelete, articleStatus, articleCateAll } from '@/api/article'
 import { useDictOptions } from '@/hooks/useDictOptions'
 import { usePaging } from '@/hooks/usePaging'
@@ -158,6 +158,10 @@ const handleDelete = async (id: number) => {
     feedback.msgSuccess('删除成功')
     getLists()
 }
+
+onActivated(() => {
+    getLists()
+})
 
 getLists()
 </script>

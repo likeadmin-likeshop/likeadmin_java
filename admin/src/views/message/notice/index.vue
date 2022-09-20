@@ -47,7 +47,7 @@
         </el-card>
     </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="notice">
 import { noticeLists } from '@/api/message'
 import { getRoutePath } from '@/router'
 
@@ -86,6 +86,10 @@ const getLists = async () => {
         state.loading = false
     }
 }
+
+onActivated(() => {
+    getLists()
+})
 
 getLists()
 </script>

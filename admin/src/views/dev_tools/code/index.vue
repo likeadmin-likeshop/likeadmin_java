@@ -138,7 +138,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="codeGenerate">
 import {
     generateTable,
     syncColumn,
@@ -227,6 +227,10 @@ const handleCommand = (command: any, row: any) => {
             handleDelete([row.id])
     }
 }
+
+onActivated(() => {
+    getLists()
+})
 
 getLists()
 </script>

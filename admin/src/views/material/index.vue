@@ -23,7 +23,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="materialCenter">
 const tabsMap = [
     {
         type: 'image',

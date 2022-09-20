@@ -113,7 +113,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="dictType">
 import { dictTypeDelete, dictTypeLists } from '@/api/setting/dict'
 import { usePaging } from '@/hooks/usePaging'
 import { getRoutePath } from '@/router'

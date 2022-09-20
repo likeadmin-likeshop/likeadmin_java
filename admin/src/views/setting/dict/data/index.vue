@@ -104,7 +104,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="dictData">
 import { dictDataDelete, dictDataLists, dictTypeAll } from '@/api/setting/dict'
 import { useDictOptions } from '@/hooks/useDictOptions'
 import { usePaging } from '@/hooks/usePaging'
