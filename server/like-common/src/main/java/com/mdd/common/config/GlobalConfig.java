@@ -36,7 +36,7 @@ public class GlobalConfig {
     public static Integer uploadImageSize = 1024 * 1024 * 10;
 
     // 上传视频限制
-    public static Integer uploadVideoSize = 1024 * 1024 * 10;
+    public static Integer uploadVideoSize = 1024 * 1024 * 30;
 
     // 上传图片扩展
     public static String[] uploadImageExt = new String[] {"png", "jpg", "jpeg", "gif", "ico", "bmp"};

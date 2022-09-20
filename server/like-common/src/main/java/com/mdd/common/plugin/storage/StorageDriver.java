@@ -115,14 +115,14 @@ public class StorageDriver {
                 throw new OperateException("不被支持的扩展:" + fileExt);
             }
             if (fileSize > GlobalConfig.uploadImageSize) {
-                throw new OperateException("上传图片不能超出限制:" + GlobalConfig.uploadImageSize);
+                throw new OperateException("上传图片不能超出限制:" + (GlobalConfig.uploadImageSize / 1024 / 1024) + "M");
             }
         } else if (type == 20) {
             if (!Arrays.asList(GlobalConfig.uploadVideoExt).contains(fileExt)) {
                 throw new OperateException("不被支持的扩展:" + fileExt);
             }
             if (fileSize > GlobalConfig.uploadVideoSize) {
-                throw new OperateException("上传视频不能超出限制:" + GlobalConfig.uploadImageSize);
+                throw new OperateException("上传视频不能超出限制:" + (GlobalConfig.uploadVideoSize / 1024 / 1024) + "M");
             }
         }
     }
