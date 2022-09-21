@@ -200,6 +200,13 @@ public class ArticleCategoryServiceImpl implements IArticleCategoryService {
 
         Assert.notNull(model, "分类不存在");
 
+        Article article = articleMapper.selectOne(new QueryWrapper<Article>()
+                .eq("cid", id)
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        Assert.isNull(article, "当前分类已被文章使用,请先移除!");
+
         model.setIsDelete(1);
         model.setDeleteTime(TimeUtil.timestamp());
         articleCategoryMapper.updateById(model);
