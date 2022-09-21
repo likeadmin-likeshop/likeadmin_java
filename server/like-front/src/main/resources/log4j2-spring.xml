@@ -6,8 +6,8 @@
     <!-- 变量配置 -->
     <Properties>
         <property name="LOG_PATTERN" value="%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
-        <property name="FILE_PATH" value="/www/wwwroot/logs/like-front" />
-        <property name="FILE_NAME" value="admin-log4j2" />
+        <property name="FILE_PATH" value="/www/logs/likeadmin-java/front" />
+        <property name="FILE_NAME" value="front-log4j2" />
     </Properties>
 
     <appenders>

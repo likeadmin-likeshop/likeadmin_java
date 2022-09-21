@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+ <trees>
+     <tree path="/like-admin" title="后台模块"/>
+     <tree path="/like-common" title="公共模块"/>
+     <tree path="/like-front" title="前台模块"/>
+     <tree path="/like-generator" title="生成器"/>
+     <tree path="/like-common/src/main/java/com/mdd/common/config" title="公共配置"/>
+     <tree path="/like-common/src/main/java/com/mdd/common/core" title="核心代码"/>
+     <tree path="/like-common/src/main/java/com/mdd/common/entity" title="模型实体"/>
+     <tree path="/like-common/src/main/java/com/mdd/common/enums" title="公共枚举"/>
+     <tree path="/like-common/src/main/java/com/mdd/common/exception" title="公共异常"/>
+     <tree path="/like-common/src/main/java/com/mdd/common/mapper" title="模型映射"/>
+     <tree path="/like-common/src/main/java/com/mdd/common/plugin" title="公共插件"/>
+    <tree path="/like-common/src/main/java/com/mdd/common/utils" title="通用工具"/>
+    <tree path="/like-common/src/main/java/com/mdd/common/validator" title="扩展验证"/>
+    <tree path="/like-common/src/main/java/com/mdd/common/validator/IDMustValidator.java" title=""
+          extension="java"/>
+    <tree path="/like-admin/src/main/java/com/mdd/admin/config" title="配置层"/>
+    <tree path="/like-admin/src/main/java/com/mdd/admin/controller" title="控制层"/>
+    <tree path="/like-admin/src/main/java/com/mdd/admin/service" title="服务层"/>
+    <tree path="/like-admin/src/main/java/com/mdd/admin/validate" title="验证层"/>
+    <tree path="/like-admin/src/main/java/com/mdd/admin/vo" title="传输层"/>
+    <tree path="/like-admin/src/main/java/com/mdd/admin/LikeAdminApplication.java" title="启动器" extension="java"/>
+    <tree path="/like-admin/src/main/java/com/mdd/admin/LikeAdminInterceptor.java" title="拦截器" extension="java"/>
+    <tree path="/like-admin/src/main/java/com/mdd/admin/LikeAdminThreadLocal.java" title="线程" extension="java"/>
+    <tree path="/like-front/src/main/java/com/mdd/front/config" title="配置层"/>
+    <tree path="/like-front/src/main/java/com/mdd/front/controller" title="控制层"/>
+    <tree path="/like-front/src/main/java/com/mdd/front/service" title="服务层"/>
+    <tree path="/like-front/src/main/java/com/mdd/front/validate" title="验证层"/>
+    <tree path="/like-front/src/main/java/com/mdd/front/vo" title="传输层"/>
+    <tree path="/like-front/src/main/java/com/mdd/front/LikeFrontApplication.java" title="启动器" extension="java"/>
+    <tree path="/like-front/src/main/java/com/mdd/front/LikeFrontInterceptor.java" title="拦截器" extension="java"/>
+    <tree path="/like-front/src/main/java/com/mdd/front/LikeFrontThreadLocal.java" title="线程" extension="java"/>
+</trees>

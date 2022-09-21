@@ -73,7 +73,11 @@
                         </div>
                     </div>
                 </el-form-item>
-                <el-form-item label="选中菜单" prop="p" v-if="formData.menuType == MenuEnum.MENU">
+                <el-form-item
+                    label="选中菜单"
+                    prop="selected"
+                    v-if="formData.menuType == MenuEnum.MENU"
+                >
                     <div class="flex-1">
                         <el-input
                             v-model="formData.selected"
@@ -116,20 +120,20 @@
                         </div>
                     </div>
                 </el-form-item>
-                <!-- <el-form-item
-                        v-if="formData.menuType == MenuEnum.MENU"
-                        label="是否缓存"
-                        prop="isCache"
-                        required
-                    >
-                        <div>
-                            <el-radio-group v-model="formData.isCache">
-                                <el-radio :label="1">缓存</el-radio>
-                                <el-radio :label="0">不缓存</el-radio>
-                            </el-radio-group>
-                            <div class="form-tips">选择缓存则会被`keep-alive`缓存</div>
-                        </div>
-                    </el-form-item> -->
+                <el-form-item
+                    v-if="formData.menuType == MenuEnum.MENU"
+                    label="是否缓存"
+                    prop="isCache"
+                    required
+                >
+                    <div>
+                        <el-radio-group v-model="formData.isCache">
+                            <el-radio :label="1">缓存</el-radio>
+                            <el-radio :label="0">不缓存</el-radio>
+                        </el-radio-group>
+                        <div class="form-tips">选择缓存则会被`keep-alive`缓存</div>
+                    </div>
+                </el-form-item>
                 <el-form-item
                     v-if="formData.menuType != MenuEnum.BUTTON"
                     label="是否显示"
@@ -220,7 +224,7 @@ const formData = reactive({
     //路由参数
     params: '',
     //是否缓存 0=否， 1=是
-    isCache: 0,
+    isCache: 1,
     //是否显示 0=否， 1=是
     isShow: 1,
     //是否禁用 0=否， 1=是
@@ -259,15 +263,12 @@ const formRules = {
 }
 const menuOptions = ref<any[]>([])
 
-const pageOptions = ref<any[]>([])
-
 const getMenu = async () => {
     const data: any = await menuLists()
-    const menu = { id: 0, menuName: '顶级', children: [] }
-    pageOptions.value = arrayToTree(
+    const menu: any = { id: 0, menuName: '顶级', children: [] }
+    menu.children = arrayToTree(
         treeToArray(data).filter((item) => item.menuType != MenuEnum.BUTTON)
     )
-    menu.children = data
     menuOptions.value.push(menu)
 }
 

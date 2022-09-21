@@ -1,5 +1,6 @@
 package com.mdd.admin.validate.setting;
 
+import com.mdd.admin.validate.BaseParam;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IntegerContains;
 import lombok.Data;
@@ -9,7 +10,6 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -18,13 +18,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class DictDataParam implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    public interface create{}
-    public interface update{}
-    public interface delete{}
+public class DictDataParam extends BaseParam {
 
     @IDMust(message = "id参数必传且需大于0", groups = {update.class})
     private Integer id;

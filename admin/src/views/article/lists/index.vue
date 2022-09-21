@@ -54,10 +54,11 @@
                 <el-table-column label="ID" prop="id" min-width="80" />
                 <el-table-column label="封面" min-width="100">
                     <template #default="{ row }">
-                        <el-image
+                        <image-contain
                             v-if="row.image"
                             :src="row.image"
-                            class="w-[60px] h-[45px]"
+                            :width="60"
+                            :height="45"
                             :preview-src-list="[row.image]"
                             preview-teleported
                             fit="contain"
@@ -117,7 +118,7 @@
         </el-card>
     </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="articleLists">
 import { articleLists, articleDelete, articleStatus, articleCateAll } from '@/api/article'
 import { useDictOptions } from '@/hooks/useDictOptions'
 import { usePaging } from '@/hooks/usePaging'
@@ -158,6 +159,10 @@ const handleDelete = async (id: number) => {
     feedback.msgSuccess('删除成功')
     getLists()
 }
+
+onActivated(() => {
+    getLists()
+})
 
 getLists()
 </script>

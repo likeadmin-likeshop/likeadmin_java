@@ -226,14 +226,16 @@
                             <el-checkbox :modelValue="isSelect(row.id)" @change="selectFile(row)" />
                         </template>
                     </el-table-column>
-                    <el-table-column label="图片" width="60">
+                    <el-table-column label="图片" width="100">
                         <template #default="{ row }">
-                            <file-item :uri="row.uri" file-size="40px"></file-item>
+                            <file-item :uri="row.uri" file-size="50px" :type="type"></file-item>
                         </template>
                     </el-table-column>
                     <el-table-column label="名称" min-width="100" show-overflow-tooltip>
                         <template #default="{ row }">
-                            <el-link @click.stop="handlePreview(row.uri)">{{ row.name }}</el-link>
+                            <el-link @click.stop="handlePreview(row.uri)" :underline="false">
+                                {{ row.name }}
+                            </el-link>
                         </template>
                     </el-table-column>
                     <el-table-column prop="createTime" label="上传时间" min-width="100" />

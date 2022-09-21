@@ -35,7 +35,7 @@
         </footer-btns>
     </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="wxDevConfig">
 import { getWxDevConfig, setWxDevConfig } from '@/api/channel/wx_dev'
 import feedback from '@/utils/feedback'
 

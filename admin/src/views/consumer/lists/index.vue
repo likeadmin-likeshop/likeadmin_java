@@ -70,7 +70,7 @@
         </el-card>
     </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="consumerLists">
 import { usePaging } from '@/hooks/usePaging'
 import { getRoutePath } from '@/router'
 import { getUserList } from '@/api/consumer'
@@ -85,6 +85,9 @@ const queryParams = reactive({
 const { pager, getLists, resetPage, resetParams } = usePaging({
     fetchFun: getUserList,
     params: queryParams
+})
+onActivated(() => {
+    getLists()
 })
 
 getLists()

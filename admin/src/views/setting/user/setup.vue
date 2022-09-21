@@ -25,7 +25,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="userSetup">
 import { getUserSetup, setUserSetup } from '@/api/setting/user'
 import feedback from '@/utils/feedback'
 // import type { FormInstance } from 'element-plus'

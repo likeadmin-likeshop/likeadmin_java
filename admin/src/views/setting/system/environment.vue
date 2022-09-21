@@ -113,7 +113,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="environment">
 import { systemInfo } from '@/api/setting/system'
 const loading = ref(false)
 const info = ref({

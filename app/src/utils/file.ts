@@ -1,5 +1,5 @@
 export async function saveImageToPhotosAlbum(url: string) {
-    if (!url) return uni.$u.$toast('图片不存在')
+    if (!url) return uni.$u.toast('图片不存在')
     //#ifdef H5
     uni.$u.$toast('长按图片保存')
     //#endif
@@ -13,9 +13,6 @@ export async function saveImageToPhotosAlbum(url: string) {
             icon: 'success'
         })
     } catch (error: any) {
-        uni.showToast({
-            title: error.errMsg || '保存失败',
-            icon: 'none'
-        })
+        uni.$u.toast(error.errMsg || '保存失败')
     }
 }

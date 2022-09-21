@@ -17,9 +17,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class RegParam implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class RegParam extends BaseParam {
 
     @NotNull(message = "username参数缺失")
     @NotEmpty(message = "账号不能为空")

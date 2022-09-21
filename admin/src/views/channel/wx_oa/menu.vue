@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" name="wxOaMenu">
 import OaPhone from './menu_com/oa-phone.vue'
 import OaAttr from './menu_com/oa-attr.vue'
 import { useMenuOa } from './menu_com/useMenuOa'

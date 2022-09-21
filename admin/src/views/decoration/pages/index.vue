@@ -12,7 +12,7 @@
         </footer-btns>
     </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="decorationPages">
 import Menu from '../component/pages/menu.vue'
 import Preview from '../component/pages/preview.vue'
 import AttrSetting from '../component/pages/attr-setting.vue'

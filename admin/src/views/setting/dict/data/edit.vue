@@ -31,7 +31,7 @@
                 </el-form-item>
                 <el-form-item label="排序" prop="sort">
                     <div>
-                        <el-input-number v-model="formData.sort" />
+                        <el-input-number v-model="formData.sort" :min="0" />
                         <div class="form-tips">数值越大越排前</div>
                     </div>
                 </el-form-item>
@@ -42,7 +42,14 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="备注" prop="remark">
-                    <el-input v-model="formData.remark" type="textarea" rows="4" clearable />
+                    <el-input
+                        v-model="formData.remark"
+                        type="textarea"
+                        :autosize="{ minRows: 4, maxRows: 6 }"
+                        clearable
+                        maxlength="200"
+                        show-word-limit
+                    />
                 </el-form-item>
             </el-form>
         </popup>

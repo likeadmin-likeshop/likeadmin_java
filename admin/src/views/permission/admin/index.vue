@@ -100,7 +100,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="admin">
 import { adminLists, adminDelete, adminStatus } from '@/api/perms/admin'
 import { roleAll } from '@/api/perms/role'
 import { useDictOptions } from '@/hooks/useDictOptions'

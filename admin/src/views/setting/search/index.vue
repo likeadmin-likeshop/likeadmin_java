@@ -16,23 +16,23 @@
         </el-card>
 
         <el-card class="!border-none mt-4" shadow="never">
-            <div class="flex">
-                <div class="flex-1 w-3/5">
-                    <el-button type="primary" class="mb-4" @click="handleAdd">添加</el-button>
+            <div class="lg:flex">
+                <div class="flex-1 min-w-0">
+                    <el-button type="primary" class="mb-4" @click="handleAdd">
+                        <template #icon>
+                            <icon name="el-icon-Plus" />
+                        </template>
+                        添加
+                    </el-button>
                     <el-table size="large" :data="formData.list">
-                        <el-table-column label="ID" prop="id" width="120">
-                            <template #default="{ $index }">
-                                {{ $index }}
+                        <el-table-column label="关键词" prop="describe" min-width="200">
+                            <template #default="{ row }">
+                                <el-input v-model="row.name" clearable maxlength="30" />
                             </template>
                         </el-table-column>
-                        <el-table-column label="关键词" prop="describe" min-width="160">
+                        <el-table-column label="排序" prop="describe" min-width="80">
                             <template #default="{ row }">
-                                <el-input v-model="row.name" clearable />
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="排序" prop="describe" min-width="160">
-                            <template #default="{ row }">
-                                <el-input v-model="row.sort" type="number" />
+                                <el-input v-model="row.sort" type="number" clearable />
                             </template>
                         </el-table-column>
                         <el-table-column label="操作" min-width="80" fixed="right">
@@ -50,8 +50,8 @@
                     </el-table>
                 </div>
 
-                <div class="w-2/5 hot-search-phone">
-                    <span class="mb-4">- 热搜预览图 -</span>
+                <div class="flex-none hot-search-phone mt-4 lg:mt-0 lg:ml-4">
+                    <div class="mb-4 text-center">- 热搜预览图 -</div>
                     <div class="hot-search-phone-content">
                         <!-- 搜索框 -->
                         <div class="search-com">
@@ -63,7 +63,12 @@
                         <!-- 热门搜索 -->
                         <div class="hot-search-title">热门搜索</div>
                         <div class="hot-search-text">
-                            <span v-for="(text, index) in list" :key="index">{{ text.name }}</span>
+                            <span
+                                class="truncate max-w-full"
+                                v-for="(text, index) in list"
+                                :key="index"
+                                >{{ text.name }}</span
+                            >
                         </div>
                     </div>
                 </div>
@@ -76,7 +81,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="search">
 import { getSearch, setSearch } from '@/api/setting/search'
 import type { Search } from '@/api/setting/search'
 import feedback from '@/utils/feedback'
@@ -130,12 +135,10 @@ getData()
 <style lang="scss" scoped>
 .hot-search {
     .hot-search-phone {
-        margin-left: 20px;
-        @apply flex flex-col items-center;
-
+        width: 300px;
         &-content {
-            width: 280px;
-            height: 494px;
+            width: 100%;
+            height: 530px;
             padding: 12px 12px;
             border-radius: 10px;
             border: 1px solid #e6e6e6;

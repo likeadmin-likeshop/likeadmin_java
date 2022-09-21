@@ -140,7 +140,7 @@
         </footer-btns>
     </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="weappConfig">
 import { getWeappConfig, setWeappConfig } from '@/api/channel/weapp'
 import feedback from '@/utils/feedback'
 

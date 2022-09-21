@@ -136,7 +136,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="cache">
 import { systemCache } from '@/api/setting/system'
 import vCharts from 'vue-echarts'
 import { reactive } from 'vue'

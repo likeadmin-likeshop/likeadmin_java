@@ -91,7 +91,7 @@
         <edit-popup v-if="showEdit" ref="editRef" @success="getLists" @close="showEdit = false" />
     </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="department">
 import type { ElTable, FormInstance } from 'element-plus'
 import EditPopup from './edit.vue'
 import { deptDelete, deptLists } from '@/api/org/department'

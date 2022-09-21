@@ -68,7 +68,11 @@
                                 <el-tag v-else type="danger">停用</el-tag>
                             </template>
                         </el-table-column>
-                        <el-table-column label="备注" prop="dictRemark" />
+                        <el-table-column
+                            label="备注"
+                            prop="dictRemark"
+                            show-tooltip-when-overflow
+                        />
                         <el-table-column label="创建时间" prop="createTime" min-width="180" />
                         <el-table-column label="操作" width="190" fixed="right">
                             <template #default="{ row }">
@@ -80,20 +84,17 @@
                                 >
                                     编辑
                                 </el-button>
-                                <el-button
-                                    v-perms="['setting:dict:data:list']"
-                                    type="primary"
-                                    link
-                                    @click="
-                                        $router.push({
+                                <el-button v-perms="['setting:dict:data:list']" type="primary" link>
+                                    <router-link
+                                        :to="{
                                             path: getRoutePath('setting:dict:data:list'),
                                             query: {
                                                 type: row.dictType
                                             }
-                                        })
-                                    "
-                                >
-                                    数据管理
+                                        }"
+                                    >
+                                        数据管理
+                                    </router-link>
                                 </el-button>
                                 <el-button
                                     v-perms="['setting:dict:type:del']"
@@ -116,7 +117,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="dictType">
 import { dictTypeDelete, dictTypeLists } from '@/api/setting/dict'
 import { usePaging } from '@/hooks/usePaging'
 import { getRoutePath } from '@/router'

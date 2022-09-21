@@ -6,7 +6,7 @@
     <!-- 变量配置 -->
     <Properties>
         <property name="LOG_PATTERN" value="%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
-        <property name="FILE_PATH" value="/www/like-admin/logs" />
+        <property name="FILE_PATH" value="/www/logs/likeadmin-java/admin" />
         <property name="FILE_NAME" value="admin-log4j2" />
     </Properties>
 

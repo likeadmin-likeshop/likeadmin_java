@@ -245,9 +245,9 @@ export default {
                 if(pagePath == this.pageUrl || pagePath == "/" + this.pageUrl) return
                 // 发出事件和修改v-model绑定的值
 			    this.$emit("change", index);
-				uni.switchTab({
-					url: pagePath
-				});
+				// uni.switchTab({
+				// 	url: pagePath
+				// });
 			} else {
 				// 如果配置了papgePath属性，将不会双向绑定v-model传入的value值
 				// 因为这个模式下，不再需要v-model绑定的value值了，而是通过getCurrentPages()适配

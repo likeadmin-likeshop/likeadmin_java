@@ -11,8 +11,8 @@ export function getToken() {
 export function clearAuthInfo() {
     const userStore = useUserStore()
     const tabsStore = useTabsStore()
-    userStore.resetState()
-    tabsStore.resetState()
+    userStore.$reset()
+    tabsStore.$reset()
     cache.remove(TOKEN_KEY)
     resetRouter()
 }

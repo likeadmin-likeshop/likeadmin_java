@@ -12,7 +12,7 @@ public class GlobalConfig {
     public static Boolean isAddressEnabled = false;
 
     // 当前代码版本
-    public static String version = "v1.3.0";
+    public static String version = "v1.3.1";
 
     // 系统加密字符
     public static String secret = "UVTIyzCy";
@@ -30,13 +30,13 @@ public class GlobalConfig {
     public static String publicPrefix = "api/uploads";
 
     // 上传映射目录
-    public static String uploadDirectory = "/www/like-admin/uploads/";
+    public static String uploadDirectory = "/www/uploads/likeadmin-java/";
 
     // 上传图片限制
     public static Integer uploadImageSize = 1024 * 1024 * 10;
 
     // 上传视频限制
-    public static Integer uploadVideoSize = 1024 * 1024 * 10;
+    public static Integer uploadVideoSize = 1024 * 1024 * 30;
 
     // 上传图片扩展
     public static String[] uploadImageExt = new String[] {"png", "jpg", "jpeg", "gif", "ico", "bmp"};

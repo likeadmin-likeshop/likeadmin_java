@@ -65,7 +65,6 @@ import theme_light from '@/assets/images/theme_white.png'
 import theme_dark from '@/assets/images/theme_black.png'
 
 const settingStore = useSettingStore()
-
 const predefineColors = ref(['#409EFF', '#28C76F', '#EA5455', '#FF9F43', '#01CFE8', '#4A5DFF'])
 const sideThemeList = [
     {

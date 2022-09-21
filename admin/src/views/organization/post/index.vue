@@ -51,7 +51,7 @@
                     show-overflow-tooltip
                 />
                 <el-table-column label="添加时间" prop="createTime" min-width="180" />
-                <el-table-column label="部门状态" prop="isStop" min-width="100">
+                <el-table-column label="岗位状态" prop="isStop" min-width="100">
                     <template #default="{ row }">
                         <el-tag class="ml-2" :type="row.isStop ? 'danger' : ''">
                             {{ row.isStop ? '停用' : '正常' }}
@@ -86,7 +86,7 @@
         <edit-popup v-if="showEdit" ref="editRef" @success="getLists" @close="showEdit = false" />
     </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="post">
 import { postDelete, postLists } from '@/api/org/post'
 import { usePaging } from '@/hooks/usePaging'
 import feedback from '@/utils/feedback'

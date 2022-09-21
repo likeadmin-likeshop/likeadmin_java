@@ -50,7 +50,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="webFilling">
 import { getCopyright, setCopyright } from '@/api/setting/website'
 import feedback from '@/utils/feedback'
 // 表单数据

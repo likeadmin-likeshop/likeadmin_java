@@ -9,12 +9,12 @@ server:
 # 框架配置
 spring:
   profiles:
-    active: pro
+    active: dev
   mvc:
     static-path-pattern: /api/static/**
   # 数据源配置
   datasource:
-    url: jdbc:mysql://localhost:3306/local_admin_java?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
+    url: jdbc:mysql://localhost:3306/likeadmin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
     type: com.zaxxer.hikari.HikariDataSource # 数据源类型
     driver-class-name: com.mysql.jdbc.Driver # MySql的驱动
     username: root # 数据库账号
@@ -52,8 +52,6 @@ spring:
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml # 映射文件路径
   typeAliasesPackage: com.mdd.**.mapper
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
     db-config:

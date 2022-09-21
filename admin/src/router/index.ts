@@ -86,8 +86,8 @@ export function findFirstValidRoute(routes: RouteRecordRaw[]): string | undefine
 }
 //通过权限字符查询路由路径
 export function getRoutePath(perms: string) {
-    const router = useRouter()
-    return router.getRoutes().find((item) => item.meta?.perms == perms)?.path || ''
+    const routerObj = useRouter() || router
+    return routerObj.getRoutes().find((item) => item.meta?.perms == perms)?.path || ''
 }
 
 // 重置路由

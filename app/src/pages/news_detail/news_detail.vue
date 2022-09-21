@@ -31,8 +31,8 @@
         <view class="panel-btn flex items-center px-[34rpx]" @click="handleAddCollect(newsData.id)">
             <u-icon
                 :name="newsData.collect ? 'star-fill' : 'star'"
-                size="34"
-                :color="newsData.collect ? '#4173ff' : '#333'"
+                size="40"
+                :color="newsData.collect ? '#F7BA47' : '#333'"
             ></u-icon>
             <text class="ml-[10rpx]">收藏</text>
         </view>
@@ -55,7 +55,7 @@ const handleAddCollect = async (articleId: number) => {
     try {
         if (newsData.value.collect) {
             await cancelCollect({ articleId })
-            uni.$u.toast('取消收藏成功')
+            uni.$u.toast('已取消收藏')
         } else {
             await addCollect({ articleId })
             uni.$u.toast('收藏成功')

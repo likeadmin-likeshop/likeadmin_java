@@ -1,5 +1,6 @@
 package com.mdd.admin.validate.system;
 
+import com.mdd.admin.validate.BaseParam;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IntegerContains;
 import lombok.Data;
@@ -16,11 +17,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SystemAuthPostParam {
-
-    public interface create{}
-    public interface update{}
-    public interface delete{}
+public class SystemAuthPostParam extends BaseParam {
 
     @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
     private Integer id;

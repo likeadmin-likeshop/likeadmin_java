@@ -18,6 +18,7 @@
                                 <el-input
                                     v-model="formData.base.tableName"
                                     placeholder="请输入表名称"
+                                    clearable
                                 />
                             </div>
                         </el-form-item>
@@ -26,6 +27,7 @@
                                 <el-input
                                     v-model="formData.base.tableComment"
                                     placeholder="请输入表描述"
+                                    clearable
                                 />
                             </div>
                         </el-form-item>
@@ -34,6 +36,7 @@
                                 <el-input
                                     v-model="formData.base.entityName"
                                     placeholder="请输入实体类名称"
+                                    clearable
                                 />
                             </div>
                         </el-form-item>
@@ -43,6 +46,7 @@
                                 <el-input
                                     v-model="formData.base.authorName"
                                     placeholder="请输入作者"
+                                    clearable
                                 />
                             </div>
                         </el-form-item>
@@ -50,9 +54,12 @@
                             <div class="w-80">
                                 <el-input
                                     v-model="formData.base.remarks"
-                                    class="el-input"
+                                    class="w-full"
                                     type="textarea"
-                                    :rows="4"
+                                    :autosize="{ minRows: 4, maxRows: 4 }"
+                                    maxlength="200"
+                                    show-word-limit
+                                    clearable
                                 />
                             </div>
                         </el-form-item>
@@ -90,7 +97,7 @@
                                         v-model="row.isRequired"
                                         :true-label="1"
                                         :false-label="0"
-                                    ></el-checkbox>
+                                    />
                                 </template>
                             </el-table-column>
                             <el-table-column label="插入" width="80">
@@ -99,7 +106,7 @@
                                         v-model="row.isInsert"
                                         :true-label="1"
                                         :false-label="0"
-                                    ></el-checkbox>
+                                    />
                                 </template>
                             </el-table-column>
                             <el-table-column label="编辑" width="80">
@@ -108,7 +115,7 @@
                                         v-model="row.isEdit"
                                         :true-label="1"
                                         :false-label="0"
-                                    ></el-checkbox>
+                                    />
                                 </template>
                             </el-table-column>
                             <el-table-column label="列表" width="80">
@@ -117,7 +124,7 @@
                                         v-model="row.isList"
                                         :true-label="1"
                                         :false-label="0"
-                                    ></el-checkbox>
+                                    />
                                 </template>
                             </el-table-column>
                             <el-table-column label="查询" width="80">
@@ -126,7 +133,7 @@
                                         v-model="row.isQuery"
                                         :true-label="1"
                                         :false-label="0"
-                                    ></el-checkbox>
+                                    />
                                 </template>
                             </el-table-column>
                             <el-table-column label="查询方式">
@@ -196,6 +203,7 @@
                                 <el-input
                                     v-model="formData.gen.moduleName"
                                     placeholder="请输入模块名"
+                                    clearable
                                 />
                                 <div class="form-tips">生成文件所在模块名</div>
                             </div>
@@ -205,6 +213,7 @@
                                 <el-input
                                     v-model="formData.gen.functionName"
                                     placeholder="请输入功能名称"
+                                    clearable
                                 />
                             </div>
                         </el-form-item>
@@ -223,6 +232,7 @@
                                 <el-input
                                     v-model="formData.gen.genPath"
                                     placeholder="请输入自定义路径"
+                                    clearable
                                 />
                             </div>
                         </el-form-item>
@@ -272,14 +282,14 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="tableEdit">
 import { generateEdit, tableDetail } from '@/api/tools/code'
 import { dictTypeAll } from '@/api/setting/dict'
 import type { FormInstance } from 'element-plus'
 import feedback from '@/utils/feedback'
 import { menuLists } from '@/api/perms/menu'
 import { useDictOptions } from '@/hooks/useDictOptions'
-
+import useMultipleTabs from '@/hooks/useMultipleTabs'
 enum GenTpl {
     CRUD = 'crud',
     TREE = 'tree'
@@ -292,6 +302,7 @@ enum GenType {
 
 const route = useRoute()
 const router = useRouter()
+const { removeTab } = useMultipleTabs()
 const activeName = ref('column')
 const formData = reactive({
     base: {
@@ -363,6 +374,7 @@ const handleSave = async () => {
         const { base, column, gen } = formData
         await generateEdit({ ...base, ...gen, column })
         feedback.msgSuccess('操作成功')
+        removeTab()
         router.back()
     } catch (error: any) {
         for (const err in error) {

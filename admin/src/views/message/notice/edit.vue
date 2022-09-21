@@ -37,7 +37,7 @@
                         <div class="w-full max-w-[320px]">
                             <el-input
                                 type="textarea"
-                                :rows="6"
+                                :autosize="{ minRows: 6, maxRows: 6 }"
                                 v-model="formData.smsNotice.content"
                             />
                         </div>
@@ -58,10 +58,11 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="noticeEdit">
 import type { FormInstance } from 'element-plus'
 import feedback from '@/utils/feedback'
 import { noticeDetail, setNoticeConfig } from '@/api/message'
+import useMultipleTabs from '@/hooks/useMultipleTabs'
 
 const route = useRoute()
 const router = useRouter()
@@ -95,7 +96,7 @@ const rules = {
         }
     ]
 }
-
+const { removeTab } = useMultipleTabs()
 const formRef = shallowRef<FormInstance>()
 
 const getDetails = async () => {
@@ -114,6 +115,7 @@ const handleSave = async () => {
     await formRef.value?.validate()
     await setNoticeConfig(formData)
     feedback.msgSuccess('操作成功')
+    removeTab()
     router.back()
 }
 

@@ -1,5 +1,6 @@
 package com.mdd.admin.validate.system;
 
+import com.mdd.admin.validate.BaseParam;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IntegerContains;
 import lombok.Data;
@@ -11,7 +12,6 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * 系统管理员参数
@@ -19,14 +19,9 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SystemAuthAdminParam implements Serializable {
+public class SystemAuthAdminParam extends BaseParam {
 
-    private static final long serialVersionUID = 1L;
-
-    public interface create{}
-    public interface update{}
     public interface upInfo{}
-    public interface delete{}
 
     @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
     private Integer id;

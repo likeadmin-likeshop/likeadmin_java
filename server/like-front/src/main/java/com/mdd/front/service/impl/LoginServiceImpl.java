@@ -136,7 +136,7 @@ public class LoginServiceImpl implements ILoginService {
                     UserAuth auth = new UserAuth();
                     auth.setUserId(model.getId());
                     auth.setOpenid(openId);
-                    auth.setUnionid(unionId);
+                    auth.setUnionid(unionId.equals("0") ? "" : unionId);
                     auth.setClient(client);
                     auth.setCreateTime(System.currentTimeMillis() / 1000);
                     auth.setUpdateTime(System.currentTimeMillis() / 1000);

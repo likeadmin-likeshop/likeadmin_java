@@ -294,7 +294,6 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         model.setDeptId(systemAuthAdminParam.getDeptId());
         model.setPostId(systemAuthAdminParam.getPostId());
         model.setNickname(systemAuthAdminParam.getNickname());
-        model.setUsername(systemAuthAdminParam.getUsername());
         model.setAvatar(UrlUtil.toRelativeUrl(systemAuthAdminParam.getAvatar()));
         model.setRole(systemAuthAdminParam.getId() == 1 ? 0 : systemAuthAdminParam.getRole());
         model.setSort(systemAuthAdminParam.getSort());
@@ -302,7 +301,11 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         model.setIsDisable(systemAuthAdminParam.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
 
-        if (systemAuthAdminParam.getPassword() != null && !systemAuthAdminParam.getPassword().equals("")) {
+        if (systemAuthAdminParam.getId() != 1) {
+            model.setUsername(systemAuthAdminParam.getUsername());
+        }
+
+        if (StringUtil.isNotEmpty(systemAuthAdminParam.getPassword())) {
             if (systemAuthAdminParam.getPassword().length() < 6 || systemAuthAdminParam.getPassword().length() > 20) {
                 throw new OperateException("密码必须在6~20位");
             }

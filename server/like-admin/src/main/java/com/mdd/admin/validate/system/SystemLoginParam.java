@@ -1,12 +1,12 @@
 package com.mdd.admin.validate.system;
 
+import com.mdd.admin.validate.BaseParam;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
 
 /**
  * 系统登录参数
@@ -14,9 +14,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SystemLoginParam implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class SystemLoginParam extends BaseParam {
 
     @NotEmpty(message = "账号不能为空")
     @Length(min = 2, max = 20, message = "账号或密码错误")

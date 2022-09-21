@@ -28,12 +28,6 @@ const useUserStore = defineStore({
     }),
     getters: {},
     actions: {
-        resetState() {
-            this.token = ''
-            this.userInfo = {}
-            this.perms = []
-            this.menu = []
-        },
         login(playload: any) {
             const { account, password } = playload
             return new Promise((resolve, reject) => {
@@ -54,8 +48,9 @@ const useUserStore = defineStore({
         logout() {
             return new Promise((resolve, reject) => {
                 logout()
-                    .then((data) => {
-                        router.push(PageEnum.LOGIN)
+                    .then(async (data) => {
+                        this.token = ''
+                        await router.push(PageEnum.LOGIN)
                         clearAuthInfo()
                         resolve(data)
                     })

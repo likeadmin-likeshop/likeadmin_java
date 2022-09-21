@@ -2,11 +2,15 @@
     <view class="suggest bg-white">
         <!-- 热门搜索 -->
         <view class="hot" v-if="hot_search.length">
-            <view class="text-base font-medium pl-[24rpx] pt-[26rpx] pb-[6rpx]">热门搜索</view>
+            <view class="font-medium pl-[24rpx] pt-[26rpx] pb-[6rpx] text-lg">热门搜索</view>
 
-            <view class="w-full pl-[24rpx] pr-[8rpx]">
-                <block v-for="hotItem in hot_search">
-                    <view class="keyword" @click="handleHistoreSearch(hotItem)">{{ hotItem }}</view>
+            <view class="w-full px-[24rpx]">
+                <block v-for="(hotItem, index) in hot_search" :key="index">
+                    <view
+                        class="keyword truncate max-w-full"
+                        @click="handleHistoreSearch(hotItem)"
+                        >{{ hotItem }}</view
+                    >
                 </block>
             </view>
         </view>
@@ -18,14 +22,16 @@
 
         <!-- 历史搜索 -->
         <view class="history" v-if="his_search.length">
-            <view class="flex justify-between px-[24rpx] pb-[6rpx]">
-                <view class="text-base font-medium">历史搜索</view>
+            <view class="flex justify-between px-[24rpx] pb-[6rpx] pt-[26rpx]">
+                <view class="text-lg font-medium">历史搜索</view>
                 <view class="text-xs text-muted" @click="() => emit('clear')">清空</view>
             </view>
 
-            <view class="w-full pl-[24rpx] pr-[8rpx]">
-                <block v-for="hisItem in his_search">
-                    <view class="keyword" @click="handleHistoreSearch(hisItem)">{{ hisItem }}</view>
+            <view class="w-full px-[24rpx]">
+                <block v-for="(hisItem, index) in his_search" :key="index">
+                    <view class="keyword truncate" @click="handleHistoreSearch(hisItem)">{{
+                        hisItem
+                    }}</view>
                 </block>
             </view>
         </view>

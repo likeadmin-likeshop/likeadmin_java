@@ -98,7 +98,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="loginRegister">
 import type { LoginSetup } from '@/api/setting/user'
 import { getLogin, setLogin } from '@/api/setting/user'
 import feedback from '@/utils/feedback'

@@ -67,7 +67,7 @@
                             :border="false"
                         />
                         <view
-                            class="border-l border-solid border-0 border-light pl-3 text-muted leading-4 ml-3 w-[180rpx]"
+                            class="border-l border-solid border-0 border-light pl-3 leading-4 ml-3 w-[180rpx]"
                             @click="sendSms"
                         >
                             <u-verification-code
@@ -76,7 +76,9 @@
                                 @change="codeChange"
                                 change-text="x秒"
                             />
-                            {{ codeTips }}
+                            <text :class="formData.mobile ? 'text-primary' : 'text-muted'">
+                                {{ codeTips }}
+                            </text>
                         </view>
                     </u-form-item>
                 </template>
@@ -208,7 +210,7 @@ const codeChange = (text: string) => {
 }
 
 const sendSms = async () => {
-    if (!formData.mobile) return uni.$u.toast('请输入手机号码')
+    if (!formData.mobile) return
     if (uCodeRef.value?.canGetCode) {
         await smsSend({
             scene: SMSEnum.LOGIN,
