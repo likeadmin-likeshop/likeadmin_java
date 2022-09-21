@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class PageParam implements Serializable {
+public class PageParam extends BaseParam {
 
     // 当前分页
     @DecimalMin(value = "1", message = "pageNo参数必须大于0的数字")

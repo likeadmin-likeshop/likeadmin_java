@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SmsParam implements Serializable {
+public class SmsParam extends BaseParam {
 
     @NotNull(message = "scene参数缺失")
     @NotEmpty(message = "场景不能为空")
