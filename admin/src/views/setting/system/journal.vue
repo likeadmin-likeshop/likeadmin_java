@@ -4,7 +4,8 @@
         <el-card class="!border-none" shadow="never">
             <el-form class="ls-form" :model="formData" inline>
                 <el-form-item label="管理员">
-                    <el-input class="w-56" placeholder="请输入" v-model="formData.username" />
+                    <el-input class="w-56" placeholder="请输入" v-model="formData.username" clearable
+                        @keyup.enter="resetPage" />
                 </el-form-item>
 
                 <el-form-item label="访问方式">
@@ -14,12 +15,13 @@
                             :key="index"
                             :label="item.label"
                             :value="item.value"
-                        ></el-option>
+                            />
                     </el-select>
                 </el-form-item>
 
                 <el-form-item label="来源IP">
-                    <el-input class="w-56" placeholder="请输入" v-model="formData.ip" />
+                    <el-input class="w-56" placeholder="请输入" v-model="formData.ip" clearable
+                        @keyup.enter="resetPage" />
                 </el-form-item>
 
                 <el-form-item label="访问时间">
@@ -30,7 +32,8 @@
                 </el-form-item>
 
                 <el-form-item label="访问链接">
-                    <el-input class="w-56" placeholder="请输入" v-model="formData.url" />
+                    <el-input class="w-56" placeholder="请输入" v-model="formData.url" clearable
+                        @keyup.enter="resetPage" />
                 </el-form-item>
 
                 <el-form-item>

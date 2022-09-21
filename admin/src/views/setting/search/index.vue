@@ -18,7 +18,12 @@
         <el-card class="!border-none mt-4" shadow="never">
             <div class="lg:flex">
                 <div class="flex-1 min-w-0">
-                    <el-button type="primary" class="mb-4" @click="handleAdd">添加</el-button>
+                    <el-button type="primary" class="mb-4" @click="handleAdd">
+                        <template #icon>
+                            <icon name="el-icon-Plus" />
+                        </template>
+                        添加
+                    </el-button>
                     <el-table size="large" :data="formData.list">
                         <el-table-column label="关键词" prop="describe" min-width="200">
                             <template #default="{ row }">

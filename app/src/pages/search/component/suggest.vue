@@ -6,7 +6,11 @@
 
             <view class="w-full px-[24rpx]">
                 <block v-for="(hotItem, index) in hot_search" :key="index">
-                    <view class="keyword truncate max-w-full" @click="handleHistoreSearch(hotItem)">{{ hotItem }}</view>
+                    <view
+                        class="keyword truncate max-w-full"
+                        @click="handleHistoreSearch(hotItem)"
+                        >{{ hotItem }}</view
+                    >
                 </block>
             </view>
         </view>
@@ -25,7 +29,9 @@
 
             <view class="w-full px-[24rpx]">
                 <block v-for="(hisItem, index) in his_search" :key="index">
-                    <view class="keyword truncate" @click="handleHistoreSearch(hisItem)">{{ hisItem }}</view>
+                    <view class="keyword truncate" @click="handleHistoreSearch(hisItem)">{{
+                        hisItem
+                    }}</view>
                 </block>
             </view>
         </view>
