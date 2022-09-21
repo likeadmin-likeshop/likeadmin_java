@@ -1,0 +1,24 @@
+# 项目配置
+like:
+  upload-directory: /www/uploads/likeadmin-java/ # 上传目录
+
+# 框架配置
+spring:
+  # 数据源配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/【库名称】?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
+    type: com.zaxxer.hikari.HikariDataSource # 数据源类型
+    driver-class-name: com.mysql.jdbc.Driver # MySql的驱动
+    username: root # 数据库账号
+    password: root # 数据库密码
+  # Redis配置
+  redis:
+    host: localhost   # Redis服务地址
+    port: 6379        # Redis端口
+    password:         # Redis密码
+    database: 0       # 数据库索引
+
+# Mybatis-plus配置 【是否开启SQL日志输出】
+#mybatis-plus:
+#    configuration:
+#      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

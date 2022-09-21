@@ -5,5 +5,6 @@
 target/
 application-dev.yml
 application-pro.yml
+application-dem.yml
 application-prod.yml
 application-test.yml
