@@ -73,7 +73,11 @@
                         </div>
                     </div>
                 </el-form-item>
-                <el-form-item label="选中菜单" prop="selected" v-if="formData.menuType == MenuEnum.MENU">
+                <el-form-item
+                    label="选中菜单"
+                    prop="selected"
+                    v-if="formData.menuType == MenuEnum.MENU"
+                >
                     <div class="flex-1">
                         <el-input
                             v-model="formData.selected"

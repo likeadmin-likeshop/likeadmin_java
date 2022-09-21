@@ -3,12 +3,20 @@
         <el-card class="!border-none" shadow="never">
             <el-form class="mb-[-16px]" :model="formData" inline>
                 <el-form-item label="表名称">
-                    <el-input class="w-56" v-model="formData.tableName"    clearable
-                        @keyup.enter="resetPage" />
+                    <el-input
+                        class="w-56"
+                        v-model="formData.tableName"
+                        clearable
+                        @keyup.enter="resetPage"
+                    />
                 </el-form-item>
                 <el-form-item label="表描述">
-                    <el-input class="w-56" v-model="formData.tableComment"    clearable
-                        @keyup.enter="resetPage" />
+                    <el-input
+                        class="w-56"
+                        v-model="formData.tableComment"
+                        clearable
+                        @keyup.enter="resetPage"
+                    />
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="resetPage">查询</el-button>

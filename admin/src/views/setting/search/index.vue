@@ -32,7 +32,7 @@
                         </el-table-column>
                         <el-table-column label="排序" prop="describe" min-width="80">
                             <template #default="{ row }">
-                                <el-input v-model="row.sort" type="number" clearable  />
+                                <el-input v-model="row.sort" type="number" clearable />
                             </template>
                         </el-table-column>
                         <el-table-column label="操作" min-width="80" fixed="right">
@@ -63,7 +63,12 @@
                         <!-- 热门搜索 -->
                         <div class="hot-search-title">热门搜索</div>
                         <div class="hot-search-text">
-                            <span class="truncate max-w-full" v-for="(text, index) in list" :key="index">{{ text.name }}</span>
+                            <span
+                                class="truncate max-w-full"
+                                v-for="(text, index) in list"
+                                :key="index"
+                                >{{ text.name }}</span
+                            >
                         </div>
                     </div>
                 </div>

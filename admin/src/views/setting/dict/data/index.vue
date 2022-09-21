@@ -71,7 +71,12 @@
                                 <el-tag v-else type="danger">停用</el-tag>
                             </template>
                         </el-table-column>
-                        <el-table-column label="备注" prop="remark" min-width="120" show-tooltip-when-overflow />
+                        <el-table-column
+                            label="备注"
+                            prop="remark"
+                            min-width="120"
+                            show-tooltip-when-overflow
+                        />
                         <el-table-column label="排序" prop="sort" />
                         <el-table-column label="操作" width="120" fixed="right">
                             <template #default="{ row }">

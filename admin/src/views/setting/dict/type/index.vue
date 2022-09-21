@@ -68,7 +68,11 @@
                                 <el-tag v-else type="danger">停用</el-tag>
                             </template>
                         </el-table-column>
-                        <el-table-column label="备注" prop="dictRemark" show-tooltip-when-overflow />
+                        <el-table-column
+                            label="备注"
+                            prop="dictRemark"
+                            show-tooltip-when-overflow
+                        />
                         <el-table-column label="创建时间" prop="createTime" min-width="180" />
                         <el-table-column label="操作" width="190" fixed="right">
                             <template #default="{ row }">
