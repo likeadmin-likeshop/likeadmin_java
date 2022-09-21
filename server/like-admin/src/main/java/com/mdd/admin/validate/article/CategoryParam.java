@@ -1,5 +1,6 @@
 package com.mdd.admin.validate.article;
 
+import com.mdd.admin.validate.BaseParam;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IntegerContains;
 import lombok.Data;
@@ -10,7 +11,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * 文章分类参数
@@ -18,14 +18,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class CategoryParam implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    public interface create{}
-    public interface update{}
-    public interface delete{}
-    public interface change{}
+public class CategoryParam extends BaseParam {
 
     @IDMust(message = "id参数必传且需大于0", groups = {delete.class, change.class})
     private Integer id;

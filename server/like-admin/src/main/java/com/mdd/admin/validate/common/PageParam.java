@@ -1,12 +1,12 @@
 package com.mdd.admin.validate.common;
 
+import com.mdd.admin.validate.BaseParam;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-import java.io.Serializable;
 
 /**
  * 分页参数
@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class PageParam implements Serializable {
+public class PageParam extends BaseParam {
 
     // 当前分页
     @DecimalMin(value = "1", message = "pageNo参数必须大于0的数字")

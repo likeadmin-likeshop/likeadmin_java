@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * 文章参数

@@ -1,5 +1,6 @@
 package com.mdd.admin.validate.system;
 
+import com.mdd.admin.validate.BaseParam;
 import com.mdd.common.validator.annotation.IDMust;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +10,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * 系统角色参数
@@ -17,11 +17,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class SystemAuthRoleParam implements Serializable {
-
-    public interface create{}
-    public interface update{}
-    public interface delete{}
+public class SystemAuthRoleParam extends BaseParam {
 
     @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
     private Integer id;

@@ -1,5 +1,6 @@
 package com.mdd.admin.validate.common;
 
+import com.mdd.admin.validate.BaseParam;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IntegerContains;
 import lombok.Data;
@@ -10,7 +11,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * 相册参数
@@ -18,11 +18,8 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AlbumParam implements Serializable {
+public class AlbumParam extends BaseParam {
 
-    private static final long serialVersionUID = 1L;
-
-    public interface delete{}
     public interface rename{}
     public interface cateAdd{}
     public interface albumMove{}
