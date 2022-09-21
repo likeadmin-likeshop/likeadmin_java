@@ -54,7 +54,7 @@ public interface GenTableMapper extends IBaseMapper<GenTable> {
             "#{name}" +
         "</foreach>",
     "</script>"})
-    List<Map<String, String>> selectDbTableListByNames(String[] tableNames);
+    List<DbTableVo> selectDbTableListByNames(String[] tableNames);
 
     /**
      * 根据表名查询列信息

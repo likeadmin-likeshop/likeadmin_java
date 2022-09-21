@@ -9,6 +9,7 @@ import com.mdd.generator.constant.JavaConstants;
 import com.mdd.generator.constant.SqlConstants;
 import com.mdd.generator.entity.GenTable;
 import com.mdd.generator.entity.GenTableColumn;
+import com.mdd.generator.vo.DbTableVo;
 import org.apache.commons.lang3.RegExUtils;
 
 import java.util.Arrays;
@@ -23,12 +24,12 @@ public class GenUtil {
      * @param table 表
      * @param map 参数
      */
-    public static void initTable(GenTable table, Map<String, String> map) {
-        String tableName = map.get("table_name");
-        String tableDesc = map.get("table_comment");
+    public static void initTable(GenTable table, DbTableVo map) {
+        String tableName = map.getTableName();
+        String tableDesc = map.getTableComment();
         table.setTableName(tableName);
         table.setTableComment(tableDesc);
-        table.setAuthorName(map.getOrDefault("author_name", ""));
+        table.setAuthorName(map.getAuthorName());
         table.setEntityName(GenUtil.toClassName(tableName));
         table.setModuleName(GenUtil.toModuleName(tableName));
         table.setFunctionName(GenUtil.replaceText(tableDesc));
