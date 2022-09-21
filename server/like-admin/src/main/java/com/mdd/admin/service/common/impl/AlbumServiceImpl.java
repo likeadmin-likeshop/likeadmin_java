@@ -131,11 +131,13 @@ public class AlbumServiceImpl implements IAlbumService {
 
         Assert.notNull(albums, "文件丢失！");
 
-        Assert.notNull(albumCateMapper.selectOne(
-                new QueryWrapper<AlbumCate>()
-                    .eq("id", cid)
-                    .eq("is_delete", 0)
-                ), "类目已不存在！");
+        if (cid > 0) {
+            Assert.notNull(albumCateMapper.selectOne(
+                    new QueryWrapper<AlbumCate>()
+                            .eq("id", cid)
+                            .eq("is_delete", 0)
+            ), "类目已不存在！");
+        }
 
         for (Album album : albums) {
             album.setCid(cid);
