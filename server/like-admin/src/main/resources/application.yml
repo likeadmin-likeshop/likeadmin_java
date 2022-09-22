@@ -9,7 +9,7 @@ server:
 # 框架配置
 spring:
   profiles:
-    active: dev
+    active: pro
   mvc:
     static-path-pattern: /api/static/**
   # 数据源配置
