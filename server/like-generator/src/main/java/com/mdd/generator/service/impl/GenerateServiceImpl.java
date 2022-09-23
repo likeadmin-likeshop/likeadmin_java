@@ -187,8 +187,8 @@ public class GenerateServiceImpl implements IGenerateService {
     @Transactional
     public void importTable(String[] tableNames) {
         try {
-            List<Map<String, String>> tables = genTableMapper.selectDbTableListByNames(tableNames);
-            for (Map<String, String> map : tables) {
+            List<DbTableVo> tables = genTableMapper.selectDbTableListByNames(tableNames);
+            for (DbTableVo map : tables) {
                 // 生成表信息
                 GenTable table = new GenTable();
                 GenUtil.initTable(table, map);
@@ -196,7 +196,7 @@ public class GenerateServiceImpl implements IGenerateService {
 
                 // 生成列信息
                 if (row > 0) {
-                    String tableName = map.get("table_name");
+                    String tableName = map.getTableName();
                     List<GenTableColumn> genTableColumns = genTableMapper.selectDbTableColumnsByName(tableName);
                     for (GenTableColumn column : genTableColumns) {
                         GenUtil.initColumn(column, table);
