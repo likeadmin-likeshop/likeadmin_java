@@ -14,6 +14,7 @@ import com.mdd.common.utils.ArrayUtil;
 import com.mdd.common.utils.TimeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -159,6 +160,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
      * @author fzr
      * @param systemAuthDeptParam 参数
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void edit(SystemAuthDeptParam systemAuthDeptParam) {
         SystemAuthDept model = systemAuthDeptMapper.selectOne(
@@ -182,6 +184,8 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
         model.setIsStop(systemAuthDeptParam.getIsStop());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         systemAuthDeptMapper.updateById(model);
+        //级联更新自己状态
+        systemAuthDeptMapper.updateChilder(systemAuthDeptParam.getIsStop(),model.getId());
     }
 
     /**
