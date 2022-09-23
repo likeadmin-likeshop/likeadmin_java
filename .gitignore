@@ -8,7 +8,3 @@ application-pro.yml
 application-dem.yml
 application-prod.yml
 application-test.yml
-.env.development
-application-pro-example.yml
-application-remote.yml
-application.yml
