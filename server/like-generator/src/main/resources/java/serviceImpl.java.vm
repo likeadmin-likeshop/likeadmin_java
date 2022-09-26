@@ -325,14 +325,14 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     public void add(${EntityName}Param ${entityName}Param) {
         ${EntityName} model = new ${EntityName}();
     #foreach ($column in $columns)
-    #if($column.isInsert)
+    #if($column.isInsert || $column.columnName.equals("create_time") || $column.columnName.equals("update_time"))
         #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
         #if($column.javaField.equals("image") || $column.javaField.equals("avatar") || $column.javaField.equals("logo") || $column.javaField.equals("img"))
         model.set${AttrName}(UrlUtil.toRelativeUrl(${entityName}Param.get${AttrName}()));
         #elseif(!$dateFields.contains($column.columnName) and !$column.javaField.equals("isDelete"))
         model.set${AttrName}(${entityName}Param.get${AttrName}());
         #elseif($column.htmlType=="datetime")
-        model.set${AttrName}(TimeUtil.dateToTimestamp(${entityName}Param.get${AttrName}()));
+        model.set${AttrName}(System.currentTimeMillis() / 1000);
         #end
     #end
     #end
@@ -361,14 +361,14 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         Assert.notNull(model, "数据不存在!");
 
     #foreach ($column in $columns)
-    #if($column.isEdit==1)
+    #if($column.isEdit==1 || $column.columnName.equals("update_time"))
         #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
         #if($column.javaField.equals("image") || $column.javaField.equals("avatar") || $column.javaField.equals("logo") || $column.javaField.equals("img"))
         model.set${AttrName}(UrlUtil.toRelativeUrl(${entityName}Param.get${AttrName}()));
         #elseif(!$dateFields.contains($column.columnName) and !$column.javaField.equals("isDelete"))
         model.set${AttrName}(${entityName}Param.get${AttrName}());
-        #elseif($column.htmlType=="datetime")
-        model.set${AttrName}(TimeUtil.dateToTimestamp(${entityName}Param.get${AttrName}()));
+        #elseif($column.htmlType=="datetime" && $column.columnName.equals("update_time"))
+        model.set${AttrName}(System.currentTimeMillis() / 1000);
         #end
     #end
     #end
