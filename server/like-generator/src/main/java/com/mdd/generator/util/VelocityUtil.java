@@ -77,6 +77,7 @@ public class VelocityUtil {
         velocityContext.put("entityName", StringUtil.uncapitalize(table.getEntityName()));
         velocityContext.put("moduleName", table.getModuleName());
         velocityContext.put("functionName", StringUtil.isNotEmpty(table.getFunctionName()) ? table.getFunctionName() : "【请填写功能名称】");
+        velocityContext.put("notesType", GenConfig.notesType);
         velocityContext.put("table", table);
         velocityContext.put("columns", columns);
         velocityContext.put("dateFields", SqlConstants.COLUMN_TIME_NAME);
@@ -119,8 +120,8 @@ public class VelocityUtil {
 //        templates.add("java/service.java.vm");
 //        templates.add("java/serviceImpl.java.vm");
 //        templates.add("java/validate.java.vm");
-        templates.add("java/voList.java.vm");
-//        templates.add("java/voDetail.java.vm");
+//        templates.add("java/voList.java.vm");
+        templates.add("java/voDetail.java.vm");
 //        templates.add("vue/api.ts.vm");
 //        templates.add("vue/edit.vue.vm");
 //        if (GenConstants.TPL_CRUD.equals(genTpl)) {

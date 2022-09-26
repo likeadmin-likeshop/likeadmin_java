@@ -11,8 +11,12 @@ import ${packageName}.common.core.PageResult;
 
 import java.util.Map;
 
+#set($isAuthor = !$authorName.equals(""))
 /**
  * ${functionName}服务接口类
+#if($isAuthor)
+ * @author ${authorName}
+#end
  */
 public interface I${EntityName}Service {
 

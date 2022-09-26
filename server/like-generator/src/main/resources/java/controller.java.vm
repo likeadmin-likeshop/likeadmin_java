@@ -22,8 +22,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.Map;
 
+#set($isAuthor = !$authorName.equals(""))
 /**
  * ${functionName}管理
+#if($isAuthor)
+ * @author ${authorName}
+#end
  */
 @RestController
 @RequestMapping("api/${moduleName}")
