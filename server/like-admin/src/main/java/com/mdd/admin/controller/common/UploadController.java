@@ -2,6 +2,7 @@ package com.mdd.admin.controller.common;
 
 import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.config.aop.Log;
+import com.mdd.admin.config.aop.RequestType;
 import com.mdd.admin.service.common.IAlbumService;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.AlbumEnum;
@@ -36,7 +37,7 @@ public class UploadController {
      * @param request 请求对象
      * @return Object
      */
-    @Log(title = "上传图片")
+    @Log(title = "上传图片", requestType = RequestType.File)
     @PostMapping("/image")
     public Object image(HttpServletRequest request) {
         MultipartFile multipartFile;

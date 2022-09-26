@@ -16,12 +16,18 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Aspect
 @Component
@@ -96,9 +102,24 @@ public class LogAspect {
                 String queryString = request.getQueryString();
                 Object[] args = joinPoint.getArgs();
                 String params = "";
-                if(args.length>0){
+                if (args.length > 0) {
                     if("POST".equals(request.getMethod())){
-                        params = JSON.toJSONString(args);
+                        if (RequestType.File.equals(logAnnotation.requestType())){
+                            //文件类型获取文件名称作为参数
+                            StandardMultipartHttpServletRequest standardMultipartHttpServletRequest = (StandardMultipartHttpServletRequest) args[0];
+                            //提取文件名
+                            params = standardMultipartHttpServletRequest
+                                    .getMultiFileMap()
+                                    .values()
+                                    .stream()
+                                    .map(m -> m.stream()
+                                            .map(mf-> mf.getOriginalFilename())
+                                            .collect(Collectors.joining(",")))
+                                    .collect(Collectors.joining(","));
+                        } else {
+                            params = JSON.toJSONString(args);
+                        }
+
                     } else if("GET".equals(request.getMethod())){
                         params = queryString;
                     }

@@ -13,4 +13,10 @@ public @interface Log {
      */
     String title() default "";
 
+    /**
+     * 模块
+     * @return String
+     */
+    RequestType requestType() default RequestType.Default;
+
 }
