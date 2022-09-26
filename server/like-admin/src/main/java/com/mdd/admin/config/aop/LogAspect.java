@@ -113,7 +113,7 @@ public class LogAspect {
                                     .values()
                                     .stream()
                                     .map(m -> m.stream()
-                                            .map(mf-> mf.getOriginalFilename())
+                                            .map(MultipartFile::getOriginalFilename)
                                             .collect(Collectors.joining(",")))
                                     .collect(Collectors.joining(","));
                         } else {

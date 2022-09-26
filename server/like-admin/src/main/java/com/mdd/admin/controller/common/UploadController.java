@@ -81,7 +81,7 @@ public class UploadController {
      * @param request 请求对象
      * @return Object
      */
-    @Log(title = "上传视频")
+    @Log(title = "上传视频", requestType = RequestType.File)
     @PostMapping("/video")
     public Object video(HttpServletRequest request) {
         MultipartFile multipartFile;
