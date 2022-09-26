@@ -88,9 +88,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         mpjQueryWrapper.eq("is_delete", 0);
         #end
         #if($allFields.contains("sort"))
-         mpjQueryWrapper.orderByDesc(Arrays.asList("sort", "id"));
+        mpjQueryWrapper.orderByDesc(Arrays.asList("sort", "${primaryField}"));
         #else
-        mpjQueryWrapper.orderByDesc("id");
+        mpjQueryWrapper.orderByDesc("${primaryField}");
         #end
     #else
         #set($queryWrapper = "queryWrapper")
@@ -99,9 +99,9 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         queryWrapper.eq("is_delete", 0);
         #end
         #if($allFields.contains("sort"))
-        queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
+        queryWrapper.orderByDesc(Arrays.asList("sort", "${primaryField}"));
         #else
-        queryWrapper.orderByDesc("id");
+        queryWrapper.orderByDesc("${primaryField}");
         #end
     #end
 
@@ -264,7 +264,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     public ${EntityName}DetailVo detail(Integer id) {
         ${EntityName} model = ${entityName}Mapper.selectOne(
                 new QueryWrapper<${EntityName}>()
-                    .eq("id", id)
+                    .eq("${primaryField}", id)
                     #if($allFields.contains("is_delete"))
                     .eq("is_delete", 0)
                     #end
@@ -346,9 +346,10 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      */
     @Override
     public void edit(${EntityName}Param ${entityName}Param) {
+        #set($AttrName=$primaryKey.substring(0,1).toUpperCase() + ${primaryKey.substring(1)})
         ${EntityName} model = ${entityName}Mapper.selectOne(
                 new QueryWrapper<${EntityName}>()
-                    .eq("id",  ${entityName}Param.getId())
+                    .eq("${primaryField}",  ${entityName}Param.get${AttrName}())
                     #if($allFields.contains("is_delete"))
                     .eq("is_delete", 0)
                     #end
@@ -383,7 +384,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     public void del(Integer id) {
         ${EntityName} model = ${entityName}Mapper.selectOne(
                 new QueryWrapper<${EntityName}>()
-                    .eq("id", id)
+                    .eq("${primaryField}", id)
                     #if($allFields.contains("is_delete"))
                     .eq("is_delete", 0)
                     #end
@@ -398,7 +399,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #end
         ${entityName}Mapper.updateById(model);
     #else
-        ${entityName}Mapper.delete(new QueryWrapper<${EntityName}>().eq("id", id));
+        ${entityName}Mapper.delete(new QueryWrapper<${EntityName}>().eq("${primaryField}", id));
     #end
     }
 

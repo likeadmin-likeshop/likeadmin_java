@@ -58,8 +58,8 @@ public class GenUtil {
         // 文本域组
         if (GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_STR, columnType) ||
                 GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_TEXT, columnType)) {
-            Integer columnLength = GenUtil.getColumnLength(column.getColumnType());
-            String htmlType = columnLength >= 500 || GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_TEXT, columnType)
+            String columnLength = GenUtil.getColumnLength(column.getColumnType());
+            String htmlType = Integer.parseInt(columnLength) >= 500 || GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_TEXT, columnType)
                     ? HtmlConstants.HTML_TEXTAREA
                     : HtmlConstants.HTML_INPUT;
             column.setHtmlType(htmlType);
@@ -241,13 +241,12 @@ public class GenUtil {
      * @param columnType 列类型
      * @return 截取后的列类型
      */
-    public static Integer getColumnLength(String columnType) {
+    public static String getColumnLength(String columnType) {
         if (StringUtil.indexOf(columnType, "(") > 0) {
-            String length = StringUtil.substringBetween(columnType, "(", ")");
-            return Integer.valueOf(length);
+            return StringUtil.substringBetween(columnType, "(", ")");
         }
         else {
-            return 0;
+            return "";
         }
     }
 

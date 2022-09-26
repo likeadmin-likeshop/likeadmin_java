@@ -117,7 +117,8 @@ public class ${EntityName}Controller {
     @Log(title = "${functionName}删除")
     @PostMapping("/del")
     public Object del(@Validated(value = ${EntityName}Param.delete.class) @RequestBody ${EntityName}Param ${entityName}Param) {
-        i${EntityName}Service.del(${entityName}Param.getId());
+        #set($AttrName=$primaryKey.substring(0,1).toUpperCase() + ${primaryKey.substring(1)})
+        i${EntityName}Service.del(${entityName}Param.get${AttrName}());
         return AjaxResult.success();
     }
 

@@ -40,8 +40,9 @@ public class VelocityUtil {
      * @return VelocityContext
      */
     public static VelocityContext prepareContext(GenTable table, List<GenTableColumn> columns) {
-        boolean isSearch = false; // 是否需要搜索
-        String primaryKey = "id"; // 主键字段名称
+        boolean isSearch = false;   // 是否需要搜索
+        String primaryKey = "id";   // 主键字段名称
+        String primaryField = "id"; // 主键字段
         List<String> allFields    = new LinkedList<>();  // 所有字段
         List<String> listFields   = new LinkedList<>();  // 列表字段
         List<String> detailFields = new LinkedList<>();  // 详情字段
@@ -59,6 +60,7 @@ public class VelocityUtil {
             }
             if (column.getIsPk() == 1) {
                 primaryKey = column.getJavaField();
+                primaryField = column.getColumnName();
             }
             if (StringUtil.isNotEmpty(column.getDictType()) && !dictFields.contains(column.getDictType())) {
                 dictFields.add(column.getDictType());
@@ -79,6 +81,7 @@ public class VelocityUtil {
         velocityContext.put("columns", columns);
         velocityContext.put("dateFields", SqlConstants.COLUMN_TIME_NAME);
         velocityContext.put("primaryKey", primaryKey);
+        velocityContext.put("primaryField", primaryField);
         velocityContext.put("allFields", allFields);
         velocityContext.put("listFields", listFields);
         velocityContext.put("detailFields", detailFields);
@@ -110,23 +113,23 @@ public class VelocityUtil {
      */
     public static List<String> getTemplateList(String genTpl, List<GenTableColumn> columns) {
         List<String> templates = new LinkedList<>();
-        templates.add("java/controller.java.vm");
-        templates.add("java/entity.java.vm");
-        templates.add("java/mapper.java.vm");
-        templates.add("java/service.java.vm");
-        templates.add("java/serviceImpl.java.vm");
-        templates.add("java/validate.java.vm");
+//        templates.add("java/controller.java.vm");
+//        templates.add("java/entity.java.vm");
+//        templates.add("java/mapper.java.vm");
+//        templates.add("java/service.java.vm");
+//        templates.add("java/serviceImpl.java.vm");
+//        templates.add("java/validate.java.vm");
         templates.add("java/voList.java.vm");
-        templates.add("java/voDetail.java.vm");
-        templates.add("vue/api.ts.vm");
-        templates.add("vue/edit.vue.vm");
-        if (GenConstants.TPL_CRUD.equals(genTpl)) {
-            templates.add("vue/index.vue.vm");
-        }
-
-        else if (GenConstants.TPL_TREE.equals(genTpl)) {
-            templates.add("vue/index-tree.vue.vm");
-        }
+//        templates.add("java/voDetail.java.vm");
+//        templates.add("vue/api.ts.vm");
+//        templates.add("vue/edit.vue.vm");
+//        if (GenConstants.TPL_CRUD.equals(genTpl)) {
+//            templates.add("vue/index.vue.vm");
+//        }
+//
+//        else if (GenConstants.TPL_TREE.equals(genTpl)) {
+//            templates.add("vue/index-tree.vue.vm");
+//        }
 
         return templates;
     }
