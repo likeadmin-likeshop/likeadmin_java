@@ -13,7 +13,6 @@ import com.mdd.generator.vo.DbTableVo;
 import org.apache.commons.lang3.RegExUtils;
 
 import java.util.Arrays;
-import java.util.Map;
 
 public class GenUtil {
 
