@@ -1,6 +1,7 @@
 package com.mdd.admin.service.decorate;
 
 import com.mdd.admin.validate.decorate.DecoratePageParam;
+import com.mdd.admin.vo.decorate.DecoratePageVo;
 
 import java.util.Map;
 
@@ -11,9 +12,9 @@ public interface IDecoratePageService {
      *
      * @author fzr
      * @param id 主键
-     * @return Map<String, Object>
+     * @return DecoratePageVo
      */
-    Map<String, Object> detail(Integer id);
+    DecoratePageVo detail(Integer id);
 
     /**
      * 页面装修保存

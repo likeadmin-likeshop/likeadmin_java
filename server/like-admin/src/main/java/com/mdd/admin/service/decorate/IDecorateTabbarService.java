@@ -1,5 +1,7 @@
 package com.mdd.admin.service.decorate;
 
+import com.mdd.admin.vo.decorate.DecorateTabbarVo;
+
 import java.util.List;
 import java.util.Map;
 
@@ -12,9 +14,9 @@ public interface IDecorateTabbarService {
      * 底部导航详情
      *
      * @author fzr
-     * @return  Map<String, Object>
+     * @return DecorateTabbarVo
      */
-    Map<String, Object> detail();
+    DecorateTabbarVo detail();
 
     /**
      * 底部导航保存

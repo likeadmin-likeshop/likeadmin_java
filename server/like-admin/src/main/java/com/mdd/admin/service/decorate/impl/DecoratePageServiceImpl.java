@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.admin.service.decorate.IDecoratePageService;
 import com.mdd.admin.validate.decorate.DecoratePageParam;
+import com.mdd.admin.vo.decorate.DecoratePageVo;
 import com.mdd.common.entity.decorate.DecoratePage;
 import com.mdd.common.mapper.decorate.DecoratePageMapper;
 import com.mdd.common.utils.ToolsUtil;
@@ -24,18 +25,18 @@ public class DecoratePageServiceImpl implements IDecoratePageService {
      *
      * @author fzr
      * @param id 主键
-     * @return Map<String, Object>
+     * @return DecoratePageVo
      */
     @Override
-    public Map<String, Object> detail(Integer id) {
+    public DecoratePageVo detail(Integer id) {
         DecoratePage decoratePage = decoratePageMapper.selectById(id);
         Assert.notNull(decoratePage, "数据不存在!");
 
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("id", decoratePage.getId());
-        map.put("pageType", decoratePage.getPageType());
-        map.put("pageData", decoratePage.getPageData());
-        return map;
+        DecoratePageVo vo = new DecoratePageVo();
+        vo.setId(decoratePage.getId());
+        vo.setPageType(vo.getPageType());
+        vo.setPageData(decoratePage.getPageData());
+        return vo;
     }
 
     /**

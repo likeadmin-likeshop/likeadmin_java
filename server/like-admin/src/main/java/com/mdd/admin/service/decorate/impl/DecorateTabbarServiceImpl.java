@@ -3,6 +3,8 @@ package com.mdd.admin.service.decorate.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.admin.service.decorate.IDecorateTabbarService;
+import com.mdd.admin.vo.decorate.DecorateTabObjVo;
+import com.mdd.admin.vo.decorate.DecorateTabbarVo;
 import com.mdd.common.entity.decorate.DecorateTabbar;
 import com.mdd.common.mapper.decorate.DecorateTabbarMapper;
 import com.mdd.common.utils.*;
@@ -28,31 +30,33 @@ public class DecorateTabbarServiceImpl implements IDecorateTabbarService {
      * 底部导航详情
      *
      * @author fzr
-     * @return Map<String, Object>
+     * @return DecorateTabbarVo
      */
     @Override
-    public Map<String, Object> detail() {
-        Map<String, Object> response = new LinkedHashMap<>();
+    public DecorateTabbarVo detail() {
+
         List<DecorateTabbar> list = decorateTabbarMapper.selectList(
                 new QueryWrapper<DecorateTabbar>()
                     .orderByAsc("id"));
 
-        List<Map<String, Object>> tabList = new LinkedList<>();
+        List<DecorateTabObjVo> tabList = new LinkedList<>();
         for (DecorateTabbar tab: list) {
-            Map<String, Object> map = new LinkedHashMap<>();
-            map.put("id", tab.getId());
-            map.put("name", tab.getName());
-            map.put("selected", UrlUtil.toAbsoluteUrl(tab.getSelected()));
-            map.put("unselected", UrlUtil.toAbsoluteUrl(tab.getUnselected()));
-            map.put("link", tab.getLink());
-            map.put("createTime", TimeUtil.timestampToDate(tab.getCreateTime()));
-            map.put("updateTime", TimeUtil.timestampToDate(tab.getUpdateTime()));
-            tabList.add(map);
+            DecorateTabObjVo vo = new DecorateTabObjVo();
+            vo.setId(tab.getId());
+            vo.setName(tab.getName());
+            vo.setSelected(UrlUtil.toAbsoluteUrl(tab.getSelected()));
+            vo.setUnselected(UrlUtil.toAbsoluteUrl(tab.getUnselected()));
+            vo.setLink(tab.getLink());
+            vo.setCreateTime(TimeUtil.timestampToDate(tab.getCreateTime()));
+            vo.setUnselected(TimeUtil.timestampToDate(tab.getUpdateTime()));
+            tabList.add(vo);
         }
 
         String tabbar = ConfigUtil.get("tabbar", "style", "{}");
-        response.put("style", ToolsUtil.jsonToMap(tabbar));
-        response.put("list", tabList);
+
+        DecorateTabbarVo response = new DecorateTabbarVo();
+        response.setStyle(ToolsUtil.jsonToMap(tabbar));
+        response.setList(tabList);
         return response;
     }
 

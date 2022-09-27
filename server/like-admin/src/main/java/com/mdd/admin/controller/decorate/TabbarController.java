@@ -1,12 +1,11 @@
 package com.mdd.admin.controller.decorate;
 
 import com.mdd.admin.service.decorate.IDecorateTabbarService;
+import com.mdd.admin.vo.decorate.DecorateTabbarVo;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.utils.ArrayUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,8 +26,8 @@ public class TabbarController {
      */
     @GetMapping("/detail")
     public AjaxResult detail() {
-        Map<String, Object> detail = iDecorateTabbarService.detail();
-        return AjaxResult.success(detail);
+        DecorateTabbarVo vo = iDecorateTabbarService.detail();
+        return AjaxResult.success(vo);
     }
 
     /**

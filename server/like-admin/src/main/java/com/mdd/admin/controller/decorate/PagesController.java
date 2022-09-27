@@ -3,6 +3,7 @@ package com.mdd.admin.controller.decorate;
 import com.mdd.admin.config.aop.Log;
 import com.mdd.admin.service.decorate.IDecoratePageService;
 import com.mdd.admin.validate.decorate.DecoratePageParam;
+import com.mdd.admin.vo.decorate.DecoratePageVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
@@ -30,8 +31,8 @@ public class PagesController {
      */
     @GetMapping("/detail")
     public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        Map<String, Object> map = iDecoratePageService.detail(id);
-        return AjaxResult.success(map);
+        DecoratePageVo vo = iDecoratePageService.detail(id);
+        return AjaxResult.success(vo);
     }
 
     /**
