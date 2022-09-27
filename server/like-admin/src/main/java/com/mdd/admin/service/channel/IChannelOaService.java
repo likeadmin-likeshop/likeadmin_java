@@ -1,6 +1,8 @@
 package com.mdd.admin.service.channel;
 
-import java.util.Map;
+import com.mdd.admin.validate.channel.ChannelOaParam;
+import com.mdd.admin.vo.channel.ChannelOaVo;
+
 
 /**
  * 公众号渠道设置服务接口类
@@ -11,15 +13,16 @@ public interface IChannelOaService {
      * 公众号设置详情
      *
      * @author fzr
-     * @return Map<String, String>
+     * @return ChannelOaVo
      */
-    Map<String, Object> detail();
+    ChannelOaVo detail();
 
     /**
      * 公众号设置保存
      *
      * @author fzr
+     * @param channelOaParam 参数
      */
-    void save(Map<String, String> param);
+    void save(ChannelOaParam channelOaParam);
 
 }

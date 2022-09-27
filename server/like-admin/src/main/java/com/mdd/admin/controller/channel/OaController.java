@@ -2,11 +2,13 @@ package com.mdd.admin.controller.channel;
 
 import com.mdd.admin.config.aop.Log;
 import com.mdd.admin.service.channel.IChannelOaService;
+import com.mdd.admin.validate.channel.ChannelOaParam;
+import com.mdd.admin.vo.channel.ChannelOaVo;
 import com.mdd.common.core.AjaxResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * 微信公众号渠道设置
@@ -22,25 +24,25 @@ public class OaController {
      * 公众号渠道设置详情
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail() {
-        Map<String, Object> map = iChannelOaService.detail();
-        return AjaxResult.success(map);
+    public AjaxResult detail() {
+        ChannelOaVo vo = iChannelOaService.detail();
+        return AjaxResult.success(vo);
     }
 
     /**
      * 公众号渠道设置保存
      *
      * @author fzr
-     * @param param 参数
-     * @return Object
+     * @param channelOaParam 参数
+     * @return AjaxResult
      */
     @Log(title = "公众号渠道设置保存")
     @PostMapping("/save")
-    public Object save(@RequestBody Map<String, String> param) {
-        iChannelOaService.save(param);
+    public AjaxResult save(@Validated @RequestBody ChannelOaParam channelOaParam) {
+        iChannelOaService.save(channelOaParam);
         return AjaxResult.success();
     }
 

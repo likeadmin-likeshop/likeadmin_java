@@ -2,11 +2,13 @@ package com.mdd.admin.controller.channel;
 
 import com.mdd.admin.config.aop.Log;
 import com.mdd.admin.service.channel.IChannelH5Service;
+import com.mdd.admin.validate.channel.ChannelH5Param;
+import com.mdd.admin.vo.channel.ChannelH5Vo;
 import com.mdd.common.core.AjaxResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * H5渠道设置
@@ -22,25 +24,25 @@ public class H5Controller {
      * H5渠道设置详情
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail() {
-        Map<String, Object> map = iChannelH5Service.detail();
-        return AjaxResult.success(map);
+    public AjaxResult detail() {
+        ChannelH5Vo vo = iChannelH5Service.detail();
+        return AjaxResult.success(vo);
     }
 
     /**
      * H5渠道设置保存
      *
      * @author fzr
-     * @param param 参数
-     * @return Object
+     * @param channelH5Param 参数
+     * @return AjaxResult
      */
     @Log(title = "H5渠道设置保存")
     @PostMapping("/save")
-    public Object save(@RequestBody Map<String, String> param) {
-        iChannelH5Service.save(param);
+    public AjaxResult save(@Validated @RequestBody ChannelH5Param channelH5Param) {
+        iChannelH5Service.save(channelH5Param);
         return AjaxResult.success();
     }
 

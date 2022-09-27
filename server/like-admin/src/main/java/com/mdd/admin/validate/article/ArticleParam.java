@@ -36,12 +36,6 @@ public class ArticleParam extends BaseParam {
     @Length(max = 200, message = "图片链接过长不能超200个字符", groups = {create.class, update.class})
     private String image = "";
 
-    private String content = "";
-
-    private String summary = "";
-
-    private Integer visit = 0;
-
     @Length(max = 32, message = "作者名称不能超32个字符", groups = {create.class, update.class})
     private String author = "";
 
@@ -52,5 +46,11 @@ public class ArticleParam extends BaseParam {
     @NotNull(message = "缺少isShow参数", groups = {create.class, update.class})
     @IntegerContains(values = {0, 1}, message = "isShow不是合法值", groups = {create.class, update.class})
     private Integer isShow;
+
+    private String content = "";
+
+    private String summary = "";
+
+    private Integer visit = 0;
 
 }
