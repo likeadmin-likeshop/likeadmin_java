@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+/**
+ * 公众号关注回复管理
+ */
 @RestController
 @RequestMapping("api/channel/oaReplyFollow")
 public class OaReplyFollowController {

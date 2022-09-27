@@ -21,7 +21,7 @@ public class UserController {
      * 用户设置详情
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
     public Object detail() {
@@ -34,10 +34,10 @@ public class UserController {
      *
      * @author fzr
      * @param params 参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/save")
-    public Object save(@RequestBody Map<String, String> params) {
+    public AjaxResult save(@RequestBody Map<String, String> params) {
         iSettingUserService.save(params);
         return AjaxResult.success();
     }

@@ -30,10 +30,10 @@ public class LogsController {
      *
      * @author fzr
      * @param params 搜索参数
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/operate")
-    public Object operate(@Validated PageParam pageParam, @RequestParam Map<String, String> params) {
+    public AjaxResult operate(@Validated PageParam pageParam, @RequestParam Map<String, String> params) {
         PageResult<LogOperateVo> list = iSystemLogsServer.operate(pageParam, params);
         return AjaxResult.success(list);
     }
@@ -43,10 +43,10 @@ public class LogsController {
      *
      * @author fzr
      * @param params 搜索参数
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/login")
-    public Object login(@Validated PageParam pageParam, @RequestParam Map<String, String> params) {
+    public AjaxResult login(@Validated PageParam pageParam, @RequestParam Map<String, String> params) {
         PageResult<LogLoginVo> list = iSystemLogsServer.login(pageParam, params);
         return AjaxResult.success(list);
     }

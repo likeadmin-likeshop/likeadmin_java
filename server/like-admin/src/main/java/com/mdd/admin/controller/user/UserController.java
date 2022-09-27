@@ -29,10 +29,10 @@ public class UserController {
      * @author fzr
      * @param pageParam 分页参数
      * @param params 搜索参数
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/list")
-    public Object list(@Validated PageParam pageParam,
+    public AjaxResult list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
         PageResult<UserVo> list = iUserService.list(pageParam, params);
         return AjaxResult.success(list);
@@ -43,10 +43,10 @@ public class UserController {
      *
      * @author fzr
      * @param id 主键
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         UserVo vo = iUserService.detail(id);
         return AjaxResult.success(vo);
     }
@@ -56,10 +56,10 @@ public class UserController {
      *
      * @author fzr
      * @param params 参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/edit")
-    public Object edit(@RequestBody Map<String, String> params) {
+    public AjaxResult edit(@RequestBody Map<String, String> params) {
         Assert.notNull(params.get("id"), "id参数缺失");
         Assert.notNull(params.get("field"), "field参数缺失");
         Assert.notNull(params.get("value"), "value参数缺失");

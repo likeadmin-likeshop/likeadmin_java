@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+/**
+ * 公众号关键词回复管理
+ */
 @RestController
 @RequestMapping("api/channel/oaReplyKeyword")
 public class OaReplyKeywordController {

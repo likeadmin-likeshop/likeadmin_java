@@ -28,11 +28,11 @@ public class CacheController {
      * 缓存监控
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "缓存监控")
     @GetMapping("/cache")
-    public Object info() {
+    public AjaxResult info() {
         Properties info = (Properties) redisTemplate.execute((RedisCallback<Object>) RedisServerCommands::info);
         Properties commandStats = (Properties) redisTemplate.execute((RedisCallback<Object>) connection -> connection.info("commandstats"));
         Object dbSize = redisTemplate.execute((RedisCallback<Object>) RedisServerCommands::dbSize);

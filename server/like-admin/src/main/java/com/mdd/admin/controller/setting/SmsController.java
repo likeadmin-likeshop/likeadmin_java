@@ -23,10 +23,10 @@ public class SmsController {
      * 短信引擎列表
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/list")
-    public Object list() {
+    public AjaxResult list() {
         List<Map<String, Object>> list = iSettingSmsService.list();
         return AjaxResult.success(list);
     }
@@ -36,10 +36,10 @@ public class SmsController {
      *
      * @author fzr
      * @param alias 别名
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail(String alias) {
+    public AjaxResult detail(String alias) {
         Map<String, Object> map = iSettingSmsService.detail(alias);
         return AjaxResult.success(map);
     }
@@ -49,11 +49,11 @@ public class SmsController {
      *
      * @author fzr
      * @param params 参数
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "短信引擎保存")
     @PostMapping("/save")
-    public Object save(@RequestBody Map<String, String> params) {
+    public AjaxResult save(@RequestBody Map<String, String> params) {
         iSettingSmsService.save(params);
         return AjaxResult.success();
     }

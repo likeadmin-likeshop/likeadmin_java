@@ -27,7 +27,7 @@ public class AuthMenuController {
      * 获取菜单路由
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/route")
     public Object route() {
@@ -40,7 +40,7 @@ public class AuthMenuController {
      * 获取菜单列表
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/list")
     public Object list() {
@@ -52,7 +52,7 @@ public class AuthMenuController {
      * 获取菜单详情
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
@@ -64,7 +64,7 @@ public class AuthMenuController {
      * 新增菜单
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "菜单新增")
     @PostMapping("/add")
@@ -77,11 +77,11 @@ public class AuthMenuController {
      * 更新菜单
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "菜单编辑")
     @PostMapping("/edit")
-    public Object edit(@Validated(value = SystemAuthMenuParam.update.class) @RequestBody SystemAuthMenuParam systemAuthMenuParam) {
+    public AjaxResult edit(@Validated(value = SystemAuthMenuParam.update.class) @RequestBody SystemAuthMenuParam systemAuthMenuParam) {
         iSystemAuthMenuService.edit(systemAuthMenuParam);
         return AjaxResult.success();
     }
@@ -90,11 +90,11 @@ public class AuthMenuController {
      * 删除菜单
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "菜单删除")
     @PostMapping("/del")
-    public Object del(@Validated(value = SystemAuthMenuParam.delete.class) @RequestBody SystemAuthMenuParam systemAuthMenuParam) {
+    public AjaxResult del(@Validated(value = SystemAuthMenuParam.delete.class) @RequestBody SystemAuthMenuParam systemAuthMenuParam) {
         iSystemAuthMenuService.del(systemAuthMenuParam.getId());
         return AjaxResult.success();
     }

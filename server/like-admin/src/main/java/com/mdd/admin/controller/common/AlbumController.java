@@ -30,10 +30,10 @@ public class AlbumController {
      * 相册文件列表
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/albumList")
-    public Object albumList(@Validated PageParam pageParam,
+    public AjaxResult albumList(@Validated PageParam pageParam,
                             @RequestParam Map<String, String> params) {
         PageResult<AlbumVo> voPageResult = iAlbumService.albumList(pageParam, params);
         return AjaxResult.success(voPageResult);
@@ -43,11 +43,11 @@ public class AlbumController {
      * 相册文件重命名
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "相册文件重命名")
     @PostMapping("/albumRename")
-    public Object albumRename(@Validated(value = AlbumParam.rename.class) @RequestBody AlbumParam albumParam) {
+    public AjaxResult albumRename(@Validated(value = AlbumParam.rename.class) @RequestBody AlbumParam albumParam) {
         iAlbumService.albumRename(albumParam.getId(), albumParam.getName());
         return AjaxResult.success();
     }
@@ -60,7 +60,7 @@ public class AlbumController {
      */
     @Log(title = "相册文件移动")
     @PostMapping("/albumMove")
-    public Object albumMove(@RequestBody Map<String, Object> params) {
+    public AjaxResult albumMove(@RequestBody Map<String, Object> params) {
         if (params.get("ids") == null) {
             return AjaxResult.failed("缺少ids参数");
         }
@@ -82,11 +82,11 @@ public class AlbumController {
      * 相册文件删除
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "相册文件删除")
     @PostMapping("/albumDel")
-    public Object albumDel(@RequestBody Map<String, List<Integer>> params) {
+    public AjaxResult albumDel(@RequestBody Map<String, List<Integer>> params) {
         if (params.get("ids") == null) {
             return AjaxResult.failed("缺少ids参数");
         }
@@ -99,10 +99,10 @@ public class AlbumController {
      * 相册分类列表
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/cateList")
-    public Object cateList(@RequestParam Map<String, String> params) {
+    public AjaxResult cateList(@RequestParam Map<String, String> params) {
         JSONArray jsonArray = iAlbumService.cateList(params);
         return AjaxResult.success(jsonArray);
     }
@@ -115,7 +115,7 @@ public class AlbumController {
      */
     @Log(title = "相册分类新增")
     @PostMapping("/cateAdd")
-    public Object cateAdd(@Validated(value = AlbumParam.cateAdd.class) @RequestBody AlbumParam albumParam) {
+    public AjaxResult cateAdd(@Validated(value = AlbumParam.cateAdd.class) @RequestBody AlbumParam albumParam) {
         iAlbumService.cateAdd(albumParam);
         return AjaxResult.success();
     }
@@ -124,11 +124,11 @@ public class AlbumController {
      * 相册分类重命名
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "相册分类重命名")
     @PostMapping("/cateRename")
-    public Object cateRename(@Validated(value = AlbumParam.rename.class) @RequestBody AlbumParam albumParam) {
+    public AjaxResult cateRename(@Validated(value = AlbumParam.rename.class) @RequestBody AlbumParam albumParam) {
         iAlbumService.cateRename(albumParam.getId(), albumParam.getName());
         return AjaxResult.success();
     }
@@ -141,7 +141,7 @@ public class AlbumController {
      */
     @Log(title = "相册分类删除")
     @PostMapping("/cateDel")
-    public Object cateDel(@Validated(value = AlbumParam.delete.class) @RequestBody AlbumParam albumParam) {
+    public AjaxResult cateDel(@Validated(value = AlbumParam.delete.class) @RequestBody AlbumParam albumParam) {
         iAlbumService.cateDel(albumParam.getId());
         return AjaxResult.success();
     }

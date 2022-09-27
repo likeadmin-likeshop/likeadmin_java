@@ -26,10 +26,10 @@ public class PagesController {
      *
      * @author fzr
      * @param id 主键
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         Map<String, Object> map = iDecoratePageService.detail(id);
         return AjaxResult.success(map);
     }
@@ -39,11 +39,11 @@ public class PagesController {
      *
      * @author fzr
      * @param decoratePageParam 参数
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "页面装修保存")
     @PostMapping("/save")
-    public Object save(@RequestBody DecoratePageParam decoratePageParam) {
+    public AjaxResult save(@RequestBody DecoratePageParam decoratePageParam) {
         iDecoratePageService.save(decoratePageParam);
         return AjaxResult.success();
     }

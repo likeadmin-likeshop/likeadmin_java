@@ -26,10 +26,10 @@ public class DataController {
      *
      * @author fzr
      * @param limit 条数
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/article")
-    public Object article(@RequestParam(defaultValue = "10") Integer limit) {
+    public AjaxResult article(@RequestParam(defaultValue = "10") Integer limit) {
         List<Map<String, Object>> list = iDecorateDataService.article(limit);
         return AjaxResult.success(list);
     }

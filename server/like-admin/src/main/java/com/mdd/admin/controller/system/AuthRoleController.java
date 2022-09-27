@@ -29,10 +29,10 @@ public class AuthRoleController {
      * 角色所有
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/all")
-    public Object all() {
+    public AjaxResult all() {
         List<Map<String, Object>> list = iSystemAuthRoleService.all();
         return AjaxResult.success(list);
     }
@@ -42,11 +42,11 @@ public class AuthRoleController {
      *
      * @author fzr
      * @param pageParam 分页参数
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "角色列表")
     @GetMapping("/list")
-    public Object list(@Validated PageParam pageParam) {
+    public AjaxResult list(@Validated PageParam pageParam) {
         PageResult<SystemAuthRoleVo> lists = iSystemAuthRoleService.list(pageParam);
         return AjaxResult.success(lists);
     }
@@ -55,11 +55,11 @@ public class AuthRoleController {
      * 角色详情
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "角色详情")
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         SystemAuthRoleVo vo = iSystemAuthRoleService.detail(id);
         return AjaxResult.success(vo);
     }
@@ -69,11 +69,11 @@ public class AuthRoleController {
      *
      * @author fzr
      * @param systemAuthRoleParam 角色参数
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "角色新增")
     @PostMapping("/add")
-    public Object add(@Validated(value = SystemAuthRoleParam.create.class) @RequestBody SystemAuthRoleParam systemAuthRoleParam) {
+    public AjaxResult add(@Validated(value = SystemAuthRoleParam.create.class) @RequestBody SystemAuthRoleParam systemAuthRoleParam) {
         iSystemAuthRoleService.add(systemAuthRoleParam);
         return AjaxResult.success();
     }
@@ -83,11 +83,11 @@ public class AuthRoleController {
      *
      * @author fzr
      * @param systemAuthRoleParam 角色参数
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "角色编辑")
     @PostMapping("/edit")
-    public Object edit(@Validated(value = SystemAuthRoleParam.create.class) @RequestBody SystemAuthRoleParam systemAuthRoleParam) {
+    public AjaxResult edit(@Validated(value = SystemAuthRoleParam.create.class) @RequestBody SystemAuthRoleParam systemAuthRoleParam) {
         iSystemAuthRoleService.edit(systemAuthRoleParam);
         return AjaxResult.success();
     }
@@ -97,11 +97,11 @@ public class AuthRoleController {
      *
      * @author fzr
      * @param systemAuthRoleParam 角色参数
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "角色删除")
     @PostMapping("/del")
-    public Object del(@Validated(value = SystemAuthRoleParam.delete.class) @RequestBody SystemAuthRoleParam systemAuthRoleParam) {
+    public AjaxResult del(@Validated(value = SystemAuthRoleParam.delete.class) @RequestBody SystemAuthRoleParam systemAuthRoleParam) {
         iSystemAuthRoleService.del(systemAuthRoleParam.getId());
         return AjaxResult.success();
     }

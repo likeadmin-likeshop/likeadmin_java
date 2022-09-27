@@ -1,5 +1,8 @@
 package com.mdd.admin.service.channel;
 
+import com.mdd.admin.validate.channel.ChannelWxParam;
+import com.mdd.admin.vo.channel.ChannelWxVo;
+
 import java.util.Map;
 
 /**
@@ -11,15 +14,16 @@ public interface IChannelWxService {
      * 微信开放平台设置详情
      *
      * @author fzr
-     * @return Map<String, String>
+     * @return ChannelWxVo
      */
-    Map<String, Object> detail();
+    ChannelWxVo detail();
 
     /**
      * 微信开放平台设置保存
      *
      * @author fzr
+     * @param channelWxParam 参数
      */
-    void save(Map<String, String> param);
+    void save(ChannelWxParam channelWxParam);
 
 }

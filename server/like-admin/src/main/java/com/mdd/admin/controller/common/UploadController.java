@@ -35,11 +35,11 @@ public class UploadController {
      *
      * @author fzr
      * @param request 请求对象
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "上传图片", requestType = RequestType.File)
     @PostMapping("/image")
-    public Object image(HttpServletRequest request) {
+    public AjaxResult image(HttpServletRequest request) {
         MultipartFile multipartFile;
         try {
             multipartFile = ((MultipartRequest) request).getFile("file");
@@ -79,11 +79,11 @@ public class UploadController {
      *
      * @author fzr
      * @param request 请求对象
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "上传视频", requestType = RequestType.File)
     @PostMapping("/video")
-    public Object video(HttpServletRequest request) {
+    public AjaxResult video(HttpServletRequest request) {
         MultipartFile multipartFile;
         try {
             multipartFile = ((MultipartRequest) request).getFile("file");

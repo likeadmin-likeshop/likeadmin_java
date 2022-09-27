@@ -18,11 +18,11 @@ public class ServerController {
      * 服务器信息
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "服务监控")
     @GetMapping("/server")
-    public Object info() {
+    public AjaxResult info() {
         ServerResult server = new ServerResult();
         return AjaxResult.success(server.copyTo());
     }

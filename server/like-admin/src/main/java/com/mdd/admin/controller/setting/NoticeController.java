@@ -27,10 +27,10 @@ public class NoticeController {
      *
      * @author fzr
      * @param recipient 类型: 1=用户, 2=平台
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/list")
-    public Object list(@RequestParam Integer recipient) {
+    public AjaxResult list(@RequestParam Integer recipient) {
         List<NoticeListVo> list = iSettingNoticeService.list(recipient);
         return AjaxResult.success(list);
     }
@@ -40,10 +40,10 @@ public class NoticeController {
      *
      * @author fzr
      * @param id 主键
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         NoticeDetailVo vo = iSettingNoticeService.detail(id);
         return AjaxResult.success(vo);
     }
@@ -56,7 +56,7 @@ public class NoticeController {
      * @return Object
      */
     @PostMapping("/save")
-    public Object save(@RequestBody Map<String, Object> params) {
+    public AjaxResult save(@RequestBody Map<String, Object> params) {
         iSettingNoticeService.save(params);
         return AjaxResult.success();
     }
