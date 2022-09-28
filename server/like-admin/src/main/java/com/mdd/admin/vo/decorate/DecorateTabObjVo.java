@@ -8,7 +8,6 @@ import java.util.Map;
 @Data
 public class DecorateTabObjVo {
 
-
     private Integer id;
     private String name;
     private String selected;
