@@ -4,8 +4,11 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * 通知设置详情Vo
+ */
 @Data
-public class NoticeDetailVo implements Serializable {
+public class SettingNoticeDetailVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

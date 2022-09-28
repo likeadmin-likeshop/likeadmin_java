@@ -1,8 +1,8 @@
 package com.mdd.admin.controller.setting;
 
 import com.mdd.admin.service.setting.ISettingNoticeService;
-import com.mdd.admin.vo.setting.NoticeDetailVo;
-import com.mdd.admin.vo.setting.NoticeListVo;
+import com.mdd.admin.vo.setting.SettingNoticeDetailVo;
+import com.mdd.admin.vo.setting.SettingNoticeListVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
@@ -31,7 +31,7 @@ public class NoticeController {
      */
     @GetMapping("/list")
     public AjaxResult list(@RequestParam Integer recipient) {
-        List<NoticeListVo> list = iSettingNoticeService.list(recipient);
+        List<SettingNoticeListVo> list = iSettingNoticeService.list(recipient);
         return AjaxResult.success(list);
     }
 
@@ -44,7 +44,7 @@ public class NoticeController {
      */
     @GetMapping("/detail")
     public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        NoticeDetailVo vo = iSettingNoticeService.detail(id);
+        SettingNoticeDetailVo vo = iSettingNoticeService.detail(id);
         return AjaxResult.success(vo);
     }
 

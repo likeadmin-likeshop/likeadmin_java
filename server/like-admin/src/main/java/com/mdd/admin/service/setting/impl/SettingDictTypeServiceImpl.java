@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mdd.admin.service.setting.ISettingDictTypeService;
 import com.mdd.admin.validate.common.PageParam;
 import com.mdd.admin.validate.setting.DictTypeParam;
-import com.mdd.admin.vo.setting.DictTypeVo;
+import com.mdd.admin.vo.setting.SettingDictTypeVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.setting.DictType;
 import com.mdd.common.mapper.setting.DictTypeMapper;
@@ -36,7 +36,7 @@ public class SettingDictTypeServiceImpl implements ISettingDictTypeService {
      * @return List<DictTypeVo>
      */
     @Override
-    public List<DictTypeVo> all() {
+    public List<SettingDictTypeVo> all() {
         QueryWrapper<DictType> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id,dict_name,dict_type,dict_remark,dict_status,create_time,update_time");
         queryWrapper.eq("is_delete", 0);
@@ -44,9 +44,9 @@ public class SettingDictTypeServiceImpl implements ISettingDictTypeService {
 
         List<DictType> dictTypeList = dictTypeMapper.selectList(queryWrapper);
 
-        List<DictTypeVo> list = new LinkedList<>();
+        List<SettingDictTypeVo> list = new LinkedList<>();
         for (DictType dictType : dictTypeList) {
-            DictTypeVo vo = new DictTypeVo();
+            SettingDictTypeVo vo = new SettingDictTypeVo();
             BeanUtils.copyProperties(dictType, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(dictType.getCreateTime()));
@@ -66,7 +66,7 @@ public class SettingDictTypeServiceImpl implements ISettingDictTypeService {
      * @return PageResult<DictDataVo>
      */
     @Override
-    public PageResult<DictTypeVo> list(PageParam pageParam, Map<String, String> params) {
+    public PageResult<SettingDictTypeVo> list(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
@@ -83,9 +83,9 @@ public class SettingDictTypeServiceImpl implements ISettingDictTypeService {
 
         IPage<DictType> iPage = dictTypeMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
-        List<DictTypeVo> list = new LinkedList<>();
+        List<SettingDictTypeVo> list = new LinkedList<>();
         for (DictType dictType : iPage.getRecords()) {
-            DictTypeVo vo = new DictTypeVo();
+            SettingDictTypeVo vo = new SettingDictTypeVo();
             BeanUtils.copyProperties(dictType, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(dictType.getCreateTime()));
@@ -104,7 +104,7 @@ public class SettingDictTypeServiceImpl implements ISettingDictTypeService {
      * @return DictDataVo
      */
     @Override
-    public DictTypeVo detail(Integer id) {
+    public SettingDictTypeVo detail(Integer id) {
         DictType dictType = dictTypeMapper.selectOne(new QueryWrapper<DictType>()
                 .select("id,dict_name,dict_type,dict_remark,dict_status,create_time,update_time")
                 .eq("id", id)
@@ -113,7 +113,7 @@ public class SettingDictTypeServiceImpl implements ISettingDictTypeService {
 
         Assert.notNull(dictType, "字典类型不存在！");
 
-        DictTypeVo vo = new DictTypeVo();
+        SettingDictTypeVo vo = new SettingDictTypeVo();
         BeanUtils.copyProperties(dictType, vo);
         vo.setCreateTime(TimeUtil.timestampToDate(dictType.getCreateTime()));
         vo.setUpdateTime(TimeUtil.timestampToDate(dictType.getUpdateTime()));

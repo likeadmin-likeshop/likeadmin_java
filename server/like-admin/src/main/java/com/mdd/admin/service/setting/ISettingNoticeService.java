@@ -1,7 +1,7 @@
 package com.mdd.admin.service.setting;
 
-import com.mdd.admin.vo.setting.NoticeDetailVo;
-import com.mdd.admin.vo.setting.NoticeListVo;
+import com.mdd.admin.vo.setting.SettingNoticeDetailVo;
+import com.mdd.admin.vo.setting.SettingNoticeListVo;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +18,7 @@ public interface ISettingNoticeService {
      * @param recipient 1=用户, 2=平台
      * @return List<NoticeSettingListVo>
      */
-    List<NoticeListVo> list(Integer recipient);
+    List<SettingNoticeListVo> list(Integer recipient);
 
     /**
      * 通知设置详情
@@ -27,7 +27,7 @@ public interface ISettingNoticeService {
      * @param id 主键
      * @return NoticeDetailVo
      */
-    NoticeDetailVo detail(Integer id);
+    SettingNoticeDetailVo detail(Integer id);
 
     /**
      * 通知设置保存

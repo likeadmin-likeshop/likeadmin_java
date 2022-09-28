@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.admin.service.setting.ISettingDictDataService;
 import com.mdd.admin.validate.common.PageParam;
 import com.mdd.admin.validate.setting.DictDataParam;
-import com.mdd.admin.vo.setting.DictDataVo;
+import com.mdd.admin.vo.setting.SettingDictDataVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.utils.StringUtil;
@@ -35,7 +35,7 @@ public class DictDataController {
     @GetMapping("/all")
     public AjaxResult all(@RequestParam Map<String, String> params) {
         Assert.isFalse(StringUtil.isEmpty(params.get("dictType")), "dictType缺失");
-        List<DictDataVo> list = iSettingDictDataService.all(params);
+        List<SettingDictDataVo> list = iSettingDictDataService.all(params);
         return AjaxResult.success(list);
     }
 
@@ -51,7 +51,7 @@ public class DictDataController {
     public AjaxResult list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
         Assert.isFalse(StringUtil.isEmpty(params.get("dictType")), "dictType缺失");
-        PageResult<DictDataVo> list = iSettingDictDataService.list(pageParam, params);
+        PageResult<SettingDictDataVo> list = iSettingDictDataService.list(pageParam, params);
         return AjaxResult.success(list);
     }
 
@@ -64,7 +64,7 @@ public class DictDataController {
      */
     @GetMapping("/detail")
     public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        DictDataVo vo = iSettingDictDataService.detail(id);
+        SettingDictDataVo vo = iSettingDictDataService.detail(id);
         return AjaxResult.success(vo);
     }
 

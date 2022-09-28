@@ -8,7 +8,7 @@ import java.io.Serializable;
  * 字典类型Vo
  */
 @Data
-public class DictTypeVo implements Serializable {
+public class SettingDictTypeVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

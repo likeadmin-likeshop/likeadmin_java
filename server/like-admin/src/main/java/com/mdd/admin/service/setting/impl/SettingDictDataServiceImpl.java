@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mdd.admin.service.setting.ISettingDictDataService;
 import com.mdd.admin.validate.common.PageParam;
 import com.mdd.admin.validate.setting.DictDataParam;
-import com.mdd.admin.vo.setting.DictDataVo;
+import com.mdd.admin.vo.setting.SettingDictDataVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.setting.DictData;
 import com.mdd.common.entity.setting.DictType;
@@ -41,7 +41,7 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
      * @return List<DictDataVo>
      */
     @Override
-    public List<DictDataVo> all(Map<String, String> params) {
+    public List<SettingDictDataVo> all(Map<String, String> params) {
         DictType dictType = dictTypeMapper.selectOne(new QueryWrapper<DictType>()
                 .eq("dict_type", params.get("dictType"))
                 .eq("is_delete", 0)
@@ -63,9 +63,9 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
 
         List<DictData> dictDataList = dictDataMapper.selectList(queryWrapper);
 
-        List<DictDataVo> list = new LinkedList<>();
+        List<SettingDictDataVo> list = new LinkedList<>();
         for (DictData dictData : dictDataList) {
-            DictDataVo vo = new DictDataVo();
+            SettingDictDataVo vo = new SettingDictDataVo();
             BeanUtils.copyProperties(dictData, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(dictData.getCreateTime()));
@@ -85,7 +85,7 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
      * @return PageResult<DictDataVo>
      */
     @Override
-    public PageResult<DictDataVo> list(PageParam pageParam, Map<String, String> params) {
+    public PageResult<SettingDictDataVo> list(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
@@ -110,9 +110,9 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
 
         IPage<DictData> iPage = dictDataMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
-        List<DictDataVo> list = new LinkedList<>();
+        List<SettingDictDataVo> list = new LinkedList<>();
         for (DictData dictData : iPage.getRecords()) {
-            DictDataVo vo = new DictDataVo();
+            SettingDictDataVo vo = new SettingDictDataVo();
             BeanUtils.copyProperties(dictData, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(dictData.getCreateTime()));
@@ -131,7 +131,7 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
      * @return DictDataVo
      */
     @Override
-    public DictDataVo detail(Integer id) {
+    public SettingDictDataVo detail(Integer id) {
         DictData dictData = dictDataMapper.selectOne(new QueryWrapper<DictData>()
                 .select("id,type_id,name,value,remark,sort,status,create_time,update_time")
                 .eq("id", id)
@@ -140,7 +140,7 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
 
         Assert.notNull(dictData, "字典数据不存在！");
 
-        DictDataVo vo = new DictDataVo();
+        SettingDictDataVo vo = new SettingDictDataVo();
         BeanUtils.copyProperties(dictData, vo);
         vo.setCreateTime(TimeUtil.timestampToDate(dictData.getCreateTime()));
         vo.setUpdateTime(TimeUtil.timestampToDate(dictData.getUpdateTime()));

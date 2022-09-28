@@ -3,7 +3,7 @@ package com.mdd.admin.controller.setting;
 import com.mdd.admin.service.setting.ISettingDictTypeService;
 import com.mdd.admin.validate.common.PageParam;
 import com.mdd.admin.validate.setting.DictTypeParam;
-import com.mdd.admin.vo.setting.DictTypeVo;
+import com.mdd.admin.vo.setting.SettingDictTypeVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
@@ -32,7 +32,7 @@ public class DictTypeController {
      */
     @GetMapping("/all")
     public AjaxResult all() {
-        List<DictTypeVo> list = iSettingDictTypeService.all();
+        List<SettingDictTypeVo> list = iSettingDictTypeService.all();
         return AjaxResult.success(list);
     }
 
@@ -47,7 +47,7 @@ public class DictTypeController {
     @GetMapping("/list")
     public AjaxResult list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
-        PageResult<DictTypeVo> list = iSettingDictTypeService.list(pageParam, params);
+        PageResult<SettingDictTypeVo> list = iSettingDictTypeService.list(pageParam, params);
         return AjaxResult.success(list);
     }
 
@@ -60,7 +60,7 @@ public class DictTypeController {
      */
     @GetMapping("/detail")
     public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        DictTypeVo vo = iSettingDictTypeService.detail(id);
+        SettingDictTypeVo vo = iSettingDictTypeService.detail(id);
         return AjaxResult.success(vo);
     }
 

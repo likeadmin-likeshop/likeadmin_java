@@ -8,7 +8,7 @@ import java.io.Serializable;
  * 通知设置列表Vo
  */
 @Data
-public class NoticeListVo implements Serializable {
+public class SettingNoticeListVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
