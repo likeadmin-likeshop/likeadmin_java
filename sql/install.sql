@@ -566,9 +566,9 @@ INSERT INTO `la_system_config` VALUES (62, 'oa_channel', 'encodingAesKey', '', 1
 INSERT INTO `la_system_config` VALUES (63, 'oa_channel', 'encryptionType', '1', 1660620367, 1662551337);
 INSERT INTO `la_system_config` VALUES (64, 'oa_channel', 'menus', '[]', 1631255140, 1663118712);
 INSERT INTO `la_system_config` VALUES (70, 'login', 'loginWay', '1,2', 1660620367, 1662538771);
-INSERT INTO `la_system_config` VALUES (71, 'login', 'forceBindMobile', '1', 1660620367, 1662538771);
+INSERT INTO `la_system_config` VALUES (71, 'login', 'forceBindMobile', '0', 1660620367, 1662538771);
 INSERT INTO `la_system_config` VALUES (72, 'login', 'openAgreement', '1', 1660620367, 1662538771);
-INSERT INTO `la_system_config` VALUES (73, 'login', 'openOtherAuth', '0', 1660620367, 1662538771);
+INSERT INTO `la_system_config` VALUES (73, 'login', 'openOtherAuth', '1', 1660620367, 1662538771);
 INSERT INTO `la_system_config` VALUES (74, 'login', 'autoLoginAuth', '1,2', 1660620367, 1662538771);
 INSERT INTO `la_system_config` VALUES (80, 'user', 'defaultAvatar', '/api/static/default_avatar.png', 1660620367, 1662535156);
 COMMIT;
