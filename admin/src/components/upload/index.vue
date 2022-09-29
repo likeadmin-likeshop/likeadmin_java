@@ -99,7 +99,7 @@ export default defineComponent({
                 visible.value = false
                 emit('change')
             }
-            if (response.code == RequestCodeEnum.FAIL && response.msg) {
+            if (response.code == RequestCodeEnum.FAILED && response.msg) {
                 feedback.msgError(response.msg)
             }
         }
