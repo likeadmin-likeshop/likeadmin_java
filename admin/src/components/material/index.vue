@@ -34,12 +34,22 @@
                                         <span class="muted m-r-10">···</span>
                                         <template #dropdown>
                                             <el-dropdown-menu>
-                                                <div
+                                                <popover-input
                                                     v-perms="['common:album:cateRename']"
-                                                    @click="handleEditCate(data.name, data.id)"
+                                                    @confirm="handleEditCate($event, data.id)"
+                                                    size="default"
+                                                    :value="data.name"
+                                                    width="400px"
+                                                    :limit="20"
+                                                    show-limit
+                                                    teleported
                                                 >
-                                                    <el-dropdown-item>命名分组</el-dropdown-item>
-                                                </div>
+                                                    <div>
+                                                        <el-dropdown-item>
+                                                            命名分组
+                                                        </el-dropdown-item>
+                                                    </div>
+                                                </popover-input>
                                                 <div
                                                     v-perms="['common:album:cateDel']"
                                                     @click="handleDeleteCate(data.id)"
@@ -57,9 +67,17 @@
             </div>
 
             <div class="flex justify-center p-2 border-t border-br">
-                <el-button @click="handleAddCate" v-perms="['common:album:cateAdd']">
-                    添加分组
-                </el-button>
+                <popover-input
+                    v-perms="['common:album:cateAdd']"
+                    @confirm="handleAddCate"
+                    size="default"
+                    width="400px"
+                    :limit="20"
+                    show-limit
+                    teleported
+                >
+                    <el-button> 添加分组 </el-button>
+                </popover-input>
             </div>
         </div>
         <div class="material__center flex flex-col">
@@ -195,14 +213,18 @@
 
                             <overflow-tooltip class="mt-1" :content="item.name" />
                             <div class="operation-btns flex items-center">
-                                <el-button
+                                <popover-input
                                     v-perms="['common:album:albumRename']"
-                                    type="primary"
-                                    link
-                                    @click="handleFileRename(item.name, item.id)"
+                                    @confirm="handleFileRename($event, item.id)"
+                                    size="default"
+                                    :value="item.name"
+                                    width="400px"
+                                    :limit="20"
+                                    show-limit
+                                    teleported
                                 >
-                                    重命名
-                                </el-button>
+                                    <el-button type="primary" link> 重命名 </el-button>
+                                </popover-input>
                                 <el-button type="primary" link @click="handlePreview(item.uri)">
                                     查看
                                 </el-button>
@@ -242,13 +264,17 @@
                     <el-table-column label="操作" width="150" fixed="right">
                         <template #default="{ row }">
                             <div class="inline-block" v-perms="['common:album:albumRename']">
-                                <el-button
-                                    type="primary"
-                                    link
-                                    @click.stop="handleFileRename(row.name, row.id)"
+                                <popover-input
+                                    @confirm="handleFileRename($event, row.id)"
+                                    size="default"
+                                    :value="row.name"
+                                    width="400px"
+                                    :limit="20"
+                                    show-limit
+                                    teleported
                                 >
-                                    重命名
-                                </el-button>
+                                    <el-button type="primary" link> 重命名 </el-button>
+                                </popover-input>
                             </div>
                             <div class="inline-block">
                                 <el-button type="primary" link @click.stop="handlePreview(row.uri)">

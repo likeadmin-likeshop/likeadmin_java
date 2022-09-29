@@ -45,8 +45,7 @@ export function useCate(type: number) {
     }
 
     // 添加分组
-    const handleAddCate = async () => {
-        const { value } = await feedback.prompt('', '添加分组')
+    const handleAddCate = async (value: string) => {
         await fileCateAdd({
             type,
             name: value,
@@ -56,8 +55,7 @@ export function useCate(type: number) {
     }
 
     // 编辑分组
-    const handleEditCate = async (name: string, id: number) => {
-        const { value } = await feedback.prompt('', '重命分组', { inputValue: name })
+    const handleEditCate = async (value: string, id: number) => {
         await fileCateEdit({
             id,
             name: value
@@ -180,8 +178,7 @@ export function useFile(
         clearSelect()
     }
 
-    const handleFileRename = async (name: string, id: number) => {
-        const { value } = await feedback.prompt('', '重命名', { inputValue: name })
+    const handleFileRename = async (value: string, id: number) => {
         await fileRename({
             id,
             name: value
