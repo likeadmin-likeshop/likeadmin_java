@@ -219,7 +219,7 @@
                                     size="default"
                                     :value="item.name"
                                     width="400px"
-                                    :limit="20"
+                                    :limit="50"
                                     show-limit
                                     teleported
                                 >
@@ -269,7 +269,7 @@
                                     size="default"
                                     :value="row.name"
                                     width="400px"
-                                    :limit="20"
+                                    :limit="50"
                                     show-limit
                                     teleported
                                 >

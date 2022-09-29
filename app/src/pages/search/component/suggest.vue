@@ -1,23 +1,21 @@
 <template>
     <view class="suggest bg-white">
         <!-- 热门搜索 -->
-        <view class="hot" v-if="hot_search.length">
+        <view class="hot" v-if="searchData.length">
             <view class="font-medium pl-[24rpx] pt-[26rpx] pb-[6rpx] text-lg">热门搜索</view>
 
             <view class="w-full px-[24rpx]">
-                <block v-for="(hotItem, index) in hot_search" :key="index">
-                    <view
-                        class="keyword truncate max-w-full"
-                        @click="handleHistoreSearch(hotItem)"
-                        >{{ hotItem }}</view
-                    >
+                <block v-for="(hotItem, index) in searchData" :key="index">
+                    <view class="keyword truncate max-w-full" @click="handleHistoreSearch(hotItem)">
+                        {{ hotItem }}
+                    </view>
                 </block>
             </view>
         </view>
 
         <view
             class="mx-[24rpx] my-[40rpx] border-b border-solid border-0 border-light"
-            v-if="hot_search.length && his_search.length"
+            v-if="searchData.length && his_search.length"
         ></view>
 
         <!-- 历史搜索 -->
@@ -39,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, nextTick } from 'vue'
+import { computed } from 'vue'
 
 const emit = defineEmits<{
     (event: 'search', value: string): void
@@ -52,10 +50,13 @@ const props = withDefaults(
         his_search?: string[]
     }>(),
     {
-        hot_search: [],
-        his_search: []
+        hot_search: () => [],
+        his_search: () => []
     }
 )
+const searchData = computed(() => {
+    return props.hot_search.filter((item) => item)
+})
 
 const handleHistoreSearch = (text: string) => {
     emit('search', text)
