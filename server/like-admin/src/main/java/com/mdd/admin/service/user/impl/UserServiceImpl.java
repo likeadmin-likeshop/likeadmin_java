@@ -164,19 +164,19 @@ public class UserServiceImpl implements IUserService {
                         throw new OperateException("当前账号已存在!");
                     }
                 }
+                Assert.isTrue(value.length() <= 32,"账号不能超过32个字符");
                 user.setUsername(value);
                 break;
             case "realName":
+                Assert.isTrue(value.length() <= 32,"真实姓名不能超过32个字符");
                 user.setRealName(value);
                 break;
             case "sex":
                 user.setSex(Integer.parseInt(value));
                 break;
             case "mobile":
-                if (!value.equals("")) {
-                    if(!Pattern.matches("^[1][3,4,5,6,7,8,9][0-9]{9}$", value)){
-                        throw new OperateException("手机号格式不正确!");
-                    }
+                if (!Pattern.matches("^[1][3,4,5,6,7,8,9][0-9]{9}$", value)) {
+                    throw new OperateException("手机号格式不正确!");
                 }
                 user.setMobile(value);
                 break;
