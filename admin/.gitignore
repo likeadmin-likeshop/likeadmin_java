@@ -30,3 +30,6 @@ components.d.ts
 *.sln
 *.sw?
 
+# .env
+.env.development
+.env.production
