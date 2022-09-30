@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { firstToUpperCase } from '@/utils/util'
 
 // 微信公众号配置保存
 export function setOaConfig(params: any) {
@@ -47,12 +48,11 @@ export function setOaMenuPublish(params: Menu | any) {
 }
 
 /**
- * @return { Promise }
- * @param { string } type
- * @description 获取回复列表
+ * @description 默认回复列表
  */
-export function getOaReplyList(params: { type: string }) {
-    return request.get({ url: '/channel/oaReply/list', params })
+export function getOaReplyList(params: any) {
+    const type = firstToUpperCase(params.type)
+    return request.get({ url: `/channel/oaReply${type}/list`, params })
 }
 
 /**
@@ -60,8 +60,9 @@ export function getOaReplyList(params: { type: string }) {
  * @param { number } id
  * @description 回复列表删除
  */
-export function oaReplyDel(params: { id: number }) {
-    return request.post({ url: '/channel/oaReply/del', params })
+export function oaReplyDel(params: any) {
+    const type = firstToUpperCase(params.type)
+    return request.post({ url: `/channel/oaReply${type}/del`, params })
 }
 
 /**
@@ -69,8 +70,9 @@ export function oaReplyDel(params: { id: number }) {
  * @param { number } id
  * @description 回复状态修改
  */
-export function changeOaReplyStatus(params: { id: number }) {
-    return request.post({ url: '/channel/oaReply/status', params })
+export function changeOaReplyStatus(params: any) {
+    const type = firstToUpperCase(params.type)
+    return request.post({ url: `/channel/oaReply${type}/status`, params })
 }
 
 export interface Reply {
@@ -85,25 +87,26 @@ export interface Reply {
 }
 /**
  * @return { Promise }
- * @description 回复添加
+ * @description 默认回复编辑
  */
 export function oaReplyAdd(params: Reply) {
-    return request.post({ url: '/channel/oaReply/add', params })
+    const type = firstToUpperCase(params.type)
+    return request.post({ url: `/channel/oaReply${type}/add`, params })
 }
 
 /**
  * @return { Promise }
- * @description 回复编辑
+ * @description 默认回复编辑
  */
 export function oaReplyEdit(params: Reply) {
-    return request.post({ url: '/channel/oaReply/edit', params })
+    const type = firstToUpperCase(params.type)
+    return request.post({ url: `/channel/oaReply${type}/edit`, params })
 }
 
 /**
- * @return { Promise }
- * @param { string } type
- * @description 获取回复详情
+ * @description 默认回复详情
  */
-export function getOaReplyDetail(params: { id: number }) {
-    return request.get({ url: '/channel/oaReply/detail', params })
+export function getOaReplyDetail(params: any) {
+    const type = firstToUpperCase(params.type)
+    return request.get({ url: `/channel/oaReply${type}/detail`, params })
 }

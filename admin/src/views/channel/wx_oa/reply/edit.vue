@@ -72,7 +72,7 @@
                 </el-form-item> -->
                 <el-form-item label="排序">
                     <div class="flex-1">
-                        <el-input v-model="formData.sort" placeholder="请输入" />
+                        <el-input-number v-model="formData.sort" :min="0"/>
                     </div>
                 </el-form-item>
                 <el-form-item label="启用状态">
@@ -172,7 +172,8 @@ const setFormData = (data: Record<any, any>) => {
 
 const getDetail = async (row: Record<string, any>) => {
     const data = await getOaReplyDetail({
-        id: row.id
+        id: row.id,
+        type: formData.type
     })
     setFormData(data)
 }
