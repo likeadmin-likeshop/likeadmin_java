@@ -97,6 +97,7 @@ public class ChannelOaReplyDefaultServiceImpl implements IChannelOaReplyDefaultS
         officialReply.setContent(channelOaReplyParam.getContent());
         officialReply.setContentType(channelOaReplyParam.getContentType());
         officialReply.setStatus(channelOaReplyParam.getStatus());
+        officialReply.setSort(channelOaReplyParam.getSort());
         officialReply.setCreateTime(System.currentTimeMillis() / 1000);
         officialReply.setUpdateTime(System.currentTimeMillis() / 1000);
         officialReplyMapper.insert(officialReply);
@@ -130,6 +131,7 @@ public class ChannelOaReplyDefaultServiceImpl implements IChannelOaReplyDefaultS
         officialReply.setContent(channelOaReplyParam.getContent());
         officialReply.setContentType(channelOaReplyParam.getContentType());
         officialReply.setStatus(channelOaReplyParam.getStatus());
+        officialReply.setSort(channelOaReplyParam.getSort());
         officialReply.setCreateTime(System.currentTimeMillis() / 1000);
         officialReply.setUpdateTime(System.currentTimeMillis() / 1000);
         officialReplyMapper.updateById(officialReply);

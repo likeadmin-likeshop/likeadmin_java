@@ -94,6 +94,7 @@ public class ChannelOaReplyKeywordServiceImpl implements IChannelOaReplyKeywordS
         officialReply.setStatus(channelOaReplyParam.getStatus());
         officialReply.setKeyword(channelOaReplyParam.getKeyword());
         officialReply.setMatchingType(channelOaReplyParam.getMatchingType());
+        officialReply.setSort(channelOaReplyParam.getSort());
         officialReply.setCreateTime(System.currentTimeMillis() / 1000);
         officialReply.setUpdateTime(System.currentTimeMillis() / 1000);
         officialReplyMapper.insert(officialReply);
@@ -123,6 +124,7 @@ public class ChannelOaReplyKeywordServiceImpl implements IChannelOaReplyKeywordS
         officialReply.setStatus(channelOaReplyParam.getStatus());
         officialReply.setKeyword(channelOaReplyParam.getKeyword());
         officialReply.setMatchingType(channelOaReplyParam.getMatchingType());
+        officialReply.setSort(channelOaReplyParam.getSort());
         officialReply.setUpdateTime(System.currentTimeMillis() / 1000);
         officialReplyMapper.updateById(officialReply);
     }

@@ -128,7 +128,7 @@ public class ChannelOaReplyFollowServiceImpl implements IChannelOaReplyFollowSer
         }
 
         officialReply.setId(channelOaReplyParam.getId());
-        officialReply.setReplyType(3);
+        officialReply.setReplyType(1);
         officialReply.setName(channelOaReplyParam.getName());
         officialReply.setContent(channelOaReplyParam.getContent());
         officialReply.setContentType(channelOaReplyParam.getContentType());
