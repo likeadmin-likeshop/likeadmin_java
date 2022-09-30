@@ -48,7 +48,7 @@ public class DecorateTabbarServiceImpl implements IDecorateTabbarService {
             vo.setUnselected(UrlUtil.toAbsoluteUrl(tab.getUnselected()));
             vo.setLink(tab.getLink());
             vo.setCreateTime(TimeUtil.timestampToDate(tab.getCreateTime()));
-            vo.setUnselected(TimeUtil.timestampToDate(tab.getUpdateTime()));
+            vo.setUpdateTime(TimeUtil.timestampToDate(tab.getUpdateTime()));
             tabList.add(vo);
         }
 
