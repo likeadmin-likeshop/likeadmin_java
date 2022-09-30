@@ -18,10 +18,10 @@ public class LoginController {
      * 登录设置详情
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail() {
+    public AjaxResult detail() {
         Map<String, Object> map = iSettingLoginService.detail();
         return AjaxResult.success(map);
     }
@@ -34,7 +34,7 @@ public class LoginController {
      * @return Object
      */
     @PostMapping("/save")
-    public Object save(@RequestBody Map<String, String> params) {
+    public AjaxResult save(@RequestBody Map<String, String> params) {
         iSettingLoginService.save(params);
         return AjaxResult.success();
     }

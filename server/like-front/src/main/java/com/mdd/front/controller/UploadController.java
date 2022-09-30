@@ -29,8 +29,6 @@ public class UploadController {
      */
     @PostMapping("/image")
     public Object image(HttpServletRequest request) {
-
-        System.out.println(request.getParameter("dir"));
         MultipartFile multipartFile;
         try {
             multipartFile = ((MultipartRequest) request).getFile("file");

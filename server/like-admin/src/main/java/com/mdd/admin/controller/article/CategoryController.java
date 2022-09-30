@@ -29,10 +29,10 @@ public class CategoryController {
      * 分类所有
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/all")
-    public Object all() {
+    public AjaxResult all() {
         List<ArticleCateVo> list = iArticleCategoryService.all();
         return AjaxResult.success(list);
     }
@@ -46,7 +46,7 @@ public class CategoryController {
      * @return Object
      */
     @GetMapping("/list")
-    public Object list(@Validated PageParam pageParam,
+    public AjaxResult list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
         PageResult<ArticleCateVo> list = iArticleCategoryService.list(pageParam, params);
         return AjaxResult.success(list);
@@ -57,10 +57,10 @@ public class CategoryController {
      *
      * @author fzr
      * @param id 主键
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         ArticleCateVo vo = iArticleCategoryService.detail(id);
         return AjaxResult.success(vo);
     }
@@ -70,11 +70,11 @@ public class CategoryController {
      *
      * @author fzr
      * @param categoryParam 分类参数
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "文章分类新增")
     @PostMapping("/add")
-    public Object add(@Validated(value = CategoryParam.create.class)
+    public AjaxResult add(@Validated(value = CategoryParam.create.class)
                           @RequestBody CategoryParam categoryParam) {
         iArticleCategoryService.add(categoryParam);
         return AjaxResult.success();
@@ -85,11 +85,11 @@ public class CategoryController {
      *
      * @author fzr
      * @param categoryParam 分类编辑
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "文章分类编辑")
     @PostMapping("/edit")
-    public Object edit(@Validated(value = CategoryParam.update.class)
+    public AjaxResult edit(@Validated(value = CategoryParam.update.class)
                            @RequestBody CategoryParam categoryParam) {
         iArticleCategoryService.edit(categoryParam);
         return AjaxResult.success();
@@ -100,11 +100,11 @@ public class CategoryController {
      *
      * @author fzr
      * @param categoryParam 分类删除
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "文章分类删除")
     @PostMapping("/del")
-    public Object del(@Validated(value = CategoryParam.delete.class)
+    public AjaxResult del(@Validated(value = CategoryParam.delete.class)
                           @RequestBody CategoryParam categoryParam) {
         iArticleCategoryService.del(categoryParam.getId());
         return AjaxResult.success();
@@ -115,11 +115,11 @@ public class CategoryController {
      *
      * @author fzr
      * @param categoryParam 分类参数
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "文章分类状态")
     @PostMapping("/change")
-    public Object change(@Validated(value = CategoryParam.change.class)
+    public AjaxResult change(@Validated(value = CategoryParam.change.class)
                          @RequestBody CategoryParam categoryParam) {
         iArticleCategoryService.change(categoryParam.getId());
         return AjaxResult.success();

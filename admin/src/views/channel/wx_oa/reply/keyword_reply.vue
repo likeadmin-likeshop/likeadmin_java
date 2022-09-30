@@ -10,14 +10,19 @@
         </el-card>
         <el-card class="!border-none mt-4" shadow="never">
             <div>
-                <el-button class="mb-4" type="primary" @click="handleAdd()">
+                <el-button
+                    v-perms="['channel:oaReplyKeyword:add']"
+                    class="mb-4"
+                    type="primary"
+                    @click="handleAdd()"
+                >
                     <template #icon>
                         <icon name="el-icon-Plus" />
                     </template>
                     新增
                 </el-button>
             </div>
-            <el-table size="large" :data="lists">
+            <el-table size="large" :data="pager.lists" v-loading="pager.loading">
                 <el-table-column label="规则名称" prop="name" min-width="120" />
 
                 <el-table-column label="关键词" prop="keyword" min-width="120" />
@@ -34,6 +39,7 @@
                 <el-table-column label="状态" min-width="120">
                     <template #default="{ row }">
                         <el-switch
+                            v-perms="['channel:oaReplyKeyword:status']"
                             v-model="row.status"
                             :active-value="1"
                             :inactive-value="0"
@@ -44,24 +50,39 @@
                 <el-table-column label="排序" prop="sort" min-width="120" />
                 <el-table-column label="操作" width="120" fixed="right">
                     <template #default="{ row }">
-                        <el-button type="primary" link @click="handleEdit(row)"> 编辑 </el-button>
-                        <el-button type="danger" link @click="handleDelete(row.id)">
+                        <el-button
+                            v-perms="['channel:oaReplyKeyword:edit']"
+                            type="primary"
+                            link
+                            @click="handleEdit(row)"
+                        >
+                            编辑
+                        </el-button>
+                        <el-button
+                            v-perms="['channel:oaReplyKeyword:del']"
+                            type="danger"
+                            link
+                            @click="handleDelete(row.id)"
+                        >
                             删除
                         </el-button>
                     </template>
                 </el-table-column>
             </el-table>
+            <div class="flex justify-end mt-4">
+                <pagination v-model="pager" @change="getLists" />
+            </div>
         </el-card>
         <edit-popup v-if="showEdit" ref="editRef" @success="getLists" @close="showEdit = false" />
     </div>
 </template>
 <script lang="ts" setup>
 import { oaReplyDel, getOaReplyList, changeOaReplyStatus } from '@/api/channel/wx_oa'
+import { usePaging } from '@/hooks/usePaging'
 import feedback from '@/utils/feedback'
 import EditPopup from './edit.vue'
 const editRef = shallowRef<InstanceType<typeof EditPopup>>()
 const showEdit = ref(false)
-const lists = ref()
 
 const getMatchingType = computed(() => {
     return (val: number) => {
@@ -82,34 +103,37 @@ const getContentType = computed(() => {
         }
     }
 })
-
-const getLists = async () => {
-    lists.value = await getOaReplyList({ type: 'keyword' })
-}
+const type = 'keyword'
+const { pager, getLists } = usePaging({
+    fetchFun: getOaReplyList,
+    params: {
+        type
+    }
+})
 
 const handleAdd = async () => {
     showEdit.value = true
     await nextTick()
-    editRef.value?.open('add', 'keyword')
+    editRef.value?.open('add', type)
 }
 
 const handleEdit = async (data: any) => {
     showEdit.value = true
     await nextTick()
-    editRef.value?.open('edit', 'keyword')
+    editRef.value?.open('edit', type)
     editRef.value?.getDetail(data)
 }
 
 const handleDelete = async (id: number) => {
     await feedback.confirm('确定要删除？')
-    await oaReplyDel({ id })
+    await oaReplyDel({ id, type })
     feedback.msgSuccess('删除成功')
     getLists()
 }
 
 const changeStatus = async (id: number) => {
     try {
-        await changeOaReplyStatus({ id })
+        await changeOaReplyStatus({ id, type })
         feedback.msgSuccess('修改成功')
         getLists()
     } catch (error) {

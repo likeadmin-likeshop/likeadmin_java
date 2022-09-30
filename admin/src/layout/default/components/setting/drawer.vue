@@ -47,6 +47,16 @@
                     />
                 </div>
             </div>
+            <div class="setting-item mb-5 flex justify-between items-center">
+                <span class="text-tx-secondary">只展开一个一级菜单</span>
+                <div>
+                    <el-switch
+                        v-model="isUniqueOpened"
+                        :active-value="true"
+                        :inactive-value="false"
+                    />
+                </div>
+            </div>
             <div class="setting-item mb-5">
                 <div class="text-tx-secondary mb-4">菜单栏宽度</div>
                 <div><el-input-number v-model="sideWidth" :min="180" :max="250" /></div>
@@ -96,6 +106,18 @@ const openMultipleTabs = computed({
     set(value) {
         settingStore.setSetting({
             key: 'openMultipleTabs',
+            value
+        })
+    }
+})
+
+const isUniqueOpened = computed({
+    get() {
+        return settingStore.isUniqueOpened
+    },
+    set(value) {
+        settingStore.setSetting({
+            key: 'isUniqueOpened',
             value
         })
     }

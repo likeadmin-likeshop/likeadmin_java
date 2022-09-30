@@ -22,10 +22,10 @@ public class CopyrightController {
      * 获取网站版权信息
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail() {
+    public AjaxResult detail() {
         List<Map<String, String>> list = iSettingCopyrightService.detail();
         return AjaxResult.success(list);
     }
@@ -34,10 +34,10 @@ public class CopyrightController {
      * 保存网站版本信息
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/save")
-    public Object save(@RequestBody List<Map<String, String>> params) {
+    public AjaxResult save(@RequestBody List<Map<String, String>> params) {
         iSettingCopyrightService.save(params);
         return AjaxResult.success();
     }

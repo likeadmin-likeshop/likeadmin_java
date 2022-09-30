@@ -4,8 +4,12 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+#set($isAuthor = !$authorName.equals(""))
 /**
  * ${EntityName}Vo
+#if($isAuthor)
+ * @author ${authorName}
+#end
  */
 @Data
 public class ${EntityName}ListVo implements Serializable {
@@ -14,10 +18,13 @@ public class ${EntityName}ListVo implements Serializable {
 
 #foreach ($column in $columns)
 #if($column.isList==1 || $column.isPk==1)
+    #if($notesType.equals("top"))
+    // ${column.columnComment}
+    #end
     #if($dateFields.contains($column.columnName))
     private String ${column.javaField}; // ${column.columnComment}
     #else
-    private ${column.javaType} ${column.javaField}; // ${column.columnComment}
+    private ${column.javaType} ${column.javaField};  #if($notesType.equals("right"))// ${column.columnComment}#end
     #end
 #end
 #end

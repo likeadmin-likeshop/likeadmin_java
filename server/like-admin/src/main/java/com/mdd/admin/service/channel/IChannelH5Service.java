@@ -1,5 +1,8 @@
 package com.mdd.admin.service.channel;
 
+import com.mdd.admin.validate.channel.ChannelH5Param;
+import com.mdd.admin.vo.channel.ChannelH5Vo;
+
 import java.util.Map;
 
 /**
@@ -11,15 +14,16 @@ public interface IChannelH5Service {
      * H5设置详情
      *
      * @author fzr
-     * @return Map<String, String>
+     * @return ChannelH5Vo
      */
-    Map<String, Object> detail();
+    ChannelH5Vo detail();
 
     /**
      * H5设置保存
      *
      * @author fzr
+     * @param channelH5Param 参数
      */
-    void save(Map<String, String> param);
+    void save(ChannelH5Param channelH5Param);
 
 }

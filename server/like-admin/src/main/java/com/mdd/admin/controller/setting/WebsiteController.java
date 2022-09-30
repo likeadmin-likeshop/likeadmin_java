@@ -21,10 +21,10 @@ public class WebsiteController {
      * 获取网站配置信息
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail() {
+    public AjaxResult detail() {
         Map<String, String> detail = iSettingWebsiteService.detail();
         return AjaxResult.success(detail);
     }
@@ -37,7 +37,7 @@ public class WebsiteController {
      * @return Object
      */
     @PostMapping("/save")
-    public Object save(@RequestBody Map<String, String> params) {
+    public AjaxResult save(@RequestBody Map<String, String> params) {
         iSettingWebsiteService.save(params);
         return AjaxResult.success();
     }

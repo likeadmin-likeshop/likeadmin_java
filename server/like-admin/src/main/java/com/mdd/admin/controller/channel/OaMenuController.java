@@ -22,10 +22,10 @@ public class OaMenuController {
      * 菜单详情
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail() {
+    public AjaxResult detail() {
         JSONArray detail = iChannelOaMenuService.detail();
         return AjaxResult.success(detail);
     }
@@ -35,10 +35,10 @@ public class OaMenuController {
      *
      * @author fzr
      * @param params 参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/save")
-    public Object save(@RequestBody List<Object> params) {
+    public AjaxResult save(@RequestBody List<Object> params) {
         iChannelOaMenuService.save(params, false);
         return AjaxResult.success();
     }
@@ -48,10 +48,10 @@ public class OaMenuController {
      *
      * @author fzr
      * @param params 参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/publish")
-    public Object publish(@RequestBody List<Object> params) {
+    public AjaxResult publish(@RequestBody List<Object> params) {
         iChannelOaMenuService.save(params, true);
         return AjaxResult.success();
     }

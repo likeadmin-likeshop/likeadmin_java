@@ -30,10 +30,10 @@ public class LoginController {
      *
      * @author fzr
      * @param systemLoginParam 登录参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/login")
-    public Object login(@Validated() @RequestBody SystemLoginParam systemLoginParam) {
+    public AjaxResult login(@Validated() @RequestBody SystemLoginParam systemLoginParam) {
         try {
             Map<String, Object> map = iSystemLoginService.login(systemLoginParam);
             return AjaxResult.success(map);
@@ -49,10 +49,10 @@ public class LoginController {
      *
      * @author fzr
      * @param request 请求接口
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/logout")
-    public Object logout(HttpServletRequest request) {
+    public AjaxResult logout(HttpServletRequest request) {
         try {
             iSystemLoginService.logout(request.getHeader("token"));
             return AjaxResult.success();

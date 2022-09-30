@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-card class="!border-none" shadow="never">
-            <el-page-header content="编辑通知设置" @back="$router.back()" />
+            <el-page-header :content="$route.meta.title" @back="$router.back()" />
         </el-card>
         <el-form
             ref="formRef"
@@ -42,11 +42,9 @@
                             />
                         </div>
                         <div class="form-tips">
-                            可选变量 用户昵称:nickname 订单编号:order_sn 支付时间:pay_time
-                            <br />
-                            示例：亲爱的${nickname}，您的订单${order_sn}已支付成功，商家正在快马加鞭为您安排发货。
-                            <br />
-                            生效条件：1、管理后台完成短信设置。2、第三方短信平台申请模板。
+                            <div v-for="(item, index) in formData.smsNotice.tips" :key="index">
+                                {{ item }}
+                            </div>
                         </div>
                     </div>
                 </el-form-item>
@@ -76,7 +74,8 @@ const formData = reactive({
     smsNotice: {
         status: 0,
         templateId: '',
-        content: ''
+        content: '',
+        tips: []
     }
 })
 

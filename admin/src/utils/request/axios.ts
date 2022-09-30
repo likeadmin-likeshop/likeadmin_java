@@ -72,10 +72,9 @@ export class Axios {
                 }
 
                 if (err.code == AxiosError.ECONNABORTED || err.code == AxiosError.ERR_NETWORK) {
-                    setTimeout(() => {
-                        console.log(err)
+                    return new Promise((resolve) => setTimeout(resolve, 500)).then(() =>
                         this.retryRequest(err)
-                    }, 500)
+                    )
                 }
                 return Promise.reject(err)
             }
@@ -103,17 +102,17 @@ export class Axios {
     retryRequest(error: AxiosError) {
         const config = error.config
         const { retryCount, isOpenRetry } = config.requestOptions
-        if (!isOpenRetry && config.method?.toUpperCase() == RequestMethodsEnum.POST) {
-            return
+        if (!isOpenRetry || config.method?.toUpperCase() == RequestMethodsEnum.POST) {
+            return Promise.reject(error)
         }
         config.retryCount = config.retryCount ?? 0
 
         if (config.retryCount >= retryCount) {
-            return
+            return Promise.reject(error)
         }
         config.retryCount++
 
-        this.axiosInstance.request(config)
+        return this.axiosInstance.request(config)
     }
     /**
      * @description get请求

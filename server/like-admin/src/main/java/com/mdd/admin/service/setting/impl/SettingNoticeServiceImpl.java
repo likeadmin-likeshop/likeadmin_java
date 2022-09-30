@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.admin.service.setting.ISettingNoticeService;
-import com.mdd.admin.vo.setting.NoticeDetailVo;
-import com.mdd.admin.vo.setting.NoticeListVo;
+import com.mdd.admin.vo.setting.SettingNoticeDetailVo;
+import com.mdd.admin.vo.setting.SettingNoticeListVo;
 import com.mdd.common.entity.notice.NoticeSetting;
 import com.mdd.common.mapper.notice.NoticeSettingMapper;
 import com.mdd.common.utils.TimeUtil;
@@ -35,16 +35,16 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
      * @return List<NoticeSettingListVo>
      */
     @Override
-    public List<NoticeListVo> list(Integer recipient) {
+    public List<SettingNoticeListVo> list(Integer recipient) {
         QueryWrapper<NoticeSetting> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("recipient", recipient);
         queryWrapper.eq("is_delete", 0);
         queryWrapper.orderByAsc("id");
 
         List<NoticeSetting> noticeSettings = noticeSettingMapper.selectList(queryWrapper);
-        List<NoticeListVo> list = new LinkedList<>();
+        List<SettingNoticeListVo> list = new LinkedList<>();
         for (NoticeSetting n : noticeSettings) {
-            NoticeListVo vo = new NoticeListVo();
+            SettingNoticeListVo vo = new SettingNoticeListVo();
             BeanUtils.copyProperties(n, vo);
 
             Map<String, String> systemMap = ToolsUtil.jsonToMap(n.getSystemNotice());
@@ -74,13 +74,13 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
      *
      */
     @Override
-    public NoticeDetailVo detail(Integer id) {
+    public SettingNoticeDetailVo detail(Integer id) {
         NoticeSetting noticeSetting = noticeSettingMapper.selectOne(new QueryWrapper<NoticeSetting>()
                 .eq("id", id)
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
-        NoticeDetailVo vo = new NoticeDetailVo();
+        SettingNoticeDetailVo vo = new SettingNoticeDetailVo();
         BeanUtils.copyProperties(noticeSetting, vo);
 
         Map<String, Object> systemMap = ToolsUtil.jsonToMapAsObj(noticeSetting.getSystemNotice());

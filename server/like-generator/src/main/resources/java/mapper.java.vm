@@ -1,10 +1,14 @@
 package ${packageName}.common.mapper.${moduleName};
 
-import com.mdd.common.core.basics.IBaseMapper;
-import com.mdd.common.entity.${moduleName}.${EntityName};
+import ${packageName}.common.core.basics.IBaseMapper;
+import ${packageName}.common.entity.${moduleName}.${EntityName};
 
+#set($isAuthor = !$authorName.equals(""))
 /**
  * ${functionName}Mapper
+#if($isAuthor)
+ * @author ${authorName}
+#end
  */
 @Mapper
 public interface ${EntityName}Mapper extends IBaseMapper<${EntityName}> {

@@ -15,7 +15,7 @@
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
                     <el-select
                         v-model="queryParams.${column.javaField}"
-                        class="w-56"
+                        class="w-[280px]"
                         clearable
                     >
                         #if($column.dictType=="")
@@ -33,7 +33,7 @@
                 </el-form-item>
                 #elseif($column.htmlType=="input")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
-                    <el-input class="w-56" v-model="queryParams.${column.javaField}" />
+                    <el-input class="w-[280px]" v-model="queryParams.${column.javaField}" />
                 </el-form-item>
                 #end
             #end

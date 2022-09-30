@@ -14,4 +14,7 @@ public class GenConfig {
     // 是否去除表前缀
     public static Boolean isRemoveTablePrefix = true;
 
+    // 注释类型[top=顶, right=右]
+    public static String notesType = "right";
+
 }

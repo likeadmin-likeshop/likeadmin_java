@@ -1,6 +1,8 @@
 package com.mdd.admin.service.channel.impl;
 
 import com.mdd.admin.service.channel.IChannelMpService;
+import com.mdd.admin.validate.channel.ChannelMpParam;
+import com.mdd.admin.vo.channel.ChannelMpVo;
 import com.mdd.common.utils.ConfigUtil;
 import com.mdd.common.utils.RequestUtil;
 import com.mdd.common.utils.UrlUtil;
@@ -19,43 +21,45 @@ public class ChannelMpServiceImpl implements IChannelMpService {
      * 微信小程序渠道详情
      *
      * @author fzr
-     * @return Map<String, Object>
+     * @return ChannelMpVo
      */
     @Override
-    public Map<String, Object> detail() {
+    public ChannelMpVo detail() {
         Map<String, String> config = ConfigUtil.get("mp_channel");
-        System.out.println(config);
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("name", config.getOrDefault("name", ""));
-        map.put("primaryId", config.getOrDefault("primaryId", ""));
-        map.put("appId", config.getOrDefault("appId", ""));
-        map.put("appSecret", config.getOrDefault("appSecret", ""));
-        map.put("qrCode", UrlUtil.toAbsoluteUrl(config.getOrDefault("qrCode", "")));
+
+        ChannelMpVo vo = new ChannelMpVo();
+        vo.setName(config.getOrDefault("name", ""));
+        vo.setPrimaryId(config.getOrDefault("primaryId", ""));
+        vo.setAppId(config.getOrDefault("appId", ""));
+        vo.setAppSecret(config.getOrDefault("appSecret", ""));
+        vo.setQrCode(UrlUtil.toAbsoluteUrl(config.getOrDefault("qrCode", "")));
+
 
         String domain = RequestUtil.domain();
-        map.put("requestDomain", domain);
-        map.put("socketDomain", domain);
-        map.put("uploadFileDomain", domain);
-        map.put("downloadFileDomain", domain);
-        map.put("udpDomain", domain);
-        map.put("tcpDomain", domain);
-        map.put("businessDomain", domain);
-        return map;
+        vo.setRequestDomain(domain);
+        vo.setSocketDomain(domain);
+        vo.setUploadFileDomain(domain);
+        vo.setDownloadFileDomain(domain);
+        vo.setUdpDomain(domain);
+        vo.setTcpDomain(domain);
+        vo.setBusinessDomain(domain);
+
+        return vo;
     }
 
     /**
      * 微信小程序渠道保存
      *
      * @author fzr
-     * @param param 参数
+     * @param channelMpParam 参数
      */
     @Override
-    public void save(Map<String, String> param) {
-        ConfigUtil.set("mp_channel", "name", param.getOrDefault("name", ""));
-        ConfigUtil.set("mp_channel", "primaryId", param.getOrDefault("primaryId", ""));
-        ConfigUtil.set("mp_channel", "appId", param.getOrDefault("appId", ""));
-        ConfigUtil.set("mp_channel", "appSecret", param.getOrDefault("appSecret", ""));
-        ConfigUtil.set("mp_channel", "qrCode", UrlUtil.toRelativeUrl(param.getOrDefault("qrCode", "")));
+    public void save(ChannelMpParam channelMpParam) {
+        ConfigUtil.set("mp_channel", "name", channelMpParam.getName());
+        ConfigUtil.set("mp_channel", "primaryId", channelMpParam.getPrimaryId());
+        ConfigUtil.set("mp_channel", "appId", channelMpParam.getAppId());
+        ConfigUtil.set("mp_channel", "appSecret", channelMpParam.getAppSecret());
+        ConfigUtil.set("mp_channel", "qrCode", UrlUtil.toRelativeUrl(channelMpParam.getQrCode()));
     }
 
 }

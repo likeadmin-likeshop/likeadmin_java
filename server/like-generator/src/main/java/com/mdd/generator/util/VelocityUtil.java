@@ -40,8 +40,9 @@ public class VelocityUtil {
      * @return VelocityContext
      */
     public static VelocityContext prepareContext(GenTable table, List<GenTableColumn> columns) {
-        boolean isSearch = false; // 是否需要搜索
-        String primaryKey = "id"; // 主键字段名称
+        boolean isSearch = false;   // 是否需要搜索
+        String primaryKey = "id";   // 主键字段名称
+        String primaryField = "id"; // 主键字段
         List<String> allFields    = new LinkedList<>();  // 所有字段
         List<String> listFields   = new LinkedList<>();  // 列表字段
         List<String> detailFields = new LinkedList<>();  // 详情字段
@@ -59,6 +60,7 @@ public class VelocityUtil {
             }
             if (column.getIsPk() == 1) {
                 primaryKey = column.getJavaField();
+                primaryField = column.getColumnName();
             }
             if (StringUtil.isNotEmpty(column.getDictType()) && !dictFields.contains(column.getDictType())) {
                 dictFields.add(column.getDictType());
@@ -75,10 +77,12 @@ public class VelocityUtil {
         velocityContext.put("entityName", StringUtil.uncapitalize(table.getEntityName()));
         velocityContext.put("moduleName", table.getModuleName());
         velocityContext.put("functionName", StringUtil.isNotEmpty(table.getFunctionName()) ? table.getFunctionName() : "【请填写功能名称】");
+        velocityContext.put("notesType", GenConfig.notesType);
         velocityContext.put("table", table);
         velocityContext.put("columns", columns);
         velocityContext.put("dateFields", SqlConstants.COLUMN_TIME_NAME);
         velocityContext.put("primaryKey", primaryKey);
+        velocityContext.put("primaryField", primaryField);
         velocityContext.put("allFields", allFields);
         velocityContext.put("listFields", listFields);
         velocityContext.put("detailFields", detailFields);

@@ -1,12 +1,11 @@
 package com.mdd.admin.controller.decorate;
 
 import com.mdd.admin.service.decorate.IDecorateTabbarService;
+import com.mdd.admin.vo.decorate.DecorateTabbarVo;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.utils.ArrayUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,12 +22,12 @@ public class TabbarController {
      * 底部导航详情
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail() {
-        Map<String, Object> detail = iDecorateTabbarService.detail();
-        return AjaxResult.success(detail);
+    public AjaxResult detail() {
+        DecorateTabbarVo vo = iDecorateTabbarService.detail();
+        return AjaxResult.success(vo);
     }
 
     /**
@@ -36,10 +35,10 @@ public class TabbarController {
      *
      * @author fzr
      * @param params 参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/save")
-    public Object save(@RequestBody Map<String, Object> params) {
+    public AjaxResult save(@RequestBody Map<String, Object> params) {
         iDecorateTabbarService.save(params);
         return AjaxResult.success();
     }

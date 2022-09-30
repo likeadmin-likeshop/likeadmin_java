@@ -1,7 +1,8 @@
 package com.mdd.admin.service.decorate;
 
+import com.mdd.admin.vo.decorate.DecorateDataArticleVo;
+
 import java.util.List;
-import java.util.Map;
 
 /**
  * 装修数据服务接口类
@@ -13,8 +14,8 @@ public interface IDecorateDataService {
      *
      * @author fzr
      * @param limit 条数
-     * @return List<Map<String, Object>>
+     * @return List<DecorateArticleDataVo>
      */
-    List<Map<String, Object>> article(Integer limit);
+    List<DecorateDataArticleVo> article(Integer limit);
 
 }

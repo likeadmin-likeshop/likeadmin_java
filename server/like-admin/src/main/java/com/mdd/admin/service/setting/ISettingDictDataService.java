@@ -2,7 +2,7 @@ package com.mdd.admin.service.setting;
 
 import com.mdd.admin.validate.common.PageParam;
 import com.mdd.admin.validate.setting.DictDataParam;
-import com.mdd.admin.vo.setting.DictDataVo;
+import com.mdd.admin.vo.setting.SettingDictDataVo;
 import com.mdd.common.core.PageResult;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public interface ISettingDictDataService {
      * @author fzr
      * @return List<DictDataVo>
      */
-    List<DictDataVo> all(Map<String, String> params);
+    List<SettingDictDataVo> all(Map<String, String> params);
 
     /**
      * 字典数据列表
@@ -29,7 +29,7 @@ public interface ISettingDictDataService {
      * @param params 搜索参数
      * @return PageResult<DictDataVo>
      */
-    PageResult<DictDataVo> list(PageParam pageParam, Map<String, String> params);
+    PageResult<SettingDictDataVo> list(PageParam pageParam, Map<String, String> params);
 
     /**
      * 字典数据详情
@@ -38,7 +38,7 @@ public interface ISettingDictDataService {
      * @param id 主键
      * @return DictDataVo
      */
-    DictDataVo detail(Integer id);
+    SettingDictDataVo detail(Integer id);
 
     /**
      * 字典数据新增

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.admin.service.setting.ISettingDictDataService;
 import com.mdd.admin.validate.common.PageParam;
 import com.mdd.admin.validate.setting.DictDataParam;
-import com.mdd.admin.vo.setting.DictDataVo;
+import com.mdd.admin.vo.setting.SettingDictDataVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.utils.StringUtil;
@@ -33,9 +33,9 @@ public class DictDataController {
      * @return Object
      */
     @GetMapping("/all")
-    public Object all(@RequestParam Map<String, String> params) {
+    public AjaxResult all(@RequestParam Map<String, String> params) {
         Assert.isFalse(StringUtil.isEmpty(params.get("dictType")), "dictType缺失");
-        List<DictDataVo> list = iSettingDictDataService.all(params);
+        List<SettingDictDataVo> list = iSettingDictDataService.all(params);
         return AjaxResult.success(list);
     }
 
@@ -45,13 +45,13 @@ public class DictDataController {
      * @author fzr
      * @param pageParam 分页参数
      * @param params 搜索参数
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/list")
-    public Object list(@Validated PageParam pageParam,
+    public AjaxResult list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
         Assert.isFalse(StringUtil.isEmpty(params.get("dictType")), "dictType缺失");
-        PageResult<DictDataVo> list = iSettingDictDataService.list(pageParam, params);
+        PageResult<SettingDictDataVo> list = iSettingDictDataService.list(pageParam, params);
         return AjaxResult.success(list);
     }
 
@@ -63,8 +63,8 @@ public class DictDataController {
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        DictDataVo vo = iSettingDictDataService.detail(id);
+    public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+        SettingDictDataVo vo = iSettingDictDataService.detail(id);
         return AjaxResult.success(vo);
     }
 
@@ -73,10 +73,10 @@ public class DictDataController {
      *
      * @author fzr
      * @param dictDataParam 参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/add")
-    public Object add(@Validated(value = DictDataParam.create.class) @RequestBody DictDataParam dictDataParam) {
+    public AjaxResult add(@Validated(value = DictDataParam.create.class) @RequestBody DictDataParam dictDataParam) {
         iSettingDictDataService.add(dictDataParam);
         return AjaxResult.success();
     }
@@ -86,7 +86,7 @@ public class DictDataController {
      *
      * @author fzr
      * @param dictDataParam 参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/edit")
     public Object edit(@Validated(value = DictDataParam.update.class) @RequestBody DictDataParam dictDataParam) {
@@ -99,10 +99,10 @@ public class DictDataController {
      *
      * @author fzr
      * @param dictDataParam 参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/del")
-    public Object del(@Validated(value = DictDataParam.delete.class) @RequestBody DictDataParam dictDataParam) {
+    public AjaxResult del(@Validated(value = DictDataParam.delete.class) @RequestBody DictDataParam dictDataParam) {
         iSettingDictDataService.del(dictDataParam.getIds());
         return AjaxResult.success();
     }

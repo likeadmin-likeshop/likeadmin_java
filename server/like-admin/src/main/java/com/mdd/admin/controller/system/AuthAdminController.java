@@ -30,10 +30,10 @@ public class AuthAdminController {
      * 管理员列表
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/list")
-    public Object list(@Validated PageParam pageParam,
+    public AjaxResult list(@Validated PageParam pageParam,
                         @RequestParam Map<String, String> params) {
         PageResult<SystemAuthAdminVo> list = iSystemAuthAdminService.list(pageParam, params);
         return AjaxResult.success(list);
@@ -43,10 +43,10 @@ public class AuthAdminController {
      * 管理员信息
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/self")
-    public Object self() {
+    public AjaxResult self() {
         Integer adminId = LikeAdminThreadLocal.getAdminId();
         SystemAuthSelfVo vo = iSystemAuthAdminService.self(adminId);
         return AjaxResult.success(vo);
@@ -57,10 +57,10 @@ public class AuthAdminController {
      *
      * @author fzr
      * @param id 主键ID
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         SystemAuthAdminVo vo = iSystemAuthAdminService.detail(id);
         return AjaxResult.success(vo);
     }
@@ -70,11 +70,11 @@ public class AuthAdminController {
      *
      * @author fzr
      * @param systemAuthAdminParam 参数
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "管理员新增")
     @PostMapping("/add")
-    public Object add(@Validated(value = SystemAuthAdminParam.create.class) @RequestBody SystemAuthAdminParam systemAuthAdminParam) {
+    public AjaxResult add(@Validated(value = SystemAuthAdminParam.create.class) @RequestBody SystemAuthAdminParam systemAuthAdminParam) {
         iSystemAuthAdminService.add(systemAuthAdminParam);
         return AjaxResult.success();
     }
@@ -84,11 +84,11 @@ public class AuthAdminController {
      *
      * @author fzr
      * @param systemAuthAdminParam 参数
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "管理员编辑")
     @PostMapping("/edit")
-    public Object edit(@Validated(value = SystemAuthAdminParam.update.class) @RequestBody SystemAuthAdminParam systemAuthAdminParam) {
+    public AjaxResult edit(@Validated(value = SystemAuthAdminParam.update.class) @RequestBody SystemAuthAdminParam systemAuthAdminParam) {
         iSystemAuthAdminService.edit(systemAuthAdminParam);
         return AjaxResult.success();
     }
@@ -97,11 +97,11 @@ public class AuthAdminController {
      * 当前管理员更新
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "管理员更新")
     @PostMapping("/upInfo")
-    public Object upInfo(@Validated(value = SystemAuthAdminParam.upInfo.class) @RequestBody SystemAuthAdminParam systemAuthAdminParam) {
+    public AjaxResult upInfo(@Validated(value = SystemAuthAdminParam.upInfo.class) @RequestBody SystemAuthAdminParam systemAuthAdminParam) {
         Integer adminId = LikeAdminThreadLocal.getAdminId();
         iSystemAuthAdminService.upInfo(systemAuthAdminParam, adminId);
         return AjaxResult.success();
@@ -111,11 +111,11 @@ public class AuthAdminController {
      * 管理员删除
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "管理员删除")
     @PostMapping("/del")
-    public Object del(@Validated(value = SystemAuthAdminParam.delete.class) @RequestBody SystemAuthAdminParam systemAuthAdminParam) {
+    public AjaxResult del(@Validated(value = SystemAuthAdminParam.delete.class) @RequestBody SystemAuthAdminParam systemAuthAdminParam) {
         iSystemAuthAdminService.del(systemAuthAdminParam.getId());
         return AjaxResult.success();
     }
@@ -124,11 +124,11 @@ public class AuthAdminController {
      * 管理员状态切换
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "管理员状态切换")
     @PostMapping("/disable")
-    public Object disable(@Validated(value = SystemAuthAdminParam.delete.class) @RequestBody SystemAuthAdminParam systemAuthAdminParam) {
+    public AjaxResult disable(@Validated(value = SystemAuthAdminParam.delete.class) @RequestBody SystemAuthAdminParam systemAuthAdminParam) {
         iSystemAuthAdminService.disable(systemAuthAdminParam.getId());
         return AjaxResult.success();
     }

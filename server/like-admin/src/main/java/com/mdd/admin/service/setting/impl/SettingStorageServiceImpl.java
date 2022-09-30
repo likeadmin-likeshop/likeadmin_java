@@ -41,7 +41,7 @@ public class SettingStorageServiceImpl implements ISettingStorageService {
         list.add(qiniu);
 
         Map<String, Object> aliyun = new LinkedHashMap<>();
-        aliyun.put("name", "阿里云才能出");
+        aliyun.put("name", "阿里云存储");
         aliyun.put("alias", "aliyun");
         aliyun.put("describe", "存储在阿里云，请前往阿里云开通存储服务");
         aliyun.put("status", engine.equals("aliyun") ? 1 : 0);

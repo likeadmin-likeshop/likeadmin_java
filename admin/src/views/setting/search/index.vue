@@ -9,7 +9,7 @@
                             <el-radio :label="0">关闭</el-radio>
                         </el-radio-group>
 
-                        <div class="form-tips">默认开始，关闭则前端不显示该功能</div>
+                        <div class="form-tips">默认开启，关闭则前端不显示该功能</div>
                     </div>
                 </el-form-item>
             </el-form>
@@ -27,7 +27,13 @@
                     <el-table size="large" :data="formData.list">
                         <el-table-column label="关键词" prop="describe" min-width="200">
                             <template #default="{ row }">
-                                <el-input v-model="row.name" clearable maxlength="30" />
+                                <el-input
+                                    v-model.trim="row.name"
+                                    clearable
+                                    placeholder="请输入关键字"
+                                    show-word-limit
+                                    maxlength="30"
+                                />
                             </template>
                         </el-table-column>
                         <el-table-column label="排序" prop="describe" min-width="80">
@@ -92,7 +98,7 @@ const formData = reactive<Search>({
 })
 
 const list = computed(() => {
-    return [...formData.list].sort((v1, v2) => v2.sort - v1.sort)
+    return formData.list.filter((item) => item.name).sort((v1, v2) => v2.sort - v1.sort)
 })
 
 // 获取登录注册数据
@@ -110,7 +116,7 @@ const getData = async () => {
 
 const handleAdd = () => {
     formData.list.push({
-        name: '关键字',
+        name: '',
         sort: 0
     })
 }

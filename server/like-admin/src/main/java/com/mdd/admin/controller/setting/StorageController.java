@@ -23,10 +23,10 @@ public class StorageController {
      * 存储列表
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/list")
-    public Object list() {
+    public AjaxResult list() {
         List<Map<String, Object>> list = iSettingStorageService.list();
         return AjaxResult.success(list);
     }
@@ -35,10 +35,10 @@ public class StorageController {
      * 存储详情
      *
      * @param alias 引擎别名
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail(String alias) {
+    public AjaxResult detail(String alias) {
         Map<String, Object> map = iSettingStorageService.detail(alias);
         return AjaxResult.success(map);
     }
@@ -48,10 +48,10 @@ public class StorageController {
      *
      * @author fzr
      * @param params 参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/edit")
-    public Object edit(@RequestBody Map<String, String> params) {
+    public AjaxResult edit(@RequestBody Map<String, String> params) {
         iSettingStorageService.edit(params);
         return AjaxResult.success();
     }
@@ -61,10 +61,10 @@ public class StorageController {
      *
      * @author fzr
      * @param params 参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/change")
-    public Object change(@RequestBody Map<String, String> params) {
+    public AjaxResult change(@RequestBody Map<String, String> params) {
         Assert.notNull(params.get("alias"), "alias参数缺失");
         Assert.notNull(params.get("status"), "status参数缺失");
         String alias = params.get("alias");

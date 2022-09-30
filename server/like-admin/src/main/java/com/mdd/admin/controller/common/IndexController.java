@@ -25,10 +25,10 @@ public class IndexController {
      * 控制台
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/console")
-    public Object console() {
+    public AjaxResult console() {
         Map<String, Object> map = iIndexService.console();
         return AjaxResult.success(map);
     }
@@ -37,10 +37,10 @@ public class IndexController {
      * 公共配置
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/config")
-    public Object config() {
+    public AjaxResult config() {
         Map<String, Object> map = iIndexService.config();
         return AjaxResult.success(map);
     }

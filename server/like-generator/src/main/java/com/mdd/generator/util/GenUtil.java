@@ -9,10 +9,10 @@ import com.mdd.generator.constant.JavaConstants;
 import com.mdd.generator.constant.SqlConstants;
 import com.mdd.generator.entity.GenTable;
 import com.mdd.generator.entity.GenTableColumn;
+import com.mdd.generator.vo.DbTableVo;
 import org.apache.commons.lang3.RegExUtils;
 
 import java.util.Arrays;
-import java.util.Map;
 
 public class GenUtil {
 
@@ -23,12 +23,12 @@ public class GenUtil {
      * @param table 表
      * @param map 参数
      */
-    public static void initTable(GenTable table, Map<String, String> map) {
-        String tableName = map.get("table_name");
-        String tableDesc = map.get("table_comment");
+    public static void initTable(GenTable table, DbTableVo map) {
+        String tableName = map.getTableName();
+        String tableDesc = map.getTableComment();
         table.setTableName(tableName);
         table.setTableComment(tableDesc);
-        table.setAuthorName(map.getOrDefault("author_name", ""));
+        table.setAuthorName(map.getAuthorName());
         table.setEntityName(GenUtil.toClassName(tableName));
         table.setModuleName(GenUtil.toModuleName(tableName));
         table.setFunctionName(GenUtil.replaceText(tableDesc));
@@ -57,8 +57,8 @@ public class GenUtil {
         // 文本域组
         if (GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_STR, columnType) ||
                 GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_TEXT, columnType)) {
-            Integer columnLength = GenUtil.getColumnLength(column.getColumnType());
-            String htmlType = columnLength >= 500 || GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_TEXT, columnType)
+            String columnLength = GenUtil.getColumnLength(column.getColumnType());
+            String htmlType = Integer.parseInt(columnLength) >= 500 || GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_TEXT, columnType)
                     ? HtmlConstants.HTML_TEXTAREA
                     : HtmlConstants.HTML_INPUT;
             column.setHtmlType(htmlType);
@@ -240,13 +240,12 @@ public class GenUtil {
      * @param columnType 列类型
      * @return 截取后的列类型
      */
-    public static Integer getColumnLength(String columnType) {
+    public static String getColumnLength(String columnType) {
         if (StringUtil.indexOf(columnType, "(") > 0) {
-            String length = StringUtil.substringBetween(columnType, "(", ")");
-            return Integer.valueOf(length);
+            return StringUtil.substringBetween(columnType, "(", ")");
         }
         else {
-            return 0;
+            return "";
         }
     }
 

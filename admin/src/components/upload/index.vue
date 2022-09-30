@@ -12,6 +12,7 @@
             :on-success="handleSuccess"
             :on-exceed="handleExceed"
             :on-error="handleError"
+            :accept="getAccept"
         >
             <slot></slot>
         </el-upload>
@@ -110,18 +111,30 @@ export default defineComponent({
             emit('error')
         }
         const handleExceed = () => {
-            feedback.msgError('超出上传上限，请重新上传')
+            feedback.msgError(`超出上传上限${props.limit}，请重新上传`)
         }
         const handleClose = () => {
             uploadRefs.value?.clearFiles()
             visible.value = false
         }
+
+        const getAccept = computed(() => {
+            switch (props.type) {
+                case 'image':
+                    return '.jpj,.png,.gif,.jpeg,.ico,.bmp'
+                case 'video':
+                    return '.wmv,.avi,.mov,.mp4,.flv,.rmvb'
+                default:
+                    return '*'
+            }
+        })
         return {
             uploadRefs,
             action,
             headers,
             visible,
             fileList,
+            getAccept,
             handleProgress,
             handleSuccess,
             handleError,

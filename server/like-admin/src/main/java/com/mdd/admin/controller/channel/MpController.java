@@ -2,11 +2,13 @@ package com.mdd.admin.controller.channel;
 
 import com.mdd.admin.config.aop.Log;
 import com.mdd.admin.service.channel.IChannelMpService;
+import com.mdd.admin.validate.channel.ChannelMpParam;
+import com.mdd.admin.vo.channel.ChannelMpVo;
 import com.mdd.common.core.AjaxResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * 微信小程序渠道设置
@@ -22,25 +24,25 @@ public class MpController {
      * 微信小程序渠道设置详情
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail() {
-        Map<String, Object> map = iChannelMpService.detail();
-        return AjaxResult.success(map);
+    public AjaxResult detail() {
+        ChannelMpVo vo = iChannelMpService.detail();
+        return AjaxResult.success(vo);
     }
 
     /**
      * 微信小程序渠道设置保存
      *
      * @author fzr
-     * @param param 参数
-     * @return Object
+     * @param channelMpParam 参数
+     * @return AjaxResult
      */
     @Log(title = "微信小程序渠道设置保存")
     @PostMapping("/save")
-    public Object save(@RequestBody Map<String, String> param) {
-        iChannelMpService.save(param);
+    public AjaxResult save(@Validated @RequestBody ChannelMpParam channelMpParam) {
+        iChannelMpService.save(channelMpParam);
         return AjaxResult.success();
     }
 

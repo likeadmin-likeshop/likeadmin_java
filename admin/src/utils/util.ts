@@ -160,3 +160,12 @@ export const getNonDuplicateID = (length = 8) => {
     idStr += Math.random().toString(36).substring(3, length)
     return idStr
 }
+
+/**
+ * @description 单词首字母大写
+ * @param  { String } str
+ * @return { String } id
+ */
+export const firstToUpperCase = (str = '') => {
+    return str.toLowerCase().replace(/( |^)[a-z]/g, ($1) => $1.toUpperCase())
+}

@@ -28,10 +28,10 @@ public class AuthPostController {
      * 岗位所有
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/all")
-    public Object all() {
+    public AjaxResult all() {
         List<SystemAuthPostVo> vos = iSystemAuthPostService.all();
         return AjaxResult.success(vos);
     }
@@ -43,14 +43,21 @@ public class AuthPostController {
      * @return Object
      */
     @GetMapping("/list")
-    public Object list(@Validated PageParam pageParam,
+    public AjaxResult list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
         PageResult<SystemAuthPostVo> list = iSystemAuthPostService.list(pageParam, params);
         return AjaxResult.success(list);
     }
 
+    /**
+     * 岗位详情
+     *
+     * @author fzr
+     * @param id 主键
+     * @return AjaxResult
+     */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         SystemAuthPostVo vo = iSystemAuthPostService.detail(id);
         return AjaxResult.success(vo);
     }
@@ -60,10 +67,10 @@ public class AuthPostController {
      *
      * @author fzr
      * @param systemAuthPostParam 参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/add")
-    public Object add(@Validated(value = SystemAuthPostParam.create.class) @RequestBody SystemAuthPostParam systemAuthPostParam) {
+    public AjaxResult add(@Validated(value = SystemAuthPostParam.create.class) @RequestBody SystemAuthPostParam systemAuthPostParam) {
         iSystemAuthPostService.add(systemAuthPostParam);
         return AjaxResult.success();
     }
@@ -73,10 +80,10 @@ public class AuthPostController {
      *
      * @author fzr
      * @param systemAuthPostParam 参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/edit")
-    public Object edit(@Validated(value = SystemAuthPostParam.update.class) @RequestBody SystemAuthPostParam systemAuthPostParam) {
+    public AjaxResult edit(@Validated(value = SystemAuthPostParam.update.class) @RequestBody SystemAuthPostParam systemAuthPostParam) {
         iSystemAuthPostService.edit(systemAuthPostParam);
         return AjaxResult.success();
     }
@@ -86,10 +93,10 @@ public class AuthPostController {
      *
      * @author fzr
      * @param systemAuthPostParam 参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/del")
-    public Object del(@Validated(value = SystemAuthPostParam.delete.class) @RequestBody SystemAuthPostParam systemAuthPostParam) {
+    public AjaxResult del(@Validated(value = SystemAuthPostParam.delete.class) @RequestBody SystemAuthPostParam systemAuthPostParam) {
         iSystemAuthPostService.del(systemAuthPostParam.getId());
         return AjaxResult.success();
     }

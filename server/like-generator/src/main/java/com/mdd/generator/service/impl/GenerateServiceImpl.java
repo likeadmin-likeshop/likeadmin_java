@@ -187,8 +187,11 @@ public class GenerateServiceImpl implements IGenerateService {
     @Transactional
     public void importTable(String[] tableNames) {
         try {
-            List<Map<String, String>> tables = genTableMapper.selectDbTableListByNames(tableNames);
-            for (Map<String, String> map : tables) {
+            List<DbTableVo> tables = genTableMapper.selectDbTableListByNames(tableNames);
+            if (tables.size() <= 0) {
+                throw new Exception("表不存在!");
+            }
+            for (DbTableVo map : tables) {
                 // 生成表信息
                 GenTable table = new GenTable();
                 GenUtil.initTable(table, map);
@@ -196,12 +199,14 @@ public class GenerateServiceImpl implements IGenerateService {
 
                 // 生成列信息
                 if (row > 0) {
-                    String tableName = map.get("table_name");
+                    String tableName = map.getTableName();
                     List<GenTableColumn> genTableColumns = genTableMapper.selectDbTableColumnsByName(tableName);
+                    System.out.println("有没有来iih");
                     for (GenTableColumn column : genTableColumns) {
                         GenUtil.initColumn(column, table);
                         genTableColumnMapper.insert(column);
                     }
+                    System.out.println("应该没来吧");
                 }
             }
         } catch (Exception e) {
@@ -372,7 +377,7 @@ public class GenerateServiceImpl implements IGenerateService {
             Template tpl = Velocity.getTemplate(template, GenConstants.UTF8);
             tpl.merge(context, sw);
             map.put(template.replace(".vm", ""), sw.toString());
-            // System.out.println(sw);
+             System.out.println(sw);
         }
 
         return map;

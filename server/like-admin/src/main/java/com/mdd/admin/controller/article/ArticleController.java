@@ -31,10 +31,10 @@ public class ArticleController {
      * @author fzr
      * @param pageParam 分页参数
      * @param params 搜索参数
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/list")
-    public Object list(@Validated PageParam pageParam,
+    public AjaxResult list(@Validated PageParam pageParam,
                               @RequestParam Map<String, String> params) {
         PageResult<ArticleListVo> vos = iArticleArchivesService.list(pageParam, params);
         return AjaxResult.success(vos);
@@ -45,10 +45,10 @@ public class ArticleController {
      *
      * @author fzr
      * @param id 文章ID
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         ArticleDetailVo vo = iArticleArchivesService.detail(id);
         return AjaxResult.success(vo);
     }
@@ -62,7 +62,7 @@ public class ArticleController {
      */
     @Log(title = "文章新增")
     @PostMapping("/add")
-    public Object add(
+    public AjaxResult add(
             @Validated(value = ArticleParam.create.class)
             @RequestBody ArticleParam articleParam) {
         iArticleArchivesService.add(articleParam);
@@ -74,11 +74,11 @@ public class ArticleController {
      *
      * @author fzr
      * @param articleParam 文章参数
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "文章编辑")
     @PostMapping("/edit")
-    public Object edit(@Validated(value = ArticleParam.update.class)
+    public AjaxResult edit(@Validated(value = ArticleParam.update.class)
                        @RequestBody ArticleParam articleParam) {
         iArticleArchivesService.edit(articleParam);
         return AjaxResult.success();
@@ -89,7 +89,7 @@ public class ArticleController {
      *
      * @author fzr
      * @param articleParam 文章参数
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "文章删除")
     @PostMapping("/del")
@@ -104,11 +104,11 @@ public class ArticleController {
      *
      * @author fzr
      * @param articleParam 文章参数
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "文章状态")
     @PostMapping("/change")
-    public Object change(@Validated(value = ArticleParam.change.class)
+    public AjaxResult change(@Validated(value = ArticleParam.change.class)
                          @RequestBody ArticleParam articleParam) {
         iArticleArchivesService.change(articleParam.getId());
         return AjaxResult.success();

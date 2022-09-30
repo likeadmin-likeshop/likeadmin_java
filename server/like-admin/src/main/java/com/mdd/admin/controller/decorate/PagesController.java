@@ -3,6 +3,7 @@ package com.mdd.admin.controller.decorate;
 import com.mdd.admin.config.aop.Log;
 import com.mdd.admin.service.decorate.IDecoratePageService;
 import com.mdd.admin.validate.decorate.DecoratePageParam;
+import com.mdd.admin.vo.decorate.DecoratePageVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
@@ -26,12 +27,12 @@ public class PagesController {
      *
      * @author fzr
      * @param id 主键
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
-        Map<String, Object> map = iDecoratePageService.detail(id);
-        return AjaxResult.success(map);
+    public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+        DecoratePageVo vo = iDecoratePageService.detail(id);
+        return AjaxResult.success(vo);
     }
 
     /**
@@ -39,11 +40,11 @@ public class PagesController {
      *
      * @author fzr
      * @param decoratePageParam 参数
-     * @return Object
+     * @return AjaxResult
      */
     @Log(title = "页面装修保存")
     @PostMapping("/save")
-    public Object save(@RequestBody DecoratePageParam decoratePageParam) {
+    public AjaxResult save(@RequestBody DecoratePageParam decoratePageParam) {
         iDecoratePageService.save(decoratePageParam);
         return AjaxResult.success();
     }

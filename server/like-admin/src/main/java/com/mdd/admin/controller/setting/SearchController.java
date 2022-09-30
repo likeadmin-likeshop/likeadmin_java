@@ -21,10 +21,10 @@ public class SearchController {
      * 热门搜索详情
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail() {
+    public AjaxResult detail() {
         Map<String, Object> map = iSettingSearchService.detail();
         return AjaxResult.success(map);
     }
@@ -34,10 +34,10 @@ public class SearchController {
      *
      * @author fzr
      * @param params 参数
-     * @return Object
+     * @return AjaxResult
      */
     @PostMapping("/save")
-    public Object save(@RequestBody Map<String, Object> params) {
+    public AjaxResult save(@RequestBody Map<String, Object> params) {
         iSettingSearchService.save(params);
         return AjaxResult.success();
     }

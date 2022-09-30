@@ -28,6 +28,11 @@ const useUserStore = defineStore({
     }),
     getters: {},
     actions: {
+        resetState() {
+            this.token = ''
+            this.userInfo = {}
+            this.perms = []
+        },
         login(playload: any) {
             const { account, password } = playload
             return new Promise((resolve, reject) => {

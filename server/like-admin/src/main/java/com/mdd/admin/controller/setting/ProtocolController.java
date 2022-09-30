@@ -21,10 +21,10 @@ public class ProtocolController {
      * 获取网站版权信息
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult
      */
     @GetMapping("/detail")
-    public Object detail() {
+    public AjaxResult detail() {
         Map<String, Map<String, String>> detail = iSettingProtocolService.detail();
         return AjaxResult.success(detail);
     }
@@ -36,7 +36,7 @@ public class ProtocolController {
      * @return Object
      */
     @PostMapping("/save")
-    public Object save(@RequestBody Map<String, Object> params) {
+    public AjaxResult save(@RequestBody Map<String, Object> params) {
         iSettingProtocolService.save(params);
         return AjaxResult.success();
     }
