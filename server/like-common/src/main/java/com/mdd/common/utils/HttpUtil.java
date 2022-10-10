@@ -1,5 +1,6 @@
 package com.mdd.common.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +24,7 @@ public class HttpUtil {
      * @return 所代表远程资源的响应结果
      */
     public static String sendGet(String url) {
-        return sendGet(url, StringUtil.EMPTY);
+        return sendGet(url, StringUtils.EMPTY);
     }
 
     /**
