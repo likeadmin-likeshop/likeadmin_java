@@ -15,7 +15,7 @@
                 </el-form-item>
                 <el-form-item label="账号：">
                     {{ formData.username }}
-                    <popover-input class="ml-[10px]" @confirm="handleEdit($event, 'username')">
+                    <popover-input class="ml-[10px]" @confirm="handleEdit($event, 'username')" limit="32">
                         <el-button type="primary" link v-perms="['user:edit']">
                             <icon name="el-icon-EditPen" />
                         </el-button>
@@ -23,7 +23,7 @@
                 </el-form-item>
                 <el-form-item label="真实姓名：">
                     {{ formData.realName || '-' }}
-                    <popover-input class="ml-[10px]" @confirm="handleEdit($event, 'realName')">
+                    <popover-input class="ml-[10px]" @confirm="handleEdit($event, 'realName')" limit="32">
                         <el-button type="primary" link v-perms="['user:edit']">
                             <icon name="el-icon-EditPen" />
                         </el-button>
