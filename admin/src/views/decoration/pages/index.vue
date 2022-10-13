@@ -47,7 +47,7 @@ const menus: Record<
     [pagesTypeEnum.HOME]: {
         id: 1,
         pageType: 1,
-        name: '商城首页',
+        name: '首页装修',
         pageData: generatePageData(['search', 'banner', 'nav', 'news'])
     },
     [pagesTypeEnum.USER]: {
