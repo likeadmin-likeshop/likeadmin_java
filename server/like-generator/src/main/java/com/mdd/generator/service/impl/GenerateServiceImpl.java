@@ -201,12 +201,10 @@ public class GenerateServiceImpl implements IGenerateService {
                 if (row > 0) {
                     String tableName = map.getTableName();
                     List<GenTableColumn> genTableColumns = genTableMapper.selectDbTableColumnsByName(tableName);
-                    System.out.println("有没有来iih");
                     for (GenTableColumn column : genTableColumns) {
                         GenUtil.initColumn(column, table);
                         genTableColumnMapper.insert(column);
                     }
-                    System.out.println("应该没来吧");
                 }
             }
         } catch (Exception e) {
