@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -41,7 +42,9 @@ public class SystemAuthDeptParam extends BaseParam {
     @NotNull(message = "请选择状态", groups = {create.class, update.class})
     @IntegerContains(values = {0, 1}, groups = {create.class, update.class})
     private Integer isStop = 0;
+
     @NotNull(message = "排序号不能为空", groups = {create.class, update.class})
     @DecimalMin(value = "0", message = "排序号值不能少于0", groups = {create.class, update.class})
+    @DecimalMax(value = "99999", message = "排序号值不能少于99999", groups = {create.class, update.class})
     private Integer sort = 0;
 }
