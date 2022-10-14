@@ -91,7 +91,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
 
             // 更新登录信息
             sysAdmin.setLastLoginIp(IpUtil.getIpAddress());
-            sysAdmin.setLastLoginTime(TimeUtil.timestamp());
+            sysAdmin.setLastLoginTime(System.currentTimeMillis() / 1000);
             systemAuthAdminMapper.updateById(sysAdmin);
 
             // 记录登录日志
