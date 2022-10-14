@@ -10,7 +10,12 @@
         >
             <el-form ref="formRef" :model="formData" label-width="84px" :rules="formRules">
                 <el-form-item label="岗位名称" prop="name">
-                    <el-input v-model="formData.name" placeholder="请输入岗位名称" clearable />
+                    <el-input
+                        v-model="formData.name"
+                        placeholder="请输入岗位名称"
+                        clearable
+                        :maxlength="100"
+                    />
                 </el-form-item>
                 <el-form-item label="岗位编码" prop="code">
                     <el-input v-model="formData.code" placeholder="请输入岗位编码" clearable />

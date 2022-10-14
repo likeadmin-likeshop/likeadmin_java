@@ -186,7 +186,7 @@ const workbenchData: any = reactive({
         {
             name: '字典管理',
             image: menu_dict,
-            url: '/setting/dict'
+            url: '/dev_tools/dict'
         },
         {
             name: '代码生成器',
