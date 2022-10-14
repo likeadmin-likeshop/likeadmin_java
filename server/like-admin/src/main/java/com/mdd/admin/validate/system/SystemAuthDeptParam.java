@@ -45,6 +45,6 @@ public class SystemAuthDeptParam extends BaseParam {
 
     @NotNull(message = "排序号不能为空", groups = {create.class, update.class})
     @DecimalMin(value = "0", message = "排序号值不能少于0", groups = {create.class, update.class})
-    @DecimalMax(value = "99999", message = "排序号值不能少于99999", groups = {create.class, update.class})
+    @DecimalMax(value = "9999", message = "排序号值不能大于9999", groups = {create.class, update.class})
     private Integer sort = 0;
 }
