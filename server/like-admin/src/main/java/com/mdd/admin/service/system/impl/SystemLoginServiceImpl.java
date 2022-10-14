@@ -70,10 +70,6 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
         }
 
         try {
-            sysAdmin.setLastLoginIp(IpUtil.getIpAddress());
-            sysAdmin.setLastLoginTime(System.currentTimeMillis() / 1000);
-            systemAuthAdminMapper.updateById(sysAdmin);
-
             // 非多处登录
             String token = ToolsUtil.makeToken();
             if (sysAdmin.getIsMultipoint() == 0) {
@@ -95,7 +91,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
 
             // 更新登录信息
             sysAdmin.setLastLoginIp(IpUtil.getIpAddress());
-            sysAdmin.setLastLoginTime(TimeUtil.timestamp());
+            sysAdmin.setLastLoginTime(System.currentTimeMillis() / 1000);
             systemAuthAdminMapper.updateById(sysAdmin);
 
             // 记录登录日志

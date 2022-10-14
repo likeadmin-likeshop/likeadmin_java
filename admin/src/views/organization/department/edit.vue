@@ -26,17 +26,27 @@
                     />
                 </el-form-item>
                 <el-form-item label="部门名称" prop="name">
-                    <el-input v-model="formData.name" placeholder="请输入部门名称" clearable />
+                    <el-input
+                        v-model="formData.name"
+                        placeholder="请输入部门名称"
+                        clearable
+                        :maxlength="100"
+                    />
                 </el-form-item>
                 <el-form-item label="负责人" prop="duty">
-                    <el-input v-model="formData.duty" placeholder="请输入负责人姓名" clearable />
+                    <el-input
+                        v-model="formData.duty"
+                        placeholder="请输入负责人姓名"
+                        clearable
+                        :maxlength="30"
+                    />
                 </el-form-item>
                 <el-form-item label="联系电话" prop="mobile">
                     <el-input v-model="formData.mobile" placeholder="请输入联系电话" clearable />
                 </el-form-item>
                 <el-form-item label="排序" prop="sort">
                     <div>
-                        <el-input-number v-model="formData.sort" :min="0" />
+                        <el-input-number v-model="formData.sort" :min="0" :max="9999" />
                         <div class="form-tips">默认为0， 数值越大越排前</div>
                     </div>
                 </el-form-item>

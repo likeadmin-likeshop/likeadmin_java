@@ -3,6 +3,11 @@ package ${packageName}.admin.vo.${moduleName};
 import lombok.Data;
 
 import java.io.Serializable;
+#foreach ($column in $columns)
+#if ($column.javaType.equals("BigDecimal"))
+import java.math.BigDecimal;
+#end
+#end
 
 #set($isAuthor = !$authorName.equals(""))
 /**

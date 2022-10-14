@@ -32,7 +32,7 @@
                 </el-form-item>
             #elseif($column.htmlType=="number")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
-                    <el-input-number v-model="formData.${column.javaField}" />
+                    <el-input-number v-model="formData.${column.javaField}" :max="9999" />
                 </el-form-item>
             #elseif($column.htmlType=="textarea")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">

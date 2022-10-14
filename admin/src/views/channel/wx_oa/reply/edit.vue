@@ -5,7 +5,6 @@
             :title="popupTitle"
             :async="true"
             width="500px"
-            :clickModalClose="true"
             @confirm="handleSubmit"
             @close="handleClose"
         >
@@ -72,7 +71,7 @@
                 </el-form-item> -->
                 <el-form-item label="排序">
                     <div class="flex-1">
-                        <el-input-number v-model="formData.sort" :min="0"/>
+                        <el-input-number v-model="formData.sort" :min="0" :max="9999" />
                     </div>
                 </el-form-item>
                 <el-form-item label="启用状态">

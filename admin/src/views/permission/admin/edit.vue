@@ -39,7 +39,7 @@
                             value: 'id',
                             label: 'name',
                             disabled(data: any) {
-                                return data.isStop
+                                return !!data.isStop
                             }
                         }"
                         check-strictly

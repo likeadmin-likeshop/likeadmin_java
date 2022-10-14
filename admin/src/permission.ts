@@ -26,7 +26,10 @@ router.beforeEach(async (to, from, next) => {
     document.title = to.meta.title ?? config.title
     const userStore = useUserStore()
     const tabsStore = useTabsStore()
-    if (userStore.token) {
+    if (whiteList.includes(to.path)) {
+        // 在免登录白名单，直接进入
+        next()
+    } else if (userStore.token) {
         // 获取用户信息
         const hasGetUserInfo = Object.keys(userStore.userInfo).length !== 0
         if (hasGetUserInfo) {
@@ -71,9 +74,6 @@ router.beforeEach(async (to, from, next) => {
                 next({ path: loginPath, query: { redirect: to.fullPath } })
             }
         }
-    } else if (whiteList.includes(to.path)) {
-        // 在免登录白名单，直接进入
-        next()
     } else {
         next({ path: loginPath, query: { redirect: to.fullPath } })
     }

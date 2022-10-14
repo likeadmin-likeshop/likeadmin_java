@@ -34,7 +34,7 @@
                 </el-form-item>
             </el-card>
             <el-card shadow="never" class="!border-none mt-4">
-                <div class="text-xl font-medium mb-[20px]">商城设置</div>
+                <div class="text-xl font-medium mb-[20px]">前台设置</div>
                 <el-form-item label="商城名称" prop="shopName">
                     <div class="w-80">
                         <el-input
