@@ -130,7 +130,7 @@
         />
     </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="${moduleName}">
 import { ${moduleName}Delete, ${moduleName}Lists } from '@/api/${moduleName}'
 import EditPopup from './edit.vue'
 import feedback from '@/utils/feedback'
