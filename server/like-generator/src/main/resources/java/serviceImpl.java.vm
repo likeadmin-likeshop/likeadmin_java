@@ -325,7 +325,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     public void add(${EntityName}Param ${entityName}Param) {
         ${EntityName} model = new ${EntityName}();
     #foreach ($column in $columns)
-    #if(($column.isInsert || $column.columnName.equals("create_time") || $column.columnName.equals("update_time")) && !$column.javaField.equals($primaryField))
+    #if(($column.isInsert || $column.columnName.equals("create_time") || $column.columnName.equals("update_time")) && !$column.columnName.equals($primaryField))
         #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
         #if($column.javaField.equals("image") || $column.javaField.equals("avatar") || $column.javaField.equals("logo") || $column.javaField.equals("img"))
         model.set${AttrName}(UrlUtil.toRelativeUrl(${entityName}Param.get${AttrName}()));
