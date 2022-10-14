@@ -212,6 +212,11 @@ public class LoginServiceImpl implements ILoginService {
         Assert.notNull(user, "账号不存在!");
         Assert.isFalse(user.getIsDisable() != 0, "账号已禁用!");
 
+        // 更新登录信息
+        user.setLastLoginIp(IpUtil.getHostIp());
+        user.setLastLoginTime(System.currentTimeMillis() / 1000);
+        userMapper.updateById(user);
+
         String token = ToolsUtil.makeToken();
         RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), 7200);
 
@@ -246,6 +251,11 @@ public class LoginServiceImpl implements ILoginService {
         String pwd = ToolsUtil.makeMd5(password+user.getSalt());
         Assert.isFalse(!pwd.equals(user.getPassword()), "账号或密码错误!");
         Assert.isFalse(user.getIsDisable() != 0, "账号已被禁用!");
+
+        // 更新登录信息
+        user.setLastLoginIp(IpUtil.getHostIp());
+        user.setLastLoginTime(System.currentTimeMillis() / 1000);
+        userMapper.updateById(user);
 
         String token = ToolsUtil.makeToken();
         RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), 7201);
