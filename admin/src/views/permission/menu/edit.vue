@@ -166,7 +166,7 @@
                 </el-form-item>
                 <el-form-item label="菜单排序" prop="menuSort">
                     <div>
-                        <el-input-number v-model="formData.menuSort" />
+                        <el-input-number v-model="formData.menuSort" :max="9999" />
                         <div class="form-tips">数值越大越排前</div>
                     </div>
                 </el-form-item>
