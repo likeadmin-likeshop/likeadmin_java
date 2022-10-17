@@ -11,7 +11,7 @@ public class StringUtil extends org.apache.commons.lang3.StringUtils {
     /**
      * 空字符串
      */
-    private static final String NULL_STR = "";
+    private static final String EMPTY = "";
 
     /**
      * 下划线
@@ -24,6 +24,7 @@ public class StringUtil extends org.apache.commons.lang3.StringUtils {
      * @param value defaultValue 要判断的value
      * @return value 返回值
      */
+    @SuppressWarnings("unused")
     public static <T> T nvl(T value, T defaultValue) {
         return value != null ? value : defaultValue;
     }
@@ -95,7 +96,7 @@ public class StringUtil extends org.apache.commons.lang3.StringUtils {
      * @return true=为空, false=非空
      */
     public static boolean isEmpty(String str) {
-        return isNull(str) || NULL_STR.equals(str.trim());
+        return isNull(str) || EMPTY.equals(str.trim());
     }
 
     /**
@@ -134,6 +135,7 @@ public class StringUtil extends org.apache.commons.lang3.StringUtils {
      * @param object 对象
      * @return true=是数组, false=不是数组
      */
+    @SuppressWarnings("unused")
     public static boolean isArray(Object object) {
         return isNotNull(object) && object.getClass().isArray();
     }
@@ -152,9 +154,10 @@ public class StringUtil extends org.apache.commons.lang3.StringUtils {
      * @param start 开始
      * @return 结果
      */
+    @SuppressWarnings("unused")
     public static String substring(final String str, int start) {
         if (str == null) {
-            return NULL_STR;
+            return EMPTY;
         }
 
         if (start < 0) {
@@ -166,7 +169,7 @@ public class StringUtil extends org.apache.commons.lang3.StringUtils {
         }
 
         if (start > str.length()) {
-            return NULL_STR;
+            return EMPTY;
         }
 
         return str.substring(start);
@@ -182,7 +185,7 @@ public class StringUtil extends org.apache.commons.lang3.StringUtils {
      */
     public static String substring(final String str, int start, int end) {
         if (str == null) {
-            return NULL_STR;
+            return EMPTY;
         }
 
         if (end < 0) {
@@ -198,7 +201,7 @@ public class StringUtil extends org.apache.commons.lang3.StringUtils {
         }
 
         if (start > end) {
-            return NULL_STR;
+            return EMPTY;
         }
 
         if (start < 0) {

@@ -25,6 +25,11 @@ import java.util.*;
 public class ServerResult {
 
     private static final int OSHI_WAIT_SECOND = 1000;
+
+    private static final long KB = 1024;
+    private static final long MB = 1024 * 1024;
+    private static final long GB = 1024 * 1024 * 1024;
+
     private final Cpu cpu = new Cpu(); // CPU相关信息
     private final Mem mem = new Mem(); // 內存相关信息
     private final Jvm jvm = new Jvm(); // JVM相关信息
@@ -143,27 +148,25 @@ public class ServerResult {
      * 字节转换
      */
     public String convertFileSize(long size) {
-        long kb = 1024;
-        long mb = kb * 1024;
-        long gb = mb * 1024;
-        if (size >= gb)
+
+        if (size >= GB)
         {
-            return String.format("%.1f GB", (float) size / gb);
+            return String.format("%.1f GB", (float) size / GB);
         }
-        else if (size >= mb)
+
+        if (size >= MB)
         {
-            float f = (float) size / mb;
+            float f = (float) size / MB;
             return String.format(f > 100 ? "%.0f MB" : "%.1f MB", f);
         }
-        else if (size >= kb)
+
+        if (size >= KB)
         {
-            float f = (float) size / kb;
+            float f = (float) size / KB;
             return String.format(f > 100 ? "%.0f KB" : "%.1f KB", f);
         }
-        else
-        {
-            return String.format("%d B", size);
-        }
+
+        return String.format("%d B", size);
     }
 
 }

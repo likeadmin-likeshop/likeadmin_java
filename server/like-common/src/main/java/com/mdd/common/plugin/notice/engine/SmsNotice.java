@@ -25,7 +25,7 @@ public class SmsNotice {
         String scene  = config.getOrDefault("scene", "");
 
         if (StringUtil.isNotEmpty(mobile) && StringUtil.isNotEmpty(scene)) {
-            (new SmsDriver())
+            new SmsDriver()
                     .setMobile(mobile)
                     .setTemplateCode(smsTemplate.getOrDefault("templateId", ""))
                     .setTemplateParam(this.getSmsParams(params, smsTemplate))

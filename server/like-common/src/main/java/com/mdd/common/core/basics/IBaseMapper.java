@@ -5,6 +5,7 @@ import com.github.yulichang.base.MPJBaseMapper;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.common.utils.TimeUtil;
 import org.apache.ibatis.annotations.Mapper;
+import org.slf4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -117,7 +118,7 @@ public interface IBaseMapper<T> extends MPJBaseMapper<T> {
                     break;
                 case "between":
                     String[] betArr = value.split(",");
-                    if (!type.equals("") && type.equals("int")) {
+                    if (type.equals("int")) {
                         queryWrapper.between(field, Integer.parseInt(betArr[0]), Integer.parseInt(betArr[1]));
                     } else if (type.equals("long")){
                         queryWrapper.between(field, Long.parseLong(betArr[0]), Long.parseLong(betArr[1]));
@@ -127,7 +128,7 @@ public interface IBaseMapper<T> extends MPJBaseMapper<T> {
                     break;
                 case "notBetween":
                     String[] notBetArr = value.split(",");
-                    if (!type.equals("") && type.equals("int")) {
+                    if (type.equals("int")) {
                         queryWrapper.notBetween(field, Integer.parseInt(notBetArr[0]), Integer.parseInt(notBetArr[1]));
                     } else if (type.equals("long")){
                         queryWrapper.notBetween(field, Long.parseLong(notBetArr[0]), Long.parseLong(notBetArr[1]));
