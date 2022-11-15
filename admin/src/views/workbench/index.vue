@@ -141,8 +141,8 @@ import menu_generator from './image/menu_generator.png'
 import menu_file from './image/menu_file.png'
 import menu_auth from './image/menu_auth.png'
 import menu_web from './image/menu_web.png'
-import qq_group from './image/qq_group.png'
-import customer_service from './image/customer_service.png'
+import oa_code from './image/oa_code.png'
+import service_code from './image/service_code.png'
 // 表单数据
 const workbenchData: any = reactive({
     version: {
@@ -156,12 +156,12 @@ const workbenchData: any = reactive({
     },
     support: [
         {
-            image: qq_group,
-            title: '扫码进入QQ交流群',
-            desc: '疑难疑点 进入QQ群'
+            image: oa_code,
+            title: '官方公众号',
+            desc: '关注官方公众号'
         },
         {
-            image: customer_service,
+            image: service_code,
             title: '添加企业客服微信',
             desc: '想了解更多请添加客服'
         }
