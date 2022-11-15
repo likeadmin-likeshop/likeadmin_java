@@ -2,7 +2,6 @@ package com.mdd.front.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.config.GlobalConfig;
@@ -16,7 +15,7 @@ import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.utils.*;
 import com.mdd.front.config.FrontConfig;
 import com.mdd.front.service.ILoginService;
-import com.mdd.front.validate.RegParam;
+import com.mdd.front.validate.RegValidate;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
@@ -47,13 +46,13 @@ public class LoginServiceImpl implements ILoginService {
      * 注册账号
      *
      * @author fzr
-     * @param regParam 参数
+     * @param regValidate 参数
      */
     @Override
-    public void register(RegParam regParam) {
+    public void register(RegValidate regValidate) {
         User model = userMapper.selectOne(new QueryWrapper<User>()
                 .select("id,sn,username")
-                .eq("username", regParam.getUsername())
+                .eq("username", regValidate.getUsername())
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
@@ -61,16 +60,16 @@ public class LoginServiceImpl implements ILoginService {
 
         Integer sn  = this.randMakeSn();
         String salt = ToolsUtil.randomString(5);
-        String pwd  = ToolsUtil.makeMd5(regParam.getPassword()+salt);
+        String pwd  = ToolsUtil.makeMd5(regValidate.getPassword()+salt);
 
         User user = new User();
         user.setSn(sn);
         user.setNickname("用户"+sn);
-        user.setUsername(regParam.getUsername());
+        user.setUsername(regValidate.getUsername());
         user.setPassword(pwd);
         user.setSalt(salt);
         user.setAvatar("/api/static/default_avatar.png");
-        user.setChannel(regParam.getClient());
+        user.setChannel(regValidate.getClient());
         user.setCreateTime(System.currentTimeMillis() / 1000);
         user.setUpdateTime(System.currentTimeMillis() / 1000);
         userMapper.insert(user);

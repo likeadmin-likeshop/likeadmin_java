@@ -2,11 +2,15 @@ package com.mdd.admin.vo.channel;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * H5渠道Vo
  */
 @Data
-public class ChannelH5Vo {
+public class ChannelH5Vo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Integer status; // 是否关闭
     private Integer close;  // 关闭类型

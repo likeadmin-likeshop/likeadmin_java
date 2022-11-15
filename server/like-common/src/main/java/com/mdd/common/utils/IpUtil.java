@@ -1,6 +1,6 @@
 package com.mdd.common.utils;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.mdd.common.config.GlobalConfig;
 import org.slf4j.Logger;

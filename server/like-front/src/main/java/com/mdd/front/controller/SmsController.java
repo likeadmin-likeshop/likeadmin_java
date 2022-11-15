@@ -3,7 +3,7 @@ package com.mdd.front.controller;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.plugin.notice.NoticeDriver;
 import com.mdd.common.utils.ToolsUtil;
-import com.mdd.front.validate.SmsParam;
+import com.mdd.front.validate.SmsValidate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,14 +24,14 @@ public class SmsController {
      * 发送短信
      *
      * @author fzr
-     * @param smsParam 参数
-     * @return Object
+     * @param smsValidate 参数
+     * @return AjaxResult<Object>
      */
     @PostMapping("/send")
-    public Object send(@Validated @RequestBody SmsParam smsParam) {
+    public AjaxResult<Object> send(@Validated @RequestBody SmsValidate smsValidate) {
         Map<String, String> config = new LinkedHashMap<>();
-        config.put("scene", smsParam.getScene());
-        config.put("mobile", smsParam.getMobile());
+        config.put("scene", smsValidate.getScene());
+        config.put("mobile", smsValidate.getMobile());
         Map<String, String> params = new LinkedHashMap<>();
         params.put("code", ToolsUtil.randomInt(4));
         (new NoticeDriver()).handle(config, params);

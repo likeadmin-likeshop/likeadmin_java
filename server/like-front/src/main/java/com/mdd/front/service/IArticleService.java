@@ -1,7 +1,7 @@
 package com.mdd.front.service;
 
 import com.mdd.common.core.PageResult;
-import com.mdd.front.validate.PageParam;
+import com.mdd.front.validate.PageValidate;
 import com.mdd.front.vo.article.ArticleCateVo;
 import com.mdd.front.vo.article.ArticleCollectVo;
 import com.mdd.front.vo.article.ArticleDetailVo;
@@ -26,12 +26,12 @@ public interface IArticleService {
      * 文章分类
      *
      * @author fzr
-     * @param pageParam 分页参数
+     * @param pageValidate 分页参数
      * @param cid 分类ID
      * @param userId 用户ID
      * @return PageResult<ArticleListVo>
      */
-    PageResult<ArticleListVo> list(PageParam pageParam, Integer cid, Integer userId);
+    PageResult<ArticleListVo> list(PageValidate pageValidate, Integer cid, Integer userId);
 
     /**
      * 文章详情
@@ -47,11 +47,11 @@ public interface IArticleService {
      * 文章收藏
      *
      * @author fzr
-     * @param pageParam 分页参数
+     * @param pageValidate 分页参数
      * @param userId 用户ID
      * @return PageResult<ArticleListVo>
      */
-    PageResult<ArticleCollectVo> collect(PageParam pageParam, Integer userId);
+    PageResult<ArticleCollectVo> collect(PageValidate pageValidate, Integer userId);
 
     /**
      * 加入收藏

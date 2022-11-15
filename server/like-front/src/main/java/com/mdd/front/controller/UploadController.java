@@ -25,10 +25,10 @@ public class UploadController {
      *
      * @author fzr
      * @param request 请求对象
-     * @return Object
+     * @return AjaxResult<Object>
      */
     @PostMapping("/image")
-    public Object image(HttpServletRequest request) {
+    public AjaxResult<Object> image(HttpServletRequest request) {
         MultipartFile multipartFile;
         try {
             multipartFile = ((MultipartRequest) request).getFile("file");

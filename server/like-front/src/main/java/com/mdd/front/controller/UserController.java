@@ -28,10 +28,10 @@ public class UserController {
      * 个人中心
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult<UserCenterVo>
      */
     @GetMapping("/center")
-    public Object center() {
+    public AjaxResult<UserCenterVo> center() {
         UserCenterVo vo = iUserService.center(LikeFrontThreadLocal.getUserId());
         return AjaxResult.success(vo);
     }
@@ -40,10 +40,10 @@ public class UserController {
      * 个人信息
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult<UserInfoVo>
      */
     @GetMapping("/info")
-    public Object info() {
+    public AjaxResult<UserInfoVo> info() {
         UserInfoVo vo = iUserService.info(LikeFrontThreadLocal.getUserId());
         return AjaxResult.success(vo);
     }
@@ -53,10 +53,10 @@ public class UserController {
      *
      * @author fzr
      * @param params 参数
-     * @return Object
+     * @return AjaxResult<Object>
      */
     @PostMapping("/edit")
-    public Object edit(@RequestBody Map<String, String> params) {
+    public AjaxResult<Object> edit(@RequestBody Map<String, String> params) {
         Assert.notNull(params.get("field"), "field参数缺失");
         Assert.notNull(params.get("value"), "value参数缺失");
         Integer userId = LikeFrontThreadLocal.getUserId();
@@ -69,10 +69,10 @@ public class UserController {
      *
      * @author fzr
      * @param params 参数
-     * @return Object
+     * @return AjaxResult<Object>
      */
     @PostMapping("/changePwd")
-    public Object changePwd(@RequestBody Map<String, String> params) {
+    public AjaxResult<Object> changePwd(@RequestBody Map<String, String> params) {
         Assert.notNull(params.get("password"), "password参数缺失");
         if(!Pattern.matches("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$", params.get("password"))){
             throw new OperateException("密码必须是6-20字母+数字组合!");
@@ -86,10 +86,11 @@ public class UserController {
      * 绑定手机号
      *
      * @author fzr
-     * @return Object
+     * @param params 参数
+     * @return AjaxResult<Object>
      */
     @PostMapping("/bindMobile")
-    public Object bindMobile(@RequestBody Map<String, String> params) {
+    public AjaxResult<Object> bindMobile(@RequestBody Map<String, String> params) {
         Assert.notNull(params.get("type"), "type参数缺失");
         Assert.notNull(params.get("mobile"), "mobile参数缺失");
         Assert.notNull(params.get("code"), "code参数缺失");
@@ -108,10 +109,11 @@ public class UserController {
      * 微信手机号
      *
      * @author fzr
-     * @return Object
+     * @param params 参数
+     * @return AjaxResult<Object>
      */
     @PostMapping("/mnpMobile")
-    public Object mnpMobile(@RequestBody Map<String, String> params) {
+    public AjaxResult<Object> mnpMobile(@RequestBody Map<String, String> params) {
         Assert.notNull(params.get("code"), "code参数缺失");
         iUserService.mnpMobile(params.get("code").trim());
         return AjaxResult.success();

@@ -18,36 +18,44 @@
 
     <!-- 特性信息 -->
     <properties>
-        <like.version>1.0.0</like.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+
+        <like.version>1.0.0</like.version>
         <java.version>1.8</java.version>
         <log4j2.version>2.16.0</log4j2.version>
+
         <mysql-connector.version>5.1.49</mysql-connector.version>
-        <mybatis-plus.version>3.4.3.1</mybatis-plus.version>
-        <mybatis-plus-join.version>1.2.2</mybatis-plus-join.version>
-        <pagehelper.version>1.4.0</pagehelper.version>
-        <lombok.version>1.18.22</lombok.version>
-        <fastJson.version>2.0.12</fastJson.version>
-        <apache-commons.version>2.10.0</apache-commons.version>
+        <mybatis-plus.version>3.5.2</mybatis-plus.version>
+        <mybatis-plus-join.version>1.2.4</mybatis-plus-join.version>
+        <pagehelper.version>1.4.5</pagehelper.version>
+
+        <lombok.version>1.18.24</lombok.version>
+        <fastJson2.version>2.0.16</fastJson2.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
-        <gson.version>2.9.0</gson.version>
-        <bitwalker.version>1.2.4</bitwalker.version>
         <commons.io.version>2.11.0</commons.io.version>
+        <commons-pool2.version>2.11.1</commons-pool2.version>
+        <google-gson.version>2.9.0</google-gson.version>
+
+        <bitwalker.version>1.2.4</bitwalker.version>
+        <oshi-core.version>6.1.2</oshi-core.version>
+        <sa-token.version>1.31.0</sa-token.version>
+
         <qiniu.version>7.9.5</qiniu.version>
         <qcloud-version>5.6.54</qcloud-version>
         <tencentcloudapi.version>3.1.411</tencentcloudapi.version>
         <aliyun-oss.version>3.10.2</aliyun-oss.version>
         <aliyun-java.version>4.5.16</aliyun-java.version>
-        <oshi-core.version>6.1.2</oshi-core.version>
+
+        <weixin.version>4.4.0</weixin.version>
     </properties>
 
     <!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
-            <!-- SpringBoot依赖配置-->
+            <!-- SpringBoot-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -55,109 +63,148 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- Mysql连接依赖 -->
+
+            <!-- Mysql-Connector -->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector.version}</version>
             </dependency>
-            <!-- MyBatisPlus依赖 -->
+
+            <!-- MyBatis-Plus -->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
-            <!-- MyBatisPlusJoin依赖 -->
+
+            <!-- MyBatis-Plus-Join -->
             <dependency>
                 <groupId>com.github.yulichang</groupId>
                 <artifactId>mybatis-plus-join</artifactId>
                 <version>${mybatis-plus-join.version}</version>
             </dependency>
-            <!-- MyBatis分页依赖 -->
+
+            <!-- MyBatis-PageHelper -->
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.version}</version>
             </dependency>
-            <!-- Lombok依赖 -->
+
+            <!-- Pool2 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${commons-pool2.version}</version>
+            </dependency>
+
+            <!-- Lombok -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
-            <!-- Fastjson -->
+
+            <!-- Fastjson2 -->
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastJson.version}</version>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>${fastJson2.version}</version>
             </dependency>
-            <!-- Lang3 -->
+
+            <!-- SaToken -->
             <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-spring-boot-starter</artifactId>
+                <version>${sa-token.version}</version>
             </dependency>
-            <!-- 通用池 -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-pool2</artifactId>
-                <version>${apache-commons.version}</version>
-            </dependency>
-            <!-- Gson -->
+
+            <!-- Gson工具 -->
             <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
-                <version>${gson.version}</version>
+                <version>${google-gson.version}</version>
             </dependency>
-            <!-- UserAgent -->
+
+            <!-- UA工具 -->
             <dependency>
                 <groupId>nl.bitwalker</groupId>
                 <artifactId>UserAgentUtils</artifactId>
                 <version>${bitwalker.version}</version>
             </dependency>
-            <!-- io常用工具类 -->
+
+            <!-- Str工具 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+
+            <!-- IO工具 -->
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons.io.version}</version>
             </dependency>
-            <!-- 七牛云 -->
+
+            <!-- 七牛云OSS -->
             <dependency>
                 <groupId>com.qiniu</groupId>
                 <artifactId>qiniu-java-sdk</artifactId>
                 <version>${qiniu.version}</version>
             </dependency>
+
             <!-- 腾讯云COS -->
             <dependency>
                 <groupId>com.qcloud</groupId>
                 <artifactId>cos_api</artifactId>
                 <version>${qcloud-version}</version>
             </dependency>
+
             <!-- 阿里云OSS -->
             <dependency>
                 <groupId>com.aliyun.oss</groupId>
                 <artifactId>aliyun-sdk-oss</artifactId>
                 <version>${aliyun-oss.version}</version>
             </dependency>
-            <!--腾讯云短信-->
+
+            <!-- 腾讯云短信 -->
             <dependency>
                 <groupId>com.tencentcloudapi</groupId>
                 <artifactId>tencentcloud-sdk-java</artifactId>
                 <version>${tencentcloudapi.version}</version>
             </dependency>
-            <!--阿里云短信-->
+
+            <!-- 阿里云短信 -->
             <dependency>
                 <groupId>com.aliyun</groupId>
                 <artifactId>aliyun-java-sdk-core</artifactId>
                 <version>${aliyun-java.version}</version>
             </dependency>
-            <!--系统监控-->
+
+            <!-- 系统监控 -->
             <dependency>
                 <groupId>com.github.oshi</groupId>
                 <artifactId>oshi-core</artifactId>
                 <version>${oshi-core.version}</version>
             </dependency>
-            <!--通用工具-->
+
+            <!-- 微信小程序 -->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-miniapp</artifactId>
+                <version>${weixin.version}</version>
+            </dependency>
+
+            <!-- 微信公众号 -->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-mp</artifactId>
+                <version>${weixin.version}</version>
+            </dependency>
+
+            <!-- 全局工具 -->
             <dependency>
                 <groupId>org.mdd</groupId>
                 <artifactId>like-common</artifactId>

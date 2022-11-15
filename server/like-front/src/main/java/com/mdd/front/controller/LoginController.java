@@ -3,7 +3,7 @@ package com.mdd.front.controller;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.front.service.ILoginService;
-import com.mdd.front.validate.RegParam;
+import com.mdd.front.validate.RegValidate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +27,12 @@ public class LoginController {
      * 注册账号
      *
      * @author fzr
-     * @param regParam 参数
-     * @return Object
+     * @param regValidate 参数
+     * @return AjaxResult<Object>
      */
     @PostMapping("/register")
-    public Object register(@Validated @RequestBody RegParam regParam) {
-        iLoginService.register(regParam);
+    public AjaxResult<Object> register(@Validated @RequestBody RegValidate regValidate) {
+        iLoginService.register(regValidate);
         return AjaxResult.success();
     }
 
@@ -41,10 +41,10 @@ public class LoginController {
      *
      * @author fzr
      * @param params 参数
-     * @return Object
+     * @return AjaxResult<Map<String, Object>>
      */
     @PostMapping("/check")
-    public Object check(@RequestBody Map<String, String> params) {
+    public AjaxResult<Map<String, Object>> check(@RequestBody Map<String, String> params) {
         Assert.notNull(params.get("scene"), "scene参数缺失!");
         Map<String, Object> map = new LinkedHashMap<>();
         switch (params.get("scene")) {
@@ -66,10 +66,10 @@ public class LoginController {
      *
      * @author fzr
      * @param params 参数
-     * @return Object
+     * @return AjaxResult<Map<String, Object>>
      */
     @GetMapping("/oaLogin")
-    public Object oaLogin(@RequestParam Map<String, String> params) {
+    public AjaxResult<Map<String, Object>> oaLogin(@RequestParam Map<String, String> params) {
         Map<String, Object> map = iLoginService.officeLogin(params);
         return AjaxResult.success(map);
     }
@@ -79,10 +79,10 @@ public class LoginController {
      *
      * @author fzr
      * @param url 连接
-     * @return Object
+     * @return AjaxResult<Map<String, String>>
      */
     @GetMapping("/codeUrl")
-    public Object codeUrl(@RequestParam String url) {
+    public AjaxResult<Map<String, String>> codeUrl(@RequestParam String url) {
         Assert.notNull(url, "url参数不能为空");
         String uri = iLoginService.codeUrl(url);
         Map<String, String> response = new LinkedHashMap<>();
@@ -95,10 +95,10 @@ public class LoginController {
      *
      * @author fzr
      * @param params 参数
-     * @return Object
+     * @return AjaxResult<Object>
      */
     @PostMapping("/forgotPassword")
-    public Object forgotPassword(@RequestBody Map<String, String> params) {
+    public AjaxResult<Object> forgotPassword(@RequestBody Map<String, String> params) {
         iLoginService.forgotPassword(params);
         return AjaxResult.success();
     }

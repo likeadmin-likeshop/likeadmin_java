@@ -1,20 +1,14 @@
 package com.mdd.common.plugin.sms;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.mdd.common.entity.system.SystemLogSms;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.system.SystemLogSmsMapper;
 import com.mdd.common.plugin.sms.engine.AliSms;
 import com.mdd.common.plugin.sms.engine.TencentSms;
-import com.mdd.common.utils.ArrayUtil;
 import com.mdd.common.utils.ConfigUtil;
 import com.mdd.common.utils.SpringUtil;
 
-import javax.annotation.Resource;
-import javax.management.openmbean.OpenDataException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class SmsDriver {

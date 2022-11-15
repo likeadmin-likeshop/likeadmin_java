@@ -1,11 +1,15 @@
 package com.mdd.common.core.basics;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.yulichang.base.MPJBaseMapper;
 import com.github.yulichang.query.MPJQueryWrapper;
+import com.google.gson.reflect.TypeToken;
 import com.mdd.common.utils.TimeUtil;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,10 +45,12 @@ public interface IBaseMapper<T> extends MPJBaseMapper<T> {
      *
      * @author fzr
      * @param queryWrapper 条件构造器
-     * @param params 参数[条件:键@数据库字段:类型]
-     * @param conditions 条件
+     * @param param 参数[条件:键@数据库字段:类型]
+     * @param conditions 条件[ new String[]{"like:username:str", "=:role:int"} ]
      */
-    default void setSearch(MPJQueryWrapper<T> queryWrapper, Map<String, String> params, String[] conditions) {
+    default void setSearch(MPJQueryWrapper<T> queryWrapper, Object param, String[] conditions) {
+        Type types = new TypeToken<Map<String, String>>() {}.getType();
+        Map<String, String> params = JSON.parseObject(JSONObject.toJSONString(param), types);
 
         for (String condition : conditions) {
             String[] array   = condition.split(":");
@@ -160,7 +166,7 @@ public interface IBaseMapper<T> extends MPJBaseMapper<T> {
 
                     if (type.equals("long")) {
                         if (!dateEnd.equals("")) { queryWrapper.le(field, Long.parseLong(dateEnd)); }
-                        if (!dateStart.equals("")) { queryWrapper.ge(field, Long.parseLong(dateStart)); };
+                        if (!dateStart.equals("")) { queryWrapper.ge(field, Long.parseLong(dateStart)); }
                     } else {
                         if (!dateStart.equals("")) { queryWrapper.ge(field, TimeUtil.dateToTimestamp(dateStart)); }
                         if (!dateEnd.equals("")) { queryWrapper.le(field, TimeUtil.dateToTimestamp(dateEnd)); }
@@ -176,10 +182,12 @@ public interface IBaseMapper<T> extends MPJBaseMapper<T> {
      *
      * @author fzr
      * @param queryWrapper 条件构造器
-     * @param params 参数[条件:键@数据库字段:类型]
-     * @param conditions 条件
+     * @param param 参数[条件:键@数据库字段:类型]
+     * @param conditions 条件[ new String[]{"like:username:str", "=:role:int"} ]
      */
-    default void setSearch(QueryWrapper<T> queryWrapper, Map<String, String> params, String[] conditions) {
+    default void setSearch(QueryWrapper<T> queryWrapper, Object param, String[] conditions) {
+        Type types = new TypeToken<Map<String, String>>() {}.getType();
+        Map<String, String> params = JSON.parseObject(JSONObject.toJSONString(param), types);
 
         for (String condition : conditions) {
             String[] array   = condition.split(":");
@@ -297,7 +305,7 @@ public interface IBaseMapper<T> extends MPJBaseMapper<T> {
                         if (!dateStart.equals("")) { queryWrapper.ge(field, Long.parseLong(dateStart)); }
                         if (!dateEnd.equals("")) { queryWrapper.le(field, Long.parseLong(dateEnd)); }
                     } else {
-                        if (!dateStart.equals("")) { queryWrapper.ge(field, TimeUtil.dateToTimestamp(dateStart)); };
+                        if (!dateStart.equals("")) { queryWrapper.ge(field, TimeUtil.dateToTimestamp(dateStart)); }
                         if (!dateEnd.equals("")) { queryWrapper.le(field, TimeUtil.dateToTimestamp(dateEnd)); }
                     }
                      break;

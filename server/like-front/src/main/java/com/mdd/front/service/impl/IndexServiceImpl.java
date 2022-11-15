@@ -8,16 +8,16 @@ import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.article.Article;
-import com.mdd.common.entity.decorate.DecoratePage;
-import com.mdd.common.entity.decorate.DecorateTabbar;
+import com.mdd.common.entity.DecoratePage;
+import com.mdd.common.entity.DecorateTabbar;
 import com.mdd.common.entity.setting.HotSearch;
 import com.mdd.common.mapper.article.ArticleMapper;
-import com.mdd.common.mapper.decorate.DecoratePageMapper;
-import com.mdd.common.mapper.decorate.DecorateTabbarMapper;
+import com.mdd.common.mapper.DecoratePageMapper;
+import com.mdd.common.mapper.DecorateTabbarMapper;
 import com.mdd.common.mapper.setting.HotSearchMapper;
 import com.mdd.common.utils.*;
 import com.mdd.front.service.IIndexService;
-import com.mdd.front.validate.PageParam;
+import com.mdd.front.validate.PageValidate;
 import com.mdd.front.vo.article.ArticleListVo;
 import org.springframework.stereotype.Service;
 
@@ -211,13 +211,13 @@ public class IndexServiceImpl implements IIndexService {
      * 搜索
      *
      * @author fzr
-     * @param pageParam 分页参数
+     * @param pageValidate 分页参数
      * @param params 搜索参数
      * @return PageResult<ArticleListVo>
      */
-    public PageResult<ArticleListVo> search(PageParam pageParam, Map<String, String> params) {
-        Integer pageNo   = pageParam.getPageNo();
-        Integer pageSize = pageParam.getPageSize();
+    public PageResult<ArticleListVo> search(PageValidate pageValidate, Map<String, String> params) {
+        Integer pageNo   = pageValidate.getPageNo();
+        Integer pageSize = pageValidate.getPageSize();
 
         MPJQueryWrapper<Article> mpjQueryWrapper = new MPJQueryWrapper<Article>()
                 .selectAll(Article.class)

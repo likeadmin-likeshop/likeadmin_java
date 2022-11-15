@@ -1,10 +1,10 @@
 package com.mdd.admin;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.mdd.admin.config.AdminConfig;
-import com.mdd.admin.service.system.ISystemAuthAdminService;
-import com.mdd.admin.service.system.ISystemAuthPermService;
+import com.mdd.admin.service.ISystemAuthAdminService;
+import com.mdd.admin.service.ISystemAuthPermService;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.utils.RedisUtil;
@@ -37,7 +37,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         // 404拦截
         response.setContentType("application/json;charset=utf-8");
         if (response.getStatus() == 404) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.REQUEST_404_ERROR.getCode(), HttpEnum.REQUEST_404_ERROR.getMsg());
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.REQUEST_404_ERROR.getCode(), HttpEnum.REQUEST_404_ERROR.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
@@ -61,7 +61,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         // Token是否为空
         String token = request.getHeader("token");
         if (StringUtils.isBlank(token)) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_EMPTY.getCode(), HttpEnum.TOKEN_EMPTY.getMsg());
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_EMPTY.getCode(), HttpEnum.TOKEN_EMPTY.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
@@ -69,7 +69,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         // Token是否过期
         token = AdminConfig.backstageTokenKey + token;
         if (!RedisUtil.exists(token)) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
@@ -85,14 +85,14 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         if (map == null || map.get("isDelete").equals("1")) {
             RedisUtil.del(token);
             RedisUtil.hDel(AdminConfig.backstageManageKey, uid);
-            AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
 
         // 校验用户被禁用
         if (map.get("isDisable").equals("1")) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.LOGIN_DISABLE_ERROR.getCode(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.LOGIN_DISABLE_ERROR.getCode(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
@@ -123,7 +123,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         // 验证是否有权限操作
         String menus = RedisUtil.hGet(AdminConfig.backstageRolesKey, roleId).toString();
         if (menus.equals("") || !Arrays.asList(menus.split(",")).contains(auths)) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.NO_PERMISSION.getCode(), HttpEnum.NO_PERMISSION.getMsg());
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.NO_PERMISSION.getCode(), HttpEnum.NO_PERMISSION.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }

@@ -1,6 +1,6 @@
 package com.mdd.front.service;
 
-import com.mdd.front.validate.RegParam;
+import com.mdd.front.validate.RegValidate;
 
 import java.util.Map;
 
@@ -13,9 +13,9 @@ public interface ILoginService {
      * 账号注册
      *
      * @author fzr
-     * @param regParam 参数
+     * @param regValidate 参数
      */
-    void register(RegParam regParam);
+    void register(RegValidate regValidate);
 
     /**
      * 微信登录
