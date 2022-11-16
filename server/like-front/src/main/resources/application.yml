@@ -10,6 +10,10 @@ spring:
     active: dev
   mvc:
     static-path-pattern: /api/static/**
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
   # 数据源配置
   datasource:
     url: jdbc:mysql://localhost:3306/local_likeadmin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
@@ -48,11 +52,11 @@ spring:
 
 # Mybatis-plus配置
 mybatis-plus:
-  mapper-locations: classpath*:/mapper/**Mapper.xml # 映射文件路径
+  mapper-locations: classpath*:/mapper/**Mapper.xml
   typeAliasesPackage: com.mdd.**.mapper
   global-config:
     banner: false
     db-config:
-      table-prefix: la_ # 设置表前缀
+      table-prefix: la_
   configuration-properties:
-    prefix: la_ # 自定义表前缀标签${prefix}
+    prefix: la_

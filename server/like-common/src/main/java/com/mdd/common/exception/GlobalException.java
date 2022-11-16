@@ -13,6 +13,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.Objects;
 
@@ -36,6 +37,16 @@ public class GlobalException {
         }
         log.error("系统异常 {}", e.getMessage());
         return AjaxResult.failed(HttpEnum.SYSTEM_ERROR.getCode(), e.getMessage());
+    }
+
+    /**
+     * 拦截404异常
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseBody
+    public AjaxResult<Object> handleNoHandlerFoundException(NoHandlerFoundException e){
+        return AjaxResult.failed(HttpEnum.REQUEST_404_ERROR.getCode(), e.getMessage());
     }
 
     /**

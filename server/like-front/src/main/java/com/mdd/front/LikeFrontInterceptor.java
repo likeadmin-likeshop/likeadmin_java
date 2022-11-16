@@ -31,16 +31,11 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
     UserMapper userMapper;
 
     @Override
-    public boolean preHandle(@NonNull HttpServletRequest request, HttpServletResponse response, @NonNull Object handler) throws Exception {
-        // 404拦截
-        response.setContentType("application/json;charset=utf-8");
-        if (response.getStatus() == 404) {
-            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.REQUEST_404_ERROR.getCode(), HttpEnum.REQUEST_404_ERROR.getMsg());
-            response.getWriter().print(JSON.toJSONString(result));
-            return false;
-        }
-
+    public boolean preHandle(@NonNull HttpServletRequest request,
+                             @NonNull HttpServletResponse response,
+                             @NonNull Object handler) throws Exception {
         // 判断请求接口
+        response.setContentType("application/json;charset=utf-8");
         if (!(handler instanceof HandlerMethod)) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
@@ -113,7 +108,9 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler, Exception ex) throws Exception {
+    public void afterCompletion(@NonNull HttpServletRequest request,
+                                @NonNull HttpServletResponse response,
+                                @NonNull Object handler, Exception ex) throws Exception {
         LikeFrontThreadLocal.remove();
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
     }
