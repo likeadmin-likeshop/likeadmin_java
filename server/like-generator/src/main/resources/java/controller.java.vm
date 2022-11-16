@@ -4,25 +4,25 @@ package ${packageName}.admin.controller;
 import com.alibaba.fastjson2.JSONArray;
 #end
 import ${packageName}.admin.config.aop.Log;
-import ${packageName}.admin.service.${moduleName}.I${EntityName}Service;
-import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
+import ${packageName}.admin.service.I${EntityName}Service;
+import ${packageName}.admin.validate.commons.IdValidate;
+import ${packageName}.admin.validate.${EntityName}CreateValidate;
+import ${packageName}.admin.validate.${EntityName}UpdateValidate;
+import ${packageName}.admin.validate.${EntityName}SearchValidate;
 #if($table.genTpl.equals("crud"))
-import ${packageName}.admin.validate.common.PageParam;
-import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
+import ${packageName}.admin.validate.commons.PageValidate;
+import ${packageName}.admin.vo.${EntityName}ListedVo;
 #end
-import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
+import ${packageName}.admin.vo.${EntityName}DetailVo;
 import ${packageName}.common.core.AjaxResult;
 #if($table.genTpl.equals("crud"))
 import ${packageName}.common.core.PageResult;
 #end
 import ${packageName}.common.validator.annotation.IDMust;
-import com.mdd.common.core.AjaxResult;
-import org.apache.commons.lang3.Validate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 #set($isAuthor = !$authorName.equals(""))
 /**
@@ -45,16 +45,16 @@ public class ${EntityName}Controller {
      * @author ${authorName}
      #end
      #if($table.genTpl.equals("crud"))
-     * @param pageParam 分页参数
+     * @param pageValidate 分页参数
      #end
-     * @param params 搜索参数
-     * @return Object
+     * @param searchValidate 搜索参数
+     * @return AjaxResult<Object>
      */
     #if($table.genTpl.equals("crud"))
     @GetMapping("/list")
-    public AjaxResult<PageResult<${EntityName}ListedVo>> list(@Validated PageParam pageParam,
-                                                              @RequestParam Map<String, String> params) {
-        PageResult<${EntityName}ListedVo> list = i${EntityName}Service.list(pageParam, params);
+    public AjaxResult<PageResult<${EntityName}ListedVo>> list(@Validated PageValidate pageValidate,
+                                                     @Validated ${EntityName}SearchValidate searchValidate) {
+        PageResult<${EntityName}ListedVo> list = i${EntityName}Service.list(pageValidate, searchValidate);
         return AjaxResult.success(list);
     }
     #else

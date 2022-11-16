@@ -83,7 +83,7 @@ public class GenUtil {
             String[] str = StringUtil.split(StringUtil.substringBetween(column.getColumnType(), "(", ")"), ",");
             if (str != null && str.length == 2 && Integer.parseInt(str[1]) > 0) {
                 column.setJavaType(JavaConstants.TYPE_BIG_DECIMAL); // 浮点形
-            } else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 10) {
+            } else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 11) {
                 column.setJavaType(JavaConstants.TYPE_INTEGER);     // 整数形
             } else {
                 column.setJavaType(JavaConstants.TYPE_LONG);        // 长整形

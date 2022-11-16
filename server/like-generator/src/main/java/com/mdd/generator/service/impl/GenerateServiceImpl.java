@@ -250,6 +250,7 @@ public class GenerateServiceImpl implements IGenerateService {
             Integer id = Integer.parseInt(item.get("id"));
             GenTableColumn column = genTableColumnMapper.selectById(id);
             column.setColumnComment(item.get("columnComment"));
+            column.setJavaType(item.get("javaType"));
             column.setJavaField(item.get("javaField"));
             column.setIsRequired(Integer.parseInt(item.get("isRequired")));
             column.setIsInsert(Integer.parseInt(item.get("isInsert")));

@@ -6,11 +6,10 @@ import com.alibaba.fastjson2.JSONArray;
 import ${packageName}.admin.validate.commons.PageValidate;
 import ${packageName}.admin.validate.${EntityName}CreateValidate;
 import ${packageName}.admin.validate.${EntityName}UpdateValidate;
+import ${packageName}.admin.validate.${EntityName}SearchValidate;
 import ${packageName}.admin.vo.${EntityName}ListedVo;
 import ${packageName}.admin.vo.${EntityName}DetailVo;
 import ${packageName}.common.core.PageResult;
-
-import java.util.Map;
 
 #set($isAuthor = !$authorName.equals(""))
 /**
@@ -29,10 +28,10 @@ public interface I${EntityName}Service {
      * @author ${authorName}
      #end
      * @param pageValidate 分页参数
-     * @param params 搜索参数
+     * @param searchValidate 搜索参数
      * @return PageResult<${EntityName}ListedVo>
      */
-    PageResult<${EntityName}ListedVo> list(PageValidate pageValidate, Map<String, String> params);
+    PageResult<${EntityName}ListedVo> list(PageValidate pageValidate, ${EntityName}SearchValidate searchValidate);
 #elseif($table.genTpl=="tree")
     /**
      * ${functionName}列表

@@ -119,7 +119,7 @@ public class VelocityUtil {
         templates.add("java/serviceImpl.java.vm");
         templates.add("java/validateCreate.java.vm");
         templates.add("java/validateUpdate.java.vm");
-//        templates.add("java/validateSearch.java.vm");
+        templates.add("java/validateSearch.java.vm");
         templates.add("java/voListed.java.vm");
         templates.add("java/voDetail.java.vm");
         templates.add("java/entity.java.vm");
@@ -165,6 +165,9 @@ public class VelocityUtil {
             fileName = StringUtil.format("java/{}/validate/{}UpdateValidate.java", GenConfig.adminPackage, entityName);
         }
 
+        else if (template.contains("validateSearch.java.vm")) {
+            fileName = StringUtil.format("java/{}/validate/{}SearchValidate.java", GenConfig.adminPackage, entityName);
+        }
 
         else if (template.contains("voListed.java.vm")) {
             fileName = StringUtil.format("java/{}/vo/{}ListedVo.java", GenConfig.adminPackage, entityName);

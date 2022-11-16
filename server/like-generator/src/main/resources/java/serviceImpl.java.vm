@@ -11,6 +11,7 @@ import ${packageName}.admin.service.I${EntityName}Service;
 import ${packageName}.admin.validate.commons.PageValidate;
 import ${packageName}.admin.validate.${EntityName}CreateValidate;
 import ${packageName}.admin.validate.${EntityName}UpdateValidate;
+import ${packageName}.admin.validate.${EntityName}SearchValidate;
 import ${packageName}.admin.vo.${EntityName}ListedVo;
 import ${packageName}.admin.vo.${EntityName}DetailVo;
 import ${packageName}.common.core.PageResult;
@@ -41,7 +42,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #set($genTpl = "PageResult<${EntityName}ListedVo>")
         #if($isSearch)
             #set($isSearchParam = true)
-            #set($genParam = "PageValidate pageValidate, Map<String, String> params")
+            #set($genParam = "PageValidate pageValidate, ${EntityName}SearchValidate searchValidate")
         #else
             #set($isSearchParam = false)
             #set($genParam = "PageValidate pageValidate")
@@ -58,7 +59,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     #end
     ## 设置基本的参数变量
     #set($pageParam = "@param pageValidate 分页参数")
-    #set($searchparams = "@param params 搜索参数")
+    #set($searchparams = "@param searchValidate 搜索参数")
 
     @Resource
     ${EntityName}Mapper ${entityName}Mapper;
@@ -110,7 +111,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     #end
 
     #if($isSearch)
-        ${entityName}Mapper.setSearch($queryWrapper, params, new String[]{
+        ${entityName}Mapper.setSearch($queryWrapper, searchValidate, new String[]{
     #foreach ($column in $columns)
     #if($column.isQuery)
         #if($dateFields.contains($column.columnName))
