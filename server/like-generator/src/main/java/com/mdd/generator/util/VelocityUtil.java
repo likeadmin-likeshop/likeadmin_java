@@ -117,13 +117,13 @@ public class VelocityUtil {
         templates.add("java/controller.java.vm");
         templates.add("java/service.java.vm");
         templates.add("java/serviceImpl.java.vm");
-        templates.add("java/entity.java.vm");
-        templates.add("java/mapper.java.vm");
         templates.add("java/validateCreate.java.vm");
         templates.add("java/validateUpdate.java.vm");
 //        templates.add("java/validateSearch.java.vm");
         templates.add("java/voListed.java.vm");
         templates.add("java/voDetail.java.vm");
+        templates.add("java/entity.java.vm");
+        templates.add("java/mapper.java.vm");
         templates.add("vue/api.ts.vm");
         templates.add("vue/edit.vue.vm");
         if (GenConstants.TPL_CRUD.equals(genTpl)) {
@@ -157,14 +157,6 @@ public class VelocityUtil {
             fileName = StringUtil.format("java/{}/service/impl/{}ServiceImpl.java", GenConfig.adminPackage, entityName);
         }
 
-        else if (template.contains("entity.java.vm")) {
-            fileName = StringUtil.format("java/{}/entity/{}.java", GenConfig.commonPackage, entityName);
-        }
-
-        else if (template.contains("mapper.java.vm")) {
-            fileName = StringUtil.format("java/{}/mapper/{}Mapper.java", GenConfig.commonPackage, entityName);
-        }
-
         else if (template.contains("validateCreate.java.vm")) {
             fileName = StringUtil.format("java/{}/validate/{}CreateValidate.java", GenConfig.adminPackage, entityName);
         }
@@ -180,6 +172,14 @@ public class VelocityUtil {
 
         else if (template.contains("voDetail.java.vm")) {
             fileName = StringUtil.format("java/{}/vo/{}DetailVo.java", GenConfig.adminPackage, entityName);
+        }
+
+        else if (template.contains("entity.java.vm")) {
+            fileName = StringUtil.format("java/{}/entity/{}.java", GenConfig.commonPackage, entityName);
+        }
+
+        else if (template.contains("mapper.java.vm")) {
+            fileName = StringUtil.format("java/{}/mapper/{}Mapper.java", GenConfig.commonPackage, entityName);
         }
 
         else if (template.contains("vue/api.ts.vm")) {

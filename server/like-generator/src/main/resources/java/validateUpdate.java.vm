@@ -3,6 +3,12 @@ package ${packageName}.admin.validate;
 import lombok.Data;
 import java.io.Serializable;
 import javax.validation.constraints.*;
+#foreach ($column in $columns)
+#if ($column.javaType.equals("BigDecimal"))
+import java.math.BigDecimal;
+#break
+#end
+#end
 import ${packageName}.common.validator.annotation.IDMust;
 
 #set($isAuthor = !$authorName.equals(""))

@@ -6,6 +6,7 @@ import java.io.Serializable;
 #foreach ($column in $columns)
 #if ($column.javaType.equals("BigDecimal"))
 import java.math.BigDecimal;
+#break
 #end
 #end
 
@@ -17,7 +18,7 @@ import java.math.BigDecimal;
 #end
  */
 @Data
-public class ${EntityName}ListVo implements Serializable {
+public class ${EntityName}ListedVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

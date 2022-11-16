@@ -1,7 +1,7 @@
 package ${packageName}.common.mapper;
 
 import ${packageName}.common.core.basics.IBaseMapper;
-import ${packageName}.common.entity.${moduleName}.${EntityName};
+import ${packageName}.common.entity.${EntityName};
 import org.apache.ibatis.annotations.Mapper;
 
 #set($isAuthor = !$authorName.equals(""))

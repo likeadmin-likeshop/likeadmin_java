@@ -2,6 +2,12 @@ package ${packageName}.admin.validate;
 
 import lombok.Data;
 import java.io.Serializable;
+#foreach ($column in $columns)
+#if ($column.javaType.equals("BigDecimal"))
+import java.math.BigDecimal;
+#break
+#end
+#end
 
 #set($isAuthor = !$authorName.equals(""))
 /**
