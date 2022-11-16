@@ -59,8 +59,8 @@ public class ${EntityName}Controller {
     }
     #else
     @GetMapping("/list")
-    public AjaxResult<JSONArray> list(@RequestParam Map<String, String> params) {
-        JSONArray list = i${EntityName}Service.list(params);
+    public AjaxResult<JSONArray> list(@Validated ${EntityName}SearchValidate searchValidate) {
+        JSONArray list = i${EntityName}Service.list(searchValidate);
         return AjaxResult.success(list);
     }
     #end

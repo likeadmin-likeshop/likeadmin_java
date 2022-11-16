@@ -208,6 +208,7 @@ public class GenerateServiceImpl implements IGenerateService {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new OperateException("导入失败：" + e.getMessage());
         }
     }

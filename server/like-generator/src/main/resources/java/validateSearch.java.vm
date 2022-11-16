@@ -23,7 +23,12 @@ public class ${EntityName}SearchValidate implements Serializable {
 
 #foreach ($column in $columns)
 #if($column.isQuery==1)
+    #if ($column.columnName.equals("create_time") || $column.columnName.equals("update_time") || $column.columnName.equals("delete_time"))
+    private String ${column.javaField}Start;
+    private String ${column.javaField}End;
+    #else
     private ${column.javaType} ${column.javaField};
+    #end
 
 #end
 #end

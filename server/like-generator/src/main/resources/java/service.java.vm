@@ -3,13 +3,19 @@ package ${packageName}.admin.service;
 #if(!$table.genTpl.equals("crud"))
 import com.alibaba.fastjson2.JSONArray;
 #end
+#if($table.genTpl.equals("crud"))
 import ${packageName}.admin.validate.commons.PageValidate;
+#end
 import ${packageName}.admin.validate.${EntityName}CreateValidate;
 import ${packageName}.admin.validate.${EntityName}UpdateValidate;
 import ${packageName}.admin.validate.${EntityName}SearchValidate;
+#if($table.genTpl.equals("crud"))
 import ${packageName}.admin.vo.${EntityName}ListedVo;
+#end
 import ${packageName}.admin.vo.${EntityName}DetailVo;
+#if($table.genTpl.equals("crud"))
 import ${packageName}.common.core.PageResult;
+#end
 
 #set($isAuthor = !$authorName.equals(""))
 /**
@@ -39,10 +45,10 @@ public interface I${EntityName}Service {
      #if(!$authorName.equals(""))
      * @author ${authorName}
      #end
-     * @param params 搜索参数
+     * @param searchValidate 搜索参数
      * @return JSONArray
     */
-    JSONArray list(Map<String, String> params);
+    JSONArray list(${EntityName}SearchValidate searchValidate);
  #end
 
     /**

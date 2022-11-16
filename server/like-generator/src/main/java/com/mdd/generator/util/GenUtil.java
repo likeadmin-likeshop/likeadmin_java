@@ -66,7 +66,6 @@ public class GenUtil {
 
         // 日期字段
         else if (GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_TIME, columnType)) {
-
             column.setJavaType(JavaConstants.TYPE_DATE);
             column.setHtmlType(HtmlConstants.HTML_DATETIME);
         }
@@ -242,14 +241,10 @@ public class GenUtil {
      * @return 截取后的列类型
      */
     public static String getColumnLength(String columnType) {
-        if (columnType.equals("")) {
-            return "0";
-        }
         if (StringUtil.indexOf(columnType, "(") > 0) {
             return StringUtil.substringBetween(columnType, "(", ")");
-        }
-        else {
-            return "";
+        } else {
+            return "0";
         }
     }
 

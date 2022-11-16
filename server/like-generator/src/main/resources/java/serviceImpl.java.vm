@@ -1,26 +1,29 @@
 package ${packageName}.admin.service.impl;
 
 #if(!$table.genTpl.equals("crud"))
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson2.JSONArray;
 #end
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+#if($table.genTpl.equals("crud"))
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
-import ${packageName}.admin.service.I${EntityName}Service;
 import ${packageName}.admin.validate.commons.PageValidate;
+#end
+import ${packageName}.admin.service.I${EntityName}Service;
 import ${packageName}.admin.validate.${EntityName}CreateValidate;
 import ${packageName}.admin.validate.${EntityName}UpdateValidate;
 import ${packageName}.admin.validate.${EntityName}SearchValidate;
 import ${packageName}.admin.vo.${EntityName}ListedVo;
 import ${packageName}.admin.vo.${EntityName}DetailVo;
+#if($table.genTpl.equals("crud"))
 import ${packageName}.common.core.PageResult;
+#end
 import ${packageName}.common.entity.${EntityName};
 import ${packageName}.common.mapper.${EntityName}Mapper;
 import ${packageName}.common.utils.ArrayUtil;
 import ${packageName}.common.utils.TimeUtil;
 import ${packageName}.common.utils.UrlUtil;
-import ${packageName}.common.config.GlobalConfig;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -51,7 +54,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #set($genTpl = "JSONArray")
         #if($isSearch)
             #set($isSearchParam = true)
-            #set($genParam = "Map<String, String> params")
+            #set($genParam = "${EntityName}SearchValidate searchValidate")
         #else
             #set($isSearchParam = false)
             #set($genParam = "")
