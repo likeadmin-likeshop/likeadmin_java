@@ -15,9 +15,6 @@ public class SystemAdminUpInfoValidate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @IDMust(message = "id参数必传且需大于0")
-    private Integer id;
-
     @NotEmpty(message = "昵称不能为空")
     @Length(min = 2, max = 30, message = "昵称必须在2~30个字符内")
     private String nickname;

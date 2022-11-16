@@ -52,8 +52,8 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         queryWrapper.eq("is_disable", 0);
         queryWrapper.orderByDesc("menu_sort");
         queryWrapper.orderByAsc("id");
-        if (adminId != 1) {
-            if ( menuIds.size() <= 0) {
+        if (!adminId.equals(1)) {
+            if (menuIds.size() <= 0) {
                 menuIds.add(0);
             }
             queryWrapper.in("id", menuIds);
@@ -192,19 +192,20 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
     public void del(Integer id) {
         SystemAuthMenu model = systemAuthMenuMapper.selectOne(
                 new QueryWrapper<SystemAuthMenu>()
+                        .select("id,pid,menu_name")
                         .eq("id", id)
                         .last("limit 1"));
 
         Assert.notNull(model, "菜单已不存在!");
-
         Assert.isNull(systemAuthMenuMapper.selectOne(
                 new QueryWrapper<SystemAuthMenu>()
                         .eq("pid", id)
                         .last("limit 1")),
-                "请先删除子菜单再操作！");
+                "请先删除子菜单再操作!");
 
         systemAuthMenuMapper.deleteById(id);
         iSystemAuthPermService.batchDeleteByMenuId(id);
+
         RedisUtil.del(AdminConfig.backstageRolesKey);
     }
 

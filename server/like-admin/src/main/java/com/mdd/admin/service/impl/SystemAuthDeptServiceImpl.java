@@ -45,17 +45,17 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
                 .eq("is_delete", 0)
                 .orderByDesc((Arrays.asList("sort", "id"))));
 
-        List<SystemAuthDeptVo> adminVoArrayList = new ArrayList<>();
+        List<SystemAuthDeptVo> list = new ArrayList<>();
         for (SystemAuthDept systemAuthDept : systemAuthDeptList) {
             SystemAuthDeptVo vo = new SystemAuthDeptVo();
             BeanUtils.copyProperties(systemAuthDept, vo);
 
             vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthDept.getUpdateTime()));
             vo.setCreateTime(TimeUtil.timestampToDate(systemAuthDept.getCreateTime()));
-            adminVoArrayList.add(vo);
+            list.add(vo);
         }
 
-        return adminVoArrayList;
+        return list;
     }
 
     /**
@@ -81,17 +81,17 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
 
         List<SystemAuthDept> systemAuthDeptList = systemAuthDeptMapper.selectList(queryWrapper);
 
-        List<SystemAuthDeptVo> lists = new LinkedList<>();
+        List<SystemAuthDeptVo> list = new LinkedList<>();
         for (SystemAuthDept systemAuthDept : systemAuthDeptList) {
             SystemAuthDeptVo vo = new SystemAuthDeptVo();
             BeanUtils.copyProperties(systemAuthDept, vo);
 
             vo.setCreateTime(TimeUtil.timestampToDate(systemAuthDept.getCreateTime()));
             vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthDept.getUpdateTime()));
-            lists.add(vo);
+            list.add(vo);
         }
 
-        JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(lists));
+        JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(list));
         return ArrayUtil.listToTree(jsonArray, "id", "pid", "children");
     }
 

@@ -17,15 +17,6 @@ import com.mdd.common.entity.system.SystemAuthAdmin;
 public interface ISystemAuthAdminService {
 
     /**
-     * 根据账号查找管理员
-     *
-     * @author fzr
-     * @param username 主键ID
-     * @return SysAdmin
-     */
-    SystemAuthAdmin findByUsername(String username);
-
-    /**
      * 管理员列表
      *
      * @author fzr
@@ -73,6 +64,7 @@ public interface ISystemAuthAdminService {
      *
      * @author fzr
      * @param upInfoValidate 参数
+     * @param adminId 管理员ID
      */
     void upInfo(SystemAdminUpInfoValidate upInfoValidate, Integer adminId);
 
@@ -81,8 +73,9 @@ public interface ISystemAuthAdminService {
      *
      * @author fzr
      * @param id 主键参数
+     * @param adminId 管理员ID
      */
-    void del(Integer id);
+    void del(Integer id, Integer adminId);
 
     /**
      * 管理员状态切换
@@ -90,7 +83,7 @@ public interface ISystemAuthAdminService {
      * @author fzr
      * @param id 主键参数
      */
-    void disable(Integer id);
+    void disable(Integer id, Integer adminId);
 
     /**
      * 缓存管理员

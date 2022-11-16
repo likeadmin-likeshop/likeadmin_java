@@ -122,7 +122,8 @@ public class SystemAuthAdminController {
     @Log(title = "管理员删除")
     @PostMapping("/del")
     public AjaxResult<Object> del(@Validated @RequestBody IdValidate idValidate) {
-        iSystemAuthAdminService.del(idValidate.getId());
+        Integer adminId = LikeAdminThreadLocal.getAdminId();
+        iSystemAuthAdminService.del(idValidate.getId(), adminId);
         return AjaxResult.success();
     }
 
@@ -135,7 +136,8 @@ public class SystemAuthAdminController {
     @Log(title = "管理员状态")
     @PostMapping("/disable")
     public AjaxResult<Object> disable(@Validated @RequestBody IdValidate idValidate) {
-        iSystemAuthAdminService.disable(idValidate.getId());
+        Integer adminId = LikeAdminThreadLocal.getAdminId();
+        iSystemAuthAdminService.disable(idValidate.getId(), adminId);
         return AjaxResult.success();
     }
 

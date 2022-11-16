@@ -1,9 +1,12 @@
 package com.mdd.admin.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.admin.config.AdminConfig;
 import com.mdd.admin.service.ISystemAuthAdminService;
 import com.mdd.admin.service.ISystemLoginService;
 import com.mdd.admin.validate.system.SystemAdminLoginsValidate;
+import com.mdd.admin.vo.system.SystemLoginVo;
 import com.mdd.common.entity.system.SystemAuthAdmin;
 import com.mdd.common.entity.system.SystemLogLogin;
 import com.mdd.common.enums.HttpEnum;
@@ -44,20 +47,23 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
      *
      * @author fzr
      * @param loginsValidate 登录参数
-     * @return token
+     * @return SystemLoginVo
      */
     @Override
-    public Map<String, Object> login(SystemAdminLoginsValidate loginsValidate) {
+    public SystemLoginVo login(SystemAdminLoginsValidate loginsValidate) {
         String username = loginsValidate.getUsername();
         String password = loginsValidate.getPassword();
 
-        SystemAuthAdmin sysAdmin = iSystemAuthAdminService.findByUsername(username);
-        if (sysAdmin == null || sysAdmin.getIsDelete() == 1) {
+        SystemAuthAdmin sysAdmin = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
+                .eq("username", username)
+                .last("limit 1"));
+
+        if (StringUtil.isNull(sysAdmin) || sysAdmin.getIsDelete().equals(1)) {
             this.recordLoginLog(0, loginsValidate.getUsername(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
             throw new LoginException(HttpEnum.LOGIN_ACCOUNT_ERROR.getCode(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
         }
 
-        if (sysAdmin.getIsDisable() == 1) {
+        if (sysAdmin.getIsDisable().equals(1)) {
             this.recordLoginLog(sysAdmin.getId(), loginsValidate.getUsername(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
             throw new LoginException(HttpEnum.LOGIN_DISABLE_ERROR.getCode(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
         }
@@ -70,24 +76,13 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
         }
 
         try {
-            // 非多处登录
-            String token = ToolsUtil.makeToken();
-            if (sysAdmin.getIsMultipoint() == 0) {
-                Set<Object> ts = RedisUtil.sGet(AdminConfig.backstageTokenSet + sysAdmin.getId());
-                for (Object t: ts) {
-                    RedisUtil.del(AdminConfig.backstageTokenKey+t.toString());
-                }
-                RedisUtil.del(AdminConfig.backstageTokenSet + sysAdmin.getId());
-                RedisUtil.sSet(AdminConfig.backstageTokenSet + sysAdmin.getId(), token);
+            // 禁止多处登录
+            if (sysAdmin.getIsMultipoint().equals(0)) {
+                StpUtil.logout(sysAdmin.getId());
             }
 
-            // 缓存登录信息
-            RedisUtil.set(AdminConfig.backstageTokenKey+token, sysAdmin.getId(), 7200);
-            iSystemAuthAdminService.cacheAdminUserByUid(sysAdmin.getId());
-
-            // 返回登录信息
-            Map<String, Object> response = new LinkedHashMap<>();
-            response.put("token", token);
+            // 实现账号登录
+            StpUtil.login(sysAdmin.getId());
 
             // 更新登录信息
             sysAdmin.setLastLoginIp(IpUtil.getIpAddress());
@@ -97,7 +92,11 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
             // 记录登录日志
             this.recordLoginLog(sysAdmin.getId(), loginsValidate.getUsername(), "");
 
-            return response;
+            // 响应登录信息
+            SystemLoginVo vo = new SystemLoginVo();
+            vo.setId(sysAdmin.getId());
+            vo.setToken(StpUtil.getTokenValue());
+            return vo;
         } catch (Exception e) {
             Integer adminId = StringUtil.isNotNull(sysAdmin.getId()) ? sysAdmin.getId() : 0;
             String error = StringUtil.isEmpty(e.getMessage()) ? "未知错误" : e.getMessage();
@@ -114,7 +113,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
      */
     @Override
     public void logout(String token) {
-        RedisUtil.del(AdminConfig.backstageTokenKey + token);
+        //RedisUtil.del(AdminConfig.backstageTokenKey + token);
     }
 
     /**

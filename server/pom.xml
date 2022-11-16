@@ -41,7 +41,7 @@
 
         <bitwalker.version>1.2.4</bitwalker.version>
         <oshi-core.version>6.1.2</oshi-core.version>
-        <sa-token.version>1.31.0</sa-token.version>
+        <sa-token.version>1.32.0</sa-token.version>
 
         <qiniu.version>7.9.5</qiniu.version>
         <qcloud-version>5.6.54</qcloud-version>

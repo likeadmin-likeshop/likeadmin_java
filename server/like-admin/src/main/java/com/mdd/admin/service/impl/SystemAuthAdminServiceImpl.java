@@ -1,12 +1,12 @@
 package com.mdd.admin.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
-import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.config.AdminConfig;
 import com.mdd.admin.service.ISystemAuthAdminService;
 import com.mdd.admin.service.ISystemAuthPermService;
@@ -21,7 +21,6 @@ import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.system.SystemAuthAdmin;
 import com.mdd.common.entity.system.SystemAuthMenu;
-import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.system.SystemAuthAdminMapper;
 import com.mdd.common.mapper.system.SystemAuthMenuMapper;
 import com.mdd.common.utils.*;
@@ -48,20 +47,6 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
 
     @Resource
     ISystemAuthPermService iSystemAuthPermService;
-
-    /**
-     * 根据账号查找管理员
-     *
-     * @author fzr
-     * @param username 主键ID
-     * @return SystemAuthAdmin
-     */
-    @Override
-    public SystemAuthAdmin findByUsername(String username) {
-        return systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
-                .eq("username", username)
-                .last("limit 1"));
-    }
 
     /**
      * 管理员列表
@@ -231,11 +216,12 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         Assert.notNull(roleVo, "角色不存在!");
         Assert.isTrue(roleVo.getIsDisable() <= 0, "当前角色已被禁用!");
 
-        String salt   = ToolsUtil.randomString(5);
-        String pwd    = ToolsUtil.makeMd5(createValidate.getPassword().trim() + salt);
-        String avatar = StringUtil.isNotEmpty(createValidate.getAvatar()) ?
-                UrlUtil.toRelativeUrl(createValidate.getAvatar()) :
-                "/api/static/backend_avatar.png";
+        String salt = ToolsUtil.randomString(5);
+        String pwd  = ToolsUtil.makeMd5(createValidate.getPassword().trim() + salt);
+
+        String createAvatar  = createValidate.getAvatar();
+        String defaultAvatar = "/api/static/backend_avatar.png";
+        String avatar = StringUtil.isNotEmpty(createValidate.getAvatar()) ? UrlUtil.toRelativeUrl(createAvatar) : defaultAvatar;
 
         SystemAuthAdmin model = new SystemAuthAdmin();
         model.setDeptId(createValidate.getDeptId());
@@ -274,14 +260,14 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .eq("is_delete", 0)
                 .eq("username", updateValidate.getUsername())
                 .ne("id", updateValidate.getId())
-                .last("limit 1")), "账号已存在换一个吧！");
+                .last("limit 1")), "账号已存在换一个吧!");
 
         Assert.isNull(systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select(field)
                 .eq("is_delete", 0)
                 .eq("nickname", updateValidate.getNickname())
                 .ne("id", updateValidate.getId())
-                .last("limit 1")), "昵称已存在换一个吧！");
+                .last("limit 1")), "昵称已存在换一个吧!");
 
         if (updateValidate.getRole() > 0 && updateValidate.getId() != 1) {
             Assert.notNull(iSystemAuthRoleService.detail(updateValidate.getRole()), "角色不存在!");
@@ -299,14 +285,11 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         model.setIsDisable(updateValidate.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
 
-        if (updateValidate.getId() != 1) {
+        if (!updateValidate.getId().equals(1)) {
             model.setUsername(updateValidate.getUsername());
         }
 
-        if (StringUtil.isNotEmpty(updateValidate.getPassword())) {
-            if (updateValidate.getPassword().length() < 6 || updateValidate.getPassword().length() > 20) {
-                throw new OperateException("密码必须在6~20位");
-            }
+        if (StringUtil.isNotNull(updateValidate.getPassword())) {
             String salt   = ToolsUtil.randomString(5);
             String pwd    = ToolsUtil.makeMd5( updateValidate.getPassword().trim() + salt);
             model.setPassword(pwd);
@@ -316,17 +299,8 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         systemAuthAdminMapper.updateById(model);
         this.cacheAdminUserByUid(updateValidate.getId());
 
-        Integer id = LikeAdminThreadLocal.getAdminId();
-        if (updateValidate.getPassword() != null && updateValidate.getId().equals(id)) {
-            String token = Objects.requireNonNull(RequestUtil.handler()).getHeader("token");
-            RedisUtil.del(AdminConfig.backstageTokenKey + token);
-
-            Set<Object> ts = RedisUtil.sGet(AdminConfig.backstageTokenSet + id);
-            for (Object t: ts) {
-                RedisUtil.del(AdminConfig.backstageTokenKey+t.toString());
-            }
-            RedisUtil.del(AdminConfig.backstageTokenSet + id);
-            RedisUtil.sSet(AdminConfig.backstageTokenSet + id, token);
+        if (StringUtil.isNotNull(updateValidate.getPassword())) {
+            StpUtil.kickout(updateValidate.getId());
         }
     }
 
@@ -346,24 +320,17 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
 
         Assert.notNull(model, "账号不存在了!");
 
-        String avatar = StringUtil.isNotEmpty(upInfoValidate.getAvatar()) ?
-                UrlUtil.toRelativeUrl(upInfoValidate.getAvatar()) :
-                "/api/static/backend_avatar.jpg";
+        String createAvatar  = upInfoValidate.getAvatar();
+        String defaultAvatar = "/api/static/backend_avatar.png";
+        String avatar = StringUtil.isNotEmpty(upInfoValidate.getAvatar()) ? UrlUtil.toRelativeUrl(createAvatar) : defaultAvatar;
 
         model.setAvatar(avatar);
         model.setNickname(upInfoValidate.getNickname());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
 
-        if (upInfoValidate.getPassword() != null && !upInfoValidate.getPassword().equals("")) {
+        if (StringUtil.isNotNull(upInfoValidate.getPassword())) {
             String currPassword = ToolsUtil.makeMd5(upInfoValidate.getCurrPassword() + model.getSalt());
-            if (!currPassword.equals(model.getPassword())) {
-                throw new OperateException("当前密码不正确!");
-            }
-
-            if (upInfoValidate.getPassword().length() > 20 || upInfoValidate.getPassword().length() < 6) {
-                throw new OperateException("密码必须在6~20位!");
-            }
-
+            Assert.isFalse(!currPassword.equals(model.getPassword()), "当前密码不正确!");
             String salt   = ToolsUtil.randomString(5);
             String pwd    = ToolsUtil.makeMd5( upInfoValidate.getPassword().trim() + salt);
             model.setPassword(pwd);
@@ -373,18 +340,8 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         systemAuthAdminMapper.updateById(model);
         this.cacheAdminUserByUid(adminId);
 
-        if (upInfoValidate.getPassword() != null) {
-
-            String token = Objects.requireNonNull(RequestUtil.handler()).getHeader("token");
-            RedisUtil.del(AdminConfig.backstageTokenKey + token);
-
-            int uid = model.getId();
-            Set<Object> ts = RedisUtil.sGet(AdminConfig.backstageTokenSet + uid);
-            for (Object t: ts) {
-                RedisUtil.del(AdminConfig.backstageTokenKey+t.toString());
-            }
-            RedisUtil.del(AdminConfig.backstageTokenSet + uid);
-            RedisUtil.sSet(AdminConfig.backstageTokenSet + model.getId(), token);
+        if (StringUtil.isNotNull(upInfoValidate.getPassword())) {
+            StpUtil.kickout(adminId);
         }
     }
 
@@ -393,9 +350,10 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
      *
      * @author fzr
      * @param id 主键
+     * @param adminId 管理员ID
      */
     @Override
-    public void del(Integer id) {
+    public void del(Integer id, Integer adminId) {
         String[] field = {"id", "username", "nickname"};
         Assert.notNull(systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select(field)
@@ -403,10 +361,8 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .eq("is_delete", 0)
                 .last("limit 1")), "账号已不存在!");
 
-        Assert.isFalse(id == 1, "系统管理员不允许删除!");
-
-        int adminId = Integer.parseInt(LikeAdminThreadLocal.getAdminId().toString());
-        Assert.isFalse(id == adminId, "不能删除自己!");
+        Assert.isFalse(id.equals(1), "系统管理员不允许删除!");
+        Assert.isFalse(id.equals(adminId) , "不能删除自己!");
 
         SystemAuthAdmin model = new SystemAuthAdmin();
         model.setId(id);
@@ -421,25 +377,24 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
      *
      * @author fzr
      * @param id 主键参数
+     * @param adminId 管理员ID
      */
     @Override
-    public void disable(Integer id) {
-        String[] field = {"id", "username", "nickname", "is_disable"};
+    public void disable(Integer id, Integer adminId) {
         SystemAuthAdmin systemAuthAdmin = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
-                .select(field)
+                .select("id,username,nickname,is_disable")
                 .eq("id", id)
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
         Assert.notNull(systemAuthAdmin, "账号已不存在!");
-
-        int adminId = Integer.parseInt(LikeAdminThreadLocal.getAdminId().toString());
-        Assert.isFalse(id == adminId, "不能禁用自己!");
+        Assert.isFalse(id.equals(adminId) , "不能禁用自己!");
 
         Integer disable = systemAuthAdmin.getIsDisable() == 1 ? 0 : 1;
         systemAuthAdmin.setIsDisable(disable);
         systemAuthAdmin.setUpdateTime(TimeUtil.timestamp());
         systemAuthAdminMapper.updateById(systemAuthAdmin);
+        this.cacheAdminUserByUid(id);
     }
 
     /**
@@ -447,24 +402,23 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
      */
     @Override
     public void cacheAdminUserByUid(Integer id) {
-        SystemAuthAdmin sysAdmin = systemAuthAdminMapper.selectById(id);
+        SystemAuthAdmin sysAdmin = systemAuthAdminMapper.selectOne(
+                new QueryWrapper<SystemAuthAdmin>()
+                    .select("id,role,username,nickname,is_disable,is_delete")
+                    .eq("id", id)
+                    .last("limit 1"));
 
         Map<String, Object> user = new LinkedHashMap<>();
-        Map<String, Object> map  = new LinkedHashMap<>();
-
         user.put("id", sysAdmin.getId());
-        user.put("role", sysAdmin.getRole());
+        user.put("roleId", sysAdmin.getRole());
         user.put("username", sysAdmin.getUsername());
         user.put("nickname", sysAdmin.getNickname());
-        user.put("avatar", sysAdmin.getAvatar());
-        user.put("isMultipoint", sysAdmin.getIsDisable());
         user.put("isDisable", sysAdmin.getIsDisable());
         user.put("isDelete", sysAdmin.getIsDelete());
-        user.put("lastLoginIp", sysAdmin.getLastLoginIp());
-        user.put("lastLoginTime", TimeUtil.timestampToDate(sysAdmin.getLastLoginTime()));
-        user.put("createTime", TimeUtil.timestampToDate(sysAdmin.getCreateTime()));
-        user.put("updateTime", TimeUtil.timestampToDate(sysAdmin.getUpdateTime()));
+
+        Map<String, Object> map  = new LinkedHashMap<>();
         map.put(String.valueOf(sysAdmin.getId()), JSON.toJSONString(user));
+
         RedisUtil.hmSet(AdminConfig.backstageManageKey, map);
     }
 

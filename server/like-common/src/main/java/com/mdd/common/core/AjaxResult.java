@@ -156,6 +156,7 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static AjaxResult<Object> failed(Integer code, String msg) {
+        System.out.println(msg);
         return new AjaxResult<>(code, msg, new ArrayList<>());
     }
 

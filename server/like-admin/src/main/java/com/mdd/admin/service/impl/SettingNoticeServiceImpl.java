@@ -76,31 +76,28 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
     @Override
     public SettingNoticeDetailVo detail(Integer id) {
         NoticeSetting noticeSetting = noticeSettingMapper.selectOne(new QueryWrapper<NoticeSetting>()
+                .select(NoticeSetting.class, info ->
+                        !info.getColumn().equals("is_delete") &&
+                        !info.getColumn().equals("delete_time") &&
+                        !info.getColumn().equals("create_time") &&
+                        !info.getColumn().equals("update_time")
+                )
                 .eq("id", id)
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
+        Map<String, Object> systemMap = ToolsUtil.jsonToMapAsObj(noticeSetting.getSystemNotice());
+        Map<String, Object> oaMap  = ToolsUtil.jsonToMapAsObj(noticeSetting.getOaNotice());
+        Map<String, Object> mnpMap = ToolsUtil.jsonToMapAsObj(noticeSetting.getMnpNotice());
+        Map<String, Object> smsMap = ToolsUtil.jsonToMapAsObj(noticeSetting.getSmsNotice());
+
         SettingNoticeDetailVo vo = new SettingNoticeDetailVo();
         BeanUtils.copyProperties(noticeSetting, vo);
-
-        Map<String, Object> systemMap = ToolsUtil.jsonToMapAsObj(noticeSetting.getSystemNotice());
-        Map<String, Object> smsMap = ToolsUtil.jsonToMapAsObj(noticeSetting.getSmsNotice());
-        Map<String, Object> oaMap = ToolsUtil.jsonToMapAsObj(noticeSetting.getOaNotice());
-        Map<String, Object> mnpMap = ToolsUtil.jsonToMapAsObj(noticeSetting.getMnpNotice());
-
-        systemMap.put("tips", JSONArray.toJSONString(systemMap.get("tips")));
-        smsMap.put("tips", JSONArray.toJSONString(smsMap.get("tips")));
-        oaMap.put("tips", JSONArray.toJSONString(oaMap.get("tips")));
-        oaMap.put("tpl", JSONArray.toJSONString(oaMap.get("tpl")));
-        mnpMap.put("tips", JSONArray.toJSONString(mnpMap.get("tips")));
-        mnpMap.put("tpl", JSONArray.toJSONString(mnpMap.get("tpl")));
-
         vo.setType(noticeSetting.getType()==1?"业务通知":"验证码");
         vo.setSystemNotice(systemMap);
-        vo.setSmsNotice(smsMap);
         vo.setOaNotice(oaMap);
         vo.setMnpNotice(mnpMap);
-
+        vo.setSmsNotice(smsMap);
         return vo;
     }
 

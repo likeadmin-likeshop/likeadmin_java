@@ -194,7 +194,7 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
 
         iSystemAuthPermService.batchDeleteByRoleId(updateValidate.getId());
         iSystemAuthPermService.batchSaveByMenuIds(updateValidate.getId(), updateValidate.getMenuIds());
-        iSystemAuthPermService.cacheRoleMenusByRoleId(updateValidate.getId());
+        RedisUtil.del(AdminConfig.backstageRolesKey);
     }
 
     /**
@@ -221,7 +221,7 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
 
         systemAuthRoleMapper.deleteById(id);
         iSystemAuthPermService.batchDeleteByRoleId(id);
-        RedisUtil.hDel(AdminConfig.backstageRolesKey, String.valueOf(id));
+        RedisUtil.del(AdminConfig.backstageRolesKey);
     }
 
 }

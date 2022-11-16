@@ -34,7 +34,6 @@ public class SystemAdminUpdateValidate implements Serializable {
     @Length(min = 2, max = 30, message = "昵称必须在2~30个字符内")
     private String nickname;
 
-    @NotEmpty(message = "密码不能为空")
     @Length(min = 6, max = 32, message = "密码必须在6~32个字符内")
     private String password;
 

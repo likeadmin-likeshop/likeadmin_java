@@ -1,6 +1,7 @@
 package com.mdd.admin.service;
 
 import com.mdd.admin.validate.system.SystemAdminLoginsValidate;
+import com.mdd.admin.vo.system.SystemLoginVo;
 
 import java.util.Map;
 
@@ -14,9 +15,9 @@ public interface ISystemLoginService {
      *
      * @author fzr
      * @param loginsValidate 登录参数
-     * @return token
+     * @return SystemLoginVo
      */
-    Map<String, Object> login(SystemAdminLoginsValidate loginsValidate);
+    SystemLoginVo login(SystemAdminLoginsValidate loginsValidate);
 
     /**
      * 退出

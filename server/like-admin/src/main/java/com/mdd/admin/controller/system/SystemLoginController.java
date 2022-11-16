@@ -2,6 +2,7 @@ package com.mdd.admin.controller.system;
 
 import com.mdd.admin.service.ISystemLoginService;
 import com.mdd.admin.validate.system.SystemAdminLoginsValidate;
+import com.mdd.admin.vo.system.SystemLoginVo;
 import com.mdd.common.core.AjaxResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,12 +29,12 @@ public class SystemLoginController {
      *
      * @author fzr
      * @param loginsValidate 登录参数
-     * @return AjaxResult<Map<String, Object>>
+     * @return AjaxResult<SystemLoginVo>
      */
     @PostMapping("/login")
-    public AjaxResult<Map<String, Object>> login(@Validated() @RequestBody SystemAdminLoginsValidate loginsValidate) {
-        Map<String, Object> map = iSystemLoginService.login(loginsValidate);
-        return AjaxResult.success(map);
+    public AjaxResult<SystemLoginVo> login(@Validated() @RequestBody SystemAdminLoginsValidate loginsValidate) {
+        SystemLoginVo vo = iSystemLoginService.login(loginsValidate);
+        return AjaxResult.success(vo);
     }
 
     /**
