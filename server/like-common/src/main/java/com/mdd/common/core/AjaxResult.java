@@ -52,7 +52,7 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static AjaxResult<Object> success(Integer code) {
-        return new AjaxResult<>(code, HttpEnum.FAILED.getMsg(), new ArrayList<>());
+        return new AjaxResult<>(code, HttpEnum.SUCCESS.getMsg(), new ArrayList<>());
     }
 
     /**
@@ -74,7 +74,7 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static <T> AjaxResult<T> success(T data) {
-        return new AjaxResult<T>(HttpEnum.SUCCESS.getCode(), HttpEnum.SUCCESS.getMsg(), data);
+        return new AjaxResult<>(HttpEnum.SUCCESS.getCode(), HttpEnum.SUCCESS.getMsg(), data);
     }
 
     /**
@@ -98,7 +98,7 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static <T> AjaxResult <T> success(String msg, T data) {
-        return new AjaxResult<T>(HttpEnum.SUCCESS.getCode(), msg, data);
+        return new AjaxResult<>(HttpEnum.SUCCESS.getCode(), msg, data);
     }
 
     /**
@@ -111,7 +111,7 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static <T> AjaxResult<T> success(Integer code, String msg, T data) {
-        return new AjaxResult<T>(code, msg, data);
+        return new AjaxResult<>(code, msg, data);
     }
 
     /**
@@ -156,7 +156,6 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static AjaxResult<Object> failed(Integer code, String msg) {
-        System.out.println(msg);
         return new AjaxResult<>(code, msg, new ArrayList<>());
     }
 
@@ -170,7 +169,7 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static <T> AjaxResult<T> failed(Integer code, String msg, T data) {
-        return new AjaxResult<T>(code, msg, data);
+        return new AjaxResult<>(code, msg, data);
     }
 
 }
