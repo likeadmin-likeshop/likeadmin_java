@@ -29,7 +29,7 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public AjaxResult handleException(Exception e) {
+    public AjaxResult<Object> handleException(Exception e) {
         if (GlobalConfig.debug) {
             e.printStackTrace();
             System.out.println(e.getMessage());
@@ -44,7 +44,7 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(BaseException.class)
     @ResponseBody
-    public AjaxResult handleException(BaseException e) {
+    public AjaxResult<Object> handleException(BaseException e) {
         int code = e.getCode();
         String msg = e.getMsg();
         return AjaxResult.failed(code, msg);
@@ -56,7 +56,7 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(BindException.class)
     @ResponseBody
-    public AjaxResult handleBindException(BindException e) {
+    public AjaxResult<Object> handleBindException(BindException e) {
         BindingResult bindingResult = e.getBindingResult();
         Integer code = HttpEnum.PARAMS_VALID_ERROR.getCode();
         String msg   = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
@@ -69,7 +69,7 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseBody
-    public AjaxResult handlePathException(MissingServletRequestParameterException e) {
+    public AjaxResult<Object> handlePathException(MissingServletRequestParameterException e) {
         Integer code = HttpEnum.PARAMS_VALID_ERROR.getCode();
         String msg   = Objects.requireNonNull(e.getMessage());
         return AjaxResult.failed(code, msg);
@@ -81,7 +81,7 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public AjaxResult handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public AjaxResult<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
         Integer code = HttpEnum.PARAMS_VALID_ERROR.getCode();
         String msg   = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
@@ -94,7 +94,7 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseBody
-    public AjaxResult handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+    public AjaxResult<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         Integer code = HttpEnum.PARAMS_TYPE_ERROR.getCode();
         String msg   = Objects.requireNonNull(e.getMessage());
         return AjaxResult.failed(code, msg.split(";")[0]);
@@ -106,7 +106,7 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseBody
-    public AjaxResult handleRequestMethodException(HttpRequestMethodNotSupportedException e) {
+    public AjaxResult<Object> handleRequestMethodException(HttpRequestMethodNotSupportedException e) {
         Integer code = HttpEnum.REQUEST_METHOD_ERROR.getCode();
         String msg   = Objects.requireNonNull(e.getMessage());
         return AjaxResult.failed(code, msg);
@@ -118,7 +118,7 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseBody
-    public AjaxResult handleIllegalArgumentException(IllegalArgumentException e) {
+    public AjaxResult<Object> handleIllegalArgumentException(IllegalArgumentException e) {
         Integer code = HttpEnum.ASSERT_ARGUMENT_ERROR.getCode();
         String msg   = Objects.requireNonNull(e.getMessage());
         return AjaxResult.failed(code, msg);
@@ -130,7 +130,7 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(MybatisPlusException.class)
     @ResponseBody
-    public AjaxResult handleMybatisPlusException(MybatisPlusException e) {
+    public AjaxResult<Object> handleMybatisPlusException(MybatisPlusException e) {
         Integer code = HttpEnum.ASSERT_MYBATIS_ERROR.getCode();
         String msg   = Objects.requireNonNull(e.getMessage());
         return AjaxResult.failed(code, msg);

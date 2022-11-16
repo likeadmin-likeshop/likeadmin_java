@@ -44,9 +44,9 @@ public class GenUtil {
      * @param table 表
      */
     public static void initColumn(GenTableColumn column, GenTable table) {
+        column.setTableId(table.getId());
         String columnName = column.getColumnName();
         String columnType = GenUtil.getDbType(column.getColumnType());
-        column.setTableId(table.getId());
         column.setColumnLength(GenUtil.getColumnLength(column.getColumnType()));
         column.setJavaField(StringUtil.toCamelCase(columnName));
         column.setJavaType(JavaConstants.TYPE_STRING);
@@ -66,6 +66,7 @@ public class GenUtil {
 
         // 日期字段
         else if (GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_TIME, columnType)) {
+
             column.setJavaType(JavaConstants.TYPE_DATE);
             column.setHtmlType(HtmlConstants.HTML_DATETIME);
         }
@@ -241,6 +242,9 @@ public class GenUtil {
      * @return 截取后的列类型
      */
     public static String getColumnLength(String columnType) {
+        if (columnType.equals("")) {
+            return "0";
+        }
         if (StringUtil.indexOf(columnType, "(") > 0) {
             return StringUtil.substringBetween(columnType, "(", ")");
         }

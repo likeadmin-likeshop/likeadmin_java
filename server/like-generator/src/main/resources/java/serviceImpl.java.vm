@@ -1,4 +1,4 @@
-package ${packageName}.admin.service.${moduleName}.impl;
+package ${packageName}.admin.service.impl;
 
 #if(!$table.genTpl.equals("crud"))
 import com.alibaba.fastjson.JSONArray;
@@ -7,14 +7,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
-import ${packageName}.admin.service.${moduleName}.I${EntityName}Service;
+import ${packageName}.admin.service.I${EntityName}Service;
 import ${packageName}.admin.validate.common.PageParam;
-import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
-import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
-import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
+import ${packageName}.admin.validate.${EntityName}CreateValidate;
+import ${packageName}.admin.validate.${EntityName}UpdateValidate;
+import ${packageName}.admin.vo.${EntityName}ListedVo;
+import ${packageName}.admin.vo.${EntityName}DetailVo;
 import ${packageName}.common.core.PageResult;
-import ${packageName}.common.entity.${moduleName}.${EntityName};
-import ${packageName}.common.mapper.${moduleName}.${EntityName}Mapper;
+import ${packageName}.common.entity.${EntityName};
+import ${packageName}.common.mapper.${EntityName}Mapper;
 import ${packageName}.common.utils.ArrayUtil;
 import ${packageName}.common.utils.TimeUtil;
 import ${packageName}.common.utils.UrlUtil;

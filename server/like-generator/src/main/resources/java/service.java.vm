@@ -1,12 +1,13 @@
-package ${packageName}.admin.service.${moduleName};
+package ${packageName}.admin.service
 
 #if(!$table.genTpl.equals("crud"))
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson2.JSONArray;
 #end
 import ${packageName}.admin.validate.common.PageParam;
-import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
-import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
-import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
+import ${packageName}.admin.validate.${EntityName}CreateValidate;
+import ${packageName}.admin.validate.${EntityName}UpdateValidate;
+import ${packageName}.admin.vo.${EntityName}ListedVo;
+import ${packageName}.admin.vo.${EntityName}DetailVo;
 import ${packageName}.common.core.PageResult;
 
 import java.util.Map;
@@ -29,9 +30,9 @@ public interface I${EntityName}Service {
      #end
      * @param pageParam 分页参数
      * @param params 搜索参数
-     * @return PageResult<${EntityName}Vo>
+     * @return PageResult<${EntityName}ListedVo>
      */
-    PageResult<${EntityName}ListVo> list(PageParam pageParam, Map<String, String> params);
+    PageResult<${EntityName}ListedVo> list(PageParam pageParam, Map<String, String> params);
 #elseif($table.genTpl=="tree")
     /**
      * ${functionName}列表
@@ -62,9 +63,9 @@ public interface I${EntityName}Service {
      #if(!$authorName.equals(""))
      * @author ${authorName}
      #end
-     * @param ${entityName}Param 参数
+     * @param createValidate 参数
      */
-    void add(${EntityName}Param ${entityName}Param);
+    void add(${EntityName}CreateValidate createValidate);
 
     /**
      * ${functionName}编辑
@@ -72,9 +73,9 @@ public interface I${EntityName}Service {
      #if(!$authorName.equals(""))
      * @author ${authorName}
      #end
-     * @param ${entityName}Param 参数
+     * @param updateValidate 参数
      */
-    void edit(${EntityName}Param ${entityName}Param);
+    void edit(${EntityName}UpdateValidate updateValidate);
 
     /**
      * ${functionName}删除

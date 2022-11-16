@@ -1,0 +1,28 @@
+package ${packageName}.admin.validate;
+
+import lombok.Data;
+import java.io.Serializable;
+import javax.validation.constraints.*;
+
+#set($isAuthor = !$authorName.equals(""))
+/**
+ * ${functionName}参数
+#if($isAuthor)
+ * @author ${authorName}
+#end
+*/
+@Data
+public class ${EntityName}CreateValidate implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+#foreach ($column in $columns)
+#if($column.isInsert==1)
+    #if($column.isRequired==1)
+    @NotNull(message = "${column.javaField}参数缺失")
+    #end
+    private ${column.javaType} ${column.javaField};
+
+#end
+#end
+}
