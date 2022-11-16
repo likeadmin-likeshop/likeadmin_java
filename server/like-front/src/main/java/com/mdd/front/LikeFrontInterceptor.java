@@ -1,6 +1,6 @@
 package com.mdd.front;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.mdd.common.core.AjaxResult;
@@ -35,7 +35,7 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
         // 404拦截
         response.setContentType("application/json;charset=utf-8");
         if (response.getStatus() == 404) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.REQUEST_404_ERROR.getCode(), HttpEnum.REQUEST_404_ERROR.getMsg());
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.REQUEST_404_ERROR.getCode(), HttpEnum.REQUEST_404_ERROR.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
@@ -62,14 +62,14 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
 
         // Token是否为空
         if (StringUtils.isBlank(token)) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_EMPTY.getCode(), HttpEnum.TOKEN_EMPTY.getMsg());
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_EMPTY.getCode(), HttpEnum.TOKEN_EMPTY.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
 
         // Token是否过期
         if (!RedisUtil.exists(token)) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
@@ -84,14 +84,14 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
 
         // 校验用户被删除
         if (user.getIsDelete() == 1) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
 
         // 校验用户被禁用
         if (user.getIsDisable() == 1) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.LOGIN_DISABLE_ERROR.getCode(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.LOGIN_DISABLE_ERROR.getCode(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
