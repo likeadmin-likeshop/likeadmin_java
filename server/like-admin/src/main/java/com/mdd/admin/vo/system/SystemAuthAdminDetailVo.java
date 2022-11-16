@@ -15,6 +15,7 @@ public class SystemAuthAdminDetailVo implements Serializable {
     private Integer id;            // 主键
     private Integer deptId;        // 部门ID
     private Integer postId;        // 岗位ID
+    private Integer role;          // 角色ID
     private String username;       // 账号
     private String nickname;       // 昵称
     private String avatar;         // 头像
