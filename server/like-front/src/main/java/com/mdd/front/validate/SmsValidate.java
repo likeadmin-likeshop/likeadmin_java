@@ -14,8 +14,7 @@ public class SmsValidate implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotNull(message = "scene参数缺失")
-    @NotEmpty(message = "场景不能为空")
-    private String scene;
+    private Integer scene;
 
     @NotNull(message = "mobile参数缺失")
     @NotEmpty(message = "手机号不能为空")

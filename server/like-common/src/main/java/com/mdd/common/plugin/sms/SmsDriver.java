@@ -15,6 +15,7 @@ public class SmsDriver {
 
     private final SystemLogSmsMapper systemLogSmsMapper;
 
+    private Integer scene;                      // 场景编码
     private String mobile;                      // 手机号码
     private String templateCode;                // 短信模板
     private String smsContent = "";             // 短信内容
@@ -76,6 +77,18 @@ public class SmsDriver {
      */
     public SmsDriver setSmsContent(String content) {
         this.smsContent = content;
+        return this;
+    }
+
+    /**
+     * 设置场景编码
+     *
+     * @author fzr
+     * @param scene 场景编码
+     * @return SmsDriver
+     */
+    public SmsDriver setScene(Integer scene) {
+        this.scene = scene;
         return this;
     }
 
@@ -143,6 +156,7 @@ public class SmsDriver {
     private void updateSmsLog(Integer id, Integer status, String result) {
         SystemLogSms model = new SystemLogSms();
         model.setId(id);
+        model.setScene(String.valueOf(this.scene));
         model.setMobile(this.mobile);
         model.setStatus(status);
         model.setResults(result);

@@ -12,7 +12,7 @@ spring:
     static-path-pattern: /api/static/**
   # 数据源配置
   datasource:
-    url: jdbc:mysql://localhost:3306/likeadmin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
+    url: jdbc:mysql://localhost:3306/local_likeadmin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
     type: com.zaxxer.hikari.HikariDataSource # 数据源类型
     driver-class-name: com.mysql.jdbc.Driver # MySql的驱动
     username: root # 数据库账号

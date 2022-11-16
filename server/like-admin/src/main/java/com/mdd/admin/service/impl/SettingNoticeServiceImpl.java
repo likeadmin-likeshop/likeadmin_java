@@ -1,7 +1,6 @@
 package com.mdd.admin.service.impl;
 
 import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.admin.service.ISettingNoticeService;
 import com.mdd.admin.vo.setting.SettingNoticeDetailVo;
