@@ -57,6 +57,7 @@ public class SettingNoticeController {
      */
     @PostMapping("/save")
     public AjaxResult<Object> save(@RequestBody Map<String, Object> params) {
+        System.out.println("黄金基金");
         iSettingNoticeService.save(params);
         return AjaxResult.success();
     }
