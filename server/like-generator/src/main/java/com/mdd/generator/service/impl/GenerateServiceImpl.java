@@ -430,8 +430,14 @@ public class GenerateServiceImpl implements IGenerateService {
             tpl.merge(context, sw);
             try {
                 String basePath = VelocityUtil.getGenPath(table);
-                String filePath = basePath + VelocityUtil.getFileName(template, table);
-                FileUtils.writeStringToFile(new File(filePath), sw.toString(), GenConstants.UTF8);
+                String filePath = "C:/Users/honor/Desktop/" + VelocityUtil.getFileName(template, table);
+
+                filePath = filePath.replace("java/", "");
+                System.out.println(filePath);
+                System.out.println(template);
+                File f = new File(filePath);
+
+                FileUtils.writeStringToFile(f, sw.toString(), GenConstants.UTF8);
             } catch (IOException e) {
                 log.error("生成渲染模板失败: " + e.getMessage());
             }
