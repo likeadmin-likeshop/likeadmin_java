@@ -392,8 +392,7 @@ public class LoginServiceImpl implements ILoginService {
         }
 
         // 删除验证码
-        int noticeTpe = NoticeEnum.SMS_FORGOT_PASSWORD_CODE.getCode();
-        RedisUtil.del(GlobalConfig.redisSmsCode+noticeTpe+":"+mobile);
+        RedisUtil.del(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()
