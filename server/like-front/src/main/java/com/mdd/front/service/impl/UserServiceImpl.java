@@ -259,7 +259,7 @@ public class UserServiceImpl implements IUserService {
             User user = new User();
             user.setId(userId);
             user.setMobile(wxMaPhoneNumberInfo.getPhoneNumber());
-            user.setCreateTime(System.currentTimeMillis() / 1000);
+            user.setUpdateTime(System.currentTimeMillis() / 1000);
             userMapper.updateById(user);
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
