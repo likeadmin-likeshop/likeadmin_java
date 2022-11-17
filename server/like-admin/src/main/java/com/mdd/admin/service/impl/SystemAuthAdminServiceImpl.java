@@ -250,7 +250,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
      */
     @Override
     public void edit(SystemAdminUpdateValidate updateValidate, Integer adminId) {
-        if (adminId.equals(1) && !adminId.equals(updateValidate.getId())) {
+        if (adminId.equals(1) && updateValidate.getId().equals(1)) {
             throw new OperateException("您无权限编辑系统管理员!");
         }
 
