@@ -48,10 +48,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
         String directory = YmlUtil.get("like.upload-directory");
-        if (directory == null || directory.equals("")) {
-            directory = GlobalConfig.uploadDirectory;
-        }
-
         registry.addResourceHandler("/"+ GlobalConfig.publicPrefix +"/**")
                 .addResourceLocations("file:" + directory);
     }
