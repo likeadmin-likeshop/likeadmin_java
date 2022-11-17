@@ -10,7 +10,7 @@ import com.mdd.common.plugin.notice.NoticeDriver;
 import com.mdd.common.plugin.notice.NoticeParams;
 import com.mdd.common.utils.StringUtil;
 import com.mdd.common.utils.ToolsUtil;
-import com.mdd.front.validate.SmsValidate;
+import com.mdd.front.validate.commons.SmsValidate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

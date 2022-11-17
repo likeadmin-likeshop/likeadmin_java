@@ -17,11 +17,11 @@ import com.mdd.common.utils.StringUtil;
 import com.mdd.common.utils.TimeUtil;
 import com.mdd.common.utils.UrlUtil;
 import com.mdd.front.service.IArticleService;
-import com.mdd.front.validate.PageValidate;
+import com.mdd.front.validate.commons.PageValidate;
 import com.mdd.front.vo.article.ArticleCateVo;
 import com.mdd.front.vo.article.ArticleCollectVo;
 import com.mdd.front.vo.article.ArticleDetailVo;
-import com.mdd.front.vo.article.ArticleListVo;
+import com.mdd.front.vo.article.ArticleListedVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -80,7 +80,7 @@ public class ArticleServiceImpl implements IArticleService {
      * @return PageResult<ArticleListVo>
      */
     @Override
-    public PageResult<ArticleListVo> list(PageValidate pageValidate, Integer cid, Integer userId) {
+    public PageResult<ArticleListedVo> list(PageValidate pageValidate, Integer cid, Integer userId) {
         Integer pageNo   = pageValidate.getPageNo();
         Integer pageSize = pageValidate.getPageSize();
 
@@ -96,9 +96,9 @@ public class ArticleServiceImpl implements IArticleService {
         IPage<Article> iPage = articleMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
 
         List<Integer> ids = new LinkedList<>();
-        List<ArticleListVo> list = new LinkedList<>();
+        List<ArticleListedVo> list = new LinkedList<>();
         for (Article article : iPage.getRecords()) {
-            ArticleListVo vo = new ArticleListVo();
+            ArticleListedVo vo = new ArticleListedVo();
             BeanUtils.copyProperties(article, vo);
             vo.setCollect(false);
             vo.setImage(UrlUtil.toAbsoluteUrl(article.getImage()));
@@ -120,7 +120,7 @@ public class ArticleServiceImpl implements IArticleService {
                 collects.add(c.getArticleId());
             }
 
-            for (ArticleListVo vo : list) {
+            for (ArticleListedVo vo : list) {
                 vo.setCollect(collects.contains(vo.getId()));
             }
         }

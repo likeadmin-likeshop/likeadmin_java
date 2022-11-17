@@ -17,8 +17,8 @@ import com.mdd.common.mapper.DecorateTabbarMapper;
 import com.mdd.common.mapper.setting.HotSearchMapper;
 import com.mdd.common.utils.*;
 import com.mdd.front.service.IIndexService;
-import com.mdd.front.validate.PageValidate;
-import com.mdd.front.vo.article.ArticleListVo;
+import com.mdd.front.validate.commons.PageValidate;
+import com.mdd.front.vo.article.ArticleListedVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -215,7 +215,7 @@ public class IndexServiceImpl implements IIndexService {
      * @param params 搜索参数
      * @return PageResult<ArticleListVo>
      */
-    public PageResult<ArticleListVo> search(PageValidate pageValidate, Map<String, String> params) {
+    public PageResult<ArticleListedVo> search(PageValidate pageValidate, Map<String, String> params) {
         Integer pageNo   = pageValidate.getPageNo();
         Integer pageSize = pageValidate.getPageSize();
 
@@ -227,12 +227,12 @@ public class IndexServiceImpl implements IIndexService {
                 .like("t.title", params.get("keyword"))
                 .orderByDesc(Arrays.asList("t.sort", "t.id"));
 
-        IPage<ArticleListVo> iPage = articleMapper.selectJoinPage(
+        IPage<ArticleListedVo> iPage = articleMapper.selectJoinPage(
                 new Page<>(pageNo, pageSize),
-                ArticleListVo.class,
+                ArticleListedVo.class,
                 mpjQueryWrapper);
 
-        for (ArticleListVo vo : iPage.getRecords()) {
+        for (ArticleListedVo vo : iPage.getRecords()) {
             vo.setCollect(false);
             vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()));
             vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));

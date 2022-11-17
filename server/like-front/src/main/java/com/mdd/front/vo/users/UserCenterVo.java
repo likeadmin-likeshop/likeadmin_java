@@ -1,4 +1,4 @@
-package com.mdd.front.vo.user;
+package com.mdd.front.vo.users;
 
 import lombok.Data;
 

@@ -16,8 +16,10 @@ import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.utils.*;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
-import com.mdd.front.vo.user.UserCenterVo;
-import com.mdd.front.vo.user.UserInfoVo;
+import com.mdd.front.validate.UserBindMobileValidate;
+import com.mdd.front.validate.UserUpdateValidate;
+import com.mdd.front.vo.users.UserCenterVo;
+import com.mdd.front.vo.users.UserInfoVo;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -106,13 +108,13 @@ public class UserServiceImpl implements IUserService {
      * 编辑信息
      *
      * @author fzr
-     * @param params 参数
+     * @param updateValidate 参数
      * @param userId 用户ID
      */
     @Override
-    public void edit(Map<String, String> params, Integer userId) {
-        String field = params.getOrDefault("field", "").trim();
-        String value =  params.getOrDefault("value", "").trim();
+    public void edit(UserUpdateValidate updateValidate, Integer userId) {
+        String field = updateValidate.getField();
+        String value = updateValidate.getValue();
 
         switch (field) {
             case "avatar":
@@ -202,14 +204,14 @@ public class UserServiceImpl implements IUserService {
      * 绑定手机
      *
      * @author fzr
-     * @param params 参数
+     * @param mobileValidate 参数
      * @param userId 用户ID
      */
     @Override
-    public void bindMobile(Map<String, String> params, Integer userId) {
-        String type   = params.getOrDefault("type", "");
-        String mobile = params.getOrDefault("mobile", "");
-        String code   = params.getOrDefault("code", "").toLowerCase();
+    public void bindMobile(UserBindMobileValidate mobileValidate, Integer userId) {
+        String type   = mobileValidate.getType();
+        String mobile = mobileValidate.getMobile();
+        String code   = mobileValidate.getCode().toLowerCase();
 
         // 校验验证码
         int typeCode = type.equals("bind") ? NoticeEnum.SMS_BIND_MOBILE_CODE.getCode() : NoticeEnum.SMS_CHANGE_MOBILE_CODE.getCode() ;

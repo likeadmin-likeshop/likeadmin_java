@@ -4,8 +4,8 @@ import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.front.service.IIndexService;
-import com.mdd.front.validate.PageValidate;
-import com.mdd.front.vo.article.ArticleListVo;
+import com.mdd.front.validate.commons.PageValidate;
+import com.mdd.front.vo.article.ArticleListedVo;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -97,9 +97,9 @@ public class IndexController {
      * @return AjaxResult<PageResult<ArticleListVo>>
      */
     @GetMapping("/search")
-    public AjaxResult<PageResult<ArticleListVo>> search(@Validated PageValidate pageValidate,
-                                                        @RequestParam Map<String, String> params) {
-        PageResult<ArticleListVo> list = iIndexService.search(pageValidate, params);
+    public AjaxResult<PageResult<ArticleListedVo>> search(@Validated PageValidate pageValidate,
+                                                          @RequestParam Map<String, String> params) {
+        PageResult<ArticleListedVo> list = iIndexService.search(pageValidate, params);
         return AjaxResult.success(list);
     }
 

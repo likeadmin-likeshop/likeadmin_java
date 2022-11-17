@@ -1,11 +1,11 @@
 package com.mdd.front.service;
 
 import com.mdd.common.core.PageResult;
-import com.mdd.front.validate.PageValidate;
+import com.mdd.front.validate.commons.PageValidate;
 import com.mdd.front.vo.article.ArticleCateVo;
 import com.mdd.front.vo.article.ArticleCollectVo;
 import com.mdd.front.vo.article.ArticleDetailVo;
-import com.mdd.front.vo.article.ArticleListVo;
+import com.mdd.front.vo.article.ArticleListedVo;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public interface IArticleService {
      * @param userId 用户ID
      * @return PageResult<ArticleListVo>
      */
-    PageResult<ArticleListVo> list(PageValidate pageValidate, Integer cid, Integer userId);
+    PageResult<ArticleListedVo> list(PageValidate pageValidate, Integer cid, Integer userId);
 
     /**
      * 文章详情
