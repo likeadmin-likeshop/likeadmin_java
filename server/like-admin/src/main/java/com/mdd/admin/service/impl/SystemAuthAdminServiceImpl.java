@@ -250,7 +250,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
      */
     @Override
     public void edit(SystemAdminUpdateValidate updateValidate, Integer adminId) {
-        if (adminId.equals(1) && updateValidate.getId().equals(1)) {
+        if (!adminId.equals(1) && updateValidate.getId().equals(1)) {
             throw new OperateException("您无权限编辑系统管理员!");
         }
 
@@ -295,7 +295,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
             model.setUsername(updateValidate.getUsername());
         }
 
-        if (StringUtil.isNotNull(updateValidate.getPassword())) {
+        if (StringUtil.isNotNull(updateValidate.getPassword()) && StringUtil.isNotEmpty(updateValidate.getPassword())) {
             String salt   = ToolsUtil.randomString(5);
             String pwd    = ToolsUtil.makeMd5( updateValidate.getPassword().trim() + salt);
             model.setPassword(pwd);
@@ -305,7 +305,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         systemAuthAdminMapper.updateById(model);
         this.cacheAdminUserByUid(updateValidate.getId());
 
-        if (StringUtil.isNotNull(updateValidate.getPassword())) {
+        if (StringUtil.isNotNull(updateValidate.getPassword()) && StringUtil.isNotEmpty(updateValidate.getPassword())) {
             StpUtil.kickout(updateValidate.getId());
         }
     }
@@ -334,7 +334,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         model.setNickname(upInfoValidate.getNickname());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
 
-        if (StringUtil.isNotNull(upInfoValidate.getPassword())) {
+        if (StringUtil.isNotNull(upInfoValidate.getPassword()) && StringUtil.isNotEmpty(upInfoValidate.getPassword())) {
             String currPassword = ToolsUtil.makeMd5(upInfoValidate.getCurrPassword() + model.getSalt());
             Assert.isFalse(!currPassword.equals(model.getPassword()), "当前密码不正确!");
             String salt   = ToolsUtil.randomString(5);
@@ -346,7 +346,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         systemAuthAdminMapper.updateById(model);
         this.cacheAdminUserByUid(adminId);
 
-        if (StringUtil.isNotNull(upInfoValidate.getPassword())) {
+        if (StringUtil.isNotNull(upInfoValidate.getPassword()) && StringUtil.isNotEmpty(upInfoValidate.getPassword())) {
             StpUtil.kickout(adminId);
         }
     }
