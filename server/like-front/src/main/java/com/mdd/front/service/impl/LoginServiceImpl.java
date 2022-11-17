@@ -2,7 +2,6 @@ package com.mdd.front.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.config.GlobalConfig;
@@ -16,7 +15,8 @@ import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.utils.*;
 import com.mdd.front.config.FrontConfig;
 import com.mdd.front.service.ILoginService;
-import com.mdd.front.validate.RegParam;
+import com.mdd.front.validate.UserRegisterValidate;
+import com.mdd.front.vo.LoginTokenVo;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -47,13 +46,13 @@ public class LoginServiceImpl implements ILoginService {
      * 注册账号
      *
      * @author fzr
-     * @param regParam 参数
+     * @param userRegisterValidate 参数
      */
     @Override
-    public void register(RegParam regParam) {
+    public void register(UserRegisterValidate userRegisterValidate) {
         User model = userMapper.selectOne(new QueryWrapper<User>()
                 .select("id,sn,username")
-                .eq("username", regParam.getUsername())
+                .eq("username", userRegisterValidate.getUsername())
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
@@ -61,16 +60,16 @@ public class LoginServiceImpl implements ILoginService {
 
         Integer sn  = this.randMakeSn();
         String salt = ToolsUtil.randomString(5);
-        String pwd  = ToolsUtil.makeMd5(regParam.getPassword()+salt);
+        String pwd  = ToolsUtil.makeMd5(userRegisterValidate.getPassword()+salt);
 
         User user = new User();
         user.setSn(sn);
         user.setNickname("用户"+sn);
-        user.setUsername(regParam.getUsername());
+        user.setUsername(userRegisterValidate.getUsername());
         user.setPassword(pwd);
         user.setSalt(salt);
         user.setAvatar("/api/static/default_avatar.png");
-        user.setChannel(regParam.getClient());
+        user.setChannel(userRegisterValidate.getClient());
         user.setCreateTime(System.currentTimeMillis() / 1000);
         user.setUpdateTime(System.currentTimeMillis() / 1000);
         userMapper.insert(user);
@@ -81,11 +80,11 @@ public class LoginServiceImpl implements ILoginService {
      *
      * @author fzr
      * @param params 参数
-     * @return Map<String, Object>
+     * @return LoginTokenVo
      */
     @Override
     @Transactional
-    public Map<String, Object> mnpLogin(Map<String, String> params) {
+    public LoginTokenVo mnpLogin(Map<String, String> params) {
         Assert.notNull(params.get("code"), "code参数缺失!");
         String code      = params.get("code");
         String avatarUrl = params.getOrDefault("avatarUrl", "/api/static/default_avatar.png");
@@ -164,15 +163,14 @@ public class LoginServiceImpl implements ILoginService {
             }
 
             String token = ToolsUtil.makeToken();
-            RedisUtil.set(FrontConfig.frontendTokenKey+token, userId, 7200);
+            int tokenValidTime = Integer.parseInt(YmlUtil.get("like.token-valid-time"));
+            RedisUtil.set(FrontConfig.frontendTokenKey+token, userId, tokenValidTime);
 
-            String mobile = StringUtil.isNull(user.getMobile()) ? "" : user.getMobile();
-
-            Map<String, Object> response = new LinkedHashMap<>();
-            response.put("id", userId);
-            response.put("isBindMobile", !mobile.equals(""));
-            response.put("token", token);
-            return response;
+            LoginTokenVo vo = new LoginTokenVo();
+            vo.setId(userId);
+            vo.setIsBindMobile(!user.getMobile().equals(""));
+            vo.setToken(token);
+            return vo;
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
@@ -183,10 +181,10 @@ public class LoginServiceImpl implements ILoginService {
      *
      * @author fzr
      * @param params 参数
-     * @return Map<String, Object>
+     * @return LoginTokenVo
      */
     @Override
-    public Map<String, Object> mobileLogin(Map<String, String> params) {
+    public LoginTokenVo mobileLogin(Map<String, String> params) {
         Assert.notNull(params.get("mobile"), "mobile参数缺失!");
         Assert.notNull(params.get("code"), "code参数缺失!");
         String mobile = params.get("mobile");
@@ -200,7 +198,7 @@ public class LoginServiceImpl implements ILoginService {
         }
 
         // 删除验证码
-        RedisUtil.del(GlobalConfig.redisSmsCode+"101:"+mobile);
+        RedisUtil.del(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()
@@ -218,13 +216,14 @@ public class LoginServiceImpl implements ILoginService {
         userMapper.updateById(user);
 
         String token = ToolsUtil.makeToken();
-        RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), 7200);
+        int tokenValidTime = Integer.parseInt(YmlUtil.get("like.token-valid-time"));
+        RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), tokenValidTime);
 
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("id", user.getId());
-        response.put("isBindMobile", !user.getMobile().equals(""));
-        response.put("token", token);
-        return response;
+        LoginTokenVo vo = new LoginTokenVo();
+        vo.setId(user.getId());
+        vo.setIsBindMobile(!user.getMobile().equals(""));
+        vo.setToken(token);
+        return vo;
     }
 
     /**
@@ -232,10 +231,10 @@ public class LoginServiceImpl implements ILoginService {
      *
      * @author fzr
      * @param params 参数
-     * @return Map<String, Object>
+     * @return LoginTokenVo
      */
     @Override
-    public Map<String, Object> accountLogin(Map<String, String> params) {
+    public LoginTokenVo accountLogin(Map<String, String> params) {
         Assert.notNull(params.get("username"), "username参数缺失!");
         Assert.notNull(params.get("password"), "password参数缺失!");
         String username = params.get("username");
@@ -258,23 +257,24 @@ public class LoginServiceImpl implements ILoginService {
         userMapper.updateById(user);
 
         String token = ToolsUtil.makeToken();
-        RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), 7201);
+        int tokenValidTime = Integer.parseInt(YmlUtil.get("like.token-valid-time"))+1;
+        RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), tokenValidTime-1);
 
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("id", user.getId());
-        response.put("isBindMobile", !user.getMobile().equals(""));
-        response.put("token", token);
-        return response;
+        LoginTokenVo vo = new LoginTokenVo();
+        vo.setId(user.getId());
+        vo.setIsBindMobile(!user.getMobile().equals(""));
+        vo.setToken(token);
+        return vo;
     }
 
     /**
      * 公众号登录
      *
      * @author fzr
-     * @return Map<String, Object>
+     * @return LoginTokenVo
      */
     @Override
-    public Map<String, Object> officeLogin(Map<String, String> params) {
+    public LoginTokenVo officeLogin(Map<String, String> params) {
         Assert.notNull(params.get("code"), "code参数缺失!");
         String code = params.get("code");
 
@@ -342,14 +342,14 @@ public class LoginServiceImpl implements ILoginService {
             }
 
             String token = ToolsUtil.makeToken();
-            RedisUtil.set(FrontConfig.frontendTokenKey+token, userId, 7201);
+            int tokenValidTime = Integer.parseInt(YmlUtil.get("like.token-valid-time"))+1;
+            RedisUtil.set(FrontConfig.frontendTokenKey+token, userId, tokenValidTime-1);
 
-            Map<String, Object> response = new LinkedHashMap<>();
-            response.put("id", userId);
-            response.put("isBindMobile", !user.getMobile().equals(""));
-            response.put("token", token);
-
-            return response;
+            LoginTokenVo vo = new LoginTokenVo();
+            vo.setId(user.getId());
+            vo.setIsBindMobile(!user.getMobile().equals(""));
+            vo.setToken(token);
+            return vo;
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
@@ -392,7 +392,7 @@ public class LoginServiceImpl implements ILoginService {
         }
 
         // 删除验证码
-        RedisUtil.del(GlobalConfig.redisSmsCode+"104:"+mobile);
+        RedisUtil.del(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()
@@ -403,10 +403,13 @@ public class LoginServiceImpl implements ILoginService {
 
         // 验证账号
         Assert.notNull(user, "账号不存在!");
-        String pwd = ToolsUtil.makeMd5(password+user.getSalt());
+
+        String salt = ToolsUtil.randomString(5);
+        String pwd  = ToolsUtil.makeMd5(password.trim()+salt);
 
         // 更新密码
         user.setPassword(pwd);
+        user.setSalt(salt);
         user.setUpdateTime(System.currentTimeMillis() / 1000);
         userMapper.updateById(user);
     }

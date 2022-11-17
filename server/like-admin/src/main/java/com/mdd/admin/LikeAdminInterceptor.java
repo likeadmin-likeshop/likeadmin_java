@@ -1,14 +1,16 @@
 package com.mdd.admin;
 
-import com.alibaba.fastjson.JSON;
+import cn.dev33.satoken.stp.StpUtil;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.mdd.admin.config.AdminConfig;
-import com.mdd.admin.service.system.ISystemAuthAdminService;
-import com.mdd.admin.service.system.ISystemAuthPermService;
+import com.mdd.admin.service.ISystemAuthAdminService;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.utils.RedisUtil;
+import com.mdd.common.utils.StringUtil;
 import com.mdd.common.utils.ToolsUtil;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -29,20 +31,13 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
     @Resource
     ISystemAuthAdminService iSystemAuthAdminService;
 
-    @Resource
-    ISystemAuthPermService iSystemAuthPermService;
-
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 404拦截
-        response.setContentType("application/json;charset=utf-8");
-        if (response.getStatus() == 404) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.REQUEST_404_ERROR.getCode(), HttpEnum.REQUEST_404_ERROR.getMsg());
-            response.getWriter().print(JSON.toJSONString(result));
-            return false;
-        }
+    public boolean preHandle(@NotNull HttpServletRequest request,
+                             @NotNull HttpServletResponse response,
+                             @NotNull Object handler) throws Exception {
 
-        // 判断请求接口
+        // 请求的类型
+        response.setContentType("application/json;charset=utf-8");
         if (!(handler instanceof HandlerMethod)) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
@@ -59,81 +54,67 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         }
 
         // Token是否为空
-        String token = request.getHeader("token");
+        String token = StpUtil.getTokenValue();
         if (StringUtils.isBlank(token)) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_EMPTY.getCode(), HttpEnum.TOKEN_EMPTY.getMsg());
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_EMPTY.getCode(), HttpEnum.TOKEN_EMPTY.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
 
         // Token是否过期
-        token = AdminConfig.backstageTokenKey + token;
-        if (!RedisUtil.exists(token)) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
+        Object id = StpUtil.getLoginId();
+        if (StringUtil.isNull(id)) {
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
 
-        // 用户信息缓存
-        String uid = RedisUtil.get(token).toString();
-        if (!RedisUtil.hExists(AdminConfig.backstageManageKey, uid)) {
-            iSystemAuthAdminService.cacheAdminUserByUid(Integer.parseInt(uid));
+        // Users是否存在
+        if (!RedisUtil.hExists(AdminConfig.backstageManageKey, id)) {
+            iSystemAuthAdminService.cacheAdminUserByUid(Integer.parseInt(id.toString()));
         }
 
+        // 获取用户的信息
+        String UserStr =  RedisUtil.hGet(AdminConfig.backstageManageKey, String.valueOf(id)).toString();
+        Map<String, String> userMap = ToolsUtil.jsonToMap(UserStr);
+
         // 校验用户被删除
-        Map<String, String> map = ToolsUtil.jsonToMap(RedisUtil.hGet(AdminConfig.backstageManageKey, uid).toString());
-        if (map == null || map.get("isDelete").equals("1")) {
-            RedisUtil.del(token);
-            RedisUtil.hDel(AdminConfig.backstageManageKey, uid);
-            AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
+        if (userMap.get("isDelete").equals("1")) {
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
 
         // 校验用户被禁用
-        if (map.get("isDisable").equals("1")) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.LOGIN_DISABLE_ERROR.getCode(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
+        if (userMap.get("isDisable").equals("1")) {
+            AjaxResult<Object> result = AjaxResult.failed(HttpEnum.LOGIN_DISABLE_ERROR.getCode(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
 
-        // 令牌剩余30分钟自动续签
-        if (RedisUtil.ttl(token) < 1800) {
-            RedisUtil.expire(token, 7200L);
-        }
+        // 用户写本地线里
+        LikeAdminThreadLocal.put("adminId", id);
+        LikeAdminThreadLocal.put("roleId", userMap.get("roleId"));
+        LikeAdminThreadLocal.put("username", userMap.get("username"));
+        LikeAdminThreadLocal.put("nickname", userMap.get("nickname"));
 
-        // 写入本地线程
-        LikeAdminThreadLocal.put("adminId", uid);
-        LikeAdminThreadLocal.put("roleId", map.get("role"));
-        LikeAdminThreadLocal.put("username", map.get("username"));
-        LikeAdminThreadLocal.put("nickname", map.get("nickname"));
-
-        // 免权限验证接口
+        // 免校验权限接口
         List<String> notAuthUri = Arrays.asList(AdminConfig.notAuthUri);
-        if (notAuthUri.contains(auths) || Integer.parseInt(uid) == 1) {
+        if (notAuthUri.contains(auths) || Integer.parseInt(id.toString()) == 1) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
 
-        // 校验角色权限是否存在
-        String roleId = map.get("role");
-        if (!RedisUtil.hExists(AdminConfig.backstageRolesKey, roleId)) {
-            iSystemAuthPermService.cacheRoleMenusByRoleId(Integer.parseInt(roleId));
-        }
-
-        // 验证是否有权限操作
-        String menus = RedisUtil.hGet(AdminConfig.backstageRolesKey, roleId).toString();
-        if (menus.equals("") || !Arrays.asList(menus.split(",")).contains(auths)) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.NO_PERMISSION.getCode(), HttpEnum.NO_PERMISSION.getMsg());
-            response.getWriter().print(JSON.toJSONString(result));
-            return false;
-        }
+        // 校验用户的权限
+        StpUtil.checkPermission(auths);
 
         // 验证通过继续操作
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(@NotNull HttpServletRequest request,
+                                @NotNull HttpServletResponse response,
+                                @NotNull Object handler, Exception ex) throws Exception {
         LikeAdminThreadLocal.remove();
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
     }

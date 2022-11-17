@@ -1,0 +1,35 @@
+package ${packageName}.admin.validate;
+
+import lombok.Data;
+import java.io.Serializable;
+#foreach ($column in $columns)
+#if ($column.javaType.equals("BigDecimal"))
+import java.math.BigDecimal;
+#break
+#end
+#end
+
+#set($isAuthor = !$authorName.equals(""))
+/**
+ * ${functionName}参数
+#if($isAuthor)
+ * @author ${authorName}
+#end
+ */
+@Data
+public class ${EntityName}SearchValidate implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+#foreach ($column in $columns)
+#if($column.isQuery==1)
+    #if ($column.columnName.equals("create_time") || $column.columnName.equals("update_time") || $column.columnName.equals("delete_time"))
+    private String ${column.javaField}Start;
+    private String ${column.javaField}End;
+    #else
+    private ${column.javaType} ${column.javaField};
+    #end
+
+#end
+#end
+}

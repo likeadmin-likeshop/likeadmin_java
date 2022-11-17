@@ -208,6 +208,7 @@ public class GenerateServiceImpl implements IGenerateService {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new OperateException("导入失败：" + e.getMessage());
         }
     }
@@ -250,6 +251,7 @@ public class GenerateServiceImpl implements IGenerateService {
             Integer id = Integer.parseInt(item.get("id"));
             GenTableColumn column = genTableColumnMapper.selectById(id);
             column.setColumnComment(item.get("columnComment"));
+            column.setJavaType(item.get("javaType"));
             column.setJavaField(item.get("javaField"));
             column.setIsRequired(Integer.parseInt(item.get("isRequired")));
             column.setIsInsert(Integer.parseInt(item.get("isInsert")));
@@ -375,7 +377,6 @@ public class GenerateServiceImpl implements IGenerateService {
             Template tpl = Velocity.getTemplate(template, GenConstants.UTF8);
             tpl.merge(context, sw);
             map.put(template.replace(".vm", ""), sw.toString());
-             System.out.println(sw);
         }
 
         return map;
@@ -431,7 +432,13 @@ public class GenerateServiceImpl implements IGenerateService {
             tpl.merge(context, sw);
             try {
                 String basePath = VelocityUtil.getGenPath(table);
+                String tplPaths = VelocityUtil.getFileName(template, table);
+                if (tplPaths.startsWith("vue")) {
+                    continue;
+                }
+
                 String filePath = basePath + VelocityUtil.getFileName(template, table);
+                filePath = filePath.replaceFirst("java/", "");
                 FileUtils.writeStringToFile(new File(filePath), sw.toString(), GenConstants.UTF8);
             } catch (IOException e) {
                 log.error("生成渲染模板失败: " + e.getMessage());

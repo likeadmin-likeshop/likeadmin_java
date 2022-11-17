@@ -1,6 +1,6 @@
 package com.mdd.admin.config.aop;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.common.entity.system.SystemLogOperate;
 import com.mdd.common.mapper.system.SystemLogOperateMapper;
@@ -16,7 +16,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,9 +24,7 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
-import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Aspect
 @Component

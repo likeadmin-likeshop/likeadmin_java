@@ -1,16 +1,19 @@
-package ${packageName}.admin.controller.${moduleName};
+package ${packageName}.admin.controller;
 
 #if(!$table.genTpl.equals("crud"))
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson2.JSONArray;
 #end
 import ${packageName}.admin.config.aop.Log;
-import ${packageName}.admin.service.${moduleName}.I${EntityName}Service;
-import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
+import ${packageName}.admin.service.I${EntityName}Service;
+import ${packageName}.admin.validate.commons.IdValidate;
+import ${packageName}.admin.validate.${EntityName}CreateValidate;
+import ${packageName}.admin.validate.${EntityName}UpdateValidate;
+import ${packageName}.admin.validate.${EntityName}SearchValidate;
 #if($table.genTpl.equals("crud"))
-import ${packageName}.admin.validate.common.PageParam;
-import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
+import ${packageName}.admin.validate.commons.PageValidate;
+import ${packageName}.admin.vo.${EntityName}ListedVo;
 #end
-import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
+import ${packageName}.admin.vo.${EntityName}DetailVo;
 import ${packageName}.common.core.AjaxResult;
 #if($table.genTpl.equals("crud"))
 import ${packageName}.common.core.PageResult;
@@ -20,7 +23,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 #set($isAuthor = !$authorName.equals(""))
 /**
@@ -43,25 +45,26 @@ public class ${EntityName}Controller {
      * @author ${authorName}
      #end
      #if($table.genTpl.equals("crud"))
-     * @param pageParam 分页参数
+     * @param pageValidate 分页参数
      #end
-     * @param params 搜索参数
-     * @return Object
+     * @param searchValidate 搜索参数
+     * @return AjaxResult<Object>
      */
     #if($table.genTpl.equals("crud"))
     @GetMapping("/list")
-    public Object list(@Validated PageParam pageParam,
-                       @RequestParam Map<String, String> params) {
-        PageResult<${EntityName}ListVo> list = i${EntityName}Service.list(pageParam, params);
+    public AjaxResult<PageResult<${EntityName}ListedVo>> list(@Validated PageValidate pageValidate,
+                                                     @Validated ${EntityName}SearchValidate searchValidate) {
+        PageResult<${EntityName}ListedVo> list = i${EntityName}Service.list(pageValidate, searchValidate);
         return AjaxResult.success(list);
     }
     #else
     @GetMapping("/list")
-    public Object list(@RequestParam Map<String, String> params) {
-        JSONArray list = i${EntityName}Service.list(params);
+    public AjaxResult<JSONArray> list(@Validated ${EntityName}SearchValidate searchValidate) {
+        JSONArray list = i${EntityName}Service.list(searchValidate);
         return AjaxResult.success(list);
     }
     #end
+
     /**
      * ${functionName}详情
      *
@@ -69,10 +72,10 @@ public class ${EntityName}Controller {
      * @author ${authorName}
      #end
      * @param id 主键ID
-     * @return Object
+     * @return AjaxResult<${EntityName}DetailVo>
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public AjaxResult<${EntityName}DetailVo> detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         ${EntityName}DetailVo detail = i${EntityName}Service.detail(id);
         return AjaxResult.success(detail);
     }
@@ -83,13 +86,13 @@ public class ${EntityName}Controller {
      #if(!$authorName.equals(""))
      * @author ${authorName}
      #end
-     * @param ${entityName}Param 参数
-     * @return Object
+     * @param createValidate 参数
+     * @return AjaxResult<Object>
      */
     @Log(title = "${functionName}新增")
     @PostMapping("/add")
-    public Object add(@Validated(value = ${EntityName}Param.create.class) @RequestBody ${EntityName}Param ${entityName}Param) {
-        i${EntityName}Service.add(${entityName}Param);
+    public AjaxResult<Object> add(@Validated @RequestBody ${EntityName}CreateValidate createValidate) {
+        i${EntityName}Service.add(createValidate);
         return AjaxResult.success();
     }
 
@@ -99,13 +102,13 @@ public class ${EntityName}Controller {
      #if(!$authorName.equals(""))
      * @author ${authorName}
      #end
-     * @param ${entityName}Param 参数
-     * @return Object
+     * @param updateValidate 参数
+     * @return AjaxResult<Object>
      */
     @Log(title = "${functionName}编辑")
     @PostMapping("/edit")
-    public Object edit(@Validated(value = ${EntityName}Param.update.class) @RequestBody ${EntityName}Param ${entityName}Param) {
-        i${EntityName}Service.edit(${entityName}Param);
+    public AjaxResult<Object> edit(@Validated @RequestBody ${EntityName}UpdateValidate updateValidate) {
+        i${EntityName}Service.edit(updateValidate);
         return AjaxResult.success();
     }
 
@@ -115,14 +118,14 @@ public class ${EntityName}Controller {
      #if(!$authorName.equals(""))
      * @author ${authorName}
      #end
-     * @param ${entityName}Param 参数
-     * @return Object
+     * @param idValidate 参数
+     * @return AjaxResult<Object>
      */
     @Log(title = "${functionName}删除")
     @PostMapping("/del")
-    public Object del(@Validated(value = ${EntityName}Param.delete.class) @RequestBody ${EntityName}Param ${entityName}Param) {
+    public AjaxResult<Object> del(@Validated @RequestBody IdValidate idValidate) {
         #set($AttrName=$primaryKey.substring(0,1).toUpperCase() + ${primaryKey.substring(1)})
-        i${EntityName}Service.del(${entityName}Param.get${AttrName}());
+        i${EntityName}Service.del(idValidate.getId());
         return AjaxResult.success();
     }
 

@@ -17,15 +17,29 @@
 
     <!-- 项目管理 -->
     <dependencies>
-        <!-- 公共依赖 -->
+        <!-- 全局工具 -->
         <dependency>
             <groupId>org.mdd</groupId>
             <artifactId>like-common</artifactId>
         </dependency>
+
+        <!-- 代码生成 -->
         <dependency>
             <groupId>org.mdd</groupId>
             <artifactId>like-generator</artifactId>
             <version>1.0.0</version>
+        </dependency>
+
+        <!-- SaToken -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-dao-redis-jackson</artifactId>
+            <version>1.32.0</version>
         </dependency>
     </dependencies>
 

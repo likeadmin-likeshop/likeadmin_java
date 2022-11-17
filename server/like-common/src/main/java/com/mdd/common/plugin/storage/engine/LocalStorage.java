@@ -24,7 +24,7 @@ public class LocalStorage {
         // 映射目录
         String directory = YmlUtil.get("like.upload-directory");
         if (directory == null || directory.equals("")) {
-            directory = GlobalConfig.uploadDirectory;
+            throw new OperateException("请配置上传目录like.upload-directory");
         }
 
         // 文件信息

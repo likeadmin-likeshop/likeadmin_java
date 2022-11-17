@@ -4,8 +4,8 @@ import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.front.service.IIndexService;
-import com.mdd.front.validate.PageParam;
-import com.mdd.front.vo.article.ArticleListVo;
+import com.mdd.front.validate.commons.PageValidate;
+import com.mdd.front.vo.article.ArticleListedVo;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,10 +30,10 @@ public class IndexController {
      * 首页
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult<Map<String, Object>>
      */
     @GetMapping("/index")
-    public Object index() {
+    public AjaxResult<Map<String, Object>> index() {
         Map<String, Object> detail = iIndexService.index();
         return AjaxResult.success(detail);
     }
@@ -43,10 +43,10 @@ public class IndexController {
      *
      * @author fzr
      * @param id 主键
-     * @return Object
+     * @return AjaxResult<Map<String, Object>>
      */
     @GetMapping("/decorate")
-    public Object decorate(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public AjaxResult<Map<String, Object>> decorate(@Validated @IDMust() @RequestParam("id") Integer id) {
         Map<String, Object> detail = iIndexService.decorate(id);
         return AjaxResult.success(detail);
     }
@@ -55,10 +55,10 @@ public class IndexController {
      * 配置
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult<Map<String, Object>>
      */
     @GetMapping("/config")
-    public Object config() {
+    public AjaxResult<Map<String, Object>> config() {
         Map<String, Object> map = iIndexService.config();
         return AjaxResult.success(map);
     }
@@ -68,10 +68,10 @@ public class IndexController {
      *
      * @author fzr
      * @param type 类型 service=服务协议,privacy=隐私协议
-     * @return Object
+     * @return AjaxResult<Map<String, String>>
      */
     @GetMapping("/policy")
-    public Object policy(@RequestParam String type) {
+    public AjaxResult<Map<String, String>> policy(@RequestParam String type) {
         Map<String, String> map = iIndexService.policy(type);
         return AjaxResult.success(map);
     }
@@ -80,10 +80,10 @@ public class IndexController {
      * 热搜
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult<List<String>>
      */
     @GetMapping("/hotSearch")
-    public Object hotSearch() {
+    public AjaxResult<List<String>> hotSearch() {
         List<String> list = iIndexService.hotSearch();
         return AjaxResult.success(list);
     }
@@ -92,12 +92,14 @@ public class IndexController {
      * 搜索
      *
      * @author fzr
-     * @return Object
+     * @param pageValidate 分页参数
+     * @param params 搜素参数
+     * @return AjaxResult<PageResult<ArticleListVo>>
      */
     @GetMapping("/search")
-    public Object search(@Validated PageParam pageParam,
-                         @RequestParam Map<String, String> params) {
-        PageResult<ArticleListVo> list = iIndexService.search(pageParam, params);
+    public AjaxResult<PageResult<ArticleListedVo>> search(@Validated PageValidate pageValidate,
+                                                          @RequestParam Map<String, String> params) {
+        PageResult<ArticleListedVo> list = iIndexService.search(pageValidate, params);
         return AjaxResult.success(list);
     }
 

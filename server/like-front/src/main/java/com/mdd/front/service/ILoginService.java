@@ -1,6 +1,7 @@
 package com.mdd.front.service;
 
-import com.mdd.front.validate.RegParam;
+import com.mdd.front.validate.UserRegisterValidate;
+import com.mdd.front.vo.LoginTokenVo;
 
 import java.util.Map;
 
@@ -13,45 +14,45 @@ public interface ILoginService {
      * 账号注册
      *
      * @author fzr
-     * @param regParam 参数
+     * @param userRegisterValidate 参数
      */
-    void register(RegParam regParam);
+    void register(UserRegisterValidate userRegisterValidate);
 
     /**
      * 微信登录
      *
      * @author fzr
      * @param params 参数
-     * @return Map<String, Object>
+     * @return LoginTokenVo
      */
-    Map<String, Object> mnpLogin(Map<String, String> params);
+    LoginTokenVo mnpLogin(Map<String, String> params);
 
     /**
      * 手机登录
      *
      * @author fzr
      * @param params 参数
-     * @return Map<String, Object>
+     * @return LoginTokenVo
      */
-    Map<String, Object> mobileLogin(Map<String, String> params);
+    LoginTokenVo mobileLogin(Map<String, String> params);
 
     /**
      * 账号登录
      *
      * @author fzr
      * @param params 参数
-     * @return Map<String, Object>
+     * @return LoginTokenVo
      */
-    Map<String, Object> accountLogin(Map<String, String> params);
+    LoginTokenVo accountLogin(Map<String, String> params);
 
     /**
      * 公众号登录
      *
      * @author fzr
      * @param params 参数
-     * @return Map<String, Object>
+     * @return LoginTokenVo
      */
-    Map<String, Object> officeLogin(Map<String, String> params);
+    LoginTokenVo officeLogin(Map<String, String> params);
 
     /**
      * 公众号跳转url

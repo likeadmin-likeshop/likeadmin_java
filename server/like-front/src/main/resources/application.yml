@@ -1,3 +1,12 @@
+# 项目配置
+like:
+  # 上传目录
+  upload-directory: /www/uploads/likeadmin-java/
+  # 登录有效时间 (单位秒)
+  token-valid-time: 7200
+  # 登录续签时间 (不足以下秒数续签)
+  token-renew-time: 1800
+
 # 服务配置
 server:
   port: 8084
@@ -10,9 +19,10 @@ spring:
     active: dev
   mvc:
     static-path-pattern: /api/static/**
+    throw-exception-if-no-handler-found: true
   # 数据源配置
   datasource:
-    url: jdbc:mysql://localhost:3306/likeadmin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
+    url: jdbc:mysql://localhost:3306/local_likeadmin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
     type: com.zaxxer.hikari.HikariDataSource # 数据源类型
     driver-class-name: com.mysql.jdbc.Driver # MySql的驱动
     username: root # 数据库账号
@@ -48,11 +58,11 @@ spring:
 
 # Mybatis-plus配置
 mybatis-plus:
-  mapper-locations: classpath*:/mapper/**Mapper.xml # 映射文件路径
+  mapper-locations: classpath*:/mapper/**Mapper.xml
   typeAliasesPackage: com.mdd.**.mapper
   global-config:
     banner: false
     db-config:
-      table-prefix: la_ # 设置表前缀
+      table-prefix: la_
   configuration-properties:
-    prefix: la_ # 自定义表前缀标签${prefix}
+    prefix: la_

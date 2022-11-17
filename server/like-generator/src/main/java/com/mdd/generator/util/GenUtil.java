@@ -44,9 +44,9 @@ public class GenUtil {
      * @param table 表
      */
     public static void initColumn(GenTableColumn column, GenTable table) {
+        column.setTableId(table.getId());
         String columnName = column.getColumnName();
         String columnType = GenUtil.getDbType(column.getColumnType());
-        column.setTableId(table.getId());
         column.setColumnLength(GenUtil.getColumnLength(column.getColumnType()));
         column.setJavaField(StringUtil.toCamelCase(columnName));
         column.setJavaType(JavaConstants.TYPE_STRING);
@@ -82,7 +82,7 @@ public class GenUtil {
             String[] str = StringUtil.split(StringUtil.substringBetween(column.getColumnType(), "(", ")"), ",");
             if (str != null && str.length == 2 && Integer.parseInt(str[1]) > 0) {
                 column.setJavaType(JavaConstants.TYPE_BIG_DECIMAL); // 浮点形
-            } else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 10) {
+            } else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 11) {
                 column.setJavaType(JavaConstants.TYPE_INTEGER);     // 整数形
             } else {
                 column.setJavaType(JavaConstants.TYPE_LONG);        // 长整形
@@ -243,9 +243,8 @@ public class GenUtil {
     public static String getColumnLength(String columnType) {
         if (StringUtil.indexOf(columnType, "(") > 0) {
             return StringUtil.substringBetween(columnType, "(", ")");
-        }
-        else {
-            return "";
+        } else {
+            return "0";
         }
     }
 

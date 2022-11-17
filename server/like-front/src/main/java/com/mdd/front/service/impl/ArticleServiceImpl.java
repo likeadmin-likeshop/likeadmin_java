@@ -10,7 +10,6 @@ import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.article.ArticleCategory;
 import com.mdd.common.entity.article.ArticleCollect;
-import com.mdd.common.entity.server.Sys;
 import com.mdd.common.mapper.article.ArticleCategoryMapper;
 import com.mdd.common.mapper.article.ArticleCollectMapper;
 import com.mdd.common.mapper.article.ArticleMapper;
@@ -18,12 +17,11 @@ import com.mdd.common.utils.StringUtil;
 import com.mdd.common.utils.TimeUtil;
 import com.mdd.common.utils.UrlUtil;
 import com.mdd.front.service.IArticleService;
-import com.mdd.front.validate.PageParam;
+import com.mdd.front.validate.commons.PageValidate;
 import com.mdd.front.vo.article.ArticleCateVo;
 import com.mdd.front.vo.article.ArticleCollectVo;
 import com.mdd.front.vo.article.ArticleDetailVo;
-import com.mdd.front.vo.article.ArticleListVo;
-import net.sf.jsqlparser.statement.create.table.Index;
+import com.mdd.front.vo.article.ArticleListedVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -76,15 +74,15 @@ public class ArticleServiceImpl implements IArticleService {
      * 文章列表
      *
      * @author fzr
-     * @param pageParam 分页参数
+     * @param pageValidate 分页参数
      * @param cid 分类ID
      * @param userId 用户ID
      * @return PageResult<ArticleListVo>
      */
     @Override
-    public PageResult<ArticleListVo> list(PageParam pageParam, Integer cid, Integer userId) {
-        Integer pageNo   = pageParam.getPageNo();
-        Integer pageSize = pageParam.getPageSize();
+    public PageResult<ArticleListedVo> list(PageValidate pageValidate, Integer cid, Integer userId) {
+        Integer pageNo   = pageValidate.getPageNo();
+        Integer pageSize = pageValidate.getPageSize();
 
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id,title,image,intro,visit,create_time");
@@ -98,9 +96,9 @@ public class ArticleServiceImpl implements IArticleService {
         IPage<Article> iPage = articleMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
 
         List<Integer> ids = new LinkedList<>();
-        List<ArticleListVo> list = new LinkedList<>();
+        List<ArticleListedVo> list = new LinkedList<>();
         for (Article article : iPage.getRecords()) {
-            ArticleListVo vo = new ArticleListVo();
+            ArticleListedVo vo = new ArticleListedVo();
             BeanUtils.copyProperties(article, vo);
             vo.setCollect(false);
             vo.setImage(UrlUtil.toAbsoluteUrl(article.getImage()));
@@ -122,7 +120,7 @@ public class ArticleServiceImpl implements IArticleService {
                 collects.add(c.getArticleId());
             }
 
-            for (ArticleListVo vo : list) {
+            for (ArticleListedVo vo : list) {
                 vo.setCollect(collects.contains(vo.getId()));
             }
         }
@@ -171,14 +169,14 @@ public class ArticleServiceImpl implements IArticleService {
      * 收藏列表
      *
      * @author fzr
-     * @param pageParam 分页参数
+     * @param pageValidate 分页参数
      * @param userId 用户ID
      * @return PageResult<ArticleCollectVo>
      */
     @Override
-    public PageResult<ArticleCollectVo> collect(PageParam pageParam, Integer userId) {
-        Integer pageNo   = pageParam.getPageNo();
-        Integer pageSize = pageParam.getPageSize();
+    public PageResult<ArticleCollectVo> collect(PageValidate pageValidate, Integer userId) {
+        Integer pageNo   = pageValidate.getPageNo();
+        Integer pageSize = pageValidate.getPageSize();
 
         MPJQueryWrapper<ArticleCollect> mpjQueryWrapper = new MPJQueryWrapper<>();
         mpjQueryWrapper.select("t.id,t.article_id,a.title,a.image,a.intro,a.visit,a.create_time")

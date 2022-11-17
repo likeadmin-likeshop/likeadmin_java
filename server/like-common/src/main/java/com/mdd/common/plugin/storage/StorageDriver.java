@@ -31,13 +31,13 @@ public class StorageDriver {
     public StorageDriver() {
         this.engine = ConfigUtil.get("storage", "default", "local");
 
-        Map<String, String> config1;
-        config1 = ConfigUtil.getMap("storage", this.engine);
-        if (config1 == null) {
-            config1 = new HashMap<>();
+        Map<String, String> config;
+        config = ConfigUtil.getMap("storage", this.engine);
+        if (config == null) {
+            config = new HashMap<>();
         }
 
-        this.config = config1;
+        this.config = config;
     }
 
     /**
@@ -47,8 +47,9 @@ public class StorageDriver {
      * @param multipartFile 文件对象
      * @param folder 文件夹
      * @param type 类型: 10=图片, 20=视频
+     * @return UploadFilesVo
      */
-    public Map<String, Object> upload(MultipartFile multipartFile, String folder, Integer type) {
+    public UploadFilesVo upload(MultipartFile multipartFile, String folder, Integer type) {
         this.checkFile(multipartFile, type);
         String key = this.buildSaveName(multipartFile);
         switch (this.engine) {
@@ -74,14 +75,22 @@ public class StorageDriver {
         String origFileExt  = origFileName.substring(origFileName.lastIndexOf(".")).replace(".", "");
         String newFileName  = folder + "/" + key;
 
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("id", 0);
-        map.put("name", multipartFile.getOriginalFilename());
-        map.put("size", multipartFile.getSize());
-        map.put("ext", origFileExt.toLowerCase());
-        map.put("url", newFileName);
-        map.put("path", UrlUtil.toAbsoluteUrl(newFileName));
-        return map;
+        UploadFilesVo vo = new UploadFilesVo();
+        vo.setId(0);
+        vo.setName(multipartFile.getOriginalFilename());
+        vo.setSize(multipartFile.getSize());
+        vo.setExt(origFileExt.toLowerCase());
+        vo.setUrl(newFileName);
+        vo.setPath(UrlUtil.toAbsoluteUrl(newFileName));
+
+//        Map<String, Object> map = new LinkedHashMap<>();
+//        map.put("id", 0);
+//        map.put("name", multipartFile.getOriginalFilename());
+//        map.put("size", multipartFile.getSize());
+//        map.put("ext", origFileExt.toLowerCase());
+//        map.put("url", newFileName);
+//        map.put("path", UrlUtil.toAbsoluteUrl(newFileName));
+        return vo;
     }
 
     /**

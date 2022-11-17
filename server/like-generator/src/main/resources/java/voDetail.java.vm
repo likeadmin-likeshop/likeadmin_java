@@ -1,4 +1,4 @@
-package ${packageName}.admin.vo.${moduleName};
+package ${packageName}.admin.vo;
 
 import lombok.Data;
 
@@ -6,6 +6,7 @@ import java.io.Serializable;
 #foreach ($column in $columns)
 #if ($column.javaType.equals("BigDecimal"))
 import java.math.BigDecimal;
+#break
 #end
 #end
 

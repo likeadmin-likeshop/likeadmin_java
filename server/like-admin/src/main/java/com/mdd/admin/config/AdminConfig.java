@@ -11,16 +11,10 @@ public class AdminConfig {
     // 角色缓存键
     public static final String backstageRolesKey = "backstage:roles";
 
-    // 令牌缓存键
-    public static final String backstageTokenKey = "backstage:token:";
-
-    // 令牌的集合
-    public static final String backstageTokenSet = "backstage:token:set:";
-
     // 免登录验证
     public static String[] notLoginUri = new String[]{
-            "system:login",         // 登录接口
-            "common:index:config"   // 配置接口
+            "system:login",  // 登录接口
+            "index:config"   // 配置接口
     };
 
     // 免权限验证

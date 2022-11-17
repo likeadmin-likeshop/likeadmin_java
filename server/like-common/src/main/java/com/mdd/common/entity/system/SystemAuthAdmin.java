@@ -22,8 +22,8 @@ public class SystemAuthAdmin implements Serializable {
     private String username;       // 用户昵称
     private String password;       // 用户密码
     private String avatar;         // 用户头像
-    private String salt;           // 角色主键
-    private Integer role;          // 加密盐巴
+    private String salt;           // 加密盐巴
+    private Integer role;          // 角色主键
     private Integer sort;          // 排序编号
     private Integer isMultipoint;  // 多端登录: [0=否, 1=是]
     private Integer isDisable;     // 是否禁用: [0=否, 1=是]

@@ -3,6 +3,7 @@ package com.mdd.admin.config;
 import com.mdd.admin.LikeAdminInterceptor;
 import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.utils.YmlUtil;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -37,19 +38,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(likeAdminInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(likeAdminInterceptor)
+                .addPathPatterns("/**");
     }
 
     /**
      * 资源目录映射
      */
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
         String directory = YmlUtil.get("like.upload-directory");
-        if (directory == null || directory.equals("")) {
-            directory = GlobalConfig.uploadDirectory;
-        }
-
         registry.addResourceHandler("/"+ GlobalConfig.publicPrefix +"/**")
                 .addResourceLocations("file:" + directory);
     }

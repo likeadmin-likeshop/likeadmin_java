@@ -1,9 +1,9 @@
 package com.mdd.front.service;
 
-import com.mdd.front.vo.user.UserCenterVo;
-import com.mdd.front.vo.user.UserInfoVo;
-
-import java.util.Map;
+import com.mdd.front.validate.UserBindMobileValidate;
+import com.mdd.front.validate.UserUpdateValidate;
+import com.mdd.front.vo.users.UserCenterVo;
+import com.mdd.front.vo.users.UserInfoVo;
 
 /**
  * 用户服务接口类
@@ -32,10 +32,10 @@ public interface IUserService {
      * 编辑信息
      *
      * @author fzr
-     * @param params 参数
+     * @param updateValidate 参数
      * @param userId 用户ID
      */
-    void edit(Map<String, String> params, Integer userId);
+    void edit(UserUpdateValidate updateValidate, Integer userId);
 
     /**
      * 修改密码
@@ -51,10 +51,10 @@ public interface IUserService {
      * 绑定手机
      *
      * @author fzr
-     * @param params 参数
+     * @param mobileValidate 参数
      * @param userId 用户ID
      */
-    void bindMobile(Map<String, String> params, Integer userId);
+    void bindMobile(UserBindMobileValidate mobileValidate, Integer userId);
 
     /**
      * 微信手机

@@ -1,0 +1,38 @@
+package ${packageName}.admin.validate;
+
+import lombok.Data;
+import java.io.Serializable;
+import javax.validation.constraints.*;
+#foreach ($column in $columns)
+#if ($column.javaType.equals("BigDecimal"))
+import java.math.BigDecimal;
+#break
+#end
+#end
+import ${packageName}.common.validator.annotation.IDMust;
+
+#set($isAuthor = !$authorName.equals(""))
+/**
+ * ${functionName}参数
+#if($isAuthor)
+ * @author ${authorName}
+#end
+ */
+@Data
+public class ${EntityName}UpdateValidate implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+#foreach ($column in $columns)
+#if($column.isEdit==1)
+    #if($column.isRequired==1 && $column.isPk==0)
+    @NotNull(message = "${column.javaField}参数缺失")
+    #end
+    #if($column.isPk==1)
+    @IDMust(message = "${column.javaField}参数必传且需大于0")
+    #end
+    private ${column.javaType} ${column.javaField};
+
+#end
+#end
+}

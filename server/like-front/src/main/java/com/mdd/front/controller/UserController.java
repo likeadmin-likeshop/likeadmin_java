@@ -1,18 +1,18 @@
 package com.mdd.front.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.exception.OperateException;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
-import com.mdd.front.vo.user.UserCenterVo;
-import com.mdd.front.vo.user.UserInfoVo;
+import com.mdd.front.validate.UserBindMobileValidate;
+import com.mdd.front.validate.UserMnpMobileValidate;
+import com.mdd.front.validate.UserPasswordValidate;
+import com.mdd.front.validate.UserUpdateValidate;
+import com.mdd.front.vo.users.UserCenterVo;
+import com.mdd.front.vo.users.UserInfoVo;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * 用户管理表
@@ -28,10 +28,10 @@ public class UserController {
      * 个人中心
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult<UserCenterVo>
      */
     @GetMapping("/center")
-    public Object center() {
+    public AjaxResult<UserCenterVo> center() {
         UserCenterVo vo = iUserService.center(LikeFrontThreadLocal.getUserId());
         return AjaxResult.success(vo);
     }
@@ -40,10 +40,10 @@ public class UserController {
      * 个人信息
      *
      * @author fzr
-     * @return Object
+     * @return AjaxResult<UserInfoVo>
      */
     @GetMapping("/info")
-    public Object info() {
+    public AjaxResult<UserInfoVo> info() {
         UserInfoVo vo = iUserService.info(LikeFrontThreadLocal.getUserId());
         return AjaxResult.success(vo);
     }
@@ -52,15 +52,13 @@ public class UserController {
      * 编辑信息
      *
      * @author fzr
-     * @param params 参数
-     * @return Object
+     * @param updateValidate 参数
+     * @return AjaxResult<Object>
      */
     @PostMapping("/edit")
-    public Object edit(@RequestBody Map<String, String> params) {
-        Assert.notNull(params.get("field"), "field参数缺失");
-        Assert.notNull(params.get("value"), "value参数缺失");
+    public AjaxResult<Object> edit(@Validated @RequestBody UserUpdateValidate updateValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
-        iUserService.edit(params, userId);
+        iUserService.edit(updateValidate, userId);
         return AjaxResult.success();
     }
 
@@ -68,17 +66,13 @@ public class UserController {
      * 修改密码
      *
      * @author fzr
-     * @param params 参数
-     * @return Object
+     * @param passwordValidate 参数
+     * @return AjaxResult<Object>
      */
     @PostMapping("/changePwd")
-    public Object changePwd(@RequestBody Map<String, String> params) {
-        Assert.notNull(params.get("password"), "password参数缺失");
-        if(!Pattern.matches("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$", params.get("password"))){
-            throw new OperateException("密码必须是6-20字母+数字组合!");
-        }
+    public AjaxResult<Object> changePwd(@Validated @RequestBody UserPasswordValidate passwordValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
-        iUserService.changePwd(params.get("password"), params.getOrDefault("oldPassword", null), userId);
+        iUserService.changePwd(passwordValidate.getPassword(), passwordValidate.getOldPassword(), userId);
         return AjaxResult.success();
     }
 
@@ -86,21 +80,13 @@ public class UserController {
      * 绑定手机号
      *
      * @author fzr
-     * @return Object
+     * @param mobileValidate 参数
+     * @return AjaxResult<Object>
      */
     @PostMapping("/bindMobile")
-    public Object bindMobile(@RequestBody Map<String, String> params) {
-        Assert.notNull(params.get("type"), "type参数缺失");
-        Assert.notNull(params.get("mobile"), "mobile参数缺失");
-        Assert.notNull(params.get("code"), "code参数缺失");
-        boolean type = Arrays.asList("bind", "change").contains(params.get("type"));
-        Assert.isTrue(type, "type类型只能是[bind/change]");
-        if(!Pattern.matches("^[1][3,4,5,6,7,8,9][0-9]{9}$", params.get("mobile"))){
-            throw new OperateException("手机号格式不正确!");
-        }
-
+    public AjaxResult<Object> bindMobile(@Validated @RequestBody UserBindMobileValidate mobileValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
-        iUserService.bindMobile(params, userId);
+        iUserService.bindMobile(mobileValidate, userId);
         return AjaxResult.success();
     }
 
@@ -108,12 +94,12 @@ public class UserController {
      * 微信手机号
      *
      * @author fzr
-     * @return Object
+     * @param mobileValidate 参数
+     * @return AjaxResult<Object>
      */
     @PostMapping("/mnpMobile")
-    public Object mnpMobile(@RequestBody Map<String, String> params) {
-        Assert.notNull(params.get("code"), "code参数缺失");
-        iUserService.mnpMobile(params.get("code").trim());
+    public AjaxResult<Object> mnpMobile(@Validated @RequestBody UserMnpMobileValidate mobileValidate) {
+        iUserService.mnpMobile(mobileValidate.getCode().trim());
         return AjaxResult.success();
     }
 

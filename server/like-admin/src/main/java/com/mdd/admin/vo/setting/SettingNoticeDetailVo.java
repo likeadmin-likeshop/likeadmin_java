@@ -17,8 +17,8 @@ public class SettingNoticeDetailVo implements Serializable {
     private String type;
     private String remarks;
     private Object systemNotice;
-    private Object smsNotice;
     private Object oaNotice;
     private Object mnpNotice;
+    private Object smsNotice;
 
 }

@@ -2,11 +2,15 @@ package com.mdd.admin.vo.channel;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 小程序渠道Vo
  */
 @Data
-public class ChannelMpVo {
+public class ChannelMpVo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String name;
     private String primaryId;

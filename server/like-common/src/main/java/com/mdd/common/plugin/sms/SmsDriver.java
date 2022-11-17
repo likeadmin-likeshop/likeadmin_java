@@ -1,26 +1,21 @@
 package com.mdd.common.plugin.sms;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.mdd.common.entity.system.SystemLogSms;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.system.SystemLogSmsMapper;
 import com.mdd.common.plugin.sms.engine.AliSms;
 import com.mdd.common.plugin.sms.engine.TencentSms;
-import com.mdd.common.utils.ArrayUtil;
 import com.mdd.common.utils.ConfigUtil;
 import com.mdd.common.utils.SpringUtil;
 
-import javax.annotation.Resource;
-import javax.management.openmbean.OpenDataException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class SmsDriver {
 
     private final SystemLogSmsMapper systemLogSmsMapper;
 
+    private Integer scene;                      // 场景编码
     private String mobile;                      // 手机号码
     private String templateCode;                // 短信模板
     private String smsContent = "";             // 短信内容
@@ -82,6 +77,18 @@ public class SmsDriver {
      */
     public SmsDriver setSmsContent(String content) {
         this.smsContent = content;
+        return this;
+    }
+
+    /**
+     * 设置场景编码
+     *
+     * @author fzr
+     * @param scene 场景编码
+     * @return SmsDriver
+     */
+    public SmsDriver setScene(Integer scene) {
+        this.scene = scene;
         return this;
     }
 
@@ -149,6 +156,7 @@ public class SmsDriver {
     private void updateSmsLog(Integer id, Integer status, String result) {
         SystemLogSms model = new SystemLogSms();
         model.setId(id);
+        model.setScene(String.valueOf(this.scene));
         model.setMobile(this.mobile);
         model.setStatus(status);
         model.setResults(result);

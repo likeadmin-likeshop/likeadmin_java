@@ -188,7 +188,7 @@ const onMove = (e: any) => {
 
 const getData = async () => {
     const data = await getDecorateTabbar()
-    tabbar.list = data.list.map((item: any) => ({ ...item, link: JSON.parse(item.link) }))
+    tabbar.list = data.list
     tabbar.style = data.style
 }
 const setData = async () => {

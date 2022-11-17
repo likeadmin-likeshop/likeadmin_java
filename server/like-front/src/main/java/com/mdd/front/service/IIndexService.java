@@ -1,8 +1,8 @@
 package com.mdd.front.service;
 
 import com.mdd.common.core.PageResult;
-import com.mdd.front.validate.PageParam;
-import com.mdd.front.vo.article.ArticleListVo;
+import com.mdd.front.validate.commons.PageValidate;
+import com.mdd.front.vo.article.ArticleListedVo;
 
 import java.util.List;
 import java.util.Map;
@@ -57,9 +57,9 @@ public interface IIndexService {
      * 搜索
      *
      * @author fzr
-     * @param pageParam 分页参数
+     * @param pageValidate 分页参数
      * @param params 搜索参数
      * @return PageResult<ArticleListVo>
      */
-    PageResult<ArticleListVo> search(PageParam pageParam, Map<String, String> params);
+    PageResult<ArticleListedVo> search(PageValidate pageValidate, Map<String, String> params);
 }
