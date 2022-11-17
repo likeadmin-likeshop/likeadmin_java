@@ -370,6 +370,8 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         model.setDeleteTime(System.currentTimeMillis() / 1000);
         systemAuthAdminMapper.updateById(model);
         this.cacheAdminUserByUid(id);
+
+        StpUtil.kickout(id);
     }
 
     /**
@@ -395,6 +397,10 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         systemAuthAdmin.setUpdateTime(TimeUtil.timestamp());
         systemAuthAdminMapper.updateById(systemAuthAdmin);
         this.cacheAdminUserByUid(id);
+
+        if (disable.equals(1)) {
+            StpUtil.kickout(id);
+        }
     }
 
     /**
@@ -404,7 +410,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
     public void cacheAdminUserByUid(Integer id) {
         SystemAuthAdmin sysAdmin = systemAuthAdminMapper.selectOne(
                 new QueryWrapper<SystemAuthAdmin>()
-                    .select("id,role,username,nickname,is_disable,is_delete")
+                    .select("id,role,username,nickname,is_multipoint,is_disable,is_delete")
                     .eq("id", id)
                     .last("limit 1"));
 
@@ -413,6 +419,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         user.put("roleId", sysAdmin.getRole());
         user.put("username", sysAdmin.getUsername());
         user.put("nickname", sysAdmin.getNickname());
+        user.put("isMultipoint", sysAdmin.getIsMultipoint());
         user.put("isDisable", sysAdmin.getIsDisable());
         user.put("isDelete", sysAdmin.getIsDelete());
 

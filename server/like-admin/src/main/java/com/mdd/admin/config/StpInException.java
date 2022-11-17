@@ -24,8 +24,11 @@ public class StpInException {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(NotLoginException.class)
     @ResponseBody
-    public AjaxResult<Object> handleNotLoginException(){
-        return AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
+    public AjaxResult<Object> handleNotLoginException(NotLoginException e){
+        String msg = e.getMessage().split("：")[0];
+        msg = msg.replaceFirst("Token", "您");
+        msg = msg.trim().equals("") ? HttpEnum.TOKEN_INVALID.getMsg() : msg;
+        return AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), msg);
     }
 
     /**

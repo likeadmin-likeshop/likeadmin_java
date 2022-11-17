@@ -22,7 +22,7 @@ import javax.annotation.Resource;
  * 相册管理
  */
 @RestController
-@RequestMapping("api/common/album")
+@RequestMapping("api/albums")
 public class AlbumsController {
 
     @Resource
