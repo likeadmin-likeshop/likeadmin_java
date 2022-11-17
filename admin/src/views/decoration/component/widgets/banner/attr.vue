@@ -33,14 +33,7 @@
                                             />
                                         </el-form-item>
                                         <el-form-item class="mt-[18px]" label="图片链接">
-                                            <link-picker
-                                                v-if="type == 'mobile'"
-                                                v-model="item.link"
-                                            />
-                                            <el-input
-                                                placeholder="请输入链接"
-                                                v-model="item.link.path"
-                                            />
+                                            <link-picker v-model="item.link" />
                                         </el-form-item>
                                     </div>
                                 </div>
@@ -70,10 +63,6 @@ const props = defineProps({
     styles: {
         type: Object as PropType<OptionsType['styles']>,
         default: () => ({})
-    },
-    type: {
-        type: String as PropType<'mobile' | 'pc'>,
-        default: 'mobile'
     }
 })
 
