@@ -21,6 +21,7 @@ import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.system.SystemAuthAdmin;
 import com.mdd.common.entity.system.SystemAuthMenu;
+import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.system.SystemAuthAdminMapper;
 import com.mdd.common.mapper.system.SystemAuthMenuMapper;
 import com.mdd.common.utils.*;
@@ -245,9 +246,14 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
      *
      * @author fzr
      * @param updateValidate 参数
+     * @param adminId 管理员ID
      */
     @Override
-    public void edit(SystemAdminUpdateValidate updateValidate) {
+    public void edit(SystemAdminUpdateValidate updateValidate, Integer adminId) {
+        if (adminId.equals(1) && !adminId.equals(updateValidate.getId())) {
+            throw new OperateException("您无权限编辑系统管理员!");
+        }
+
         String[] field = {"id", "username", "nickname"};
         Assert.notNull(systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select(field)

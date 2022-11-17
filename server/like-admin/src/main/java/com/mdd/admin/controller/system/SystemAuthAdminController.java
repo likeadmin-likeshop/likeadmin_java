@@ -95,7 +95,8 @@ public class SystemAuthAdminController {
     @Log(title = "管理员编辑")
     @PostMapping("/edit")
     public AjaxResult<Object> edit(@Validated @RequestBody SystemAdminUpdateValidate updateValidate) {
-        iSystemAuthAdminService.edit(updateValidate);
+        Integer adminId = LikeAdminThreadLocal.getAdminId();
+        iSystemAuthAdminService.edit(updateValidate, adminId);
         return AjaxResult.success();
     }
 

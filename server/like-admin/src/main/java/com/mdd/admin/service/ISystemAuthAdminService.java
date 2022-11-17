@@ -56,8 +56,9 @@ public interface ISystemAuthAdminService {
      *
      * @author fzr
      * @param updateValidate 参数
+     * @param adminId 管理员ID
      */
-    void edit(SystemAdminUpdateValidate updateValidate);
+    void edit(SystemAdminUpdateValidate updateValidate, Integer adminId);
 
     /**
      * 当前管理员更新
