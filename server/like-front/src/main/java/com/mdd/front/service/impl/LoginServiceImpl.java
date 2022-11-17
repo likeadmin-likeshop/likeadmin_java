@@ -163,12 +163,12 @@ public class LoginServiceImpl implements ILoginService {
             }
 
             String token = ToolsUtil.makeToken();
-            RedisUtil.set(FrontConfig.frontendTokenKey+token, userId, 7200);
-            String mobile = StringUtil.isNull(user.getMobile()) ? "" : user.getMobile();
+            int tokenValidTime = Integer.parseInt(YmlUtil.get("like.token-valid-time"));
+            RedisUtil.set(FrontConfig.frontendTokenKey+token, userId, tokenValidTime);
 
             LoginTokenVo vo = new LoginTokenVo();
             vo.setId(userId);
-            vo.setIsBindMobile(!mobile.equals(""));
+            vo.setIsBindMobile(!user.getMobile().equals(""));
             vo.setToken(token);
             return vo;
         } catch (WxErrorException e) {
@@ -215,7 +215,6 @@ public class LoginServiceImpl implements ILoginService {
         user.setLastLoginTime(System.currentTimeMillis() / 1000);
         userMapper.updateById(user);
 
-
         String token = ToolsUtil.makeToken();
         int tokenValidTime = Integer.parseInt(YmlUtil.get("like.token-valid-time"));
         RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), tokenValidTime);
@@ -258,7 +257,8 @@ public class LoginServiceImpl implements ILoginService {
         userMapper.updateById(user);
 
         String token = ToolsUtil.makeToken();
-        RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), 7201);
+        int tokenValidTime = Integer.parseInt(YmlUtil.get("like.token-valid-time"))+1;
+        RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), tokenValidTime-1);
 
         LoginTokenVo vo = new LoginTokenVo();
         vo.setId(user.getId());
@@ -342,7 +342,8 @@ public class LoginServiceImpl implements ILoginService {
             }
 
             String token = ToolsUtil.makeToken();
-            RedisUtil.set(FrontConfig.frontendTokenKey+token, userId, 7201);
+            int tokenValidTime = Integer.parseInt(YmlUtil.get("like.token-valid-time"))+1;
+            RedisUtil.set(FrontConfig.frontendTokenKey+token, userId, tokenValidTime-1);
 
             LoginTokenVo vo = new LoginTokenVo();
             vo.setId(user.getId());
