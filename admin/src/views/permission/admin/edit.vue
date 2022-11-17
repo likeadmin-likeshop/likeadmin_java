@@ -76,7 +76,7 @@
                             v-for="(item, index) in optionsData.role"
                             :key="index"
                             :label="item.name"
-                            :value="String(item.id)"
+                            :value="item.id"
                         />
                     </el-select>
                 </el-form-item>
