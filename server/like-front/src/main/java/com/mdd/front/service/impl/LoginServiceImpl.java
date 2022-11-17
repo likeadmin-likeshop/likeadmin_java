@@ -215,8 +215,10 @@ public class LoginServiceImpl implements ILoginService {
         user.setLastLoginTime(System.currentTimeMillis() / 1000);
         userMapper.updateById(user);
 
+
         String token = ToolsUtil.makeToken();
-        RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), 7200);
+        int tokenValidTime = Integer.parseInt(YmlUtil.get("like.token-valid-time"));
+        RedisUtil.set(FrontConfig.frontendTokenKey+token, user.getId(), tokenValidTime);
 
         LoginTokenVo vo = new LoginTokenVo();
         vo.setId(user.getId());

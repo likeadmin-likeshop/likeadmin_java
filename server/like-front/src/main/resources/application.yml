@@ -1,6 +1,11 @@
 # 项目配置
 like:
-  upload-directory: /www/uploads/likeadmin-java/ # 上传目录
+  # 上传目录
+  upload-directory: /www/uploads/likeadmin-java/
+  # 登录有效时间 (单位秒)
+  token-valid-time: 7200
+  # 登录续签时间 (不足以下秒数续签)
+  token-renew-time: 1800
 
 # 服务配置
 server:

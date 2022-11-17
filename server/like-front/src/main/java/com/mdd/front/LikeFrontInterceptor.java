@@ -9,6 +9,7 @@ import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.utils.RedisUtil;
 import com.mdd.common.utils.StringUtil;
+import com.mdd.common.utils.YmlUtil;
 import com.mdd.front.config.FrontConfig;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -78,22 +79,24 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
                 .last("limit 1"));
 
         // 校验用户被删除
-        if (user.getIsDelete() == 1) {
+        if (user.getIsDelete().equals(1)) {
             AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
 
         // 校验用户被禁用
-        if (user.getIsDisable() == 1) {
+        if (user.getIsDisable().equals(1)) {
             AjaxResult<Object> result = AjaxResult.failed(HttpEnum.LOGIN_DISABLE_ERROR.getCode(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
 
-        // 令牌剩余30分钟自动续签
-        if (RedisUtil.ttl(token) < 1800) {
-            RedisUtil.expire(token, 7200L);
+        // 令牌自动续签
+        int tokenRenewTime = Integer.parseInt(YmlUtil.get("like.token-renew-time"));
+        if (RedisUtil.ttl(token) < tokenRenewTime) {
+            long tokenValidTime = Long.parseLong(YmlUtil.get("like.token-valid-time"));
+            RedisUtil.expire(token, tokenValidTime);
         }
 
         // 写入本地线程
