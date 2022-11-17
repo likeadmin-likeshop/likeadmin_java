@@ -18,7 +18,6 @@ public class UserPasswordValidate implements Serializable {
     @Pattern(message = "密码必须是6-20字母+数字组合!", regexp="^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$")
     private String password;
 
-    @NotNull(message = "oldPassword参数缺失")
-    private String oldPassword;
+    private String oldPassword="";
 
 }
