@@ -1,6 +1,7 @@
 package com.mdd.admin.service.impl;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.admin.service.IDecorateTabbarService;
 import com.mdd.admin.validate.DecorateTabsValidate;
@@ -45,7 +46,7 @@ public class DecorateTabbarServiceImpl implements IDecorateTabbarService {
             vo.setName(tab.getName());
             vo.setSelected(UrlUtil.toAbsoluteUrl(tab.getSelected()));
             vo.setUnselected(UrlUtil.toAbsoluteUrl(tab.getUnselected()));
-            vo.setLink(tab.getLink());
+            vo.setLink(JSON.parse(tab.getLink()));
             vo.setCreateTime(TimeUtil.timestampToDate(tab.getCreateTime()));
             vo.setUpdateTime(TimeUtil.timestampToDate(tab.getUpdateTime()));
             tabList.add(vo);
@@ -71,10 +72,9 @@ public class DecorateTabbarServiceImpl implements IDecorateTabbarService {
         decorateTabbarMapper.delete(new QueryWrapper<DecorateTabbar>().gt("id", 0));
 
         for (DecorateTabsListsVo obj : tabsValidate.getList()) {
-
             DecorateTabbar model = new DecorateTabbar();
             model.setName(obj.getName());
-            model.setLink(obj.getLink());
+            model.setLink(JSON.toJSONString(obj.getLink()));
             model.setSelected(UrlUtil.toRelativeUrl(obj.getSelected()));
             model.setUnselected(UrlUtil.toRelativeUrl(obj.getUnselected()));
             model.setCreateTime(System.currentTimeMillis() / 1000);

@@ -18,7 +18,7 @@ public class DecorateTabsListsVo implements Serializable {
     private String name;
     private String selected;
     private String unselected;
-    private String link;
+    private Object link;
     private String createTime;
     private String updateTime;
 
