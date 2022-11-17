@@ -1,6 +1,5 @@
 package com.mdd.admin.validate.system;
 
-import com.mdd.common.validator.annotation.IDMust;
 import org.hibernate.validator.constraints.Length;
 import lombok.Data;
 
@@ -20,13 +19,13 @@ public class SystemAdminUpInfoValidate implements Serializable {
     private String nickname;
 
     @Length(min = 6, max = 32, message = "密码必须在6~32个字符内")
-    private String password;
+    private String password="";
 
     @Length(min = 6, max = 32, message = "当前密码错误")
-    private String currPassword;
+    private String currPassword="";
 
     @Length(min = 6, max = 32, message = "旧密码错误")
-    private String oldPassword;
+    private String oldPassword="";
 
     @Length(max = 200, message = "头像不能超出200个字符")
     private String avatar = "";
