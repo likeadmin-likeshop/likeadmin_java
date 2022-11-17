@@ -392,7 +392,8 @@ public class LoginServiceImpl implements ILoginService {
         }
 
         // 删除验证码
-        RedisUtil.del(GlobalConfig.redisSmsCode+"104:"+mobile);
+        int noticeTpe = NoticeEnum.SMS_FORGOT_PASSWORD_CODE.getCode();
+        RedisUtil.del(GlobalConfig.redisSmsCode+noticeTpe+":"+mobile);
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()
@@ -403,10 +404,13 @@ public class LoginServiceImpl implements ILoginService {
 
         // 验证账号
         Assert.notNull(user, "账号不存在!");
-        String pwd = ToolsUtil.makeMd5(password+user.getSalt());
+
+        String salt = ToolsUtil.randomString(5);
+        String pwd  = ToolsUtil.makeMd5(password.trim()+salt);
 
         // 更新密码
         user.setPassword(pwd);
+        user.setSalt(salt);
         user.setUpdateTime(System.currentTimeMillis() / 1000);
         userMapper.updateById(user);
     }
