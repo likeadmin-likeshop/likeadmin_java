@@ -132,7 +132,7 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
             smsMap.put("templateId", smsParam.getOrDefault("templateId", ""));
             smsMap.put("content", smsParam.getOrDefault("content", ""));
             smsMap.put("tips", smsParam.getOrDefault("tips", ""));
-            smsMap.put("status", smsParam.getOrDefault("status", ""));
+            smsMap.put("status", smsParam.getOrDefault("status", "0"));
         }
 
         Map<String, String> oaParam = ToolsUtil.objectToMap(params.get("oaNotice"));
@@ -145,7 +145,7 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
             oaMap.put("templateSn", oaParam.getOrDefault("templateSn", ""));
             oaMap.put("tpl", oaParam.getOrDefault("tpl", ""));
             oaMap.put("tips", oaParam.getOrDefault("tips", ""));
-            oaMap.put("status", oaParam.getOrDefault("status", ""));
+            oaMap.put("status", oaParam.getOrDefault("status", "0"));
         }
 
         Map<String, String> mnpParam = ToolsUtil.objectToMap(params.get("mnpNotice"));
