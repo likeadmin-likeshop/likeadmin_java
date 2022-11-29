@@ -52,8 +52,18 @@
                     </el-table-column>
                     <el-table-column label="账号" prop="username" min-width="100" />
                     <el-table-column label="名称" prop="nickname" min-width="100" />
-                    <el-table-column label="角色" prop="role" min-width="100" />
-                    <el-table-column label="部门" prop="dept" min-width="100" />
+                    <el-table-column
+                        label="角色"
+                        prop="role"
+                        show-tooltip-when-overflow
+                        min-width="100"
+                    />
+                    <el-table-column
+                        label="部门"
+                        prop="dept"
+                        show-tooltip-when-overflow
+                        min-width="100"
+                    />
                     <el-table-column label="创建时间" prop="createTime" min-width="180" />
                     <el-table-column label="最近登录时间" prop="lastLoginTime" min-width="180" />
                     <el-table-column label="最近登录IP" prop="lastLoginIp" min-width="120" />
