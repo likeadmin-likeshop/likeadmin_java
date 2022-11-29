@@ -92,11 +92,13 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
             } else {
                 List<String> role = new LinkedList<>();
                 List<Integer> roleIds = ArrayUtil.stringToListAsInt(vo.getRole(), ",");
-                List<SystemAuthRole> roleList = systemAuthRoleMapper.selectList(new QueryWrapper<SystemAuthRole>()
-                        .select("id,name")
-                        .in("id", roleIds));
-                for (SystemAuthRole d : roleList) {
-                    role.add(d.getName());
+                if (!roleIds.isEmpty()) {
+                    List<SystemAuthRole> roleList = systemAuthRoleMapper.selectList(new QueryWrapper<SystemAuthRole>()
+                            .select("id,name")
+                            .in("id", roleIds));
+                    for (SystemAuthRole d : roleList) {
+                        role.add(d.getName());
+                    }
                 }
                 vo.setRole(ArrayUtil.listToStringByStr(role, "/"));
             }
@@ -106,12 +108,14 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
             } else {
                 List<String> dept = new LinkedList<>();
                 List<Integer> deptIds = ArrayUtil.stringToListAsInt(vo.getDept(), ",");
-                List<SystemAuthDept> deptList = systemAuthDeptMapper.selectList(new QueryWrapper<SystemAuthDept>()
-                        .select("id,name")
-                        .in("id", deptIds)
-                        .eq("is_delete", 0));
-                for (SystemAuthDept d : deptList) {
-                    dept.add(d.getName());
+                if (!deptIds.isEmpty()) {
+                    List<SystemAuthDept> deptList = systemAuthDeptMapper.selectList(new QueryWrapper<SystemAuthDept>()
+                            .select("id,name")
+                            .in("id", deptIds)
+                            .eq("is_delete", 0));
+                    for (SystemAuthDept d : deptList) {
+                        dept.add(d.getName());
+                    }
                 }
                 vo.setDept(ArrayUtil.listToStringByStr(dept, "/"));
             }
