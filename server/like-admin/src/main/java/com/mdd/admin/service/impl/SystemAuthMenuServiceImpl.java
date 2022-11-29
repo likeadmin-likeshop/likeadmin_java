@@ -39,13 +39,13 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
      * 根据角色ID获取菜单
      *
      * @author fzr
-     * @param roleId 角色ID
+     * @param roleIds 角色ID
      * @return JSONArray
      */
     @Override
-    public JSONArray selectMenuByRoleId(Integer roleId) {
+    public JSONArray selectMenuByRoleId(List<Integer> roleIds) {
         Integer adminId = LikeAdminThreadLocal.getAdminId();
-        List<Integer> menuIds = iSystemAuthPermService.selectMenuIdsByRoleId(roleId);
+        List<Integer> menuIds = iSystemAuthPermService.selectMenuIdsByRoleId(roleIds);
 
         QueryWrapper<SystemAuthMenu> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("menu_type", Arrays.asList("M", "C"));

@@ -5,6 +5,8 @@ import com.mdd.admin.validate.system.SystemMenuCreateValidate;
 import com.mdd.admin.validate.system.SystemMenuUpdateValidate;
 import com.mdd.admin.vo.system.SystemAuthMenuVo;
 
+import java.util.List;
+
 /**
  * 系统菜单服务接口类
  */
@@ -16,7 +18,7 @@ public interface ISystemAuthMenuService {
      * @author fzr
      * @return JSONArray
      */
-    JSONArray selectMenuByRoleId(Integer roleId);
+    JSONArray selectMenuByRoleId(List<Integer> roleId);
 
     /**
      * 菜单列表

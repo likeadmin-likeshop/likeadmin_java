@@ -10,20 +10,22 @@ import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.admin.config.AdminConfig;
 import com.mdd.admin.service.ISystemAuthAdminService;
 import com.mdd.admin.service.ISystemAuthPermService;
-import com.mdd.admin.service.ISystemAuthRoleService;
 import com.mdd.admin.validate.commons.PageValidate;
 import com.mdd.admin.validate.system.SystemAdminCreateValidate;
 import com.mdd.admin.validate.system.SystemAdminSearchValidate;
 import com.mdd.admin.validate.system.SystemAdminUpInfoValidate;
 import com.mdd.admin.validate.system.SystemAdminUpdateValidate;
 import com.mdd.admin.vo.system.*;
-import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.system.SystemAuthAdmin;
+import com.mdd.common.entity.system.SystemAuthDept;
 import com.mdd.common.entity.system.SystemAuthMenu;
+import com.mdd.common.entity.system.SystemAuthRole;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.system.SystemAuthAdminMapper;
+import com.mdd.common.mapper.system.SystemAuthDeptMapper;
 import com.mdd.common.mapper.system.SystemAuthMenuMapper;
+import com.mdd.common.mapper.system.SystemAuthRoleMapper;
 import com.mdd.common.utils.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -44,7 +46,10 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
     SystemAuthMenuMapper systemAuthMenuMapper;
 
     @Resource
-    ISystemAuthRoleService iSystemAuthRoleService;
+    SystemAuthDeptMapper systemAuthDeptMapper;
+
+    @Resource
+    SystemAuthRoleMapper systemAuthRoleMapper;
 
     @Resource
     ISystemAuthPermService iSystemAuthPermService;
@@ -64,11 +69,9 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
 
         MPJQueryWrapper<SystemAuthAdmin> mpjQueryWrapper = new MPJQueryWrapper<>();
         mpjQueryWrapper.select("t.id,t.username,t.nickname,t.avatar," +
-                "sd.name as dept,sr.name as role,t.is_multipoint,t.is_disable," +
-                "t.last_login_ip,t.last_login_time,t.create_time,t.update_time")
+                "t.role_ids as role,t.dept_ids as dept,t.is_multipoint," +
+                "t.is_disable,t.last_login_ip,t.last_login_time,t.create_time,t.update_time")
             .eq("t.is_delete", 0)
-            .leftJoin("?_system_auth_role sr ON sr.id=t.role".replace("?_", GlobalConfig.tablePrefix))
-            .leftJoin("?_system_auth_dept sd ON sd.id=t.dept_id".replace("?_", GlobalConfig.tablePrefix))
             .orderByDesc(Arrays.asList("t.id", "t.sort"));
 
 
@@ -86,10 +89,31 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         for (SystemAuthAdminListedVo vo : iPage.getRecords()) {
             if (vo.getId().equals(1)) {
                 vo.setRole("系统管理员");
+            } else {
+                List<String> role = new LinkedList<>();
+                List<Integer> roleIds = ArrayUtil.stringToListAsInt(vo.getRole(), ",");
+                List<SystemAuthRole> roleList = systemAuthRoleMapper.selectList(new QueryWrapper<SystemAuthRole>()
+                        .select("id,name")
+                        .in("id", roleIds));
+                for (SystemAuthRole d : roleList) {
+                    role.add(d.getName());
+                }
+                vo.setRole(ArrayUtil.listToStringByStr(role, "/"));
             }
 
-            if (vo.getDept() == null) {
+            if (StringUtil.isNull(vo.getDept()) || vo.getDept().equals("")) {
                 vo.setDept("");
+            } else {
+                List<String> dept = new LinkedList<>();
+                List<Integer> deptIds = ArrayUtil.stringToListAsInt(vo.getDept(), ",");
+                List<SystemAuthDept> deptList = systemAuthDeptMapper.selectList(new QueryWrapper<SystemAuthDept>()
+                        .select("id,name")
+                        .in("id", deptIds)
+                        .eq("is_delete", 0));
+                for (SystemAuthDept d : deptList) {
+                    dept.add(d.getName());
+                }
+                vo.setDept(ArrayUtil.listToStringByStr(dept, "/"));
             }
 
             vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar()));
@@ -131,7 +155,8 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         // 角色权限
         List<String> auths = new LinkedList<>();
         if (adminId > 1) {
-            List<Integer> menuIds = iSystemAuthPermService.selectMenuIdsByRoleId(sysAdmin.getRole());
+            List<Integer> roleIds = ArrayUtil.stringToListAsInt(sysAdmin.getRoleIds(), ",");
+            List<Integer> menuIds = iSystemAuthPermService.selectMenuIdsByRoleId(roleIds);
             if (menuIds.size() > 0) {
                 List<SystemAuthMenu> systemAuthMenus = systemAuthMenuMapper.selectList(new QueryWrapper<SystemAuthMenu>()
                         .eq("is_disable", 0)
@@ -185,6 +210,9 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
 
         SystemAuthAdminDetailVo vo = new SystemAuthAdminDetailVo();
         BeanUtils.copyProperties(sysAdmin, vo);
+        vo.setRoleIds(ArrayUtil.stringToListAsInt(sysAdmin.getRoleIds(), ","));
+        vo.setDeptIds(ArrayUtil.stringToListAsInt(sysAdmin.getDeptIds(), ","));
+        vo.setPostIds(ArrayUtil.stringToListAsInt(sysAdmin.getPostIds(), ","));
         vo.setAvatar(UrlUtil.toAbsoluteUrl(sysAdmin.getAvatar()));
         vo.setCreateTime(TimeUtil.timestampToDate(sysAdmin.getCreateTime()));
         vo.setUpdateTime(TimeUtil.timestampToDate(sysAdmin.getUpdateTime()));
@@ -213,10 +241,6 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .eq("nickname", createValidate.getNickname())
                 .last("limit 1")), "昵称已存在换一个吧！");
 
-        SystemAuthRoleVo roleVo = iSystemAuthRoleService.detail(createValidate.getRole());
-        Assert.notNull(roleVo, "角色不存在!");
-        Assert.isTrue(roleVo.getIsDisable() <= 0, "当前角色已被禁用!");
-
         String salt = ToolsUtil.randomString(5);
         String pwd  = ToolsUtil.makeMd5(createValidate.getPassword().trim() + salt);
 
@@ -225,11 +249,11 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         String avatar = StringUtil.isNotEmpty(createValidate.getAvatar()) ? UrlUtil.toRelativeUrl(createAvatar) : defaultAvatar;
 
         SystemAuthAdmin model = new SystemAuthAdmin();
-        model.setDeptId(createValidate.getDeptId());
-        model.setPostId(createValidate.getPostId());
+        model.setRoleIds(ArrayUtil.listToStringByInt(createValidate.getRoleIds(), ","));
+        model.setDeptIds(ArrayUtil.listToStringByInt(createValidate.getDeptIds(), ","));
+        model.setPostIds(ArrayUtil.listToStringByInt(createValidate.getPostIds(), ","));
         model.setUsername(createValidate.getUsername());
         model.setNickname(createValidate.getNickname());
-        model.setRole(createValidate.getRole());
         model.setAvatar(avatar);
         model.setPassword(pwd);
         model.setSalt(salt);
@@ -275,17 +299,13 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .ne("id", updateValidate.getId())
                 .last("limit 1")), "昵称已存在换一个吧!");
 
-        if (updateValidate.getRole() > 0 && updateValidate.getId() != 1) {
-            Assert.notNull(iSystemAuthRoleService.detail(updateValidate.getRole()), "角色不存在!");
-        }
-
         SystemAuthAdmin model = new SystemAuthAdmin();
         model.setId(updateValidate.getId());
-        model.setDeptId(updateValidate.getDeptId());
-        model.setPostId(updateValidate.getPostId());
+        model.setRoleIds(ArrayUtil.listToStringByInt(updateValidate.getRoleIds(), ","));
+        model.setDeptIds(ArrayUtil.listToStringByInt(updateValidate.getDeptIds(), ","));
+        model.setPostIds(ArrayUtil.listToStringByInt(updateValidate.getPostIds(), ","));
         model.setNickname(updateValidate.getNickname());
         model.setAvatar(UrlUtil.toRelativeUrl(updateValidate.getAvatar()));
-        model.setRole(updateValidate.getId() == 1 ? 0 : updateValidate.getRole());
         model.setSort(updateValidate.getSort());
         model.setIsMultipoint(updateValidate.getIsMultipoint());
         model.setIsDisable(updateValidate.getIsDisable());
@@ -416,13 +436,13 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
     public void cacheAdminUserByUid(Integer id) {
         SystemAuthAdmin sysAdmin = systemAuthAdminMapper.selectOne(
                 new QueryWrapper<SystemAuthAdmin>()
-                    .select("id,role,username,nickname,is_multipoint,is_disable,is_delete")
+                    .select("id,role_ids,username,nickname,is_multipoint,is_disable,is_delete")
                     .eq("id", id)
                     .last("limit 1"));
 
         Map<String, Object> user = new LinkedHashMap<>();
         user.put("id", sysAdmin.getId());
-        user.put("roleId", sysAdmin.getRole());
+        user.put("roleIds", sysAdmin.getRoleIds());
         user.put("username", sysAdmin.getUsername());
         user.put("nickname", sysAdmin.getNickname());
         user.put("isMultipoint", sysAdmin.getIsMultipoint());

@@ -64,7 +64,7 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
             vo.setIsDisable(systemAuthRole.getIsDisable());
             vo.setCreateTime(TimeUtil.timestampToDate(systemAuthRole.getCreateTime()));
             vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthRole.getUpdateTime()));
-            vo.setMember(0L);
+            vo.setMember(0);
             vo.setRemark("");
             vo.setMenus(Collections.EMPTY_LIST);
             list.add(vo);
@@ -95,9 +95,8 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
             SystemAuthRoleVo vo = new SystemAuthRoleVo();
             BeanUtils.copyProperties(systemAuthRole, vo);
 
-            Long member = systemAuthAdminMapper.selectCount(new QueryWrapper<SystemAuthAdmin>()
-                    .eq("is_delete", 0)
-                    .eq("role", systemAuthRole.getId()));
+            List<Integer> ids = systemAuthAdminMapper.selectChildrenById(systemAuthRole.getId());
+            Integer member = ids.size();
 
             vo.setMenus(new ArrayList<>());
             vo.setMember(member);
@@ -124,14 +123,13 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
 
         Assert.notNull(systemAuthRole, "角色已不存在!");
 
-        Long member = systemAuthAdminMapper.selectCount(new QueryWrapper<SystemAuthAdmin>()
-                .eq("is_delete", 0)
-                .eq("role", systemAuthRole.getId()));
+        List<Integer> roleIds = new LinkedList<>();
+        roleIds.add(systemAuthRole.getId());
 
         SystemAuthRoleVo vo = new SystemAuthRoleVo();
         BeanUtils.copyProperties(systemAuthRole, vo);
-        vo.setMember(member);
-        vo.setMenus(iSystemAuthPermService.selectMenuIdsByRoleId(systemAuthRole.getId()));
+        vo.setMember(0);
+        vo.setMenus(iSystemAuthPermService.selectMenuIdsByRoleId(roleIds));
         vo.setCreateTime(TimeUtil.timestampToDate(systemAuthRole.getCreateTime()));
         vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthRole.getUpdateTime()));
 

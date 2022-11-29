@@ -3,6 +3,7 @@ package com.mdd.admin.vo.system;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 管理员详情Vo
@@ -13,9 +14,9 @@ public class SystemAuthAdminDetailVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;            // 主键
-    private Integer deptId;        // 部门ID
-    private Integer postId;        // 岗位ID
-    private Integer role;          // 角色ID
+    private List<Integer> roleIds; // 角色ID
+    private List<Integer> deptIds; // 部门ID
+    private List<Integer> postIds; // 岗位ID
     private String username;       // 账号
     private String nickname;       // 昵称
     private String avatar;         // 头像

@@ -1,6 +1,12 @@
 package com.mdd.admin;
 
+import com.mdd.common.utils.ArrayUtil;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * 本地线程
@@ -51,12 +57,12 @@ public class LikeAdminThreadLocal {
     /**
      * 获取角色ID
      */
-    public static Integer getRoleId() {
-        String roleId = LikeAdminThreadLocal.get("roleId").toString();
-        if (roleId.equals("")) {
-            return 0;
+    public static List<Integer> getRoleId() {
+        String roleIds = LikeAdminThreadLocal.get("roleIds").toString();
+        if (roleIds.equals("") || roleIds.equals("0")) {
+            return Collections.emptyList();
         }
-        return Integer.parseInt(roleId);
+        return ArrayUtil.stringToListAsInt(roleIds, ",");
     }
 
     /**

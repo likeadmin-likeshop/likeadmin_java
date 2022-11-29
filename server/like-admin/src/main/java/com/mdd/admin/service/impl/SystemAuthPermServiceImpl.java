@@ -38,15 +38,19 @@ public class SystemAuthPermServiceImpl implements ISystemAuthPermService {
     /**
      * 根据角色ID获取菜单ID
      *
-     * @param roleId 角色ID
+     * @param roleIds 角色ID
      * @return List<Integer>
      */
     @Override
-    public List<Integer> selectMenuIdsByRoleId(Integer roleId) {
+    public List<Integer> selectMenuIdsByRoleId(List<Integer> roleIds) {
         List<Integer> menus = new LinkedList<>();
 
+        if (roleIds.isEmpty()) {
+            return menus;
+        }
+
         SystemAuthRole systemAuthRole = systemAuthRoleMapper.selectOne(new QueryWrapper<SystemAuthRole>()
-                .eq("id", roleId)
+                .in("id", roleIds)
                 .eq("is_disable", 0)
                 .last("limit 1"));
 
@@ -55,7 +59,9 @@ public class SystemAuthPermServiceImpl implements ISystemAuthPermService {
         }
 
         List<SystemAuthPerm> systemAuthPerms = systemAuthPermMapper.selectList(
-                new QueryWrapper<SystemAuthPerm>().eq("role_id", roleId));
+                new QueryWrapper<SystemAuthPerm>()
+                        .in("role_id", roleIds));
+
         for (SystemAuthPerm systemAuthPerm : systemAuthPerms) {
             menus.add(systemAuthPerm.getMenuId());
         }

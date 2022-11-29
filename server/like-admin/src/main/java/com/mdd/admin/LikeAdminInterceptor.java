@@ -94,7 +94,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
 
         // 用户写本地线里
         LikeAdminThreadLocal.put("adminId", id);
-        LikeAdminThreadLocal.put("roleId", userMap.get("roleId"));
+        LikeAdminThreadLocal.put("roleIds", userMap.get("roleIds"));
         LikeAdminThreadLocal.put("username", userMap.get("username"));
         LikeAdminThreadLocal.put("nickname", userMap.get("nickname"));
 

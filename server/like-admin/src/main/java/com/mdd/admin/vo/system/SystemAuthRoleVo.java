@@ -16,7 +16,7 @@ public class SystemAuthRoleVo implements Serializable {
     private String name;        // 角色名称
     private String remark;      // 角色备注
     private Object menus;       // 关联菜单
-    private Long member;        // 成员数量
+    private Integer member;     // 成员数量
     private Integer sort;       // 角色排序
     private Integer isDisable;  // 是否禁用: [0=否, 1=是]
     private String createTime;  // 创建时间
