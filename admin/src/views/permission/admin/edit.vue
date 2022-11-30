@@ -28,13 +28,14 @@
                 <el-form-item label="名称" prop="nickname">
                     <el-input v-model="formData.nickname" placeholder="请输入名称" clearable />
                 </el-form-item>
-                <el-form-item label="归属部门" prop="deptId">
+                <el-form-item label="归属部门" prop="deptIds">
                     <el-tree-select
                         class="flex-1"
-                        v-model="formData.deptId"
+                        v-model="formData.deptIds"
                         :data="optionsData.dept"
                         clearable
                         node-key="id"
+                        multiple
                         :props="{
                             value: 'id',
                             label: 'name',
@@ -47,11 +48,12 @@
                         placeholder="请选择上级部门"
                     />
                 </el-form-item>
-                <el-form-item label="岗位" prop="deptId">
+                <el-form-item label="岗位" prop="postIds">
                     <el-select
                         class="flex-1"
                         clearable
-                        v-model="formData.postId"
+                        multiple
+                        v-model="formData.postIds"
                         placeholder="请选择岗位"
                     >
                         <el-option
@@ -63,10 +65,11 @@
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="角色" prop="role">
+                <el-form-item label="角色" prop="roleIds">
                     <el-select
-                        v-model="formData.role"
+                        v-model="formData.roleIds"
                         :disabled="isRoot"
+                        multiple
                         class="flex-1"
                         clearable
                         placeholder="请选择角色"
@@ -135,12 +138,12 @@ const popupTitle = computed(() => {
 })
 
 const formData = reactive({
-    id: '',
+    id: 0,
     username: '',
     nickname: '',
-    deptId: '',
-    postId: '',
-    role: '',
+    deptIds: [],
+    postIds: [],
+    roleIds: [],
     avatar: '',
     password: '',
     passwordConfirm: '',
@@ -149,7 +152,7 @@ const formData = reactive({
 })
 
 const isRoot = computed(() => {
-    return formData.role == '0'
+    return formData.id == 1
 })
 
 const passwordConfirmValidator = (rule: object, value: string, callback: any) => {
@@ -174,8 +177,9 @@ const formRules = reactive({
             trigger: ['blur']
         }
     ],
-    role: [
+    roleIds: [
         {
+            type: 'array',
             required: true,
             message: '请选择角色',
             trigger: ['blur']
@@ -239,8 +243,6 @@ const setFormData = async (row: any) => {
             //@ts-ignore
             formData[key] = data[key]
         }
-        Number(formData.deptId) == 0 && (formData.deptId = '')
-        Number(formData.postId) == 0 && (formData.postId = '')
     }
     formRules.password = []
     formRules.passwordConfirm = [
