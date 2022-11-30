@@ -1,6 +1,6 @@
 package com.mdd.admin.controller;
 
-import com.mdd.admin.service.IIndexCommonService;
+import com.mdd.admin.service.IIndexService;
 import com.mdd.common.core.AjaxResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class IndexController {
 
     @Resource
-    IIndexCommonService iIndexCommonService;
+    IIndexService iIndexService;
 
     /**
      * 控制台
@@ -29,7 +29,7 @@ public class IndexController {
      */
     @GetMapping("/console")
     public AjaxResult<Map<String, Object>> console() {
-        Map<String, Object> map = iIndexCommonService.console();
+        Map<String, Object> map = iIndexService.console();
         return AjaxResult.success(map);
     }
 
@@ -41,7 +41,7 @@ public class IndexController {
      */
     @GetMapping("/config")
     public AjaxResult<Map<String, Object>> config() {
-        Map<String, Object> map = iIndexCommonService.config();
+        Map<String, Object> map = iIndexService.config();
         return AjaxResult.success(map);
     }
 

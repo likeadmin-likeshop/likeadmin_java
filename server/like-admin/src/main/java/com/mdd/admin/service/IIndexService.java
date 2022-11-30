@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * 主页服务接口类
  */
-public interface IIndexCommonService {
+public interface IIndexService {
 
     /**
      * 控制台数据

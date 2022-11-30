@@ -1,6 +1,6 @@
 package com.mdd.admin.service.impl;
 
-import com.mdd.admin.service.IIndexCommonService;
+import com.mdd.admin.service.IIndexService;
 import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.utils.ArrayUtil;
 import com.mdd.common.utils.ConfigUtil;
@@ -14,7 +14,7 @@ import java.util.*;
  * 主页服务实现类
  */
 @Service
-public class IndexCommonServiceImpl implements IIndexCommonService {
+public class IndexServiceImpl implements IIndexService {
 
     /**
      * 控制台数据
