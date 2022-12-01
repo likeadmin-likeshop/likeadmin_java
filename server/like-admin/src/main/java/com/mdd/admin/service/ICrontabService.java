@@ -1,5 +1,7 @@
 package com.mdd.admin.service;
 
+import com.mdd.admin.validate.CrontabCreateValidate;
+import com.mdd.admin.validate.CrontabUpdateValidate;
 import com.mdd.admin.validate.commons.PageValidate;
 import com.mdd.admin.vo.CrontabDetailVo;
 import com.mdd.admin.vo.CrontabListedVo;
@@ -19,12 +21,37 @@ public interface ICrontabService {
      */
     PageResult<CrontabListedVo> list(PageValidate pageValidate);
 
-    CrontabDetailVo detail();
+    /**
+     * 计划任务详情
+     *
+     * @author fzr
+     * @param id 主键
+     * @return CrontabDetailVo
+     */
+    CrontabDetailVo detail(Integer id);
 
-    void add();
+    /**
+     * 计划任务新增
+     *
+     * @author fzr
+     * @param createValidate 参数
+     */
+    void add(CrontabCreateValidate createValidate);
 
-    void edit();
+    /**
+     * 计划任务编辑
+     *
+     * @author fzr
+     * @param updateValidate 参数
+     */
+    void edit(CrontabUpdateValidate updateValidate);
 
-    void del();
+    /**
+     * 计划任务删除
+     *
+     * @author fzr
+     * @param id 主键
+     */
+    void del(Integer id);
 
 }
