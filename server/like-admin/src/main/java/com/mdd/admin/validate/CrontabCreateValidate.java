@@ -15,6 +15,9 @@ public class CrontabCreateValidate implements Serializable {
     @NotNull(message = "name参数缺失")
     private String name;
 
+    @NotNull(message = "groups参数缺失")
+    private String groups;
+
     @NotNull(message = "command参数缺失")
     private String command;
 
