@@ -10,6 +10,7 @@ import com.mdd.admin.vo.CrontabListedVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
+import org.quartz.SchedulerException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,7 +57,7 @@ public class CrontabController {
      * @return AjaxResult<Object>
      */
     @PostMapping("/add")
-    public AjaxResult<Object> add(@Validated @RequestBody CrontabCreateValidate createValidate) {
+    public AjaxResult<Object> add(@Validated @RequestBody CrontabCreateValidate createValidate) throws SchedulerException {
         iCrontabService.add(createValidate);
         return AjaxResult.success();
     }
@@ -69,7 +70,7 @@ public class CrontabController {
      * @return AjaxResult<Object>
      */
     @PostMapping("/edit")
-    public AjaxResult<Object> edit(@Validated @RequestBody CrontabUpdateValidate updateValidate) {
+    public AjaxResult<Object> edit(@Validated @RequestBody CrontabUpdateValidate updateValidate) throws SchedulerException {
         iCrontabService.edit(updateValidate);
         return AjaxResult.success();
     }
@@ -82,7 +83,7 @@ public class CrontabController {
      * @return AjaxResult<Object>
      */
     @PostMapping("/del")
-    public AjaxResult<Object> del(@Validated @RequestBody IdValidate idValidate) {
+    public AjaxResult<Object> del(@Validated @RequestBody IdValidate idValidate) throws SchedulerException {
         iCrontabService.del(idValidate.getId());
         return AjaxResult.success();
     }

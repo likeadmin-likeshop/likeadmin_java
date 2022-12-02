@@ -3,6 +3,7 @@ package com.mdd.admin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mdd.admin.config.quartz.QuartzUtils;
 import com.mdd.admin.service.ICrontabService;
 import com.mdd.admin.validate.CrontabCreateValidate;
 import com.mdd.admin.validate.CrontabUpdateValidate;
@@ -11,12 +12,15 @@ import com.mdd.admin.vo.CrontabDetailVo;
 import com.mdd.admin.vo.CrontabListedVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.Crontab;
-import com.mdd.common.entity.server.Sys;
 import com.mdd.common.mapper.CrontabMapper;
+import com.mdd.common.utils.TimeUtil;
+import org.quartz.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +32,25 @@ import java.util.List;
 public class CrontabServiceImpl implements ICrontabService {
 
     @Resource
+    Scheduler scheduler;
+
+    @Resource
     CrontabMapper crontabMapper;
+
+    /**
+     * 项目启动初始化任务
+     *
+     * @author fzr
+     * @throws SchedulerException 异常
+     */
+    @PostConstruct
+    public void init() throws SchedulerException {
+        scheduler.clear();
+        List<Crontab> jobs = crontabMapper.selectList(new QueryWrapper<Crontab>().eq("is_delete", 0));
+        for (Crontab crontab : jobs) {
+            QuartzUtils.createScheduleJob(scheduler, crontab);
+        }
+    }
 
     /**
      * 计划任务列表
@@ -52,6 +74,8 @@ public class CrontabServiceImpl implements ICrontabService {
             CrontabListedVo vo = new CrontabListedVo();
             BeanUtils.copyProperties(crontab, vo);
 
+            vo.setStartTime(crontab.getStartTime()<=0?"-": TimeUtil.timestampToDate(crontab.getStartTime()));
+            vo.setEndTime(crontab.getEndTime()<=0?"-": TimeUtil.timestampToDate(crontab.getEndTime()));
             list.add(vo);
         }
 
@@ -87,16 +111,21 @@ public class CrontabServiceImpl implements ICrontabService {
      * @param createValidate 参数
      */
     @Override
-    public void add(CrontabCreateValidate createValidate) {
+    @Transactional
+    public void add(CrontabCreateValidate createValidate) throws SchedulerException {
         Crontab crontab = new Crontab();
         crontab.setName(createValidate.getName());
         crontab.setCommand(createValidate.getCommand());
         crontab.setRules(createValidate.getRules());
         crontab.setStatus(createValidate.getStatus());
         crontab.setRemark(createValidate.getRemark());
+        crontab.setStrategy(createValidate.getStrategy());
+        crontab.setConcurrent(createValidate.getConcurrent());
         crontab.setCreateTime(System.currentTimeMillis() / 1000);
         crontab.setUpdateTime(System.currentTimeMillis() / 1000);
         crontabMapper.insert(crontab);
+
+        QuartzUtils.createScheduleJob(scheduler, crontab);
     }
 
     /**
@@ -106,7 +135,8 @@ public class CrontabServiceImpl implements ICrontabService {
      * @param updateValidate 参数
      */
     @Override
-    public void edit(CrontabUpdateValidate updateValidate) {
+    @Transactional
+    public void edit(CrontabUpdateValidate updateValidate) throws SchedulerException {
         Crontab crontab = crontabMapper.selectOne(
                 new QueryWrapper<Crontab>()
                         .eq("id", updateValidate.getId())
@@ -117,15 +147,27 @@ public class CrontabServiceImpl implements ICrontabService {
 
         crontab.setName(updateValidate.getName());
         crontab.setCommand(updateValidate.getCommand());
+        crontab.setGroups(updateValidate.getGroups());
         crontab.setRules(updateValidate.getRules());
         crontab.setStatus(updateValidate.getStatus());
         crontab.setRemark(updateValidate.getRemark());
+        crontab.setStrategy(updateValidate.getStrategy());
+        crontab.setConcurrent(updateValidate.getConcurrent());
         crontab.setUpdateTime(System.currentTimeMillis() / 1000);
         crontabMapper.updateById(crontab);
+
+        QuartzUtils.createScheduleJob(scheduler, crontab);
     }
 
+    /**
+     * 计划任务删除
+     *
+     * @author fzr
+     * @param id 主键
+     */
     @Override
-    public void del(Integer id) {
+    @Transactional
+    public void del(Integer id) throws SchedulerException {
         Crontab crontab = crontabMapper.selectOne(
                 new QueryWrapper<Crontab>()
                         .eq("id", id)
@@ -137,6 +179,8 @@ public class CrontabServiceImpl implements ICrontabService {
         crontab.setIsDelete(1);
         crontab.setDeleteTime(System.currentTimeMillis() / 1000);
         crontabMapper.updateById(crontab);
+
+        scheduler.deleteJob(QuartzUtils.getJobKey(crontab.getId(), crontab.getGroups()));
     }
 
 }
