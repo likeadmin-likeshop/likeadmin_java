@@ -235,6 +235,13 @@ const open = (type = 'add') => {
 }
 
 const setFormData = async (row: any) => {
+    formRules.password = []
+    formRules.passwordConfirm = [
+        {
+            validator: passwordConfirmValidator,
+            trigger: 'blur'
+        }
+    ]
     const data = await adminDetail({
         id: row.id
     })
@@ -244,13 +251,6 @@ const setFormData = async (row: any) => {
             formData[key] = data[key]
         }
     }
-    formRules.password = []
-    formRules.passwordConfirm = [
-        {
-            validator: passwordConfirmValidator,
-            trigger: 'blur'
-        }
-    ]
 }
 
 const handleClose = () => {
