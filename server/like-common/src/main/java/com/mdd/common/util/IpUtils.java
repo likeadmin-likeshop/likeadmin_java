@@ -1,7 +1,6 @@
-package com.mdd.common.utils;
+package com.mdd.common.util;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.mdd.common.config.GlobalConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +12,9 @@ import java.net.UnknownHostException;
 /**
  * IP工具类
  */
-public class IpUtil {
+public class IpUtils {
 
-    private static final Logger log = LoggerFactory.getLogger(IpUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(IpUtils.class);
 
     /**
      * 获取客户端IP
@@ -24,7 +23,7 @@ public class IpUtil {
      * @return IP地址 (113.67.10.194)
      */
     public static String getIpAddress() {
-        HttpServletRequest request = RequestUtil.handler();
+        HttpServletRequest request = RequestUtils.handler();
         if (request == null) {
             return "unknown";
         }
@@ -61,13 +60,13 @@ public class IpUtil {
         String UNKNOWN = "XX XX";
 
         // 内网不查询
-        if (IpUtil.internalIp(ip)) {
+        if (IpUtils.internalIp(ip)) {
             return "内网IP";
         }
         if (GlobalConfig.isAddressEnabled) {
             try {
-                String rspStr = HttpUtil.sendGet(IP_URL, "ip=" + ip + "&json=true", "GBK");
-                if (StringUtil.isEmpty(rspStr)) {
+                String rspStr = HttpUtils.sendGet(IP_URL, "ip=" + ip + "&json=true", "GBK");
+                if (StringUtils.isEmpty(rspStr)) {
                     log.error("获取地理位置异常 {}", ip);
                     return UNKNOWN;
                 }
@@ -263,7 +262,7 @@ public class IpUtil {
      * @return 是否未知
      */
     public static boolean isUnknown(String checkString) {
-        return StringUtils.isBlank(checkString) || "unknown".equalsIgnoreCase(checkString);
+        return com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(checkString) || "unknown".equalsIgnoreCase(checkString);
     }
 
 }

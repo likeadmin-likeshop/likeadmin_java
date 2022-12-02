@@ -1,4 +1,4 @@
-package com.mdd.common.utils;
+package com.mdd.common.util;
 
 import org.springframework.util.AntPathMatcher;
 
@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * 字符串工具类
  */
-public class StringUtil extends org.apache.commons.lang3.StringUtils {
+public class StringUtils extends org.apache.commons.lang3.StringUtils {
     /**
      * 空字符串
      */
@@ -235,18 +235,18 @@ public class StringUtil extends org.apache.commons.lang3.StringUtils {
      */
     public static List<String> str2List(String str, String sep, boolean filterBlank, boolean trim) {
         List<String> list = new ArrayList<String>();
-        if (StringUtil.isEmpty(str)) {
+        if (StringUtils.isEmpty(str)) {
             return list;
         }
 
         // 过滤空白字符串
-        if (filterBlank && StringUtil.isBlank(str)) {
+        if (filterBlank && StringUtils.isBlank(str)) {
             return list;
         }
 
         String[] split = str.split(sep);
         for (String string : split) {
-            if (filterBlank && StringUtil.isBlank(string)) {
+            if (filterBlank && StringUtils.isBlank(string)) {
                 continue;
             }
             if (trim) {

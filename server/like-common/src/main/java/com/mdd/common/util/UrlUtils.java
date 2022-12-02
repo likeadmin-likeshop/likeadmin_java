@@ -1,4 +1,4 @@
-package com.mdd.common.utils;
+package com.mdd.common.util;
 
 import com.mdd.common.config.GlobalConfig;
 
@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * 文件路径处理工具
  */
-public class UrlUtil {
+public class UrlUtils {
 
     /**
      * 访问前缀
@@ -33,16 +33,16 @@ public class UrlUtil {
         }
 
         if (url.startsWith("/api/static/")) {
-            return RequestUtil.uri() + url;
+            return RequestUtils.uri() + url;
         }
 
-        String engine = ConfigUtil.get("storage", "default", "local");
+        String engine = ConfigUtils.get("storage", "default", "local");
         engine = engine.equals("") ? "local" : engine;
         if (engine.equals("local")) {
-            return RequestUtil.uri() + "/" + uploadPrefix + url;
+            return RequestUtils.uri() + "/" + uploadPrefix + url;
         }
 
-        Map<String, String> config = ConfigUtil.getMap("storage", engine);
+        Map<String, String> config = ConfigUtils.getMap("storage", engine);
         if (config != null) {
             return config.getOrDefault("domain", "") + url;
         }
@@ -63,14 +63,14 @@ public class UrlUtil {
             return "";
         }
 
-        String engine = ConfigUtil.get("storage", "default", "local");
+        String engine = ConfigUtils.get("storage", "default", "local");
         engine = engine.equals("") ? "local" : engine;
         if (engine.equals("local")) {
-            return url.replace(RequestUtil.uri(), "")
+            return url.replace(RequestUtils.uri(), "")
                       .replace("/" + uploadPrefix + "/", "");
         }
 
-        Map<String, String> config = ConfigUtil.getMap("storage", engine);
+        Map<String, String> config = ConfigUtils.getMap("storage", engine);
         if (config != null) {
             return url.replace(config.getOrDefault("domain", ""), "")
                     .replace( "/" + uploadPrefix + "/", "");
@@ -87,13 +87,13 @@ public class UrlUtil {
      * @return String
      */
     public static String domain() {
-        String engine = ConfigUtil.get("storage", "default", "local");
+        String engine = ConfigUtils.get("storage", "default", "local");
         engine = engine.equals("") ? "local" : engine;
         if (engine.equals("local")) {
-            return RequestUtil.uri() + "/";
+            return RequestUtils.uri() + "/";
         }
 
-        Map<String, String> config = ConfigUtil.getMap("storage", engine);
+        Map<String, String> config = ConfigUtils.getMap("storage", engine);
         if (config != null) {
             return config.getOrDefault("domain", "") + "/";
         }

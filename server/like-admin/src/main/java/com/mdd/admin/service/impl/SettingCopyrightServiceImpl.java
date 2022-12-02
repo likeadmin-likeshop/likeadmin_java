@@ -4,8 +4,8 @@ import com.alibaba.fastjson2.JSON;
 import com.mdd.admin.service.ISettingCopyrightService;
 import com.mdd.admin.validate.setting.SettingCopyrightValidate;
 import com.mdd.admin.vo.setting.SettingCopyrightVo;
-import com.mdd.common.utils.ArrayUtil;
-import com.mdd.common.utils.ConfigUtil;
+import com.mdd.common.util.ArrayUtils;
+import com.mdd.common.util.ConfigUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -24,8 +24,8 @@ public class SettingCopyrightServiceImpl implements ISettingCopyrightService {
      */
     @Override
     public List<SettingCopyrightVo> detail() {
-        String config = ConfigUtil.get("website", "copyright", "[]");
-        List<Map<String, String>> copyright = ArrayUtil.stringToListAsMapStr(config);
+        String config = ConfigUtils.get("website", "copyright", "[]");
+        List<Map<String, String>> copyright = ArrayUtils.stringToListAsMapStr(config);
 
         List<SettingCopyrightVo> list = new LinkedList<>();
         for (Map<String, String> map : copyright) {
@@ -47,7 +47,7 @@ public class SettingCopyrightServiceImpl implements ISettingCopyrightService {
     @Override
     public void save(SettingCopyrightValidate copyrightValidate) {
         String s = JSON.toJSONString(copyrightValidate.getList());
-        ConfigUtil.set("website", "copyright", s);
+        ConfigUtils.set("website", "copyright", s);
     }
 
 }

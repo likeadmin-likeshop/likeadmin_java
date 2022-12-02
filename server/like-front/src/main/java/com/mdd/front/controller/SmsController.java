@@ -8,8 +8,8 @@ import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.system.SystemLogSmsMapper;
 import com.mdd.common.plugin.notice.NoticeDriver;
 import com.mdd.common.plugin.notice.NoticeParams;
-import com.mdd.common.utils.StringUtil;
-import com.mdd.common.utils.ToolsUtil;
+import com.mdd.common.util.StringUtils;
+import com.mdd.common.util.ToolsUtils;
 import com.mdd.front.validate.commons.SmsValidate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,7 +49,7 @@ public class SmsController {
                 .orderByDesc("id")
                 .last("limit 1"));
 
-        if (StringUtil.isNotNull(systemLogSms)) {
+        if (StringUtils.isNotNull(systemLogSms)) {
             if (systemLogSms.getCreateTime() >= (System.currentTimeMillis() / 1000 - 60)){
                 throw new OperateException("操作频繁,请稍后再试!");
             }
@@ -59,7 +59,7 @@ public class SmsController {
                 .setScene(smsValidate.getScene())
                 .setMobile(smsValidate.getMobile())
                 .setParams(new String[] {
-                    "code:" + ToolsUtil.randomInt(4)
+                    "code:" + ToolsUtils.randomInt(4)
                 });
 
         (new NoticeDriver()).handle(params);

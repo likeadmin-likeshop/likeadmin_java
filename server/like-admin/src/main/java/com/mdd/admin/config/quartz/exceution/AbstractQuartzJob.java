@@ -3,8 +3,8 @@ package com.mdd.admin.config.quartz.exceution;
 import com.mdd.admin.config.quartz.TaskConstants;
 import com.mdd.common.entity.Crontab;
 import com.mdd.common.mapper.CrontabMapper;
-import com.mdd.common.utils.SpringUtil;
-import com.mdd.common.utils.StringUtil;
+import com.mdd.common.util.SpringUtils;
+import com.mdd.common.util.StringUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
@@ -61,12 +61,12 @@ public abstract class AbstractQuartzJob implements Job {
         crontab.setStartTime(startTime / 1000);
         crontab.setEndTime(endTime / 1000);
         crontab.setTaskTime(endTime - startTime);
-        if (StringUtil.isNotNull(e)) {
+        if (StringUtils.isNotNull(e)) {
             crontab.setError(e.getMessage());
             crontab.setStatus(TaskConstants.STATUS_FAIL);
         }
 
-        SpringUtil.getBean(CrontabMapper.class).updateById(crontab);
+        SpringUtils.getBean(CrontabMapper.class).updateById(crontab);
     }
 
     /**

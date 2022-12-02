@@ -3,7 +3,7 @@ package com.mdd.admin.config.quartz;
 import com.mdd.admin.config.quartz.exceution.QuartzDisExecution;
 import com.mdd.admin.config.quartz.exceution.QuartzJobExecution;
 import com.mdd.common.entity.Crontab;
-import com.mdd.common.utils.StringUtil;
+import com.mdd.common.util.StringUtils;
 import org.quartz.*;
 
 /**
@@ -91,7 +91,7 @@ public class QuartzUtils {
         }
 
         // 如果过期则调度
-        if (StringUtil.isNotNull(CronUtils.nextExecution(job.getRules()))) {
+        if (StringUtils.isNotNull(CronUtils.nextExecution(job.getRules()))) {
             scheduler.scheduleJob(jobDetail, trigger);
         }
 

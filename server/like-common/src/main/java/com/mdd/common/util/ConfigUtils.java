@@ -1,4 +1,4 @@
-package com.mdd.common.utils;
+package com.mdd.common.util;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.common.entity.system.SystemConfig;
@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * 数据库配置操作工具
  */
-public class ConfigUtil {
+public class ConfigUtils {
 
     /**
      * 根据类型获取配置
@@ -21,7 +21,7 @@ public class ConfigUtil {
      * @return Map<String, String>
      */
     public static Map<String, String> get(String type) {
-        SystemConfigMapper model = SpringUtil.getBean(SystemConfigMapper.class);
+        SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
 
         List<SystemConfig> configs = model.selectList(
                 new QueryWrapper<SystemConfig>()
@@ -45,7 +45,7 @@ public class ConfigUtil {
      * @return String
      */
     public static String get(String type, String name) {
-        SystemConfigMapper model = SpringUtil.getBean(SystemConfigMapper.class);
+        SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
 
         SystemConfig config = model.selectOne(
                 new QueryWrapper<SystemConfig>()
@@ -65,7 +65,7 @@ public class ConfigUtil {
      * @return String
      */
     public static String get(String type, String name, String defaults) {
-        SystemConfigMapper model = SpringUtil.getBean(SystemConfigMapper.class);
+        SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
 
         SystemConfig config = model.selectOne(
                 new QueryWrapper<SystemConfig>()
@@ -89,7 +89,7 @@ public class ConfigUtil {
      * @return String
      */
     public static Map<String, String> getMap(String type, String name) {
-        SystemConfigMapper model = SpringUtil.getBean(SystemConfigMapper.class);
+        SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
 
         SystemConfig config = model.selectOne(
                 new QueryWrapper<SystemConfig>()
@@ -105,7 +105,7 @@ public class ConfigUtil {
             return new LinkedHashMap<>();
         }
 
-        return ToolsUtil.jsonToMap(config.getValue());
+        return ToolsUtils.jsonToMap(config.getValue());
     }
 
     /**
@@ -117,7 +117,7 @@ public class ConfigUtil {
      * @param val 值
      */
     public static void set(String type, String name, String val) {
-        SystemConfigMapper model = SpringUtil.getBean(SystemConfigMapper.class);
+        SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
 
         SystemConfig config = model.selectOne(
                 new QueryWrapper<SystemConfig>()

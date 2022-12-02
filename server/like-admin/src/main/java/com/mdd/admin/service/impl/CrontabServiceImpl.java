@@ -13,7 +13,7 @@ import com.mdd.admin.vo.CrontabListedVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.Crontab;
 import com.mdd.common.mapper.CrontabMapper;
-import com.mdd.common.utils.TimeUtil;
+import com.mdd.common.util.TimeUtils;
 import org.quartz.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -74,8 +74,8 @@ public class CrontabServiceImpl implements ICrontabService {
             CrontabListedVo vo = new CrontabListedVo();
             BeanUtils.copyProperties(crontab, vo);
 
-            vo.setStartTime(crontab.getStartTime()<=0?"-": TimeUtil.timestampToDate(crontab.getStartTime()));
-            vo.setEndTime(crontab.getEndTime()<=0?"-": TimeUtil.timestampToDate(crontab.getEndTime()));
+            vo.setStartTime(crontab.getStartTime()<=0?"-": TimeUtils.timestampToDate(crontab.getStartTime()));
+            vo.setEndTime(crontab.getEndTime()<=0?"-": TimeUtils.timestampToDate(crontab.getEndTime()));
             list.add(vo);
         }
 

@@ -1,4 +1,4 @@
-package com.mdd.common.utils;
+package com.mdd.common.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -6,13 +6,13 @@ import java.math.RoundingMode;
 /**
  * 算术运算工具
  */
-public class ArithUtil {
+public class ArithUtils {
 
     /** 默认除法运算精度 */
     private static final int DEF_DIV_SCALE = 10;
 
     /** 这个类不能实例化 */
-    private ArithUtil() {}
+    private ArithUtils() {}
 
     /**
      * 提供精确的加法运算

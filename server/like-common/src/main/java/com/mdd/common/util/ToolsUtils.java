@@ -1,4 +1,4 @@
-package com.mdd.common.utils;
+package com.mdd.common.util;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * 常用工具集合
  */
-public class ToolsUtil {
+public class ToolsUtils {
 
     /**
      * 制作UUID
@@ -55,10 +55,10 @@ public class ToolsUtil {
      */
     public static String makeToken() {
         long millisecond =  System.currentTimeMillis();
-        String randStr =  ToolsUtil.randomString(8);
+        String randStr =  ToolsUtils.randomString(8);
         String secret  = GlobalConfig.secret;
-        String token   = ToolsUtil.makeMd5(ToolsUtil.makeUUID() + millisecond + randStr);
-        return ToolsUtil.makeMd5(token + secret) + ToolsUtil.randomString(6);
+        String token   = ToolsUtils.makeMd5(ToolsUtils.makeUUID() + millisecond + randStr);
+        return ToolsUtils.makeMd5(token + secret) + ToolsUtils.randomString(6);
     }
 
     /**

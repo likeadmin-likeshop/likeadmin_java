@@ -2,14 +2,13 @@ package com.mdd.admin;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.alibaba.fastjson2.JSON;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.mdd.admin.config.AdminConfig;
 import com.mdd.admin.service.ISystemAuthAdminService;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.HttpEnum;
-import com.mdd.common.utils.RedisUtil;
-import com.mdd.common.utils.StringUtil;
-import com.mdd.common.utils.ToolsUtil;
+import com.mdd.common.util.RedisUtils;
+import com.mdd.common.util.StringUtils;
+import com.mdd.common.util.ToolsUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -55,7 +54,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
 
         // Token是否为空
         String token = StpUtil.getTokenValue();
-        if (StringUtils.isBlank(token)) {
+        if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(token)) {
             AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_EMPTY.getCode(), HttpEnum.TOKEN_EMPTY.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
@@ -63,20 +62,20 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
 
         // Token是否过期
         Object id = StpUtil.getLoginId();
-        if (StringUtil.isNull(id)) {
+        if (StringUtils.isNull(id)) {
             AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
 
         // Users是否存在
-        if (!RedisUtil.hExists(AdminConfig.backstageManageKey, id)) {
+        if (!RedisUtils.hExists(AdminConfig.backstageManageKey, id)) {
             iSystemAuthAdminService.cacheAdminUserByUid(Integer.parseInt(id.toString()));
         }
 
         // 获取用户的信息
-        String UserStr =  RedisUtil.hGet(AdminConfig.backstageManageKey, String.valueOf(id)).toString();
-        Map<String, String> userMap = ToolsUtil.jsonToMap(UserStr);
+        String UserStr =  RedisUtils.hGet(AdminConfig.backstageManageKey, String.valueOf(id)).toString();
+        Map<String, String> userMap = ToolsUtils.jsonToMap(UserStr);
 
         // 校验用户被删除
         if (userMap.get("isDelete").equals("1")) {

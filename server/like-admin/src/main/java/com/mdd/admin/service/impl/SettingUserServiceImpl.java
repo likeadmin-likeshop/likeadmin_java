@@ -3,8 +3,8 @@ package com.mdd.admin.service.impl;
 import com.mdd.admin.service.ISettingUserService;
 import com.mdd.admin.validate.setting.SettingUserValidate;
 import com.mdd.admin.vo.setting.SettingUserVo;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.UrlUtil;
+import com.mdd.common.util.ConfigUtils;
+import com.mdd.common.util.UrlUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,10 +21,10 @@ public class SettingUserServiceImpl implements ISettingUserService {
      */
     @Override
     public SettingUserVo detail() {
-        String defaultAvatar = ConfigUtil.get("user", "defaultAvatar", "");
+        String defaultAvatar = ConfigUtils.get("user", "defaultAvatar", "");
 
         SettingUserVo vo = new SettingUserVo();
-        vo.setDefaultAvatar(UrlUtil.toAbsoluteUrl(defaultAvatar));
+        vo.setDefaultAvatar(UrlUtils.toAbsoluteUrl(defaultAvatar));
         return vo;
     }
 
@@ -36,7 +36,7 @@ public class SettingUserServiceImpl implements ISettingUserService {
      */
     @Override
     public void save(SettingUserValidate userValidate) {
-        ConfigUtil.set("user", "defaultAvatar", UrlUtil.toRelativeUrl(userValidate.getDefaultAvatar()));
+        ConfigUtils.set("user", "defaultAvatar", UrlUtils.toRelativeUrl(userValidate.getDefaultAvatar()));
     }
 
 }

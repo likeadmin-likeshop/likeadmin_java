@@ -1,7 +1,7 @@
 package com.mdd.front.config;
 
 import com.mdd.common.config.GlobalConfig;
-import com.mdd.common.utils.YmlUtil;
+import com.mdd.common.util.YmlUtils;
 import com.mdd.front.LikeFrontInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
@@ -43,7 +43,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
-        String directory = YmlUtil.get("like.upload-directory");
+        String directory = YmlUtils.get("like.upload-directory");
         registry.addResourceHandler("/"+ GlobalConfig.publicPrefix +"/**")
                 .addResourceLocations("file:" + directory);
     }

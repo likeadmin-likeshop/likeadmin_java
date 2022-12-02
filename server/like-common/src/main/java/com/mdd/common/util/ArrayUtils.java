@@ -1,4 +1,4 @@
-package com.mdd.common.utils;
+package com.mdd.common.util;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * 数组工具类
  */
-public class ArrayUtil {
+public class ArrayUtils {
 
     /**
      * JSONArray转树形结构
@@ -151,7 +151,7 @@ public class ArrayUtil {
         if (str.contains(regex)){
             String[] split = str.split(regex);
             for (String value : split) {
-                if(!StringUtil.isBlank(value)){
+                if(!StringUtils.isBlank(value)){
                     list.add(Long.parseLong(value.trim()));
                 }
             }
@@ -177,7 +177,7 @@ public class ArrayUtil {
         if (str.contains(regex)){
             String[] split = str.split(regex);
             for (String value : split) {
-                if(!StringUtil.isBlank(value)){
+                if(!StringUtils.isBlank(value)){
                     list.add(Integer.parseInt(value.trim()));
                 }
             }
@@ -200,7 +200,7 @@ public class ArrayUtil {
         if (str.contains(regex)){
             String[] split = str.split(regex);
             for (String value : split) {
-                if(!StringUtil.isBlank(value)){
+                if(!StringUtils.isBlank(value)){
                     list.add(value.trim());
                 }
             }
@@ -242,7 +242,7 @@ public class ArrayUtil {
      * @return Map<String, Object>
      */
     public static List<Map<String, Object>> stringToListAsMapObj(String s) {
-        if (StringUtil.isEmpty(s)) {
+        if (StringUtils.isEmpty(s)) {
             return Collections.emptyList();
         }
         Type type = new TypeToken<List<Map<String, Object>>>() {}.getType();
@@ -257,7 +257,7 @@ public class ArrayUtil {
      * @return Map<String, String>
      */
     public static List<Map<String, String>> stringToListAsMapStr(String s) {
-        if (StringUtil.isEmpty(s)) {
+        if (StringUtils.isEmpty(s)) {
             return Collections.emptyList();
         }
         Type type = new TypeToken<List<Map<String, String>>>() {}.getType();
@@ -272,7 +272,7 @@ public class ArrayUtil {
      * @return List<Long>
      */
     public static List<Integer> objectToListAsLong(Object object) {
-        if (StringUtil.isNull(object)) {
+        if (StringUtils.isNull(object)) {
             return Collections.emptyList();
         }
         Type type = new TypeToken<List<Long>>() {}.getType();
@@ -287,7 +287,7 @@ public class ArrayUtil {
      * @return List<Integer>
      */
     public static List<Integer> objectToListAsInt(Object object) {
-        if (StringUtil.isNull(object)) {
+        if (StringUtils.isNull(object)) {
             return Collections.emptyList();
         }
         Type type = new TypeToken<List<Integer>>() {}.getType();
@@ -302,7 +302,7 @@ public class ArrayUtil {
      * @return List<String>
      */
     public static List<String> objectToListAsStr(Object object) {
-        if (StringUtil.isNull(object)) {
+        if (StringUtils.isNull(object)) {
             return Collections.emptyList();
         }
         Type type = new TypeToken<List<String>>() {}.getType();

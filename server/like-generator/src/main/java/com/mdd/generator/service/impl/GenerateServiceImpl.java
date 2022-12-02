@@ -9,8 +9,8 @@ import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.PageResult;
 
 import com.mdd.common.exception.OperateException;
-import com.mdd.common.utils.StringUtil;
-import com.mdd.common.utils.TimeUtil;
+import com.mdd.common.util.StringUtils;
+import com.mdd.common.util.TimeUtils;
 import com.mdd.generator.constant.GenConstants;
 import com.mdd.generator.entity.GenTable;
 import com.mdd.generator.entity.GenTableColumn;
@@ -113,8 +113,8 @@ public class GenerateServiceImpl implements IGenerateService {
         for (GenTable item : iPage.getRecords()) {
             GenTableVo vo = new GenTableVo();
             BeanUtils.copyProperties(item, vo);
-            vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(item.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(item.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(item.getUpdateTime()));
             list.add(vo);
         }
 
@@ -141,8 +141,8 @@ public class GenerateServiceImpl implements IGenerateService {
         base.put("entityName", genTable.getEntityName());
         base.put("authorName", genTable.getAuthorName());
         base.put("remarks", genTable.getRemarks());
-        base.put("createTime", TimeUtil.timestampToDate(genTable.getCreateTime()));
-        base.put("updateTime", TimeUtil.timestampToDate(genTable.getUpdateTime()));
+        base.put("createTime", TimeUtils.timestampToDate(genTable.getCreateTime()));
+        base.put("updateTime", TimeUtils.timestampToDate(genTable.getUpdateTime()));
         maps.put("base", base);
 
         // 生成信息
@@ -167,8 +167,8 @@ public class GenerateServiceImpl implements IGenerateService {
         for (GenTableColumn item : genTableColumnMapper.selectList(queryWrapper)) {
             GenColumnVo vo = new GenColumnVo();
             BeanUtils.copyProperties(item, vo);
-            vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(item.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(item.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(item.getUpdateTime()));
             columns.add(vo);
         }
 
@@ -298,7 +298,7 @@ public class GenerateServiceImpl implements IGenerateService {
                 new QueryWrapper<GenTableColumn>()
                          .eq("table_id", id)
                         .orderByAsc("sort"));
-        Assert.isFalse(StringUtil.isEmpty(genTableColumns), "旧数据异常！");
+        Assert.isFalse(StringUtils.isEmpty(genTableColumns), "旧数据异常！");
 
         // 原表转Map
         Map<String, GenTableColumn> tableColumnMap = genTableColumns
@@ -307,7 +307,7 @@ public class GenerateServiceImpl implements IGenerateService {
 
         // 新表数据
         List<GenTableColumn> columns = genTableMapper.selectDbTableColumnsByName(genTable.getTableName());
-        if (StringUtil.isNull(columns)) {
+        if (StringUtils.isNull(columns)) {
             throw new OperateException("同步结构失败,原表结构不存在！");
         }
 
@@ -341,7 +341,7 @@ public class GenerateServiceImpl implements IGenerateService {
         List<GenTableColumn> delColumns = genTableColumns.stream()
                 .filter(column -> !dbTableColumnNames.contains(column.getColumnName()))
                 .collect(Collectors.toList());
-        if (StringUtil.isNotEmpty(delColumns)) {
+        if (StringUtils.isNotEmpty(delColumns)) {
             for (GenTableColumn item : delColumns) {
                 genTableColumnMapper.deleteById(item);
             }

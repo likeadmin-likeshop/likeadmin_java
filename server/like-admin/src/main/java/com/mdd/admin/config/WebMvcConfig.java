@@ -2,7 +2,7 @@ package com.mdd.admin.config;
 
 import com.mdd.admin.LikeAdminInterceptor;
 import com.mdd.common.config.GlobalConfig;
-import com.mdd.common.utils.YmlUtil;
+import com.mdd.common.util.YmlUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -47,7 +47,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
-        String directory = YmlUtil.get("like.upload-directory");
+        String directory = YmlUtils.get("like.upload-directory");
         registry.addResourceHandler("/"+ GlobalConfig.publicPrefix +"/**")
                 .addResourceLocations("file:" + directory);
     }

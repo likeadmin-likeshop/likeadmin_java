@@ -2,14 +2,13 @@ package com.mdd.front;
 
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.mapper.user.UserMapper;
-import com.mdd.common.utils.RedisUtil;
-import com.mdd.common.utils.StringUtil;
-import com.mdd.common.utils.YmlUtil;
+import com.mdd.common.util.RedisUtils;
+import com.mdd.common.util.StringUtils;
+import com.mdd.common.util.YmlUtils;
 import com.mdd.front.config.FrontConfig;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -46,8 +45,8 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
         token = FrontConfig.frontendTokenKey + token;
         List<String> notLoginUri = Arrays.asList(FrontConfig.notLoginUri);
         if (notLoginUri.contains(request.getRequestURI())) {
-            if (StringUtil.isNotEmpty(token)) {
-                Object uid = RedisUtil.get(token);
+            if (StringUtils.isNotEmpty(token)) {
+                Object uid = RedisUtils.get(token);
                 if (uid != null) {
                     Integer userId = Integer.parseInt(uid.toString());
                     LikeFrontThreadLocal.put("userId", userId);
@@ -57,21 +56,21 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
         }
 
         // Token是否为空
-        if (StringUtils.isBlank(token)) {
+        if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(token)) {
             AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_EMPTY.getCode(), HttpEnum.TOKEN_EMPTY.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
 
         // Token是否过期
-        if (!RedisUtil.exists(token)) {
+        if (!RedisUtils.exists(token)) {
             AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
 
         // 用户信息缓存
-        Object uid = RedisUtil.get(token);
+        Object uid = RedisUtils.get(token);
         Integer userId = Integer.parseInt(uid.toString());
         User user = userMapper.selectOne(new QueryWrapper<User>()
                 .select("id,sn,username,nickname,mobile,is_disable,is_delete")
@@ -93,10 +92,10 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
         }
 
         // 令牌自动续签
-        int tokenRenewTime = Integer.parseInt(YmlUtil.get("like.token-renew-time"));
-        if (RedisUtil.ttl(token) < tokenRenewTime) {
-            long tokenValidTime = Long.parseLong(YmlUtil.get("like.token-valid-time"));
-            RedisUtil.expire(token, tokenValidTime);
+        int tokenRenewTime = Integer.parseInt(YmlUtils.get("like.token-renew-time"));
+        if (RedisUtils.ttl(token) < tokenRenewTime) {
+            long tokenValidTime = Long.parseLong(YmlUtils.get("like.token-valid-time"));
+            RedisUtils.expire(token, tokenValidTime);
         }
 
         // 写入本地线程

@@ -3,9 +3,9 @@ package com.mdd.admin.service.impl;
 import com.mdd.admin.service.IChannelMpConfigService;
 import com.mdd.admin.validate.channel.ChannelMpValidate;
 import com.mdd.admin.vo.channel.ChannelMpVo;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.RequestUtil;
-import com.mdd.common.utils.UrlUtil;
+import com.mdd.common.util.ConfigUtils;
+import com.mdd.common.util.RequestUtils;
+import com.mdd.common.util.UrlUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -24,17 +24,17 @@ public class ChannelMpConfigServiceImpl implements IChannelMpConfigService {
      */
     @Override
     public ChannelMpVo detail() {
-        Map<String, String> config = ConfigUtil.get("mp_channel");
+        Map<String, String> config = ConfigUtils.get("mp_channel");
 
         ChannelMpVo vo = new ChannelMpVo();
         vo.setName(config.getOrDefault("name", ""));
         vo.setPrimaryId(config.getOrDefault("primaryId", ""));
         vo.setAppId(config.getOrDefault("appId", ""));
         vo.setAppSecret(config.getOrDefault("appSecret", ""));
-        vo.setQrCode(UrlUtil.toAbsoluteUrl(config.getOrDefault("qrCode", "")));
+        vo.setQrCode(UrlUtils.toAbsoluteUrl(config.getOrDefault("qrCode", "")));
 
 
-        String domain = RequestUtil.domain();
+        String domain = RequestUtils.domain();
         vo.setRequestDomain(domain);
         vo.setSocketDomain(domain);
         vo.setUploadFileDomain(domain);
@@ -54,11 +54,11 @@ public class ChannelMpConfigServiceImpl implements IChannelMpConfigService {
      */
     @Override
     public void save(ChannelMpValidate channelMpValidate) {
-        ConfigUtil.set("mp_channel", "name", channelMpValidate.getName());
-        ConfigUtil.set("mp_channel", "primaryId", channelMpValidate.getPrimaryId());
-        ConfigUtil.set("mp_channel", "appId", channelMpValidate.getAppId());
-        ConfigUtil.set("mp_channel", "appSecret", channelMpValidate.getAppSecret());
-        ConfigUtil.set("mp_channel", "qrCode", UrlUtil.toRelativeUrl(channelMpValidate.getQrCode()));
+        ConfigUtils.set("mp_channel", "name", channelMpValidate.getName());
+        ConfigUtils.set("mp_channel", "primaryId", channelMpValidate.getPrimaryId());
+        ConfigUtils.set("mp_channel", "appId", channelMpValidate.getAppId());
+        ConfigUtils.set("mp_channel", "appSecret", channelMpValidate.getAppSecret());
+        ConfigUtils.set("mp_channel", "qrCode", UrlUtils.toRelativeUrl(channelMpValidate.getQrCode()));
     }
 
 }

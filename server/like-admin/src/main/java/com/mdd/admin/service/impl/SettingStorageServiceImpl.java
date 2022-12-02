@@ -3,8 +3,8 @@ package com.mdd.admin.service.impl;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.admin.service.ISettingStorageService;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.StringUtil;
+import com.mdd.common.util.ConfigUtils;
+import com.mdd.common.util.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,7 +23,7 @@ public class SettingStorageServiceImpl implements ISettingStorageService {
      */
     @Override
     public List<Map<String, Object>> list() {
-        String engine = ConfigUtil.get("storage", "default", "local");
+        String engine = ConfigUtils.get("storage", "default", "local");
         List<Map<String, Object>> list = new LinkedList<>();
 
         Map<String, Object> local = new LinkedHashMap<>();
@@ -66,9 +66,9 @@ public class SettingStorageServiceImpl implements ISettingStorageService {
      */
     @Override
     public Map<String, Object> detail(String alias) {
-        String engine = ConfigUtil.get("storage", "default", "local");
-        Map<String, String> config = ConfigUtil.getMap("storage", alias);
-        config = StringUtil.isNotNull(config) ? config : Collections.emptyMap();
+        String engine = ConfigUtils.get("storage", "default", "local");
+        Map<String, String> config = ConfigUtils.getMap("storage", alias);
+        config = StringUtils.isNotNull(config) ? config : Collections.emptyMap();
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("name", config.getOrDefault("name", ""));
@@ -119,13 +119,13 @@ public class SettingStorageServiceImpl implements ISettingStorageService {
             }
         }
 
-        ConfigUtil.set("storage", params.get("alias"), JSON.toJSONString(map));
+        ConfigUtils.set("storage", params.get("alias"), JSON.toJSONString(map));
 
-        String engine = ConfigUtil.get("storage", "default", "local");
+        String engine = ConfigUtils.get("storage", "default", "local");
         if (Integer.parseInt(params.get("status")) == 1) {
-            ConfigUtil.set("storage", "default", params.get("alias"));
+            ConfigUtils.set("storage", "default", params.get("alias"));
         } else if (engine.equals(params.get("alias")) && Integer.parseInt(params.get("status")) == 0) {
-            ConfigUtil.set("storage", "default", "");
+            ConfigUtils.set("storage", "default", "");
         }
     }
 
@@ -138,11 +138,11 @@ public class SettingStorageServiceImpl implements ISettingStorageService {
      */
     @Override
     public void change(String alias, Integer status) {
-        String engine = ConfigUtil.get("storage", "default", "local");
+        String engine = ConfigUtils.get("storage", "default", "local");
         if (engine.equals(alias) && status == 0) {
-            ConfigUtil.set("storage", "default", "");
+            ConfigUtils.set("storage", "default", "");
         } else {
-            ConfigUtil.set("storage", "default", alias);
+            ConfigUtils.set("storage", "default", alias);
         }
     }
 

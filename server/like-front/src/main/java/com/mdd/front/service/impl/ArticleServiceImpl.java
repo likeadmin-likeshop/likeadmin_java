@@ -13,9 +13,9 @@ import com.mdd.common.entity.article.ArticleCollect;
 import com.mdd.common.mapper.article.ArticleCategoryMapper;
 import com.mdd.common.mapper.article.ArticleCollectMapper;
 import com.mdd.common.mapper.article.ArticleMapper;
-import com.mdd.common.utils.StringUtil;
-import com.mdd.common.utils.TimeUtil;
-import com.mdd.common.utils.UrlUtil;
+import com.mdd.common.util.StringUtils;
+import com.mdd.common.util.TimeUtils;
+import com.mdd.common.util.UrlUtils;
 import com.mdd.front.service.IArticleService;
 import com.mdd.front.validate.commons.PageValidate;
 import com.mdd.front.vo.article.ArticleCateVo;
@@ -101,8 +101,8 @@ public class ArticleServiceImpl implements IArticleService {
             ArticleListedVo vo = new ArticleListedVo();
             BeanUtils.copyProperties(article, vo);
             vo.setCollect(false);
-            vo.setImage(UrlUtil.toAbsoluteUrl(article.getImage()));
-            vo.setCreateTime(TimeUtil.timestampToDate(article.getCreateTime()));
+            vo.setImage(UrlUtils.toAbsoluteUrl(article.getImage()));
+            vo.setCreateTime(TimeUtils.timestampToDate(article.getCreateTime()));
             list.add(vo);
 
             ids.add(article.getId());
@@ -156,8 +156,8 @@ public class ArticleServiceImpl implements IArticleService {
         ArticleDetailVo vo = new ArticleDetailVo();
         BeanUtils.copyProperties(article, vo);
         vo.setCollect(articleCollect != null);
-        vo.setImage(UrlUtil.toAbsoluteUrl(article.getImage()));
-        vo.setCreateTime(TimeUtil.timestampToDate(article.getCreateTime()));
+        vo.setImage(UrlUtils.toAbsoluteUrl(article.getImage()));
+        vo.setCreateTime(TimeUtils.timestampToDate(article.getCreateTime()));
 
         article.setVisit(article.getVisit() + 1);
         articleMapper.updateById(article);
@@ -192,8 +192,8 @@ public class ArticleServiceImpl implements IArticleService {
                 mpjQueryWrapper);
 
         for (ArticleCollectVo vo : iPage.getRecords()) {
-            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()));
-            vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
+            vo.setImage(UrlUtils.toAbsoluteUrl(vo.getImage()));
+            vo.setCreateTime(TimeUtils.timestampToDate(vo.getCreateTime()));
         }
 
         return PageResult.iPageHandle(iPage);
@@ -214,7 +214,7 @@ public class ArticleServiceImpl implements IArticleService {
                     .eq("user_id", userId)
                     .last("limit 1"));
 
-        if (StringUtil.isNotNull(articleCollect)) {
+        if (StringUtils.isNotNull(articleCollect)) {
             articleCollect.setIsDelete(0);
             articleCollect.setUpdateTime(System.currentTimeMillis() / 1000);
             articleCollectMapper.updateById(articleCollect);

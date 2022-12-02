@@ -1,4 +1,4 @@
-package com.mdd.common.utils;
+package com.mdd.common.util;
 
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * 系统文件配置操作工具
  */
 @Component
-public class YmlUtil implements EnvironmentAware {
+public class YmlUtils implements EnvironmentAware {
 
     private static Environment env;
 
@@ -20,7 +20,7 @@ public class YmlUtil implements EnvironmentAware {
      */
     @Override
     public void setEnvironment(Environment environment) {
-        YmlUtil.env = environment;
+        YmlUtils.env = environment;
     }
 
     /**

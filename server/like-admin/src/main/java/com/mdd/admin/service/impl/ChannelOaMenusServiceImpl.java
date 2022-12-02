@@ -5,7 +5,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.admin.service.IChannelOaMenusService;
 import com.mdd.common.exception.OperateException;
-import com.mdd.common.utils.*;
+import com.mdd.common.util.*;
 import me.chanjar.weixin.common.bean.menu.WxMenu;
 import me.chanjar.weixin.common.bean.menu.WxMenuButton;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -29,7 +29,7 @@ public class ChannelOaMenusServiceImpl implements IChannelOaMenusService {
      */
     @Override
     public JSONArray detail() {
-        String json = ConfigUtil.get("oa_channel", "menus", "[]");
+        String json = ConfigUtils.get("oa_channel", "menus", "[]");
         return JSONArray.parseArray(json);
     }
 
@@ -48,7 +48,7 @@ public class ChannelOaMenusServiceImpl implements IChannelOaMenusService {
 
         List<Map<String, String>> params = new LinkedList<>();
         for (Object o : objs) {
-            params.add(ToolsUtil.objectToMap(o));
+            params.add(ToolsUtils.objectToMap(o));
         }
 
         List<WxMenuButton> menuButtons = new LinkedList<>();
@@ -79,7 +79,7 @@ public class ChannelOaMenusServiceImpl implements IChannelOaMenusService {
              // 子级菜单
             if (Integer.parseInt(item.get("menuType")) == 2) {
                 Assert.notNull(item.get("subButtons"), "子级菜单不能为空");
-                List<Map<String, String>> subButtons = ArrayUtil.stringToListAsMapStr(item.get("subButtons"));
+                List<Map<String, String>> subButtons = ArrayUtils.stringToListAsMapStr(item.get("subButtons"));
 
                 if (subButtons.size() > 5) {
                     throw new OperateException("子级菜单超出限制(最多5个)");
@@ -105,14 +105,14 @@ public class ChannelOaMenusServiceImpl implements IChannelOaMenusService {
             }
         }
 
-        ConfigUtil.set("oa_channel", "menus", JSON.toJSONString(objs));
+        ConfigUtils.set("oa_channel", "menus", JSON.toJSONString(objs));
 
         if (isPublish) {
             try {
                 WxMenu wxMenu = new WxMenu();
                 wxMenu.setButtons(menuButtons);
 
-                WxMpService wxMpService = WeChatUtil.official();
+                WxMpService wxMpService = WeChatUtils.official();
                 WxMpMenuService wxMpMenuService = new WxMpMenuServiceImpl(wxMpService);
                 wxMpMenuService.menuCreate(wxMenu);
             } catch (WxErrorException e) {

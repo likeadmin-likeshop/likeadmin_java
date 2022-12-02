@@ -12,7 +12,7 @@ import com.mdd.admin.vo.setting.SettingDictTypeVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.setting.DictType;
 import com.mdd.common.mapper.setting.DictTypeMapper;
-import com.mdd.common.utils.TimeUtil;
+import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -50,8 +50,8 @@ public class SettingDictTypeServiceImpl implements ISettingDictTypeService {
             SettingDictTypeVo vo = new SettingDictTypeVo();
             BeanUtils.copyProperties(dictType, vo);
 
-            vo.setCreateTime(TimeUtil.timestampToDate(dictType.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(dictType.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(dictType.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(dictType.getUpdateTime()));
             list.add(vo);
         }
 
@@ -89,8 +89,8 @@ public class SettingDictTypeServiceImpl implements ISettingDictTypeService {
             SettingDictTypeVo vo = new SettingDictTypeVo();
             BeanUtils.copyProperties(dictType, vo);
 
-            vo.setCreateTime(TimeUtil.timestampToDate(dictType.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(dictType.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(dictType.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(dictType.getUpdateTime()));
             list.add(vo);
         }
 
@@ -116,8 +116,8 @@ public class SettingDictTypeServiceImpl implements ISettingDictTypeService {
 
         SettingDictTypeVo vo = new SettingDictTypeVo();
         BeanUtils.copyProperties(dictType, vo);
-        vo.setCreateTime(TimeUtil.timestampToDate(dictType.getCreateTime()));
-        vo.setUpdateTime(TimeUtil.timestampToDate(dictType.getUpdateTime()));
+        vo.setCreateTime(TimeUtils.timestampToDate(dictType.getCreateTime()));
+        vo.setUpdateTime(TimeUtils.timestampToDate(dictType.getUpdateTime()));
         return vo;
     }
 

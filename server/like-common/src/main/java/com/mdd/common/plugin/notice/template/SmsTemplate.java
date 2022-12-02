@@ -1,6 +1,6 @@
 package com.mdd.common.plugin.notice.template;
 
-import com.mdd.common.utils.ToolsUtil;
+import com.mdd.common.util.ToolsUtils;
 import lombok.Data;
 
 import java.util.Map;
@@ -24,7 +24,7 @@ public class SmsTemplate {
      * 设置参数
      */
     public void setParams(String smsNotice) {
-        Map<String, String> config = ToolsUtil.jsonToMap(smsNotice);
+        Map<String, String> config = ToolsUtils.jsonToMap(smsNotice);
         this.setTemplateId(config.getOrDefault("templateId", ""));
         this.setContent(config.getOrDefault("content", ""));
         this.setStatus(Integer.parseInt(config.getOrDefault("status", "0")));

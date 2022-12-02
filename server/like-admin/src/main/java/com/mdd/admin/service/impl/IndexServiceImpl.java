@@ -2,10 +2,10 @@ package com.mdd.admin.service.impl;
 
 import com.mdd.admin.service.IIndexService;
 import com.mdd.common.config.GlobalConfig;
-import com.mdd.common.utils.ArrayUtil;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.TimeUtil;
-import com.mdd.common.utils.UrlUtil;
+import com.mdd.common.util.ArrayUtils;
+import com.mdd.common.util.ConfigUtils;
+import com.mdd.common.util.TimeUtils;
+import com.mdd.common.util.UrlUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -28,7 +28,7 @@ public class IndexServiceImpl implements IIndexService {
 
         // 版本信息
         Map<String, Object> version = new LinkedHashMap<>();
-        version.put("name", ConfigUtil.get("website", "name", "LikeAdmin-Java"));
+        version.put("name", ConfigUtils.get("website", "name", "LikeAdmin-Java"));
         version.put("version", GlobalConfig.version);
         version.put("website", "www.likeadmin.cn");
         version.put("based", "Vue3.x、ElementUI、MySQL");
@@ -53,7 +53,7 @@ public class IndexServiceImpl implements IIndexService {
 
         // 访客图表
         Map<String, Object> visitor = new LinkedHashMap<>();
-        visitor.put("date", TimeUtil.daysAgoDate(15));
+        visitor.put("date", TimeUtils.daysAgoDate(15));
         visitor.put("list", Arrays.asList(12,13,11,5,8,22,14,9,456,62,78,12,18,22,46));
         console.put("visitor", visitor);
 
@@ -68,16 +68,16 @@ public class IndexServiceImpl implements IIndexService {
      */
     @Override
     public Map<String, Object> config() {
-        Map<String, String> website   = ConfigUtil.get("website");
-        String copyright = ConfigUtil.get("website", "copyright", "");
+        Map<String, String> website   = ConfigUtils.get("website");
+        String copyright = ConfigUtils.get("website", "copyright", "");
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("webName", website.getOrDefault("name", ""));
-        map.put("webLogo", UrlUtil.toAbsoluteUrl(website.getOrDefault("logo", "")));
-        map.put("webFavicon", UrlUtil.toAbsoluteUrl(website.getOrDefault("favicon", "")));
-        map.put("webBackdrop", UrlUtil.toAbsoluteUrl(website.getOrDefault("backdrop", "")));
-        map.put("ossDomain", UrlUtil.domain());
-        map.put("copyright", ArrayUtil.stringToListAsMapStr(copyright));
+        map.put("webLogo", UrlUtils.toAbsoluteUrl(website.getOrDefault("logo", "")));
+        map.put("webFavicon", UrlUtils.toAbsoluteUrl(website.getOrDefault("favicon", "")));
+        map.put("webBackdrop", UrlUtils.toAbsoluteUrl(website.getOrDefault("backdrop", "")));
+        map.put("ossDomain", UrlUtils.domain());
+        map.put("copyright", ArrayUtils.stringToListAsMapStr(copyright));
 
         return map;
     }

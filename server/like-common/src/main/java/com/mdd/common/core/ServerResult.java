@@ -1,9 +1,9 @@
 package com.mdd.common.core;
 
 import com.mdd.common.entity.server.*;
-import com.mdd.common.utils.ArithUtil;
-import com.mdd.common.utils.IpUtil;
-import com.mdd.common.utils.TimeUtil;
+import com.mdd.common.util.ArithUtils;
+import com.mdd.common.util.IpUtils;
+import com.mdd.common.util.TimeUtils;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.CentralProcessor.TickType;
@@ -69,11 +69,11 @@ public class ServerResult {
         long idle = ticks[TickType.IDLE.getIndex()] - prevTicks[TickType.IDLE.getIndex()];
         long totalCpu = user + nice + cSys + idle + ioWait + irq + softer + steal;
         cpu.setCpuNum(processor.getLogicalProcessorCount());
-        cpu.setTotal(ArithUtil.round(ArithUtil.mul(totalCpu, 100), 2));
-        cpu.setSys(ArithUtil.round(ArithUtil.mul(cSys / cpu.getTotal(), 100), 2));
-        cpu.setUsed(ArithUtil.round(ArithUtil.mul(user / cpu.getTotal(), 100), 2));
-        cpu.setWait(ArithUtil.round(ArithUtil.mul(ioWait / cpu.getTotal(), 100), 2));
-        cpu.setFree( ArithUtil.round(ArithUtil.mul(idle / cpu.getTotal(), 100), 2));
+        cpu.setTotal(ArithUtils.round(ArithUtils.mul(totalCpu, 100), 2));
+        cpu.setSys(ArithUtils.round(ArithUtils.mul(cSys / cpu.getTotal(), 100), 2));
+        cpu.setUsed(ArithUtils.round(ArithUtils.mul(user / cpu.getTotal(), 100), 2));
+        cpu.setWait(ArithUtils.round(ArithUtils.mul(ioWait / cpu.getTotal(), 100), 2));
+        cpu.setFree( ArithUtils.round(ArithUtils.mul(idle / cpu.getTotal(), 100), 2));
     }
 
     /**
@@ -81,10 +81,10 @@ public class ServerResult {
      */
     private void setMemInfo(GlobalMemory memory) {
         int number = (1024 * 1024 * 1024);
-        mem.setTotal(ArithUtil.div(memory.getTotal(), number, 2));
-        mem.setUsed(ArithUtil.div(memory.getTotal() - memory.getAvailable(), number, 2));
-        mem.setFree(ArithUtil.div(memory.getAvailable(), number, 2));
-        mem.setUsage(ArithUtil.mul(ArithUtil.div(mem.getUsed(), memory.getTotal(), 4), 100));
+        mem.setTotal(ArithUtils.div(memory.getTotal(), number, 2));
+        mem.setUsed(ArithUtils.div(memory.getTotal() - memory.getAvailable(), number, 2));
+        mem.setFree(ArithUtils.div(memory.getAvailable(), number, 2));
+        mem.setUsage(ArithUtils.mul(ArithUtils.div(mem.getUsed(), memory.getTotal(), 4), 100));
     }
 
     /**
@@ -92,8 +92,8 @@ public class ServerResult {
      */
     private void setSysInfo() {
         Properties props = System.getProperties();
-        sys.setComputerName(IpUtil.getHostName());
-        sys.setComputerIp(IpUtil.getHostIp());
+        sys.setComputerName(IpUtils.getHostName());
+        sys.setComputerIp(IpUtils.getHostIp());
         sys.setOsName(props.getProperty("os.name"));
         sys.setOsArch(props.getProperty("os.arch"));
         sys.setUserDir(props.getProperty("user.dir"));
@@ -104,16 +104,16 @@ public class ServerResult {
      */
     private void setJvmInfo() {
         Properties props = System.getProperties();
-        jvm.setTotal(ArithUtil.div(Runtime.getRuntime().totalMemory(), (1024 * 1024), 2));
-        jvm.setMax(ArithUtil.div(Runtime.getRuntime().maxMemory(), (1024 * 1024), 2));
-        jvm.setFree(ArithUtil.div(Runtime.getRuntime().freeMemory(), (1024 * 1024), 2));
-        jvm.setUsage(ArithUtil.mul(ArithUtil.div(jvm.getTotal() - jvm.getFree(), jvm.getTotal(), 4), 100));
+        jvm.setTotal(ArithUtils.div(Runtime.getRuntime().totalMemory(), (1024 * 1024), 2));
+        jvm.setMax(ArithUtils.div(Runtime.getRuntime().maxMemory(), (1024 * 1024), 2));
+        jvm.setFree(ArithUtils.div(Runtime.getRuntime().freeMemory(), (1024 * 1024), 2));
+        jvm.setUsage(ArithUtils.mul(ArithUtils.div(jvm.getTotal() - jvm.getFree(), jvm.getTotal(), 4), 100));
         jvm.setVersion(props.getProperty("java.version"));
         jvm.setHome(props.getProperty("java.home"));
         jvm.setName(ManagementFactory.getRuntimeMXBean().getVmName());
         jvm.setInputArgs(ManagementFactory.getRuntimeMXBean().getInputArguments().toString());
-        jvm.setRunTime(TimeUtil.datePoor(TimeUtil.nowDate(), TimeUtil.serverStartDate()));
-        jvm.setStartTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TimeUtil.serverStartDate()));
+        jvm.setRunTime(TimeUtils.datePoor(TimeUtils.nowDate(), TimeUtils.serverStartDate()));
+        jvm.setStartTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TimeUtils.serverStartDate()));
     }
 
     /**
@@ -134,7 +134,7 @@ public class ServerResult {
             sysFile.setTotal(convertFileSize(total));
             sysFile.setFree(convertFileSize(free));
             sysFile.setUsed(convertFileSize(used));
-            sysFile.setUsage(ArithUtil.mul(ArithUtil.div(used, total, 4), 100));
+            sysFile.setUsage(ArithUtils.mul(ArithUtils.div(used, total, 4), 100));
             disk.add(sysFile);
         }
     }

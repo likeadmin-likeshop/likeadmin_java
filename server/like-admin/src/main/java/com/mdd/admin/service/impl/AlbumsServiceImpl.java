@@ -17,7 +17,7 @@ import com.mdd.common.entity.album.Album;
 import com.mdd.common.entity.album.AlbumCate;
 import com.mdd.common.mapper.album.AlbumCateMapper;
 import com.mdd.common.mapper.album.AlbumMapper;
-import com.mdd.common.utils.*;
+import com.mdd.common.util.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +62,7 @@ public class AlbumsServiceImpl implements IAlbumsService {
                 .eq("is_delete", 0)
                 .orderByDesc("id");
 
-        if (StringUtil.isNotNull(searchValidate.getCid())) {
+        if (StringUtils.isNotNull(searchValidate.getCid())) {
             queryWrapper.eq("cid", searchValidate.getCid());
         }
 
@@ -73,7 +73,7 @@ public class AlbumsServiceImpl implements IAlbumsService {
 
         IPage<Album> iPage = albumMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
-        String engine = ConfigUtil.get("storage", "default", "local");
+        String engine = ConfigUtils.get("storage", "default", "local");
         engine = engine.equals("") ? "local" : engine;
 
         List<AlbumVo> list = new ArrayList<>();
@@ -86,10 +86,10 @@ public class AlbumsServiceImpl implements IAlbumsService {
             } else {
                 vo.setPath(album.getUri());
             }
-            vo.setUri(UrlUtil.toAbsoluteUrl(album.getUri()));
-            vo.setSize(ToolsUtil.storageUnit(album.getSize()));
-            vo.setCreateTime(TimeUtil.timestampToDate(album.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(album.getUpdateTime()));
+            vo.setUri(UrlUtils.toAbsoluteUrl(album.getUri()));
+            vo.setSize(ToolsUtils.storageUnit(album.getSize()));
+            vo.setCreateTime(TimeUtils.timestampToDate(album.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(album.getUpdateTime()));
             list.add(vo);
         }
 
@@ -208,11 +208,11 @@ public class AlbumsServiceImpl implements IAlbumsService {
                 .eq("is_delete", 0)
                 .orderByDesc("id");
 
-        if (StringUtil.isNotNull(searchValidate.getType()) && searchValidate.getType() > 0) {
+        if (StringUtils.isNotNull(searchValidate.getType()) && searchValidate.getType() > 0) {
             queryWrapper.eq("type", searchValidate.getType());
         }
 
-        if (StringUtil.isNotNull(searchValidate.getKeyword()) && StringUtil.isNotEmpty(searchValidate.getKeyword())) {
+        if (StringUtils.isNotNull(searchValidate.getKeyword()) && StringUtils.isNotEmpty(searchValidate.getKeyword())) {
             queryWrapper.like("name", searchValidate.getKeyword());
         }
 
@@ -223,13 +223,13 @@ public class AlbumsServiceImpl implements IAlbumsService {
             AlbumCateVo vo = new AlbumCateVo();
             BeanUtils.copyProperties(albumCate, vo);
 
-            vo.setCreateTime(TimeUtil.timestampToDate(albumCate.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(albumCate.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(albumCate.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(albumCate.getUpdateTime()));
             lists.add(vo);
         }
 
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(lists));
-        return ArrayUtil.listToTree(jsonArray, "id", "pid", "children");
+        return ArrayUtils.listToTree(jsonArray, "id", "pid", "children");
     }
 
     /**

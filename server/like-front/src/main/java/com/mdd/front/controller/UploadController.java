@@ -5,7 +5,7 @@ import com.mdd.common.enums.AlbumEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.plugin.storage.StorageDriver;
 import com.mdd.common.plugin.storage.UploadFilesVo;
-import com.mdd.common.utils.StringUtil;
+import com.mdd.common.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +42,7 @@ public class UploadController {
         }
 
         String folder = "image";
-        if (StringUtil.isNotEmpty(request.getParameter("dir"))) {
+        if (StringUtils.isNotEmpty(request.getParameter("dir"))) {
             folder += "/" + request.getParameter("dir");
         }
 

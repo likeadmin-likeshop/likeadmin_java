@@ -3,10 +3,9 @@ package com.mdd.admin.config;
 import cn.dev33.satoken.stp.StpInterface;
 import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.service.ISystemAuthPermService;
-import com.mdd.common.utils.ArrayUtil;
-import com.mdd.common.utils.RedisUtil;
-import com.mdd.common.utils.StringUtil;
-import com.mdd.common.utils.ToolsUtil;
+import com.mdd.common.util.ArrayUtils;
+import com.mdd.common.util.RedisUtils;
+import com.mdd.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -34,13 +33,13 @@ public class StpInterConfig implements StpInterface {
         List<String> perms = new LinkedList<>();
 
         for (Integer roleId : roleIds) {
-            Object menusObj = RedisUtil.hGet(AdminConfig.backstageRolesKey, String.valueOf(roleId));
-            if (StringUtil.isNull(menusObj)) {
+            Object menusObj = RedisUtils.hGet(AdminConfig.backstageRolesKey, String.valueOf(roleId));
+            if (StringUtils.isNull(menusObj)) {
                 iSystemAuthPermService.cacheRoleMenusByRoleId(roleId);
-                menusObj = RedisUtil.hGet(AdminConfig.backstageRolesKey, String.valueOf(roleId));
+                menusObj = RedisUtils.hGet(AdminConfig.backstageRolesKey, String.valueOf(roleId));
             }
-            if (StringUtil.isNotNull(menusObj)) {
-                perms.addAll(ArrayUtil.stringToListAsStr(menusObj.toString(), ","));
+            if (StringUtils.isNotNull(menusObj)) {
+                perms.addAll(ArrayUtils.stringToListAsStr(menusObj.toString(), ","));
             }
         }
 

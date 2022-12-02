@@ -3,9 +3,9 @@ package com.mdd.admin.service.impl;
 import com.mdd.admin.service.IChannelOaConfigService;
 import com.mdd.admin.validate.channel.ChannelOaValidate;
 import com.mdd.admin.vo.channel.ChannelOaVo;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.RequestUtil;
-import com.mdd.common.utils.UrlUtil;
+import com.mdd.common.util.ConfigUtils;
+import com.mdd.common.util.RequestUtils;
+import com.mdd.common.util.UrlUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -24,10 +24,10 @@ public class ChannelOaConfigServiceImpl implements IChannelOaConfigService {
      */
     @Override
     public ChannelOaVo detail() {
-        Map<String, String> config = ConfigUtil.get("oa_channel");
+        Map<String, String> config = ConfigUtils.get("oa_channel");
         ChannelOaVo vo = new ChannelOaVo();
 
-        vo.setQrCode(UrlUtil.toAbsoluteUrl(config.getOrDefault("qrCode", "")));
+        vo.setQrCode(UrlUtils.toAbsoluteUrl(config.getOrDefault("qrCode", "")));
         vo.setName(config.getOrDefault("name", ""));
         vo.setPrimaryId(config.getOrDefault("primaryId", ""));
         vo.setAppId(config.getOrDefault("appId", ""));
@@ -37,7 +37,7 @@ public class ChannelOaConfigServiceImpl implements IChannelOaConfigService {
         vo.setEncodingAesKey(config.getOrDefault("encodingAesKey", ""));
         vo.setEncryptionType(Integer.parseInt(config.getOrDefault("encryptionType", "1")));
 
-        String domain = RequestUtil.domain();
+        String domain = RequestUtils.domain();
         vo.setBusinessDomain(domain);
         vo.setJsDomain(domain);
         vo.setWebDomain(domain);
@@ -53,15 +53,15 @@ public class ChannelOaConfigServiceImpl implements IChannelOaConfigService {
      */
     @Override
     public void save(ChannelOaValidate channelOaValidate) {
-        ConfigUtil.set("oa_channel", "name", channelOaValidate.getName());
-        ConfigUtil.set("oa_channel", "primaryId", channelOaValidate.getPrimaryId());
-        ConfigUtil.set("oa_channel", "qrCode", UrlUtil.toRelativeUrl(channelOaValidate.getQrCode()));
-        ConfigUtil.set("oa_channel", "appId", channelOaValidate.getAppId());
-        ConfigUtil.set("oa_channel", "appSecret", channelOaValidate.getAppSecret());
-        ConfigUtil.set("oa_channel", "url", channelOaValidate.getUrl());
-        ConfigUtil.set("oa_channel", "token", channelOaValidate.getToken());
-        ConfigUtil.set("oa_channel", "encodingAesKey", channelOaValidate.getEncodingAesKey());
-        ConfigUtil.set("oa_channel", "encryptionType", String.valueOf(channelOaValidate.getEncryptionType()));
+        ConfigUtils.set("oa_channel", "name", channelOaValidate.getName());
+        ConfigUtils.set("oa_channel", "primaryId", channelOaValidate.getPrimaryId());
+        ConfigUtils.set("oa_channel", "qrCode", UrlUtils.toRelativeUrl(channelOaValidate.getQrCode()));
+        ConfigUtils.set("oa_channel", "appId", channelOaValidate.getAppId());
+        ConfigUtils.set("oa_channel", "appSecret", channelOaValidate.getAppSecret());
+        ConfigUtils.set("oa_channel", "url", channelOaValidate.getUrl());
+        ConfigUtils.set("oa_channel", "token", channelOaValidate.getToken());
+        ConfigUtils.set("oa_channel", "encodingAesKey", channelOaValidate.getEncodingAesKey());
+        ConfigUtils.set("oa_channel", "encryptionType", String.valueOf(channelOaValidate.getEncryptionType()));
     }
 
 }

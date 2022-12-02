@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.yulichang.base.MPJBaseMapper;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.google.gson.reflect.TypeToken;
-import com.mdd.common.utils.TimeUtil;
+import com.mdd.common.util.TimeUtils;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.lang.reflect.Type;
@@ -168,8 +168,8 @@ public interface IBaseMapper<T> extends MPJBaseMapper<T> {
                         if (!dateEnd.equals("")) { queryWrapper.le(field, Long.parseLong(dateEnd)); }
                         if (!dateStart.equals("")) { queryWrapper.ge(field, Long.parseLong(dateStart)); }
                     } else {
-                        if (!dateStart.equals("")) { queryWrapper.ge(field, TimeUtil.dateToTimestamp(dateStart)); }
-                        if (!dateEnd.equals("")) { queryWrapper.le(field, TimeUtil.dateToTimestamp(dateEnd)); }
+                        if (!dateStart.equals("")) { queryWrapper.ge(field, TimeUtils.dateToTimestamp(dateStart)); }
+                        if (!dateEnd.equals("")) { queryWrapper.le(field, TimeUtils.dateToTimestamp(dateEnd)); }
                     }
                     break;
             }
@@ -305,8 +305,8 @@ public interface IBaseMapper<T> extends MPJBaseMapper<T> {
                         if (!dateStart.equals("")) { queryWrapper.ge(field, Long.parseLong(dateStart)); }
                         if (!dateEnd.equals("")) { queryWrapper.le(field, Long.parseLong(dateEnd)); }
                     } else {
-                        if (!dateStart.equals("")) { queryWrapper.ge(field, TimeUtil.dateToTimestamp(dateStart)); }
-                        if (!dateEnd.equals("")) { queryWrapper.le(field, TimeUtil.dateToTimestamp(dateEnd)); }
+                        if (!dateStart.equals("")) { queryWrapper.ge(field, TimeUtils.dateToTimestamp(dateStart)); }
+                        if (!dateEnd.equals("")) { queryWrapper.le(field, TimeUtils.dateToTimestamp(dateEnd)); }
                     }
                      break;
             }

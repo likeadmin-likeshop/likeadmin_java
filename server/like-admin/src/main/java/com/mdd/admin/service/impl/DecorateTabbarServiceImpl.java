@@ -1,7 +1,6 @@
 package com.mdd.admin.service.impl;
 
 import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.admin.service.IDecorateTabbarService;
 import com.mdd.admin.validate.DecorateTabsValidate;
@@ -9,7 +8,7 @@ import com.mdd.admin.vo.decorate.DecorateTabsListsVo;
 import com.mdd.admin.vo.decorate.DecorateTabbarVo;
 import com.mdd.common.entity.DecorateTabbar;
 import com.mdd.common.mapper.DecorateTabbarMapper;
-import com.mdd.common.utils.*;
+import com.mdd.common.util.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,18 +43,18 @@ public class DecorateTabbarServiceImpl implements IDecorateTabbarService {
             DecorateTabsListsVo vo = new DecorateTabsListsVo();
             vo.setId(tab.getId());
             vo.setName(tab.getName());
-            vo.setSelected(UrlUtil.toAbsoluteUrl(tab.getSelected()));
-            vo.setUnselected(UrlUtil.toAbsoluteUrl(tab.getUnselected()));
+            vo.setSelected(UrlUtils.toAbsoluteUrl(tab.getSelected()));
+            vo.setUnselected(UrlUtils.toAbsoluteUrl(tab.getUnselected()));
             vo.setLink(JSON.parse(tab.getLink()));
-            vo.setCreateTime(TimeUtil.timestampToDate(tab.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(tab.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(tab.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(tab.getUpdateTime()));
             tabList.add(vo);
         }
 
-        String tabbar = ConfigUtil.get("tabbar", "style", "{}");
+        String tabbar = ConfigUtils.get("tabbar", "style", "{}");
 
         DecorateTabbarVo response = new DecorateTabbarVo();
-        response.setStyle(ToolsUtil.jsonToMap(tabbar));
+        response.setStyle(ToolsUtils.jsonToMap(tabbar));
         response.setList(tabList);
         return response;
     }
@@ -75,15 +74,15 @@ public class DecorateTabbarServiceImpl implements IDecorateTabbarService {
             DecorateTabbar model = new DecorateTabbar();
             model.setName(obj.getName());
             model.setLink(JSON.toJSONString(obj.getLink()));
-            model.setSelected(UrlUtil.toRelativeUrl(obj.getSelected()));
-            model.setUnselected(UrlUtil.toRelativeUrl(obj.getUnselected()));
+            model.setSelected(UrlUtils.toRelativeUrl(obj.getSelected()));
+            model.setUnselected(UrlUtils.toRelativeUrl(obj.getUnselected()));
             model.setCreateTime(System.currentTimeMillis() / 1000);
             model.setUpdateTime(System.currentTimeMillis() / 1000);
             decorateTabbarMapper.insert(model);
         }
 
-        if (StringUtil.isNotNull(tabsValidate.getStyle())) {
-            ConfigUtil.set("tabbar", "style", JSON.toJSONString(tabsValidate.getStyle()));
+        if (StringUtils.isNotNull(tabsValidate.getStyle())) {
+            ConfigUtils.set("tabbar", "style", JSON.toJSONString(tabsValidate.getStyle()));
         }
     }
 

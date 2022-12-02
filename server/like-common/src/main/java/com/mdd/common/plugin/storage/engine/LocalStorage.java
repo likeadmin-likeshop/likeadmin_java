@@ -1,8 +1,7 @@
 package com.mdd.common.plugin.storage.engine;
 
-import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.exception.OperateException;
-import com.mdd.common.utils.YmlUtil;
+import com.mdd.common.util.YmlUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -22,7 +21,7 @@ public class LocalStorage {
      */
     public void upload(MultipartFile multipartFile, String key, String folder) {
         // 映射目录
-        String directory = YmlUtil.get("like.upload-directory");
+        String directory = YmlUtils.get("like.upload-directory");
         if (directory == null || directory.equals("")) {
             throw new OperateException("请配置上传目录like.upload-directory");
         }

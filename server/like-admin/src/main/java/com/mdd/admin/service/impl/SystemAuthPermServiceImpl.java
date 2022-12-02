@@ -9,9 +9,9 @@ import com.mdd.common.entity.system.SystemAuthRole;
 import com.mdd.common.mapper.system.SystemAuthMenuMapper;
 import com.mdd.common.mapper.system.SystemAuthPermMapper;
 import com.mdd.common.mapper.system.SystemAuthRoleMapper;
-import com.mdd.common.utils.ArrayUtil;
-import com.mdd.common.utils.RedisUtil;
-import com.mdd.common.utils.StringUtil;
+import com.mdd.common.util.ArrayUtils;
+import com.mdd.common.util.RedisUtils;
+import com.mdd.common.util.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,7 +54,7 @@ public class SystemAuthPermServiceImpl implements ISystemAuthPermService {
                 .eq("is_disable", 0)
                 .last("limit 1"));
 
-        if (StringUtil.isNull(systemAuthRole)) {
+        if (StringUtils.isNull(systemAuthRole)) {
             return menus;
         }
 
@@ -137,13 +137,13 @@ public class SystemAuthPermServiceImpl implements ISystemAuthPermService {
                     .orderByAsc(Arrays.asList("menu_sort", "id")));
 
             for (SystemAuthMenu item : systemAuthMenus) {
-                if (StringUtil.isNotNull(item.getPerms()) && StringUtil.isNotEmpty(item.getPerms())) {
+                if (StringUtils.isNotNull(item.getPerms()) && StringUtils.isNotEmpty(item.getPerms())) {
                     menuArray.add(item.getPerms().trim());
                 }
             }
         }
 
-        RedisUtil.hSet(AdminConfig.backstageRolesKey, String.valueOf(roleId), ArrayUtil.listToStringByStr(menuArray, ","));
+        RedisUtils.hSet(AdminConfig.backstageRolesKey, String.valueOf(roleId), ArrayUtils.listToStringByStr(menuArray, ","));
     }
 
 }

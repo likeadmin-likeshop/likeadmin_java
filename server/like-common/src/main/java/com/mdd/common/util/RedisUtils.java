@@ -1,4 +1,4 @@
-package com.mdd.common.utils;
+package com.mdd.common.util;
 
 import com.mdd.common.config.GlobalConfig;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class RedisUtil {
+public class RedisUtils {
 
     private static RedisTemplate<String, Object> redisTemplate;
     private static final String redisPrefix = GlobalConfig.redisPrefix;
@@ -27,7 +27,7 @@ public class RedisUtil {
      */
     @Resource
     public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
-        RedisUtil.redisTemplate = redisTemplate;
+        RedisUtils.redisTemplate = redisTemplate;
     }
 
     /**
@@ -190,7 +190,7 @@ public class RedisUtil {
      */
     public static Set<String> matchSet(String pattern) {
         Set<String> keys = new LinkedHashSet<>();
-        RedisUtil.handler().execute((RedisConnection connection) -> {
+        RedisUtils.handler().execute((RedisConnection connection) -> {
             try (Cursor<byte[]> cursor = connection.scan(
                     ScanOptions.scanOptions()
                             .count(Long.MAX_VALUE)

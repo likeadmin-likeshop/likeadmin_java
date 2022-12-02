@@ -6,9 +6,9 @@ import com.mdd.common.plugin.storage.engine.AliyunStorage;
 import com.mdd.common.plugin.storage.engine.LocalStorage;
 import com.mdd.common.plugin.storage.engine.QcloudStorage;
 import com.mdd.common.plugin.storage.engine.QiniuStorage;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.TimeUtil;
-import com.mdd.common.utils.UrlUtil;
+import com.mdd.common.util.ConfigUtils;
+import com.mdd.common.util.TimeUtils;
+import com.mdd.common.util.UrlUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
@@ -29,10 +29,10 @@ public class StorageDriver {
      * 构造方法
      */
     public StorageDriver() {
-        this.engine = ConfigUtil.get("storage", "default", "local");
+        this.engine = ConfigUtils.get("storage", "default", "local");
 
         Map<String, String> config;
-        config = ConfigUtil.getMap("storage", this.engine);
+        config = ConfigUtils.getMap("storage", this.engine);
         if (config == null) {
             config = new HashMap<>();
         }
@@ -81,7 +81,7 @@ public class StorageDriver {
         vo.setSize(multipartFile.getSize());
         vo.setExt(origFileExt.toLowerCase());
         vo.setUrl(newFileName);
-        vo.setPath(UrlUtil.toAbsoluteUrl(newFileName));
+        vo.setPath(UrlUtils.toAbsoluteUrl(newFileName));
 
 //        Map<String, Object> map = new LinkedHashMap<>();
 //        map.put("id", 0);
@@ -103,7 +103,7 @@ public class StorageDriver {
     private String buildSaveName(MultipartFile multipartFile) {
         String name = multipartFile.getOriginalFilename();
         String ext  = Objects.requireNonNull(name).substring(name.lastIndexOf("."));
-        String date = TimeUtil.timestampToDate(TimeUtil.timestamp(), "yyyyMMdd");
+        String date = TimeUtils.timestampToDate(TimeUtils.timestamp(), "yyyyMMdd");
         return date + "/" + UUID.randomUUID() + ext.toLowerCase();
     }
 

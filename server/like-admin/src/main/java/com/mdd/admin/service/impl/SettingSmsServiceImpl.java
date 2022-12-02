@@ -2,8 +2,8 @@ package com.mdd.admin.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.mdd.admin.service.ISettingSmsService;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.StringUtil;
+import com.mdd.common.util.ConfigUtils;
+import com.mdd.common.util.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -22,7 +22,7 @@ public class SettingSmsServiceImpl implements ISettingSmsService {
      */
     @Override
     public List<Map<String, Object>> list() {
-        String engine = ConfigUtil.get("sms", "default", "aliyun");
+        String engine = ConfigUtils.get("sms", "default", "aliyun");
         List<Map<String, Object>> list = new LinkedList<>();
 
         Map<String, Object> aliyun = new LinkedHashMap<>();
@@ -48,9 +48,9 @@ public class SettingSmsServiceImpl implements ISettingSmsService {
      */
     @Override
     public Map<String, Object> detail(String alias) {
-        String engine = ConfigUtil.get("sms", "default", "local");
-        Map<String, String> config = ConfigUtil.getMap("sms", alias);
-        config = StringUtil.isNotNull(config) ? config : Collections.emptyMap();
+        String engine = ConfigUtils.get("sms", "default", "local");
+        Map<String, String> config = ConfigUtils.getMap("sms", alias);
+        config = StringUtils.isNotNull(config) ? config : Collections.emptyMap();
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("name", config.getOrDefault("name", ""));
@@ -105,13 +105,13 @@ public class SettingSmsServiceImpl implements ISettingSmsService {
                 break;
         }
 
-        ConfigUtil.set("sms", params.get("alias"), JSON.toJSONString(map));
+        ConfigUtils.set("sms", params.get("alias"), JSON.toJSONString(map));
 
-        String engine = ConfigUtil.get("sms", "default", "");
+        String engine = ConfigUtils.get("sms", "default", "");
         if (Integer.parseInt(params.get("status")) == 1) {
-            ConfigUtil.set("sms", "default", params.get("alias"));
+            ConfigUtils.set("sms", "default", params.get("alias"));
         } else if (engine.equals(params.get("alias")) && Integer.parseInt(params.get("status")) == 0) {
-            ConfigUtil.set("sms", "default", "");
+            ConfigUtils.set("sms", "default", "");
         }
     }
 

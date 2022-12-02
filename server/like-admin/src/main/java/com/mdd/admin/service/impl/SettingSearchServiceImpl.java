@@ -7,7 +7,7 @@ import com.mdd.admin.vo.setting.SettingSearchDetailVo;
 import com.mdd.admin.vo.setting.SettingSearchObjectVo;
 import com.mdd.common.entity.setting.HotSearch;
 import com.mdd.common.mapper.setting.HotSearchMapper;
-import com.mdd.common.utils.ConfigUtil;
+import com.mdd.common.util.ConfigUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -30,7 +30,7 @@ public class SettingSearchServiceImpl implements ISettingSearchService {
      */
     @Override
     public SettingSearchDetailVo detail() {
-        Integer isHotSearch = Integer.parseInt(ConfigUtil.get("search", "isHotSearch", "0"));
+        Integer isHotSearch = Integer.parseInt(ConfigUtils.get("search", "isHotSearch", "0"));
         List<HotSearch> list = hotSearchMapper.selectList(new QueryWrapper<HotSearch>().orderByDesc("sort"));
 
         SettingSearchDetailVo vo = new SettingSearchDetailVo();
@@ -48,7 +48,7 @@ public class SettingSearchServiceImpl implements ISettingSearchService {
     @Override
     public void save(SettingSearchValidate searchValidate) {
         String isHotSearch = String.valueOf(searchValidate.getIsHotSearch());
-        ConfigUtil.set("search", "isHotSearch", isHotSearch);
+        ConfigUtils.set("search", "isHotSearch", isHotSearch);
 
         hotSearchMapper.delete(new QueryWrapper<HotSearch>().ge("id", 0));
         for (SettingSearchObjectVo vo : searchValidate.getList()) {

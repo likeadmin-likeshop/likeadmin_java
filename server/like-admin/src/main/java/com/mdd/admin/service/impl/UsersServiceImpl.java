@@ -14,16 +14,15 @@ import com.mdd.common.entity.user.User;
 import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.user.UserMapper;
-import com.mdd.common.utils.StringUtil;
-import com.mdd.common.utils.TimeUtil;
-import com.mdd.common.utils.UrlUtil;
+import com.mdd.common.util.StringUtils;
+import com.mdd.common.util.TimeUtils;
+import com.mdd.common.util.UrlUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -59,7 +58,7 @@ public class UsersServiceImpl implements IUsersService {
                 !info.getColumn().equals("salt")
         );
 
-        if (StringUtil.isNotNull(searchValidate.getKeyword()) && StringUtil.isNotEmpty(searchValidate.getKeyword())) {
+        if (StringUtils.isNotNull(searchValidate.getKeyword()) && StringUtils.isNotEmpty(searchValidate.getKeyword())) {
             String keyword = searchValidate.getKeyword();
             queryWrapper.nested(wq->wq
                     .like("sn", keyword).or()
@@ -81,9 +80,9 @@ public class UsersServiceImpl implements IUsersService {
 
             vo.setSex(user.getSex());
             vo.setChannel(ClientEnum.getMsgByCode(user.getChannel()));
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(user.getAvatar()));
-            vo.setLastLoginTime(TimeUtil.timestampToDate(user.getLastLoginTime()));
-            vo.setCreateTime(TimeUtil.timestampToDate(user.getCreateTime()));
+            vo.setAvatar(UrlUtils.toAbsoluteUrl(user.getAvatar()));
+            vo.setLastLoginTime(TimeUtils.timestampToDate(user.getLastLoginTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(user.getCreateTime()));
             list.add(vo);
         }
 
@@ -124,13 +123,13 @@ public class UsersServiceImpl implements IUsersService {
         BeanUtils.copyProperties(user, vo);
 
         vo.setSex(user.getSex());
-        vo.setAvatar(UrlUtil.toAbsoluteUrl(user.getAvatar()));
+        vo.setAvatar(UrlUtils.toAbsoluteUrl(user.getAvatar()));
         vo.setChannel(ClientEnum.getMsgByCode(user.getChannel()));
-        vo.setCreateTime(TimeUtil.timestampToDate(user.getCreateTime()));
+        vo.setCreateTime(TimeUtils.timestampToDate(user.getCreateTime()));
         if (user.getLastLoginTime() <= 0) {
             vo.setLastLoginTime("无");
         } else {
-            vo.setLastLoginTime(TimeUtil.timestampToDate(user.getLastLoginTime()));
+            vo.setLastLoginTime(TimeUtils.timestampToDate(user.getLastLoginTime()));
         }
         return vo;
     }
@@ -162,7 +161,7 @@ public class UsersServiceImpl implements IUsersService {
                             .eq("is_delete", 0)
                             .last("limit 1"));
 
-                    if (StringUtil.isNotNull(u) && !u.getId().equals(id)) {
+                    if (StringUtils.isNotNull(u) && !u.getId().equals(id)) {
                         throw new OperateException("当前账号已存在!");
                     }
                 }

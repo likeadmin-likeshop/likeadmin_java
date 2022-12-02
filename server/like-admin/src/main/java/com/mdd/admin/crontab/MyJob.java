@@ -5,13 +5,13 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * 工作类的具体实现,即需要定时执行的“某个事件”
+ * 具体的定时任务
  */
 @Component("myJob")
 public class MyJob  {
 
     public void handle(String s) {
-        System.out.println("执行无参方法: " + s);
+        System.out.println("有参数定时任务执行逻辑 : " + s);
     }
 
 }

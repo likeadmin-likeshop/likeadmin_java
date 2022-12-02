@@ -1,16 +1,15 @@
-package com.mdd.common.utils;
+package com.mdd.common.util;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
-import com.qcloud.cos.model.ciModel.auditing.Conf;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
 
 import java.util.Map;
 
-public class WeChatUtil {
+public class WeChatUtils {
 
     /**
      * 微信小程序
@@ -19,7 +18,7 @@ public class WeChatUtil {
      * @return WxMaService
      */
     public static WxMaService mnp() {
-        Map<String, String> config = ConfigUtil.get("mp_channel");
+        Map<String, String> config = ConfigUtils.get("mp_channel");
 
         WxMaService service = new WxMaServiceImpl();
         WxMaDefaultConfigImpl wxConfig = new WxMaDefaultConfigImpl();
@@ -37,7 +36,7 @@ public class WeChatUtil {
      * @return WxMpService
      */
     public static WxMpService official() {
-        Map<String, String> config = ConfigUtil.get("oa_channel");
+        Map<String, String> config = ConfigUtils.get("oa_channel");
 
         WxMpDefaultConfigImpl wxMpDefaultConfig = new WxMpDefaultConfigImpl();
         wxMpDefaultConfig.setAppId(config.getOrDefault("appId", "").trim());

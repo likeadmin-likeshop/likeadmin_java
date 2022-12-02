@@ -1,6 +1,6 @@
 package com.mdd.generator.util;
 
-import com.mdd.common.utils.StringUtil;
+import com.mdd.common.util.StringUtils;
 import com.mdd.generator.config.GenConfig;
 import com.mdd.generator.constant.GenConstants;
 import com.mdd.generator.constant.SqlConstants;
@@ -62,7 +62,7 @@ public class VelocityUtil {
                 primaryKey = column.getJavaField();
                 primaryField = column.getColumnName();
             }
-            if (StringUtil.isNotEmpty(column.getDictType()) && !dictFields.contains(column.getDictType())) {
+            if (StringUtils.isNotEmpty(column.getDictType()) && !dictFields.contains(column.getDictType())) {
                 dictFields.add(column.getDictType());
             }
         }
@@ -74,9 +74,9 @@ public class VelocityUtil {
         velocityContext.put("authorName", table.getAuthorName());
         velocityContext.put("packageName", GenConfig.packageName);
         velocityContext.put("EntityName", table.getEntityName());
-        velocityContext.put("entityName", StringUtil.uncapitalize(table.getEntityName()));
+        velocityContext.put("entityName", StringUtils.uncapitalize(table.getEntityName()));
         velocityContext.put("moduleName", table.getModuleName());
-        velocityContext.put("functionName", StringUtil.isNotEmpty(table.getFunctionName()) ? table.getFunctionName() : "【请填写功能名称】");
+        velocityContext.put("functionName", StringUtils.isNotEmpty(table.getFunctionName()) ? table.getFunctionName() : "【请填写功能名称】");
         velocityContext.put("notesType", GenConfig.notesType);
         velocityContext.put("table", table);
         velocityContext.put("columns", columns);
@@ -100,7 +100,7 @@ public class VelocityUtil {
      */
     public static String getGenPath(GenTable table) {
         String genPath = table.getGenPath();
-        if (StringUtil.equals(genPath, "/")) {
+        if (StringUtils.equals(genPath, "/")) {
             return System.getProperty("user.dir") + File.separator + "src" + File.separator;
         }
         return genPath + File.separator;
@@ -146,59 +146,59 @@ public class VelocityUtil {
         String moduleName   = genTable.getModuleName();
 
         if (template.contains("controller.java.vm")) {
-            fileName = StringUtil.format("java/{}/controller/{}Controller.java", GenConfig.adminPackage, entityName);
+            fileName = StringUtils.format("java/{}/controller/{}Controller.java", GenConfig.adminPackage, entityName);
         }
 
         else if (template.contains("service.java.vm")) {
-            fileName = StringUtil.format("java/{}/service/I{}Service.java", GenConfig.adminPackage, entityName);
+            fileName = StringUtils.format("java/{}/service/I{}Service.java", GenConfig.adminPackage, entityName);
         }
 
         else if (template.contains("serviceImpl.java.vm")) {
-            fileName = StringUtil.format("java/{}/service/impl/{}ServiceImpl.java", GenConfig.adminPackage, entityName);
+            fileName = StringUtils.format("java/{}/service/impl/{}ServiceImpl.java", GenConfig.adminPackage, entityName);
         }
 
         else if (template.contains("validateCreate.java.vm")) {
-            fileName = StringUtil.format("java/{}/validate/{}CreateValidate.java", GenConfig.adminPackage, entityName);
+            fileName = StringUtils.format("java/{}/validate/{}CreateValidate.java", GenConfig.adminPackage, entityName);
         }
 
         else if (template.contains("validateUpdate.java.vm")) {
-            fileName = StringUtil.format("java/{}/validate/{}UpdateValidate.java", GenConfig.adminPackage, entityName);
+            fileName = StringUtils.format("java/{}/validate/{}UpdateValidate.java", GenConfig.adminPackage, entityName);
         }
 
         else if (template.contains("validateSearch.java.vm")) {
-            fileName = StringUtil.format("java/{}/validate/{}SearchValidate.java", GenConfig.adminPackage, entityName);
+            fileName = StringUtils.format("java/{}/validate/{}SearchValidate.java", GenConfig.adminPackage, entityName);
         }
 
         else if (template.contains("voListed.java.vm")) {
-            fileName = StringUtil.format("java/{}/vo/{}ListedVo.java", GenConfig.adminPackage, entityName);
+            fileName = StringUtils.format("java/{}/vo/{}ListedVo.java", GenConfig.adminPackage, entityName);
         }
 
         else if (template.contains("voDetail.java.vm")) {
-            fileName = StringUtil.format("java/{}/vo/{}DetailVo.java", GenConfig.adminPackage, entityName);
+            fileName = StringUtils.format("java/{}/vo/{}DetailVo.java", GenConfig.adminPackage, entityName);
         }
 
         else if (template.contains("entity.java.vm")) {
-            fileName = StringUtil.format("java/{}/entity/{}.java", GenConfig.commonPackage, entityName);
+            fileName = StringUtils.format("java/{}/entity/{}.java", GenConfig.commonPackage, entityName);
         }
 
         else if (template.contains("mapper.java.vm")) {
-            fileName = StringUtil.format("java/{}/mapper/{}Mapper.java", GenConfig.commonPackage, entityName);
+            fileName = StringUtils.format("java/{}/mapper/{}Mapper.java", GenConfig.commonPackage, entityName);
         }
 
         else if (template.contains("vue/api.ts.vm")) {
-            fileName = StringUtil.format("vue/api/{}.ts", moduleName);
+            fileName = StringUtils.format("vue/api/{}.ts", moduleName);
         }
 
         else if (template.contains("vue/edit.vue.vm")) {
-            fileName = StringUtil.format("vue/views/{}/edit.vue", moduleName);
+            fileName = StringUtils.format("vue/views/{}/edit.vue", moduleName);
         }
 
         else if (template.contains("vue/index.vue.vm")) {
-            fileName = StringUtil.format("vue/views/{}/index.vue", moduleName);
+            fileName = StringUtils.format("vue/views/{}/index.vue", moduleName);
         }
 
         else if (template.contains("vue/index-tree.vue.vm")) {
-            fileName = StringUtil.format("vue/views/{}/index.vue", moduleName);
+            fileName = StringUtils.format("vue/views/{}/index.vue", moduleName);
         }
 
         return fileName;

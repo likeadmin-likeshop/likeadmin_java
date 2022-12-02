@@ -1,4 +1,4 @@
-package com.mdd.common.utils;
+package com.mdd.common.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +12,9 @@ import java.security.cert.X509Certificate;
 /**
  * HTTP工具类
  */
-public class HttpUtil {
+public class HttpUtils {
 
-    private static final Logger log = LoggerFactory.getLogger(HttpUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(HttpUtils.class);
 
     /**
      * 向指定URL发送GET方法的请求 (不带参)
@@ -23,7 +23,7 @@ public class HttpUtil {
      * @return 所代表远程资源的响应结果
      */
     public static String sendGet(String url) {
-        return sendGet(url, StringUtil.EMPTY);
+        return sendGet(url, StringUtils.EMPTY);
     }
 
     /**
@@ -49,7 +49,7 @@ public class HttpUtil {
         StringBuilder result = new StringBuilder();
         BufferedReader in = null;
         try {
-            String urlNameString = StringUtil.isNotBlank(param) ? url + "?" + param : url;
+            String urlNameString = StringUtils.isNotBlank(param) ? url + "?" + param : url;
             log.info("sendGet - {}", urlNameString);
             URL realUrl = new URL(urlNameString);
             URLConnection connection = realUrl.openConnection();

@@ -1,4 +1,4 @@
-package com.mdd.common.utils;
+package com.mdd.common.util;
 
 
 import java.lang.management.ManagementFactory;
@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class TimeUtil {
+public class TimeUtils {
 
     /**
      * 时间戳转日期(默认格式)
@@ -69,7 +69,7 @@ public class TimeUtil {
      * @return Long
      */
     public static Long dateToTimestamp(String date) {
-        String dateTime = TimeUtil.formatDate(date);
+        String dateTime = TimeUtils.formatDate(date);
         return (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(dateTime, new ParsePosition(0)).getTime() / 1000;
     }
 
@@ -234,7 +234,7 @@ public class TimeUtil {
      * @return List
      */
     public static List<Long> yesterday() {
-        List<Long> today = TimeUtil.today();
+        List<Long> today = TimeUtils.today();
         List<Long> list = new ArrayList<>();
         list.add(today.get(0) - 86400);
         list.add(today.get(1) - 86400);
@@ -266,7 +266,7 @@ public class TimeUtil {
      * @return List
      */
     public static List<Long> lastWeek() {
-        List<Long> week = TimeUtil.week();
+        List<Long> week = TimeUtils.week();
         List<Long> list = new ArrayList<>();
         list.add(week.get(0) - 604800);
         list.add(week.get(1) - 604800);
@@ -412,7 +412,7 @@ public class TimeUtil {
      * @return List
      */
     public static List<Long> dayToNow(int day) {
-        List<Long> today = TimeUtil.today();
+        List<Long> today = TimeUtils.today();
         List<Long> list = new ArrayList<>();
         list.add(today.get(0) - day * 86400L);
         list.add(today.get(0) -1);
@@ -464,7 +464,7 @@ public class TimeUtil {
      * @return [2022-03-29, 2022-03-30, 2022-03-31, 2022-04-01]
      */
     public static List<String> daysAgoDate(Integer day) {
-        long time = TimeUtil.today().get(0);
+        long time = TimeUtils.today().get(0);
 
         List<String> data = new ArrayList<>();
         for (int i=0; i<day; i++) {
@@ -472,7 +472,7 @@ public class TimeUtil {
                 time -= 86400;
             }
 
-            data.add(TimeUtil.timestampToDate(time, "yyyy-MM-dd"));
+            data.add(TimeUtils.timestampToDate(time, "yyyy-MM-dd"));
         }
 
         Collections.reverse(data);
@@ -487,7 +487,7 @@ public class TimeUtil {
      * @return [1648483200, 1648569600, 1648656000, 1648742400]
      */
     public static List<Long> daysAgoTime(Integer day) {
-        long time = TimeUtil.today().get(0);
+        long time = TimeUtils.today().get(0);
 
         List<Long> data = new ArrayList<>();
         for (int i=0; i<day; i++) {

@@ -9,7 +9,7 @@ import com.mdd.admin.validate.setting.DictDataUpdateValidate;
 import com.mdd.admin.vo.setting.SettingDictDataVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
-import com.mdd.common.utils.StringUtil;
+import com.mdd.common.util.StringUtils;
 import com.mdd.common.validator.annotation.IDMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +37,7 @@ public class SettingDictDataController {
      */
     @GetMapping("/all")
     public AjaxResult<List<SettingDictDataVo>> all(@RequestParam Map<String, String> params) {
-        Assert.isFalse(StringUtil.isEmpty(params.get("dictType")), "dictType缺失");
+        Assert.isFalse(StringUtils.isEmpty(params.get("dictType")), "dictType缺失");
         List<SettingDictDataVo> list = iSettingDictDataService.all(params);
         return AjaxResult.success(list);
     }
@@ -53,7 +53,7 @@ public class SettingDictDataController {
     @GetMapping("/list")
     public AjaxResult<PageResult<SettingDictDataVo>> list(@Validated PageValidate pageValidate,
                                                           @RequestParam Map<String, String> params) {
-        Assert.isFalse(StringUtil.isEmpty(params.get("dictType")), "dictType缺失");
+        Assert.isFalse(StringUtils.isEmpty(params.get("dictType")), "dictType缺失");
         PageResult<SettingDictDataVo> list = iSettingDictDataService.list(pageValidate, params);
         return AjaxResult.success(list);
     }

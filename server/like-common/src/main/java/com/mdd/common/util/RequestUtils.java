@@ -1,4 +1,4 @@
-package com.mdd.common.utils;
+package com.mdd.common.util;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 请求工具类
  */
-public class RequestUtil {
+public class RequestUtils {
 
     /**
      * 获取请求对象
@@ -34,7 +34,7 @@ public class RequestUtil {
      * @return String
      */
     public static String url() {
-        HttpServletRequest request = RequestUtil.handler();
+        HttpServletRequest request = RequestUtils.handler();
         if (request != null) {
             return request.getRequestURL().toString();
         }
@@ -49,9 +49,9 @@ public class RequestUtil {
      * @return String
      */
     public static String uri() {
-        String domain = RequestUtil.domain();
-        if (!Arrays.asList(443,80,0).contains(RequestUtil.port())) {
-            domain += ":" + RequestUtil.port();
+        String domain = RequestUtils.domain();
+        if (!Arrays.asList(443,80,0).contains(RequestUtils.port())) {
+            domain += ":" + RequestUtils.port();
         }
 
         return domain;
@@ -65,7 +65,7 @@ public class RequestUtil {
      * @return String
      */
     public static String route() {
-        HttpServletRequest request = RequestUtil.handler();
+        HttpServletRequest request = RequestUtils.handler();
         if (request != null) {
             return request.getRequestURI();
         }
@@ -80,7 +80,7 @@ public class RequestUtil {
      * @return Integer
      */
     public static Integer port() {
-        HttpServletRequest request = RequestUtil.handler();
+        HttpServletRequest request = RequestUtils.handler();
         if (request != null) {
             return request.getServerPort();
         }
@@ -95,7 +95,7 @@ public class RequestUtil {
      * @return String
      */
     public static String domain() {
-        HttpServletRequest request = RequestUtil.handler();
+        HttpServletRequest request = RequestUtils.handler();
         if (request != null) {
             String requestUrl = request.getRequestURL().toString();
             List<String> urls = Arrays.asList(requestUrl.split("/"));
