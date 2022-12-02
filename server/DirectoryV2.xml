@@ -31,4 +31,5 @@
     <tree path="/like-front/src/main/java/com/mdd/front/LikeFrontApplication.java" title="启动器" extension="java"/>
     <tree path="/like-front/src/main/java/com/mdd/front/LikeFrontInterceptor.java" title="拦截器" extension="java"/>
     <tree path="/like-front/src/main/java/com/mdd/front/LikeFrontThreadLocal.java" title="线程" extension="java"/>
+    <tree path="/like-admin/src/main/java/com/mdd/admin/crontab" title="任务层"/>
 </trees>
