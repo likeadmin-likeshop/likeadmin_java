@@ -30,6 +30,7 @@ public class AdminConfig {
             "setting:dict:type:all", // 所有字典类型
             "setting:dict:data:all", // 所有字典数据
             "article:cate:all",      // 所有文章分类
+            "decorate:data:article", // 装修数据文章
     };
 
 }
