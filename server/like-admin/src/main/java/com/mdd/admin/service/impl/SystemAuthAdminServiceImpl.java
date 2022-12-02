@@ -77,9 +77,12 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
 
         systemAuthAdminMapper.setSearch(mpjQueryWrapper, searchValidate, new String[]{
                 "like:username:str",
-                "like:nickname:str",
-                "=:role:int"
+                "like:nickname:str"
         });
+
+        if (StringUtil.isNotNull(searchValidate.getRole())) {
+            mpjQueryWrapper.in("role_ids", Collections.singletonList(searchValidate.getRole()));
+        }
 
         IPage<SystemAuthAdminListedVo> iPage = systemAuthAdminMapper.selectJoinPage(
                 new Page<>(page, limit),
