@@ -34,7 +34,11 @@ public class LogAspect {
     SystemLogOperateMapper systemLogOperateMapper;
 
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
-    private Long beginTime = 0L;
+
+    /**
+     * 线程本地变量
+     */
+    private static final ThreadLocal<Long> threadLocal = new ThreadLocal<>();
 
     /**
      * 声明切面点拦截那些类
@@ -48,7 +52,7 @@ public class LogAspect {
     @Around(value = "pointCutMethodController()")
     public Object doAroundService(ProceedingJoinPoint joinPoint) throws Throwable {
         // 开始时间
-        this.beginTime = System.currentTimeMillis();
+        threadLocal.set(System.currentTimeMillis());
         // 执行方法
         Object result = joinPoint.proceed();
         // 保存日志
@@ -76,6 +80,7 @@ public class LogAspect {
      */
     private void recordLog(Object joinPointObj, final Exception e) {
         try {
+            long beginTime = threadLocal.get();
             long endTime = System.currentTimeMillis();
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (requestAttributes != null) {
@@ -141,9 +146,9 @@ public class LogAspect {
                 model.setArgs(params);
                 model.setError(error);
                 model.setStatus(status);
-                model.setStartTime(this.beginTime / 1000);
+                model.setStartTime(beginTime / 1000);
                 model.setEndTime(endTime / 1000);
-                model.setTaskTime(endTime - this.beginTime);
+                model.setTaskTime(endTime - beginTime);
                 model.setCreateTime(System.currentTimeMillis() / 1000);
                 systemLogOperateMapper.insert(model);
             }
