@@ -161,7 +161,7 @@ public class AlbumsServiceImpl implements IAlbumsService {
         album.setAid(Integer.parseInt(params.get("aid") == null ? "0" : params.get("aid")));
         album.setUid(Integer.parseInt(params.get("uid") == null ? "0" : params.get("uid")));
         album.setType(Integer.parseInt(params.get("type")));
-        album.setName(params.get("name"));
+        album.setName(params.get("name").substring(0, 99));
         album.setExt(params.get("ext"));
         album.setUri(params.get("url"));
         album.setSize(Long.parseLong(params.get("size")));
