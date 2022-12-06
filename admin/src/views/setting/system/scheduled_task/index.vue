@@ -48,6 +48,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="error" label="错误信息" min-width="120" />
+                <el-table-column label="最后执行时间" prop="endTime" min-width="180" />
                 <el-table-column prop="taskTime" label="执行耗时（ms）" min-width="100" />
 
                 <el-table-column label="操作" width="120" fixed="right">
