@@ -156,12 +156,17 @@ public class AlbumsServiceImpl implements IAlbumsService {
      */
     @Override
     public Integer albumAdd(Map<String, String> params) {
+        String name = params.get("name");
+        if (name.length() >= 100) {
+            name = name.substring(0, 99);
+        }
+
         Album album = new Album();
         album.setCid(Integer.parseInt(params.get("cid") == null ? "0" : params.get("cid")));
         album.setAid(Integer.parseInt(params.get("aid") == null ? "0" : params.get("aid")));
         album.setUid(Integer.parseInt(params.get("uid") == null ? "0" : params.get("uid")));
         album.setType(Integer.parseInt(params.get("type")));
-        album.setName(params.get("name").substring(0, 99));
+        album.setName(name);
         album.setExt(params.get("ext"));
         album.setUri(params.get("url"));
         album.setSize(Long.parseLong(params.get("size")));

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class MyJob  {
 
     public void handle(String s) {
-        System.out.println("有参数定时任务执行逻辑 : " + s);
+        // System.out.println("有参数定时任务执行逻辑 : " + s);
     }
 
 }
