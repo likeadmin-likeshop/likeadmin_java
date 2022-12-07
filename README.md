@@ -17,6 +17,11 @@
 ### 开发文档 
 地址：[https://www.likeadmin.cn](https://www.likeadmin.cn "https://www.likeadmin.cn")
 
+官网备案中，如需访问官网和文档，请直接跳转IP地址：
+
+官网 http://119.91.221.145/
+
+文档 https://119.91.221.145/
 
 ## 👨‍💻‍简介
 我们希望能够为开源社区做出更多的贡献，推出永久免费开源的likeadmin通用前后端分离管理后台系统。遵循MIT开源许可协议，您可以免费使用，甚至允许把你基于likeadmin开发的软件应用开源、发布、销售。
