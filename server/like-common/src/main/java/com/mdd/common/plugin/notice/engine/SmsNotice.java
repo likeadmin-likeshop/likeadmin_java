@@ -4,9 +4,9 @@ import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.plugin.notice.NoticeParams;
 import com.mdd.common.plugin.notice.template.SmsTemplate;
 import com.mdd.common.plugin.sms.SmsDriver;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.RedisUtil;
-import com.mdd.common.utils.StringUtil;
+import com.mdd.common.util.ConfigUtils;
+import com.mdd.common.util.RedisUtils;
+import com.mdd.common.util.StringUtils;
 
 import java.util.*;
 
@@ -27,7 +27,7 @@ public class SmsNotice {
         Integer scene = noticeParams.getScene();
 
         Map<String, String> params = new LinkedHashMap<>();
-        if (StringUtil.isNotNull(noticeParams.getParams())) {
+        if (StringUtils.isNotNull(noticeParams.getParams())) {
             for (String s : noticeParams.getParams()) {
                 String[] arr =  s.split(":");
                 String key = arr[0].trim();
@@ -36,7 +36,7 @@ public class SmsNotice {
             }
         }
 
-        if (StringUtil.isNotEmpty(mobile)) {
+        if (StringUtils.isNotEmpty(mobile)) {
             (new SmsDriver())
                     .setScene(scene)
                     .setMobile(mobile)
@@ -46,9 +46,9 @@ public class SmsNotice {
                     .sendSms();
 
             // 通知类型: [1=业务, 2=验证码]
-            if (smsTemplate.getType().equals(2) && StringUtil.isNotNull(params.get("code"))) {
+            if (smsTemplate.getType().equals(2) && StringUtils.isNotNull(params.get("code"))) {
                 String code = params.get("code").toLowerCase();
-                RedisUtil.set(GlobalConfig.redisSmsCode+scene+":"+mobile, code, 900);
+                RedisUtils.set(GlobalConfig.redisSmsCode+scene+":"+mobile, code, 900);
             }
         }
     }
@@ -79,7 +79,7 @@ public class SmsNotice {
      * @return Map<String, String>
      */
     private Map<String, String> getSmsParams(Map<String, String> params, String content) {
-        String engine = ConfigUtil.get("sms", "default", "");
+        String engine = ConfigUtils.get("sms", "default", "");
         if (!engine.equals("tencent")) {
             return params;
         }
@@ -114,7 +114,7 @@ public class SmsNotice {
         // 取变量对应值
         Map<String, String> arr4 = new LinkedHashMap<>();
         for (String v : arr3) {
-            if (StringUtil.isNotNull(params.get(v))) {
+            if (StringUtils.isNotNull(params.get(v))) {
                 arr4.put(params.get(v), "");
             }
         }

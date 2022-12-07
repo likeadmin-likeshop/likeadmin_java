@@ -6,8 +6,8 @@ import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.system.SystemLogSmsMapper;
 import com.mdd.common.plugin.sms.engine.AliSms;
 import com.mdd.common.plugin.sms.engine.TencentSms;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.SpringUtil;
+import com.mdd.common.util.ConfigUtils;
+import com.mdd.common.util.SpringUtils;
 
 import java.util.Map;
 
@@ -27,9 +27,9 @@ public class SmsDriver {
      * 构造方法
      */
     public SmsDriver() {
-        this.engine = ConfigUtil.get("sms", "default", "");
-        this.config = ConfigUtil.getMap("sms", this.engine);
-        this.systemLogSmsMapper = SpringUtil.getBean(SystemLogSmsMapper.class);
+        this.engine = ConfigUtils.get("sms", "default", "");
+        this.config = ConfigUtils.getMap("sms", this.engine);
+        this.systemLogSmsMapper = SpringUtils.getBean(SystemLogSmsMapper.class);
     }
 
     /**

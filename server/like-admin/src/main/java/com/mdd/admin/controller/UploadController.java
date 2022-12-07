@@ -9,7 +9,7 @@ import com.mdd.common.enums.AlbumEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.plugin.storage.StorageDriver;
 import com.mdd.common.plugin.storage.UploadFilesVo;
-import com.mdd.common.utils.StringUtil;
+import com.mdd.common.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,7 +54,7 @@ public class UploadController {
 
         StorageDriver storageDriver = new StorageDriver();
         UploadFilesVo vo = storageDriver.upload(multipartFile, "image", AlbumEnum.IMAGE.getCode());
-        String cid = StringUtil.isNotEmpty(request.getParameter("cid")) ? request.getParameter("cid") : "0";
+        String cid = StringUtils.isNotEmpty(request.getParameter("cid")) ? request.getParameter("cid") : "0";
 
         Map<String, String> album = new LinkedHashMap<>();
         album.put("aid", String.valueOf(LikeAdminThreadLocal.getAdminId()));
@@ -93,7 +93,7 @@ public class UploadController {
 
         StorageDriver storageDriver = new StorageDriver();
         UploadFilesVo vo = storageDriver.upload(multipartFile, "video", AlbumEnum.Video.getCode());
-        String cid = StringUtil.isNotEmpty(request.getParameter("cid")) ? request.getParameter("cid") : "0";
+        String cid = StringUtils.isNotEmpty(request.getParameter("cid")) ? request.getParameter("cid") : "0";
 
         Map<String, String> album = new LinkedHashMap<>();
         album.put("cid", cid);

@@ -13,7 +13,7 @@ import com.mdd.common.enums.NoticeEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
-import com.mdd.common.utils.*;
+import com.mdd.common.util.*;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
 import com.mdd.front.validate.UserBindMobileValidate;
@@ -57,10 +57,10 @@ public class UserServiceImpl implements IUserService {
         UserCenterVo vo = new UserCenterVo();
         BeanUtils.copyProperties(user, vo);
         if (user.getAvatar().equals("")) {
-            String avatar = ConfigUtil.get("user", "defaultAvatar", "");
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(avatar));
+            String avatar = ConfigUtils.get("user", "defaultAvatar", "");
+            vo.setAvatar(UrlUtils.toAbsoluteUrl(avatar));
         } else {
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(user.getAvatar()));
+            vo.setAvatar(UrlUtils.toAbsoluteUrl(user.getAvatar()));
         }
 
         return vo;
@@ -92,13 +92,13 @@ public class UserServiceImpl implements IUserService {
         vo.setIsBindMnp(userAuth != null);
         vo.setVersion(GlobalConfig.version);
         vo.setSex(user.getSex());
-        vo.setCreateTime(TimeUtil.timestampToDate(user.getCreateTime()));
+        vo.setCreateTime(TimeUtils.timestampToDate(user.getCreateTime()));
 
         if (!user.getAvatar().equals("")) {
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(user.getAvatar()));
+            vo.setAvatar(UrlUtils.toAbsoluteUrl(user.getAvatar()));
         } else {
-            String avatar = ConfigUtil.get("user", "defaultAvatar", "");
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(avatar));
+            String avatar = ConfigUtils.get("user", "defaultAvatar", "");
+            vo.setAvatar(UrlUtils.toAbsoluteUrl(avatar));
         }
 
         return vo;
@@ -120,7 +120,7 @@ public class UserServiceImpl implements IUserService {
             case "avatar":
                 User avatarUser = new User();
                 avatarUser.setId(userId);
-                avatarUser.setAvatar(UrlUtil.toRelativeUrl(value));
+                avatarUser.setAvatar(UrlUtils.toRelativeUrl(value));
                 avatarUser.setUpdateTime(System.currentTimeMillis() / 1000);
                 userMapper.updateById(avatarUser);
                 break;
@@ -131,11 +131,11 @@ public class UserServiceImpl implements IUserService {
                         .eq("is_delete", 0)
                         .last("limit 1"));
 
-                if (StringUtil.isNotNull(usernameUser) && !usernameUser.getId().equals(userId)) {
+                if (StringUtils.isNotNull(usernameUser) && !usernameUser.getId().equals(userId)) {
                     throw new OperateException("账号已被使用!");
                 }
 
-                if (StringUtil.isNotNull(usernameUser) && usernameUser.getUsername().equals(value)) {
+                if (StringUtils.isNotNull(usernameUser) && usernameUser.getUsername().equals(value)) {
                     throw new OperateException("新账号与旧账号一致,修改失败!");
                 }
 
@@ -183,14 +183,14 @@ public class UserServiceImpl implements IUserService {
 
         if (!user.getPassword().equals("")) {
             Assert.notNull(oldPassword, "oldPassword参数缺失");
-            String oldPwd = ToolsUtil.makeMd5(oldPassword.trim() + user.getSalt());
+            String oldPwd = ToolsUtils.makeMd5(oldPassword.trim() + user.getSalt());
             if (!oldPwd.equals(user.getPassword())) {
                 throw new OperateException("原密码不正确!");
             }
         }
 
-        String salt = ToolsUtil.randomString(5);
-        String pwd  = ToolsUtil.makeMd5(password.trim()+salt);
+        String salt = ToolsUtils.randomString(5);
+        String pwd  = ToolsUtils.makeMd5(password.trim()+salt);
 
         User u = new User();
         u.setId(userId);
@@ -215,8 +215,8 @@ public class UserServiceImpl implements IUserService {
 
         // 校验验证码
         int typeCode = type.equals("bind") ? NoticeEnum.SMS_BIND_MOBILE_CODE.getCode() : NoticeEnum.SMS_CHANGE_MOBILE_CODE.getCode() ;
-        Object smsCode = RedisUtil.get(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
-        if (StringUtil.isNull(smsCode) || !smsCode.toString().equals(code)) {
+        Object smsCode = RedisUtils.get(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
+        if (StringUtils.isNull(smsCode) || !smsCode.toString().equals(code)) {
             throw new OperateException("验证码错误!");
         }
 
@@ -226,7 +226,7 @@ public class UserServiceImpl implements IUserService {
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
-        if (StringUtil.isNotNull(user) && user.getId().equals(userId)) {
+        if (StringUtils.isNotNull(user) && user.getId().equals(userId)) {
             throw new OperateException("手机号已被其它账号绑定!");
         }
 
@@ -245,7 +245,7 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public void mnpMobile(String code) {
-        Map<String, String> config = ConfigUtil.get("mp_channel");
+        Map<String, String> config = ConfigUtils.get("mp_channel");
         WxMaService wxMaService = new WxMaServiceImpl();
         WxMaDefaultConfigImpl wxConfig = new WxMaDefaultConfigImpl();
         wxConfig.setSecret(config.getOrDefault("appSecret", ""));

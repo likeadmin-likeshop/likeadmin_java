@@ -10,6 +10,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 系统管理员更新参数
@@ -21,10 +22,6 @@ public class SystemAdminUpdateValidate implements Serializable {
 
     @IDMust(message = "id参数必传且需大于0")
     private Integer id;
-
-    @NotNull(message = "请选择角色")
-    @Min(value = 0, message = "role参数异常")
-    private Integer role;
 
     @NotEmpty(message = "账号不能为空")
     @Length(min = 2, max = 20, message = "账号必须在2~20个字符内")
@@ -48,13 +45,15 @@ public class SystemAdminUpdateValidate implements Serializable {
     @DecimalMin(value = "0", message = "排序号值不能少于0")
     private Integer sort = 0;
 
-    @DecimalMin(value = "0", message = "部门ID值不能少于0")
-    private Integer deptId = 0;
-
-    @DecimalMin(value = "0", message = "岗位ID值不能少于0")
-    private Integer postId = 0;
-
     @Length(max = 200, message = "头像不能超出200个字符")
     private String avatar = "";
+
+    @NotNull(message = "请选择角色")
+
+    private List<Integer> roleIds;
+
+    private List<Integer> deptIds;
+
+    private List<Integer> postIds;
 
 }

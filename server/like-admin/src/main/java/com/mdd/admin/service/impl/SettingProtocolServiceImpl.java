@@ -5,8 +5,8 @@ import com.mdd.admin.service.ISettingProtocolService;
 import com.mdd.admin.validate.setting.SettingProtocolValidate;
 import com.mdd.admin.vo.setting.SettingProtocolDetailVo;
 import com.mdd.admin.vo.setting.SettingProtocolObjectVo;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.ToolsUtil;
+import com.mdd.common.util.ConfigUtils;
+import com.mdd.common.util.ToolsUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -25,10 +25,10 @@ public class SettingProtocolServiceImpl implements ISettingProtocolService {
      */
     @Override
     public SettingProtocolDetailVo detail() {
-        String service = ConfigUtil.get("protocol", "service", "{\"name\":\"\",\"content\":\"\"}");
-        String privacy = ConfigUtil.get("protocol", "privacy", "{\"name\":\"\",\"content\":\"\"}");
-        Map<String, String> serviceMap = ToolsUtil.jsonToMap(service);
-        Map<String, String> privacyMap = ToolsUtil.jsonToMap(privacy);
+        String service = ConfigUtils.get("protocol", "service", "{\"name\":\"\",\"content\":\"\"}");
+        String privacy = ConfigUtils.get("protocol", "privacy", "{\"name\":\"\",\"content\":\"\"}");
+        Map<String, String> serviceMap = ToolsUtils.jsonToMap(service);
+        Map<String, String> privacyMap = ToolsUtils.jsonToMap(privacy);
 
         SettingProtocolObjectVo serviceObj = new SettingProtocolObjectVo();
         serviceObj.setName(serviceMap.getOrDefault("name", ""));
@@ -52,8 +52,8 @@ public class SettingProtocolServiceImpl implements ISettingProtocolService {
      */
     @Override
     public void save(SettingProtocolValidate protocolValidate) {
-        ConfigUtil.set("protocol","service", JSON.toJSONString(protocolValidate.getService()));
-        ConfigUtil.set("protocol","privacy", JSON.toJSONString(protocolValidate.getPrivacy()));
+        ConfigUtils.set("protocol","service", JSON.toJSONString(protocolValidate.getService()));
+        ConfigUtils.set("protocol","privacy", JSON.toJSONString(protocolValidate.getPrivacy()));
     }
 
 }

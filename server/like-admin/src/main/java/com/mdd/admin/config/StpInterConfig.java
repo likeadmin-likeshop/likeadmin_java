@@ -3,13 +3,13 @@ package com.mdd.admin.config;
 import cn.dev33.satoken.stp.StpInterface;
 import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.service.ISystemAuthPermService;
-import com.mdd.common.utils.RedisUtil;
-import com.mdd.common.utils.StringUtil;
+import com.mdd.common.util.ArrayUtils;
+import com.mdd.common.util.RedisUtils;
+import com.mdd.common.util.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Sa-Token自定义权限验证接口
@@ -29,20 +29,21 @@ public class StpInterConfig implements StpInterface {
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        Integer roleId  = LikeAdminThreadLocal.getRoleId();
-        Object menusObj = RedisUtil.hGet(AdminConfig.backstageRolesKey, String.valueOf(roleId));
-        if (StringUtil.isNull(menusObj)) {
-            iSystemAuthPermService.cacheRoleMenusByRoleId(roleId);
-            menusObj = RedisUtil.hGet(AdminConfig.backstageRolesKey, String.valueOf(roleId));
+        List<Integer> roleIds  = LikeAdminThreadLocal.getRoleId();
+        List<String> perms = new LinkedList<>();
+
+        for (Integer roleId : roleIds) {
+            Object menusObj = RedisUtils.hGet(AdminConfig.backstageRolesKey, String.valueOf(roleId));
+            if (StringUtils.isNull(menusObj)) {
+                iSystemAuthPermService.cacheRoleMenusByRoleId(roleId);
+                menusObj = RedisUtils.hGet(AdminConfig.backstageRolesKey, String.valueOf(roleId));
+            }
+            if (StringUtils.isNotNull(menusObj)) {
+                perms.addAll(ArrayUtils.stringToListAsStr(menusObj.toString(), ","));
+            }
         }
 
-        List<String> list = new ArrayList<>();
-        String[] menus = menusObj.toString().split(",");
-        for (String auth : menus) {
-            list.add(auth.toLowerCase());
-        }
-
-        return list;
+        return perms;
     }
 
     /**

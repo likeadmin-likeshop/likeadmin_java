@@ -14,3 +14,28 @@ export function systemLogLists(params: any) {
 export function systemCache() {
     return request.get({ url: '/monitor/cache' })
 }
+
+// 定时任务列表
+export function crontabLists(params: any) {
+    return request.get({ url: '/crontab/list', params })
+}
+
+// 添加定时任务
+export function crontabAdd(params: any) {
+    return request.post({ url: '/crontab/add', params })
+}
+
+// 定时任务详情
+export function crontabDetail(params: any) {
+    return request.get({ url: '/crontab/detail', params })
+}
+
+// 编辑定时任务
+export function crontabEdit(params: any) {
+    return request.post({ url: '/crontab/edit', params })
+}
+
+// 删除定时任务
+export function crontabDel(params: any) {
+    return request.post({ url: '/crontab/del', params })
+}

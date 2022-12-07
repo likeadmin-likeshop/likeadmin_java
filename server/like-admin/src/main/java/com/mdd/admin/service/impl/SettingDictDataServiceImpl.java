@@ -14,7 +14,7 @@ import com.mdd.common.entity.setting.DictData;
 import com.mdd.common.entity.setting.DictType;
 import com.mdd.common.mapper.setting.DictDataMapper;
 import com.mdd.common.mapper.setting.DictTypeMapper;
-import com.mdd.common.utils.TimeUtil;
+import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -69,8 +69,8 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
             SettingDictDataVo vo = new SettingDictDataVo();
             BeanUtils.copyProperties(dictData, vo);
 
-            vo.setCreateTime(TimeUtil.timestampToDate(dictData.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(dictData.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(dictData.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(dictData.getUpdateTime()));
             list.add(vo);
         }
 
@@ -116,8 +116,8 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
             SettingDictDataVo vo = new SettingDictDataVo();
             BeanUtils.copyProperties(dictData, vo);
 
-            vo.setCreateTime(TimeUtil.timestampToDate(dictData.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(dictData.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(dictData.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(dictData.getUpdateTime()));
             list.add(vo);
         }
 
@@ -143,8 +143,8 @@ public class SettingDictDataServiceImpl implements ISettingDictDataService {
 
         SettingDictDataVo vo = new SettingDictDataVo();
         BeanUtils.copyProperties(dictData, vo);
-        vo.setCreateTime(TimeUtil.timestampToDate(dictData.getCreateTime()));
-        vo.setUpdateTime(TimeUtil.timestampToDate(dictData.getUpdateTime()));
+        vo.setCreateTime(TimeUtils.timestampToDate(dictData.getCreateTime()));
+        vo.setUpdateTime(TimeUtils.timestampToDate(dictData.getUpdateTime()));
         return vo;
     }
 

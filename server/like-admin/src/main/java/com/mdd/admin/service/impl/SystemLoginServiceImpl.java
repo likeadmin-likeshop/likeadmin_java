@@ -2,7 +2,6 @@ package com.mdd.admin.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.mdd.admin.config.AdminConfig;
 import com.mdd.admin.service.ISystemAuthAdminService;
 import com.mdd.admin.service.ISystemLoginService;
 import com.mdd.admin.validate.system.SystemAdminLoginsValidate;
@@ -14,7 +13,7 @@ import com.mdd.common.exception.LoginException;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.system.SystemAuthAdminMapper;
 import com.mdd.common.mapper.system.SystemLogLoginMapper;
-import com.mdd.common.utils.*;
+import com.mdd.common.util.*;
 import nl.bitwalker.useragentutils.UserAgent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +57,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
                 .eq("username", username)
                 .last("limit 1"));
 
-        if (StringUtil.isNull(sysAdmin) || sysAdmin.getIsDelete().equals(1)) {
+        if (StringUtils.isNull(sysAdmin) || sysAdmin.getIsDelete().equals(1)) {
             this.recordLoginLog(0, loginsValidate.getUsername(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
             throw new LoginException(HttpEnum.LOGIN_ACCOUNT_ERROR.getCode(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
         }
@@ -69,7 +68,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
         }
 
         String newPWd = password + sysAdmin.getSalt();
-        String md5Pwd = ToolsUtil.makeMd5(newPWd);
+        String md5Pwd = ToolsUtils.makeMd5(newPWd);
         if (!md5Pwd.equals(sysAdmin.getPassword())) {
             this.recordLoginLog(sysAdmin.getId(), loginsValidate.getUsername(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
             throw new LoginException(HttpEnum.LOGIN_ACCOUNT_ERROR.getCode(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
@@ -85,7 +84,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
             StpUtil.login(sysAdmin.getId());
 
             // 更新登录信息
-            sysAdmin.setLastLoginIp(IpUtil.getIpAddress());
+            sysAdmin.setLastLoginIp(IpUtils.getIpAddress());
             sysAdmin.setLastLoginTime(System.currentTimeMillis() / 1000);
             systemAuthAdminMapper.updateById(sysAdmin);
 
@@ -99,8 +98,8 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
             vo.setToken(StpUtil.getTokenValue());
             return vo;
         } catch (Exception e) {
-            Integer adminId = StringUtil.isNotNull(sysAdmin.getId()) ? sysAdmin.getId() : 0;
-            String error = StringUtil.isEmpty(e.getMessage()) ? "未知错误" : e.getMessage();
+            Integer adminId = StringUtils.isNotNull(sysAdmin.getId()) ? sysAdmin.getId() : 0;
+            String error = StringUtils.isEmpty(e.getMessage()) ? "未知错误" : e.getMessage();
             this.recordLoginLog(adminId, loginsValidate.getUsername(), error);
             throw new OperateException(e.getMessage());
         }
@@ -122,16 +121,16 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
      */
     private void recordLoginLog(Integer adminId, String username, String error) {
         try {
-            HttpServletRequest request = Objects.requireNonNull(RequestUtil.handler());
+            HttpServletRequest request = Objects.requireNonNull(RequestUtils.handler());
             final UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
 
             SystemLogLogin model = new SystemLogLogin();
             model.setAdminId(adminId);
             model.setUsername(username);
-            model.setIp(IpUtil.getIpAddress());
+            model.setIp(IpUtils.getIpAddress());
             model.setOs(userAgent.getOperatingSystem().getName());
             model.setBrowser(userAgent.getBrowser().getName());
-            model.setStatus(StringUtil.isEmpty(error) ? 1 : 0);
+            model.setStatus(StringUtils.isEmpty(error) ? 1 : 0);
             model.setCreateTime(System.currentTimeMillis() / 1000);
             systemLogLoginMapper.insert(model);
         } catch (Exception e) {

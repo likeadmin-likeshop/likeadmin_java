@@ -14,7 +14,7 @@ import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.article.ArticleCategory;
 import com.mdd.common.mapper.article.ArticleCategoryMapper;
 import com.mdd.common.mapper.article.ArticleMapper;
-import com.mdd.common.utils.TimeUtil;
+import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -56,8 +56,8 @@ public class ArtCateServiceImpl implements IArtCateService {
             ArticleCateVo vo = new ArticleCateVo();
             BeanUtils.copyProperties(category, vo);
 
-            vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(vo.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(vo.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(vo.getUpdateTime()));
             vos.add(vo);
         }
 
@@ -98,8 +98,8 @@ public class ArtCateServiceImpl implements IArtCateService {
                     .eq("is_delete", 0));
 
             vo.setNumber(number);
-            vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(vo.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(vo.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(vo.getUpdateTime()));
             list.add(vo);
         }
 
@@ -127,8 +127,8 @@ public class ArtCateServiceImpl implements IArtCateService {
 
         ArticleCateVo vo = new ArticleCateVo();
         BeanUtils.copyProperties(model, vo);
-        vo.setCreateTime(TimeUtil.timestampToDate(model.getCreateTime()));
-        vo.setUpdateTime(TimeUtil.timestampToDate(model.getUpdateTime()));
+        vo.setCreateTime(TimeUtils.timestampToDate(model.getCreateTime()));
+        vo.setUpdateTime(TimeUtils.timestampToDate(model.getUpdateTime()));
 
         return vo;
     }
@@ -145,8 +145,8 @@ public class ArtCateServiceImpl implements IArtCateService {
         model.setName(createValidate.getName());
         model.setSort(createValidate.getSort());
         model.setIsShow(model.getIsShow());
-        model.setCreateTime(TimeUtil.timestamp());
-        model.setUpdateTime(TimeUtil.timestamp());
+        model.setCreateTime(TimeUtils.timestamp());
+        model.setUpdateTime(TimeUtils.timestamp());
         articleCategoryMapper.insert(model);
     }
 
@@ -171,7 +171,7 @@ public class ArtCateServiceImpl implements IArtCateService {
         model.setName(updateValidate.getName());
         model.setSort(updateValidate.getSort());
         model.setIsShow(updateValidate.getIsShow());
-        model.setUpdateTime(TimeUtil.timestamp());
+        model.setUpdateTime(TimeUtils.timestamp());
         articleCategoryMapper.updateById(model);
     }
 
@@ -199,7 +199,7 @@ public class ArtCateServiceImpl implements IArtCateService {
         Assert.isNull(article, "当前分类已被文章使用,请先移除!");
 
         model.setIsDelete(1);
-        model.setDeleteTime(TimeUtil.timestamp());
+        model.setDeleteTime(TimeUtils.timestamp());
         articleCategoryMapper.updateById(model);
     }
 
@@ -220,7 +220,7 @@ public class ArtCateServiceImpl implements IArtCateService {
         Assert.notNull(model, "分类不存在");
 
         model.setIsShow(model.getIsShow()==0?1:0);
-        model.setUpdateTime(TimeUtil.timestamp());
+        model.setUpdateTime(TimeUtils.timestamp());
         articleCategoryMapper.updateById(model);
     }
 

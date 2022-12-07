@@ -17,9 +17,9 @@ import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.article.ArticleCategory;
 import com.mdd.common.mapper.article.ArticleCategoryMapper;
 import com.mdd.common.mapper.article.ArticleMapper;
-import com.mdd.common.utils.StringUtil;
-import com.mdd.common.utils.TimeUtil;
-import com.mdd.common.utils.UrlUtil;
+import com.mdd.common.util.StringUtils;
+import com.mdd.common.util.TimeUtils;
+import com.mdd.common.util.UrlUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -72,9 +72,9 @@ public class ArticleServiceImpl implements IArticleService {
                 mpjQueryWrapper);
 
         for (ArticleListedVo vo : iPage.getRecords()) {
-            vo.setImage(UrlUtil.toAbsoluteUrl(vo.getImage()));
-            vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(vo.getUpdateTime()));
+            vo.setImage(UrlUtils.toAbsoluteUrl(vo.getImage()));
+            vo.setCreateTime(TimeUtils.timestampToDate(vo.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(vo.getUpdateTime()));
         }
 
         return PageResult.iPageHandle(iPage);
@@ -100,10 +100,10 @@ public class ArticleServiceImpl implements IArticleService {
 
         ArticleDetailVo vo = new ArticleDetailVo();
         BeanUtils.copyProperties(model, vo);
-        vo.setContent(StringUtil.isNull(model.getContent()) ? "" : model.getContent());
-        vo.setImage(UrlUtil.toAbsoluteUrl(model.getImage()));
-        vo.setCreateTime(TimeUtil.timestampToDate(model.getCreateTime()));
-        vo.setUpdateTime(TimeUtil.timestampToDate(model.getUpdateTime()));
+        vo.setContent(StringUtils.isNull(model.getContent()) ? "" : model.getContent());
+        vo.setImage(UrlUtils.toAbsoluteUrl(model.getImage()));
+        vo.setCreateTime(TimeUtils.timestampToDate(model.getCreateTime()));
+        vo.setUpdateTime(TimeUtils.timestampToDate(model.getUpdateTime()));
 
         return vo;
     }
@@ -119,7 +119,7 @@ public class ArticleServiceImpl implements IArticleService {
         Article model = new Article();
         model.setCid(createValidate.getCid());
         model.setTitle(createValidate.getTitle());
-        model.setImage(UrlUtil.toRelativeUrl(createValidate.getImage()));
+        model.setImage(UrlUtils.toRelativeUrl(createValidate.getImage()));
         model.setIntro(createValidate.getIntro());
         model.setContent(createValidate.getContent());
         model.setSummary(createValidate.getSummary());
@@ -127,8 +127,8 @@ public class ArticleServiceImpl implements IArticleService {
         model.setIsShow(createValidate.getIsShow());
         model.setAuthor(createValidate.getAuthor());
         model.setVisit(createValidate.getVisit());
-        model.setCreateTime(TimeUtil.timestamp());
-        model.setUpdateTime(TimeUtil.timestamp());
+        model.setCreateTime(TimeUtils.timestamp());
+        model.setUpdateTime(TimeUtils.timestamp());
         articleMapper.insert(model);
     }
 
@@ -154,7 +154,7 @@ public class ArticleServiceImpl implements IArticleService {
 
         model.setCid(updateValidate.getCid());
         model.setTitle(updateValidate.getTitle());
-        model.setImage(UrlUtil.toRelativeUrl(updateValidate.getImage()));
+        model.setImage(UrlUtils.toRelativeUrl(updateValidate.getImage()));
         model.setIntro(updateValidate.getIntro());
         model.setContent(updateValidate.getContent());
         model.setSummary(updateValidate.getSummary());
@@ -162,7 +162,7 @@ public class ArticleServiceImpl implements IArticleService {
         model.setIsShow(updateValidate.getIsShow());
         model.setAuthor(updateValidate.getAuthor());
         model.setSort(updateValidate.getSort());
-        model.setUpdateTime(TimeUtil.timestamp());
+        model.setUpdateTime(TimeUtils.timestamp());
         articleMapper.updateById(model);
     }
 
@@ -183,7 +183,7 @@ public class ArticleServiceImpl implements IArticleService {
         Assert.notNull(article, "文章不存在!");
 
         article.setIsDelete(1);
-        article.setDeleteTime(TimeUtil.timestamp());
+        article.setDeleteTime(TimeUtils.timestamp());
         articleMapper.updateById(article);
     }
 
@@ -204,7 +204,7 @@ public class ArticleServiceImpl implements IArticleService {
         Assert.notNull(article, "文章不存在!");
 
         article.setIsShow(article.getIsShow()==0?1:0);
-        article.setUpdateTime(TimeUtil.timestamp());
+        article.setUpdateTime(TimeUtils.timestamp());
         articleMapper.updateById(article);
     }
 

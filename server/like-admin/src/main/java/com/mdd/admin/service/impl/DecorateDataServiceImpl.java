@@ -5,8 +5,8 @@ import com.mdd.admin.service.IDecorateDataService;
 import com.mdd.admin.vo.decorate.DecorateDataArticleVo;
 import com.mdd.common.entity.article.Article;
 import com.mdd.common.mapper.article.ArticleMapper;
-import com.mdd.common.utils.TimeUtil;
-import com.mdd.common.utils.UrlUtil;
+import com.mdd.common.util.TimeUtils;
+import com.mdd.common.util.UrlUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +43,8 @@ public class DecorateDataServiceImpl implements IDecorateDataService {
         for (Article article : articles) {
             DecorateDataArticleVo vo = new DecorateDataArticleVo();
             BeanUtils.copyProperties(article, vo);
-            vo.setImage(UrlUtil.toAbsoluteUrl(article.getImage()));
-            vo.setCreateTime(TimeUtil.timestampToDate(article.getCreateTime()));
+            vo.setImage(UrlUtils.toAbsoluteUrl(article.getImage()));
+            vo.setCreateTime(TimeUtils.timestampToDate(article.getCreateTime()));
             list.add(vo);
         }
 

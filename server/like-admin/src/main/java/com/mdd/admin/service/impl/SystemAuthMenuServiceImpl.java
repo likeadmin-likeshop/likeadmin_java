@@ -12,9 +12,9 @@ import com.mdd.admin.validate.system.SystemMenuUpdateValidate;
 import com.mdd.admin.vo.system.SystemAuthMenuVo;
 import com.mdd.common.entity.system.SystemAuthMenu;
 import com.mdd.common.mapper.system.SystemAuthMenuMapper;
-import com.mdd.common.utils.ArrayUtil;
-import com.mdd.common.utils.RedisUtil;
-import com.mdd.common.utils.TimeUtil;
+import com.mdd.common.util.ArrayUtils;
+import com.mdd.common.util.RedisUtils;
+import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -39,13 +39,13 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
      * 根据角色ID获取菜单
      *
      * @author fzr
-     * @param roleId 角色ID
+     * @param roleIds 角色ID
      * @return JSONArray
      */
     @Override
-    public JSONArray selectMenuByRoleId(Integer roleId) {
+    public JSONArray selectMenuByRoleId(List<Integer> roleIds) {
         Integer adminId = LikeAdminThreadLocal.getAdminId();
-        List<Integer> menuIds = iSystemAuthPermService.selectMenuIdsByRoleId(roleId);
+        List<Integer> menuIds = iSystemAuthPermService.selectMenuIdsByRoleId(roleIds);
 
         QueryWrapper<SystemAuthMenu> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("menu_type", Arrays.asList("M", "C"));
@@ -66,13 +66,13 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
             SystemAuthMenuVo vo = new SystemAuthMenuVo();
             BeanUtils.copyProperties(systemAuthMenu, vo);
 
-            vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthMenu.getUpdateTime()));
-            vo.setCreateTime(TimeUtil.timestampToDate(systemAuthMenu.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(systemAuthMenu.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(systemAuthMenu.getCreateTime()));
             lists.add(vo);
         }
 
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(lists));
-        return ArrayUtil.listToTree(jsonArray, "id", "pid", "children");
+        return ArrayUtils.listToTree(jsonArray, "id", "pid", "children");
     }
 
     /**
@@ -94,13 +94,13 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
             SystemAuthMenuVo vo = new SystemAuthMenuVo();
             BeanUtils.copyProperties(systemAuthMenu, vo);
 
-            vo.setCreateTime(TimeUtil.timestampToDate(systemAuthMenu.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthMenu.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(systemAuthMenu.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(systemAuthMenu.getUpdateTime()));
             lists.add(vo);
         }
 
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(lists));
-        return ArrayUtil.listToTree(jsonArray, "id", "pid", "children");
+        return ArrayUtils.listToTree(jsonArray, "id", "pid", "children");
     }
 
     /**
@@ -117,8 +117,8 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
 
         SystemAuthMenuVo vo  = new SystemAuthMenuVo();
         BeanUtils.copyProperties(systemAuthMenu, vo);
-        vo.setCreateTime(TimeUtil.timestampToDate(systemAuthMenu.getCreateTime()));
-        vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthMenu.getUpdateTime()));
+        vo.setCreateTime(TimeUtils.timestampToDate(systemAuthMenu.getCreateTime()));
+        vo.setUpdateTime(TimeUtils.timestampToDate(systemAuthMenu.getUpdateTime()));
 
         return vo;
     }
@@ -149,7 +149,7 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         systemAuthMenuMapper.insert(model);
 
-        RedisUtil.del(AdminConfig.backstageRolesKey);
+        RedisUtils.del(AdminConfig.backstageRolesKey);
     }
 
     /**
@@ -179,7 +179,7 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         systemAuthMenuMapper.updateById(model);
 
-        RedisUtil.del(AdminConfig.backstageRolesKey);
+        RedisUtils.del(AdminConfig.backstageRolesKey);
     }
 
     /**
@@ -206,7 +206,7 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         systemAuthMenuMapper.deleteById(id);
         iSystemAuthPermService.batchDeleteByMenuId(id);
 
-        RedisUtil.del(AdminConfig.backstageRolesKey);
+        RedisUtils.del(AdminConfig.backstageRolesKey);
     }
 
 }

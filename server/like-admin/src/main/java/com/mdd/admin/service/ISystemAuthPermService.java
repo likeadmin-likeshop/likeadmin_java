@@ -10,10 +10,10 @@ public interface ISystemAuthPermService {
     /**
      * 根据角色ID获取菜单ID
      *
-     * @param roleId 角色ID
+     * @param roleIds 角色ID
      * @return List<Integer>
      */
-    List<Integer> selectMenuIdsByRoleId(Integer roleId);
+    List<Integer> selectMenuIdsByRoleId(List<Integer> roleIds);
 
     /**
      * 批量写入角色菜单

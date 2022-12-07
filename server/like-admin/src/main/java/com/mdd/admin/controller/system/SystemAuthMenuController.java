@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 系统菜单管理
@@ -33,8 +34,8 @@ public class SystemAuthMenuController {
      */
     @GetMapping("/route")
     public AjaxResult<JSONArray> route() {
-        Integer roleId = LikeAdminThreadLocal.getRoleId();
-        JSONArray lists = iSystemAuthMenuService.selectMenuByRoleId(roleId);
+        List<Integer> roleIds = LikeAdminThreadLocal.getRoleId();
+        JSONArray lists = iSystemAuthMenuService.selectMenuByRoleId(roleIds);
         return AjaxResult.success(lists);
     }
 

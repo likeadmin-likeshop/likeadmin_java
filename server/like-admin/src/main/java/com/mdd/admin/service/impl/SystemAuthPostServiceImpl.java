@@ -15,7 +15,7 @@ import com.mdd.common.entity.system.SystemAuthAdmin;
 import com.mdd.common.entity.system.SystemAuthPost;
 import com.mdd.common.mapper.system.SystemAuthAdminMapper;
 import com.mdd.common.mapper.system.SystemAuthPostMapper;
-import com.mdd.common.utils.TimeUtil;
+import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -53,8 +53,8 @@ public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
             SystemAuthPostVo vo = new SystemAuthPostVo();
             BeanUtils.copyProperties(systemAuthPost, vo);
 
-            vo.setCreateTime(TimeUtil.timestampToDate(systemAuthPost.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthPost.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(systemAuthPost.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(systemAuthPost.getUpdateTime()));
             adminVoArrayList.add(vo);
         }
 
@@ -94,8 +94,8 @@ public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
             SystemAuthPostVo vo = new SystemAuthPostVo();
             BeanUtils.copyProperties(systemAuthPost, vo);
 
-            vo.setCreateTime(TimeUtil.timestampToDate(systemAuthPost.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthPost.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(systemAuthPost.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(systemAuthPost.getUpdateTime()));
             list.add(vo);
         }
 
@@ -123,8 +123,8 @@ public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
 
         SystemAuthPostVo vo = new SystemAuthPostVo();
         BeanUtils.copyProperties(systemAuthPost, vo);
-        vo.setCreateTime(TimeUtil.timestampToDate(systemAuthPost.getCreateTime()));
-        vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthPost.getUpdateTime()));
+        vo.setCreateTime(TimeUtils.timestampToDate(systemAuthPost.getCreateTime()));
+        vo.setUpdateTime(TimeUtils.timestampToDate(systemAuthPost.getUpdateTime()));
 
         return vo;
     }

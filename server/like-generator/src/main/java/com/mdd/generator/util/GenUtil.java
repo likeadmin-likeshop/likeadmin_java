@@ -2,7 +2,7 @@ package com.mdd.generator.util;
 
 import com.mdd.common.config.GlobalConfig;
 import com.mdd.generator.constant.GenConstants;
-import com.mdd.common.utils.StringUtil;
+import com.mdd.common.util.StringUtils;
 import com.mdd.generator.config.GenConfig;
 import com.mdd.generator.constant.HtmlConstants;
 import com.mdd.generator.constant.JavaConstants;
@@ -48,7 +48,7 @@ public class GenUtil {
         String columnName = column.getColumnName();
         String columnType = GenUtil.getDbType(column.getColumnType());
         column.setColumnLength(GenUtil.getColumnLength(column.getColumnType()));
-        column.setJavaField(StringUtil.toCamelCase(columnName));
+        column.setJavaField(StringUtils.toCamelCase(columnName));
         column.setJavaType(JavaConstants.TYPE_STRING);
         column.setQueryType(GenConstants.QUERY_EQ);
         column.setUpdateTime(table.getUpdateTime());
@@ -79,7 +79,7 @@ public class GenUtil {
         // 数字字段
         else if (GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_NUMBER, columnType)) {
             column.setHtmlType(HtmlConstants.HTML_INPUT);           // 输入框
-            String[] str = StringUtil.split(StringUtil.substringBetween(column.getColumnType(), "(", ")"), ",");
+            String[] str = StringUtils.split(StringUtils.substringBetween(column.getColumnType(), "(", ")"), ",");
             if (str != null && str.length == 2 && Integer.parseInt(str[1]) > 0) {
                 column.setJavaType(JavaConstants.TYPE_BIG_DECIMAL); // 浮点形
             } else if (str != null && str.length == 1 && Integer.parseInt(str[0]) <= 11) {
@@ -116,7 +116,7 @@ public class GenUtil {
         }
 
         // 模糊查字段
-        if (StringUtil.endsWithIgnoreCase(columnName, "name") ||
+        if (StringUtils.endsWithIgnoreCase(columnName, "name") ||
                 columnName.equals("nickname") ||
                 columnName.equals("username") ||
                 columnName.equals("title")    ||
@@ -125,22 +125,22 @@ public class GenUtil {
         }
 
         // 根据字段设置
-        if (StringUtil.endsWithIgnoreCase(columnName, "status")
+        if (StringUtils.endsWithIgnoreCase(columnName, "status")
                 || columnName.equals("isShow")
                 || columnName.equals("isDisable")) {
             // 状态字段设置单选框
             column.setHtmlType(HtmlConstants.HTML_RADIO);
-        } else if (StringUtil.endsWithIgnoreCase(columnName, "type") ||
-                StringUtil.endsWithIgnoreCase(columnName, "sex")) {
+        } else if (StringUtils.endsWithIgnoreCase(columnName, "type") ||
+                StringUtils.endsWithIgnoreCase(columnName, "sex")) {
             // 类型&性别字段设置下拉框
             column.setHtmlType(HtmlConstants.HTML_SELECT);
-        } else if (StringUtil.endsWithIgnoreCase(columnName, "image")) {
+        } else if (StringUtils.endsWithIgnoreCase(columnName, "image")) {
             // 图片字段设置图片上传控件
             column.setHtmlType(HtmlConstants.HTML_IMAGE_UPLOAD);
-        } else if (StringUtil.endsWithIgnoreCase(columnName, "file")) {
+        } else if (StringUtils.endsWithIgnoreCase(columnName, "file")) {
             // 文件字段设置文件上传控件
             column.setHtmlType(HtmlConstants.HTML_FILE_UPLOAD);
-        } else if (StringUtil.endsWithIgnoreCase(columnName, "content")) {
+        } else if (StringUtils.endsWithIgnoreCase(columnName, "content")) {
             // 内容字段的设置富文本控件
             column.setHtmlType(HtmlConstants.HTML_EDITOR);
         }
@@ -156,7 +156,7 @@ public class GenUtil {
     public static String toModuleName(String tableName)   {
         int lastIndex = tableName.lastIndexOf("_");
         int nameLength = tableName.length();
-        return StringUtil.substring(tableName, lastIndex + 1, nameLength);
+        return StringUtils.substring(tableName, lastIndex + 1, nameLength);
     }
 
     /**
@@ -168,11 +168,11 @@ public class GenUtil {
      */
     public static String toClassName(String tableName) {
         String tablePrefix = GlobalConfig.tablePrefix;
-        if (GenConfig.isRemoveTablePrefix && StringUtil.isNotEmpty(tablePrefix)) {
-            String[] searchList = StringUtil.split(tablePrefix, ",");
+        if (GenConfig.isRemoveTablePrefix && StringUtils.isNotEmpty(tablePrefix)) {
+            String[] searchList = StringUtils.split(tablePrefix, ",");
             tableName = replaceFirst(tableName, searchList);
         }
-        return StringUtil.convertToCamelCase(tableName);
+        return StringUtils.convertToCamelCase(tableName);
     }
 
     /**
@@ -225,8 +225,8 @@ public class GenUtil {
      * @return String
      */
     public static String getDbType(String columnType) {
-        if (StringUtil.indexOf(columnType, "(") > 0) {
-            return StringUtil.substringBefore(columnType, "(");
+        if (StringUtils.indexOf(columnType, "(") > 0) {
+            return StringUtils.substringBefore(columnType, "(");
         }
         else {
             return columnType;
@@ -241,8 +241,8 @@ public class GenUtil {
      * @return 截取后的列类型
      */
     public static String getColumnLength(String columnType) {
-        if (StringUtil.indexOf(columnType, "(") > 0) {
-            return StringUtil.substringBetween(columnType, "(", ")");
+        if (StringUtils.indexOf(columnType, "(") > 0) {
+            return StringUtils.substringBetween(columnType, "(", ")");
         } else {
             return "0";
         }

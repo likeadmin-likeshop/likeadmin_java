@@ -3,11 +3,10 @@ package com.mdd.admin.service.impl;
 import com.mdd.admin.service.ISettingWebsiteService;
 import com.mdd.admin.validate.setting.SettingWebsiteValidate;
 import com.mdd.admin.vo.setting.SettingWebsiteVo;
-import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.UrlUtil;
+import com.mdd.common.util.ConfigUtils;
+import com.mdd.common.util.UrlUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -24,15 +23,15 @@ public class SettingWebsiteServiceImpl implements ISettingWebsiteService {
      */
     @Override
     public SettingWebsiteVo detail() {
-        Map<String, String> config = ConfigUtil.get("website");
+        Map<String, String> config = ConfigUtils.get("website");
 
         SettingWebsiteVo vo = new SettingWebsiteVo();
         vo.setName(config.getOrDefault("name", ""));
-        vo.setLogo(UrlUtil.toAbsoluteUrl(config.getOrDefault("logo", "")));
-        vo.setFavicon(UrlUtil.toAbsoluteUrl(config.getOrDefault("favicon", "")));
-        vo.setBackdrop(UrlUtil.toAbsoluteUrl(config.getOrDefault("backdrop", "")));
+        vo.setLogo(UrlUtils.toAbsoluteUrl(config.getOrDefault("logo", "")));
+        vo.setFavicon(UrlUtils.toAbsoluteUrl(config.getOrDefault("favicon", "")));
+        vo.setBackdrop(UrlUtils.toAbsoluteUrl(config.getOrDefault("backdrop", "")));
         vo.setShopName(config.getOrDefault("shopName", ""));
-        vo.setShopLogo(UrlUtil.toAbsoluteUrl(config.getOrDefault("shopLogo", "")));
+        vo.setShopLogo(UrlUtils.toAbsoluteUrl(config.getOrDefault("shopLogo", "")));
         return vo;
     }
 
@@ -44,12 +43,12 @@ public class SettingWebsiteServiceImpl implements ISettingWebsiteService {
      */
     @Override
     public void save(SettingWebsiteValidate websiteValidate) {
-        ConfigUtil.set("website", "name", websiteValidate.getName());
-        ConfigUtil.set("website", "logo", UrlUtil.toRelativeUrl(websiteValidate.getLogo()));
-        ConfigUtil.set("website", "favicon", UrlUtil.toRelativeUrl(websiteValidate.getFavicon()));
-        ConfigUtil.set("website", "backdrop", UrlUtil.toRelativeUrl(websiteValidate.getBackdrop()));
-        ConfigUtil.set("website", "shopName", websiteValidate.getShopName());
-        ConfigUtil.set("website", "shopLogo", UrlUtil.toRelativeUrl(websiteValidate.getShopLogo()));
+        ConfigUtils.set("website", "name", websiteValidate.getName());
+        ConfigUtils.set("website", "logo", UrlUtils.toRelativeUrl(websiteValidate.getLogo()));
+        ConfigUtils.set("website", "favicon", UrlUtils.toRelativeUrl(websiteValidate.getFavicon()));
+        ConfigUtils.set("website", "backdrop", UrlUtils.toRelativeUrl(websiteValidate.getBackdrop()));
+        ConfigUtils.set("website", "shopName", websiteValidate.getShopName());
+        ConfigUtils.set("website", "shopLogo", UrlUtils.toRelativeUrl(websiteValidate.getShopLogo()));
     }
 
 }

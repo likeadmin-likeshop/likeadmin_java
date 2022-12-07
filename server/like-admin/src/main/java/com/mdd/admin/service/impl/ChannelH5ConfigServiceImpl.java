@@ -3,7 +3,7 @@ package com.mdd.admin.service.impl;
 import com.mdd.admin.service.IChannelH5ConfigService;
 import com.mdd.admin.validate.channel.ChannelH5Validate;
 import com.mdd.admin.vo.channel.ChannelH5Vo;
-import com.mdd.common.utils.ConfigUtil;
+import com.mdd.common.util.ConfigUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -22,7 +22,7 @@ public class ChannelH5ConfigServiceImpl implements IChannelH5ConfigService {
      */
     @Override
     public ChannelH5Vo detail() {
-        Map<String, String> config = ConfigUtil.get("h5_channel");
+        Map<String, String> config = ConfigUtils.get("h5_channel");
         ChannelH5Vo vo = new ChannelH5Vo();
         vo.setStatus(Integer.parseInt(config.getOrDefault("status", "0")));
         vo.setClose(Integer.parseInt(config.getOrDefault("close", "0")));
@@ -38,9 +38,9 @@ public class ChannelH5ConfigServiceImpl implements IChannelH5ConfigService {
      */
     @Override
     public void save(ChannelH5Validate channelH5Validate) {
-        ConfigUtil.set("h5_channel", "status", String.valueOf(channelH5Validate.getStatus()));
-        ConfigUtil.set("h5_channel", "close", String.valueOf(channelH5Validate.getClose()));
-        ConfigUtil.set("h5_channel", "url", channelH5Validate.getUrl());
+        ConfigUtils.set("h5_channel", "status", String.valueOf(channelH5Validate.getStatus()));
+        ConfigUtils.set("h5_channel", "close", String.valueOf(channelH5Validate.getClose()));
+        ConfigUtils.set("h5_channel", "url", channelH5Validate.getUrl());
     }
 
 }

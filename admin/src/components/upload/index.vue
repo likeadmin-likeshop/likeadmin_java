@@ -81,7 +81,7 @@ export default defineComponent({
         const uploadRefs = shallowRef<InstanceType<typeof ElUpload>>()
         const action = ref(`${config.baseUrl}${config.urlPrefix}/upload/${props.type}`)
         const headers = computed(() => ({
-            token: userStore.token,
+            ['like-admin']: userStore.token,
             version: config.version
         }))
         const visible = ref(false)

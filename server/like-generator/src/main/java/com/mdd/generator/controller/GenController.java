@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.exception.OperateException;
-import com.mdd.common.utils.StringUtil;
-import com.mdd.common.utils.YmlUtil;
+import com.mdd.common.util.StringUtils;
+import com.mdd.common.util.YmlUtils;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.generator.service.IGenerateService;
 import com.mdd.generator.validate.GenParam;
@@ -145,8 +145,8 @@ public class GenController {
      */
     @GetMapping("/genCode")
     public Object genCode(String tables) {
-        String production = YmlUtil.get("like.production");
-        if (StringUtil.isNotEmpty(production) && production.equals("true")) {
+        String production = YmlUtils.get("like.production");
+        if (StringUtils.isNotEmpty(production) && production.equals("true")) {
             throw new OperateException("抱歉,演示环境不允许操作！");
         }
 

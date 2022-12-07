@@ -3,7 +3,7 @@ package com.mdd.admin.controller.monitor;
 
 import com.mdd.admin.config.aop.Log;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.utils.StringUtil;
+import com.mdd.common.util.StringUtils;
 import org.springframework.data.redis.connection.RedisServerCommands;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -49,8 +49,8 @@ public class MonitorCacheController {
         commandStats.stringPropertyNames().forEach(key -> {
             Map<String, String> data = new HashMap<>(2);
             String property = commandStats.getProperty(key);
-            data.put("name", StringUtil.removeStart(key, "cmdstat_"));
-            data.put("value", StringUtil.substringBetween(property, "calls=", ",usec"));
+            data.put("name", StringUtils.removeStart(key, "cmdstat_"));
+            data.put("value", StringUtils.substringBetween(property, "calls=", ",usec"));
             pieList.add(data);
         });
 

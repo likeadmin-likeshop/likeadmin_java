@@ -16,8 +16,8 @@ import com.mdd.common.entity.system.SystemAuthAdmin;
 import com.mdd.common.entity.system.SystemAuthRole;
 import com.mdd.common.mapper.system.SystemAuthAdminMapper;
 import com.mdd.common.mapper.system.SystemAuthRoleMapper;
-import com.mdd.common.utils.RedisUtil;
-import com.mdd.common.utils.TimeUtil;
+import com.mdd.common.util.RedisUtils;
+import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,9 +62,9 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
             vo.setName(systemAuthRole.getName());
             vo.setSort(systemAuthRole.getSort());
             vo.setIsDisable(systemAuthRole.getIsDisable());
-            vo.setCreateTime(TimeUtil.timestampToDate(systemAuthRole.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthRole.getUpdateTime()));
-            vo.setMember(0L);
+            vo.setCreateTime(TimeUtils.timestampToDate(systemAuthRole.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(systemAuthRole.getUpdateTime()));
+            vo.setMember(0);
             vo.setRemark("");
             vo.setMenus(Collections.EMPTY_LIST);
             list.add(vo);
@@ -95,14 +95,13 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
             SystemAuthRoleVo vo = new SystemAuthRoleVo();
             BeanUtils.copyProperties(systemAuthRole, vo);
 
-            Long member = systemAuthAdminMapper.selectCount(new QueryWrapper<SystemAuthAdmin>()
-                    .eq("is_delete", 0)
-                    .eq("role", systemAuthRole.getId()));
+            List<Integer> ids = systemAuthAdminMapper.selectChildrenById(systemAuthRole.getId());
+            Integer member = ids.size();
 
             vo.setMenus(new ArrayList<>());
             vo.setMember(member);
-            vo.setCreateTime(TimeUtil.timestampToDate(systemAuthRole.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthRole.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(systemAuthRole.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(systemAuthRole.getUpdateTime()));
             list.add(vo);
         }
 
@@ -124,16 +123,15 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
 
         Assert.notNull(systemAuthRole, "角色已不存在!");
 
-        Long member = systemAuthAdminMapper.selectCount(new QueryWrapper<SystemAuthAdmin>()
-                .eq("is_delete", 0)
-                .eq("role", systemAuthRole.getId()));
+        List<Integer> roleIds = new LinkedList<>();
+        roleIds.add(systemAuthRole.getId());
 
         SystemAuthRoleVo vo = new SystemAuthRoleVo();
         BeanUtils.copyProperties(systemAuthRole, vo);
-        vo.setMember(member);
-        vo.setMenus(iSystemAuthPermService.selectMenuIdsByRoleId(systemAuthRole.getId()));
-        vo.setCreateTime(TimeUtil.timestampToDate(systemAuthRole.getCreateTime()));
-        vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthRole.getUpdateTime()));
+        vo.setMember(0);
+        vo.setMenus(iSystemAuthPermService.selectMenuIdsByRoleId(roleIds));
+        vo.setCreateTime(TimeUtils.timestampToDate(systemAuthRole.getCreateTime()));
+        vo.setUpdateTime(TimeUtils.timestampToDate(systemAuthRole.getUpdateTime()));
 
         return vo;
     }
@@ -194,7 +192,7 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
 
         iSystemAuthPermService.batchDeleteByRoleId(updateValidate.getId());
         iSystemAuthPermService.batchSaveByMenuIds(updateValidate.getId(), updateValidate.getMenuIds());
-        RedisUtil.del(AdminConfig.backstageRolesKey);
+        RedisUtils.del(AdminConfig.backstageRolesKey);
     }
 
     /**
@@ -221,7 +219,7 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
 
         systemAuthRoleMapper.deleteById(id);
         iSystemAuthPermService.batchDeleteByRoleId(id);
-        RedisUtil.del(AdminConfig.backstageRolesKey);
+        RedisUtils.del(AdminConfig.backstageRolesKey);
     }
 
 }

@@ -12,8 +12,8 @@ import com.mdd.common.entity.system.SystemAuthAdmin;
 import com.mdd.common.entity.system.SystemAuthDept;
 import com.mdd.common.mapper.system.SystemAuthAdminMapper;
 import com.mdd.common.mapper.system.SystemAuthDeptMapper;
-import com.mdd.common.utils.ArrayUtil;
-import com.mdd.common.utils.TimeUtil;
+import com.mdd.common.util.ArrayUtils;
+import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -50,8 +50,8 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
             SystemAuthDeptVo vo = new SystemAuthDeptVo();
             BeanUtils.copyProperties(systemAuthDept, vo);
 
-            vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthDept.getUpdateTime()));
-            vo.setCreateTime(TimeUtil.timestampToDate(systemAuthDept.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(systemAuthDept.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(systemAuthDept.getCreateTime()));
             list.add(vo);
         }
 
@@ -86,13 +86,13 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
             SystemAuthDeptVo vo = new SystemAuthDeptVo();
             BeanUtils.copyProperties(systemAuthDept, vo);
 
-            vo.setCreateTime(TimeUtil.timestampToDate(systemAuthDept.getCreateTime()));
-            vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthDept.getUpdateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(systemAuthDept.getCreateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(systemAuthDept.getUpdateTime()));
             list.add(vo);
         }
 
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(list));
-        return ArrayUtil.listToTree(jsonArray, "id", "pid", "children");
+        return ArrayUtils.listToTree(jsonArray, "id", "pid", "children");
     }
 
     /**
@@ -117,8 +117,8 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
 
         SystemAuthDeptVo vo  = new SystemAuthDeptVo();
         BeanUtils.copyProperties(systemAuthDept, vo);
-        vo.setCreateTime(TimeUtil.timestampToDate(systemAuthDept.getCreateTime()));
-        vo.setUpdateTime(TimeUtil.timestampToDate(systemAuthDept.getUpdateTime()));
+        vo.setCreateTime(TimeUtils.timestampToDate(systemAuthDept.getCreateTime()));
+        vo.setUpdateTime(TimeUtils.timestampToDate(systemAuthDept.getUpdateTime()));
 
         return vo;
     }

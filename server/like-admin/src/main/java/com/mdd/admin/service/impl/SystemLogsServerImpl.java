@@ -16,8 +16,8 @@ import com.mdd.common.entity.system.SystemLogLogin;
 import com.mdd.common.entity.system.SystemLogOperate;
 import com.mdd.common.mapper.system.SystemLogLoginMapper;
 import com.mdd.common.mapper.system.SystemLogOperateMapper;
-import com.mdd.common.utils.StringUtil;
-import com.mdd.common.utils.TimeUtil;
+import com.mdd.common.util.StringUtils;
+import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -73,10 +73,10 @@ public class SystemLogsServerImpl implements ISystemLogsServer {
 
         for (SystemLogOperateVo vo : iPage.getRecords()) {
             vo.setTaskTime(vo.getTaskTime());
-            vo.setStartTime(TimeUtil.timestampToDate(vo.getStartTime()));
-            vo.setEndTime(TimeUtil.timestampToDate(vo.getEndTime()));
-            vo.setCreateTime(TimeUtil.timestampToDate(vo.getCreateTime()));
-            vo.setError(StringUtil.isNull(vo.getError()) ? "" : vo.getError());
+            vo.setStartTime(TimeUtils.timestampToDate(vo.getStartTime()));
+            vo.setEndTime(TimeUtils.timestampToDate(vo.getEndTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(vo.getCreateTime()));
+            vo.setError(StringUtils.isNull(vo.getError()) ? "" : vo.getError());
         }
 
         return PageResult.iPageHandle(iPage);
@@ -110,7 +110,7 @@ public class SystemLogsServerImpl implements ISystemLogsServer {
             SystemLogLoginVo vo = new SystemLogLoginVo();
             BeanUtils.copyProperties(item, vo);
 
-            vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(item.getCreateTime()));
             list.add(vo);
         }
 
