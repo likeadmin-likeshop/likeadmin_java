@@ -1,6 +1,7 @@
 package com.mdd.front.service;
 
-import com.mdd.front.validate.UserRegisterValidate;
+import com.mdd.front.validate.login.RegisterValidate;
+import com.mdd.front.validate.login.ForgetPwdValidate;
 import com.mdd.front.vo.LoginTokenVo;
 
 import javax.servlet.http.HttpSession;
@@ -15,9 +16,9 @@ public interface ILoginService {
      * 账号注册
      *
      * @author fzr
-     * @param userRegisterValidate 参数
+     * @param registerValidate 参数
      */
-    void register(UserRegisterValidate userRegisterValidate);
+    void register(RegisterValidate registerValidate);
 
     /**
      * 账号登录
@@ -41,19 +42,21 @@ public interface ILoginService {
      * 微信登录
      *
      * @author fzr
-     * @param params 参数
+     * @param code 微信code
+     * @param client 来源客户端
      * @return LoginTokenVo
      */
-    LoginTokenVo mnpLogin(Map<String, String> params);
+    LoginTokenVo mnpLogin(String code, Integer client);
 
     /**
      * 公众号登录
      *
      * @author fzr
-     * @param params 参数
+     * @param code 参数
+     * @param client 参数
      * @return LoginTokenVo
      */
-    LoginTokenVo officeLogin(Map<String, String> params);
+    LoginTokenVo officeLogin(String code, Integer client);
 
     /**
      * 公众号跳转url
@@ -68,9 +71,9 @@ public interface ILoginService {
      * 忘记密码
      *
      * @author fzr
-     * @param params 参数
+     * @param forgetPwdValidate 参数
      */
-    void forgotPassword(Map<String, String> params);
+    void forgotPassword(ForgetPwdValidate forgetPwdValidate);
 
     String getScanCode(HttpSession session);
 }

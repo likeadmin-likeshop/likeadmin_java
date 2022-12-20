@@ -1,4 +1,4 @@
-package com.mdd.front.validate;
+package com.mdd.front.validate.login;
 
 import com.mdd.common.validator.annotation.IntegerContains;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.io.Serializable;
  * 注册参数类
  */
 @Data
-public class UserRegisterValidate implements Serializable {
+public class RegisterValidate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
