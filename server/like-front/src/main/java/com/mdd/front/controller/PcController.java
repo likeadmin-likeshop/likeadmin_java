@@ -19,6 +19,13 @@ public class PcController {
     @Resource
     IPcService iPcService;
 
+    @GetMapping("/index")
+    public AjaxResult<Map<String,Object>> index()
+    {
+        Map<String, Object> index = iPcService.index();
+        return AjaxResult.success(index);
+    }
+
     /**
      * 配置
      * @author cjh

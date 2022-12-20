@@ -29,6 +29,7 @@ public class FrontConfig {
             "/api/article/detail",
             "/api/article/list",
             "/api/pc/getConfig",
+            "/api/pc/index",
     };
 
 }

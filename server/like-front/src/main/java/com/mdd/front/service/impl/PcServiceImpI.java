@@ -1,17 +1,109 @@
 package com.mdd.front.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.common.config.GlobalConfig;
+import com.mdd.common.entity.DecoratePage;
+import com.mdd.common.entity.article.Article;
+import com.mdd.common.mapper.DecoratePageMapper;
+import com.mdd.common.mapper.article.ArticleMapper;
 import com.mdd.common.util.ArrayUtils;
 import com.mdd.common.util.ConfigUtils;
+import com.mdd.common.util.TimeUtils;
 import com.mdd.common.util.UrlUtils;
 import com.mdd.front.service.IPcService;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class PcServiceImpI implements IPcService {
 
+    @Resource
+    DecoratePageMapper decoratePageMapper;
+
+    @Resource
+    ArticleMapper articleMapper;
+
+    @Override
+    public Map<String, Object> index() {
+        Map<String,Object> indexData = new LinkedHashMap<>();
+        DecoratePage decoratePage = decoratePageMapper.selectOne(
+                new QueryWrapper<DecoratePage>()
+                        .eq("id", 1)
+                        .last("limit 1"));
+        //全部资讯
+        List<Article> articlesAll = articleMapper.selectList(new QueryWrapper<Article>()
+                .eq("is_show", 1)
+                .eq("is_delete", 0)
+                .orderByDesc("sort")
+                .orderByDesc("id")
+                .last("limit 5"));
+        List<Map<String, Object>> articlesAllList = new LinkedList<>();
+        for (Article article : articlesAll) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("id", article.getId());
+            map.put("title", article.getTitle());
+            map.put("intro", article.getIntro());
+            map.put("summary", article.getSummary());
+            map.put("image", UrlUtils.toAbsoluteUrl(article.getImage()));
+            map.put("author", article.getAuthor());
+            map.put("visit", article.getVisit());
+            map.put("sort", article.getSort());
+            map.put("createTime", TimeUtils.timestampToDate(article.getCreateTime()));
+            articlesAllList.add(map);
+        }
+
+        //最新资讯
+        List<Article> articlesNew = articleMapper.selectList(new QueryWrapper<Article>()
+                .eq("is_show", 1)
+                .eq("is_delete", 0)
+                .orderByDesc("id")
+                .last("limit 7"));
+        List<Map<String, Object>> articlesNewList = new LinkedList<>();
+        for (Article article : articlesNew) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("id", article.getId());
+            map.put("title", article.getTitle());
+            map.put("intro", article.getIntro());
+            map.put("summary", article.getSummary());
+            map.put("image", UrlUtils.toAbsoluteUrl(article.getImage()));
+            map.put("author", article.getAuthor());
+            map.put("visit", article.getVisit());
+            map.put("sort", article.getSort());
+            map.put("createTime", TimeUtils.timestampToDate(article.getCreateTime()));
+            articlesNewList.add(map);
+        }
+        //热门资讯
+        List<Article> articlesHot = articleMapper.selectList(new QueryWrapper<Article>()
+                .eq("is_show", 1)
+                .eq("is_delete", 0)
+                .orderByDesc("visit")
+                .last("limit 7"));
+        List<Map<String, Object>> articlesHostList = new LinkedList<>();
+        for (Article article : articlesHot) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("id", article.getId());
+            map.put("title", article.getTitle());
+            map.put("intro", article.getIntro());
+            map.put("summary", article.getSummary());
+            map.put("image", UrlUtils.toAbsoluteUrl(article.getImage()));
+            map.put("author", article.getAuthor());
+            map.put("visit", article.getVisit());
+            map.put("sort", article.getSort());
+            map.put("createTime", TimeUtils.timestampToDate(article.getCreateTime()));
+            articlesHostList.add(map);
+        }
+
+        indexData.put("pages", decoratePage.getPageData());
+        indexData.put("all", articlesAllList);
+        indexData.put("new", articlesNewList);
+        indexData.put("hot", articlesHostList);
+        return  indexData;
+    }
 
     @Override
     public Map<String, Object> getConfig() {
