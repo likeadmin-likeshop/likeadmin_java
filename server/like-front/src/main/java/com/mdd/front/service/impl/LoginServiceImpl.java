@@ -27,6 +27,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 /**
@@ -73,6 +76,81 @@ public class LoginServiceImpl implements ILoginService {
         user.setCreateTime(System.currentTimeMillis() / 1000);
         user.setUpdateTime(System.currentTimeMillis() / 1000);
         userMapper.insert(user);
+    }
+
+    /**
+     * 账号登录
+     *
+     * @author fzr
+     * @param params 参数
+     * @return LoginTokenVo
+     */
+    @Override
+    public LoginTokenVo accountLogin(Map<String, String> params) {
+        Assert.notNull(params.get("username"), "username参数缺失!");
+        Assert.notNull(params.get("password"), "password参数缺失!");
+        String username = params.get("username");
+        String password = params.get("password");
+
+        User user = userMapper.selectOne(new QueryWrapper<User>()
+                .select("id,username,password,salt,mobile,is_disable")
+                .eq("username", username)
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        Assert.notNull(user, "账号不存在!");
+        String pwd = ToolsUtils.makeMd5(password+user.getSalt());
+        Assert.isFalse(!pwd.equals(user.getPassword()), "账号或密码错误!");
+        Assert.isFalse(user.getIsDisable() != 0, "账号已被禁用!");
+
+        // 更新登录信息
+        user.setLastLoginIp(IpUtils.getHostIp());
+        user.setLastLoginTime(System.currentTimeMillis() / 1000);
+        userMapper.updateById(user);
+
+        return this.makeLoginToken(user.getId(), user.getMobile());
+    }
+
+    /**
+     * 手机号登录
+     *
+     * @author fzr
+     * @param params 参数
+     * @return LoginTokenVo
+     */
+    @Override
+    public LoginTokenVo mobileLogin(Map<String, String> params) {
+        Assert.notNull(params.get("mobile"), "mobile参数缺失!");
+        Assert.notNull(params.get("code"), "code参数缺失!");
+        String mobile = params.get("mobile");
+        String code   = params.get("code").toLowerCase();
+
+        // 校验验证码
+        int typeCode = NoticeEnum.SMS_LOGIN_CODE.getCode();
+        Object smsCode = RedisUtils.get(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
+        if (StringUtils.isNull(smsCode) || !smsCode.toString().equals(code)) {
+            throw new OperateException("验证码错误!");
+        }
+
+        // 删除验证码
+        RedisUtils.del(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
+
+        // 查询手机号
+        User user = userMapper.selectOne(new QueryWrapper<User>()
+                .select("id,username,mobile,is_disable")
+                .eq("mobile", mobile)
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        Assert.notNull(user, "账号不存在!");
+        Assert.isFalse(user.getIsDisable() != 0, "账号已禁用!");
+
+        // 更新登录信息
+        user.setLastLoginIp(IpUtils.getHostIp());
+        user.setLastLoginTime(System.currentTimeMillis() / 1000);
+        userMapper.updateById(user);
+
+        return this.makeLoginToken(user.getId(), user.getMobile());
     }
 
     /**
@@ -162,109 +240,11 @@ public class LoginServiceImpl implements ILoginService {
                 userMapper.updateById(user);
             }
 
-            String token = ToolsUtils.makeToken();
-            int tokenValidTime = Integer.parseInt(YmlUtils.get("like.token-valid-time"));
-            RedisUtils.set(FrontConfig.frontendTokenKey+token, userId, tokenValidTime);
 
-            LoginTokenVo vo = new LoginTokenVo();
-            vo.setId(userId);
-            vo.setIsBindMobile(!user.getMobile().equals(""));
-            vo.setToken(token);
-            return vo;
+            return this.makeLoginToken(userId, user.getMobile());
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
-    }
-
-    /**
-     * 手机号登录
-     *
-     * @author fzr
-     * @param params 参数
-     * @return LoginTokenVo
-     */
-    @Override
-    public LoginTokenVo mobileLogin(Map<String, String> params) {
-        Assert.notNull(params.get("mobile"), "mobile参数缺失!");
-        Assert.notNull(params.get("code"), "code参数缺失!");
-        String mobile = params.get("mobile");
-        String code   = params.get("code").toLowerCase();
-
-        // 校验验证码
-        int typeCode = NoticeEnum.SMS_LOGIN_CODE.getCode();
-        Object smsCode = RedisUtils.get(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
-        if (StringUtils.isNull(smsCode) || !smsCode.toString().equals(code)) {
-            throw new OperateException("验证码错误!");
-        }
-
-        // 删除验证码
-        RedisUtils.del(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
-
-        // 查询手机号
-        User user = userMapper.selectOne(new QueryWrapper<User>()
-                .select("id,username,mobile,is_disable")
-                .eq("mobile", mobile)
-                .eq("is_delete", 0)
-                .last("limit 1"));
-
-        Assert.notNull(user, "账号不存在!");
-        Assert.isFalse(user.getIsDisable() != 0, "账号已禁用!");
-
-        // 更新登录信息
-        user.setLastLoginIp(IpUtils.getHostIp());
-        user.setLastLoginTime(System.currentTimeMillis() / 1000);
-        userMapper.updateById(user);
-
-        String token = ToolsUtils.makeToken();
-        int tokenValidTime = Integer.parseInt(YmlUtils.get("like.token-valid-time"));
-        RedisUtils.set(FrontConfig.frontendTokenKey+token, user.getId(), tokenValidTime);
-
-        LoginTokenVo vo = new LoginTokenVo();
-        vo.setId(user.getId());
-        vo.setIsBindMobile(!user.getMobile().equals(""));
-        vo.setToken(token);
-        return vo;
-    }
-
-    /**
-     * 账号登录
-     *
-     * @author fzr
-     * @param params 参数
-     * @return LoginTokenVo
-     */
-    @Override
-    public LoginTokenVo accountLogin(Map<String, String> params) {
-        Assert.notNull(params.get("username"), "username参数缺失!");
-        Assert.notNull(params.get("password"), "password参数缺失!");
-        String username = params.get("username");
-        String password = params.get("password");
-
-        User user = userMapper.selectOne(new QueryWrapper<User>()
-                .select("id,username,password,salt,mobile,is_disable")
-                .eq("username", username)
-                .eq("is_delete", 0)
-                .last("limit 1"));
-
-        Assert.notNull(user, "账号不存在!");
-        String pwd = ToolsUtils.makeMd5(password+user.getSalt());
-        Assert.isFalse(!pwd.equals(user.getPassword()), "账号或密码错误!");
-        Assert.isFalse(user.getIsDisable() != 0, "账号已被禁用!");
-
-        // 更新登录信息
-        user.setLastLoginIp(IpUtils.getHostIp());
-        user.setLastLoginTime(System.currentTimeMillis() / 1000);
-        userMapper.updateById(user);
-
-        String token = ToolsUtils.makeToken();
-        int tokenValidTime = Integer.parseInt(YmlUtils.get("like.token-valid-time"))+1;
-        RedisUtils.set(FrontConfig.frontendTokenKey+token, user.getId(), tokenValidTime-1);
-
-        LoginTokenVo vo = new LoginTokenVo();
-        vo.setId(user.getId());
-        vo.setIsBindMobile(!user.getMobile().equals(""));
-        vo.setToken(token);
-        return vo;
     }
 
     /**
@@ -341,15 +321,7 @@ public class LoginServiceImpl implements ILoginService {
                 userMapper.updateById(user);
             }
 
-            String token = ToolsUtils.makeToken();
-            int tokenValidTime = Integer.parseInt(YmlUtils.get("like.token-valid-time"))+1;
-            RedisUtils.set(FrontConfig.frontendTokenKey+token, userId, tokenValidTime-1);
-
-            LoginTokenVo vo = new LoginTokenVo();
-            vo.setId(user.getId());
-            vo.setIsBindMobile(!user.getMobile().equals(""));
-            vo.setToken(token);
-            return vo;
+            return this.makeLoginToken(userId, user.getMobile());
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
@@ -412,6 +384,63 @@ public class LoginServiceImpl implements ILoginService {
         user.setSalt(salt);
         user.setUpdateTime(System.currentTimeMillis() / 1000);
         userMapper.updateById(user);
+    }
+
+    /**
+     * 扫码链接
+     *
+     * @author fzr
+     * @param session session
+     * @return String
+     */
+    @Override
+    public String getScanCode(HttpSession session) {
+        // 获取AppId
+        String appId = ConfigUtils.get("op_channel", "appId", "");
+
+        // 微信开放平台授权
+        String baseUrl = "https://open.weixin.qq.com/connect/qrconnect" +
+                "?appid=%s" +
+                "&redirect_uri=%s" +
+                "&response_type=code" +
+                "&scope=snsapi_login" +
+                "&state=%s" +
+                "#wechat_redirect";
+
+        // 回调地址
+        String redirectUrl = "https://www.baidu.com/";
+        try {
+            redirectUrl = URLEncoder.encode(redirectUrl, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new OperateException(e.getMessage());
+        }
+
+        // 防止csrf攻击
+        String state = ToolsUtils.makeUUID().replaceAll("-", "");
+        RedisUtils.set("wechat-open-state-"+session.getId(), state, 600);
+
+        //生成qrcodeUrl
+        return String.format(baseUrl, appId, redirectUrl, state);
+    }
+
+    /**
+     * 生成登录Token
+     *
+     * @author fzr
+     * @param userId 用户ID
+     * @param mobile 用户手机
+     * @return LoginTokenVo
+     */
+    private LoginTokenVo makeLoginToken(Integer userId, String mobile) {
+        String token = ToolsUtils.makeToken();
+        int tokenValidTime = Integer.parseInt(YmlUtils.get("like.token-valid-time"));
+        RedisUtils.set(FrontConfig.frontendTokenKey+token, userId, tokenValidTime);
+
+        LoginTokenVo vo = new LoginTokenVo();
+        vo.setId(userId);
+        vo.setIsBindMobile(!mobile.equals(""));
+        vo.setToken(token);
+        return vo;
     }
 
     /**

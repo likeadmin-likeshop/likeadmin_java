@@ -11,6 +11,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -102,6 +106,14 @@ public class LoginController {
     public AjaxResult<Object> forgotPassword(@RequestBody Map<String, String> params) {
         iLoginService.forgotPassword(params);
         return AjaxResult.success();
+    }
+
+    @GetMapping("/getScanCode")
+    public AjaxResult<Map<String, String>> getScanCode(HttpSession session) {
+        String qrcodeUrl = iLoginService.getScanCode(session);
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("url", qrcodeUrl);
+        return AjaxResult.success(map);
     }
 
 }

@@ -30,6 +30,8 @@ public class FrontConfig {
             "/api/article/list",
             "/api/pc/getConfig",
             "/api/pc/index",
+            "/api/login/getScanCode",
+
     };
 
 }
