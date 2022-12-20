@@ -20,13 +20,13 @@ public interface ILoginService {
     void register(UserRegisterValidate userRegisterValidate);
 
     /**
-     * 微信登录
+     * 账号登录
      *
      * @author fzr
      * @param params 参数
      * @return LoginTokenVo
      */
-    LoginTokenVo mnpLogin(Map<String, String> params);
+    LoginTokenVo accountLogin(Map<String, String> params);
 
     /**
      * 手机登录
@@ -38,13 +38,13 @@ public interface ILoginService {
     LoginTokenVo mobileLogin(Map<String, String> params);
 
     /**
-     * 账号登录
+     * 微信登录
      *
      * @author fzr
      * @param params 参数
      * @return LoginTokenVo
      */
-    LoginTokenVo accountLogin(Map<String, String> params);
+    LoginTokenVo mnpLogin(Map<String, String> params);
 
     /**
      * 公众号登录
