@@ -17,6 +17,7 @@ import com.mdd.front.config.FrontConfig;
 import com.mdd.front.service.ILoginService;
 import com.mdd.front.validate.UserRegisterValidate;
 import com.mdd.front.vo.LoginTokenVo;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
@@ -27,6 +28,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 /**
@@ -412,6 +416,36 @@ public class LoginServiceImpl implements ILoginService {
         user.setSalt(salt);
         user.setUpdateTime(System.currentTimeMillis() / 1000);
         userMapper.updateById(user);
+    }
+
+    @Override
+    public String getScanCode(HttpSession session) {
+        // 获取AppId
+        String appId = ConfigUtils.get("op_channel", "appId", "");
+
+        // 微信开放平台授权
+        String baseUrl = "https://open.weixin.qq.com/connect/qrconnect" +
+                "?appid=%s" +
+                "&redirect_uri=%s" +
+                "&response_type=code" +
+                "&scope=snsapi_login" +
+                "&state=%s" +
+                "#wechat_redirect";
+
+        // 回调地址
+        String redirectUrl = "https://www.baidu.com/";
+        try {
+            redirectUrl = URLEncoder.encode(redirectUrl, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new OperateException(e.getMessage());
+        }
+
+        // 防止csrf攻击
+        String state = ToolsUtils.makeUUID().replaceAll("-", "");
+        RedisUtils.set("wechat-open-state-"+session.getId(), state, 600);
+
+        //生成qrcodeUrl
+        return String.format(baseUrl, appId, redirectUrl, state);
     }
 
     /**

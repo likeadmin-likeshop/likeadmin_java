@@ -3,6 +3,7 @@ package com.mdd.front.service;
 import com.mdd.front.validate.UserRegisterValidate;
 import com.mdd.front.vo.LoginTokenVo;
 
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -71,4 +72,5 @@ public interface ILoginService {
      */
     void forgotPassword(Map<String, String> params);
 
+    String getScanCode(HttpSession session);
 }
