@@ -2,8 +2,12 @@ package com.mdd.front.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.core.AjaxResult;
+import com.mdd.common.enums.ClientEnum;
+import com.mdd.common.util.StringUtils;
 import com.mdd.front.service.ILoginService;
-import com.mdd.front.validate.UserRegisterValidate;
+import com.mdd.front.validate.login.RegisterValidate;
+import com.mdd.front.validate.login.ForgetPwdValidate;
+import com.mdd.front.validate.login.OaLoginValidate;
 import com.mdd.front.vo.LoginCodesVo;
 import com.mdd.front.vo.LoginTokenVo;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -32,12 +34,12 @@ public class LoginController {
      * 注册账号
      *
      * @author fzr
-     * @param userRegisterValidate 参数
+     * @param registerValidate 参数
      * @return AjaxResult<Object>
      */
     @PostMapping("/register")
-    public AjaxResult<Object> register(@Validated @RequestBody UserRegisterValidate userRegisterValidate) {
-        iLoginService.register(userRegisterValidate);
+    public AjaxResult<Object> register(@Validated @RequestBody RegisterValidate registerValidate) {
+        iLoginService.register(registerValidate);
         return AjaxResult.success();
     }
 
@@ -52,9 +54,14 @@ public class LoginController {
     public AjaxResult<LoginTokenVo> check(@RequestBody Map<String, String> params) {
         Assert.notNull(params.get("scene"), "scene参数缺失!");
         LoginTokenVo vo = new LoginTokenVo();
+
         switch (params.get("scene")) {
             case "mnp":
-                vo = iLoginService.mnpLogin(params);
+                Assert.notNull(params.get("code"), "code参数缺失!");
+                Assert.notNull(params.get("client"), "client参数缺失!");
+                String code    = params.get("code");
+                Integer client = Integer.parseInt(params.get("client"));
+                vo = iLoginService.mnpLogin(code, client);
                 break;
             case "mobile":
                 vo = iLoginService.mobileLogin(params);
@@ -63,6 +70,7 @@ public class LoginController {
                 vo = iLoginService.accountLogin(params);
                 break;
         }
+
         return AjaxResult.success(vo);
     }
 
@@ -70,12 +78,16 @@ public class LoginController {
      * 公众号登录
      *
      * @author fzr
-     * @param params 参数
+     * @param oaLoginValidate 参数
      * @return AjaxResult<LoginTokenVo>
      */
-    @GetMapping("/oaLogin")
-    public AjaxResult<LoginTokenVo> oaLogin(@RequestParam Map<String, String> params) {
-        LoginTokenVo vo = iLoginService.officeLogin(params);
+    @PostMapping("/oaLogin")
+    public AjaxResult<LoginTokenVo> oaLogin(@Validated @RequestBody OaLoginValidate oaLoginValidate) {
+        String code = oaLoginValidate.getCode();
+        Integer client = oaLoginValidate.getClient();
+        client = StringUtils.isNotNull(client) ? client : ClientEnum.OA.getCode();
+
+        LoginTokenVo vo = iLoginService.officeLogin(code, client);
         return AjaxResult.success(vo);
     }
 
@@ -99,15 +111,22 @@ public class LoginController {
      * 忘记密码
      *
      * @author fzr
-     * @param params 参数
+     * @param forgetPwdValidate 参数
      * @return AjaxResult<Object>
      */
     @PostMapping("/forgotPassword")
-    public AjaxResult<Object> forgotPassword(@RequestBody Map<String, String> params) {
-        iLoginService.forgotPassword(params);
+    public AjaxResult<Object> forgotPassword(@Validated @RequestBody ForgetPwdValidate forgetPwdValidate) {
+        iLoginService.forgotPassword(forgetPwdValidate);
         return AjaxResult.success();
     }
 
+    /**
+     * 扫码链接
+     *
+     * @author fzr
+     * @param session session
+     * @return AjaxResult<Map<String, String>>
+     */
     @GetMapping("/getScanCode")
     public AjaxResult<Map<String, String>> getScanCode(HttpSession session) {
         String qrcodeUrl = iLoginService.getScanCode(session);

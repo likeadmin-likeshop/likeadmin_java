@@ -15,7 +15,8 @@ import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.util.*;
 import com.mdd.front.config.FrontConfig;
 import com.mdd.front.service.ILoginService;
-import com.mdd.front.validate.UserRegisterValidate;
+import com.mdd.front.validate.login.RegisterValidate;
+import com.mdd.front.validate.login.ForgetPwdValidate;
 import com.mdd.front.vo.LoginTokenVo;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
@@ -49,13 +50,13 @@ public class LoginServiceImpl implements ILoginService {
      * 注册账号
      *
      * @author fzr
-     * @param userRegisterValidate 参数
+     * @param registerValidate 参数
      */
     @Override
-    public void register(UserRegisterValidate userRegisterValidate) {
+    public void register(RegisterValidate registerValidate) {
         User model = userMapper.selectOne(new QueryWrapper<User>()
                 .select("id,sn,username")
-                .eq("username", userRegisterValidate.getUsername())
+                .eq("username", registerValidate.getUsername())
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
@@ -63,16 +64,16 @@ public class LoginServiceImpl implements ILoginService {
 
         Integer sn  = this.randMakeSn();
         String salt = ToolsUtils.randomString(5);
-        String pwd  = ToolsUtils.makeMd5(userRegisterValidate.getPassword()+salt);
+        String pwd  = ToolsUtils.makeMd5(registerValidate.getPassword()+salt);
 
         User user = new User();
         user.setSn(sn);
         user.setNickname("用户"+sn);
-        user.setUsername(userRegisterValidate.getUsername());
+        user.setUsername(registerValidate.getUsername());
         user.setPassword(pwd);
         user.setSalt(salt);
         user.setAvatar("/api/static/default_avatar.png");
-        user.setChannel(userRegisterValidate.getClient());
+        user.setChannel(registerValidate.getClient());
         user.setCreateTime(System.currentTimeMillis() / 1000);
         user.setUpdateTime(System.currentTimeMillis() / 1000);
         userMapper.insert(user);
@@ -157,19 +158,13 @@ public class LoginServiceImpl implements ILoginService {
      * 微信小程序登录
      *
      * @author fzr
-     * @param params 参数
+     * @param code 微信code
+     * @param client 来源客户端
      * @return LoginTokenVo
      */
     @Override
     @Transactional
-    public LoginTokenVo mnpLogin(Map<String, String> params) {
-        Assert.notNull(params.get("code"), "code参数缺失!");
-        String code      = params.get("code");
-        String avatarUrl = params.getOrDefault("avatarUrl", "/api/static/default_avatar.png");
-        String nickName  = params.getOrDefault("nickName", "微信用户");
-        String gender    = params.getOrDefault("gender", "0");
-        Integer client   = Integer.parseInt(params.getOrDefault("client", "1"));
-
+    public LoginTokenVo mnpLogin(String code, Integer client) {
         try {
             WxMaService wxMaService = WeChatUtils.mnp();
             WxMaJscode2SessionResult sessionResult = wxMaService.getUserService().getSessionInfo(code);
@@ -196,10 +191,10 @@ public class LoginServiceImpl implements ILoginService {
                 Integer sn  = this.randMakeSn();
                 User model = new User();
                 model.setSn(sn);
-                model.setAvatar(avatarUrl);
-                model.setNickname(nickName.equals("") ? "用户"+sn : nickName);
+                model.setAvatar("/api/static/default_avatar.png");
+                model.setNickname("用户"+sn);
                 model.setUsername("u"+sn);
-                model.setSex(Integer.parseInt(gender));
+                model.setSex(0);
                 model.setChannel(client);
                 model.setLastLoginIp(IpUtils.getHostIp());
                 model.setLastLoginTime(System.currentTimeMillis() / 1000);
@@ -227,13 +222,6 @@ public class LoginServiceImpl implements ILoginService {
                     userAuthMapper.updateById(userAuth);
                 }
 
-                // 更新用户信息
-                if (StringUtils.isEmpty(user.getAvatar()) && StringUtils.isNotEmpty(avatarUrl)) {
-                    user.setAvatar(avatarUrl);
-                    user.setNickname(nickName);
-                    user.setSex(Integer.parseInt(gender));
-                }
-
                 // 更新登录信息
                 user.setLastLoginIp(IpUtils.getHostIp());
                 user.setLastLoginTime(System.currentTimeMillis() / 1000);
@@ -254,10 +242,7 @@ public class LoginServiceImpl implements ILoginService {
      * @return LoginTokenVo
      */
     @Override
-    public LoginTokenVo officeLogin(Map<String, String> params) {
-        Assert.notNull(params.get("code"), "code参数缺失!");
-        String code = params.get("code");
-
+    public LoginTokenVo officeLogin(String code, Integer client) {
         try {
             WxMpService wxMpService = WeChatUtils.official();
             WxOAuth2AccessToken wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(code);
@@ -286,8 +271,8 @@ public class LoginServiceImpl implements ILoginService {
                 model.setSn(sn);
                 model.setAvatar("/api/static/default_avatar.png");
                 model.setNickname("用户" + sn);
-                model.setUsername("u"+sn);
-                model.setChannel(ClientEnum.OA.getCode());
+                model.setUsername("u" + sn);
+                model.setChannel(client);
                 model.setSex(0);
                 model.setLastLoginIp(IpUtils.getHostIp());
                 model.setLastLoginTime(System.currentTimeMillis() / 1000);
@@ -345,16 +330,13 @@ public class LoginServiceImpl implements ILoginService {
      * 忘记密码
      *
      * @author fzr
-     * @param params 参数
+     * @param forgetPwdValidate 参数
      */
     @Override
-    public void forgotPassword(Map<String, String> params) {
-        Assert.notNull(params.get("mobile"), "mobile参数缺失!");
-        Assert.notNull(params.get("code"), "code参数缺失!");
-        Assert.notNull(params.get("password"), "password参数缺失!");
-        String mobile = params.get("mobile");
-        String code = params.get("code");
-        String password = params.get("password");
+    public void forgotPassword(ForgetPwdValidate forgetPwdValidate) {
+        String mobile = forgetPwdValidate.getMobile();
+        String code = forgetPwdValidate.getCode();
+        String password = forgetPwdValidate.getPassword();
 
         // 校验验证码
         int typeCode = NoticeEnum.SMS_FORGOT_PASSWORD_CODE.getCode();
