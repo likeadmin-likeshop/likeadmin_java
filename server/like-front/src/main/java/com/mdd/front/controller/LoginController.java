@@ -8,7 +8,8 @@ import com.mdd.front.service.ILoginService;
 import com.mdd.front.validate.login.RegisterValidate;
 import com.mdd.front.validate.login.ForgetPwdValidate;
 import com.mdd.front.validate.login.OaLoginValidate;
-import com.mdd.front.vo.LoginCodesVo;
+import com.mdd.front.validate.login.ScanLoginValidate;
+import com.mdd.front.vo.LoginUrlsVo;
 import com.mdd.front.vo.LoginTokenVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -99,10 +100,10 @@ public class LoginController {
      * @return AjaxResult<LoginCodesVo>
      */
     @GetMapping("/codeUrl")
-    public AjaxResult<LoginCodesVo> codeUrl(@RequestParam String url) {
+    public AjaxResult<LoginUrlsVo> codeUrl(@RequestParam String url) {
         Assert.notNull(url, "url参数不能为空");
 
-        LoginCodesVo vo = new LoginCodesVo();
+        LoginUrlsVo vo = new LoginUrlsVo();
         vo.setUrl(iLoginService.codeUrl(url));
         return AjaxResult.success(vo);
     }
@@ -125,14 +126,27 @@ public class LoginController {
      *
      * @author fzr
      * @param session session
-     * @return AjaxResult<Map<String, String>>
+     * @return AjaxResult<LoginUrlsVo>
      */
     @GetMapping("/getScanCode")
-    public AjaxResult<Map<String, String>> getScanCode(HttpSession session) {
+    public AjaxResult<LoginUrlsVo> getScanCode(HttpSession session) {
         String qrcodeUrl = iLoginService.getScanCode(session);
-        Map<String, String> map = new LinkedHashMap<>();
-        map.put("url", qrcodeUrl);
-        return AjaxResult.success(map);
+        LoginUrlsVo vo = new LoginUrlsVo();
+        vo.setUrl(qrcodeUrl);
+        return AjaxResult.success(vo);
+    }
+
+    /**
+     * 扫码登录
+     *
+     * @author fzr
+     * @param scanLoginValidate 参数
+     * @return AjaxResult<Object>
+     */
+    @PostMapping("/scanLogin")
+    public AjaxResult<Object> scanLogin(@Validated @RequestBody ScanLoginValidate scanLoginValidate, HttpSession session) {
+        iLoginService.scanLogin(scanLoginValidate, session);
+        return AjaxResult.success();
     }
 
 }

@@ -2,6 +2,7 @@ package com.mdd.front.service;
 
 import com.mdd.front.validate.login.RegisterValidate;
 import com.mdd.front.validate.login.ForgetPwdValidate;
+import com.mdd.front.validate.login.ScanLoginValidate;
 import com.mdd.front.vo.LoginTokenVo;
 
 import javax.servlet.http.HttpSession;
@@ -75,5 +76,18 @@ public interface ILoginService {
      */
     void forgotPassword(ForgetPwdValidate forgetPwdValidate);
 
+    /**
+     * 扫码链接
+     *
+     * @author fzr
+     * @param session session
+     * @return String
+     */
     String getScanCode(HttpSession session);
+
+    /**
+     * 扫码登录
+     */
+    void scanLogin(ScanLoginValidate scanLoginValidate, HttpSession session);
+
 }

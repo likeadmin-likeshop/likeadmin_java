@@ -8,7 +8,7 @@ import java.io.Serializable;
  * 公众号跳转url
  */
 @Data
-public class LoginCodesVo implements Serializable {
+public class LoginUrlsVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

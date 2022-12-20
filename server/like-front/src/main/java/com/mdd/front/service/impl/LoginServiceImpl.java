@@ -17,6 +17,7 @@ import com.mdd.front.config.FrontConfig;
 import com.mdd.front.service.ILoginService;
 import com.mdd.front.validate.login.RegisterValidate;
 import com.mdd.front.validate.login.ForgetPwdValidate;
+import com.mdd.front.validate.login.ScanLoginValidate;
 import com.mdd.front.vo.LoginTokenVo;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
@@ -403,6 +404,44 @@ public class LoginServiceImpl implements ILoginService {
 
         //生成qrcodeUrl
         return String.format(baseUrl, appId, redirectUrl, state);
+    }
+
+    /**
+     * 扫码登录
+     *
+     * @author fzr
+     * @param scanLoginValidate 参数
+     */
+    @Override
+    public void scanLogin(ScanLoginValidate scanLoginValidate, HttpSession session) {
+        Object o = RedisUtils.get("wechat-open-state-"+session.getId());
+        if (StringUtils.isNull(o) || !o.toString().equals(scanLoginValidate.getState())) {
+            throw new OperateException("二维码已失效或不存在,请重新操作");
+        }
+
+        // 得到配置和授权临时票据code
+        String code = scanLoginValidate.getCode();
+        String appId = ConfigUtils.get("op_channel", "appId", "");
+        String appSecret = ConfigUtils.get("op_channel", "appSecret", "");
+
+        //向认证服务器发送请求换取access_token
+        String baseAccessTokenUrl = "https://api.weixin.qq.com/sns/oauth2/access_token" +
+                "?appid=%s" +
+                "&secret=%s" +
+                "&code=%s" +
+                "&grant_type=authorization_code";
+
+        String result = null;
+        try {
+            String accessTokenUrl = String.format(baseAccessTokenUrl, appId, appSecret, code);
+            result = HttpUtils.sendGet(accessTokenUrl);
+        } catch (Exception e) {
+            throw new OperateException("获取access_token失败:"+e.getMessage());
+        }
+
+        // 2、获取微信用户信息
+
+        // 3、存在则更新否则创建用户
     }
 
     /**
