@@ -439,9 +439,18 @@ public class LoginServiceImpl implements ILoginService {
             throw new OperateException("获取access_token失败:"+e.getMessage());
         }
 
-        // 2、获取微信用户信息
+        String accessToken = "";
+        String openid = "";
 
-        // 3、存在则更新否则创建用户
+        // 访问微信获取用户信息
+        String baseUserInfoUrl = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s";
+        String userInfoUrl = String.format(baseUserInfoUrl, accessToken, openid);
+        String resultUserInfo = null;
+        try {
+            resultUserInfo = HttpUtils.sendGet(userInfoUrl);
+        } catch (Exception e) {
+            throw new OperateException("获取用户信息失败:"+e.getMessage());
+        }
     }
 
     /**
