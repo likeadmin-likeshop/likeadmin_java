@@ -66,7 +66,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
 
         // Token是否为空
         String token = StpUtil.getTokenValue();
-        if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(token)) {
+        if (StringUtils.isBlank(token)) {
             AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_EMPTY.getCode(), HttpEnum.TOKEN_EMPTY.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
