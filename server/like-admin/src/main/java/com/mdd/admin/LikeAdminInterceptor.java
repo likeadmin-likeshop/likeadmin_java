@@ -9,6 +9,7 @@ import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.util.RedisUtils;
 import com.mdd.common.util.StringUtils;
 import com.mdd.common.util.ToolsUtils;
+import com.mdd.common.util.YmlUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -50,6 +51,17 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         List<String> notLoginUri = Arrays.asList(AdminConfig.notLoginUri);
         if (notLoginUri.contains(auths)) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
+        }
+
+        // 演示环境拦截
+        if (YmlUtils.get("like.production").equals("true")) {
+            List<String> ignoreUrl = Arrays.asList("system:login", "system:logout");
+            if (request.getMethod().equals("POST") && !ignoreUrl.contains(auths)) {
+                String message = "演示环境不支持修改数据，请下载源码本地部署体验";
+                AjaxResult<Object> result = AjaxResult.failed(HttpEnum.NO_PERMISSION.getCode(), message);
+                response.getWriter().print(JSON.toJSONString(result));
+                return false;
+            }
         }
 
         // Token是否为空
