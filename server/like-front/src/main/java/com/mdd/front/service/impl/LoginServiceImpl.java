@@ -288,16 +288,33 @@ public class LoginServiceImpl implements ILoginService {
                     auth.setUserId(model.getId());
                     auth.setUnionid(unionId);
                     auth.setOpenid(openId);
-                    auth.setClient(ClientEnum.OA.getCode());
+                    auth.setClient(client);
                     auth.setCreateTime(System.currentTimeMillis() / 1000);
                     auth.setUpdateTime(System.currentTimeMillis() / 1000);
                     userAuthMapper.insert(auth);
                 }
             } else {
-                // 更新微信标识
                 userId = user.getId();
-                if (StringUtils.isEmpty(userAuth.getUnionid()) && StringUtils.isNotEmpty(unionId)) {
-                    userAuth.setUnionid(unionId);
+
+                // 授权不存在则创建
+                UserAuth auth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
+                        .nested(wq->wq
+                            .eq("unionid", unionId).or()
+                            .eq("openid", openId)
+                        ).eq("client", client)
+                         .last("limit 1"));
+
+                if (StringUtils.isNull(auth)) {
+                    UserAuth authModel = new UserAuth();
+                    authModel.setUserId(user.getId());
+                    authModel.setUnionid(unionId);
+                    authModel.setOpenid(openId);
+                    authModel.setClient(client);
+                    authModel.setCreateTime(System.currentTimeMillis() / 1000);
+                    authModel.setUpdateTime(System.currentTimeMillis() / 1000);
+                    userAuthMapper.insert(authModel);
+                } else if(StringUtils.isEmpty(auth.getUnionid()) && StringUtils.isNotEmpty(unionId)) {
+                    auth.setUnionid(unionId);
                     userAuthMapper.updateById(userAuth);
                 }
 
