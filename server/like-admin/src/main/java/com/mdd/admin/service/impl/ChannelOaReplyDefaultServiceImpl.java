@@ -8,7 +8,6 @@ import com.mdd.admin.service.IChannelOaReplyDefaultService;
 import com.mdd.admin.validate.channel.ChannelRpDefaultValidate;
 import com.mdd.admin.validate.commons.PageValidate;
 import com.mdd.admin.vo.channel.ChannelRpDefaultVo;
-import com.mdd.admin.vo.channel.ChannelRpVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.OfficialReply;
 import com.mdd.common.mapper.OfficialReplyMapper;
