@@ -20,7 +20,7 @@ public interface IChannelMpConfigService {
      * 微信小程序设置保存
      *
      * @author fzr
-     * @param channelMpValidate
+     * @param channelMpValidate 参数
      */
     void save(ChannelMpValidate channelMpValidate);
 

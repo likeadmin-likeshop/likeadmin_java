@@ -54,7 +54,8 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         }
 
         // 演示环境拦截
-        if (YmlUtils.get("like.production").equals("true")) {
+        String env = YmlUtils.get("like.production");
+        if (StringUtils.isNotNull(env) && env.equals("true")) {
             List<String> ignoreUrl = Arrays.asList("system:login", "system:logout");
             if (request.getMethod().equals("POST") && !ignoreUrl.contains(auths)) {
                 String message = "演示环境不支持修改数据，请下载源码本地部署体验";

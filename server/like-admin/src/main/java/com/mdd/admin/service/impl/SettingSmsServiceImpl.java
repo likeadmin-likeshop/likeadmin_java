@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.mdd.admin.service.ISettingSmsService;
 import com.mdd.common.util.ConfigUtils;
 import com.mdd.common.util.StringUtils;
+import com.mdd.common.util.YmlUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -48,6 +49,9 @@ public class SettingSmsServiceImpl implements ISettingSmsService {
      */
     @Override
     public Map<String, Object> detail(String alias) {
+        String env = YmlUtils.get("like.production");
+        boolean envStatus = StringUtils.isNotNull(env) && env.equals("true");
+
         String engine = ConfigUtils.get("sms", "default", "local");
         Map<String, String> config = ConfigUtils.getMap("sms", alias);
         config = StringUtils.isNotNull(config) ? config : Collections.emptyMap();
@@ -60,13 +64,13 @@ public class SettingSmsServiceImpl implements ISettingSmsService {
 
         switch (alias) {
             case "aliyun":
-                map.put("appKey", config.getOrDefault("appKey", ""));
-                map.put("secretKey", config.getOrDefault("secretKey", ""));
+                map.put("appKey", envStatus ? "******" : config.getOrDefault("appKey", ""));
+                map.put("secretKey", envStatus ? "******" : config.getOrDefault("secretKey", ""));
                 break;
             case "tencent":
-                map.put("appId", config.getOrDefault("appId", ""));
-                map.put("secretId", config.getOrDefault("secretId", ""));
-                map.put("secretKey", config.getOrDefault("secretKey", ""));
+                map.put("appId", envStatus ? "******" : config.getOrDefault("appId", ""));
+                map.put("secretId", envStatus ? "******" : config.getOrDefault("secretId", ""));
+                map.put("secretKey", envStatus ? "******" : config.getOrDefault("secretKey", ""));
                 break;
             case "huawei":
                 break;

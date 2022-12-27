@@ -4,6 +4,8 @@ import com.mdd.admin.service.IChannelOpService;
 import com.mdd.admin.validate.channel.ChannelOpValidate;
 import com.mdd.admin.vo.channel.ChannelOpVo;
 import com.mdd.common.util.ConfigUtils;
+import com.mdd.common.util.StringUtils;
+import com.mdd.common.util.YmlUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,9 +25,12 @@ public class ChannelOpServiceImpl implements IChannelOpService {
         String appId = ConfigUtils.get("op_channel", "appId", "");
         String appSecret = ConfigUtils.get("op_channel", "appSecret", "");
 
+        String env = YmlUtils.get("like.production");
+        boolean envStatus = StringUtils.isNotNull(env) && env.equals("true");
+
         ChannelOpVo vo = new ChannelOpVo();
-        vo.setAppId(appId);
-        vo.setAppSecret(appSecret);
+        vo.setAppId(envStatus ? "******" : appId);
+        vo.setAppSecret(envStatus ? "******" : appSecret);
         return vo;
     }
 
