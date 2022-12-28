@@ -8,7 +8,7 @@
                 ref="formRef"
                 class="ls-form"
                 :model="formData"
-                label-width="100px"
+                label-width="130px"
                 :rules="rules"
             >
                 <el-tabs v-model="activeName">
@@ -273,6 +273,37 @@
                             </el-form-item>
                         </template>
                     </el-tab-pane>
+                    <el-tab-pane label="关联配置" name="relation">
+                        <el-form-item label="关联子表的表名" prop="gen.subTableName">
+                            <el-select class="w-80" v-model="formData.gen.subTableName" clearable>
+                                <el-option
+                                    v-for="item in formData.column"
+                                    :key="item.id"
+                                    :value="item.columnName"
+                                    :label="`${item.columnName}：${item.columnComment}`"
+                                />
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="子表关联的外键名 " prop="gen.subTableFk">
+                            <el-select class="w-80" v-model="formData.gen.subTableFk" clearable>
+                                <el-option
+                                    v-for="item in formData.column"
+                                    :key="item.id"
+                                    :value="item.columnName"
+                                    :label="`${item.columnName}：${item.columnComment}`"
+                                />
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="关联表主键 " prop="gen.subTableFr">
+                            <div class="w-80">
+                                <el-input
+                                    v-model="formData.gen.subTableFr"
+                                    placeholder="请输入关联表主键"
+                                    clearable
+                                />
+                            </div>
+                        </el-form-item>
+                    </el-tab-pane>
                 </el-tabs>
             </el-form>
         </el-card>
@@ -322,6 +353,7 @@ const formData = reactive({
         moduleName: '',
         subTableFk: '',
         subTableName: '',
+        subTableFr: '',
         treeParent: '',
         treePrimary: '',
         treeName: ''
