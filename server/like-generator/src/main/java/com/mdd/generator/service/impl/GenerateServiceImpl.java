@@ -89,25 +89,19 @@ public class GenerateServiceImpl implements IGenerateService {
      * 库列表
      *
      * @author fzr
-     * @param pageParam 分页参数
      * @param params 搜索参数
      * @return PageResult<Map<String, String>>
      */
     @Override
-    public PageResult<DbTableVo> dbAll(PageParam pageParam, Map<String, String> params) {
-        Integer page  = pageParam.getPageNo();
-        Integer limit = pageParam.getPageSize();
-
-        PageHelper.startPage(page, limit);
+    public List<DbTableVo> dbAll(Map<String, String> params) {
         List<DbTableVo> tables = genTableMapper.selectDbTableAllList(params);
-
         for (DbTableVo vo : tables) {
             if (vo.getUpdateTime() == null) {
                 vo.setUpdateTime("");
             }
         }
 
-        return PageResult.pageHelper(tables);
+        return tables;
     }
 
     /**
