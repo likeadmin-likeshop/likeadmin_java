@@ -44,7 +44,7 @@ public class GenController {
     }
 
     /**
-     * 库列表
+     * 所有库表
      *
      * @author fzr
      * @param pageParam 分页参数
