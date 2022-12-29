@@ -1,5 +1,6 @@
 package com.mdd.generator.util;
 
+import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.util.StringUtils;
 import com.mdd.generator.config.GenConfig;
 import com.mdd.generator.constant.GenConstants;
@@ -66,6 +67,9 @@ public class VelocityUtil {
                 dictFields.add(column.getDictType());
             }
         }
+
+        // 替换前缀
+        table.setSubTableName(table.getSubTableName().replace(GlobalConfig.tablePrefix, ""));
 
         // 设置模板变量
         VelocityContext velocityContext = new VelocityContext();

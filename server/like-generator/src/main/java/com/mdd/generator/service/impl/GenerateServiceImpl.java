@@ -264,7 +264,7 @@ public class GenerateServiceImpl implements IGenerateService {
         model.setGenType(genParam.getGenType());
         model.setGenPath(genParam.getGenPath());
         model.setSubTableFk(genParam.getSubTableFk());
-        model.setSubTableName(genParam.getSubTableName().replace(GlobalConfig.tablePrefix, ""));
+        model.setSubTableName(genParam.getSubTableName());
         genTableMapper.updateById(model);
 
         for (Map<String, String> item : genParam.getColumn()) {
