@@ -44,6 +44,21 @@ public class GenController {
     }
 
     /**
+     * 库列表
+     *
+     * @author fzr
+     * @param pageParam 分页参数
+     * @param params 搜索参数
+     * @return Object
+     */
+    @GetMapping("/dbAll")
+    public Object dbAll(@Validated PageParam pageParam,
+                     @RequestParam Map<String, String> params) {
+        PageResult<DbTableVo> list = iGenerateService.dbAll(pageParam, params);
+        return AjaxResult.success(list);
+    }
+
+    /**
      * 生成列表
      *
      * @author fzr

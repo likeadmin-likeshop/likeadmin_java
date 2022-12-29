@@ -39,6 +39,27 @@ public interface GenTableMapper extends IBaseMapper<GenTable> {
     List<DbTableVo> selectDbTableList(Map<String, String> params);
 
     /**
+     * 查询库中的数据表
+     *
+     * @author fzr
+     * @param params 参数
+     * @return List<Map<String, String>>
+     */
+    @Select({"<script>",
+        "SELECT table_name, table_comment, create_time, update_time " +
+        "FROM information_schema.tables " +
+        "WHERE table_schema = (SELECT database()) " +
+        "AND table_name NOT LIKE 'qrtz_%' AND table_name NOT LIKE 'gen_%' " +
+        "<if test=\"tableName != null and tableName != ''\">" +
+            "AND lower(table_name) like lower(concat('%', #{tableName}, '%'))" +
+        "</if>",
+        "<if test=\"tableComment != null and tableComment != ''\">" +
+            "AND lower(table_comment) like lower(concat('%', #{tableComment}, '%'))" +
+        "</if>",
+        "</script>"})
+    List<DbTableVo> selectDbTableAllList(Map<String, String> params);
+
+    /**
      * 根据表名集查询表
      *
      * @author fzr
