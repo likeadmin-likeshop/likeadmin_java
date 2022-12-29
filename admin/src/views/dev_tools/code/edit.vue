@@ -277,10 +277,10 @@
                         <el-form-item label="关联子表的表名" prop="gen.subTableName">
                             <el-select class="w-80" v-model="formData.gen.subTableName" clearable>
                                 <el-option
-                                    v-for="item in formData.column"
-                                    :key="item.id"
-                                    :value="item.columnName"
-                                    :label="`${item.columnName}：${item.columnComment}`"
+                                    v-for="item in optionsData.dataTable"
+                                    :key="item.tableName"
+                                    :value="item.tableName"
+                                    :label="`${item.tableName}：${item.tableComment}`"
                                 />
                             </el-select>
                         </el-form-item>
@@ -314,7 +314,7 @@
 </template>
 
 <script lang="ts" setup name="tableEdit">
-import { generateEdit, tableDetail } from '@/api/tools/code'
+import { dataTableAll, generateEdit, tableDetail } from '@/api/tools/code'
 import { dictTypeAll } from '@/api/setting/dict'
 import type { FormInstance } from 'element-plus'
 import feedback from '@/utils/feedback'
@@ -386,6 +386,7 @@ const getDetails = async () => {
 const { optionsData } = useDictOptions<{
     dictType: any[]
     menu: any[]
+    dataTable: any[]
 }>({
     dictType: {
         api: dictTypeAll
@@ -397,6 +398,9 @@ const { optionsData } = useDictOptions<{
             menu.children = data
             return menu
         }
+    },
+    dataTable: {
+        api: dataTableAll
     }
 })
 
