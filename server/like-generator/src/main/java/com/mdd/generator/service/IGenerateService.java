@@ -3,6 +3,7 @@ package com.mdd.generator.service;
 import com.mdd.common.core.PageResult;
 import com.mdd.generator.validate.GenParam;
 import com.mdd.generator.validate.PageParam;
+import com.mdd.generator.vo.DbColumnVo;
 import com.mdd.generator.vo.DbTableVo;
 import com.mdd.generator.vo.GenTableVo;
 
@@ -32,6 +33,14 @@ public interface IGenerateService {
      * @return PageResult<Map<String, String>>
      */
     List<DbTableVo> dbAll(Map<String, String> params);
+
+    /**
+     * 根据表名查字段
+     *
+     * @param tableName 表名
+     * @return List<DbColumnVo>
+     */
+    List<DbColumnVo> dbColumn(String tableName);
 
     /**
      * 生成列表

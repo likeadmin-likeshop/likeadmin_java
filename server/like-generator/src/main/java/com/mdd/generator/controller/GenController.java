@@ -10,6 +10,7 @@ import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.generator.service.IGenerateService;
 import com.mdd.generator.validate.GenParam;
 import com.mdd.generator.validate.PageParam;
+import com.mdd.generator.vo.DbColumnVo;
 import com.mdd.generator.vo.DbTableVo;
 import com.mdd.generator.vo.GenTableVo;
 import org.apache.commons.io.IOUtils;
@@ -38,8 +39,8 @@ public class GenController {
      * @return Object
      */
     @GetMapping("/db")
-    public Object db(@Validated PageParam pageParam,
-                     @RequestParam Map<String, String> params) {
+    public AjaxResult<PageResult<DbTableVo>> db(@Validated PageParam pageParam,
+                                                @RequestParam Map<String, String> params) {
         PageResult<DbTableVo> list = iGenerateService.db(pageParam, params);
         return AjaxResult.success(list);
     }
@@ -52,8 +53,20 @@ public class GenController {
      * @return Object
      */
     @GetMapping("/dbAll")
-    public Object dbAll(@RequestParam Map<String, String> params) {
+    public AjaxResult<List<DbTableVo>> dbAll(@RequestParam Map<String, String> params) {
         List<DbTableVo> list = iGenerateService.dbAll(params);
+        return AjaxResult.success(list);
+    }
+
+    /**
+     * 根据表名查字段
+     *
+     * @param tableName 表名
+     * @return List<DbColumnVo>
+     */
+    @GetMapping("/dbColumn")
+    public AjaxResult<List<DbColumnVo>> dbColumn(@RequestParam String tableName) {
+        List<DbColumnVo> list = iGenerateService.dbColumn(tableName);
         return AjaxResult.success(list);
     }
 
@@ -66,8 +79,8 @@ public class GenController {
      * @return Object
      */
     @GetMapping("/list")
-    public Object list(@Validated PageParam pageParam,
-                       @RequestParam Map<String, String> params) {
+    public AjaxResult<PageResult<GenTableVo>> list(@Validated PageParam pageParam,
+                                                   @RequestParam Map<String, String> params) {
         PageResult<GenTableVo> list = iGenerateService.list(pageParam, params);
         return AjaxResult.success(list);
     }
@@ -80,7 +93,7 @@ public class GenController {
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public AjaxResult<Map<String, Object>> detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         Map<String, Object> maps = iGenerateService.detail(id);
         return AjaxResult.success(maps);
     }
@@ -92,7 +105,7 @@ public class GenController {
      * @return Object
      */
     @PostMapping("/importTable")
-    public Object importTable(String tables) {
+    public AjaxResult<Object> importTable(String tables) {
         Assert.notNull(tables, "请选择要导入的表");
         String[] tableNames = tables.split(",");
         iGenerateService.importTable(tableNames);
@@ -107,7 +120,7 @@ public class GenController {
      * @return Object
      */
     @PostMapping("/editTable")
-    public Object editTable(@Validated() @RequestBody GenParam genParam) {
+    public AjaxResult<Object> editTable(@Validated() @RequestBody GenParam genParam) {
         iGenerateService.editTable(genParam);
         return AjaxResult.success();
     }
@@ -120,7 +133,7 @@ public class GenController {
      * @return Object
      */
     @PostMapping("/delTable")
-    public Object deleteTable(@Validated(value = GenParam.delete.class) @RequestBody GenParam genParam) {
+    public AjaxResult<Object> deleteTable(@Validated(value = GenParam.delete.class) @RequestBody GenParam genParam) {
         iGenerateService.deleteTable(genParam.getIds());
         return AjaxResult.success();
     }
@@ -133,7 +146,7 @@ public class GenController {
      * @return Object
      */
     @PostMapping("/syncTable")
-    public Object syncTable(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public AjaxResult<Object> syncTable(@Validated @IDMust() @RequestParam("id") Integer id) {
         iGenerateService.syncTable(id);
         return AjaxResult.success();
     }
@@ -146,7 +159,7 @@ public class GenController {
      * @return Object
      */
     @GetMapping("/previewCode")
-    public Object previewCode(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public AjaxResult<Map<String, String>> previewCode(@Validated @IDMust() @RequestParam("id") Integer id) {
         Map<String, String> map = iGenerateService.previewCode(id);
         return AjaxResult.success(map);
     }
@@ -158,7 +171,7 @@ public class GenController {
      * @param tables 表名
      */
     @GetMapping("/genCode")
-    public Object genCode(String tables) {
+    public AjaxResult<Object> genCode(String tables) {
         String production = YmlUtils.get("like.production");
         if (StringUtils.isNotEmpty(production) && production.equals("true")) {
             throw new OperateException("抱歉,演示环境不允许操作！");

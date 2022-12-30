@@ -21,6 +21,7 @@ import com.mdd.generator.util.GenUtil;
 import com.mdd.generator.util.VelocityUtil;
 import com.mdd.generator.validate.GenParam;
 import com.mdd.generator.validate.PageParam;
+import com.mdd.generator.vo.DbColumnVo;
 import com.mdd.generator.vo.DbTableVo;
 import com.mdd.generator.vo.GenColumnVo;
 import com.mdd.generator.vo.GenTableVo;
@@ -102,6 +103,28 @@ public class GenerateServiceImpl implements IGenerateService {
         }
 
         return tables;
+    }
+
+    /**
+     * 根据表名查字段
+     *
+     * @param tableName 表名
+     * @return List<DbColumnVo>
+     */
+    @Override
+    public List<DbColumnVo> dbColumn(String tableName) {
+        List<GenTableColumn> columns = genTableMapper.selectDbTableColumnsByName(tableName);
+
+        List<DbColumnVo> list = new LinkedList<>();
+        for (GenTableColumn col : columns) {
+            DbColumnVo vo = new DbColumnVo();
+            vo.setColumnName(col.getColumnName());
+            vo.setColumnType(col.getColumnType());
+            vo.setColumnComment(col.getColumnComment());
+            list.add(vo);
+        }
+
+        return list;
     }
 
     /**
