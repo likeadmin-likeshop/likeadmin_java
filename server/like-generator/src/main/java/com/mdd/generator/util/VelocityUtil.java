@@ -70,6 +70,7 @@ public class VelocityUtil {
 
         // 替换前缀
         table.setSubTableName(table.getSubTableName().replace(GlobalConfig.tablePrefix, ""));
+        System.out.println(GenUtil.getTableAlias(table.getSubTableName()));
 
         // 设置模板变量
         VelocityContext velocityContext = new VelocityContext();
@@ -84,6 +85,7 @@ public class VelocityUtil {
         velocityContext.put("notesType", GenConfig.notesType);
         velocityContext.put("table", table);
         velocityContext.put("columns", columns);
+        velocityContext.put("subTableAlias", GenUtil.getTableAlias(table.getSubTableName()));
         velocityContext.put("dateFields", SqlConstants.COLUMN_TIME_NAME);
         velocityContext.put("primaryKey", primaryKey);
         velocityContext.put("primaryField", primaryField);

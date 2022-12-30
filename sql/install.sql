@@ -169,6 +169,7 @@ CREATE TABLE `la_gen_table`  (
   `table_comment` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '表描述',
   `sub_table_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '关联表名称',
   `sub_table_fk` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '关联表外键',
+  `sub_table_fr` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '关联表主键',
   `author_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '作者的名称',
   `entity_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '实体的名称',
   `module_name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '生成模块名',
@@ -526,7 +527,7 @@ BEGIN;
 INSERT INTO `la_system_auth_dept` VALUES (1, 0, '默认部门', 'LikeAdmin', '18327647788', 10, 0, 0, 1649841995, 1660190949, 0);
 INSERT INTO `la_system_auth_role` VALUES (1, '审核员', '审核数据', 0, 0, 1668679451, 1668679468);
 INSERT INTO `la_system_auth_admin` VALUES (1, '0', '1', '', 'admin', 'admin', '4919832b10f1d2133c0f24a7dbe8330e', '/api/static/backend_avatar.png', 'Huku0', 0, 1, 0, 0, '127.0.0.1', 1670314940, 1642321599, 1670376604, 0);
-INSERT INTO `la_crontab` VALUES (1, '有参数任务', 'default', 'myJob.handle(\"参数\")', '* * * * * ?', '', '', 1, 1, 0, 0, 1670377612, 1670377612, 0, 1669970830, 1670289651, 0);
+INSERT INTO `la_crontab` VALUES (1, '有参数任务', 'default', 'myJob.handle(\"参数\")', '* * * * * ?', '', '', 2, 1, 0, 0, 1670377612, 1670377612, 0, 1669970830, 1670289651, 0);
 COMMIT;
 
 BEGIN;
