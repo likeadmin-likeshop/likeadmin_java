@@ -88,4 +88,6 @@ public class GenParam implements Serializable {
 
     private String subTableFk = "";
 
+    private String subTableFr = "";
+
 }
