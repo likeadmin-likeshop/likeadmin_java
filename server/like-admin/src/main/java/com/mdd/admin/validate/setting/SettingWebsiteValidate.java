@@ -19,4 +19,10 @@ public class SettingWebsiteValidate implements Serializable {
     private String shopName = "";
     private String shopLogo = "";
 
+    private String pcLogo = "";
+    private String pcTitle = "";
+    private String pcIco = "";
+    private String pcDesc = "";
+    private String pcKeywords = "";
+
 }

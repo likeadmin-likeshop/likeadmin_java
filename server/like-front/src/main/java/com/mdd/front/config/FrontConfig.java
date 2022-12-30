@@ -28,6 +28,10 @@ public class FrontConfig {
             "/api/article/category",
             "/api/article/detail",
             "/api/article/list",
+            "/api/pc/getConfig",
+            "/api/pc/index",
+            "/api/login/getScanCode",
+
     };
 
 }

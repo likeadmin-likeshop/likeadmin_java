@@ -20,6 +20,7 @@ public class GenTable implements Serializable {
     private String tableComment;
     private String subTableName;
     private String subTableFk;
+    private String subTableFr;
     private String authorName;
     private String entityName;
     private String moduleName;

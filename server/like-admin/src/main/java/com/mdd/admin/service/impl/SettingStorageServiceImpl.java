@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.admin.service.ISettingStorageService;
 import com.mdd.common.util.ConfigUtils;
 import com.mdd.common.util.StringUtils;
+import com.mdd.common.util.YmlUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -66,6 +67,9 @@ public class SettingStorageServiceImpl implements ISettingStorageService {
      */
     @Override
     public Map<String, Object> detail(String alias) {
+        String env = YmlUtils.get("like.production");
+        boolean envStatus = StringUtils.isNotNull(env) && env.equals("true");
+
         String engine = ConfigUtils.get("storage", "default", "local");
         Map<String, String> config = ConfigUtils.getMap("storage", alias);
         config = StringUtils.isNotNull(config) ? config : Collections.emptyMap();
@@ -76,8 +80,8 @@ public class SettingStorageServiceImpl implements ISettingStorageService {
         map.put("status", engine.equals(alias) ? 1 : 0);
         if (!alias.equals("local")) {
             map.put("bucket", config.getOrDefault("bucket", ""));
-            map.put("secretKey", config.getOrDefault("secretKey", ""));
-            map.put("accessKey", config.getOrDefault("accessKey", ""));
+            map.put("secretKey", envStatus ? "******" : config.getOrDefault("secretKey", ""));
+            map.put("accessKey", envStatus ? "******" : config.getOrDefault("accessKey", ""));
             map.put("domain", config.getOrDefault("domain", ""));
             if (alias.equals("qcloud")) {
                 map.put("region", config.getOrDefault("region", ""));

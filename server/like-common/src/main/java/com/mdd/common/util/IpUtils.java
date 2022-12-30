@@ -262,7 +262,7 @@ public class IpUtils {
      * @return 是否未知
      */
     public static boolean isUnknown(String checkString) {
-        return com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(checkString) || "unknown".equalsIgnoreCase(checkString);
+        return StringUtils.isBlank(checkString) || "unknown".equalsIgnoreCase(checkString);
     }
 
 }

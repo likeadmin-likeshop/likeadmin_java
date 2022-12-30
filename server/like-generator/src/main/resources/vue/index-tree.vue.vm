@@ -40,7 +40,7 @@
             #end
                 <el-form-item>
                     <el-button type="primary" @click="getLists">查询</el-button>
-                    <el-button @click="getLists">重置</el-button>
+                    <el-button @click="resetParams">重置</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -137,10 +137,11 @@ import feedback from '@/utils/feedback'
 #if($dictFields.size()>=1)
 import { useDictData } from '@/hooks/useDictOptions'
 #end
-import type { ElTable } from 'element-plus'
+import type { ElTable, FormInstance } from 'element-plus'
 
 const tableRef = shallowRef<InstanceType<typeof ElTable>>()
 const editRef = shallowRef<InstanceType<typeof EditPopup>>()
+const formRef = shallowRef<FormInstance>()
 let isExpand = false
 const showEdit = ref(false)
 const loading = ref(false)
@@ -168,6 +169,10 @@ const getLists = async () => {
     } catch (error) {
         loading.value = false
     }
+}
+const resetParams = () => {
+    formRef.value?.resetFields()
+    getLists()
 }
 
 #if($dictFields.size()>=1)

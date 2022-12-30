@@ -24,7 +24,7 @@ public class SettingWebsiteServiceImpl implements ISettingWebsiteService {
     @Override
     public SettingWebsiteVo detail() {
         Map<String, String> config = ConfigUtils.get("website");
-
+        System.out.println(config);
         SettingWebsiteVo vo = new SettingWebsiteVo();
         vo.setName(config.getOrDefault("name", ""));
         vo.setLogo(UrlUtils.toAbsoluteUrl(config.getOrDefault("logo", "")));
@@ -32,6 +32,11 @@ public class SettingWebsiteServiceImpl implements ISettingWebsiteService {
         vo.setBackdrop(UrlUtils.toAbsoluteUrl(config.getOrDefault("backdrop", "")));
         vo.setShopName(config.getOrDefault("shopName", ""));
         vo.setShopLogo(UrlUtils.toAbsoluteUrl(config.getOrDefault("shopLogo", "")));
+        vo.setPcLogo(UrlUtils.toAbsoluteUrl(config.getOrDefault("pcLogo", "")));
+        vo.setPcTitle(config.getOrDefault("pcTitle", ""));
+        vo.setPcIco(config.getOrDefault("pcIco", ""));
+        vo.setPcDesc(config.getOrDefault("pcDesc", ""));
+        vo.setPcKeywords(config.getOrDefault("pcKeywords", ""));
         return vo;
     }
 
@@ -49,6 +54,11 @@ public class SettingWebsiteServiceImpl implements ISettingWebsiteService {
         ConfigUtils.set("website", "backdrop", UrlUtils.toRelativeUrl(websiteValidate.getBackdrop()));
         ConfigUtils.set("website", "shopName", websiteValidate.getShopName());
         ConfigUtils.set("website", "shopLogo", UrlUtils.toRelativeUrl(websiteValidate.getShopLogo()));
+        ConfigUtils.set("website", "pcLogo", UrlUtils.toRelativeUrl(websiteValidate.getPcLogo()));
+        ConfigUtils.set("website", "pcTitle", websiteValidate.getShopLogo());
+        ConfigUtils.set("website", "pcIco", websiteValidate.getPcIco());
+        ConfigUtils.set("website", "pcDesc", websiteValidate.getPcDesc());
+        ConfigUtils.set("website", "pcKeywords", websiteValidate.getPcKeywords());
     }
 
 }

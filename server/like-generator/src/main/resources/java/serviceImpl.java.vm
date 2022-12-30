@@ -4,10 +4,10 @@ package ${packageName}.admin.service.impl;
 import com.alibaba.fastjson2.JSONArray;
 #end
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.yulichang.query.MPJQueryWrapper;
 #if($table.genTpl.equals("crud"))
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.yulichang.query.MPJQueryWrapper;
 import ${packageName}.admin.validate.commons.PageValidate;
 #end
 import ${packageName}.admin.service.I${EntityName}Service;
@@ -16,14 +16,15 @@ import ${packageName}.admin.validate.${EntityName}UpdateValidate;
 import ${packageName}.admin.validate.${EntityName}SearchValidate;
 import ${packageName}.admin.vo.${EntityName}ListedVo;
 import ${packageName}.admin.vo.${EntityName}DetailVo;
+import com.mdd.common.config.GlobalConfig;
 #if($table.genTpl.equals("crud"))
 import ${packageName}.common.core.PageResult;
 #end
 import ${packageName}.common.entity.${EntityName};
 import ${packageName}.common.mapper.${EntityName}Mapper;
-import ${packageName}.common.utils.ArrayUtil;
-import ${packageName}.common.utils.TimeUtil;
-import ${packageName}.common.utils.UrlUtil;
+import ${packageName}.common.util.ArrayUtils;
+import ${packageName}.common.util.TimeUtils;
+import ${packageName}.common.util.UrlUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -91,12 +92,13 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     #if(!$table.subTableName.equals("") && !$table.subTableFk.equals(""))
         #set($queryWrapper = "mpjQueryWrapper")
         MPJQueryWrapper<${EntityName}> mpjQueryWrapper = new MPJQueryWrapper<>();
-        mpjQueryWrapper.innerJoin("?_$table.subTableName f ON f.$table.SubTableFk=t.id".replace("?_", GlobalConfig.tablePrefix));
+        mpjQueryWrapper.selectAll(${EntityName}.class);
+        mpjQueryWrapper.innerJoin("?_$table.subTableName f ON f.$table.SubTableFr=t.$table.SubTableFk".replace("?_", GlobalConfig.tablePrefix));
         #if($allFields.contains("is_delete"))
-        mpjQueryWrapper.eq("is_delete", 0);
+        mpjQueryWrapper.eq("t.is_delete", 0);
         #end
         #if($allFields.contains("sort"))
-        mpjQueryWrapper.orderByDesc(Arrays.asList("sort", "${primaryField}"));
+        mpjQueryWrapper.orderByDesc(Arrays.asList("t.sort", "t.${primaryField}"));
         #else
         mpjQueryWrapper.orderByDesc("${primaryField}");
         #end
@@ -153,7 +155,8 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
                 ${EntityName}ListedVo.class,
                 $queryWrapper);
         #else
-        List<${EntityName}ListedVo> iPage = ${entityName}Mapper.selectJoinList(
+        #set($joinCrudName = "array")
+        List<${EntityName}ListedVo> array = ${entityName}Mapper.selectJoinList(
                 ${EntityName}ListedVo.class,
                 $queryWrapper);
         #end
@@ -169,13 +172,6 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #end
     #end
 
-    #set($filter = false)
-    #if($listFields.contains("create_time") || $listFields.contains("update_time") ||
-        $listFields.contains("delete_time") || $listFields.contains("start_time") ||
-        $listFields.contains("end_time") || $listFields.contains("image") ||
-        $listFields.contains("avatar") || $listFields.contains("logo") ||
-        $listFields.contains("img"))
-        #set($filter = true)
         #if(!$isJoin)
         List<${EntityName}ListedVo> list = new LinkedList<>();
         #end
@@ -184,64 +180,63 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
             ${EntityName}ListedVo vo = new ${EntityName}ListedVo();
             BeanUtils.copyProperties(item, vo);
             #if($listFields.contains("image"))
-            vo.setImage(UrlUtil.toAbsoluteUrl(item.getImage()));
+            vo.setImage(UrlUtils.toAbsoluteUrl(item.getImage()));
             #end
             #if($listFields.contains("avatar"))
-            vo.setAvatar(UrlUtil.toAbsoluteUrl(item.getAvatar()));
+            vo.setAvatar(UrlUtils.toAbsoluteUrl(item.getAvatar()));
             #end
             #if($listFields.contains("logo"))
-            vo.setLogo(UrlUtil.toAbsoluteUrl(item.getLogo()));
+            vo.setLogo(UrlUtils.toAbsoluteUrl(item.getLogo()));
             #end
             #if($listFields.contains("img"))
-            vo.setImg(UrlUtil.toAbsoluteUrl(item.getImg()));
+            vo.setImg(UrlUtils.toAbsoluteUrl(item.getImg()));
             #end
             #if($listFields.contains("create_time"))
-            vo.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(item.getCreateTime()));
             #end
             #if($listFields.contains("update_time"))
-            vo.setUpdateTime(TimeUtil.timestampToDate(item.getUpdateTime()));
+            vo.setUpdateTime(TimeUtils.timestampToDate(item.getUpdateTime()));
             #end
             #if($listFields.contains("delete_time"))
-            vo.setDeleteTime(TimeUtil.timestampToDate(item.getDeleteTime()));
+            vo.setDeleteTime(TimeUtils.timestampToDate(item.getDeleteTime()));
             #end
             #if($listFields.contains("start_time"))
-            vo.setStartTime(TimeUtil.timestampToDate(item.getStartTime()));
+            vo.setStartTime(TimeUtils.timestampToDate(item.getStartTime()));
             #end
             #if($listFields.contains("end_time"))
-            vo.setEndTime(TimeUtil.timestampToDate(item.getEndTime()));
+            vo.setEndTime(TimeUtils.timestampToDate(item.getEndTime()));
             #end
             list.add(vo);
         #else
             #if($listFields.contains("image"))
-            item.setImage(UrlUtil.toAbsoluteUrl(item.getImage()));
+            item.setImage(UrlUtils.toAbsoluteUrl(item.getImage()));
             #end
             #if($listFields.contains("avatar"))
-            item.setAvatar(UrlUtil.toAbsoluteUrl(item.getAvatar()));
+            item.setAvatar(UrlUtils.toAbsoluteUrl(item.getAvatar()));
             #end
             #if($listFields.contains("logo"))
-            item.setLogo(UrlUtil.toAbsoluteUrl(item.getLogo()));
+            item.setLogo(UrlUtils.toAbsoluteUrl(item.getLogo()));
             #end
             #if($listFields.contains("img"))
-            item.setImg(UrlUtil.toAbsoluteUrl(item.getImg()));
+            item.setImg(UrlUtils.toAbsoluteUrl(item.getImg()));
             #end
             #if($listFields.contains("create_time"))
-            item.setCreateTime(TimeUtil.timestampToDate(item.getCreateTime()));
+            item.setCreateTime(TimeUtils.timestampToDate(item.getCreateTime()));
             #end
             #if($listFields.contains("update_time"))
-            item.setUpdateTime(TimeUtil.timestampToDate(item.getUpdateTime()));
+            item.setUpdateTime(TimeUtils.timestampToDate(item.getUpdateTime()));
             #end
             #if($listFields.contains("delete_time"))
-            item.setDeleteTime(TimeUtil.timestampToDate(item.getDeleteTime()));
+            item.setDeleteTime(TimeUtils.timestampToDate(item.getDeleteTime()));
             #end
             #if($listFields.contains("start_time"))
-            item.setStartTime(TimeUtil.timestampToDate(item.getStartTime()));
+            item.setStartTime(TimeUtils.timestampToDate(item.getStartTime()));
             #end
             #if($listFields.contains("end_time"))
-            item.setEndTime(TimeUtil.timestampToDate(item.getEndTime()));
+            item.setEndTime(TimeUtils.timestampToDate(item.getEndTime()));
             #end
         #end
         }
-    #end
 
     #if($table.genTpl.equals("crud"))
         #if($isJoin)
@@ -255,7 +250,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #else
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(array));
         #end
-        return ArrayUtil.listToTree(jsonArray, "${table.treePrimary}", "${table.treeParent}", "children");
+        return ArrayUtils.listToTree(jsonArray, "${table.treePrimary}", "${table.treeParent}", "children");
     #end
     }
 
@@ -288,31 +283,31 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         $detailFields.contains("avatar") || $detailFields.contains("logo") ||
         $detailFields.contains("img"))
         #if($detailFields.contains("image"))
-        vo.setImage(UrlUtil.toAbsoluteUrl(model.getImage()));
+        vo.setImage(UrlUtils.toAbsoluteUrl(model.getImage()));
         #end
         #if($detailFields.contains("avatar"))
-        vo.setAvatar(UrlUtil.toAbsoluteUrl(model.getAvatar()));
+        vo.setAvatar(UrlUtils.toAbsoluteUrl(model.getAvatar()));
         #end
         #if($detailFields.contains("logo"))
-        vo.setLogo(UrlUtil.toAbsoluteUrl(model.getLogo()));
+        vo.setLogo(UrlUtils.toAbsoluteUrl(model.getLogo()));
         #end
         #if($detailFields.contains("img"))
-        vo.setImg(UrlUtil.toAbsoluteUrl(model.getImg()));
+        vo.setImg(UrlUtils.toAbsoluteUrl(model.getImg()));
         #end
         #if($detailFields.contains("create_time"))
-        vo.setCreateTime(TimeUtil.timestampToDate(model.getCreateTime()));
+        vo.setCreateTime(TimeUtils.timestampToDate(model.getCreateTime()));
         #end
         #if($detailFields.contains("update_time"))
-        vo.setUpdateTime(TimeUtil.timestampToDate(model.getUpdateTime()));
+        vo.setUpdateTime(TimeUtils.timestampToDate(model.getUpdateTime()));
         #end
         #if($detailFields.contains("delete_time"))
-        vo.setDeleteTime(TimeUtil.timestampToDate(model.getDeleteTime()));
+        vo.setDeleteTime(TimeUtils.timestampToDate(model.getDeleteTime()));
         #end
         #if($detailFields.contains("start_time"))
-        vo.setStartTime(TimeUtil.timestampToDate(model.getStartTime()));
+        vo.setStartTime(TimeUtils.timestampToDate(model.getStartTime()));
         #end
         #if($detailFields.contains("end_time"))
-        vo.setEndTime(TimeUtil.timestampToDate(model.getEndTime()));
+        vo.setEndTime(TimeUtils.timestampToDate(model.getEndTime()));
         #end
      #end
         return vo;
@@ -333,7 +328,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     #if(($column.isInsert || $column.columnName.equals("create_time") || $column.columnName.equals("update_time")) && !$column.columnName.equals($primaryField))
         #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
         #if($column.javaField.equals("image") || $column.javaField.equals("avatar") || $column.javaField.equals("logo") || $column.javaField.equals("img"))
-        model.set${AttrName}(UrlUtil.toRelativeUrl(createValidate.get${AttrName}()));
+        model.set${AttrName}(UrlUtils.toRelativeUrl(createValidate.get${AttrName}()));
         #elseif(!$dateFields.contains($column.columnName) and !$column.javaField.equals("isDelete"))
         model.set${AttrName}(createValidate.get${AttrName}());
         #elseif($column.htmlType=="datetime")
@@ -369,7 +364,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
     #if($column.isEdit==1 || $column.columnName.equals("update_time"))
         #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
         #if($column.javaField.equals("image") || $column.javaField.equals("avatar") || $column.javaField.equals("logo") || $column.javaField.equals("img"))
-        model.set${AttrName}(UrlUtil.toRelativeUrl(updateValidate.get${AttrName}()));
+        model.set${AttrName}(UrlUtils.toRelativeUrl(updateValidate.get${AttrName}()));
         #elseif(!$dateFields.contains($column.columnName) and !$column.javaField.equals("isDelete"))
         model.set${AttrName}(updateValidate.get${AttrName}());
         #elseif($column.htmlType=="datetime" && $column.columnName.equals("update_time"))

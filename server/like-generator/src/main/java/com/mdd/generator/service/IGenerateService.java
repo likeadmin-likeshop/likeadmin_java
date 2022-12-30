@@ -25,6 +25,15 @@ public interface IGenerateService {
     PageResult<DbTableVo> db(PageParam pageParam, Map<String, String> params);
 
     /**
+     * 所有库表
+     *
+     * @author fzr
+     * @param params 搜索参数
+     * @return PageResult<Map<String, String>>
+     */
+    List<DbTableVo> dbAll(Map<String, String> params);
+
+    /**
      * 生成列表
      *
      * @author fzr

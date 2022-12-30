@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -40,6 +41,19 @@ public class GenController {
     public Object db(@Validated PageParam pageParam,
                      @RequestParam Map<String, String> params) {
         PageResult<DbTableVo> list = iGenerateService.db(pageParam, params);
+        return AjaxResult.success(list);
+    }
+
+    /**
+     * 所有库表
+     *
+     * @author fzr
+     * @param params 搜索参数
+     * @return Object
+     */
+    @GetMapping("/dbAll")
+    public Object dbAll(@RequestParam Map<String, String> params) {
+        List<DbTableVo> list = iGenerateService.dbAll(params);
         return AjaxResult.success(list);
     }
 

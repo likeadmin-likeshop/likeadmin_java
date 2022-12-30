@@ -3,9 +3,7 @@ package com.mdd.admin.service.impl;
 import com.mdd.admin.service.IChannelMpConfigService;
 import com.mdd.admin.validate.channel.ChannelMpValidate;
 import com.mdd.admin.vo.channel.ChannelMpVo;
-import com.mdd.common.util.ConfigUtils;
-import com.mdd.common.util.RequestUtils;
-import com.mdd.common.util.UrlUtils;
+import com.mdd.common.util.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -26,13 +24,15 @@ public class ChannelMpConfigServiceImpl implements IChannelMpConfigService {
     public ChannelMpVo detail() {
         Map<String, String> config = ConfigUtils.get("mp_channel");
 
+        String env = YmlUtils.get("like.production");
+        boolean envStatus = StringUtils.isNotNull(env) && env.equals("true");
+
         ChannelMpVo vo = new ChannelMpVo();
         vo.setName(config.getOrDefault("name", ""));
         vo.setPrimaryId(config.getOrDefault("primaryId", ""));
-        vo.setAppId(config.getOrDefault("appId", ""));
-        vo.setAppSecret(config.getOrDefault("appSecret", ""));
+        vo.setAppId(envStatus ? "******" : config.getOrDefault("appId", ""));
+        vo.setAppSecret(envStatus ? "******" : config.getOrDefault("appSecret", ""));
         vo.setQrCode(UrlUtils.toAbsoluteUrl(config.getOrDefault("qrCode", "")));
-
 
         String domain = RequestUtils.domain();
         vo.setRequestDomain(domain);

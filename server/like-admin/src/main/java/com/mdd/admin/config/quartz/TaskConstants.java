@@ -14,9 +14,6 @@ public class TaskConstants {
     /** 状态: 运行 */
     public static final Integer STATUS_RUN   = 1;
 
-    /** 状态: 停止 */
-    public static final Integer STATUS_STOP  = 2;
-
     /** 状态: 失败 */
     public static final Integer STATUS_FAIL  = 2;
 

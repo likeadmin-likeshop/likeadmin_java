@@ -3,9 +3,7 @@ package com.mdd.admin.service.impl;
 import com.mdd.admin.service.IChannelOaConfigService;
 import com.mdd.admin.validate.channel.ChannelOaValidate;
 import com.mdd.admin.vo.channel.ChannelOaVo;
-import com.mdd.common.util.ConfigUtils;
-import com.mdd.common.util.RequestUtils;
-import com.mdd.common.util.UrlUtils;
+import com.mdd.common.util.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -27,11 +25,14 @@ public class ChannelOaConfigServiceImpl implements IChannelOaConfigService {
         Map<String, String> config = ConfigUtils.get("oa_channel");
         ChannelOaVo vo = new ChannelOaVo();
 
+        String env = YmlUtils.get("like.production");
+        boolean envStatus = StringUtils.isNotNull(env) && env.equals("true");
+
         vo.setQrCode(UrlUtils.toAbsoluteUrl(config.getOrDefault("qrCode", "")));
         vo.setName(config.getOrDefault("name", ""));
         vo.setPrimaryId(config.getOrDefault("primaryId", ""));
-        vo.setAppId(config.getOrDefault("appId", ""));
-        vo.setAppSecret(config.getOrDefault("appSecret", ""));
+        vo.setAppId(envStatus ? "******" : config.getOrDefault("appId", ""));
+        vo.setAppSecret(envStatus ? "******" : config.getOrDefault("appSecret", ""));
         vo.setUrl(config.getOrDefault("url", ""));
         vo.setToken(config.getOrDefault("token", ""));
         vo.setEncodingAesKey(config.getOrDefault("encodingAesKey", ""));

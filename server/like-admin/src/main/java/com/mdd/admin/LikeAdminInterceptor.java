@@ -9,6 +9,7 @@ import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.util.RedisUtils;
 import com.mdd.common.util.StringUtils;
 import com.mdd.common.util.ToolsUtils;
+import com.mdd.common.util.YmlUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -52,9 +53,21 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
 
+        // 演示环境拦截
+        String env = YmlUtils.get("like.production");
+        if (StringUtils.isNotNull(env) && env.equals("true")) {
+            List<String> ignoreUrl = Arrays.asList("system:login", "system:logout");
+            if (request.getMethod().equals("POST") && !ignoreUrl.contains(auths)) {
+                String message = "演示环境不支持修改数据，请下载源码本地部署体验";
+                AjaxResult<Object> result = AjaxResult.failed(HttpEnum.NO_PERMISSION.getCode(), message);
+                response.getWriter().print(JSON.toJSONString(result));
+                return false;
+            }
+        }
+
         // Token是否为空
         String token = StpUtil.getTokenValue();
-        if (com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank(token)) {
+        if (StringUtils.isBlank(token)) {
             AjaxResult<Object> result = AjaxResult.failed(HttpEnum.TOKEN_EMPTY.getCode(), HttpEnum.TOKEN_EMPTY.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;

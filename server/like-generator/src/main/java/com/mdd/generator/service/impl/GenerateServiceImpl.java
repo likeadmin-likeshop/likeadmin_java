@@ -86,6 +86,25 @@ public class GenerateServiceImpl implements IGenerateService {
     }
 
     /**
+     * 库列表
+     *
+     * @author fzr
+     * @param params 搜索参数
+     * @return PageResult<Map<String, String>>
+     */
+    @Override
+    public List<DbTableVo> dbAll(Map<String, String> params) {
+        List<DbTableVo> tables = genTableMapper.selectDbTableAllList(params);
+        for (DbTableVo vo : tables) {
+            if (vo.getUpdateTime() == null) {
+                vo.setUpdateTime("");
+            }
+        }
+
+        return tables;
+    }
+
+    /**
      * 生成列表
      *
      * @param pageParam 分页参数
@@ -157,6 +176,7 @@ public class GenerateServiceImpl implements IGenerateService {
         gen.put("treeName", genTable.getTreeName());
         gen.put("subTableName", genTable.getSubTableName());
         gen.put("subTableFk", genTable.getSubTableFk());
+        gen.put("subTableFr", genTable.getSubTableFr());
         maps.put("gen", gen);
 
         // 字段信息
@@ -244,7 +264,7 @@ public class GenerateServiceImpl implements IGenerateService {
         model.setGenType(genParam.getGenType());
         model.setGenPath(genParam.getGenPath());
         model.setSubTableFk(genParam.getSubTableFk());
-        model.setSubTableName(genParam.getSubTableName().replace(GlobalConfig.tablePrefix, ""));
+        model.setSubTableName(genParam.getSubTableName());
         genTableMapper.updateById(model);
 
         for (Map<String, String> item : genParam.getColumn()) {
