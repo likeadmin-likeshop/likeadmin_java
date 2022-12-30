@@ -275,7 +275,12 @@
                     </el-tab-pane>
                     <el-tab-pane label="关联配置" name="relation">
                         <el-form-item label="关联子表的表名" prop="gen.subTableName">
-                            <el-select class="w-80" v-model="formData.gen.subTableName" clearable>
+                            <el-select
+                                class="w-80"
+                                v-model="formData.gen.subTableName"
+                                clearable
+                                @change="handleTableChange"
+                            >
                                 <el-option
                                     v-for="item in optionsData.dataTable"
                                     :key="item.tableName"
@@ -285,9 +290,14 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="子表关联的外键名 " prop="gen.subTableFk">
-                            <el-select class="w-80" v-model="formData.gen.subTableFk" clearable>
+                            <el-select
+                                class="w-80"
+                                v-model="formData.gen.subTableFk"
+                                clearable
+                                :loading="columnLoading"
+                            >
                                 <el-option
-                                    v-for="item in formData.column"
+                                    v-for="item in tableColumn"
                                     :key="item.id"
                                     :value="item.columnName"
                                     :label="`${item.columnName}：${item.columnComment}`"
@@ -295,13 +305,14 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="关联表主键 " prop="gen.subTableFr">
-                            <div class="w-80">
-                                <el-input
-                                    v-model="formData.gen.subTableFr"
-                                    placeholder="请输入关联表主键"
-                                    clearable
+                            <el-select class="w-80" v-model="formData.gen.subTableFr" clearable>
+                                <el-option
+                                    v-for="item in formData.column"
+                                    :key="item.id"
+                                    :value="item.columnName"
+                                    :label="`${item.columnName}：${item.columnComment}`"
                                 />
-                            </div>
+                            </el-select>
                         </el-form-item>
                     </el-tab-pane>
                 </el-tabs>
@@ -314,7 +325,7 @@
 </template>
 
 <script lang="ts" setup name="tableEdit">
-import { dataTableAll, generateEdit, tableDetail } from '@/api/tools/code'
+import { dataTableAll, generateEdit, tableDetail, dataTableToColumn } from '@/api/tools/code'
 import { dictTypeAll } from '@/api/setting/dict'
 import type { FormInstance } from 'element-plus'
 import feedback from '@/utils/feedback'
@@ -377,10 +388,12 @@ const getDetails = async () => {
     const data = await tableDetail({
         id: route.query.id
     })
+
     Object.keys(formData).forEach((key) => {
         //@ts-ignore
         formData[key] = data[key]
     })
+    getTableColumn()
 }
 
 const { optionsData } = useDictOptions<{
@@ -404,6 +417,19 @@ const { optionsData } = useDictOptions<{
     }
 })
 
+const columnLoading = ref(false)
+const tableColumn = ref<any[]>([])
+const getTableColumn = async () => {
+    columnLoading.value = true
+    const res = await dataTableToColumn({ tableName: formData.gen.subTableName })
+    columnLoading.value = false
+    tableColumn.value = res
+}
+
+const handleTableChange = () => {
+    formData.gen.subTableFk = ''
+    getTableColumn()
+}
 const handleSave = async () => {
     try {
         await formRef.value?.validate()

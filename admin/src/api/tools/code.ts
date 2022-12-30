@@ -10,11 +10,15 @@ export function dataTable(params: any) {
     return request.get({ url: '/gen/db', params })
 }
 
-// 数据表列表接口
+// 数据表所有列表接口
 export function dataTableAll() {
     return request.get({ url: '/gen/dbAll' })
 }
 
+//表名查字段
+export function dataTableToColumn(params: any) {
+    return request.get({ url: '/gen/dbColumn', params })
+}
 //选择要生成代码的数据表
 export function selectTable(params: any) {
     return request.post(
