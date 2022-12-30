@@ -1,0 +1,5 @@
+<<<<<<<< HEAD:public/admin/assets/role.86090770.js
+import{r}from"./index.64e62b67.js";function l(e){return r.get({url:"/system/role/list",params:e})}function s(e){return r.get({url:"/system/role/all",params:e})}function o(e){return r.get({url:"/system/role/detail",params:e})}function u(e){return r.post({url:"/system/role/add",params:e})}function n(e){return r.post({url:"/system/role/edit",params:e})}function i(e){return r.post({url:"/system/role/del",params:e})}export{n as a,o as b,u as c,i as d,l as e,s as r};
+========
+import{r}from"./index.a80222dc.js";function l(e){return r.get({url:"/system/role/list",params:e})}function s(e){return r.get({url:"/system/role/all",params:e})}function o(e){return r.get({url:"/system/role/detail",params:e})}function u(e){return r.post({url:"/system/role/add",params:e})}function n(e){return r.post({url:"/system/role/edit",params:e})}function i(e){return r.post({url:"/system/role/del",params:e})}export{n as a,o as b,u as c,i as d,l as e,s as r};
+>>>>>>>> wjx202212300933:public/admin/assets/role.b25c198c.js
