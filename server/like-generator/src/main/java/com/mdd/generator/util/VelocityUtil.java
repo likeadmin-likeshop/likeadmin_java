@@ -70,7 +70,6 @@ public class VelocityUtil {
 
         // 替换前缀
         table.setSubTableName(table.getSubTableName().replace(GlobalConfig.tablePrefix, ""));
-        System.out.println(GenUtil.getTableAlias(table.getSubTableName()));
 
         // 设置模板变量
         VelocityContext velocityContext = new VelocityContext();
