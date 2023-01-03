@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageHelper;
-import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.PageResult;
 
 import com.mdd.common.exception.OperateException;
