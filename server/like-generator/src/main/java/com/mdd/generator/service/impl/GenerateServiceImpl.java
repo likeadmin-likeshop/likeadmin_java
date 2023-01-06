@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageHelper;
 import com.mdd.common.core.PageResult;
 
+import com.mdd.common.entity.system.SystemAuthMenu;
 import com.mdd.common.exception.OperateException;
+import com.mdd.common.mapper.system.SystemAuthMenuMapper;
 import com.mdd.common.util.StringUtils;
 import com.mdd.common.util.TimeUtils;
 import com.mdd.generator.constant.GenConstants;
@@ -59,6 +61,9 @@ public class GenerateServiceImpl implements IGenerateService {
 
     @Resource
     GenTableColumnMapper genTableColumnMapper;
+
+    @Resource
+    SystemAuthMenuMapper systemAuthMenuMapper;
 
     /**
      * 库列表
@@ -490,6 +495,9 @@ public class GenerateServiceImpl implements IGenerateService {
                 log.error("生成渲染模板失败: " + e.getMessage());
             }
         }
+
+        // 生成菜单
+        this.genAutoMenu(table);
     }
 
     /**
@@ -532,4 +540,48 @@ public class GenerateServiceImpl implements IGenerateService {
         }
     }
 
+    /**
+     * 自动构建菜单
+     */
+    private void genAutoMenu(GenTable table) {
+        if (table.getMenuStatus().equals(1)) {
+            SystemAuthMenu authMenu = new SystemAuthMenu();
+            authMenu.setPid(table.getMenuPid());
+            authMenu.setMenuType("C");
+            authMenu.setMenuName(table.getMenuName());
+            authMenu.setPaths(table.getModuleName());
+            authMenu.setPerms(table.getModuleName() + ":list");
+            authMenu.setComponent(table.getModuleName() + "/index");
+            authMenu.setMenuName(table.getMenuName());
+            authMenu.setCreateTime(System.currentTimeMillis() / 1000);
+            authMenu.setUpdateTime(System.currentTimeMillis() / 1000);
+            systemAuthMenuMapper.insert(authMenu);
+
+            for (String op : Arrays.asList("detail", "add", "edit", "del")) {
+                String menuName = "";
+                switch (op) {
+                    case "detail":
+                        menuName = "详情";
+                        break;
+                    case "add":
+                        menuName = "新增";
+                        break;
+                    case "edit":
+                        menuName = "编辑";
+                        break;
+                    case "del":
+                        menuName = "删除";
+                }
+                String perms = table.getModuleName() + ":" + op;
+                SystemAuthMenu systemAuthMenu = new SystemAuthMenu();
+                systemAuthMenu.setPid(authMenu.getId());
+                systemAuthMenu.setMenuType("A");
+                systemAuthMenu.setPerms(perms);
+                systemAuthMenu.setMenuName(table.getMenuName() + menuName);
+                systemAuthMenu.setCreateTime(System.currentTimeMillis() / 1000);
+                systemAuthMenu.setUpdateTime(System.currentTimeMillis() / 1000);
+                systemAuthMenuMapper.insert(systemAuthMenu);
+            }
+        }
+    }
 }
