@@ -571,6 +571,8 @@ INSERT INTO `la_system_config` VALUES (61, 'oa_channel', 'token', '', 1660620367
 INSERT INTO `la_system_config` VALUES (62, 'oa_channel', 'encodingAesKey', '', 1660620367, 1662551337);
 INSERT INTO `la_system_config` VALUES (63, 'oa_channel', 'encryptionType', '1', 1660620367, 1662551337);
 INSERT INTO `la_system_config` VALUES (64, 'oa_channel', 'menus', '[]', 1631255140, 1663118712);
+INSERT INTO `la_system_config` VALUES (68, 'op_channel', 'appId', '', 0, 0);
+INSERT INTO `la_system_config` VALUES (69, 'op_channel', 'appSecret', '', 0, 0);
 INSERT INTO `la_system_config` VALUES (70, 'login', 'loginWay', '1,2', 1660620367, 1662538771);
 INSERT INTO `la_system_config` VALUES (71, 'login', 'forceBindMobile', '0', 1660620367, 1662538771);
 INSERT INTO `la_system_config` VALUES (72, 'login', 'openAgreement', '1', 1660620367, 1662538771);
