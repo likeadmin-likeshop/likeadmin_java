@@ -79,15 +79,15 @@ public class GenParam implements Serializable {
     private List<Map<String, String>> column = new ArrayList<>();
 
     private String treePrimary = "";
-
     private String treeParent  = "";
-
     private String treeName  = "";
 
     private String subTableName = "";
-
     private String subTableFk = "";
-
     private String subTableFr = "";
+
+    private Integer menuStatus = 2;
+    private Integer menuPid = 0;
+    private String menuName = "";
 
 }
