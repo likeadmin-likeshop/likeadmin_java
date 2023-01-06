@@ -1,7 +1,4 @@
 <template>
-    <view class="shadow">
-        斤斤计较
-    </view>
     <view class="index">
         <view v-for="(item, index) in state.pages" :key="index">
             <template v-if="item.name == 'search'">
