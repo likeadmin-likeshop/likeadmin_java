@@ -31,6 +31,9 @@ public class GenTable implements Serializable {
     private String genTpl;
     private Integer genType;
     private String genPath;
+    private Integer menuStatus;
+    private Integer menuPid;
+    private String menuName;
     private String remarks;
     private Long createTime;
     private Long updateTime;

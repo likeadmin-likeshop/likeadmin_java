@@ -82,14 +82,6 @@ public class StorageDriver {
         vo.setExt(origFileExt.toLowerCase());
         vo.setUrl(newFileName);
         vo.setPath(UrlUtils.toAbsoluteUrl(newFileName));
-
-//        Map<String, Object> map = new LinkedHashMap<>();
-//        map.put("id", 0);
-//        map.put("name", multipartFile.getOriginalFilename());
-//        map.put("size", multipartFile.getSize());
-//        map.put("ext", origFileExt.toLowerCase());
-//        map.put("url", newFileName);
-//        map.put("path", UrlUtil.toAbsoluteUrl(newFileName));
         return vo;
     }
 
