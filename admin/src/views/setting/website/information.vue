@@ -52,6 +52,44 @@
                     </div>
                 </el-form-item>
             </el-card>
+            <el-card shadow="never" class="!border-none mt-4">
+                <div class="text-xl font-medium mb-[20px]">PC端设置</div>
+                <el-form-item label="PC端LOGO" prop="pcLogo">
+                    <div>
+                        <material-picker v-model="formData.pcLogo" :limit="1" />
+                        <div class="form-tips">建议尺寸：120*28px，支持jpg，jpeg，png格式</div>
+                    </div>
+                </el-form-item>
+                <el-form-item label="网站标题" prop="pcTitle">
+                    <div class="w-80">
+                        <el-input
+                            v-model.trim="formData.pcTitle"
+                            placeholder="请输入PC端网站标题"
+                            maxlength="30"
+                            show-word-limit
+                        />
+                    </div>
+                </el-form-item>
+                <el-form-item label="网站图标" prop="pcIco">
+                    <div>
+                        <material-picker v-model="formData.pcIco" :limit="1" />
+                        <div class="form-tips">建议尺寸：100*100像素，支持jpg，jpeg，png格式</div>
+                    </div>
+                </el-form-item>
+                <el-form-item label="网站描述" prop="pcDesc">
+                    <div class="w-80">
+                        <el-input v-model.trim="formData.pcDesc" placeholder="请输入PC端网站描述" />
+                    </div>
+                </el-form-item>
+                <el-form-item label="网站关键词" prop="pcKeywords">
+                    <div class="w-80">
+                        <el-input
+                            v-model.trim="formData.pcKeywords"
+                            placeholder="请输入PC端网站关键词"
+                        />
+                    </div>
+                </el-form-item>
+            </el-card>
         </el-form>
         <footer-btns v-perms="['setting:website:save']">
             <el-button type="primary" @click="handleSubmit">保存</el-button>
@@ -73,7 +111,12 @@ const formData = reactive({
     logo: '', // 网站logo
     backdrop: '', // 登录页广告图
     shopName: '',
-    shopLogo: ''
+    shopLogo: '',
+    pcDesc: '',
+    pcIco: '',
+    pcKeywords: '',
+    pcLogo: '',
+    pcTitle: ''
 })
 
 // 表单验证
@@ -117,6 +160,27 @@ const rules = {
         {
             required: true,
             message: '请选择商城LOGO',
+            trigger: ['change']
+        }
+    ],
+    pcLogo: [
+        {
+            required: true,
+            message: '请选择PC端LOGO',
+            trigger: ['change']
+        }
+    ],
+    pcTitle: [
+        {
+            required: true,
+            message: '请输入PC端网站标题',
+            trigger: ['blur']
+        }
+    ],
+    pcIco: [
+        {
+            required: true,
+            message: '请选择PC端网站图标',
             trigger: ['change']
         }
     ]

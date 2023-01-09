@@ -6,5 +6,6 @@ import './styles/index.scss'
 import 'virtual:svg-icons-register'
 
 const app = createApp(App)
+console.log(app)
 app.use(install)
 app.mount('#app')
