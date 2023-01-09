@@ -13,6 +13,7 @@ import com.mdd.common.mapper.article.ArticleCollectMapper;
 import com.mdd.common.mapper.article.ArticleMapper;
 import com.mdd.common.util.*;
 import com.mdd.front.service.IPcService;
+import com.mdd.front.vo.PcArticleCenterVo;
 import com.mdd.front.vo.PcArticleDetailVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -164,6 +165,42 @@ public class PcServiceImpI implements IPcService {
         return config;
     }
 
+    @Override
+    public List<PcArticleCenterVo> articleCenter() {
+        List<ArticleCategory> articleCategoryList = articleCategoryMapper.selectList(
+                new QueryWrapper<ArticleCategory>()
+                    .eq("is_show", 1)
+                    .eq("is_delete", 0)
+                    .orderByDesc(Arrays.asList("sort", "id")));
+
+        List<PcArticleCenterVo> list = new LinkedList<>();
+        for (ArticleCategory articleCategory : articleCategoryList) {
+            List<Article> articleList = articleMapper.selectList(new QueryWrapper<Article>()
+                    .eq("cid", articleCategory.getId())
+                    .eq("is_show", 1)
+                    .eq("is_delete", 0)
+                    .orderByDesc(Arrays.asList("sort", "id"))
+                    .last("limit 10"));
+
+            List<Map<String, Object>> articles = new LinkedList<>();
+            for (Article article : articleList) {
+                Map<String, Object> a = new LinkedHashMap<>();
+                a.put("id", article.getId());
+                a.put("title", article.getTitle());
+                a.put("image", UrlUtils.toAbsoluteUrl(article.getImage()));
+                articles.add(a);
+            }
+
+            PcArticleCenterVo vo = new PcArticleCenterVo();
+            vo.setId(articleCategory.getId());
+            vo.setName(articleCategory.getName());
+            vo.setArticle(articles);
+            list.add(vo);
+        }
+
+        return list;
+    }
+
     /**
      * 文章详情
      *
@@ -191,12 +228,12 @@ public class PcServiceImpI implements IPcService {
         // 分类名称
         ArticleCategory articleCategory = articleCategoryMapper.selectOne(
                 new QueryWrapper<ArticleCategory>()
-                    .eq("id", article.getId())
+                    .eq("id", article.getCid())
                     .eq("is_delete", 0));
 
         // 上一条记录
         Article prev = articleMapper.selectOne(new QueryWrapper<Article>()
-                .select()
+                .select("id,title")
                 .lt("id", id)
                 .eq("is_delete", 0)
                 .orderByDesc(Arrays.asList("sort", "id"))
@@ -217,6 +254,25 @@ public class PcServiceImpI implements IPcService {
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
+        // 最新资讯
+        List<Article> news = articleMapper.selectList(new QueryWrapper<Article>()
+                .select("id,title,image,create_time,update_time")
+                .eq("cid", article.getCid())
+                .eq("is_delete", 0)
+                .orderByDesc("id")
+                .last("limit 8"));
+
+        List<Map<String, Object>> newsList = new LinkedList<>();
+        for (Article newArticle : news) {
+            Map<String, Object> newsMap = new LinkedHashMap<>();
+            newsMap.put("id", newArticle.getId());
+            newsMap.put("title", newArticle.getTitle());
+            newsMap.put("image", UrlUtils.toAbsoluteUrl(newArticle.getImage()));
+            newsMap.put("createTime", TimeUtils.timestampToDate(newArticle.getCreateTime()));
+            newsMap.put("updateTime", TimeUtils.timestampToDate(newArticle.getUpdateTime()));
+            newsList.add(newsMap);
+        }
+
         // 处理数据
         PcArticleDetailVo vo = new PcArticleDetailVo();
         BeanUtils.copyProperties(article, vo);
@@ -224,6 +280,7 @@ public class PcServiceImpI implements IPcService {
         vo.setUpdateTime(TimeUtils.timestampToDate(vo.getUpdateTime()));
         vo.setCategory(StringUtils.isNotNull(articleCategory) ? articleCategory.getName() : "");
         vo.setIsCollect(StringUtils.isNotNull(collect) ? 1 : 0);
+        vo.setNews(newsList);
         vo.setPrev(null);
         vo.setNext(null);
 

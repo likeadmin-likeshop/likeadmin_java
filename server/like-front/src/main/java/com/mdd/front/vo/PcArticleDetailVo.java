@@ -13,6 +13,7 @@ public class PcArticleDetailVo implements Serializable {
     private Integer id;
     private Integer cid;
     private String category;
+    private String title;
     private String intro;
     private String summary;
     private String image;
@@ -25,6 +26,6 @@ public class PcArticleDetailVo implements Serializable {
     private String updateTime;
     private Object prev;
     private Object next;
-
+    private Object news;
 
 }

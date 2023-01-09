@@ -6,6 +6,7 @@ import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IArticleService;
 import com.mdd.front.validate.ArticleCollectValidate;
+import com.mdd.front.validate.ArticleSearchValidate;
 import com.mdd.front.validate.commons.PageValidate;
 import com.mdd.front.vo.article.ArticleCateVo;
 import com.mdd.front.vo.article.ArticleCollectVo;
@@ -47,6 +48,7 @@ public class ArticleController {
      */
     @GetMapping("/list")
     public AjaxResult<PageResult<ArticleListedVo>> list(@Validated PageValidate pageValidate,
+                                                        @Validated ArticleSearchValidate searchValidate,
                                                         @RequestParam(value = "cid", defaultValue = "0") Integer cid) {
         Integer userId = LikeFrontThreadLocal.getUserId();
         PageResult<ArticleListedVo> list = iArticleService.list(pageValidate, cid, userId);
