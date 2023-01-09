@@ -4,20 +4,21 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.entity.DecoratePage;
 import com.mdd.common.entity.article.Article;
+import com.mdd.common.entity.article.ArticleCategory;
+import com.mdd.common.entity.article.ArticleCollect;
+import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.DecoratePageMapper;
+import com.mdd.common.mapper.article.ArticleCategoryMapper;
+import com.mdd.common.mapper.article.ArticleCollectMapper;
 import com.mdd.common.mapper.article.ArticleMapper;
-import com.mdd.common.util.ArrayUtils;
-import com.mdd.common.util.ConfigUtils;
-import com.mdd.common.util.TimeUtils;
-import com.mdd.common.util.UrlUtils;
+import com.mdd.common.util.*;
 import com.mdd.front.service.IPcService;
+import com.mdd.front.vo.PcArticleDetailVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PcServiceImpI implements IPcService {
@@ -26,8 +27,19 @@ public class PcServiceImpI implements IPcService {
     DecoratePageMapper decoratePageMapper;
 
     @Resource
+    ArticleCategoryMapper articleCategoryMapper;
+
+    @Resource
+    ArticleCollectMapper articleCollectMapper;
+
+    @Resource
     ArticleMapper articleMapper;
 
+    /**
+     * 配置
+     * @author cjh
+     * @return Map<String, Object>
+     */
     @Override
     public Map<String, Object> index() {
         Map<String,Object> indexData = new LinkedHashMap<>();
@@ -106,6 +118,11 @@ public class PcServiceImpI implements IPcService {
         return  indexData;
     }
 
+    /**
+     * 配置
+     * @author cjh
+     * @return Map<String, Object>
+     */
     @Override
     public Map<String, Object> getConfig() {
         Map<String, Object> config = new LinkedHashMap<>();
@@ -145,5 +162,85 @@ public class PcServiceImpI implements IPcService {
         config.put("copyright",copyrightMap);
         config.put("qrcode",qrCodeMap);
         return config;
+    }
+
+    /**
+     * 文章详情
+     *
+     * @author fzr
+     * @param id 文章主键
+     * @param userId 用户ID
+     * @return PcArticleDetailVo
+     */
+    @Override
+    public PcArticleDetailVo articleDetail(Integer id, Integer userId) {
+        // 文章详情
+        Article article = articleMapper.selectOne(new QueryWrapper<Article>()
+                .select(Article.class, info->
+                        !info.getColumn().equals("is_show") &&
+                        !info.getColumn().equals("is_delete") &&
+                        !info.getColumn().equals("delete_time"))
+                .eq("id", id)
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        if (StringUtils.isNull(article)) {
+            throw new OperateException("文章数据不存在!");
+        }
+
+        // 分类名称
+        ArticleCategory articleCategory = articleCategoryMapper.selectOne(
+                new QueryWrapper<ArticleCategory>()
+                    .eq("id", article.getId())
+                    .eq("is_delete", 0));
+
+        // 上一条记录
+        Article prev = articleMapper.selectOne(new QueryWrapper<Article>()
+                .select()
+                .lt("id", id)
+                .eq("is_delete", 0)
+                .orderByDesc(Arrays.asList("sort", "id"))
+                .last("limit 1"));
+
+        // 下一条记录
+        Article next = articleMapper.selectOne(new QueryWrapper<Article>()
+                .select("id,title")
+                .gt("id", id)
+                .eq("is_delete", 0)
+                .orderByDesc(Arrays.asList("sort", "id"))
+                .last("limit 1"));
+
+        // 是否收藏
+        ArticleCollect collect = articleCollectMapper.selectOne(new QueryWrapper<ArticleCollect>()
+                .eq("article_id", article.getId())
+                .eq("user_id", userId)
+                .eq("is_delete", 0)
+                .last("limit 1"));
+
+        // 处理数据
+        PcArticleDetailVo vo = new PcArticleDetailVo();
+        BeanUtils.copyProperties(article, vo);
+        vo.setCreateTime(TimeUtils.timestampToDate(vo.getCreateTime()));
+        vo.setUpdateTime(TimeUtils.timestampToDate(vo.getUpdateTime()));
+        vo.setCategory(StringUtils.isNotNull(articleCategory) ? articleCategory.getName() : "");
+        vo.setIsCollect(StringUtils.isNotNull(collect) ? 1 : 0);
+        vo.setPrev(null);
+        vo.setNext(null);
+
+        if (StringUtils.isNotNull(prev)) {
+            Map<String, Object> prevMap = new LinkedHashMap<>();
+            prevMap.put("id", prev.getId());
+            prevMap.put("title", prev.getTitle());
+            vo.setPrev(prevMap);
+        }
+
+        if (StringUtils.isNotNull(next)) {
+            Map<String, Object> nextMap = new LinkedHashMap<>();
+            nextMap.put("id", next.getId());
+            nextMap.put("title", next.getTitle());
+            vo.setNext(nextMap);
+        }
+
+        return vo;
     }
 }
