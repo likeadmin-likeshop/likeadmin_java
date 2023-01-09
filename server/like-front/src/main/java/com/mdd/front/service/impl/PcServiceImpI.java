@@ -33,7 +33,7 @@ public class PcServiceImpI implements IPcService {
         Map<String,Object> indexData = new LinkedHashMap<>();
         DecoratePage decoratePage = decoratePageMapper.selectOne(
                 new QueryWrapper<DecoratePage>()
-                        .eq("id", 1)
+                        .eq("id", 4)
                         .last("limit 1"));
         //全部资讯
         List<Article> articlesAll = articleMapper.selectList(new QueryWrapper<Article>()
@@ -50,8 +50,8 @@ public class PcServiceImpI implements IPcService {
             map.put("intro", article.getIntro());
             map.put("summary", article.getSummary());
             map.put("image", UrlUtils.toAbsoluteUrl(article.getImage()));
-            map.put("author", article.getAuthor());
             map.put("visit", article.getVisit());
+            map.put("author", article.getAuthor());
             map.put("sort", article.getSort());
             map.put("createTime", TimeUtils.timestampToDate(article.getCreateTime()));
             articlesAllList.add(map);
@@ -71,12 +71,13 @@ public class PcServiceImpI implements IPcService {
             map.put("intro", article.getIntro());
             map.put("summary", article.getSummary());
             map.put("image", UrlUtils.toAbsoluteUrl(article.getImage()));
-            map.put("author", article.getAuthor());
             map.put("visit", article.getVisit());
             map.put("sort", article.getSort());
+            map.put("author", article.getAuthor());
             map.put("createTime", TimeUtils.timestampToDate(article.getCreateTime()));
             articlesNewList.add(map);
         }
+
         //热门资讯
         List<Article> articlesHot = articleMapper.selectList(new QueryWrapper<Article>()
                 .eq("is_show", 1)
@@ -113,8 +114,8 @@ public class PcServiceImpI implements IPcService {
         Map<String, String> loginConfig = ConfigUtils.get("login");
         loginMap.put("loginWay", ArrayUtils.stringToListAsInt(loginConfig.getOrDefault("loginWay", ""), ","));
         loginMap.put("forceBindMobile", Integer.parseInt(loginConfig.getOrDefault("forceBindMobile", "0")));
-        loginMap.put("openAgreement", Integer.parseInt(loginConfig.getOrDefault("openAgreement", "0")));
         loginMap.put("openOtherAuth", Integer.parseInt(loginConfig.getOrDefault("openOtherAuth", "0")));
+        loginMap.put("openAgreement", Integer.parseInt(loginConfig.getOrDefault("openAgreement", "0")));
         loginMap.put("autoLoginAuth", ArrayUtils.stringToListAsInt(loginConfig.getOrDefault("autoLoginAuth", ""), ","));
 
         // 网址信息
