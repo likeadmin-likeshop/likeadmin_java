@@ -228,7 +228,7 @@ public class PcServiceImpI implements IPcService {
         // 分类名称
         ArticleCategory articleCategory = articleCategoryMapper.selectOne(
                 new QueryWrapper<ArticleCategory>()
-                    .eq("id", article.getId())
+                    .eq("id", article.getCid())
                     .eq("is_delete", 0));
 
         // 上一条记录
