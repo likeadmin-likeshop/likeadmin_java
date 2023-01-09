@@ -4,6 +4,7 @@ import com.mdd.common.core.AjaxResult;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IPcService;
+import com.mdd.front.vo.PcArticleCenterVo;
 import com.mdd.front.vo.PcArticleDetailVo;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,6 +47,18 @@ public class PcController {
     public AjaxResult<Map<String, Object>> getConfig() {
         Map<String, Object> config = iPcService.getConfig();
         return AjaxResult.success(config);
+    }
+
+    /**
+     * 资讯中心
+     *
+     * @author fzr
+     * @return AjaxResult<List<PcArticleCenterVo>>
+     */
+    @GetMapping("/articleCenter")
+    public AjaxResult<List<PcArticleCenterVo>> articleCenter() {
+        List<PcArticleCenterVo> list = iPcService.articleCenter();
+        return AjaxResult.success(list);
     }
 
     /**
