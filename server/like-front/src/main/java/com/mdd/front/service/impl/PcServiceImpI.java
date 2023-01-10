@@ -37,7 +37,8 @@ public class PcServiceImpI implements IPcService {
     ArticleMapper articleMapper;
 
     /**
-     * 配置
+     * 主页
+     *
      * @author cjh
      * @return Map<String, Object>
      */
@@ -121,12 +122,14 @@ public class PcServiceImpI implements IPcService {
 
     /**
      * 配置
+     *
      * @author cjh
      * @return Map<String, Object>
      */
     @Override
     public Map<String, Object> getConfig() {
         Map<String, Object> config = new LinkedHashMap<>();
+
         // 登录配置
         Map<String, Object> loginMap = new LinkedHashMap<>();
         Map<String, String> loginConfig = ConfigUtils.get("login");
@@ -150,7 +153,7 @@ public class PcServiceImpI implements IPcService {
         websiteMap.put("pcLogo", UrlUtils.toAbsoluteUrl(websiteConfig.getOrDefault("pcLogo", "")));
         websiteMap.put("pcTitle", websiteConfig.getOrDefault("pcTitle", ""));
 
-        //演示公众号和小程序二维码
+        // 演示公众号和小程序二维码
         Map<String,String> qrCodeMap = new LinkedHashMap<>();
         qrCodeMap.put("mnp",UrlUtils.toAbsoluteUrl(ConfigUtils.get("mp_channel","qrCode")));
         qrCodeMap.put("oa",UrlUtils.toAbsoluteUrl(ConfigUtils.get("oa_channel","qrCode")));
@@ -165,6 +168,12 @@ public class PcServiceImpI implements IPcService {
         return config;
     }
 
+    /**
+     * 资讯中心
+     *
+     * @author fzr
+     * @return List<PcArticleCenterVo>
+     */
     @Override
     public List<PcArticleCenterVo> articleCenter() {
         List<ArticleCategory> articleCategoryList = articleCategoryMapper.selectList(
