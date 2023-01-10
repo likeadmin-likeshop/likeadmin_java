@@ -255,6 +255,10 @@ public class GenUtil {
      * @return String
      */
     public static String getTableAlias(String tableName) {
+        if (StringUtils.isNull(tableName) || StringUtils.isEmpty(tableName)) {
+            return "";
+        }
+
         StringBuilder val = new StringBuilder();
         for (String name : tableName.split("_")) {
             val.append(name.charAt(0));
