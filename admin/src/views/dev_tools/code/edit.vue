@@ -233,7 +233,7 @@
                                     <el-radio :label="0">手动添加</el-radio>
                                 </el-radio-group>
                                 <div class="form-tips">
-                                    自动构建：自动执行生成菜单sal。 手动添加：自行添加菜单
+                                    自动构建：自动执行生成菜单sql。 手动添加：自行添加菜单
                                 </div>
                             </div>
                         </el-form-item>
