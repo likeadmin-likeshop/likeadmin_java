@@ -45,7 +45,6 @@ import { ArrowDown } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import { PopupTypeEnum, useAccount } from '../account/useAccount'
 import feedback from '~~/utils/feedback'
-import { logout } from '~~/api/account'
 const { setPopupType, toggleShowPopup } = useAccount()
 const userStore = useUserStore()
 
@@ -58,7 +57,6 @@ const handleCommand = async (command: string) => {
     switch (command) {
         case 'logout':
             await feedback.confirm('确定退出登录吗？')
-            await logout()
             userStore.logout()
     }
 }

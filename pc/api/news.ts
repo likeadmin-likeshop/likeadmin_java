@@ -19,7 +19,7 @@ export function getArticleList(params) {
  * @return { Promise }
  */
 export function getArticleCenter() {
-    return $request.get({ url: '/pc/infoCenter' })
+    return $request.get({ url: '/pc/articleCenter' })
 }
 
 /**

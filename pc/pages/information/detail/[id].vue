@@ -8,7 +8,7 @@
                 </el-breadcrumb-item>
                 <el-breadcrumb-item
                     :to="{
-                        path: `/information/default`,
+                        path: `/information/search`,
                         query: {
                             cid: newsDetail.cid,
                             name: newsDetail.category
@@ -52,12 +52,12 @@
                             :name="`el-icon-${
                                 newsDetail.isCollect ? 'StarFilled' : 'Star'
                             }`"
-                            :size="16"
+                            :size="newsDetail.isCollect ? 22 : 18"
                             :color="
                                 newsDetail.isCollect ? '#FF2C2F' : 'inherit'
                             "
                         />
-                        点击收藏
+                        {{ newsDetail.isCollect ? '取消收藏' : '点击收藏' }}
                     </ElButton>
                 </div>
                 <div class="border-t border-br mt-[30px]">
@@ -109,31 +109,20 @@ const route = useRoute()
 const { data: newsDetail, refresh } = await useAsyncData(
     () =>
         getArticleDetail({
-            id: route.params.id,
-            source: route.params.source
+            id: route.params.id
         }),
     {
         initialCache: false
     }
 )
-const getSourceText = computed(() => {
-    switch (route.params.source) {
-        case 'hot':
-            return '热门资讯'
-        case 'new':
-            return ' 最新资讯'
-        default:
-            return '全部资讯'
-    }
-})
 
 const handelCollect = async () => {
-    const id = route.params.id
-    if (newsDetail.value.collect) {
-        await cancelCollect({ id })
+    const articleId = route.params.id
+    if (newsDetail.value.isCollect) {
+        await cancelCollect({ articleId })
         feedback.msgSuccess('已取消收藏')
     } else {
-        await addCollect({ id })
+        await addCollect({ articleId })
         feedback.msgSuccess('收藏成功')
     }
     refresh()

@@ -16,8 +16,8 @@ export function getLocalIconNames() {
 
 export default defineNuxtPlugin((nuxtApp) => {
     for (const [iconName, component] of Object.entries(ElementPlusIcons)) {
-        const componenName = `${EL_ICON_PREFIX}${iconName}`
-        elIconsName.push(componenName)
-        nuxtApp.vueApp.component(componenName, component)
+        const componentName = `${EL_ICON_PREFIX}${iconName}`
+        elIconsName.push(componentName)
+        nuxtApp.vueApp.component(componentName, component)
     }
 })

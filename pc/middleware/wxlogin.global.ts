@@ -10,14 +10,14 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const appStore = useAppStore()
     const userStore = useUserStore()
     const { setPopupType, toggleShowPopup } = useAccount()
-    const isForceBindMobile = appStore.getLoginConfig.coerce_mobile
+    const isForceBindMobile = appStore.getLoginConfig.forceBindMobile
     const { code, state } = to.query
     delete to.query.code
     delete to.query.state
     try {
         if (code && state) {
             const data = await wxLogin({ code, state })
-            if (isForceBindMobile && !data.mobile) {
+            if (isForceBindMobile && !data.isBindMobile) {
                 userStore.temToken = data.token
                 setPopupType(PopupTypeEnum.BIND_MOBILE)
                 toggleShowPopup(true)

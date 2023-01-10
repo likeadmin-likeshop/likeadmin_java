@@ -31,9 +31,9 @@
                     placeholder="请输入6-20位数字+字母或符号组合"
                 />
             </ElFormItem>
-            <ElFormItem prop="password_confirm">
+            <ElFormItem prop="passwordConfirm">
                 <ElInput
-                    v-model="formData.password_confirm"
+                    v-model="formData.passwordConfirm"
                     type="password"
                     show-password
                     placeholder="请再次输入密码"
@@ -93,7 +93,7 @@ const formRules: FormRules = {
             trigger: ['change', 'blur']
         }
     ],
-    password_confirm: [
+    passwordConfirm: [
         {
             validator(rule: any, value: any, callback: any) {
                 if (value === '') {
@@ -111,7 +111,7 @@ const formRules: FormRules = {
 const formData = reactive({
     username: '',
     password: '',
-    password_confirm: ''
+    passwordConfirm: ''
 })
 
 const handleConfirm = async () => {

@@ -7,10 +7,6 @@ export function login(params: any) {
         params: { ...params, client: getClient() }
     })
 }
-// // 登录
-export function logout() {
-    return $request.post({ url: '/login/logout' })
-}
 
 //注册
 export function register(params: any) {
@@ -32,4 +28,9 @@ export function getWxCodeUrl() {
 
 export function wxLogin(params: any) {
     return $request.post({ url: '/login/scanLogin', params })
+}
+
+//忘记密码
+export function forgotPassword(params: Record<string, any>) {
+    return $request.post({ url: '/login/forgotPassword', params })
 }

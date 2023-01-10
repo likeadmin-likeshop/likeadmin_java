@@ -8,7 +8,7 @@
                 class="cursor-pointer"
                 v-for="item in data.lists"
                 :key="item.id"
-                @click="$router.push(`/information/detail/${item.article_id}`)"
+                @click="$router.push(`/information/detail/${item.articleId}`)"
             >
                 <div class="border-b border-br py-4 flex items-center">
                     <ElImage
@@ -23,15 +23,15 @@
                         </div>
 
                         <div class="text-tx-regular line-clamp-2 mt-4">
-                            {{ item.desc }}
+                            {{ item.intro }}
                         </div>
                         <div
                             class="mt-5 text-tx-secondary flex justify-between"
                         >
-                            <div>收藏于{{ item.collect_time }}</div>
+                            <div>收藏于{{ item.createTime }}</div>
                             <ElButton
                                 link
-                                @click.stop="handelCollect(item.article_id)"
+                                @click.stop="handelCollect(item.articleId)"
                             >
                                 取消收藏
                             </ElButton>
@@ -41,9 +41,9 @@
             </div>
             <div class="py-4 flex justify-end">
                 <el-pagination
-                    v-model:current-page="params.page_no"
+                    v-model:current-page="params.pageNo"
                     :total="data.count"
-                    :page-size="params.page_size"
+                    :page-size="params.pageSize"
                     hide-on-single-page
                     layout="total, prev, pager, next, jumper"
                     @current-change="refresh()"
@@ -66,14 +66,14 @@ import empty_news from '@/assets/images/empty_news.png'
 import { ElImage, ElButton, ElPagination, ElEmpty } from 'element-plus'
 import feedback from '~~/utils/feedback'
 const params = reactive({
-    page_no: 1,
-    page_size: 15
+    pageNo: 1,
+    pageSize: 15
 })
 const { data, refresh } = await useAsyncData(() => getCollect(params), {
     initialCache: false
 })
-const handelCollect = async (id) => {
-    await cancelCollect({ id })
+const handelCollect = async (articleId) => {
+    await cancelCollect({ articleId })
     feedback.msgSuccess('已取消收藏')
     refresh()
 }

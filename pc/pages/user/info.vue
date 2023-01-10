@@ -9,18 +9,18 @@
                 <div class="avatar">
                     <ElAvatar :size="60" :src="userInfo.avatar"></ElAvatar>
                     <div class="change-btn">
-                        <CropperUploaad
+                        <CropperUpload
                             @change="setUserInfo($event, UserFieldEnum.AVATAR)"
                         >
                             <span class="text-xs text-white">修改</span>
-                        </CropperUploaad>
+                        </CropperUpload>
                     </div>
                 </div>
             </div>
             <div class="info-item leading-10">
                 <div class="item-name">账号</div>
                 <div>
-                    {{ userInfo.account }}
+                    {{ userInfo.username }}
                     <ClientOnly>
                         <PopoverInput
                             class="inline-block"
@@ -104,25 +104,24 @@
             <div class="info-item leading-10">
                 <div class="item-name">注册时间</div>
                 <div>
-                    {{ userInfo.create_time }}
+                    {{ userInfo.createTime }}
                 </div>
             </div>
         </div>
         <div class="mt-[60px] flex justify-center">
-            <ElButton type="primary" @click="handleLogut">退出登录</ElButton>
+            <ElButton type="primary" @click="handleLogout">退出登录</ElButton>
         </div>
     </div>
 </template>
 <script lang="ts" setup>
 import { ElAvatar, ElButton } from 'element-plus'
 import { getUserInfo, userEdit } from '@/api/user'
-import CropperUploaad from '@/components/cropper-upload/index.vue'
+import CropperUpload from '@/components/cropper-upload/index.vue'
 import PopoverInput from '@/components/popover-input/index.vue'
 import {
     useAccount,
     PopupTypeEnum
 } from '@/layouts/components/account/useAccount'
-import { logout } from '~~/api/account'
 import feedback from '~~/utils/feedback'
 import { useUserStore } from '~~/stores/user'
 const { setPopupType, toggleShowPopup, showPopup } = useAccount()
@@ -131,7 +130,7 @@ const userStore = useUserStore()
 enum UserFieldEnum {
     NONE = '',
     AVATAR = 'avatar',
-    USERNAME = 'account',
+    USERNAME = 'username',
     NICKNAME = 'nickname',
     SEX = 'sex'
 }
@@ -147,6 +146,7 @@ const setUserInfo = async (
         field: type,
         value: value
     })
+    feedback.msgSuccess('操作成功')
     refresh()
 }
 
@@ -161,9 +161,8 @@ watch(showPopup, (value) => {
     }
 })
 
-const handleLogut = async () => {
+const handleLogout = async () => {
     await feedback.confirm('确定退出登录吗？')
-    await logout()
     userStore.logout()
 }
 

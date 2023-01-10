@@ -46,9 +46,9 @@
                     show-password
                 />
             </ElFormItem>
-            <ElFormItem prop="password_confirm">
+            <ElFormItem prop="passwordConfirm">
                 <ElInput
-                    v-model="formData.password_confirm"
+                    v-model="formData.passwordConfirm"
                     placeholder="请再次输入密码"
                     type="password"
                     show-password
@@ -77,12 +77,13 @@ import {
     FormRules
 } from 'element-plus'
 import { smsSend } from '~~/api/app'
-import { forgotPassword } from '~~/api/user'
+import { forgotPassword } from '~~/api/account'
 import { SMSEnum } from '~~/enums/appEnums'
 import { useUserStore } from '~~/stores/user'
 import { useAccount, PopupTypeEnum } from './useAccount'
+import feedback from '~~/utils/feedback'
 const userStore = useUserStore()
-const { setPopupType } = useAccount()
+const { setPopupType, toggleShowPopup } = useAccount()
 const formRef = shallowRef<FormInstance>()
 const verificationCodeRef = shallowRef()
 const formRules: FormRules = {
@@ -119,7 +120,7 @@ const formRules: FormRules = {
             trigger: ['change', 'blur']
         }
     ],
-    password_confirm: [
+    passwordConfirm: [
         {
             validator(rule: any, value: any, callback: any) {
                 if (value === '') {
@@ -138,7 +139,7 @@ const formData = reactive({
     mobile: '',
     password: '',
     code: '',
-    password_confirm: ''
+    passwordConfirm: ''
 })
 
 const sendSms = async () => {
@@ -153,6 +154,8 @@ const sendSms = async () => {
 const handleConfirm = async () => {
     await formRef.value?.validate()
     await forgotPassword(formData)
+    feedback.msgSuccess('操作成功')
+    userStore.logout()
     setPopupType(PopupTypeEnum.LOGIN)
 }
 const { lockFn: handleConfirmLock, isLock } = useLockFn(handleConfirm)

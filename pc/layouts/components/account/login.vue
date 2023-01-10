@@ -278,7 +278,7 @@ const handleLogin = async () => {
         params.code = formData.code
     }
     const data = await login(params)
-    if (isForceBindMobile.value && !data.mobile) {
+    if (isForceBindMobile.value && !data.isBindMobile) {
         userStore.temToken = data.token
         setPopupType(PopupTypeEnum.BIND_MOBILE)
         return

@@ -9,7 +9,7 @@ export function getUserInfo() {
 
 // 个人编辑
 export function userEdit(params: any) {
-    return $request.post({ url: '/user/setInfo', params })
+    return $request.post({ url: '/user/edit', params })
 }
 
 // 绑定手机
@@ -20,17 +20,7 @@ export function userBindMobile(params: any, headers?: any) {
     )
 }
 
-// 微信电话
-export function userMnpMobile(params: any) {
-    return $request.post({ url: '/user/getMobileByMnp', params })
-}
-
 // 更改密码
 export function userChangePwd(params: any) {
-    return $request.post({ url: '/user/changePassword', params })
-}
-
-//忘记密码
-export function forgotPassword(params: Record<string, any>) {
-    return $request.post({ url: '/user/resetPassword', params })
+    return $request.post({ url: '/user/changePwd', params })
 }

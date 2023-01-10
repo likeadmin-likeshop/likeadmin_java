@@ -10,17 +10,17 @@ const config = {
     locale: zhCn
 }
 const appStore = useAppStore()
-const { pc_title, pc_ico, pc_keywords, pc_desc } = appStore.getWebsiteConfig
+const { pcTitle, pcIco, pcKeywords, pcDesc } = appStore.getWebsiteConfig
 useHead({
-    title: pc_title,
+    title: pcTitle,
     meta: [
-        { name: 'description', content: pc_desc },
-        { name: 'keywords', content: pc_keywords }
+        { name: 'description', content: pcDesc },
+        { name: 'keywords', content: pcKeywords }
     ],
     link: [
         {
             rel: 'icon',
-            href: pc_ico
+            href: pcIco
         }
     ]
 })

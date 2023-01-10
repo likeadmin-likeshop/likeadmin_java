@@ -19,18 +19,18 @@
                     :key="item.id"
                     :id="item.id"
                     :title="item.title"
-                    :desc="item.desc"
-                    :click="item.click"
+                    :desc="item.intro"
+                    :click="item.visit"
                     :author="item.author"
-                    :create-time="item.create_time"
+                    :create-time="item.createTime"
                     :image="item.image"
                     :only-title="false"
                 />
                 <div class="py-4 flex justify-end">
                     <el-pagination
-                        v-model:current-page="params.page_no"
+                        v-model:current-page="params.pageNo"
                         :total="data.count"
-                        :page-size="params.page_size"
+                        :page-size="params.pageSize"
                         hide-on-single-page
                         @current-change="refresh()"
                     />
@@ -57,8 +57,8 @@ const sort = computed(() =>
 const keyword = computed(() => route.query.keywords || '')
 const cid = computed(() => route.query.cid || '')
 const params = reactive({
-    page_no: 1,
-    page_size: 15,
+    pageNo: 1,
+    pageSize: 15,
     keyword,
     cid,
     sort

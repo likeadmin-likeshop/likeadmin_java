@@ -12,7 +12,7 @@
                         type="primary"
                         @click="showMobilePopup = true"
                     >
-                        {{ userInfo.has_password ? '点击修改' : '点击设置' }}
+                        {{ userInfo.isPassword ? '点击修改' : '点击设置' }}
                         <Icon name="el-icon-ArrowRight" />
                     </ElButton>
                 </div>
@@ -20,7 +20,7 @@
             <div class="info-item leading-10 flex justify-between">
                 <div class="item-name">绑定微信</div>
                 <div>
-                    {{ userInfo.has_auth ? '已绑定' : '未绑定' }}
+                    {{ userInfo.isBindMnp ? '已绑定' : '未绑定' }}
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
                     <div class="flex justify-between">
                         <span class="text-4xl">
                             {{
-                                userInfo.has_password
+                                userInfo.isPassword
                                     ? '修改登录密码'
                                     : '设置登录密码'
                             }}
@@ -43,7 +43,7 @@
                             type="primary"
                             link
                             @click="toForgetPwd"
-                            v-if="userInfo.has_password"
+                            v-if="userInfo.isPassword"
                         >
                             忘记原密码
                         </ElButton>
@@ -56,11 +56,11 @@
                         :rules="formRules"
                     >
                         <ElFormItem
-                            prop="old_password"
-                            v-if="userInfo.has_password"
+                            prop="oldPassword"
+                            v-if="userInfo.isPassword"
                         >
                             <ElInput
-                                v-model="formData.old_password"
+                                v-model="formData.oldPassword"
                                 placeholder="请输入原密码"
                                 type="password"
                                 show-password
@@ -74,9 +74,9 @@
                                 show-password
                             />
                         </ElFormItem>
-                        <ElFormItem prop="password_confirm">
+                        <ElFormItem prop="passwordConfirm">
                             <ElInput
-                                v-model="formData.password_confirm"
+                                v-model="formData.passwordConfirm"
                                 placeholder="请再次输入密码"
                                 type="password"
                                 show-password
@@ -113,14 +113,19 @@ import {
     PopupTypeEnum,
     useAccount
 } from '~~/layouts/components/account/useAccount'
+import { useUserStore } from '@/stores/user'
+import feedback from '~~/utils/feedback'
 const { data: userInfo, refresh } = await useAsyncData(() => getUserInfo(), {
-    default: () => ({})
+    default: () => ({}),
+    initialCache: false
 })
+
+const userStore = useUserStore()
 const showMobilePopup = ref(false)
 const { setPopupType, toggleShowPopup } = useAccount()
 const formRef = shallowRef<FormInstance>()
 const formRules: FormRules = {
-    old_password: [
+    oldPassword: [
         {
             required: true,
             message: '请输入原密码',
@@ -140,7 +145,7 @@ const formRules: FormRules = {
             trigger: ['change', 'blur']
         }
     ],
-    password_confirm: [
+    passwordConfirm: [
         {
             validator(rule: any, value: any, callback: any) {
                 if (value === '') {
@@ -156,9 +161,9 @@ const formRules: FormRules = {
     ]
 }
 const formData = reactive({
-    old_password: '',
+    oldPassword: '',
     password: '',
-    password_confirm: ''
+    passwordConfirm: ''
 })
 
 const toForgetPwd = () => {
@@ -170,6 +175,8 @@ const toForgetPwd = () => {
 const handleConfirm = async () => {
     await formRef.value?.validate()
     await userChangePwd(formData)
+    feedback.msgSuccess('修改成功')
+    userStore.logout()
     showMobilePopup.value = false
     refresh()
 }

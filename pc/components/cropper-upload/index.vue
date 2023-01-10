@@ -65,7 +65,7 @@ const handleConfirmCropper = () => {
         })
         const data = await uploadImage({ file: imgFile })
         state.cropperVisible = false
-        emit('change', data.uri)
+        emit('change', data.path)
         uploadRef.value?.clearFiles()
     })
 }

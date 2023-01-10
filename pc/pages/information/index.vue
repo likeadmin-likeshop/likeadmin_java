@@ -8,7 +8,7 @@
                 :key="item.id"
                 :header="item.name"
                 :data="item.article"
-                :link="`/information/default?cid=${item.id}&name=${item.name}`"
+                :link="`/information/search?cid=${item.id}&name=${item.name}`"
             >
                 <template #content="{ data }">
                     <div class="px-4 py-5">
@@ -23,10 +23,8 @@
                                     :index="index"
                                     :id="item.id"
                                     :title="item.title"
-                                    :desc="item.desc"
-                                    :click="item.click"
                                     :author="item.author"
-                                    :create-time="item.create_time"
+                                    :create-time="item.createTime"
                                     :image="item.image || placeholder"
                                     :only-title="false"
                                     :border="false"
@@ -51,10 +49,8 @@
                             <InformationItems
                                 :id="item.id"
                                 :title="item.title"
-                                :desc="item.desc"
-                                :click="item.click"
                                 :author="item.author"
-                                :create-time="item.create_time"
+                                :create-time="item.createTime"
                                 :image="item.image"
                                 :only-title="true"
                                 :show-time="false"
