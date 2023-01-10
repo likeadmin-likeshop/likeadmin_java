@@ -140,7 +140,7 @@ public class PcServiceImpI implements IPcService {
         Map<String, Object> websiteMap = new LinkedHashMap<>();
         Map<String, String> websiteConfig = ConfigUtils.get("website");
         String copyright = websiteConfig.getOrDefault("copyright", "[]");
-        Map<String, String> copyrightMap = ArrayUtils.stringToListAsMapStr(copyright).get(0);
+        List<Map<String, String>> copyrightMap = ArrayUtils.stringToListAsMapStr(copyright);
 
         websiteMap.put("shopName", websiteConfig.getOrDefault("shopName", "LikeAdmin"));
         websiteMap.put("shopLogo", UrlUtils.toAbsoluteUrl(websiteConfig.getOrDefault("shopLogo", "")));
