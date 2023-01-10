@@ -48,10 +48,9 @@ public class ArticleController {
      */
     @GetMapping("/list")
     public AjaxResult<PageResult<ArticleListedVo>> list(@Validated PageValidate pageValidate,
-                                                        @Validated ArticleSearchValidate searchValidate,
-                                                        @RequestParam(value = "cid", defaultValue = "0") Integer cid) {
+                                                        @Validated ArticleSearchValidate searchValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
-        PageResult<ArticleListedVo> list = iArticleService.list(pageValidate, cid, userId);
+        PageResult<ArticleListedVo> list = iArticleService.list(userId, pageValidate, searchValidate);
         return AjaxResult.success(list);
     }
 
