@@ -19,9 +19,6 @@
                     <template v-if="item.component == 'mobile'">
                         <Mobile :menu-item="item" />
                     </template>
-                    <template v-if="item.component == 'admin'">
-                        <Admin :menu-item="item" />
-                    </template>
                 </div>
             </template>
         </Menu>

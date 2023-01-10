@@ -11,7 +11,7 @@
                 <el-dropdown-menu>
                     <NuxtLink
                         :to="{
-                            path: '/information/default',
+                            path: '/information/search',
                             query: {
                                 cid: item.id,
                                 name: item.name
