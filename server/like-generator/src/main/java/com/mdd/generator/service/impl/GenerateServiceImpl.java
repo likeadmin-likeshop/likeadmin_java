@@ -5,10 +5,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageHelper;
-import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.PageResult;
 
+import com.mdd.common.entity.system.SystemAuthMenu;
 import com.mdd.common.exception.OperateException;
+import com.mdd.common.mapper.system.SystemAuthMenuMapper;
 import com.mdd.common.util.StringUtils;
 import com.mdd.common.util.TimeUtils;
 import com.mdd.generator.constant.GenConstants;
@@ -21,6 +22,7 @@ import com.mdd.generator.util.GenUtil;
 import com.mdd.generator.util.VelocityUtil;
 import com.mdd.generator.validate.GenParam;
 import com.mdd.generator.validate.PageParam;
+import com.mdd.generator.vo.DbColumnVo;
 import com.mdd.generator.vo.DbTableVo;
 import com.mdd.generator.vo.GenColumnVo;
 import com.mdd.generator.vo.GenTableVo;
@@ -59,6 +61,9 @@ public class GenerateServiceImpl implements IGenerateService {
 
     @Resource
     GenTableColumnMapper genTableColumnMapper;
+
+    @Resource
+    SystemAuthMenuMapper systemAuthMenuMapper;
 
     /**
      * 库列表
@@ -102,6 +107,28 @@ public class GenerateServiceImpl implements IGenerateService {
         }
 
         return tables;
+    }
+
+    /**
+     * 根据表名查字段
+     *
+     * @param tableName 表名
+     * @return List<DbColumnVo>
+     */
+    @Override
+    public List<DbColumnVo> dbColumn(String tableName) {
+        List<GenTableColumn> columns = genTableMapper.selectDbTableColumnsByName(tableName);
+
+        List<DbColumnVo> list = new LinkedList<>();
+        for (GenTableColumn col : columns) {
+            DbColumnVo vo = new DbColumnVo();
+            vo.setColumnName(col.getColumnName());
+            vo.setColumnType(col.getColumnType());
+            vo.setColumnComment(col.getColumnComment());
+            list.add(vo);
+        }
+
+        return list;
     }
 
     /**
@@ -177,6 +204,9 @@ public class GenerateServiceImpl implements IGenerateService {
         gen.put("subTableName", genTable.getSubTableName());
         gen.put("subTableFk", genTable.getSubTableFk());
         gen.put("subTableFr", genTable.getSubTableFr());
+        gen.put("menuStatus", genTable.getMenuStatus());
+        gen.put("menuPid", genTable.getMenuPid());
+        gen.put("menuName", genTable.getMenuName());
         maps.put("gen", gen);
 
         // 字段信息
@@ -264,7 +294,11 @@ public class GenerateServiceImpl implements IGenerateService {
         model.setGenType(genParam.getGenType());
         model.setGenPath(genParam.getGenPath());
         model.setSubTableFk(genParam.getSubTableFk());
+        model.setSubTableFr(genParam.getSubTableFr());
         model.setSubTableName(genParam.getSubTableName());
+        model.setMenuStatus(genParam.getMenuStatus());
+        model.setMenuPid(genParam.getMenuPid());
+        model.setMenuName(genParam.getMenuName());
         genTableMapper.updateById(model);
 
         for (Map<String, String> item : genParam.getColumn()) {
@@ -464,6 +498,9 @@ public class GenerateServiceImpl implements IGenerateService {
                 log.error("生成渲染模板失败: " + e.getMessage());
             }
         }
+
+        // 生成菜单
+        this.genAutoMenu(table);
     }
 
     /**
@@ -506,4 +543,48 @@ public class GenerateServiceImpl implements IGenerateService {
         }
     }
 
+    /**
+     * 自动构建菜单
+     */
+    private void genAutoMenu(GenTable table) {
+        if (table.getMenuStatus().equals(1)) {
+            SystemAuthMenu authMenu = new SystemAuthMenu();
+            authMenu.setPid(table.getMenuPid());
+            authMenu.setMenuType("C");
+            authMenu.setMenuName(table.getMenuName());
+            authMenu.setPaths(table.getModuleName());
+            authMenu.setPerms(table.getModuleName() + ":list");
+            authMenu.setComponent(table.getModuleName() + "/index");
+            authMenu.setMenuName(table.getMenuName());
+            authMenu.setCreateTime(System.currentTimeMillis() / 1000);
+            authMenu.setUpdateTime(System.currentTimeMillis() / 1000);
+            systemAuthMenuMapper.insert(authMenu);
+
+            for (String op : Arrays.asList("detail", "add", "edit", "del")) {
+                String menuName = "";
+                switch (op) {
+                    case "detail":
+                        menuName = "详情";
+                        break;
+                    case "add":
+                        menuName = "新增";
+                        break;
+                    case "edit":
+                        menuName = "编辑";
+                        break;
+                    case "del":
+                        menuName = "删除";
+                }
+                String perms = table.getModuleName() + ":" + op;
+                SystemAuthMenu systemAuthMenu = new SystemAuthMenu();
+                systemAuthMenu.setPid(authMenu.getId());
+                systemAuthMenu.setMenuType("A");
+                systemAuthMenu.setPerms(perms);
+                systemAuthMenu.setMenuName(table.getMenuName() + menuName);
+                systemAuthMenu.setCreateTime(System.currentTimeMillis() / 1000);
+                systemAuthMenu.setUpdateTime(System.currentTimeMillis() / 1000);
+                systemAuthMenuMapper.insert(systemAuthMenu);
+            }
+        }
+    }
 }

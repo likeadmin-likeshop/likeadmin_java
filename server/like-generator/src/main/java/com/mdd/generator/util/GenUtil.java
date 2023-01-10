@@ -248,4 +248,21 @@ public class GenUtil {
         }
     }
 
+    /**
+     * 获取表的别名
+     *
+     * @param tableName 表名
+     * @return String
+     */
+    public static String getTableAlias(String tableName) {
+        if (StringUtils.isNull(tableName) || StringUtils.isEmpty(tableName)) {
+            return "";
+        }
+
+        StringBuilder val = new StringBuilder();
+        for (String name : tableName.split("_")) {
+            val.append(name.charAt(0));
+        }
+        return val.toString();
+    }
 }

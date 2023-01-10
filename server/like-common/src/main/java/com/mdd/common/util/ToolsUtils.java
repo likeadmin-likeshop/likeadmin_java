@@ -5,7 +5,10 @@ import com.alibaba.fastjson2.JSONObject;
 import com.google.gson.reflect.TypeToken;
 import com.mdd.common.config.GlobalConfig;
 
+import java.io.*;
 import java.lang.reflect.Type;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.*;
@@ -124,6 +127,37 @@ public class ToolsUtils {
         } else {
             size = size * 100 / 1024;
             return (size / 100) + "." + (size % 100) + "GB";
+        }
+    }
+
+    /**
+     * 下载文件
+     *
+     * @author fzr
+     * @param urlString (文件网址)
+     * @param savePath (保存路径,如: /www/uploads)
+     * @param filename (保存名称,如: aa.png)
+     * @throws IOException 异常
+     */
+    public static void download(String urlString, String savePath, String filename) throws IOException {
+        URL url = new URL(urlString);
+        URLConnection con = url.openConnection();
+        con.setConnectTimeout(20 * 1000);
+        File sf = new File(savePath);
+        if (!sf.exists()) {
+            if (sf.mkdirs()) {
+                throw new IOException("创建目录失败");
+            }
+        }
+        try (InputStream in = con.getInputStream();
+             OutputStream out = new FileOutputStream(sf.getPath() + "\\" + filename)) {
+            byte[] buff = new byte[1024];
+            int n;
+            while ((n = in.read(buff)) >= 0) {
+                out.write(buff, 0, n);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

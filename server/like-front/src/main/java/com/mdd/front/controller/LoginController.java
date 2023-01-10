@@ -129,8 +129,8 @@ public class LoginController {
      * @return AjaxResult<LoginUrlsVo>
      */
     @GetMapping("/getScanCode")
-    public AjaxResult<LoginUrlsVo> getScanCode(HttpSession session) {
-        String qrcodeUrl = iLoginService.getScanCode(session);
+    public AjaxResult<LoginUrlsVo> getScanCode(@RequestParam String url, HttpSession session) {
+        String qrcodeUrl = iLoginService.getScanCode(url, session);
         LoginUrlsVo vo = new LoginUrlsVo();
         vo.setUrl(qrcodeUrl);
         return AjaxResult.success(vo);
@@ -145,8 +145,8 @@ public class LoginController {
      */
     @PostMapping("/scanLogin")
     public AjaxResult<Object> scanLogin(@Validated @RequestBody ScanLoginValidate scanLoginValidate, HttpSession session) {
-        iLoginService.scanLogin(scanLoginValidate, session);
-        return AjaxResult.success();
+        LoginTokenVo vo = iLoginService.scanLogin(scanLoginValidate, session);
+        return AjaxResult.success(vo);
     }
 
 }

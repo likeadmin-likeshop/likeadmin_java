@@ -93,7 +93,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         #set($queryWrapper = "mpjQueryWrapper")
         MPJQueryWrapper<${EntityName}> mpjQueryWrapper = new MPJQueryWrapper<>();
         mpjQueryWrapper.selectAll(${EntityName}.class);
-        mpjQueryWrapper.innerJoin("?_$table.subTableName f ON f.$table.SubTableFr=t.$table.SubTableFk".replace("?_", GlobalConfig.tablePrefix));
+        mpjQueryWrapper.innerJoin("?_$table.subTableName $subTableAlias ON $subTableAlias.$table.SubTableFk=t.$table.SubTableFr".replace("?_", GlobalConfig.tablePrefix));
         #if($allFields.contains("is_delete"))
         mpjQueryWrapper.eq("t.is_delete", 0);
         #end

@@ -83,11 +83,11 @@ public interface ILoginService {
      * @param session session
      * @return String
      */
-    String getScanCode(HttpSession session);
+    String getScanCode(String url, HttpSession session);
 
     /**
      * 扫码登录
      */
-    void scanLogin(ScanLoginValidate scanLoginValidate, HttpSession session);
+    LoginTokenVo scanLogin(ScanLoginValidate scanLoginValidate, HttpSession session);
 
 }

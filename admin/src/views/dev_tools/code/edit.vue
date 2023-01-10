@@ -218,11 +218,50 @@
                             </div>
                         </el-form-item>
                         <el-form-item label="生成方式" prop="gen.genType">
-                            <el-radio-group v-model="formData.gen.genType">
-                                <el-radio :label="GenType.ZIP">压缩包下载</el-radio>
-                                <el-radio :label="GenType.CUSTOM_PATH">自定义路径</el-radio>
-                            </el-radio-group>
+                            <div>
+                                <el-radio-group v-model="formData.gen.genType">
+                                    <el-radio :label="GenType.ZIP">压缩包下载</el-radio>
+                                    <el-radio :label="GenType.CUSTOM_PATH">自定义路径</el-radio>
+                                </el-radio-group>
+                                <div class="form-tips">压縮包下载方式暂不支持自动构建菜单权限</div>
+                            </div>
                         </el-form-item>
+                        <el-form-item label="菜单构建" prop="gen.menuStatus" required>
+                            <div>
+                                <el-radio-group v-model="formData.gen.menuStatus">
+                                    <el-radio :label="1">自动构建</el-radio>
+                                    <el-radio :label="0">手动添加</el-radio>
+                                </el-radio-group>
+                                <div class="form-tips">
+                                    自动构建：自动执行生成菜单sql。 手动添加：自行添加菜单
+                                </div>
+                            </div>
+                        </el-form-item>
+                        <el-form-item label="父级菜单" prop="gen.menuPid">
+                            <el-tree-select
+                                class="w-80"
+                                v-model="formData.gen.menuPid"
+                                :data="optionsData.menu"
+                                clearable
+                                node-key="id"
+                                :props="{
+                                    label: 'menuName'
+                                }"
+                                default-expand-all
+                                placeholder="请选择父级菜单"
+                                check-strictly
+                            />
+                        </el-form-item>
+                        <el-form-item label="菜单名称" prop="gen.menuName">
+                            <div class="w-80">
+                                <el-input
+                                    v-model="formData.gen.menuName"
+                                    placeholder="请输入菜单名称"
+                                    clearable
+                                />
+                            </div>
+                        </el-form-item>
+
                         <el-form-item
                             v-if="formData.gen.genType == GenType.CUSTOM_PATH"
                             label="自定义路径"
@@ -275,7 +314,12 @@
                     </el-tab-pane>
                     <el-tab-pane label="关联配置" name="relation">
                         <el-form-item label="关联子表的表名" prop="gen.subTableName">
-                            <el-select class="w-80" v-model="formData.gen.subTableName" clearable>
+                            <el-select
+                                class="w-80"
+                                v-model="formData.gen.subTableName"
+                                clearable
+                                @change="handleTableChange"
+                            >
                                 <el-option
                                     v-for="item in optionsData.dataTable"
                                     :key="item.tableName"
@@ -285,9 +329,14 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="子表关联的外键名 " prop="gen.subTableFk">
-                            <el-select class="w-80" v-model="formData.gen.subTableFk" clearable>
+                            <el-select
+                                class="w-80"
+                                v-model="formData.gen.subTableFk"
+                                clearable
+                                :loading="columnLoading"
+                            >
                                 <el-option
-                                    v-for="item in formData.column"
+                                    v-for="item in tableColumn"
                                     :key="item.id"
                                     :value="item.columnName"
                                     :label="`${item.columnName}：${item.columnComment}`"
@@ -295,13 +344,14 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="关联表主键 " prop="gen.subTableFr">
-                            <div class="w-80">
-                                <el-input
-                                    v-model="formData.gen.subTableFr"
-                                    placeholder="请输入关联表主键"
-                                    clearable
+                            <el-select class="w-80" v-model="formData.gen.subTableFr" clearable>
+                                <el-option
+                                    v-for="item in formData.column"
+                                    :key="item.id"
+                                    :value="item.columnName"
+                                    :label="`${item.columnName}：${item.columnComment}`"
                                 />
-                            </div>
+                            </el-select>
                         </el-form-item>
                     </el-tab-pane>
                 </el-tabs>
@@ -314,7 +364,7 @@
 </template>
 
 <script lang="ts" setup name="tableEdit">
-import { dataTableAll, generateEdit, tableDetail } from '@/api/tools/code'
+import { dataTableAll, generateEdit, tableDetail, dataTableToColumn } from '@/api/tools/code'
 import { dictTypeAll } from '@/api/setting/dict'
 import type { FormInstance } from 'element-plus'
 import feedback from '@/utils/feedback'
@@ -356,7 +406,10 @@ const formData = reactive({
         subTableFr: '',
         treeParent: '',
         treePrimary: '',
-        treeName: ''
+        treeName: '',
+        menuName: '',
+        menuStatus: 0,
+        menuPid: 0
     }
 })
 
@@ -377,10 +430,12 @@ const getDetails = async () => {
     const data = await tableDetail({
         id: route.query.id
     })
+
     Object.keys(formData).forEach((key) => {
         //@ts-ignore
         formData[key] = data[key]
     })
+    getTableColumn()
 }
 
 const { optionsData } = useDictOptions<{
@@ -394,9 +449,9 @@ const { optionsData } = useDictOptions<{
     menu: {
         api: menuLists,
         transformData(data: any) {
-            const menu = { id: 0, name: '顶级', children: [] }
+            const menu = { id: 0, menuName: '顶级', children: [] }
             menu.children = data
-            return menu
+            return [menu]
         }
     },
     dataTable: {
@@ -404,6 +459,19 @@ const { optionsData } = useDictOptions<{
     }
 })
 
+const columnLoading = ref(false)
+const tableColumn = ref<any[]>([])
+const getTableColumn = async () => {
+    columnLoading.value = true
+    const res = await dataTableToColumn({ tableName: formData.gen.subTableName })
+    columnLoading.value = false
+    tableColumn.value = res
+}
+
+const handleTableChange = () => {
+    formData.gen.subTableFk = ''
+    getTableColumn()
+}
 const handleSave = async () => {
     try {
         await formRef.value?.validate()

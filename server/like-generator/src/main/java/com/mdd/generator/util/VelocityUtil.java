@@ -84,6 +84,7 @@ public class VelocityUtil {
         velocityContext.put("notesType", GenConfig.notesType);
         velocityContext.put("table", table);
         velocityContext.put("columns", columns);
+        velocityContext.put("subTableAlias", GenUtil.getTableAlias(table.getSubTableName()));
         velocityContext.put("dateFields", SqlConstants.COLUMN_TIME_NAME);
         velocityContext.put("primaryKey", primaryKey);
         velocityContext.put("primaryField", primaryField);

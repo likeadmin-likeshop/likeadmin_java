@@ -173,64 +173,7 @@ public class LoginServiceImpl implements ILoginService {
             String uniId = sessionResult.getUnionid();
             String unionId = uniId == null ? "0" : uniId;
 
-            UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
-                    .nested(wq->wq
-                        .eq("openid", openId).or()
-                        .eq("unionid", unionId)
-                    ).last("limit 1"));
-
-            User user = null;
-            Integer userId;
-            if (StringUtils.isNotNull(userAuth)) {
-                 user = userMapper.selectOne(new QueryWrapper<User>()
-                        .eq("id", userAuth.getUserId())
-                        .eq("is_delete", 0)
-                        .last("limit 1"));
-            }
-
-            if (StringUtils.isNull(user)) {
-                Integer sn  = this.randMakeSn();
-                User model = new User();
-                model.setSn(sn);
-                model.setAvatar("/api/static/default_avatar.png");
-                model.setNickname("用户"+sn);
-                model.setUsername("u"+sn);
-                model.setSex(0);
-                model.setChannel(client);
-                model.setLastLoginIp(IpUtils.getHostIp());
-                model.setLastLoginTime(System.currentTimeMillis() / 1000);
-                model.setCreateTime(System.currentTimeMillis() / 1000);
-                model.setUpdateTime(System.currentTimeMillis() / 1000);
-                userMapper.insert(model);
-                user = model;
-                userId = model.getId();
-
-                if (StringUtils.isNull(userAuth)) {
-                    UserAuth auth = new UserAuth();
-                    auth.setUserId(model.getId());
-                    auth.setOpenid(openId);
-                    auth.setUnionid(unionId.equals("0") ? "" : unionId);
-                    auth.setClient(client);
-                    auth.setCreateTime(System.currentTimeMillis() / 1000);
-                    auth.setUpdateTime(System.currentTimeMillis() / 1000);
-                    userAuthMapper.insert(auth);
-                }
-            } else {
-                // 更新微信标识
-                userId = user.getId();
-                if (StringUtils.isEmpty(userAuth.getUnionid()) && StringUtils.isNotEmpty(sessionResult.getUnionid())) {
-                    userAuth.setUnionid(sessionResult.getUnionid());
-                    userAuthMapper.updateById(userAuth);
-                }
-
-                // 更新登录信息
-                user.setLastLoginIp(IpUtils.getHostIp());
-                user.setLastLoginTime(System.currentTimeMillis() / 1000);
-                userMapper.updateById(user);
-            }
-
-
-            return this.makeLoginToken(userId, user.getMobile());
+            return this.userService(openId, unionId, client);
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
@@ -250,81 +193,7 @@ public class LoginServiceImpl implements ILoginService {
             String uniId = wxOAuth2AccessToken.getUnionId();
             String openId  = wxOAuth2AccessToken.getOpenId();
             String unionId = uniId == null ? "0" : uniId;
-
-            UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
-                    .nested(wq->wq
-                        .eq("unionid", unionId).or()
-                        .eq("openid", openId)
-                    ).last("limit 1"));
-
-            Integer userId;
-            User user = null;
-            if (StringUtils.isNotNull(userAuth)) {
-                user = userMapper.selectOne(new QueryWrapper<User>()
-                        .eq("is_delete", 0)
-                        .eq("id", userAuth.getUserId())
-                        .last("limit 1"));
-            }
-
-            if (StringUtils.isNull(user)) {
-                Integer sn  = this.randMakeSn();
-                User model = new User();
-                model.setSn(sn);
-                model.setAvatar("/api/static/default_avatar.png");
-                model.setNickname("用户" + sn);
-                model.setUsername("u" + sn);
-                model.setChannel(client);
-                model.setSex(0);
-                model.setLastLoginIp(IpUtils.getHostIp());
-                model.setLastLoginTime(System.currentTimeMillis() / 1000);
-                model.setUpdateTime(System.currentTimeMillis() / 1000);
-                model.setCreateTime(System.currentTimeMillis() / 1000);
-                userMapper.insert(model);
-                userId = model.getId();
-                user = model;
-
-                if (StringUtils.isNull(userAuth)) {
-                    UserAuth auth = new UserAuth();
-                    auth.setUserId(model.getId());
-                    auth.setUnionid(unionId);
-                    auth.setOpenid(openId);
-                    auth.setClient(client);
-                    auth.setCreateTime(System.currentTimeMillis() / 1000);
-                    auth.setUpdateTime(System.currentTimeMillis() / 1000);
-                    userAuthMapper.insert(auth);
-                }
-            } else {
-                userId = user.getId();
-
-                // 授权不存在则创建
-                UserAuth auth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
-                        .nested(wq->wq
-                            .eq("unionid", unionId).or()
-                            .eq("openid", openId)
-                        ).eq("client", client)
-                         .last("limit 1"));
-
-                if (StringUtils.isNull(auth)) {
-                    UserAuth authModel = new UserAuth();
-                    authModel.setUserId(user.getId());
-                    authModel.setUnionid(unionId);
-                    authModel.setOpenid(openId);
-                    authModel.setClient(client);
-                    authModel.setCreateTime(System.currentTimeMillis() / 1000);
-                    authModel.setUpdateTime(System.currentTimeMillis() / 1000);
-                    userAuthMapper.insert(authModel);
-                } else if(StringUtils.isEmpty(auth.getUnionid()) && StringUtils.isNotEmpty(unionId)) {
-                    auth.setUnionid(unionId);
-                    userAuthMapper.updateById(userAuth);
-                }
-
-                // 更新登录信息
-                user.setLastLoginIp(IpUtils.getHostIp());
-                user.setLastLoginTime(System.currentTimeMillis() / 1000);
-                userMapper.updateById(user);
-            }
-
-            return this.makeLoginToken(userId, user.getMobile());
+            return this.userService(openId, unionId, client);
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
@@ -394,7 +263,7 @@ public class LoginServiceImpl implements ILoginService {
      * @return String
      */
     @Override
-    public String getScanCode(HttpSession session) {
+    public String getScanCode(String url, HttpSession session) {
         // 获取AppId
         String appId = ConfigUtils.get("op_channel", "appId", "");
 
@@ -408,7 +277,7 @@ public class LoginServiceImpl implements ILoginService {
                 "#wechat_redirect";
 
         // 回调地址
-        String redirectUrl = "https://www.baidu.com/";
+        String redirectUrl = url;
         try {
             redirectUrl = URLEncoder.encode(redirectUrl, "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -418,7 +287,6 @@ public class LoginServiceImpl implements ILoginService {
         // 防止csrf攻击
         String state = ToolsUtils.makeUUID().replaceAll("-", "");
         RedisUtils.set("wechat-open-state-"+session.getId(), state, 600);
-
         //生成qrcodeUrl
         return String.format(baseUrl, appId, redirectUrl, state);
     }
@@ -430,7 +298,7 @@ public class LoginServiceImpl implements ILoginService {
      * @param scanLoginValidate 参数
      */
     @Override
-    public void scanLogin(ScanLoginValidate scanLoginValidate, HttpSession session) {
+    public LoginTokenVo scanLogin(ScanLoginValidate scanLoginValidate, HttpSession session) {
         Object o = RedisUtils.get("wechat-open-state-"+session.getId());
         if (StringUtils.isNull(o) || !o.toString().equals(scanLoginValidate.getState())) {
             throw new OperateException("二维码已失效或不存在,请重新操作");
@@ -448,26 +316,33 @@ public class LoginServiceImpl implements ILoginService {
                 "&code=%s" +
                 "&grant_type=authorization_code";
 
-        String result = null;
+        Map<String, String> resultMap;
         try {
             String accessTokenUrl = String.format(baseAccessTokenUrl, appId, appSecret, code);
-            result = HttpUtils.sendGet(accessTokenUrl);
+            String result = HttpUtils.sendGet(accessTokenUrl);
+            resultMap = ToolsUtils.jsonToMap(result);
         } catch (Exception e) {
             throw new OperateException("获取access_token失败:"+e.getMessage());
         }
 
-        String accessToken = "";
-        String openid = "";
-
-        // 访问微信获取用户信息
+        // 访问微信获取用户信息 (openId,unionId,昵称,头像等)
+        String accessToken = resultMap.get("access_token");
+        String openid = resultMap.get("openid");
         String baseUserInfoUrl = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s";
         String userInfoUrl = String.format(baseUserInfoUrl, accessToken, openid);
-        String resultUserInfo = null;
+        Map<String, String> userinfoMap;
         try {
-            resultUserInfo = HttpUtils.sendGet(userInfoUrl);
+            String resultUserInfo = HttpUtils.sendGet(userInfoUrl);
+            userinfoMap = ToolsUtils.jsonToMap(resultUserInfo);
         } catch (Exception e) {
             throw new OperateException("获取用户信息失败:"+e.getMessage());
         }
+
+        String openId  = userinfoMap.get("openid");
+        String uniId   = userinfoMap.get("unionid");
+        String unionId = uniId == null ? "0" : uniId;
+        RedisUtils.del("wechat-open-state-"+session.getId());
+        return this.userService(openId, unionId, ClientEnum.PC.getCode());
     }
 
     /**
@@ -488,6 +363,90 @@ public class LoginServiceImpl implements ILoginService {
         vo.setIsBindMobile(!mobile.equals(""));
         vo.setToken(token);
         return vo;
+    }
+
+    /**
+     * 用户创建服务
+     *
+     * @param openId  (openId)
+     * @param unionId (unionId)
+     * @param client  (client)
+     * @return LoginTokenVo
+     */
+    private LoginTokenVo userService(String openId, String unionId, Integer client) {
+        UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
+                .nested(wq->wq
+                    .eq("unionid", unionId).or()
+                    .eq("openid", openId)
+                ).last("limit 1"));
+
+        Integer userId;
+        User user = null;
+        if (StringUtils.isNotNull(userAuth)) {
+            user = userMapper.selectOne(new QueryWrapper<User>()
+                    .eq("is_delete", 0)
+                    .eq("id", userAuth.getUserId())
+                    .last("limit 1"));
+        }
+
+        if (StringUtils.isNull(user)) {
+            Integer sn  = this.randMakeSn();
+            User model = new User();
+            model.setSn(sn);
+            model.setAvatar("/api/static/default_avatar.png");
+            model.setNickname("用户" + sn);
+            model.setUsername("u" + sn);
+            model.setChannel(ClientEnum.PC.getCode());
+            model.setSex(0);
+            model.setLastLoginIp(IpUtils.getHostIp());
+            model.setLastLoginTime(System.currentTimeMillis() / 1000);
+            model.setUpdateTime(System.currentTimeMillis() / 1000);
+            model.setCreateTime(System.currentTimeMillis() / 1000);
+            userMapper.insert(model);
+            userId = model.getId();
+            user = model;
+
+            if (StringUtils.isNull(userAuth)) {
+                UserAuth auth = new UserAuth();
+                auth.setUserId(model.getId());
+                auth.setUnionid(unionId);
+                auth.setOpenid(openId);
+                auth.setClient(client);
+                auth.setCreateTime(System.currentTimeMillis() / 1000);
+                auth.setUpdateTime(System.currentTimeMillis() / 1000);
+                userAuthMapper.insert(auth);
+            }
+        } else {
+            // 授权不存在则创建
+            userId = user.getId();
+            UserAuth auth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
+                    .nested(wq->wq
+                            .eq("unionid", unionId).or()
+                            .eq("openid", openId)
+                    ).eq("client", client)
+                    .last("limit 1"));
+
+            if (StringUtils.isNull(auth)) {
+                UserAuth authModel = new UserAuth();
+                authModel.setUserId(user.getId());
+                authModel.setUnionid(unionId);
+                authModel.setOpenid(openId);
+                authModel.setClient(client);
+                authModel.setCreateTime(System.currentTimeMillis() / 1000);
+                authModel.setUpdateTime(System.currentTimeMillis() / 1000);
+                userAuthMapper.insert(authModel);
+            } else if(StringUtils.isEmpty(auth.getUnionid()) && StringUtils.isNotEmpty(unionId)) {
+                auth.setUnionid(unionId);
+                userAuthMapper.updateById(userAuth);
+            }
+
+            // 更新登录信息
+            user.setLastLoginIp(IpUtils.getHostIp());
+            user.setLastLoginTime(System.currentTimeMillis() / 1000);
+            userMapper.updateById(user);
+        }
+
+        return this.makeLoginToken(userId, user.getMobile());
     }
 
     /**
