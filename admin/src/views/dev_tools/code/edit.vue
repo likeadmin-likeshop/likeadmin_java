@@ -218,10 +218,13 @@
                             </div>
                         </el-form-item>
                         <el-form-item label="生成方式" prop="gen.genType">
-                            <el-radio-group v-model="formData.gen.genType">
-                                <el-radio :label="GenType.ZIP">压缩包下载</el-radio>
-                                <el-radio :label="GenType.CUSTOM_PATH">自定义路径</el-radio>
-                            </el-radio-group>
+                            <div>
+                                <el-radio-group v-model="formData.gen.genType">
+                                    <el-radio :label="GenType.ZIP">压缩包下载</el-radio>
+                                    <el-radio :label="GenType.CUSTOM_PATH">自定义路径</el-radio>
+                                </el-radio-group>
+                                <div class="form-tips">压縮包下载方式暂不支持自动构建菜单权限</div>
+                            </div>
                         </el-form-item>
                         <el-form-item label="菜单构建" prop="gen.menuStatus" required>
                             <div>
@@ -230,7 +233,7 @@
                                     <el-radio :label="0">手动添加</el-radio>
                                 </el-radio-group>
                                 <div class="form-tips">
-                                    自动构建：自动执行生成菜单sql。手动添加：自行添加菜单。
+                                    自动构建：自动执行生成菜单sal。 手动添加：自行添加菜单
                                 </div>
                             </div>
                         </el-form-item>
