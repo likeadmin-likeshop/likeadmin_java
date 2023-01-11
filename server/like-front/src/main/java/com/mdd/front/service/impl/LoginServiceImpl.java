@@ -354,6 +354,8 @@ public class LoginServiceImpl implements ILoginService {
      * @return LoginTokenVo
      */
     private LoginTokenVo makeLoginToken(Integer userId, String mobile) {
+        mobile = StringUtils.isNull(mobile) ? "" : mobile;
+
         String token = ToolsUtils.makeToken();
         int tokenValidTime = Integer.parseInt(YmlUtils.get("like.token-valid-time"));
         RedisUtils.set(FrontConfig.frontendTokenKey+token, userId, tokenValidTime);
