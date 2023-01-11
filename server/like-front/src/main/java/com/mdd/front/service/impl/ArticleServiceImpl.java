@@ -91,9 +91,12 @@ public class ArticleServiceImpl implements IArticleService {
         queryWrapper.eq("is_show", 1);
 
         articleMapper.setSearch(queryWrapper, searchValidate, new String[]{
-                "=:cid:int",
                 "like:keyword@title:str"
         });
+
+        if (StringUtils.isNotNull(searchValidate.getCid()) && searchValidate.getCid() > 0) {
+            queryWrapper.eq("cid", searchValidate.getCid());
+        }
 
         if (StringUtils.isNotNull(searchValidate.getSort())) {
             switch (searchValidate.getSort()) {
