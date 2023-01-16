@@ -10,7 +10,11 @@
 
 <body>
     <script>
-        window.location.href = '/mobile'
+        var isMobile = function () {
+            var u = navigator.userAgent
+            return /Mobile|Android|webOS|iPhone|iPad|Phone/i.test(u)
+        }
+        window.location.href = isMobile() ? '/mobile' : '/pc'
     </script>
 </body>
 

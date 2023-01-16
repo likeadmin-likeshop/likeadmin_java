@@ -204,6 +204,9 @@ public class GenerateServiceImpl implements IGenerateService {
         gen.put("subTableName", genTable.getSubTableName());
         gen.put("subTableFk", genTable.getSubTableFk());
         gen.put("subTableFr", genTable.getSubTableFr());
+        gen.put("menuStatus", genTable.getMenuStatus());
+        gen.put("menuPid", genTable.getMenuPid());
+        gen.put("menuName", genTable.getMenuName());
         maps.put("gen", gen);
 
         // 字段信息

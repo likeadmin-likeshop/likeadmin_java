@@ -17,6 +17,7 @@ import com.mdd.common.util.StringUtils;
 import com.mdd.common.util.TimeUtils;
 import com.mdd.common.util.UrlUtils;
 import com.mdd.front.service.IArticleService;
+import com.mdd.front.validate.ArticleSearchValidate;
 import com.mdd.front.validate.commons.PageValidate;
 import com.mdd.front.vo.article.ArticleCateVo;
 import com.mdd.front.vo.article.ArticleCollectVo;
@@ -74,13 +75,13 @@ public class ArticleServiceImpl implements IArticleService {
      * 文章列表
      *
      * @author fzr
-     * @param pageValidate 分页参数
-     * @param cid 分类ID
      * @param userId 用户ID
+     * @param pageValidate 分页参数
+     * @param searchValidate 搜索参数
      * @return PageResult<ArticleListVo>
      */
     @Override
-    public PageResult<ArticleListedVo> list(PageValidate pageValidate, Integer cid, Integer userId) {
+    public PageResult<ArticleListedVo> list( Integer userId, PageValidate pageValidate, ArticleSearchValidate searchValidate) {
         Integer pageNo   = pageValidate.getPageNo();
         Integer pageSize = pageValidate.getPageSize();
 
@@ -88,9 +89,26 @@ public class ArticleServiceImpl implements IArticleService {
         queryWrapper.select("id,title,image,intro,visit,create_time");
         queryWrapper.eq("is_delete", 0);
         queryWrapper.eq("is_show", 1);
-        queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
-        if (cid > 0) {
-            queryWrapper.eq("cid", cid);
+
+        articleMapper.setSearch(queryWrapper, searchValidate, new String[]{
+                "like:keyword@title:str"
+        });
+
+        if (StringUtils.isNotNull(searchValidate.getCid()) && searchValidate.getCid() > 0) {
+            queryWrapper.eq("cid", searchValidate.getCid());
+        }
+
+        if (StringUtils.isNotNull(searchValidate.getSort())) {
+            switch (searchValidate.getSort()) {
+                case "hot": // 最热
+                    queryWrapper.orderByDesc(Arrays.asList("visit", "id"));
+                    break;
+                case "new": // 最新
+                    queryWrapper.orderByDesc("id");
+                    break;
+                default:    // 默认
+                    queryWrapper.orderByDesc(Arrays.asList("sort", "id"));
+            }
         }
 
         IPage<Article> iPage = articleMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);

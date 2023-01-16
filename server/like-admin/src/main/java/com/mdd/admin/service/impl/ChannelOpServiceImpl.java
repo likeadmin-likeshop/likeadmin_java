@@ -43,7 +43,7 @@ public class ChannelOpServiceImpl implements IChannelOpService {
     @Override
     public void save(ChannelOpValidate opValidate) {
         ConfigUtils.set("op_channel", "appId", opValidate.getAppId());
-        ConfigUtils.set("op_channel", "appSecret", opValidate.getAppId());
+        ConfigUtils.set("op_channel", "appSecret", opValidate.getAppSecret());
     }
 
 }

@@ -218,11 +218,50 @@
                             </div>
                         </el-form-item>
                         <el-form-item label="生成方式" prop="gen.genType">
-                            <el-radio-group v-model="formData.gen.genType">
-                                <el-radio :label="GenType.ZIP">压缩包下载</el-radio>
-                                <el-radio :label="GenType.CUSTOM_PATH">自定义路径</el-radio>
-                            </el-radio-group>
+                            <div>
+                                <el-radio-group v-model="formData.gen.genType">
+                                    <el-radio :label="GenType.ZIP">压缩包下载</el-radio>
+                                    <el-radio :label="GenType.CUSTOM_PATH">自定义路径</el-radio>
+                                </el-radio-group>
+                                <div class="form-tips">压縮包下载方式暂不支持自动构建菜单权限</div>
+                            </div>
                         </el-form-item>
+                        <el-form-item label="菜单构建" prop="gen.menuStatus" required>
+                            <div>
+                                <el-radio-group v-model="formData.gen.menuStatus">
+                                    <el-radio :label="1">自动构建</el-radio>
+                                    <el-radio :label="0">手动添加</el-radio>
+                                </el-radio-group>
+                                <div class="form-tips">
+                                    自动构建：自动执行生成菜单sql。 手动添加：自行添加菜单
+                                </div>
+                            </div>
+                        </el-form-item>
+                        <el-form-item label="父级菜单" prop="gen.menuPid">
+                            <el-tree-select
+                                class="w-80"
+                                v-model="formData.gen.menuPid"
+                                :data="optionsData.menu"
+                                clearable
+                                node-key="id"
+                                :props="{
+                                    label: 'menuName'
+                                }"
+                                default-expand-all
+                                placeholder="请选择父级菜单"
+                                check-strictly
+                            />
+                        </el-form-item>
+                        <el-form-item label="菜单名称" prop="gen.menuName">
+                            <div class="w-80">
+                                <el-input
+                                    v-model="formData.gen.menuName"
+                                    placeholder="请输入菜单名称"
+                                    clearable
+                                />
+                            </div>
+                        </el-form-item>
+
                         <el-form-item
                             v-if="formData.gen.genType == GenType.CUSTOM_PATH"
                             label="自定义路径"
@@ -367,7 +406,10 @@ const formData = reactive({
         subTableFr: '',
         treeParent: '',
         treePrimary: '',
-        treeName: ''
+        treeName: '',
+        menuName: '',
+        menuStatus: 0,
+        menuPid: 0
     }
 })
 
@@ -407,9 +449,9 @@ const { optionsData } = useDictOptions<{
     menu: {
         api: menuLists,
         transformData(data: any) {
-            const menu = { id: 0, name: '顶级', children: [] }
+            const menu = { id: 0, menuName: '顶级', children: [] }
             menu.children = data
-            return menu
+            return [menu]
         }
     },
     dataTable: {
