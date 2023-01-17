@@ -39,3 +39,8 @@ export function crontabEdit(params: any) {
 export function crontabDel(params: any) {
     return request.post({ url: '/crontab/del', params })
 }
+
+// 获取登录日志列表
+export function loginLogLists(params: any) {
+    return request.get({ url: '/system/log/login', params })
+}
