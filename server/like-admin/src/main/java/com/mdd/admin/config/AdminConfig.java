@@ -13,8 +13,9 @@ public class AdminConfig {
 
     // 免登录验证
     public static String[] notLoginUri = new String[]{
-            "system:login",  // 登录接口
-            "index:config"   // 配置接口
+            "system:captcha", // 验证码
+            "system:login",   // 登录接口
+            "index:config"    // 配置接口
     };
 
     // 免权限验证

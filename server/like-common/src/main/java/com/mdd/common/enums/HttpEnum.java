@@ -14,6 +14,7 @@ public enum HttpEnum {
     LOGIN_DISABLE_ERROR(331, "登录账号已被禁用了"),
     TOKEN_EMPTY(332, "token参数为空"),
     TOKEN_INVALID(333, "token参数无效"),
+    CAPTCHA_ERROR(334, "验证码错误"),
 
     NO_PERMISSION(403, "无相关权限"),
     REQUEST_404_ERROR(404, "请求接口不存在"),

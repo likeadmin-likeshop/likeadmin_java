@@ -22,4 +22,8 @@ public class SystemAdminLoginsValidate implements Serializable {
     @Length(min = 6, max = 18, message = "账号或密码错误")
     private String password;
 
+    private String code;
+
+    private String uuid;
+
 }

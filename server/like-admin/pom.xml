@@ -30,6 +30,12 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!-- 验证码 -->
+        <dependency>
+            <groupId>com.github.penggle</groupId>
+            <artifactId>kaptcha</artifactId>
+        </dependency>
+
         <!-- SaToken -->
         <dependency>
             <groupId>cn.dev33</groupId>
