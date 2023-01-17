@@ -115,7 +115,7 @@ public class CrontabServiceImpl implements ICrontabService {
     public void add(CrontabCreateValidate createValidate) throws SchedulerException {
         Crontab crontab = new Crontab();
         crontab.setName(createValidate.getName());
-        crontab.setGroups(createValidate.getGroups());
+        crontab.setTypes(createValidate.getGroups());
         crontab.setCommand(createValidate.getCommand());
         crontab.setRules(createValidate.getRules());
         crontab.setStatus(createValidate.getStatus());
@@ -148,7 +148,7 @@ public class CrontabServiceImpl implements ICrontabService {
 
         crontab.setName(updateValidate.getName());
         crontab.setCommand(updateValidate.getCommand());
-        crontab.setGroups(updateValidate.getGroups());
+        crontab.setTypes(updateValidate.getGroups());
         crontab.setRules(updateValidate.getRules());
         crontab.setStatus(updateValidate.getStatus());
         crontab.setRemark(updateValidate.getRemark());
@@ -181,7 +181,7 @@ public class CrontabServiceImpl implements ICrontabService {
         crontab.setDeleteTime(System.currentTimeMillis() / 1000);
         crontabMapper.updateById(crontab);
 
-        scheduler.deleteJob(QuartzUtils.getJobKey(crontab.getId(), crontab.getGroups()));
+        scheduler.deleteJob(QuartzUtils.getJobKey(crontab.getId(), crontab.getTypes()));
     }
 
 }
