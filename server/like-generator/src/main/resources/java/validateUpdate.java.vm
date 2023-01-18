@@ -6,7 +6,9 @@ import javax.validation.constraints.*;
 #foreach ($column in $columns)
 #if ($column.javaType.equals("BigDecimal"))
 import java.math.BigDecimal;
-#break
+#end
+#if ($column.javaType.equals("Date"))
+import java.util.Date;
 #end
 #end
 import ${packageName}.common.validator.annotation.IDMust;
