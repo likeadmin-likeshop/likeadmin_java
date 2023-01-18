@@ -34,6 +34,25 @@
                                 </template>
                             </el-input>
                         </el-form-item>
+                        <el-form-item prop="code">
+                            <div class="flex items-center">
+                                <el-input
+                                    v-model="formData.code"
+                                    placeholder="请输入验证码"
+                                    @keyup.enter="handleLogin"
+                                >
+                                    <template #prepend>
+                                        <icon name="local-icon-anquan" />
+                                    </template>
+                                </el-input>
+                                <div
+                                    class="ml-4 w-[100px] flex-none cursor-pointer"
+                                    @click="getLoginCaptcha"
+                                >
+                                    <img class="w-full" :src="codeImg" alt="" />
+                                </div>
+                            </div>
+                        </el-form-item>
                     </el-form>
                     <div class="mb-5">
                         <el-checkbox v-model="remAccount" label="记住账号"></el-checkbox>
@@ -58,6 +77,7 @@ import cache from '@/utils/cache'
 import { ACCOUNT_KEY } from '@/enums/cacheEnums'
 import { PageEnum } from '@/enums/pageEnum'
 import { useLockFn } from '@/hooks/useLockFn'
+import { loginCaptcha } from '@/api/user'
 const passwordRef = shallowRef<InputInstance>()
 const formRef = shallowRef<FormInstance>()
 const appStore = useAppStore()
@@ -66,9 +86,12 @@ const route = useRoute()
 const router = useRouter()
 const remAccount = ref(false)
 const config = computed(() => appStore.config)
+const codeImg = ref()
 const formData = reactive({
     account: '',
-    password: ''
+    password: '',
+    code: '',
+    uuid: ''
 })
 const rules = {
     account: [
@@ -84,7 +107,20 @@ const rules = {
             message: '请输入密码',
             trigger: ['blur']
         }
+    ],
+    code: [
+        {
+            required: true,
+            message: '请输入验证码',
+            trigger: ['blur']
+        }
     ]
+}
+
+const getLoginCaptcha = async () => {
+    const data = await loginCaptcha()
+    formData.uuid = data.uuid
+    codeImg.value = data.img
 }
 // 回车按键监听
 const handleEnter = () => {
@@ -101,7 +137,11 @@ const handleLogin = async () => {
         remember: remAccount.value,
         account: remAccount.value ? formData.account : ''
     })
-    await userStore.login(formData)
+    try {
+        await userStore.login(formData)
+    } catch (error) {
+        getLoginCaptcha()
+    }
     const {
         query: { redirect }
     } = route
@@ -112,6 +152,7 @@ const { isLock, lockFn: lockLogin } = useLockFn(handleLogin)
 
 onMounted(() => {
     const value = cache.get(ACCOUNT_KEY)
+    getLoginCaptcha()
     if (value?.remember) {
         remAccount.value = value.remember
         formData.account = value.account
@@ -125,6 +166,9 @@ onMounted(() => {
     @apply min-h-screen bg-no-repeat bg-center bg-cover;
     .login-card {
         height: 400px;
+        :deep(.el-input-group__prepend) {
+            padding: 0 15px;
+        }
     }
 }
 </style>

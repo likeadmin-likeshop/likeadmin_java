@@ -6,6 +6,11 @@ export function login(params: Record<string, any>) {
     return request.post({ url: '/system/login', params: { ...params, terminal: config.terminal } })
 }
 
+// 登录
+export function loginCaptcha() {
+    return request.get({ url: '/system/captcha' })
+}
+
 // 退出登录
 export function logout() {
     return request.post({ url: '/system/logout' })
