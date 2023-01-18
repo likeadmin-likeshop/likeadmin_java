@@ -1,6 +1,14 @@
 # 项目配置
 like:
   upload-directory: /www/uploads/likeadmin-java/ # 上传目录
+  # 验证码配置
+  captcha:
+    # 是否开启验证码
+    status: true
+    # 验证码有效时长
+    expire: 120
+    # 验证码缓存键名
+    token: "captcha:key:"
 
 # 服务配置
 server:

@@ -46,6 +46,7 @@ public class ArticleCreateValidate implements Serializable {
 
     private String summary = "";
 
+    @DecimalMin(value = "0", message = "初始浏览量不能少于0")
     private Integer visit = 0;
 
 }

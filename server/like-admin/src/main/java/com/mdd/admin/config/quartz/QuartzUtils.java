@@ -53,7 +53,7 @@ public class QuartzUtils {
      */
     public static void createScheduleJob(Scheduler scheduler, Crontab job) throws SchedulerException {
         Integer jobId     = job.getId();
-        String jobGroup   = job.getGroups();
+        String jobGroup   = job.getTypes();
         String expression = job.getRules();
 
         // 构建任务

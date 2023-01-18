@@ -2,10 +2,7 @@ package com.mdd.admin.service.impl;
 
 import com.mdd.admin.service.IIndexService;
 import com.mdd.common.config.GlobalConfig;
-import com.mdd.common.util.ArrayUtils;
-import com.mdd.common.util.ConfigUtils;
-import com.mdd.common.util.TimeUtils;
-import com.mdd.common.util.UrlUtils;
+import com.mdd.common.util.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -71,7 +68,10 @@ public class IndexServiceImpl implements IIndexService {
         Map<String, String> website   = ConfigUtils.get("website");
         String copyright = ConfigUtils.get("website", "copyright", "");
 
+        String captchaStatus = YmlUtils.get("like.captcha.status");
+
         Map<String, Object> map = new LinkedHashMap<>();
+        map.put("loginCaptcha", StringUtils.isNotNull(captchaStatus) && captchaStatus.equals("true"));
         map.put("webName", website.getOrDefault("name", ""));
         map.put("webLogo", UrlUtils.toAbsoluteUrl(website.getOrDefault("logo", "")));
         map.put("webFavicon", UrlUtils.toAbsoluteUrl(website.getOrDefault("favicon", "")));

@@ -22,6 +22,7 @@ export enum RequestCodeEnum {
     LOGIN_DISABLE_ERROR = 331, //登陆账号已被禁用
     TOKEN_EMPTY = 332, // TOKEN参数为空
     TOKEN_INVALID = 333, // TOKEN参数无效
+    VERIFICATION_CODE_ERROR = 334, // 验证码错误
     NO_PERMISSTION = 403, //无相关权限
     REQUEST_404_ERROR = 404, //请求接口不存在
     SYSTEM_ERROR = 500 //系统错误

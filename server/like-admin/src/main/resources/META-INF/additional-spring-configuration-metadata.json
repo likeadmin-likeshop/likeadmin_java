@@ -9,6 +9,21 @@
       "name": "like.production",
       "type": "java.lang.String",
       "description": "Description for like.production."
+    },
+    {
+      "name": "like.captcha.status",
+      "type": "java.lang.String",
+      "description": "Description for like.captcha.status."
+    },
+    {
+      "name": "like.captcha.expire",
+      "type": "java.lang.String",
+      "description": "Description for like.captcha.expire."
+    },
+    {
+      "name": "like.captcha.token",
+      "type": "java.lang.String",
+      "description": "Description for like.captcha.token."
     }
   ]
 }

@@ -2,17 +2,14 @@ package com.mdd.admin.controller.system;
 
 import com.mdd.admin.service.ISystemLoginService;
 import com.mdd.admin.validate.system.SystemAdminLoginsValidate;
+import com.mdd.admin.vo.system.SystemCaptchaVo;
 import com.mdd.admin.vo.system.SystemLoginVo;
 import com.mdd.common.core.AjaxResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 /**
  * 系统登录管理
@@ -23,6 +20,18 @@ public class SystemLoginController {
 
     @Resource
     ISystemLoginService iSystemLoginService;
+
+    /**
+     * 验证码
+     *
+     * @author fzr
+     * @return AjaxResult<SystemCaptchaVo>
+     */
+    @GetMapping("/captcha")
+    public AjaxResult<SystemCaptchaVo> captcha() {
+        SystemCaptchaVo vo = iSystemLoginService.captcha();
+        return AjaxResult.success(vo);
+    }
 
     /**
      * 登录系统
