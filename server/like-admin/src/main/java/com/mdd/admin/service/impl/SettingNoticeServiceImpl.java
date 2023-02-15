@@ -119,7 +119,7 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
 
         Map<String, String> systemParam = ToolsUtils.objectToMap(params.get("systemNotice"));
         Map<String, String> systemMap = ToolsUtils.jsonToMap(noticeSetting.getSystemNotice());
-        if (!StringUtils.isNotEmpty(systemMap)) {
+        if (StringUtils.isNotEmpty(systemMap)) {
             systemMap.put("title", systemParam.getOrDefault("title", ""));
             systemMap.put("content", systemParam.getOrDefault("content", ""));
             systemMap.put("tips", systemParam.getOrDefault("tips", ""));
@@ -128,7 +128,7 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
 
         Map<String, String> smsParam = ToolsUtils.objectToMap(params.get("smsNotice"));
         Map<String, String> smsMap = ToolsUtils.jsonToMap(noticeSetting.getSmsNotice());
-        if (!StringUtils.isNotEmpty(smsMap)) {
+        if (StringUtils.isNotEmpty(smsMap)) {
             smsMap.put("templateId", smsParam.getOrDefault("templateId", ""));
             smsMap.put("content", smsParam.getOrDefault("content", ""));
             smsMap.put("tips", smsParam.getOrDefault("tips", ""));
@@ -137,7 +137,7 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
 
         Map<String, String> oaParam = ToolsUtils.objectToMap(params.get("oaNotice"));
         Map<String, String> oaMap = ToolsUtils.jsonToMap(noticeSetting.getOaNotice());
-        if (!StringUtils.isNotEmpty(oaMap)) {
+        if (StringUtils.isNotEmpty(oaMap)) {
             oaMap.put("name", oaParam.getOrDefault("name", ""));
             oaMap.put("first", oaParam.getOrDefault("first", ""));
             oaMap.put("remark", oaParam.getOrDefault("remark", ""));
@@ -150,7 +150,7 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
 
         Map<String, String> mnpParam = ToolsUtils.objectToMap(params.get("mnpNotice"));
         Map<String, String> mnpMap = ToolsUtils.jsonToMap(noticeSetting.getMnpNotice());
-        if (!StringUtils.isNotEmpty(mnpParam)) {
+        if (StringUtils.isNotEmpty(mnpParam)) {
             mnpMap.put("templateId", mnpParam.get("templateId"));
             mnpMap.put("templateSn", mnpParam.get("templateSn"));
             mnpMap.put("tpl", mnpParam.get("tpl"));
