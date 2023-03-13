@@ -1,5 +1,6 @@
 package com.mdd.admin.controller;
 
+import com.mdd.common.aop.NotLogin;
 import com.mdd.admin.service.IIndexService;
 import com.mdd.common.core.AjaxResult;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,7 @@ public class IndexController {
      * @author fzr
      * @return AjaxResult<Map<String, Object>
      */
+    @NotLogin
     @GetMapping("/config")
     public AjaxResult<Map<String, Object>> config() {
         Map<String, Object> map = iIndexService.config();

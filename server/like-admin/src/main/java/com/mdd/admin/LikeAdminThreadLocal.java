@@ -55,7 +55,7 @@ public class LikeAdminThreadLocal {
     /**
      * 获取角色ID
      */
-    public static List<Integer> getRoleId() {
+    public static List<Integer> getRoleIds() {
         String roleIds = LikeAdminThreadLocal.get("roleIds").toString();
         if (roleIds.equals("") || roleIds.equals("0")) {
             return Collections.emptyList();

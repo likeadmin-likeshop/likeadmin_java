@@ -1,5 +1,6 @@
 package com.mdd.admin.controller.setting;
 
+import com.mdd.common.aop.NotPower;
 import com.mdd.admin.service.ISettingDictTypeService;
 import com.mdd.admin.validate.commons.IdsValidate;
 import com.mdd.admin.validate.commons.PageValidate;
@@ -32,6 +33,7 @@ public class SettingDictTypeController {
      * @author fzr
      * @return AjaxResult<List<SettingDictTypeVo>>
      */
+    @NotPower
     @GetMapping("/all")
     public AjaxResult<List<SettingDictTypeVo>> all() {
         List<SettingDictTypeVo> list = iSettingDictTypeService.all();

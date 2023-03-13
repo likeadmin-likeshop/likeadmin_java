@@ -1,6 +1,6 @@
 package com.mdd.admin.controller.setting;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.ISettingSmsService;
 import com.mdd.common.core.AjaxResult;
 import org.springframework.web.bind.annotation.*;

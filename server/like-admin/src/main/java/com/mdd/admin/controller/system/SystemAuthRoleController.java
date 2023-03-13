@@ -1,6 +1,7 @@
 package com.mdd.admin.controller.system;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.admin.aop.Log;
+import com.mdd.common.aop.NotPower;
 import com.mdd.admin.service.ISystemAuthRoleService;
 import com.mdd.admin.validate.commons.IdValidate;
 import com.mdd.admin.validate.commons.PageValidate;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 系统角色管理
@@ -33,6 +33,7 @@ public class SystemAuthRoleController {
      * @author fzr
      * @return AjaxResult<List<SystemAuthRoleVo>>
      */
+    @NotPower
     @GetMapping("/all")
     public AjaxResult<List<SystemAuthRoleVo>> all() {
         List<SystemAuthRoleVo> list = iSystemAuthRoleService.all();

@@ -1,7 +1,8 @@
 package com.mdd.admin.controller.system;
 
 import com.mdd.admin.LikeAdminThreadLocal;
-import com.mdd.admin.config.aop.Log;
+import com.mdd.admin.aop.Log;
+import com.mdd.common.aop.NotPower;
 import com.mdd.admin.service.ISystemAuthAdminService;
 import com.mdd.admin.validate.commons.IdValidate;
 import com.mdd.admin.validate.commons.PageValidate;
@@ -51,6 +52,7 @@ public class SystemAuthAdminController {
      * @author fzr
      * @return AjaxResult<SystemAuthSelfVo>
      */
+    @NotPower
     @GetMapping("/self")
     public AjaxResult<SystemAuthAdminSelvesVo> self() {
         Integer adminId = LikeAdminThreadLocal.getAdminId();
@@ -106,6 +108,7 @@ public class SystemAuthAdminController {
      * @author fzr
      * @return AjaxResult<Object>
      */
+    @NotPower
     @Log(title = "管理员更新")
     @PostMapping("/upInfo")
     public AjaxResult<Object> upInfo(@Validated @RequestBody SystemAdminUpInfoValidate upInfoValidate) {

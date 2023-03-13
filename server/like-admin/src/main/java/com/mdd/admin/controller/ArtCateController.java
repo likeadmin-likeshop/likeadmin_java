@@ -1,6 +1,7 @@
 package com.mdd.admin.controller;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.admin.aop.Log;
+import com.mdd.common.aop.NotPower;
 import com.mdd.admin.service.IArtCateService;
 import com.mdd.admin.validate.ArtCateCreateValidate;
 import com.mdd.admin.validate.ArtCateUpdateValidate;
@@ -33,6 +34,7 @@ public class ArtCateController {
      * @author fzr
      * @return AjaxResult<List<ArticleCateVo>>
      */
+    @NotPower
     @GetMapping("/all")
     public AjaxResult<List<ArticleCateVo>> all() {
         List<ArticleCateVo> list = iArtCateService.all();

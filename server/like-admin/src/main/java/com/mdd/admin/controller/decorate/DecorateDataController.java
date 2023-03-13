@@ -1,5 +1,6 @@
 package com.mdd.admin.controller.decorate;
 
+import com.mdd.common.aop.NotPower;
 import com.mdd.admin.service.IDecorateDataService;
 import com.mdd.admin.vo.decorate.DecorateDataArticleVo;
 import com.mdd.common.core.AjaxResult;
@@ -28,6 +29,7 @@ public class DecorateDataController {
      * @param limit 条数
      * @return AjaxResult<List<DecorateDataArticleVo>>
      */
+    @NotPower
     @GetMapping("/article")
     public AjaxResult<List<DecorateDataArticleVo>> article(@RequestParam(defaultValue = "10") Integer limit) {
         List<DecorateDataArticleVo> list = iDecorateDataService.article(limit);

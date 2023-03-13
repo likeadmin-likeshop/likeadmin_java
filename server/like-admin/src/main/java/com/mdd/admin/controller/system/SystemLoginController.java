@@ -1,5 +1,7 @@
 package com.mdd.admin.controller.system;
 
+import com.mdd.common.aop.NotLogin;
+import com.mdd.common.aop.NotPower;
 import com.mdd.admin.service.ISystemLoginService;
 import com.mdd.admin.validate.system.SystemAdminLoginsValidate;
 import com.mdd.admin.vo.system.SystemCaptchaVo;
@@ -27,6 +29,7 @@ public class SystemLoginController {
      * @author fzr
      * @return AjaxResult<SystemCaptchaVo>
      */
+    @NotLogin
     @GetMapping("/captcha")
     public AjaxResult<SystemCaptchaVo> captcha() {
         SystemCaptchaVo vo = iSystemLoginService.captcha();
@@ -40,6 +43,7 @@ public class SystemLoginController {
      * @param loginsValidate 登录参数
      * @return AjaxResult<SystemLoginVo>
      */
+    @NotLogin
     @PostMapping("/login")
     public AjaxResult<SystemLoginVo> login(@Validated() @RequestBody SystemAdminLoginsValidate loginsValidate) {
         SystemLoginVo vo = iSystemLoginService.login(loginsValidate);
@@ -53,6 +57,7 @@ public class SystemLoginController {
      * @param request 请求接口
      * @return AjaxResult<Object>
      */
+    @NotPower
     @PostMapping("/logout")
     public AjaxResult<Object> logout(HttpServletRequest request) {
         iSystemLoginService.logout(request.getHeader("token"));

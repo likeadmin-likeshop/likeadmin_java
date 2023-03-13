@@ -1,7 +1,8 @@
-package com.mdd.admin.config.aop;
+package com.mdd.admin.aop.aspect;
 
 import com.alibaba.fastjson2.JSON;
 import com.mdd.admin.LikeAdminThreadLocal;
+import com.mdd.admin.aop.Log;
 import com.mdd.common.entity.system.SystemLogOperate;
 import com.mdd.common.mapper.system.SystemLogOperateMapper;
 import com.mdd.common.util.IpUtils;
@@ -43,7 +44,7 @@ public class LogAspect {
     /**
      * 声明切面点拦截那些类
      */
-    @Pointcut("@annotation(com.mdd.admin.config.aop.Log)")
+    @Pointcut("@annotation(com.mdd.admin.aop.Log)")
     private void pointCutMethodController() {}
 
     /**

@@ -1,6 +1,6 @@
 package com.mdd.admin.controller;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.IArticleService;
 import com.mdd.admin.validate.ArticleCreateValidate;
 import com.mdd.admin.validate.ArticleSearchValidate;

@@ -1,8 +1,8 @@
 package com.mdd.admin.controller;
 
 import com.mdd.admin.LikeAdminThreadLocal;
-import com.mdd.admin.config.aop.Log;
-import com.mdd.admin.config.aop.RequestType;
+import com.mdd.admin.aop.Log;
+import com.mdd.admin.aop.aspect.RequestType;
 import com.mdd.admin.service.IAlbumsService;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.AlbumEnum;

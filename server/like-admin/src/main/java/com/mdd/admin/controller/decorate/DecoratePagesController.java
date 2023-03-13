@@ -1,6 +1,6 @@
 package com.mdd.admin.controller.decorate;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.IDecoratePageService;
 import com.mdd.admin.validate.DecoratePageValidate;
 import com.mdd.admin.vo.decorate.DecoratePageVo;

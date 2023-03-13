@@ -1,6 +1,6 @@
 package com.mdd.admin.controller.channel;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.IChannelH5ConfigService;
 import com.mdd.admin.validate.channel.ChannelH5Validate;
 import com.mdd.admin.vo.channel.ChannelH5Vo;

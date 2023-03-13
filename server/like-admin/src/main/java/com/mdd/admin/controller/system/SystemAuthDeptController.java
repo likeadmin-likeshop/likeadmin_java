@@ -1,6 +1,7 @@
 package com.mdd.admin.controller.system;
 
 import com.alibaba.fastjson2.JSONArray;
+import com.mdd.common.aop.NotPower;
 import com.mdd.admin.service.ISystemAuthDeptService;
 import com.mdd.admin.validate.commons.IdValidate;
 import com.mdd.admin.validate.system.SystemDeptCreateValidate;
@@ -31,6 +32,7 @@ public class SystemAuthDeptController {
      * @author fzr
      * @return AjaxResult<List<SystemAuthDeptVo>>
      */
+    @NotPower
     @GetMapping("/all")
     public AjaxResult<List<SystemAuthDeptVo>> all() {
         List<SystemAuthDeptVo> list = iSystemAuthDeptService.all();

@@ -148,8 +148,6 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         systemAuthMenuMapper.insert(model);
-
-        RedisUtils.del(AdminConfig.backstageRolesKey);
     }
 
     /**
@@ -178,8 +176,6 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         model.setIsDisable(updateValidate.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         systemAuthMenuMapper.updateById(model);
-
-        RedisUtils.del(AdminConfig.backstageRolesKey);
     }
 
     /**
@@ -205,8 +201,6 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
 
         systemAuthMenuMapper.deleteById(id);
         iSystemAuthPermService.batchDeleteByMenuId(id);
-
-        RedisUtils.del(AdminConfig.backstageRolesKey);
     }
 
 }

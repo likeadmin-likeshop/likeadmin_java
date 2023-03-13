@@ -1,6 +1,6 @@
 package com.mdd.admin.controller.monitor;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.admin.aop.Log;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.ServerResult;
 import org.springframework.web.bind.annotation.GetMapping;

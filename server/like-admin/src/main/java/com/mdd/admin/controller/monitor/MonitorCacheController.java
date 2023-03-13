@@ -1,7 +1,7 @@
 package com.mdd.admin.controller.monitor;
 
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.admin.aop.Log;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.util.StringUtils;
 import org.springframework.data.redis.connection.RedisServerCommands;

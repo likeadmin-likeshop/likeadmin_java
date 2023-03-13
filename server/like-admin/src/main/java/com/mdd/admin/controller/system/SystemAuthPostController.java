@@ -1,5 +1,6 @@
 package com.mdd.admin.controller.system;
 
+import com.mdd.common.aop.NotPower;
 import com.mdd.admin.service.ISystemAuthPostService;
 import com.mdd.admin.validate.commons.IdValidate;
 import com.mdd.admin.validate.commons.PageValidate;
@@ -32,6 +33,7 @@ public class SystemAuthPostController {
      * @author fzr
      * @return AjaxResult<List<SystemAuthPostVo>>
      */
+    @NotPower
     @GetMapping("/all")
     public AjaxResult<List<SystemAuthPostVo>> all() {
         List<SystemAuthPostVo> list = iSystemAuthPostService.all();

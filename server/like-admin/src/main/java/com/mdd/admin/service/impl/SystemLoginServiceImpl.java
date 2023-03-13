@@ -149,7 +149,6 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
 
             // 记录登录日志
             this.recordLoginLog(sysAdmin.getId(), loginsValidate.getUsername(), "");
-            iSystemAuthAdminService.cacheAdminUserByUid(sysAdmin.getId());
 
             // 响应登录信息
             SystemLoginVo vo = new SystemLoginVo();

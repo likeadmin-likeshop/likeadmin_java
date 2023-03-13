@@ -1,6 +1,6 @@
 package com.mdd.admin.controller.channel;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.IChannelMpConfigService;
 import com.mdd.admin.validate.channel.ChannelMpValidate;
 import com.mdd.admin.vo.channel.ChannelMpVo;

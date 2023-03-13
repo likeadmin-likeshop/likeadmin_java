@@ -1,4 +1,4 @@
-package com.mdd.admin.config;
+package com.mdd.admin.config.stp;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;

@@ -1,7 +1,7 @@
 package com.mdd.admin.controller;
 
 import com.alibaba.fastjson2.JSONArray;
-import com.mdd.admin.config.aop.Log;
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.IAlbumsService;
 import com.mdd.admin.validate.AlbumCateValidate;
 import com.mdd.admin.validate.AlbumMoveValidate;

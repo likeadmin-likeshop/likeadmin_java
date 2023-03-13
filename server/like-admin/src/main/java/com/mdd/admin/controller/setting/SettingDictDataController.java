@@ -1,6 +1,7 @@
 package com.mdd.admin.controller.setting;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.mdd.common.aop.NotPower;
 import com.mdd.admin.service.ISettingDictDataService;
 import com.mdd.admin.validate.commons.IdsValidate;
 import com.mdd.admin.validate.commons.PageValidate;
@@ -35,6 +36,7 @@ public class SettingDictDataController {
      * @param params 参数
      * @return jaxResult<List<SettingDictDataVo>>
      */
+    @NotPower
     @GetMapping("/all")
     public AjaxResult<List<SettingDictDataVo>> all(@RequestParam Map<String, String> params) {
         Assert.isFalse(StringUtils.isEmpty(params.get("dictType")), "dictType缺失");

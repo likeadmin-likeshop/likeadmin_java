@@ -1,13 +1,11 @@
 package com.mdd.admin.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
-import com.mdd.admin.config.AdminConfig;
 import com.mdd.admin.service.ISystemAuthAdminService;
 import com.mdd.admin.service.ISystemAuthPermService;
 import com.mdd.admin.validate.commons.PageValidate;
@@ -330,8 +328,6 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         }
 
         systemAuthAdminMapper.updateById(model);
-        this.cacheAdminUserByUid(updateValidate.getId());
-
         if (StringUtils.isNotNull(updateValidate.getPassword()) && StringUtils.isNotEmpty(updateValidate.getPassword())) {
             StpUtil.kickout(updateValidate.getId());
         }
@@ -371,8 +367,6 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         }
 
         systemAuthAdminMapper.updateById(model);
-        this.cacheAdminUserByUid(adminId);
-
         if (StringUtils.isNotNull(upInfoValidate.getPassword()) && StringUtils.isNotEmpty(upInfoValidate.getPassword())) {
             StpUtil.kickout(adminId);
         }
@@ -402,7 +396,6 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         model.setIsDelete(1);
         model.setDeleteTime(System.currentTimeMillis() / 1000);
         systemAuthAdminMapper.updateById(model);
-        this.cacheAdminUserByUid(id);
 
         StpUtil.kickout(id);
     }
@@ -429,37 +422,10 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         systemAuthAdmin.setIsDisable(disable);
         systemAuthAdmin.setUpdateTime(TimeUtils.timestamp());
         systemAuthAdminMapper.updateById(systemAuthAdmin);
-        this.cacheAdminUserByUid(id);
 
         if (disable.equals(1)) {
             StpUtil.kickout(id);
         }
-    }
-
-    /**
-     * 缓存管理员
-     */
-    @Override
-    public void cacheAdminUserByUid(Integer id) {
-        SystemAuthAdmin sysAdmin = systemAuthAdminMapper.selectOne(
-                new QueryWrapper<SystemAuthAdmin>()
-                    .select("id,role_ids,username,nickname,is_multipoint,is_disable,is_delete")
-                    .eq("id", id)
-                    .last("limit 1"));
-
-        Map<String, Object> user = new LinkedHashMap<>();
-        user.put("id", sysAdmin.getId());
-        user.put("roleIds", sysAdmin.getRoleIds());
-        user.put("username", sysAdmin.getUsername());
-        user.put("nickname", sysAdmin.getNickname());
-        user.put("isMultipoint", sysAdmin.getIsMultipoint());
-        user.put("isDisable", sysAdmin.getIsDisable());
-        user.put("isDelete", sysAdmin.getIsDelete());
-
-        Map<String, Object> map  = new LinkedHashMap<>();
-        map.put(String.valueOf(sysAdmin.getId()), JSON.toJSONString(user));
-
-        RedisUtils.hmSet(AdminConfig.backstageManageKey, map);
     }
 
 }

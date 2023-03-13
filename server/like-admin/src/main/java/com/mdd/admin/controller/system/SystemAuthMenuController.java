@@ -2,7 +2,8 @@ package com.mdd.admin.controller.system;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.mdd.admin.LikeAdminThreadLocal;
-import com.mdd.admin.config.aop.Log;
+import com.mdd.admin.aop.Log;
+import com.mdd.common.aop.NotPower;
 import com.mdd.admin.service.ISystemAuthMenuService;
 import com.mdd.admin.validate.commons.IdValidate;
 import com.mdd.admin.validate.system.SystemMenuCreateValidate;
@@ -32,9 +33,10 @@ public class SystemAuthMenuController {
      * @author fzr
      * @return AjaxResult<JSONArray>
      */
+    @NotPower
     @GetMapping("/route")
     public AjaxResult<JSONArray> route() {
-        List<Integer> roleIds = LikeAdminThreadLocal.getRoleId();
+        List<Integer> roleIds = LikeAdminThreadLocal.getRoleIds();
         JSONArray lists = iSystemAuthMenuService.selectMenuByRoleId(roleIds);
         return AjaxResult.success(lists);
     }
@@ -45,6 +47,7 @@ public class SystemAuthMenuController {
      * @author fzr
      * @return AjaxResult<JSONArray>
      */
+    @NotPower
     @GetMapping("/list")
     public AjaxResult<JSONArray> list() {
         JSONArray lists = iSystemAuthMenuService.list();

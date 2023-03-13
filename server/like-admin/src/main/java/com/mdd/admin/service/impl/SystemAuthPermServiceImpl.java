@@ -111,39 +111,4 @@ public class SystemAuthPermServiceImpl implements ISystemAuthPermService {
         systemAuthPermMapper.delete(new QueryWrapper<SystemAuthPerm>().eq("menu_id", menuId));
     }
 
-    /**
-     * 缓存角色菜单
-     *
-     * @author fzr
-     * @param roleId 角色ID
-     */
-    @Override
-    public void cacheRoleMenusByRoleId(Integer roleId) {
-        List<Integer> menuIds  = new LinkedList<>();
-        List<String> menuArray = new LinkedList<>();
-
-        List<SystemAuthPerm> systemAuthPerms = systemAuthPermMapper.selectList(
-                new QueryWrapper<SystemAuthPerm>().eq("role_id", roleId));
-        for (SystemAuthPerm systemAuthPerm : systemAuthPerms) {
-            menuIds.add(systemAuthPerm.getMenuId());
-        }
-
-        if (menuIds.size() > 0) {
-            List<SystemAuthMenu> systemAuthMenus = systemAuthMenuMapper.selectList(new QueryWrapper<SystemAuthMenu>()
-                    .select("id,perms")
-                    .eq("is_disable", 0)
-                    .in("id", menuIds)
-                    .in("menu_type", Arrays.asList("C", "A"))
-                    .orderByAsc(Arrays.asList("menu_sort", "id")));
-
-            for (SystemAuthMenu item : systemAuthMenus) {
-                if (StringUtils.isNotNull(item.getPerms()) && StringUtils.isNotEmpty(item.getPerms())) {
-                    menuArray.add(item.getPerms().trim());
-                }
-            }
-        }
-
-        RedisUtils.hSet(AdminConfig.backstageRolesKey, String.valueOf(roleId), ArrayUtils.listToStringByStr(menuArray, ","));
-    }
-
 }
