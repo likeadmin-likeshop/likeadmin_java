@@ -8,6 +8,9 @@ import java.util.Map;
 @Data
 public class SmsTemplate {
 
+    /** 通知名称 */
+    private String name;
+
     /** 通知类型: 1=业务,2=验证码 */
     private Integer type;
 

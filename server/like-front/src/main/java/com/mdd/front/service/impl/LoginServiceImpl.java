@@ -4,7 +4,6 @@ import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
-import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
 import com.mdd.common.enums.ClientEnum;
@@ -12,6 +11,7 @@ import com.mdd.common.enums.NoticeEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
+import com.mdd.common.plugin.notice.NoticeCheck;
 import com.mdd.common.util.*;
 import com.mdd.front.config.FrontConfig;
 import com.mdd.front.service.ILoginService;
@@ -128,14 +128,10 @@ public class LoginServiceImpl implements ILoginService {
         String code   = params.get("code").toLowerCase();
 
         // 校验验证码
-        int typeCode = NoticeEnum.SMS_LOGIN_CODE.getCode();
-        Object smsCode = RedisUtils.get(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
-        if (StringUtils.isNull(smsCode) || !smsCode.toString().equals(code)) {
+        int sceneCode = NoticeEnum.LOGIN_CODE.getCode();
+        if (!NoticeCheck.verify(sceneCode, code)) {
             throw new OperateException("验证码错误!");
         }
-
-        // 删除验证码
-        RedisUtils.del(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()
@@ -226,14 +222,10 @@ public class LoginServiceImpl implements ILoginService {
         String password = forgetPwdValidate.getPassword();
 
         // 校验验证码
-        int typeCode = NoticeEnum.SMS_FORGOT_PASSWORD_CODE.getCode();
-        Object smsCode = RedisUtils.get(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
-        if (StringUtils.isNull(smsCode) || !smsCode.toString().equals(code)) {
+        int sceneCode = NoticeEnum.FORGOT_PASSWORD_CODE.getCode();
+        if (!NoticeCheck.verify(sceneCode, code)) {
             throw new OperateException("验证码错误!");
         }
-
-        // 删除验证码
-        RedisUtils.del(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()

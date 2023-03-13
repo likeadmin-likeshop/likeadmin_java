@@ -13,6 +13,7 @@ import com.mdd.common.enums.NoticeEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
+import com.mdd.common.plugin.notice.NoticeCheck;
 import com.mdd.common.util.*;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
@@ -214,9 +215,8 @@ public class UserServiceImpl implements IUserService {
         String code   = mobileValidate.getCode().toLowerCase();
 
         // 校验验证码
-        int typeCode = type.equals("bind") ? NoticeEnum.SMS_BIND_MOBILE_CODE.getCode() : NoticeEnum.SMS_CHANGE_MOBILE_CODE.getCode() ;
-        Object smsCode = RedisUtils.get(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
-        if (StringUtils.isNull(smsCode) || !smsCode.toString().equals(code)) {
+        int sceneCode = type.equals("bind") ? NoticeEnum.BIND_MOBILE_CODE.getCode() : NoticeEnum.CHANGE_MOBILE_CODE.getCode() ;
+        if (!NoticeCheck.verify(sceneCode, code)) {
             throw new OperateException("验证码错误!");
         }
 

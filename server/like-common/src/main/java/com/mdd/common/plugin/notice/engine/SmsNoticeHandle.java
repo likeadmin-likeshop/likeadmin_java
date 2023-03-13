@@ -1,11 +1,16 @@
 package com.mdd.common.plugin.notice.engine;
 
 import com.mdd.common.config.GlobalConfig;
-import com.mdd.common.plugin.notice.NoticeParams;
+import com.mdd.common.entity.notice.NoticeRecord;
+import com.mdd.common.enums.NoticeEnum;
+import com.mdd.common.exception.OperateException;
+import com.mdd.common.mapper.notice.NoticeRecordMapper;
+import com.mdd.common.plugin.notice.vo.NoticeSmsVo;
 import com.mdd.common.plugin.notice.template.SmsTemplate;
 import com.mdd.common.plugin.sms.SmsDriver;
 import com.mdd.common.util.ConfigUtils;
 import com.mdd.common.util.RedisUtils;
+import com.mdd.common.util.SpringUtils;
 import com.mdd.common.util.StringUtils;
 
 import java.util.*;
@@ -13,22 +18,24 @@ import java.util.*;
 /**
  * 短信通知
  */
-public class SmsNotice {
+public class SmsNoticeHandle {
 
     /**
      * 发送短信通知
      *
      * @author fzr
-     * @param noticeParams  基础配置
+     * @param noticeSmsVo  基础配置
      * @param smsTemplate   短信模板
      */
-    public void send(NoticeParams noticeParams, SmsTemplate smsTemplate) {
-        String mobile = noticeParams.getMobile();
-        Integer scene = noticeParams.getScene();
+    public void send(NoticeSmsVo noticeSmsVo, SmsTemplate smsTemplate) {
+        // 基础参数
+        String mobile = noticeSmsVo.getMobile();
+        Integer scene = noticeSmsVo.getScene();
 
+        // 模板参数
         Map<String, String> params = new LinkedHashMap<>();
-        if (StringUtils.isNotNull(noticeParams.getParams())) {
-            for (String s : noticeParams.getParams()) {
+        if (StringUtils.isNotNull(noticeSmsVo.getParams())) {
+            for (String s : noticeSmsVo.getParams()) {
                 String[] arr =  s.split(":");
                 String key = arr[0].trim();
                 String val = arr[1].trim();
@@ -36,14 +43,43 @@ public class SmsNotice {
             }
         }
 
+        // 消息记录
+        NoticeRecordMapper noticeRecordMapper = SpringUtils.getBean(NoticeRecordMapper.class);
+        int expire = StringUtils.isNull(noticeSmsVo.getExpire()) ? 0 : noticeSmsVo.getExpire();
+        NoticeRecord noticeRecord = new NoticeRecord();
+        noticeRecord.setScene(scene);
+        noticeRecord.setUserId(0);
+        noticeRecord.setAccount(mobile);
+        noticeRecord.setTitle(smsTemplate.getName());
+        noticeRecord.setCode(params.getOrDefault("code", ""));
+        noticeRecord.setContent(this.getContent(params, smsTemplate.getContent()));
+        noticeRecord.setReceiver(NoticeEnum.SENDER_SMS.getCode());
+        noticeRecord.setStatus(NoticeEnum.STATUS_WAIT.getCode());
+        noticeRecord.setIsRead(NoticeEnum.VIEW_UNREAD.getCode());
+        noticeRecord.setIsCaptcha(smsTemplate.getType().equals(2) ? 1 : 0);
+        noticeRecord.setExpireTime(expire + (System.currentTimeMillis() / 1000));
+        noticeRecord.setCreateTime(System.currentTimeMillis() / 1000);
+        noticeRecord.setUpdateTime(System.currentTimeMillis() / 1000);
+        noticeRecordMapper.insert(noticeRecord);
+
+        // 消息发送
         if (StringUtils.isNotEmpty(mobile)) {
-            (new SmsDriver())
-                    .setScene(scene)
-                    .setMobile(mobile)
-                    .setTemplateCode(smsTemplate.getTemplateId())
-                    .setTemplateParam(this.getSmsParams(params, smsTemplate.getContent()))
-                    .setSmsContent(this.getContent(params, smsTemplate.getContent()))
-                    .sendSms();
+            try {
+                (new SmsDriver())
+                        .setMobile(mobile)
+                        .setTemplateCode(smsTemplate.getTemplateId())
+                        .setTemplateParam(this.getSmsParams(params, smsTemplate.getContent()))
+                        .sendSms();
+
+                noticeRecord.setStatus(NoticeEnum.STATUS_OK.getCode());
+                noticeRecord.setUpdateTime(System.currentTimeMillis() / 1000);
+                noticeRecordMapper.updateById(noticeRecord);
+            } catch (OperateException e) {
+                noticeRecord.setError(e.getMsg());
+                noticeRecord.setStatus(NoticeEnum.STATUS_FAIL.getCode());
+                noticeRecord.setUpdateTime(System.currentTimeMillis() / 1000);
+                noticeRecordMapper.updateById(noticeRecord);
+            }
 
             // 通知类型: [1=业务, 2=验证码]
             if (smsTemplate.getType().equals(2) && StringUtils.isNotNull(params.get("code"))) {

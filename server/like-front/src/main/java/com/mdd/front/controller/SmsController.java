@@ -1,13 +1,13 @@
 package com.mdd.front.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.entity.system.SystemLogSms;
+import com.mdd.common.entity.notice.NoticeRecord;
+import com.mdd.common.enums.NoticeEnum;
 import com.mdd.common.exception.OperateException;
-import com.mdd.common.mapper.system.SystemLogSmsMapper;
+import com.mdd.common.mapper.notice.NoticeRecordMapper;
 import com.mdd.common.plugin.notice.NoticeDriver;
-import com.mdd.common.plugin.notice.NoticeParams;
+import com.mdd.common.plugin.notice.vo.NoticeSmsVo;
 import com.mdd.common.util.StringUtils;
 import com.mdd.common.util.ToolsUtils;
 import com.mdd.front.validate.commons.SmsValidate;
@@ -28,7 +28,7 @@ import java.util.Arrays;
 public class SmsController {
 
     @Resource
-    SystemLogSmsMapper systemLogSmsMapper;
+    NoticeRecordMapper noticeRecordMapper;
 
     /**
      * 发送短信
@@ -39,30 +39,28 @@ public class SmsController {
      */
     @PostMapping("/send")
     public AjaxResult<Object> send(@Validated @RequestBody SmsValidate smsValidate) {
-        Assert.notNull(smsValidate.getMobile(), "mobile参数缺失!");
-        Assert.notNull(smsValidate.getScene(), "scene参数缺失!");
-
-        SystemLogSms systemLogSms = systemLogSmsMapper.selectOne(new QueryWrapper<SystemLogSms>()
+        NoticeRecord noticeRecord = noticeRecordMapper.selectOne(new QueryWrapper<NoticeRecord>()
                 .eq("mobile", smsValidate.getMobile())
                 .eq("scene", smsValidate.getScene())
-                .in("status", Arrays.asList(0, 1))
+                .eq("status", Arrays.asList(NoticeEnum.STATUS_WAIT, NoticeEnum.STATUS_OK))
                 .orderByDesc("id")
                 .last("limit 1"));
 
-        if (StringUtils.isNotNull(systemLogSms)) {
-            if (systemLogSms.getCreateTime() >= (System.currentTimeMillis() / 1000 - 60)){
+        if (StringUtils.isNotNull(noticeRecord)) {
+            if (noticeRecord.getCreateTime() >= (System.currentTimeMillis() / 1000 - 60)){
                 throw new OperateException("操作频繁,请稍后再试!");
             }
         }
 
-        NoticeParams params = new NoticeParams()
+        NoticeSmsVo params = new NoticeSmsVo()
                 .setScene(smsValidate.getScene())
                 .setMobile(smsValidate.getMobile())
+                .setExpire(900)
                 .setParams(new String[] {
                     "code:" + ToolsUtils.randomInt(4)
                 });
 
-        (new NoticeDriver()).handle(params);
+        NoticeDriver.handle(params);
         return AjaxResult.success();
     }
 

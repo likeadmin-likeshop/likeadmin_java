@@ -1,22 +1,16 @@
 package com.mdd.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.mdd.admin.config.AdminConfig;
 import com.mdd.admin.service.ISystemAuthPermService;
-import com.mdd.common.entity.system.SystemAuthMenu;
 import com.mdd.common.entity.system.SystemAuthPerm;
 import com.mdd.common.entity.system.SystemAuthRole;
-import com.mdd.common.mapper.system.SystemAuthMenuMapper;
 import com.mdd.common.mapper.system.SystemAuthPermMapper;
 import com.mdd.common.mapper.system.SystemAuthRoleMapper;
-import com.mdd.common.util.ArrayUtils;
-import com.mdd.common.util.RedisUtils;
 import com.mdd.common.util.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,9 +22,6 @@ public class SystemAuthPermServiceImpl implements ISystemAuthPermService {
 
     @Resource
     SystemAuthPermMapper systemAuthPermMapper;
-
-    @Resource
-    SystemAuthMenuMapper systemAuthMenuMapper;
 
     @Resource
     SystemAuthRoleMapper systemAuthRoleMapper;

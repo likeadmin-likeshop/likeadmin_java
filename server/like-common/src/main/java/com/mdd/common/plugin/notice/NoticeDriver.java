@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.common.entity.notice.NoticeSetting;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.notice.NoticeSettingMapper;
-import com.mdd.common.plugin.notice.engine.SmsNotice;
+import com.mdd.common.plugin.notice.engine.SmsNoticeHandle;
 import com.mdd.common.plugin.notice.template.SmsTemplate;
+import com.mdd.common.plugin.notice.vo.NoticeSmsVo;
 import com.mdd.common.util.SpringUtils;
 import com.mdd.common.util.StringUtils;
 
@@ -14,12 +15,12 @@ import com.mdd.common.util.StringUtils;
  */
 public class NoticeDriver {
 
-    public void handle(NoticeParams noticeParams) {
-        // 获取场景模板
+    public static void handle(NoticeSmsVo noticeSmsVo) {
+        // 场景模板
         NoticeSettingMapper noticeSettingMapper = SpringUtils.getBean(NoticeSettingMapper.class);
         NoticeSetting noticeSetting = noticeSettingMapper.selectOne(
                 new QueryWrapper<NoticeSetting>()
-                        .eq("scene", noticeParams.getScene())
+                        .eq("scene", noticeSmsVo.getScene())
                         .eq("is_delete", 0)
                         .last("limit 1"));
 
@@ -29,10 +30,11 @@ public class NoticeDriver {
 
         // 短信通知
         SmsTemplate smsTemplate = new SmsTemplate();
+        smsTemplate.setName(noticeSetting.getName());
         smsTemplate.setType(noticeSetting.getType());
         smsTemplate.setParams(noticeSetting.getSmsNotice());
         if (StringUtils.isNotNull(smsTemplate.getStatus()) && smsTemplate.getStatus().equals(1)) {
-            (new SmsNotice()).send(noticeParams, smsTemplate);
+            (new SmsNoticeHandle()).send(noticeSmsVo, smsTemplate);
         }
     }
 
