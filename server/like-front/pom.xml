@@ -17,10 +17,22 @@
 
     <!-- 项目管理 -->
     <dependencies>
-        <!-- 公共依赖 -->
+        <!-- 全局工具 -->
         <dependency>
             <groupId>org.mdd</groupId>
             <artifactId>like-common</artifactId>
+        </dependency>
+
+        <!-- SaToken -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- SaToken-Redis -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-dao-redis-jackson</artifactId>
         </dependency>
     </dependencies>
 

@@ -1,5 +1,6 @@
 package com.mdd.front.controller;
 
+import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.AlbumEnum;
 import com.mdd.common.exception.OperateException;
@@ -28,6 +29,7 @@ public class UploadController {
      * @param request 请求对象
      * @return AjaxResult<UploadFilesVo>
      */
+    @NotLogin
     @PostMapping("/image")
     public AjaxResult<UploadFilesVo> image(HttpServletRequest request) {
         MultipartFile multipartFile;

@@ -1,6 +1,6 @@
 package com.mdd.common.plugin.sms.engine;
 
-import com.mdd.common.util.ToolsUtils;
+import com.mdd.common.util.ToolUtils;
 
 import javax.net.ssl.*;
 import java.io.*;
@@ -241,7 +241,7 @@ public class HuaweiSms {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         String time = sdf.format(new Date()); //Created
-        String nonce = ToolsUtils.makeUUID().replace("-", "");
+        String nonce = ToolUtils.makeUUID().replace("-", "");
 
         MessageDigest md;
         byte[] passwordDigest = null;

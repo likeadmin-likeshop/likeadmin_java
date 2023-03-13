@@ -1,6 +1,5 @@
 package com.mdd.common.plugin.notice.engine;
 
-import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.entity.notice.NoticeRecord;
 import com.mdd.common.enums.NoticeEnum;
 import com.mdd.common.exception.OperateException;
@@ -9,7 +8,6 @@ import com.mdd.common.plugin.notice.vo.NoticeSmsVo;
 import com.mdd.common.plugin.notice.template.SmsTemplate;
 import com.mdd.common.plugin.sms.SmsDriver;
 import com.mdd.common.util.ConfigUtils;
-import com.mdd.common.util.RedisUtils;
 import com.mdd.common.util.SpringUtils;
 import com.mdd.common.util.StringUtils;
 
@@ -79,12 +77,6 @@ public class SmsNoticeHandle {
                 noticeRecord.setStatus(NoticeEnum.STATUS_FAIL.getCode());
                 noticeRecord.setUpdateTime(System.currentTimeMillis() / 1000);
                 noticeRecordMapper.updateById(noticeRecord);
-            }
-
-            // 通知类型: [1=业务, 2=验证码]
-            if (smsTemplate.getType().equals(2) && StringUtils.isNotNull(params.get("code"))) {
-                String code = params.get("code").toLowerCase();
-                RedisUtils.set(GlobalConfig.redisSmsCode+scene+":"+mobile, code, 900);
             }
         }
     }

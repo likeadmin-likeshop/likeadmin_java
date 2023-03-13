@@ -66,3 +66,14 @@ mybatis-plus:
       table-prefix: la_
   configuration-properties:
     prefix: la_
+
+# Sa-token配置
+sa-token:
+  token-name: token       # token的名称
+  timeout: 2592000        # token有效期单位s(默认30天,-1代表永不过期)
+  activity-timeout: -1    # token临时有效期(指定时间无操作掉线)
+  is-concurrent: true     # 是否允许同一账号并发登录
+  is-share: false         # 多人同登账号共用token
+  token-style: random-64  # token生成的风格
+  is-print: false         # 打印版本字符画
+  is-log: false           # 是否输出操作日志

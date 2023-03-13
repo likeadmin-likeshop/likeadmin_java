@@ -34,4 +34,7 @@
     <tree path="/like-admin/src/main/java/com/mdd/admin/crontab" title="任务层"/>
     <tree path="/like-common/src/main/java/com/mdd/common/util" title="公共工具"/>
     <tree path="/like-common/src/main/java/com/mdd/common/aop" title="公共切面"/>
+    <tree path="/like-front/src/main/java/com/mdd/front/cache" title="缓存层"/>
+    <tree path="/like-admin/src/main/java/com/mdd/admin/cache" title="缓存层"/>
+    <tree path="/like-admin/src/main/java/com/mdd/admin/aop" title="切面层"/>
 </trees>

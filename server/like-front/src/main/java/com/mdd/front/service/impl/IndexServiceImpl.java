@@ -133,11 +133,11 @@ public class IndexServiceImpl implements IIndexService {
         // 登录配置
         Map<String, Object> loginMap = new LinkedHashMap<>();
         Map<String, String> loginConfig = ConfigUtils.get("login");
-        loginMap.put("loginWay", ArrayUtils.stringToListAsInt(loginConfig.getOrDefault("loginWay", ""), ","));
+        loginMap.put("loginWay", ListUtils.stringToListAsInt(loginConfig.getOrDefault("loginWay", ""), ","));
         loginMap.put("forceBindMobile", Integer.parseInt(loginConfig.getOrDefault("forceBindMobile", "0")));
         loginMap.put("openAgreement", Integer.parseInt(loginConfig.getOrDefault("openAgreement", "0")));
         loginMap.put("openOtherAuth", Integer.parseInt(loginConfig.getOrDefault("openOtherAuth", "0")));
-        loginMap.put("autoLoginAuth", ArrayUtils.stringToListAsInt(loginConfig.getOrDefault("autoLoginAuth", ""), ","));
+        loginMap.put("autoLoginAuth", ListUtils.stringToListAsInt(loginConfig.getOrDefault("autoLoginAuth", ""), ","));
 
         // 网址信息
         Map<String, Object> websiteMap = new LinkedHashMap<>();
@@ -156,7 +156,7 @@ public class IndexServiceImpl implements IIndexService {
         // 响应数据
         response.put("version", GlobalConfig.version);
         response.put("domain", UrlUtils.domain());
-        response.put("style", ToolsUtils.jsonToMap(tabbarStyle));
+        response.put("style", MapUtils.jsonToMap(tabbarStyle));
         response.put("tabbar", tabs);
         response.put("login", loginMap);
         response.put("website", websiteMap);

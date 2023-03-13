@@ -11,7 +11,7 @@ import com.mdd.admin.validate.system.SystemMenuUpdateValidate;
 import com.mdd.admin.vo.system.SystemAuthMenuVo;
 import com.mdd.common.entity.system.SystemAuthMenu;
 import com.mdd.common.mapper.system.SystemAuthMenuMapper;
-import com.mdd.common.util.ArrayUtils;
+import com.mdd.common.util.ListUtils;
 import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -70,7 +70,7 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         }
 
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(lists));
-        return ArrayUtils.listToTree(jsonArray, "id", "pid", "children");
+        return ListUtils.listToTree(jsonArray, "id", "pid", "children");
     }
 
     /**
@@ -98,7 +98,7 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         }
 
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(lists));
-        return ArrayUtils.listToTree(jsonArray, "id", "pid", "children");
+        return ListUtils.listToTree(jsonArray, "id", "pid", "children");
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.mdd.front.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.util.StringUtils;
@@ -37,6 +38,7 @@ public class LoginController {
      * @param registerValidate 参数
      * @return AjaxResult<Object>
      */
+    @NotLogin
     @PostMapping("/register")
     public AjaxResult<Object> register(@Validated @RequestBody RegisterValidate registerValidate) {
         iLoginService.register(registerValidate);
@@ -50,6 +52,7 @@ public class LoginController {
      * @param params 参数
      * @return AjaxResult<LoginTokenVo>
      */
+    @NotLogin
     @PostMapping("/check")
     public AjaxResult<LoginTokenVo> check(@RequestBody Map<String, String> params) {
         Assert.notNull(params.get("scene"), "scene参数缺失!");
@@ -81,6 +84,7 @@ public class LoginController {
      * @param oaLoginValidate 参数
      * @return AjaxResult<LoginTokenVo>
      */
+    @NotLogin
     @PostMapping("/oaLogin")
     public AjaxResult<LoginTokenVo> oaLogin(@Validated @RequestBody OaLoginValidate oaLoginValidate) {
         String code = oaLoginValidate.getCode();
@@ -98,6 +102,7 @@ public class LoginController {
      * @param url 连接
      * @return AjaxResult<LoginCodesVo>
      */
+    @NotLogin
     @GetMapping("/codeUrl")
     public AjaxResult<LoginUrlsVo> codeUrl(@RequestParam String url) {
         Assert.notNull(url, "url参数不能为空");
@@ -114,6 +119,7 @@ public class LoginController {
      * @param forgetPwdValidate 参数
      * @return AjaxResult<Object>
      */
+    @NotLogin
     @PostMapping("/forgotPassword")
     public AjaxResult<Object> forgotPassword(@Validated @RequestBody ForgetPwdValidate forgetPwdValidate) {
         iLoginService.forgotPassword(forgetPwdValidate);
@@ -127,6 +133,7 @@ public class LoginController {
      * @param session session
      * @return AjaxResult<LoginUrlsVo>
      */
+    @NotLogin
     @GetMapping("/getScanCode")
     public AjaxResult<LoginUrlsVo> getScanCode(@RequestParam String url, HttpSession session) {
         String qrcodeUrl = iLoginService.getScanCode(url, session);
@@ -142,6 +149,7 @@ public class LoginController {
      * @param scanLoginValidate 参数
      * @return AjaxResult<Object>
      */
+    @NotLogin
     @PostMapping("/scanLogin")
     public AjaxResult<Object> scanLogin(@Validated @RequestBody ScanLoginValidate scanLoginValidate, HttpSession session) {
         LoginTokenVo vo = iLoginService.scanLogin(scanLoginValidate, session);

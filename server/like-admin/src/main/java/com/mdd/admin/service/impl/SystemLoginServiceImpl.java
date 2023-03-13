@@ -2,7 +2,7 @@ package com.mdd.admin.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.mdd.admin.service.ISystemAuthAdminService;
+import com.mdd.admin.cache.CaptchaCache;
 import com.mdd.admin.service.ISystemLoginService;
 import com.mdd.admin.validate.system.SystemAdminLoginsValidate;
 import com.mdd.admin.vo.system.SystemCaptchaVo;
@@ -45,10 +45,6 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
     @Resource
     SystemAuthAdminMapper systemAuthAdminMapper;
 
-    @Resource
-    ISystemAuthAdminService iSystemAuthAdminService;
-
-
     private static final Logger log = LoggerFactory.getLogger(SystemLoginServiceImpl.class);
 
     /**
@@ -62,15 +58,11 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
         // 验证码信息
         String capStr, code;
         BufferedImage image;
-        String uuid = ToolsUtils.makeUUID();
-        String ip   = IpUtils.getIpAddress().replaceAll("\\.", "");
-        String verifyKey = YmlUtils.get("like.captcha.token") + ip + ":" + uuid;
-        long expireTime = Long.parseLong(YmlUtils.get("like.captcha.expire"));
+        String uuid = ToolUtils.makeUUID();
 
         // 生成验证码
         capStr = code = captchaProducer.createText();
         image = captchaProducer.createImage(capStr);
-        RedisUtils.set(verifyKey, code.toLowerCase(), expireTime);
         FastByteArrayOutputStream os = new FastByteArrayOutputStream();
         try {
             ImageIO.write(image, "jpg", os);
@@ -78,6 +70,9 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
             log.error("verifyCode Error:" + e.getMessage());
             throw new OperateException(e.getMessage());
         }
+
+        // 缓存验证码
+        CaptchaCache.set(code, uuid);
 
         // 返回验证码
         String base64 = "data:image/jpeg;base64,"+ Base64Util.encode(os.toByteArray());
@@ -103,11 +98,9 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
         if (StringUtils.isNotNull(captchaStatus) && captchaStatus.equals("true")) {
             Assert.notNull(loginsValidate.getCode(), "code参数缺失");
             Assert.notNull(loginsValidate.getUuid(), "uuid参数缺失");
-            String ip   = IpUtils.getIpAddress().replaceAll("\\.", "");
-            String captchaKey = YmlUtils.get("like.captcha.token") + ip + ":" + loginsValidate.getUuid();
-            Object code = RedisUtils.get(captchaKey);
-            RedisUtils.del(captchaKey);
-            if (StringUtils.isNull(code) || StringUtils.isEmpty(code.toString()) || !loginsValidate.getCode().equals(code.toString())) {
+
+            String code = CaptchaCache.get(loginsValidate.getUuid());
+            if (!loginsValidate.getCode().equals(code)) {
                 throw new LoginException(HttpEnum.CAPTCHA_ERROR.getCode(), HttpEnum.CAPTCHA_ERROR.getMsg());
             }
         }
@@ -127,7 +120,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
         }
 
         String newPWd = password + sysAdmin.getSalt();
-        String md5Pwd = ToolsUtils.makeMd5(newPWd);
+        String md5Pwd = ToolUtils.makeMd5(newPWd);
         if (!md5Pwd.equals(sysAdmin.getPassword())) {
             this.recordLoginLog(sysAdmin.getId(), loginsValidate.getUsername(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
             throw new LoginException(HttpEnum.LOGIN_ACCOUNT_ERROR.getCode(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());

@@ -1,5 +1,6 @@
 package com.mdd.front.controller;
 
+import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
@@ -32,6 +33,7 @@ public class IndexController {
      * @author fzr
      * @return AjaxResult<Map<String, Object>>
      */
+    @NotLogin
     @GetMapping("/index")
     public AjaxResult<Map<String, Object>> index() {
         Map<String, Object> detail = iIndexService.index();
@@ -45,6 +47,7 @@ public class IndexController {
      * @param id 主键
      * @return AjaxResult<Map<String, Object>>
      */
+    @NotLogin
     @GetMapping("/decorate")
     public AjaxResult<Map<String, Object>> decorate(@Validated @IDMust() @RequestParam("id") Integer id) {
         Map<String, Object> detail = iIndexService.decorate(id);
@@ -57,6 +60,7 @@ public class IndexController {
      * @author fzr
      * @return AjaxResult<Map<String, Object>>
      */
+    @NotLogin
     @GetMapping("/config")
     public AjaxResult<Map<String, Object>> config() {
         Map<String, Object> map = iIndexService.config();
@@ -70,6 +74,7 @@ public class IndexController {
      * @param type 类型 service=服务协议,privacy=隐私协议
      * @return AjaxResult<Map<String, String>>
      */
+    @NotLogin
     @GetMapping("/policy")
     public AjaxResult<Map<String, String>> policy(@RequestParam String type) {
         Map<String, String> map = iIndexService.policy(type);
@@ -82,6 +87,7 @@ public class IndexController {
      * @author fzr
      * @return AjaxResult<List<String>>
      */
+    @NotLogin
     @GetMapping("/hotSearch")
     public AjaxResult<List<String>> hotSearch() {
         List<String> list = iIndexService.hotSearch();
@@ -96,6 +102,7 @@ public class IndexController {
      * @param params 搜素参数
      * @return AjaxResult<PageResult<ArticleListVo>>
      */
+    @NotLogin
     @GetMapping("/search")
     public AjaxResult<PageResult<ArticleListedVo>> search(@Validated PageValidate pageValidate,
                                                           @RequestParam Map<String, String> params) {

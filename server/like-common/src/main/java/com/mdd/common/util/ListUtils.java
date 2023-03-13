@@ -9,9 +9,9 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 /**
- * 数组工具类
+ * 列表工具类
  */
-public class ArrayUtils {
+public class ListUtils {
 
     /**
      * JSONArray转树形结构

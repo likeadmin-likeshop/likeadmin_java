@@ -1,6 +1,6 @@
 package com.mdd.admin;
 
-import com.mdd.common.util.ArrayUtils;
+import com.mdd.common.util.ListUtils;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -60,7 +60,7 @@ public class LikeAdminThreadLocal {
         if (roleIds.equals("") || roleIds.equals("0")) {
             return Collections.emptyList();
         }
-        return ArrayUtils.stringToListAsInt(roleIds, ",");
+        return ListUtils.stringToListAsInt(roleIds, ",");
     }
 
     /**

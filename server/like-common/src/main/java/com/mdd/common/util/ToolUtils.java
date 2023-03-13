@@ -1,12 +1,8 @@
 package com.mdd.common.util;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
-import com.google.gson.reflect.TypeToken;
 import com.mdd.common.config.GlobalConfig;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -16,7 +12,7 @@ import java.util.*;
 /**
  * 常用工具集合
  */
-public class ToolsUtils {
+public class ToolUtils {
 
     /**
      * 制作UUID
@@ -58,10 +54,10 @@ public class ToolsUtils {
      */
     public static String makeToken() {
         long millisecond =  System.currentTimeMillis();
-        String randStr =  ToolsUtils.randomString(8);
+        String randStr =  ToolUtils.randomString(8);
         String secret  = GlobalConfig.secret;
-        String token   = ToolsUtils.makeMd5(ToolsUtils.makeUUID() + millisecond + randStr);
-        return ToolsUtils.makeMd5(token + secret) + ToolsUtils.randomString(6);
+        String token   = ToolUtils.makeMd5(ToolUtils.makeUUID() + millisecond + randStr);
+        return ToolUtils.makeMd5(token + secret) + ToolUtils.randomString(6);
     }
 
     /**
@@ -137,7 +133,7 @@ public class ToolsUtils {
      * @param urlString (文件网址)
      * @param savePath (保存路径,如: /www/uploads)
      * @param filename (保存名称,如: aa.png)
-     * @throws IOException 异常
+     * @throws IOException IO异常
      */
     public static void download(String urlString, String savePath, String filename) throws IOException {
         URL url = new URL(urlString);
@@ -159,70 +155,6 @@ public class ToolsUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * JSON转 Map<String, String>
-     *
-     * @author fzr
-     * @param json 对象
-     * @return Map<String, String>
-     */
-    public static Map<String, String> jsonToMap(String json){
-        Type type = new TypeToken<Map<String, String>>() {}.getType();
-        return JSON.parseObject(json, type);
-    }
-
-    /**
-     * JSON转 Map<String, Object>
-     *
-     * @author fzr
-     * @param json 对象
-     * @return Map<String, String>
-     */
-    public static Map<String, Object> jsonToMapAsObj(String json){
-        Type type = new TypeToken<Map<String, Object>>() {}.getType();
-        return JSON.parseObject(json, type);
-    }
-
-    /**
-     * JSON转Map<String, String>
-     *
-     * @author fzr
-     * @param object 对象
-     * @return Map<String, String>
-     */
-    public static Map<String, String> objectToMap(Object object){
-        Type type = new TypeToken<Map<String, String>>() {}.getType();
-        return JSON.parseObject(JSONObject.toJSONString(object), type);
-    }
-
-    /**
-     * 对象类型Map合并
-     *
-     * @author fzr
-     * @param map 对象
-     * @return Object
-     */
-    public static Map<String, Object> mergeMapByObj(Map<String, Object> map, Map<String, Object> map1){
-        HashMap<String, Object> map2 = new HashMap<>();
-        map2.putAll(map);
-        map2.putAll(map1);
-        return map2;
-    }
-
-    /**
-     * 字符串类型Map合并
-     *
-     * @author fzr
-     * @param map 对象
-     * @return Object
-     */
-    public static Map<String, String> mergeMapByStr(Map<String, String> map, Map<String, String> map1){
-        HashMap<String, String> map2 = new HashMap<>();
-        map2.putAll(map);
-        map2.putAll(map1);
-        return map2;
     }
 
 }

@@ -9,7 +9,7 @@ import com.mdd.common.mapper.notice.NoticeRecordMapper;
 import com.mdd.common.plugin.notice.NoticeDriver;
 import com.mdd.common.plugin.notice.vo.NoticeSmsVo;
 import com.mdd.common.util.StringUtils;
-import com.mdd.common.util.ToolsUtils;
+import com.mdd.common.util.ToolUtils;
 import com.mdd.front.validate.commons.SmsValidate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,7 +57,7 @@ public class SmsController {
                 .setMobile(smsValidate.getMobile())
                 .setExpire(900)
                 .setParams(new String[] {
-                    "code:" + ToolsUtils.randomInt(4)
+                    "code:" + ToolUtils.randomInt(4)
                 });
 
         NoticeDriver.handle(params);

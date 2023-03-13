@@ -1,5 +1,6 @@
 package com.mdd.front.controller;
 
+import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -34,6 +36,7 @@ public class ArticleController {
      * @author fzr
      * @return AjaxResult<List<ArticleCateVo>>
      */
+    @NotLogin
     @GetMapping("/category")
     public AjaxResult<List<ArticleCateVo>> category() {
         List<ArticleCateVo> list = iArticleService.category();
@@ -46,6 +49,7 @@ public class ArticleController {
      * @author fzr
      * @return AjaxResult<PageResult<ArticleListVo>>
      */
+    @NotLogin
     @GetMapping("/list")
     public AjaxResult<PageResult<ArticleListedVo>> list(@Validated PageValidate pageValidate,
                                                         @Validated ArticleSearchValidate searchValidate) {
@@ -60,6 +64,7 @@ public class ArticleController {
      * @author fzr
      * @return AjaxResult<ArticleDetailVo>
      */
+    @NotLogin
     @GetMapping("/detail")
     public AjaxResult<ArticleDetailVo> detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         Integer userId = LikeFrontThreadLocal.getUserId();

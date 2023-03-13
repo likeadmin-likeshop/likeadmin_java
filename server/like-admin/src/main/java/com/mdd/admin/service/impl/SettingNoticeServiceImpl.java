@@ -7,9 +7,9 @@ import com.mdd.admin.vo.setting.SettingNoticeDetailVo;
 import com.mdd.admin.vo.setting.SettingNoticeListedVo;
 import com.mdd.common.entity.notice.NoticeSetting;
 import com.mdd.common.mapper.notice.NoticeSettingMapper;
+import com.mdd.common.util.MapUtils;
 import com.mdd.common.util.StringUtils;
 import com.mdd.common.util.TimeUtils;
-import com.mdd.common.util.ToolsUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -47,10 +47,10 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
             SettingNoticeListedVo vo = new SettingNoticeListedVo();
             BeanUtils.copyProperties(n, vo);
 
-            Map<String, String> systemMap = ToolsUtils.jsonToMap(n.getSystemNotice());
-            Map<String, String> smsMap = ToolsUtils.jsonToMap(n.getSmsNotice());
-            Map<String, String> oaMap = ToolsUtils.jsonToMap(n.getOaNotice());
-            Map<String, String> mnpMap = ToolsUtils.jsonToMap(n.getMnpNotice());
+            Map<String, String> systemMap = MapUtils.jsonToMap(n.getSystemNotice());
+            Map<String, String> smsMap = MapUtils.jsonToMap(n.getSmsNotice());
+            Map<String, String> oaMap = MapUtils.jsonToMap(n.getOaNotice());
+            Map<String, String> mnpMap = MapUtils.jsonToMap(n.getMnpNotice());
 
             vo.setType(n.getType()==1?"业务通知":"验证码");
             vo.setSystemStatus(Integer.parseInt(systemMap.getOrDefault("status", "0")));
@@ -86,10 +86,10 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
-        Map<String, Object> systemMap = ToolsUtils.jsonToMapAsObj(noticeSetting.getSystemNotice());
-        Map<String, Object> oaMap  = ToolsUtils.jsonToMapAsObj(noticeSetting.getOaNotice());
-        Map<String, Object> mnpMap = ToolsUtils.jsonToMapAsObj(noticeSetting.getMnpNotice());
-        Map<String, Object> smsMap = ToolsUtils.jsonToMapAsObj(noticeSetting.getSmsNotice());
+        Map<String, Object> systemMap = MapUtils.jsonToMapAsObj(noticeSetting.getSystemNotice());
+        Map<String, Object> oaMap  = MapUtils.jsonToMapAsObj(noticeSetting.getOaNotice());
+        Map<String, Object> mnpMap = MapUtils.jsonToMapAsObj(noticeSetting.getMnpNotice());
+        Map<String, Object> smsMap = MapUtils.jsonToMapAsObj(noticeSetting.getSmsNotice());
 
         smsMap.put("tips", JSON.parseArray(smsMap.get("tips").toString()));
 
@@ -117,8 +117,8 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
-        Map<String, String> systemParam = ToolsUtils.objectToMap(params.get("systemNotice"));
-        Map<String, String> systemMap = ToolsUtils.jsonToMap(noticeSetting.getSystemNotice());
+        Map<String, String> systemParam = MapUtils.objectToMap(params.get("systemNotice"));
+        Map<String, String> systemMap = MapUtils.jsonToMap(noticeSetting.getSystemNotice());
         if (StringUtils.isNotEmpty(systemMap)) {
             systemMap.put("title", systemParam.getOrDefault("title", ""));
             systemMap.put("content", systemParam.getOrDefault("content", ""));
@@ -126,8 +126,8 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
             systemMap.put("status", systemParam.getOrDefault("status", "0"));
         }
 
-        Map<String, String> smsParam = ToolsUtils.objectToMap(params.get("smsNotice"));
-        Map<String, String> smsMap = ToolsUtils.jsonToMap(noticeSetting.getSmsNotice());
+        Map<String, String> smsParam = MapUtils.objectToMap(params.get("smsNotice"));
+        Map<String, String> smsMap = MapUtils.jsonToMap(noticeSetting.getSmsNotice());
         if (StringUtils.isNotEmpty(smsMap)) {
             smsMap.put("templateId", smsParam.getOrDefault("templateId", ""));
             smsMap.put("content", smsParam.getOrDefault("content", ""));
@@ -135,8 +135,8 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
             smsMap.put("status", smsParam.getOrDefault("status", "0"));
         }
 
-        Map<String, String> oaParam = ToolsUtils.objectToMap(params.get("oaNotice"));
-        Map<String, String> oaMap = ToolsUtils.jsonToMap(noticeSetting.getOaNotice());
+        Map<String, String> oaParam = MapUtils.objectToMap(params.get("oaNotice"));
+        Map<String, String> oaMap = MapUtils.jsonToMap(noticeSetting.getOaNotice());
         if (StringUtils.isNotEmpty(oaMap)) {
             oaMap.put("name", oaParam.getOrDefault("name", ""));
             oaMap.put("first", oaParam.getOrDefault("first", ""));
@@ -148,8 +148,8 @@ public class SettingNoticeServiceImpl implements ISettingNoticeService {
             oaMap.put("status", oaParam.getOrDefault("status", "0"));
         }
 
-        Map<String, String> mnpParam = ToolsUtils.objectToMap(params.get("mnpNotice"));
-        Map<String, String> mnpMap = ToolsUtils.jsonToMap(noticeSetting.getMnpNotice());
+        Map<String, String> mnpParam = MapUtils.objectToMap(params.get("mnpNotice"));
+        Map<String, String> mnpMap = MapUtils.jsonToMap(noticeSetting.getMnpNotice());
         if (StringUtils.isNotEmpty(mnpParam)) {
             mnpMap.put("templateId", mnpParam.get("templateId"));
             mnpMap.put("templateSn", mnpParam.get("templateSn"));

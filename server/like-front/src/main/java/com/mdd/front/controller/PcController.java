@@ -1,5 +1,6 @@
 package com.mdd.front.controller;
 
+import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.front.LikeFrontThreadLocal;
@@ -32,6 +33,7 @@ public class PcController {
      * @author cjh
      * @return AjaxResult<Map<String, Object>>
      */
+    @NotLogin
     @GetMapping("/index")
     public AjaxResult<Map<String,Object>> index() {
         Map<String, Object> index = iPcService.index();
@@ -43,6 +45,7 @@ public class PcController {
      * @author cjh
      * @return AjaxResult<Map<String, Object>>
      */
+    @NotLogin
     @GetMapping("/getConfig")
     public AjaxResult<Map<String, Object>> getConfig() {
         Map<String, Object> config = iPcService.getConfig();
@@ -55,6 +58,7 @@ public class PcController {
      * @author fzr
      * @return AjaxResult<List<PcArticleCenterVo>>
      */
+    @NotLogin
     @GetMapping("/articleCenter")
     public AjaxResult<List<PcArticleCenterVo>> articleCenter() {
         List<PcArticleCenterVo> list = iPcService.articleCenter();
@@ -68,6 +72,7 @@ public class PcController {
      * @param id 文章主键
      * @return AjaxResult<PcArticleDetailVo>
      */
+    @NotLogin
     @GetMapping("/articleDetail")
     public AjaxResult<PcArticleDetailVo> articleDetail(@Validated @IDMust() @RequestParam("id") Integer id) {
         Integer userId = LikeFrontThreadLocal.getUserId();

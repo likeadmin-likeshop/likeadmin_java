@@ -3,7 +3,7 @@ package com.mdd.admin.service.impl;
 import com.mdd.admin.service.ISettingLoginService;
 import com.mdd.admin.validate.setting.SettingLoginValidate;
 import com.mdd.admin.vo.setting.SettingLoginVo;
-import com.mdd.common.util.ArrayUtils;
+import com.mdd.common.util.ListUtils;
 import com.mdd.common.util.ConfigUtils;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +26,11 @@ public class SettingLoginServiceImpl implements ISettingLoginService {
         Map<String, String> config = ConfigUtils.get("login");
 
         SettingLoginVo vo =  new SettingLoginVo();
-        vo.setLoginWay(ArrayUtils.stringToListAsInt(config.getOrDefault("loginWay", ""), ","));
+        vo.setLoginWay(ListUtils.stringToListAsInt(config.getOrDefault("loginWay", ""), ","));
         vo.setForceBindMobile(Integer.parseInt(config.getOrDefault("forceBindMobile", "0")));
         vo.setOpenAgreement(Integer.parseInt(config.getOrDefault("openAgreement", "0")));
         vo.setOpenOtherAuth(Integer.parseInt(config.getOrDefault("openOtherAuth", "0")));
-        vo.setAutoLoginAuth(ArrayUtils.stringToListAsInt(config.getOrDefault("autoLoginAuth", ""), ","));
+        vo.setAutoLoginAuth(ListUtils.stringToListAsInt(config.getOrDefault("autoLoginAuth", ""), ","));
         return vo;
     }
 

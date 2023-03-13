@@ -13,6 +13,9 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Redis工具
+ */
 @Component
 public class RedisUtils {
 
