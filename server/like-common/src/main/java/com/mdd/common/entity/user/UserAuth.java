@@ -19,7 +19,7 @@ public class UserAuth implements Serializable {
     private Integer userId;   // 用户Id
     private String openid;    // Openid
     private String unionid;   // Unionid
-    private Integer terminal;   // 客户端类型: [1=微信小程序, 2=微信公众号, 3=手机H5；4=电脑PC, 5=苹果APP, 6=安卓APP]
+    private Integer terminal; // 客户端类型: [1=微信小程序, 2=微信公众号, 3=手机H5；4=电脑PC, 5=苹果APP, 6=安卓APP]
     private Long createTime;  // 创建时间
     private Long updateTime;  // 更新时间
 

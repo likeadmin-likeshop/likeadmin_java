@@ -17,7 +17,7 @@ public class Crontab implements Serializable {
     @TableId(value="id", type= IdType.AUTO)
     private Integer id;         // 主键
     private String name;        // 任务名称
-    private String types;      // 任务分组
+    private String types;       // 任务分组
     private String command;     // 执行命令
     private String rules;       // 执行规则
     private String remark;      // 备注信息

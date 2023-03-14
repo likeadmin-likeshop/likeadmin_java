@@ -10,7 +10,6 @@ import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.exception.LoginException;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.util.StringUtils;
-import io.swagger.models.auth.In;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;

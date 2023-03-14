@@ -19,7 +19,7 @@ public class AlbumCate implements Serializable {
     private Integer pid;       // 父级ID
     private Integer type;      // 分类类型: [10=图片,20=视频]
     private String name;       // 分类名称
-    private Integer isDelete;  // 是否删除: 0=否，1=是
+    private Integer isDelete;  // 是否删除: [0=否,1=是]
     private Long createTime;   // 创建时间
     private Long updateTime;   // 更新时间
     private Long deleteTime;   // 删除时间

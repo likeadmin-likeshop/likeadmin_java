@@ -4,16 +4,6 @@
       "name": "like.upload-directory",
       "type": "java.lang.String",
       "description": "Description for like.upload-directory."
-    },
-    {
-      "name": "like.token-valid-time",
-      "type": "java.lang.String",
-      "description": "Description for like.token-valid-time."
-    },
-    {
-      "name": "like.token-renew-time",
-      "type": "java.lang.String",
-      "description": "Description for like.token-renew-time."
     }
   ]
 }
