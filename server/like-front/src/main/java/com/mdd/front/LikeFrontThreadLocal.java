@@ -1,7 +1,7 @@
 package com.mdd.front;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 public class LikeFrontThreadLocal {
 
@@ -13,17 +13,18 @@ public class LikeFrontThreadLocal {
     /**
      * 取得本地线程对象
      */
-    private static final java.lang.ThreadLocal<LinkedHashMap<String, Object>> MY_LOCAL = new java.lang.ThreadLocal<>();
+    private static final java.lang.ThreadLocal<Map<String, Object>> MY_LOCAL = new java.lang.ThreadLocal<>();
 
     /**
      * 写入本地线程
      */
     public static void put(String key, Object val) {
-        LinkedHashMap<String, Object> map = MY_LOCAL.get();
+        Map<String, Object> map = MY_LOCAL.get();
         if (map == null) {
-            map = new LinkedHashMap<>();
+            synchronized (MY_LOCAL) {
+                map = new ConcurrentSkipListMap<>();
+            }
         }
-
         map.put(key, val);
         MY_LOCAL.set(map);
     }
