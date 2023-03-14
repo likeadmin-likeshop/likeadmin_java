@@ -23,6 +23,8 @@ spring:
   mvc:
     static-path-pattern: /api/static/**
     throw-exception-if-no-handler-found: true
+    pathmatch:
+      matching-strategy: ant_path_matcher
   # 数据源配置
   datasource:
     url: jdbc:mysql://localhost:3306/likeadmin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false

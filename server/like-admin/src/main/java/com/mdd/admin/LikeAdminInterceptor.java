@@ -48,15 +48,15 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
                              @NotNull Object handler) throws Exception {
 
         // 请求方法类型
-        response.setContentType("application/json;charset=utf-8");
-        if (!(handler instanceof HandlerMethod)) {
+        String reqUri = request.getRequestURI();
+        if (!(handler instanceof HandlerMethod) || !reqUri.startsWith("/api")) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
 
         // 登录权限校验
         try {
+            response.setContentType("application/json;charset=utf-8");
             Method method = this.obtainAop(handler);
-            String reqUri = request.getRequestURI();
             this.checkLogin(method, reqUri);
         } catch (LoginException e) {
             AjaxResult<Object> result = AjaxResult.failed(e.getCode(), e.getMsg());

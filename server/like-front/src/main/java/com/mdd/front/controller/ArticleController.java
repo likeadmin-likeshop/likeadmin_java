@@ -13,17 +13,17 @@ import com.mdd.front.vo.article.ArticleCateVo;
 import com.mdd.front.vo.article.ArticleCollectVo;
 import com.mdd.front.vo.article.ArticleDetailVo;
 import com.mdd.front.vo.article.ArticleListedVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * 文章管理
- */
 @RestController
 @RequestMapping("/api/article")
+@Api(tags = "文章管理")
 public class ArticleController {
 
     @Resource
@@ -37,6 +37,7 @@ public class ArticleController {
      */
     @NotLogin
     @GetMapping("/category")
+    @ApiOperation(value="文章分类")
     public AjaxResult<List<ArticleCateVo>> category() {
         List<ArticleCateVo> list = iArticleService.category();
         return AjaxResult.success(list);
@@ -50,6 +51,7 @@ public class ArticleController {
      */
     @NotLogin
     @GetMapping("/list")
+    @ApiOperation(value="文章列表")
     public AjaxResult<PageResult<ArticleListedVo>> list(@Validated PageValidate pageValidate,
                                                         @Validated ArticleSearchValidate searchValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
@@ -65,6 +67,7 @@ public class ArticleController {
      */
     @NotLogin
     @GetMapping("/detail")
+    @ApiOperation(value="文章详情")
     public AjaxResult<ArticleDetailVo> detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         Integer userId = LikeFrontThreadLocal.getUserId();
         ArticleDetailVo vo = iArticleService.detail(id, userId);
@@ -72,13 +75,14 @@ public class ArticleController {
     }
 
     /**
-     * 文章收藏
+     * 收藏列表
      *
      * @author fzr
      * @param pageValidate 分页参数
      * @return AjaxResult<PageResult<ArticleCollectVo>>
      */
-    @GetMapping("/collect")
+    @GetMapping("/collectList")
+    @ApiOperation(value="收藏列表")
     public AjaxResult<PageResult<ArticleCollectVo>> collect(@Validated PageValidate pageValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
         PageResult<ArticleCollectVo> list = iArticleService.collect(pageValidate, userId);
@@ -86,13 +90,14 @@ public class ArticleController {
     }
 
     /**
-     * 加入收藏
+     * 收藏加入
      *
      * @author fzr
      * @param collectValidate 参数
      * @return AjaxResult<Object>
      */
-    @PostMapping("/addCollect")
+    @PostMapping("/collectAdd")
+    @ApiOperation(value="收藏加入")
     public AjaxResult<Object> addCollect(@Validated @RequestBody ArticleCollectValidate collectValidate) {
         Integer articleId = collectValidate.getArticleId();
         Integer userId = LikeFrontThreadLocal.getUserId();
@@ -101,13 +106,14 @@ public class ArticleController {
     }
 
     /**
-     * 取消收藏
+     * 收藏取消
      *
      * @author fzr
      * @param collectValidate 参数
      * @return AjaxResult<Object>
      */
-    @PostMapping("/cancelCollect")
+    @PostMapping("/collectCancel")
+    @ApiOperation(value="收藏取消")
     public AjaxResult<Object> cancelCollect(@Validated @RequestBody ArticleCollectValidate collectValidate) {
         Integer articleId = collectValidate.getArticleId();
         Integer userId = LikeFrontThreadLocal.getUserId();

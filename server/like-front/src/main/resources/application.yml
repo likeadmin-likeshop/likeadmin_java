@@ -6,8 +6,8 @@ like:
 # 服务配置
 server:
   port: 8084
-  servlet:
-    context-path: /
+#  servlet:
+#    context-path: /
 
 # 框架配置
 spring:
@@ -16,6 +16,8 @@ spring:
   mvc:
     static-path-pattern: /api/static/**
     throw-exception-if-no-handler-found: true
+    pathmatch:
+      matching-strategy: ant_path_matcher
   # 数据源配置
   datasource:
     url: jdbc:mysql://localhost:3306/local_likeadmin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false

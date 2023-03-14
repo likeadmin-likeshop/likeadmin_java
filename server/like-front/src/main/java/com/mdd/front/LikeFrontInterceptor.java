@@ -44,16 +44,16 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
                              @NonNull HttpServletResponse response,
                              @NonNull Object handler) throws Exception {
 
-        // 记录当前平台
-        String terminal = request.getHeader("terminal");
-        terminal = StringUtils.isEmpty(terminal) ? "1" : terminal;
-        LikeFrontThreadLocal.put("terminal", terminal);
-
         // 判断请求接口
-        response.setContentType("application/json;charset=utf-8");
-        if (!(handler instanceof HandlerMethod)) {
+        String reqUri = request.getRequestURI();
+        if (!(handler instanceof HandlerMethod) || !reqUri.startsWith("/api")) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
+
+        // 记录当前平台
+        response.setContentType("application/json;charset=utf-8");
+        String terminal = request.getHeader("terminal");
+        LikeFrontThreadLocal.put("terminal", StringUtils.isEmpty(terminal) ? "1" : terminal);
 
         // 登录权限校验
         try {
