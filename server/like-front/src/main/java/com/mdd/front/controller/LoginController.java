@@ -30,15 +30,15 @@ public class LoginController {
      * 注册账号
      *
      * @author fzr
-     * @param valid 注册参数
+     * @param registerValidate 注册参数
      * @return AjaxResult<Object>
      */
     @NotLogin
     @PostMapping("/register")
-    public AjaxResult<Object> register(@Validated @RequestBody RegisterValidate valid) {
+    public AjaxResult<Object> register(@Validated @RequestBody RegisterValidate registerValidate) {
         Integer terminal = LikeFrontThreadLocal.getTerminal();
-        String username = valid.getUsername();
-        String password = valid.getPassword();
+        String username = registerValidate.getUsername();
+        String password = registerValidate.getPassword();
 
         iLoginService.register(username, password, terminal);
         return AjaxResult.success();
@@ -47,15 +47,16 @@ public class LoginController {
     /**
      * 账号登录
      *
-     * @param valid 登录参数
+     * @author fzr
+     * @param loginPwdValidate 登录参数
      * @return AjaxResult<LoginTokenVo>
      */
     @NotLogin
     @PostMapping("/accountLogin")
-    public AjaxResult<LoginTokenVo> accountLogin(@Validated @RequestBody LoginPwdValidate valid) {
+    public AjaxResult<LoginTokenVo> accountLogin(@Validated @RequestBody LoginPwdValidate loginPwdValidate) {
         Integer terminal = LikeFrontThreadLocal.getTerminal();
-        String username = valid.getUsername();
-        String password = valid.getPassword();
+        String username = loginPwdValidate.getUsername();
+        String password = loginPwdValidate.getPassword();
 
         LoginTokenVo vo = iLoginService.accountLogin(username, password, terminal);
         return AjaxResult.success(vo);
@@ -64,15 +65,16 @@ public class LoginController {
     /**
      * 手机登录
      *
-     * @param valid 登录参数
+     * @author fzr
+     * @param loginPhoneValidate 登录参数
      * @return AjaxResult<LoginTokenVo>
      */
     @NotLogin
     @PostMapping("/mobileLogin")
-    public AjaxResult<LoginTokenVo> mobileLogin(@Validated @RequestBody LoginPhoneValidate valid) {
+    public AjaxResult<LoginTokenVo> mobileLogin(@Validated @RequestBody LoginPhoneValidate loginPhoneValidate) {
         Integer terminal = LikeFrontThreadLocal.getTerminal();
-        String mobile = valid.getMobile();
-        String code = valid.getCode();
+        String mobile = loginPhoneValidate.getMobile();
+        String code = loginPhoneValidate.getCode();
 
         LoginTokenVo vo = iLoginService.mobileLogin(mobile, code, terminal);
         return AjaxResult.success(vo);
@@ -81,14 +83,15 @@ public class LoginController {
     /**
      * 微信登录
      *
-     * @param valid 登录参数
+     * @author fzr
+     * @param loginCodeValidate 登录参数
      * @return AjaxResult<LoginTokenVo>
      */
     @NotLogin
     @PostMapping("/mnpLogin")
-    public AjaxResult<LoginTokenVo> mnpLogin(@Validated @RequestBody LoginCodeValidate valid) {
+    public AjaxResult<LoginTokenVo> mnpLogin(@Validated @RequestBody LoginCodeValidate loginCodeValidate) {
         Integer terminal = LikeFrontThreadLocal.getTerminal();
-        String code = valid.getCode();
+        String code = loginCodeValidate.getCode();
 
         LoginTokenVo vo = iLoginService.mnpLogin(code, terminal);
         return AjaxResult.success(vo);
@@ -98,14 +101,14 @@ public class LoginController {
      * 公众号登录
      *
      * @author fzr
-     * @param valid 登录参数
+     * @param loginCodeValidate 登录参数
      * @return AjaxResult<LoginTokenVo>
      */
     @NotLogin
     @PostMapping("/oaLogin")
-    public AjaxResult<LoginTokenVo> oaLogin(@Validated @RequestBody LoginCodeValidate valid) {
+    public AjaxResult<LoginTokenVo> oaLogin(@Validated @RequestBody LoginCodeValidate loginCodeValidate) {
         Integer terminal = LikeFrontThreadLocal.getTerminal();
-        String code = valid.getCode();
+        String code = loginCodeValidate.getCode();
 
         LoginTokenVo vo = iLoginService.officeLogin(code, terminal);
         return AjaxResult.success(vo);
@@ -146,15 +149,15 @@ public class LoginController {
      * 扫码登录
      *
      * @author fzr
-     * @param valid 扫码参数
+     * @param loginScanValidate 扫码参数
      * @return AjaxResult<Object>
      */
     @NotLogin
     @PostMapping("/scanLogin")
-    public AjaxResult<Object> scanLogin(@Validated @RequestBody LoginScanValidate valid, HttpSession session) {
+    public AjaxResult<Object> scanLogin(@Validated @RequestBody LoginScanValidate loginScanValidate, HttpSession session) {
         Integer terminal = LikeFrontThreadLocal.getTerminal();
-        String code = valid.getCode();
-        String state = valid.getState();
+        String code = loginScanValidate.getCode();
+        String state = loginScanValidate.getState();
 
         LoginTokenVo vo = iLoginService.scanLogin(code, state, terminal, session);
         return AjaxResult.success(vo);
