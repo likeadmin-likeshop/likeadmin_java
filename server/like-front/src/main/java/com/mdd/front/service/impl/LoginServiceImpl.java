@@ -241,6 +241,10 @@ public class LoginServiceImpl implements ILoginService {
      */
     @Override
     public LoginTokenVo scanLogin(String code, String state, Integer terminal, HttpSession session) {
+        if (!ScanLoginCache.get(session.getId()).equals(state)) {
+            throw new OperateException("二维码已失效或不存在,请重新操作");
+        }
+
         // 得到配置和授权临时票据code
         String appId = ConfigUtils.get("op_channel", "appId", "");
         String appSecret = ConfigUtils.get("op_channel", "appSecret", "");
