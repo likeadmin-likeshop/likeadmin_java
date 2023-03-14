@@ -182,7 +182,9 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
             LikeAdminThreadLocal.put("postIds", adminUser.getPostIds());
 
             // 权限校验
-            this.checkAuth(method, reqUri);
+            if (!adminUser.getId().equals(1)) {
+                this.checkAuth(method, reqUri);
+            }
         }
     }
 
