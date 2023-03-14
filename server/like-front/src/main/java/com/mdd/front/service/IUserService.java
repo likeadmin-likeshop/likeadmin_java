@@ -1,7 +1,8 @@
 package com.mdd.front.service;
 
-import com.mdd.front.validate.UserBindMobileValidate;
-import com.mdd.front.validate.UserUpdateValidate;
+import com.mdd.front.validate.users.UserForgetPwdValidate;
+import com.mdd.front.validate.users.UserPhoneBindValidate;
+import com.mdd.front.validate.users.UserUpdateValidate;
 import com.mdd.front.vo.users.UserCenterVo;
 import com.mdd.front.vo.users.UserInfoVo;
 
@@ -47,6 +48,8 @@ public interface IUserService {
      */
     void changePwd(String password, String oldPassword, Integer userId);
 
+    void forgotPwd(UserForgetPwdValidate userForgetPwdValidate);
+
     /**
      * 绑定手机
      *
@@ -54,7 +57,7 @@ public interface IUserService {
      * @param mobileValidate 参数
      * @param userId 用户ID
      */
-    void bindMobile(UserBindMobileValidate mobileValidate, Integer userId);
+    void bindMobile(UserPhoneBindValidate mobileValidate, Integer userId);
 
     /**
      * 微信手机

@@ -1,4 +1,4 @@
-package com.mdd.front.validate;
+package com.mdd.front.validate.article;
 
 import com.mdd.common.validator.annotation.IDMust;
 import lombok.Data;

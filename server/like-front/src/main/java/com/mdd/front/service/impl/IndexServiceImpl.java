@@ -17,7 +17,7 @@ import com.mdd.common.mapper.DecorateTabbarMapper;
 import com.mdd.common.mapper.setting.HotSearchMapper;
 import com.mdd.common.util.*;
 import com.mdd.front.service.IIndexService;
-import com.mdd.front.validate.commons.PageValidate;
+import com.mdd.front.validate.common.PageValidate;
 import com.mdd.front.vo.article.ArticleListedVo;
 import org.springframework.stereotype.Service;
 

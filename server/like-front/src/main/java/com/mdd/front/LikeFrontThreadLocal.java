@@ -51,6 +51,17 @@ public class LikeFrontThreadLocal {
     }
 
     /**
+     * 获取平台标识
+     */
+    public static Integer getTerminal() {
+        Object adminId = LikeFrontThreadLocal.get("terminal");
+        if (adminId == null || adminId.toString().equals("")) {
+            return 0;
+        }
+        return Integer.parseInt(adminId.toString());
+    }
+
+    /**
      * 删除本地线程
      */
     public static void remove() {

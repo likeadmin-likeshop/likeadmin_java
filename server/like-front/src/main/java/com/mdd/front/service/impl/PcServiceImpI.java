@@ -13,8 +13,8 @@ import com.mdd.common.mapper.article.ArticleCollectMapper;
 import com.mdd.common.mapper.article.ArticleMapper;
 import com.mdd.common.util.*;
 import com.mdd.front.service.IPcService;
-import com.mdd.front.vo.PcArticleCenterVo;
-import com.mdd.front.vo.PcArticleDetailVo;
+import com.mdd.front.vo.article.PcArticleCenterVo;
+import com.mdd.front.vo.article.PcArticleDetailVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 

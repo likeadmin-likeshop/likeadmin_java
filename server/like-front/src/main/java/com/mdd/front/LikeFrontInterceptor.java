@@ -44,6 +44,10 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
                              @NonNull HttpServletResponse response,
                              @NonNull Object handler) throws Exception {
 
+        // 记录当前平台
+        String terminal = request.getHeader("terminal");
+        LikeFrontThreadLocal.put("terminal", terminal);
+
         // 判断请求接口
         response.setContentType("application/json;charset=utf-8");
         if (!(handler instanceof HandlerMethod)) {
@@ -113,12 +117,14 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
     private void checkLogin(Method method) {
         for (int i=0; i<=0; i++) {
             // 免登校验
-            Object id = StpUtil.getLoginId();
             if (StringUtils.isNotNull(method) && method.isAnnotationPresent(NotLogin.class)) {
-                if (StringUtils.isNotNull(id)) {
-                    Integer userId = Integer.parseInt(id.toString());
-                    LikeFrontThreadLocal.put("userId", userId);
-                }
+                try {
+                    Object id = StpUtil.getLoginId();
+                    if (StringUtils.isNotNull(id)) {
+                        Integer userId = Integer.parseInt(id.toString());
+                        LikeFrontThreadLocal.put("userId", userId);
+                    }
+                } catch (Exception ignored) {}
                 break;
             }
 
@@ -131,6 +137,7 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
             }
 
             // 登录校验
+            Object id = StpUtil.getLoginId();
             if (StringUtils.isNull(id)) {
                 Integer errCode = HttpEnum.TOKEN_INVALID.getCode();
                 String errMsg = HttpEnum.TOKEN_INVALID.getMsg();

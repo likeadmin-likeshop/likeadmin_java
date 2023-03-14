@@ -1,4 +1,4 @@
-package com.mdd.front.validate;
+package com.mdd.front.validate.users;
 
 import com.mdd.common.validator.annotation.StringContains;
 import lombok.Data;

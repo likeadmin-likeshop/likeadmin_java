@@ -1,4 +1,4 @@
-package com.mdd.front.validate.commons;
+package com.mdd.front.validate.common;
 
 import lombok.Data;
 

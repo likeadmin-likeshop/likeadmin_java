@@ -1,4 +1,4 @@
-package com.mdd.front.vo;
+package com.mdd.front.vo.article;
 
 import lombok.Data;
 

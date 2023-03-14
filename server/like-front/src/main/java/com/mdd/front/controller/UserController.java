@@ -1,12 +1,14 @@
 package com.mdd.front.controller;
 
+import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
-import com.mdd.front.validate.UserBindMobileValidate;
-import com.mdd.front.validate.UserMnpMobileValidate;
-import com.mdd.front.validate.UserPasswordValidate;
-import com.mdd.front.validate.UserUpdateValidate;
+import com.mdd.front.validate.users.UserForgetPwdValidate;
+import com.mdd.front.validate.users.UserPhoneBindValidate;
+import com.mdd.front.validate.users.UserPhoneMnpValidate;
+import com.mdd.front.validate.users.UserChangePwdValidate;
+import com.mdd.front.validate.users.UserUpdateValidate;
 import com.mdd.front.vo.users.UserCenterVo;
 import com.mdd.front.vo.users.UserInfoVo;
 import org.springframework.validation.annotation.Validated;
@@ -32,7 +34,8 @@ public class UserController {
      */
     @GetMapping("/center")
     public AjaxResult<UserCenterVo> center() {
-        UserCenterVo vo = iUserService.center(LikeFrontThreadLocal.getUserId());
+        Integer userId = LikeFrontThreadLocal.getUserId();
+        UserCenterVo vo = iUserService.center(userId);
         return AjaxResult.success(vo);
     }
 
@@ -44,7 +47,8 @@ public class UserController {
      */
     @GetMapping("/info")
     public AjaxResult<UserInfoVo> info() {
-        UserInfoVo vo = iUserService.info(LikeFrontThreadLocal.getUserId());
+        Integer userId = LikeFrontThreadLocal.getUserId();
+        UserInfoVo vo = iUserService.info(userId);
         return AjaxResult.success(vo);
     }
 
@@ -70,9 +74,23 @@ public class UserController {
      * @return AjaxResult<Object>
      */
     @PostMapping("/changePwd")
-    public AjaxResult<Object> changePwd(@Validated @RequestBody UserPasswordValidate passwordValidate) {
+    public AjaxResult<Object> changePwd(@Validated @RequestBody UserChangePwdValidate passwordValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
         iUserService.changePwd(passwordValidate.getPassword(), passwordValidate.getOldPassword(), userId);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 忘记密码
+     *
+     * @author fzr
+     * @param userForgetPwdValidate 参数
+     * @return AjaxResult<Object>
+     */
+    @NotLogin
+    @PostMapping("/forgotPwd")
+    public AjaxResult<Object> forgotPwd(@Validated @RequestBody UserForgetPwdValidate userForgetPwdValidate) {
+        iUserService.forgotPwd(userForgetPwdValidate);
         return AjaxResult.success();
     }
 
@@ -84,7 +102,7 @@ public class UserController {
      * @return AjaxResult<Object>
      */
     @PostMapping("/bindMobile")
-    public AjaxResult<Object> bindMobile(@Validated @RequestBody UserBindMobileValidate mobileValidate) {
+    public AjaxResult<Object> bindMobile(@Validated @RequestBody UserPhoneBindValidate mobileValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
         iUserService.bindMobile(mobileValidate, userId);
         return AjaxResult.success();
@@ -98,7 +116,7 @@ public class UserController {
      * @return AjaxResult<Object>
      */
     @PostMapping("/mnpMobile")
-    public AjaxResult<Object> mnpMobile(@Validated @RequestBody UserMnpMobileValidate mobileValidate) {
+    public AjaxResult<Object> mnpMobile(@Validated @RequestBody UserPhoneMnpValidate mobileValidate) {
         iUserService.mnpMobile(mobileValidate.getCode().trim());
         return AjaxResult.success();
     }

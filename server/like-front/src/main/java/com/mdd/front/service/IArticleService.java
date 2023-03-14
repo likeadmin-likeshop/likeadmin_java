@@ -1,8 +1,8 @@
 package com.mdd.front.service;
 
 import com.mdd.common.core.PageResult;
-import com.mdd.front.validate.ArticleSearchValidate;
-import com.mdd.front.validate.commons.PageValidate;
+import com.mdd.front.validate.article.ArticleSearchValidate;
+import com.mdd.front.validate.common.PageValidate;
 import com.mdd.front.vo.article.ArticleCateVo;
 import com.mdd.front.vo.article.ArticleCollectVo;
 import com.mdd.front.vo.article.ArticleDetailVo;

@@ -6,9 +6,9 @@ import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IArticleService;
-import com.mdd.front.validate.ArticleCollectValidate;
-import com.mdd.front.validate.ArticleSearchValidate;
-import com.mdd.front.validate.commons.PageValidate;
+import com.mdd.front.validate.article.ArticleCollectValidate;
+import com.mdd.front.validate.article.ArticleSearchValidate;
+import com.mdd.front.validate.common.PageValidate;
 import com.mdd.front.vo.article.ArticleCateVo;
 import com.mdd.front.vo.article.ArticleCollectVo;
 import com.mdd.front.vo.article.ArticleDetailVo;
@@ -17,7 +17,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**

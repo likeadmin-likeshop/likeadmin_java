@@ -1,7 +1,7 @@
 package com.mdd.front.service;
 
-import com.mdd.front.vo.PcArticleCenterVo;
-import com.mdd.front.vo.PcArticleDetailVo;
+import com.mdd.front.vo.article.PcArticleCenterVo;
+import com.mdd.front.vo.article.PcArticleDetailVo;
 
 import java.util.List;
 import java.util.Map;

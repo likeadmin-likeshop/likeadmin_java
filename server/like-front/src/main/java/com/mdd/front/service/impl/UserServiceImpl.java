@@ -17,8 +17,9 @@ import com.mdd.common.plugin.notice.NoticeCheck;
 import com.mdd.common.util.*;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
-import com.mdd.front.validate.UserBindMobileValidate;
-import com.mdd.front.validate.UserUpdateValidate;
+import com.mdd.front.validate.users.UserForgetPwdValidate;
+import com.mdd.front.validate.users.UserPhoneBindValidate;
+import com.mdd.front.validate.users.UserUpdateValidate;
 import com.mdd.front.vo.users.UserCenterVo;
 import com.mdd.front.vo.users.UserInfoVo;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -202,6 +203,43 @@ public class UserServiceImpl implements IUserService {
     }
 
     /**
+     * 忘记密码
+     *
+     * @param userForgetPwdValidate
+     */
+    @Override
+    public void forgotPwd(UserForgetPwdValidate userForgetPwdValidate) {
+        String mobile = userForgetPwdValidate.getMobile();
+        String code = userForgetPwdValidate.getCode();
+        String password = userForgetPwdValidate.getPassword();
+
+        // 校验验证码
+        int sceneCode = NoticeEnum.FORGOT_PASSWORD_CODE.getCode();
+        if (!NoticeCheck.verify(sceneCode, code)) {
+            throw new OperateException("验证码错误!");
+        }
+
+        // 查询手机号
+        User user = userMapper.selectOne(new QueryWrapper<User>()
+                .select("id,username,mobile,is_disable")
+                .eq("is_delete", 0)
+                .eq("mobile", mobile)
+                .last("limit 1"));
+
+        // 验证账号
+        com.baomidou.mybatisplus.core.toolkit.Assert.notNull(user, "账号不存在!");
+
+        String salt = ToolUtils.randomString(5);
+        String pwd  = ToolUtils.makeMd5(password.trim()+salt);
+
+        // 更新密码
+        user.setPassword(pwd);
+        user.setSalt(salt);
+        user.setUpdateTime(System.currentTimeMillis() / 1000);
+        userMapper.updateById(user);
+    }
+
+    /**
      * 绑定手机
      *
      * @author fzr
@@ -209,7 +247,7 @@ public class UserServiceImpl implements IUserService {
      * @param userId 用户ID
      */
     @Override
-    public void bindMobile(UserBindMobileValidate mobileValidate, Integer userId) {
+    public void bindMobile(UserPhoneBindValidate mobileValidate, Integer userId) {
         String type   = mobileValidate.getType();
         String mobile = mobileValidate.getMobile();
         String code   = mobileValidate.getCode().toLowerCase();

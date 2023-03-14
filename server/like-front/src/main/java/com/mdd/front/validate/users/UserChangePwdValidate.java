@@ -1,4 +1,4 @@
-package com.mdd.front.validate;
+package com.mdd.front.validate.users;
 
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 用户修改密码参数
  */
 @Data
-public class UserPasswordValidate implements Serializable {
+public class UserChangePwdValidate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -18,6 +18,8 @@ public class UserPasswordValidate implements Serializable {
     @Pattern(message = "密码必须是6-20字母+数字组合!", regexp="^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$")
     private String password;
 
+    @NotNull(message = "oldPassword参数缺失")
+    @NotNull(message = "旧密码不能为空")
     private String oldPassword="";
 
 }

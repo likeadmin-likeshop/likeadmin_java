@@ -1,24 +1,19 @@
 package com.mdd.front.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.enums.ClientEnum;
-import com.mdd.common.util.StringUtils;
+import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.ILoginService;
-import com.mdd.front.validate.login.RegisterValidate;
-import com.mdd.front.validate.login.ForgetPwdValidate;
-import com.mdd.front.validate.login.OaLoginValidate;
-import com.mdd.front.validate.login.ScanLoginValidate;
-import com.mdd.front.vo.LoginUrlsVo;
-import com.mdd.front.vo.LoginTokenVo;
+import com.mdd.front.validate.login.*;
+import com.mdd.front.vo.login.LoginUrlsVo;
+import com.mdd.front.vo.login.LoginTokenVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.Map;
+import javax.validation.constraints.NotNull;
 
 /**
  * 登录管理
@@ -35,45 +30,67 @@ public class LoginController {
      * 注册账号
      *
      * @author fzr
-     * @param registerValidate 参数
+     * @param valid 注册参数
      * @return AjaxResult<Object>
      */
     @NotLogin
     @PostMapping("/register")
-    public AjaxResult<Object> register(@Validated @RequestBody RegisterValidate registerValidate) {
-        iLoginService.register(registerValidate);
+    public AjaxResult<Object> register(@Validated @RequestBody RegisterValidate valid) {
+        Integer terminal = LikeFrontThreadLocal.getTerminal();
+        String username = valid.getUsername();
+        String password = valid.getPassword();
+
+        iLoginService.register(username, password, terminal);
         return AjaxResult.success();
     }
 
     /**
-     * 登录验证
+     * 账号登录
      *
-     * @author fzr
-     * @param params 参数
+     * @param valid 登录参数
      * @return AjaxResult<LoginTokenVo>
      */
     @NotLogin
-    @PostMapping("/check")
-    public AjaxResult<LoginTokenVo> check(@RequestBody Map<String, String> params) {
-        Assert.notNull(params.get("scene"), "scene参数缺失!");
-        LoginTokenVo vo = new LoginTokenVo();
+    @PostMapping("/accountLogin")
+    public AjaxResult<LoginTokenVo> accountLogin(@Validated @RequestBody LoginPwdValidate valid) {
+        Integer terminal = LikeFrontThreadLocal.getTerminal();
+        String username = valid.getUsername();
+        String password = valid.getPassword();
 
-        switch (params.get("scene")) {
-            case "mnp":
-                Assert.notNull(params.get("code"), "code参数缺失!");
-                Assert.notNull(params.get("client"), "client参数缺失!");
-                String code    = params.get("code");
-                Integer client = Integer.parseInt(params.get("client"));
-                vo = iLoginService.mnpLogin(code, client);
-                break;
-            case "mobile":
-                vo = iLoginService.mobileLogin(params);
-                break;
-            case "account":
-                vo = iLoginService.accountLogin(params);
-                break;
-        }
+        LoginTokenVo vo = iLoginService.accountLogin(username, password, terminal);
+        return AjaxResult.success(vo);
+    }
 
+    /**
+     * 手机登录
+     *
+     * @param valid 登录参数
+     * @return AjaxResult<LoginTokenVo>
+     */
+    @NotLogin
+    @PostMapping("/mobileLogin")
+    public AjaxResult<LoginTokenVo> mobileLogin(@Validated @RequestBody LoginPhoneValidate valid) {
+        Integer terminal = LikeFrontThreadLocal.getTerminal();
+        String mobile = valid.getMobile();
+        String code = valid.getCode();
+
+        LoginTokenVo vo = iLoginService.mobileLogin(mobile, code, terminal);
+        return AjaxResult.success(vo);
+    }
+
+    /**
+     * 微信登录
+     *
+     * @param valid 登录参数
+     * @return AjaxResult<LoginTokenVo>
+     */
+    @NotLogin
+    @PostMapping("/mnpLogin")
+    public AjaxResult<LoginTokenVo> mnpLogin(@Validated @RequestBody LoginCodeValidate valid) {
+        Integer terminal = LikeFrontThreadLocal.getTerminal();
+        String code = valid.getCode();
+
+        LoginTokenVo vo = iLoginService.mnpLogin(code, terminal);
         return AjaxResult.success(vo);
     }
 
@@ -81,49 +98,32 @@ public class LoginController {
      * 公众号登录
      *
      * @author fzr
-     * @param oaLoginValidate 参数
+     * @param valid 登录参数
      * @return AjaxResult<LoginTokenVo>
      */
     @NotLogin
     @PostMapping("/oaLogin")
-    public AjaxResult<LoginTokenVo> oaLogin(@Validated @RequestBody OaLoginValidate oaLoginValidate) {
-        String code = oaLoginValidate.getCode();
-        Integer client = oaLoginValidate.getClient();
-        client = StringUtils.isNotNull(client) ? client : ClientEnum.OA.getCode();
+    public AjaxResult<LoginTokenVo> oaLogin(@Validated @RequestBody LoginCodeValidate valid) {
+        Integer terminal = LikeFrontThreadLocal.getTerminal();
+        String code = valid.getCode();
 
-        LoginTokenVo vo = iLoginService.officeLogin(code, client);
+        LoginTokenVo vo = iLoginService.officeLogin(code, terminal);
         return AjaxResult.success(vo);
     }
 
     /**
-     * 公众号跳转url
+     * 公众号链接
      *
      * @author fzr
-     * @param url 连接
+     * @param url 跳转链接
      * @return AjaxResult<LoginCodesVo>
      */
     @NotLogin
-    @GetMapping("/codeUrl")
-    public AjaxResult<LoginUrlsVo> codeUrl(@RequestParam String url) {
-        Assert.notNull(url, "url参数不能为空");
-
+    @GetMapping("/oaCodeUrl")
+    public AjaxResult<LoginUrlsVo> oaCodeUrl(@Validated @NotNull() @RequestParam("url") String url) {
         LoginUrlsVo vo = new LoginUrlsVo();
-        vo.setUrl(iLoginService.codeUrl(url));
+        vo.setUrl(iLoginService.oaCodeUrl(url));
         return AjaxResult.success(vo);
-    }
-
-    /**
-     * 忘记密码
-     *
-     * @author fzr
-     * @param forgetPwdValidate 参数
-     * @return AjaxResult<Object>
-     */
-    @NotLogin
-    @PostMapping("/forgotPassword")
-    public AjaxResult<Object> forgotPassword(@Validated @RequestBody ForgetPwdValidate forgetPwdValidate) {
-        iLoginService.forgotPassword(forgetPwdValidate);
-        return AjaxResult.success();
     }
 
     /**
@@ -134,9 +134,9 @@ public class LoginController {
      * @return AjaxResult<LoginUrlsVo>
      */
     @NotLogin
-    @GetMapping("/getScanCode")
-    public AjaxResult<LoginUrlsVo> getScanCode(@RequestParam String url, HttpSession session) {
-        String qrcodeUrl = iLoginService.getScanCode(url, session);
+    @GetMapping("/scanCodeUrl")
+    public AjaxResult<LoginUrlsVo> scanCodeUrl(@Validated @NotNull() @RequestParam("url") String url, HttpSession session) {
+        String qrcodeUrl = iLoginService.scanCodeUrl(url, session);
         LoginUrlsVo vo = new LoginUrlsVo();
         vo.setUrl(qrcodeUrl);
         return AjaxResult.success(vo);
@@ -146,13 +146,17 @@ public class LoginController {
      * 扫码登录
      *
      * @author fzr
-     * @param scanLoginValidate 参数
+     * @param valid 扫码参数
      * @return AjaxResult<Object>
      */
     @NotLogin
     @PostMapping("/scanLogin")
-    public AjaxResult<Object> scanLogin(@Validated @RequestBody ScanLoginValidate scanLoginValidate, HttpSession session) {
-        LoginTokenVo vo = iLoginService.scanLogin(scanLoginValidate, session);
+    public AjaxResult<Object> scanLogin(@Validated @RequestBody LoginScanValidate valid, HttpSession session) {
+        Integer terminal = LikeFrontThreadLocal.getTerminal();
+        String code = valid.getCode();
+        String state = valid.getState();
+
+        LoginTokenVo vo = iLoginService.scanLogin(code, state, terminal, session);
         return AjaxResult.success(vo);
     }
 
