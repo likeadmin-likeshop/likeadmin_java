@@ -8,6 +8,8 @@ import com.mdd.admin.vo.system.SystemLogLoginVo;
 import com.mdd.admin.vo.system.SystemLogOperateVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,38 +17,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-/**
- * 系统日志管理
- */
 @RestController
 @RequestMapping("api/system/log")
+@Api(tags = "系统日志管理")
 public class SystemLogsController {
 
     @Resource
     ISystemLogsServer iSystemLogsServer;
 
-    /**
-     * 系统操作日志
-     *
-     * @author fzr
-     * @param searchValidate 搜索参数
-     * @return AjaxResult<PageResult<LogOperateVo>>
-     */
     @GetMapping("/operate")
+    @ApiOperation(value="系统操作日志")
     public AjaxResult<PageResult<SystemLogOperateVo>> operate(@Validated PageValidate pageValidate,
                                                               @Validated SystemSearchOperateValidate searchValidate) {
         PageResult<SystemLogOperateVo> list = iSystemLogsServer.operate(pageValidate, searchValidate);
         return AjaxResult.success(list);
     }
 
-    /**
-     * 系统登录日志
-     *
-     * @author fzr
-     * @param searchValidate 搜索参数
-     * @return AjaxResult<PageResult<LogLoginVo>>
-     */
     @GetMapping("/login")
+    @ApiOperation(value="系统登录日志")
     public AjaxResult<PageResult<SystemLogLoginVo>> login(@Validated PageValidate pageValidate,
                                                           @Validated SystemSearchLoginsValidate searchValidate) {
         PageResult<SystemLogLoginVo> list = iSystemLogsServer.login(pageValidate, searchValidate);

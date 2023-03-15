@@ -1,13 +1,12 @@
 package com.mdd.admin.validate.setting;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * 基础设置参数
- */
 @Data
+@ApiModel("基础设置参数")
 public class SettingWebsiteValidate implements Serializable {
 
     private static final long serialVersionUID = 1L;

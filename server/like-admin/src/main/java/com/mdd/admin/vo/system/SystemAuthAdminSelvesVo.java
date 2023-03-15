@@ -1,14 +1,17 @@
 package com.mdd.admin.vo.system;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-/**
- * 当前系统管理员Vo
- */
 @Data
+@ApiModel("当前系统管理员Vo")
 public class SystemAuthAdminSelvesVo {
 
-    private Object user;        // 用户信息
-    private Object permissions; // 权限集合: [[*]=>所有权限, ['article:add']=>部分权限]
+    @ApiModelProperty(value = "用户信息")
+    private Object user;
+
+    @ApiModelProperty(value = "权限集合: [[*]=>所有权限, ['article:add']=>部分权限]")
+    private Object permissions;
 
 }

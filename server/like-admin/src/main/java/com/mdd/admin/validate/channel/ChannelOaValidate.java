@@ -1,15 +1,14 @@
 package com.mdd.admin.validate.channel;
 
 import com.mdd.common.validator.annotation.IntegerContains;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
 
-/**
- * 公众号渠道参数
- */
 @Data
+@ApiModel("公众号渠道参数")
 public class ChannelOaValidate implements Serializable {
 
     private static final long serialVersionUID = 1L;

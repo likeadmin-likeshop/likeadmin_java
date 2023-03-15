@@ -1,25 +1,42 @@
 package com.mdd.admin.vo.system;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * 系统角色Vo
- */
 @Data
+@ApiModel("系统角色Vo")
 public class SystemAuthRoleVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;         // 主键
-    private String name;        // 角色名称
-    private String remark;      // 角色备注
-    private Object menus;       // 关联菜单
-    private Integer member;     // 成员数量
-    private Integer sort;       // 角色排序
-    private Integer isDisable;  // 是否禁用: [0=否, 1=是]
-    private String createTime;  // 创建时间
-    private String updateTime;  // 更新时间
+    @ApiModelProperty(value = "主键")
+    private Integer id;
+
+    @ApiModelProperty(value = "角色名称")
+    private String name;
+
+    @ApiModelProperty(value = "角色备注")
+    private String remark;
+
+    @ApiModelProperty(value = "关联菜单")
+    private Object menus;
+
+    @ApiModelProperty(value = "成员数量")
+    private Integer member;
+
+    @ApiModelProperty(value = "角色排序")
+    private Integer sort;
+
+    @ApiModelProperty(value = "是否禁用: [0=否, 1=是]")
+    private Integer isDisable;
+
+    @ApiModelProperty(value = "创建时间")
+    private String createTime;
+
+    @ApiModelProperty(value = "更新时间")
+    private String updateTime;
 
 }

@@ -11,99 +11,65 @@ import com.mdd.admin.validate.system.SystemMenuUpdateValidate;
 import com.mdd.admin.vo.system.SystemAuthMenuVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.validator.annotation.IDMust;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * 系统菜单管理
- */
 @RestController
 @RequestMapping("api/system/menu")
+@Api(tags = "系统菜单管理")
 public class SystemAuthMenuController {
 
     @Resource
     ISystemAuthMenuService iSystemAuthMenuService;
 
-    /**
-     * 获取菜单路由
-     *
-     * @author fzr
-     * @return AjaxResult<JSONArray>
-     */
     @NotPower
     @GetMapping("/route")
+    @ApiOperation(value="获取菜单路由")
     public AjaxResult<JSONArray> route() {
         List<Integer> roleIds = LikeAdminThreadLocal.getRoleIds();
         JSONArray lists = iSystemAuthMenuService.selectMenuByRoleId(roleIds);
         return AjaxResult.success(lists);
     }
 
-    /**
-     * 获取菜单列表
-     *
-     * @author fzr
-     * @return AjaxResult<JSONArray>
-     */
     @NotPower
     @GetMapping("/list")
+    @ApiOperation(value="获取菜单列表")
     public AjaxResult<JSONArray> list() {
         JSONArray lists = iSystemAuthMenuService.list();
         return AjaxResult.success(lists);
     }
 
-    /**
-     * 获取菜单详情
-     *
-     * @author fzr
-     * @param id 主键
-     * @return AjaxResult<SystemAuthMenuVo>
-     */
     @GetMapping("/detail")
+    @ApiOperation(value="获取菜单详情")
     public AjaxResult<SystemAuthMenuVo> detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         SystemAuthMenuVo vo = iSystemAuthMenuService.detail(id);
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 新增菜单
-     *
-     * @author fzr
-     * @param createValidate 参数
-     * @return AjaxResult<Object>
-     */
     @Log(title = "菜单新增")
     @PostMapping("/add")
+    @ApiOperation(value="新增菜单")
     public AjaxResult<Object> add(@Validated @RequestBody SystemMenuCreateValidate createValidate) {
         iSystemAuthMenuService.add(createValidate);
         return AjaxResult.success();
     }
 
-    /**
-     * 更新菜单
-     *
-     * @author fzr
-     * @param updateValidate 参数
-     * @return AjaxResult<Object>
-     */
     @Log(title = "菜单编辑")
     @PostMapping("/edit")
+    @ApiOperation(value="菜单编辑")
     public AjaxResult<Object> edit(@Validated @RequestBody SystemMenuUpdateValidate updateValidate) {
         iSystemAuthMenuService.edit(updateValidate);
         return AjaxResult.success();
     }
 
-    /**
-     * 删除菜单
-     *
-     * @author fzr
-     * @param idValidate 参数
-     * @return AjaxResult<Object>
-     */
     @Log(title = "菜单删除")
     @PostMapping("/del")
+    @ApiOperation(value="菜单删除")
     public AjaxResult<Object> del(@Validated @RequestBody IdValidate idValidate) {
         iSystemAuthMenuService.del(idValidate.getId());
         return AjaxResult.success();

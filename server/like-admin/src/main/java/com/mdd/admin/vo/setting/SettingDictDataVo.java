@@ -1,25 +1,42 @@
 package com.mdd.admin.vo.setting;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * 字典数据Vo
- */
 @Data
+@ApiModel("字典数据Vo")
 public class SettingDictDataVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;        // 主键
-    private Integer typeId;    // 类型
-    private String name;       // 键
-    private String value;      // 值
-    private String remark;     // 备注
-    private Integer sort;      // 排序
-    private Integer status;    // 状态: [0=停用, 1=禁用]
-    private String createTime; // 创建时间
-    private String updateTime; // 更新时间
+    @ApiModelProperty(value = "主键")
+    private Integer id;
+
+    @ApiModelProperty(value = "类型")
+    private Integer typeId;
+
+    @ApiModelProperty(value = "键")
+    private String name;
+
+    @ApiModelProperty(value = "值")
+    private String value;
+
+    @ApiModelProperty(value = "备注")
+    private String remark;
+
+    @ApiModelProperty(value = "排序")
+    private Integer sort;
+
+    @ApiModelProperty(value = "是否停用")
+    private Integer status;
+
+    @ApiModelProperty(value = "创建时间")
+    private String createTime;
+
+    @ApiModelProperty(value = "更新时间")
+    private String updateTime;
 
 }
