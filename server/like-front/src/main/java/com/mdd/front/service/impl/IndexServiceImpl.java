@@ -1,12 +1,8 @@
 package com.mdd.front.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.common.config.GlobalConfig;
-import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.DecoratePage;
 import com.mdd.common.entity.DecorateTabbar;
@@ -17,8 +13,6 @@ import com.mdd.common.mapper.DecorateTabbarMapper;
 import com.mdd.common.mapper.setting.HotSearchMapper;
 import com.mdd.common.util.*;
 import com.mdd.front.service.IIndexService;
-import com.mdd.front.validate.common.PageValidate;
-import com.mdd.front.vo.article.ArticleListedVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -205,40 +199,6 @@ public class IndexServiceImpl implements IIndexService {
         }
 
         return list;
-    }
-
-    /**
-     * 搜索
-     *
-     * @author fzr
-     * @param pageValidate 分页参数
-     * @param params 搜索参数
-     * @return PageResult<ArticleListVo>
-     */
-    public PageResult<ArticleListedVo> search(PageValidate pageValidate, Map<String, String> params) {
-        Integer pageNo   = pageValidate.getPageNo();
-        Integer pageSize = pageValidate.getPageSize();
-
-        MPJQueryWrapper<Article> mpjQueryWrapper = new MPJQueryWrapper<Article>()
-                .selectAll(Article.class)
-                .select("ac.name as category")
-                .innerJoin("?_article_category ac ON ac.id=t.cid".replace("?_", GlobalConfig.tablePrefix))
-                .eq("t.is_delete", 0)
-                .like("t.title", params.get("keyword"))
-                .orderByDesc(Arrays.asList("t.sort", "t.id"));
-
-        IPage<ArticleListedVo> iPage = articleMapper.selectJoinPage(
-                new Page<>(pageNo, pageSize),
-                ArticleListedVo.class,
-                mpjQueryWrapper);
-
-        for (ArticleListedVo vo : iPage.getRecords()) {
-            vo.setCollect(false);
-            vo.setImage(UrlUtils.toAbsoluteUrl(vo.getImage()));
-            vo.setCreateTime(TimeUtils.timestampToDate(vo.getCreateTime()));
-        }
-
-        return PageResult.iPageHandle(iPage);
     }
 
 }

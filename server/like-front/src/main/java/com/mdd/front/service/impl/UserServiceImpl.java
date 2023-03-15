@@ -85,7 +85,6 @@ public class UserServiceImpl implements IUserService {
         UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
                 .select("id,openid")
                 .eq("user_id", userId)
-                .eq("client", ClientEnum.MNP.getCode())
                 .last("limit 1"));
 
         UserInfoVo vo = new UserInfoVo();

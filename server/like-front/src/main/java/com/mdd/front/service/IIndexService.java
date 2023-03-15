@@ -53,13 +53,4 @@ public interface IIndexService {
      */
     List<String> hotSearch();
 
-    /**
-     * 搜索
-     *
-     * @author fzr
-     * @param pageValidate 分页参数
-     * @param params 搜索参数
-     * @return PageResult<ArticleListVo>
-     */
-    PageResult<ArticleListedVo> search(PageValidate pageValidate, Map<String, String> params);
 }

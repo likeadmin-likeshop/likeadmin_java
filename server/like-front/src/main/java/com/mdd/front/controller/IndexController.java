@@ -111,23 +111,6 @@ public class IndexController {
     }
 
     /**
-     * 搜索
-     *
-     * @author fzr
-     * @param pageValidate 分页参数
-     * @param params 搜素参数
-     * @return AjaxResult<PageResult<ArticleListVo>>
-     */
-    @NotLogin
-    @GetMapping("/search")
-    @ApiOperation(value="搜索文章")
-    public AjaxResult<PageResult<ArticleListedVo>> search(@Validated PageValidate pageValidate,
-                                                          @RequestParam Map<String, String> params) {
-        PageResult<ArticleListedVo> list = iIndexService.search(pageValidate, params);
-        return AjaxResult.success(list);
-    }
-
-    /**
      * 发送短信
      *
      * @author fzr

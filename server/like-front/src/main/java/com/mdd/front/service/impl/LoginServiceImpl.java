@@ -374,7 +374,7 @@ public class LoginServiceImpl implements ILoginService {
      */
     private LoginTokenVo __loginToken(Integer userId, String mobile, Integer terminal) {
         // 实现账号登录
-        StpUtil.login(userId, terminal);
+        StpUtil.login(userId, String.valueOf(terminal));
 
         // 更新登录信息
         User user = new User();
