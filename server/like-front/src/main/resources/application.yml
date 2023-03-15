@@ -2,6 +2,12 @@
 like:
   # 上传目录
   upload-directory: /www/uploads/likeadmin-java/
+  # Swagger配置
+  swagger:
+    # 是否开启swagger
+    enabled: true
+    # 请求前缀
+    pathMapping: /dev-api
 
 # 服务配置
 server:

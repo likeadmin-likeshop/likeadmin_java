@@ -24,6 +24,16 @@
       "name": "like.captcha.token",
       "type": "java.lang.String",
       "description": "Description for like.captcha.token."
+    },
+    {
+      "name": "like.swagger.enabled",
+      "type": "java.lang.String",
+      "description": "Description for like.swagger.enabled."
+    },
+    {
+      "name": "like.swagger.pathMapping",
+      "type": "java.lang.String",
+      "description": "Description for like.swagger.pathMapping."
     }
   ]
 }
