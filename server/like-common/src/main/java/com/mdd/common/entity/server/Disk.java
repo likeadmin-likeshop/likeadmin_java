@@ -1,50 +1,36 @@
 package com.mdd.common.entity.server;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * 系统文件相关信息
- */
 @Data
+@ApiModel("系统文件信息实体")
 public class Disk implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 盘符路径
-     */
+    @ApiModelProperty("盘符路径")
     private String dirName;
 
-    /**
-     * 盘符类型
-     */
+    @ApiModelProperty("盘符类型")
     private String sysTypeName;
 
-    /**
-     * 文件类型
-     */
+    @ApiModelProperty("文件类型")
     private String typeName;
 
-    /**
-     * 总大小
-     */
+    @ApiModelProperty("总大小")
     private String total;
 
-    /**
-     * 剩余大小
-     */
+    @ApiModelProperty("剩余大小")
     private String free;
 
-    /**
-     * 已经使用量
-     */
+    @ApiModelProperty("已经使用量")
     private String used;
 
-    /**
-     * 资源的使用率
-     */
+    @ApiModelProperty("资源的使用率")
     private double usage;
 
 }

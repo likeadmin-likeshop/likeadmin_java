@@ -1,64 +1,44 @@
 package com.mdd.common.entity.server;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * JVM相关信息
- */
 @Data
+@ApiModel("JVM相关信息实体")
 public class Jvm implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 当前JVM占用的内存总数(M)
-     */
+    @ApiModelProperty("当前JVM占用的内存总数(M)")
     private double total;
 
-    /**
-     * JVM最大可用内存总数(M)
-     */
+    @ApiModelProperty("JVM最大可用内存总数(M)")
     private double max;
 
-    /**
-     * JVM空闲内存(M)
-     */
+    @ApiModelProperty("JVM空闲内存(M)")
     private double free;
 
-    /**
-     * JVM内存使用率
-     */
+    @ApiModelProperty("JVM内存使用率")
     private double usage;
 
-    /**
-     * JDK版本
-     */
+    @ApiModelProperty("JDK版本")
     private String version;
 
-    /**
-     * JDK路径
-     */
+    @ApiModelProperty("JDK路径")
     private String home;
 
-    /**
-     * JDK名称
-     */
+    @ApiModelProperty("JDK名称")
     private String name;
 
-    /**
-     * 运行参数
-     */
+    @ApiModelProperty("运行参数")
     private String inputArgs;
 
-    /**
-     * JDK运行时间
-     */
+    @ApiModelProperty("JDK运行时间")
     private String runTime;
 
-    /**
-     * JDK启动时间
-     */
+    @ApiModelProperty("JDK启动时间")
     private String startTime;
 }
