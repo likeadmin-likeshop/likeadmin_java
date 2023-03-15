@@ -8,6 +8,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.oas.annotations.EnableOpenApi;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
@@ -33,10 +34,15 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo(){
+        String author = "FZR";
+        String url = "https://gitee.com/likeadmin/likeadmin_java";
+        String email = "tinyants@163.com";
+
         return new ApiInfoBuilder()
                 .title("LikeAdmin【后台】接口文档")
-                .description("likeadmin快速开发管理后台")
+                .description("likeadmin是一套使用流行的技术栈的快速开发管理后台")
                 .version(GlobalConfig.version)
+                .contact(new Contact(author, url, email))
                 .build();
     }
 

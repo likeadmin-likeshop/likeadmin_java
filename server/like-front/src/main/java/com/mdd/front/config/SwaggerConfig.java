@@ -33,10 +33,15 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo(){
+        String author = "FZR";
+        String url = "https://gitee.com/likeadmin/likeadmin_java";
+        String email = "tinyants@163.com";
+
         return new ApiInfoBuilder()
                 .title("LikeAdmin【前台】接口文档")
-                .description("likeadmin快速开发管理后台")
+                .description("likeadmin是一套使用流行的技术栈的快速开发管理后台")
                 .version(GlobalConfig.version)
+                .contact(new Contact(author, url, email))
                 .build();
     }
 
