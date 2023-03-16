@@ -25,6 +25,8 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Aspect
@@ -40,6 +42,11 @@ public class LogAspect {
      * 线程本地变量
      */
     private static final ThreadLocal<Long> threadLocal = new ThreadLocal<>();
+
+    /**
+     * 单线程化的线程池
+     */
+    private final ExecutorService executor =  Executors.newSingleThreadExecutor();
 
     /**
      * 声明切面点拦截那些类
@@ -151,7 +158,9 @@ public class LogAspect {
                 model.setEndTime(endTime / 1000);
                 model.setTaskTime(endTime - beginTime);
                 model.setCreateTime(System.currentTimeMillis() / 1000);
-                systemLogOperateMapper.insert(model);
+                executor.submit(() -> {
+                    systemLogOperateMapper.insert(model);
+                });
             }
         } catch (Exception ex) {
             log.error("异常信息:{}", ex.getMessage());
