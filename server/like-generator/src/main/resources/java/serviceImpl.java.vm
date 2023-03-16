@@ -22,7 +22,7 @@ import ${packageName}.common.core.PageResult;
 #end
 import ${packageName}.common.entity.${EntityName};
 import ${packageName}.common.mapper.${EntityName}Mapper;
-import ${packageName}.common.util.ArrayUtils;
+import ${packageName}.common.util.ListUtils;
 import ${packageName}.common.util.TimeUtils;
 import ${packageName}.common.util.UrlUtils;
 import org.springframework.beans.BeanUtils;

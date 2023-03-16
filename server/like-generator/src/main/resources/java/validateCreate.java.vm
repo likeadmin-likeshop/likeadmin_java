@@ -1,5 +1,7 @@
 package ${packageName}.admin.validate;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import java.io.Serializable;
 #foreach ($column in $columns)
@@ -12,14 +14,8 @@ import java.util.Date;
 #end
 import javax.validation.constraints.*;
 
-#set($isAuthor = !$authorName.equals(""))
-/**
- * ${functionName}参数
-#if($isAuthor)
- * @author ${authorName}
-#end
-*/
 @Data
+@ApiModel("${functionName}创建参数")
 public class ${EntityName}CreateValidate implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,6 +25,7 @@ public class ${EntityName}CreateValidate implements Serializable {
     #if($column.isRequired==1)
     @NotNull(message = "${column.javaField}参数缺失")
     #end
+    @ApiModelProperty(value = "${column.columnComment}")
     private ${column.javaType} ${column.javaField};
 
 #end

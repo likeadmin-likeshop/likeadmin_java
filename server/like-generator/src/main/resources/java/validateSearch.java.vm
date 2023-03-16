@@ -1,5 +1,7 @@
 package ${packageName}.admin.validate;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import java.io.Serializable;
 #foreach ($column in $columns)
@@ -11,14 +13,8 @@ import java.util.Date;
 #end
 #end
 
-#set($isAuthor = !$authorName.equals(""))
-/**
- * ${functionName}参数
-#if($isAuthor)
- * @author ${authorName}
-#end
- */
 @Data
+@ApiModel("${functionName}搜素参数")
 public class ${EntityName}SearchValidate implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -26,9 +22,13 @@ public class ${EntityName}SearchValidate implements Serializable {
 #foreach ($column in $columns)
 #if($column.isQuery==1)
     #if ($column.columnName.equals("create_time") || $column.columnName.equals("update_time") || $column.columnName.equals("delete_time"))
+    @ApiModelProperty(value = "开始时间")
     private String ${column.javaField}Start;
+
+    @ApiModelProperty(value = "结束时间")
     private String ${column.javaField}End;
     #else
+    @ApiModelProperty(value = "${column.columnComment}")
     private ${column.javaType} ${column.javaField};
     #end
 
