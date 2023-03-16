@@ -2,6 +2,8 @@ package com.mdd.front.controller;
 
 import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
+import com.mdd.common.exception.LoginException;
+import com.mdd.common.exception.OperateException;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
 import com.mdd.front.validate.users.UserForgetPwdValidate;
@@ -31,6 +33,9 @@ public class UserController {
     @ApiOperation(value="个人中心")
     public AjaxResult<UserCenterVo> center() {
         Integer userId = LikeFrontThreadLocal.getUserId();
+        if (userId == 0) {
+            throw new OperateException("未登录", 1);
+        }
 
         UserCenterVo vo = iUserService.center(userId);
         return AjaxResult.success(vo);
