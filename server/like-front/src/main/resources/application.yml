@@ -73,7 +73,7 @@ mybatis-plus:
 
 # Sa-token配置
 sa-token:
-  token-name: token  # token的名称
+  token-name: like-token  # token的名称
   timeout: 2592000        # token有效期单位s(默认30天,-1代表永不过期)
   activity-timeout: -1    # token临时有效期(指定时间无操作掉线)
   is-concurrent: true     # 是否允许同一账号并发登录
