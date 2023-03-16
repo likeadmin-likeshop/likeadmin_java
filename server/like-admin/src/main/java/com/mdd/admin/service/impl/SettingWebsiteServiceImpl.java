@@ -30,7 +30,7 @@ public class SettingWebsiteServiceImpl implements ISettingWebsiteService {
         vo.setLogo(UrlUtils.toAbsoluteUrl(config.getOrDefault("logo", "")));
         vo.setFavicon(UrlUtils.toAbsoluteUrl(config.getOrDefault("favicon", "")));
         vo.setBackdrop(UrlUtils.toAbsoluteUrl(config.getOrDefault("backdrop", "")));
-        
+
         vo.setShopName(config.getOrDefault("shopName", ""));
         vo.setShopLogo(UrlUtils.toAbsoluteUrl(config.getOrDefault("shopLogo", "")));
 
@@ -59,8 +59,8 @@ public class SettingWebsiteServiceImpl implements ISettingWebsiteService {
         ConfigUtils.set("website", "shopLogo", UrlUtils.toRelativeUrl(websiteValidate.getShopLogo()));
 
         ConfigUtils.set("website", "pcLogo", UrlUtils.toRelativeUrl(websiteValidate.getPcLogo()));
+        ConfigUtils.set("website", "pcIco", UrlUtils.toRelativeUrl(websiteValidate.getPcIco()));
         ConfigUtils.set("website", "pcTitle", websiteValidate.getPcTitle());
-        ConfigUtils.set("website", "pcIco", websiteValidate.getPcIco());
         ConfigUtils.set("website", "pcDesc", websiteValidate.getPcDesc());
         ConfigUtils.set("website", "pcKeywords", websiteValidate.getPcKeywords());
     }
