@@ -1,5 +1,6 @@
 package com.mdd.admin.controller.setting;
 
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.ISettingNoticeService;
 import com.mdd.admin.vo.setting.SettingNoticeDetailVo;
 import com.mdd.admin.vo.setting.SettingNoticeListedVo;
@@ -39,8 +40,9 @@ public class SettingNoticeController {
         return AjaxResult.success(vo);
     }
 
+    @Log(title = "通知设置编辑")
     @PostMapping("/save")
-    @ApiOperation(value="通知设置保存")
+    @ApiOperation(value="通知设置编辑")
     public AjaxResult<Object> save(@RequestBody Map<String, Object> params) {
         iSettingNoticeService.save(params);
         return AjaxResult.success();

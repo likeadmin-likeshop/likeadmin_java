@@ -1,6 +1,7 @@
 package com.mdd.admin.controller.setting;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.mdd.admin.aop.Log;
 import com.mdd.common.aop.NotPower;
 import com.mdd.admin.service.ISettingDictDataService;
 import com.mdd.admin.validate.commons.IdsValidate;
@@ -54,6 +55,7 @@ public class SettingDictDataController {
         return AjaxResult.success(vo);
     }
 
+    @Log(title = "字典数据新增")
     @PostMapping("/add")
     @ApiOperation(value="字典数据新增")
     public AjaxResult<Object> add(@Validated @RequestBody DictDataCreateValidate createValidate) {
@@ -61,6 +63,7 @@ public class SettingDictDataController {
         return AjaxResult.success();
     }
 
+    @Log(title = "字典数据编辑")
     @PostMapping("/edit")
     @ApiOperation(value="字典数据编辑")
     public AjaxResult<Object> edit(@Validated @RequestBody DictDataUpdateValidate updateValidate) {
@@ -68,6 +71,7 @@ public class SettingDictDataController {
         return AjaxResult.success();
     }
 
+    @Log(title = "字典数据删除")
     @PostMapping("/del")
     @ApiOperation(value="字典数据删除")
     public AjaxResult<Object> del(@Validated @RequestBody IdsValidate idsValidate) {

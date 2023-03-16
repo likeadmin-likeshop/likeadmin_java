@@ -1,5 +1,6 @@
 package com.mdd.admin.controller;
 
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.IUsersService;
 import com.mdd.admin.validate.UsersSearchValidate;
 import com.mdd.admin.validate.UsersUpdateValidate;
@@ -38,6 +39,7 @@ public class UsersController {
         return AjaxResult.success(vo);
     }
 
+    @Log(title = "用户编辑")
     @PostMapping("/edit")
     @ApiOperation(value="用户编辑")
     public AjaxResult<Object> edit(@Validated @RequestBody UsersUpdateValidate updateValidate) {

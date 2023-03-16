@@ -1,5 +1,6 @@
 package com.mdd.admin.controller;
 
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.ICrontabService;
 import com.mdd.admin.validate.CrontabCreateValidate;
 import com.mdd.admin.validate.CrontabUpdateValidate;
@@ -40,6 +41,7 @@ public class CrontabController {
         return AjaxResult.success(vo);
     }
 
+    @Log(title = "计划任务新增")
     @PostMapping("/add")
     @ApiOperation(value="计划任务新增")
     public AjaxResult<Object> add(@Validated @RequestBody CrontabCreateValidate createValidate) throws SchedulerException {
@@ -47,6 +49,7 @@ public class CrontabController {
         return AjaxResult.success();
     }
 
+    @Log(title = "计划任务编辑")
     @PostMapping("/edit")
     @ApiOperation(value="计划任务编辑")
     public AjaxResult<Object> edit(@Validated @RequestBody CrontabUpdateValidate updateValidate) throws SchedulerException {
@@ -54,6 +57,7 @@ public class CrontabController {
         return AjaxResult.success();
     }
 
+    @Log(title = "计划任务删除")
     @PostMapping("/del")
     @ApiOperation(value="计划任务删除")
     public AjaxResult<Object> del(@Validated @RequestBody IdValidate idValidate) throws SchedulerException {

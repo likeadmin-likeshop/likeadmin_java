@@ -1,5 +1,6 @@
 package com.mdd.admin.controller.setting;
 
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.ISettingCopyrightService;
 import com.mdd.admin.validate.setting.SettingCopyrightValidate;
 import com.mdd.admin.vo.setting.SettingCopyrightVo;
@@ -21,14 +22,15 @@ public class SettingCopyrightController {
     ISettingCopyrightService iSettingCopyrightService;
 
     @GetMapping("/detail")
-    @ApiOperation(value="获取网站版权信息")
+    @ApiOperation(value="网站版权信息")
     public AjaxResult<List<SettingCopyrightVo>> detail() {
         List<SettingCopyrightVo> list = iSettingCopyrightService.detail();
         return AjaxResult.success(list);
     }
 
+    @Log(title = "网站版权编辑")
     @PostMapping("/save")
-    @ApiOperation(value="保存网站版本信息")
+    @ApiOperation(value="网站版权编辑")
     public AjaxResult<Object> save(@Validated @RequestBody SettingCopyrightValidate copyrightValidate) {
         iSettingCopyrightService.save(copyrightValidate);
         return AjaxResult.success();

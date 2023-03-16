@@ -1,5 +1,6 @@
 package com.mdd.admin.controller.setting;
 
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.ISettingLoginService;
 import com.mdd.admin.validate.setting.SettingLoginValidate;
 import com.mdd.admin.vo.setting.SettingLoginVo;
@@ -27,8 +28,9 @@ public class SettingLoginController {
         return AjaxResult.success(vo);
     }
 
+    @Log(title = "登录设置编辑")
     @PostMapping("/save")
-    @ApiOperation(value="登录设置保存")
+    @ApiOperation(value="登录设置编辑")
     public AjaxResult<Object> save(@Validated @RequestBody SettingLoginValidate loginValidate) {
         iSettingLoginService.save(loginValidate);
         return AjaxResult.success();

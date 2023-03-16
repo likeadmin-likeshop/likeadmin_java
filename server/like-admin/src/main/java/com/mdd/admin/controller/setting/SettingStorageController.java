@@ -1,6 +1,7 @@
 package com.mdd.admin.controller.setting;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.ISettingStorageService;
 import com.mdd.common.core.AjaxResult;
 import io.swagger.annotations.Api;
@@ -33,6 +34,7 @@ public class SettingStorageController {
         return AjaxResult.success(map);
     }
 
+    @Log(title = "存储编辑")
     @PostMapping("/edit")
     @ApiOperation(value="存储编辑")
     public AjaxResult<Object> edit(@RequestBody Map<String, String> params) {
@@ -40,6 +42,7 @@ public class SettingStorageController {
         return AjaxResult.success();
     }
 
+    @Log(title = "存储切换")
     @PostMapping("/change")
     @ApiOperation(value="存储切换")
     public AjaxResult<Object> change(@RequestBody Map<String, String> params) {

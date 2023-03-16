@@ -1,5 +1,6 @@
 package com.mdd.admin.controller.setting;
 
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.ISettingSearchService;
 import com.mdd.admin.validate.setting.SettingSearchValidate;
 import com.mdd.admin.vo.setting.SettingSearchDetailVo;
@@ -27,8 +28,9 @@ public class SettingSearchController {
         return AjaxResult.success(vo);
     }
 
+    @Log(title = "热门搜索编辑")
     @PostMapping("/save")
-    @ApiOperation(value="热门搜索保存")
+    @ApiOperation(value="热门搜索编辑")
     public AjaxResult<Object> save(@Validated @RequestBody SettingSearchValidate searchValidate) {
         iSettingSearchService.save(searchValidate);
         return AjaxResult.success();

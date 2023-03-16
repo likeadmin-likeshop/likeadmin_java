@@ -1,5 +1,6 @@
 package com.mdd.admin.controller.decorate;
 
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.IDecorateTabbarService;
 import com.mdd.admin.validate.DecorateTabsValidate;
 import com.mdd.admin.vo.decorate.DecorateTabbarVo;
@@ -19,12 +20,6 @@ public class DecorateTabbarController {
     @Resource
     IDecorateTabbarService iDecorateTabbarService;
 
-    /**
-     * 底部导航详情
-     *
-     * @author fzr
-     * @return AjaxResult<DecorateTabbarVo>
-     */
     @GetMapping("/detail")
     @ApiOperation(value="底部导航详情")
     public AjaxResult<DecorateTabbarVo> detail() {
@@ -32,15 +27,9 @@ public class DecorateTabbarController {
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 底部导航保存
-     *
-     * @author fzr
-     * @param tabsValidate 参数
-     * @return AjaxResult<Object>
-     */
+    @Log(title = "底部导航编辑")
     @PostMapping("/save")
-    @ApiOperation(value="底部导航保存")
+    @ApiOperation(value="底部导航编辑")
     public AjaxResult<Object> save(@Validated @RequestBody DecorateTabsValidate tabsValidate) {
         iDecorateTabbarService.save(tabsValidate);
         return AjaxResult.success();

@@ -36,9 +36,9 @@ public class SettingSmsController {
         return AjaxResult.success(map);
     }
 
-    @Log(title = "短信引擎保存")
+    @Log(title = "短信引擎编辑")
     @PostMapping("/save")
-    @ApiOperation(value="短信引擎保存")
+    @ApiOperation(value="短信引擎编辑")
     public AjaxResult<Object> save(@RequestBody Map<String, String> params) {
         iSettingSmsService.save(params);
         return AjaxResult.success();

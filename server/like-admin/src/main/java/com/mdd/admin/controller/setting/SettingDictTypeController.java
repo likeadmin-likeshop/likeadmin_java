@@ -1,5 +1,6 @@
 package com.mdd.admin.controller.setting;
 
+import com.mdd.admin.aop.Log;
 import com.mdd.common.aop.NotPower;
 import com.mdd.admin.service.ISettingDictTypeService;
 import com.mdd.admin.validate.commons.IdsValidate;
@@ -50,6 +51,7 @@ public class SettingDictTypeController {
         return AjaxResult.success(vo);
     }
 
+    @Log(title = "字典类型新增")
     @PostMapping("/add")
     @ApiOperation(value="字典类型新增")
     public AjaxResult<Object> add(@Validated @RequestBody DictTypeCreateValidate createValidate) {
@@ -57,6 +59,7 @@ public class SettingDictTypeController {
         return AjaxResult.success();
     }
 
+    @Log(title = "字典类型编辑")
     @PostMapping("/edit")
     @ApiOperation(value="字典类型编辑")
     public AjaxResult<Object> edit(@Validated @RequestBody DictTypeUpdateValidate updateValidate) {
@@ -64,6 +67,7 @@ public class SettingDictTypeController {
         return AjaxResult.success();
     }
 
+    @Log(title = "字典类型删除")
     @PostMapping("/del")
     @ApiOperation(value="字典类型删除")
     public AjaxResult<Object> del(@Validated @RequestBody IdsValidate idsValidate) {

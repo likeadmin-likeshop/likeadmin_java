@@ -21,13 +21,6 @@ public class DecoratePagesController {
     @Resource
     IDecoratePageService iDecoratePageService;
 
-    /**
-     * 页面装修详情
-     *
-     * @author fzr
-     * @param id 主键
-     * @return AjaxResult<DecoratePageVo>
-     */
     @GetMapping("/detail")
     @ApiOperation(value="页面装修详情")
     public AjaxResult<DecoratePageVo> detail(@Validated @IDMust() @RequestParam("id") Integer id) {
@@ -35,13 +28,6 @@ public class DecoratePagesController {
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 页面装修保存
-     *
-     * @author fzr
-     * @param decoratePageValidate 参数
-     * @return AjaxResult<Object>
-     */
     @Log(title = "页面装修保存")
     @PostMapping("/save")
     @ApiOperation(value="页面装修保存")

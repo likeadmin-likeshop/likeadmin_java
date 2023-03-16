@@ -1,5 +1,6 @@
 package com.mdd.admin.controller.setting;
 
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.ISettingUserService;
 import com.mdd.admin.validate.setting.SettingUserValidate;
 import com.mdd.admin.vo.setting.SettingUserVo;
@@ -26,8 +27,9 @@ public class SettingUserController {
         return AjaxResult.success(vo);
     }
 
+    @Log(title = "用户设置编辑")
     @PostMapping("/save")
-    @ApiOperation(value="用户设置保存")
+    @ApiOperation(value="用户设置编辑")
     public AjaxResult<Object> save(@Validated @RequestBody SettingUserValidate userValidate) {
         iSettingUserService.save(userValidate);
         return AjaxResult.success();

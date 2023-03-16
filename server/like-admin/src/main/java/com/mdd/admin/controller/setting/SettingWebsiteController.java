@@ -1,5 +1,6 @@
 package com.mdd.admin.controller.setting;
 
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.ISettingWebsiteService;
 import com.mdd.admin.validate.setting.SettingWebsiteValidate;
 import com.mdd.admin.vo.setting.SettingWebsiteVo;
@@ -21,14 +22,15 @@ public class SettingWebsiteController {
     ISettingWebsiteService iSettingWebsiteService;
 
     @GetMapping("/detail")
-    @ApiOperation(value="获取网站配置信息")
+    @ApiOperation(value="网站配置信息")
     public AjaxResult<SettingWebsiteVo> detail() {
         SettingWebsiteVo detail = iSettingWebsiteService.detail();
         return AjaxResult.success(detail);
     }
 
+    @Log(title = "网站配置编辑")
     @PostMapping("/save")
-    @ApiOperation(value="保存网站配置信息")
+    @ApiOperation(value="网站配置编辑")
     public AjaxResult<Object> save(@Validated @RequestBody SettingWebsiteValidate websiteValidate) {
         iSettingWebsiteService.save(websiteValidate);
         return AjaxResult.success();
