@@ -36,7 +36,7 @@ export function getArticleDetail(params) {
  * @return { Promise }
  */
 export function addCollect(params) {
-    return $request.post({ url: '/article/addCollect', params })
+    return $request.post({ url: '/article/collectAdd', params })
 }
 
 /**
@@ -45,7 +45,7 @@ export function addCollect(params) {
  * @return { Promise }
  */
 export function cancelCollect(params) {
-    return $request.post({ url: '/article/cancelCollect', params })
+    return $request.post({ url: '/article/collectCancel', params })
 }
 
 /**
@@ -53,5 +53,5 @@ export function cancelCollect(params) {
  * @return { Promise }
  */
 export function getCollect(params) {
-    return $request.get({ url: '/article/collect', params })
+    return $request.get({ url: '/article/collectList', params })
 }

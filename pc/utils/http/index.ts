@@ -1,3 +1,4 @@
+import { getClient } from '@/utils/env'
 import { FetchOptions } from 'ohmyfetch'
 import { RequestCodeEnum, RequestMethodsEnum } from '@/enums/requestEnums'
 import feedback from '@/utils/feedback'
@@ -27,8 +28,9 @@ export function createRequest(opt?: Partial<FetchOptions>) {
             // 添加token
             if (withToken) {
                 const token = userStore.token
-                headers['token'] = token
+                headers['like-token'] = token
             }
+            options.headers['terminal'] = getClient()
             options.headers = headers
         },
         requestOptions: {
