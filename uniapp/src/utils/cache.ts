@@ -14,7 +14,7 @@ const cache = {
         try {
             uni.setStorageSync(key, data)
         } catch (e) {
-            return null
+            return undefined
         }
     },
     get(key: string) {
@@ -22,16 +22,16 @@ const cache = {
         try {
             const data = uni.getStorageSync(key)
             if (!data) {
-                return null
+                return undefined
             }
             const { value, expire } = JSON.parse(data)
             if (expire && expire < this.time()) {
                 uni.removeStorageSync(key)
-                return null
+                return undefined
             }
             return value
         } catch (e) {
-            return null
+            return undefined
         }
     },
     //获取当前时间

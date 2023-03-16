@@ -2,8 +2,9 @@ import HttpRequest from './http'
 import { merge } from 'lodash-es'
 import { HttpRequestOptions, RequestHooks } from './type'
 import { getToken } from '../auth'
-import { RequestCodeEnum } from '@/enums/requestEnums'
+import { RequestCodeEnum, RequestMethodsEnum } from '@/enums/requestEnums'
 import { useUserStore } from '@/stores/user'
+import { client } from '../client'
 
 const requestHooks: RequestHooks = {
     requestInterceptorsHook(options, config) {
@@ -17,12 +18,15 @@ const requestHooks: RequestHooks = {
         }
         const token = getToken()
         // 添加token
-        if (withToken && token) {
-            options.header.token = token
+        if (withToken) {
+            options.header['like-token'] = options.header.token || token
         }
+        // 添加终端类型
+        options.header['terminal'] = client
+        delete options.header.token
         return options
     },
-    responseInterceptorsHook(response, config) {
+    async responseInterceptorsHook(response, config) {
         const { isTransformResponse, isReturnDefaultResponse, isAuth } = config
 
         //返回默认响应，当需要获取响应头及其他数据时可使用
@@ -34,7 +38,7 @@ const requestHooks: RequestHooks = {
             return response.data
         }
         const { logout } = useUserStore()
-        const { code, data, msg } = response.data as any
+        const { code, data, msg, show } = response.data as any
         switch (code) {
             case RequestCodeEnum.SUCCESS:
                 return data
@@ -48,6 +52,7 @@ const requestHooks: RequestHooks = {
             case RequestCodeEnum.NO_PERMISSTION:
             case RequestCodeEnum.FAILED:
             case RequestCodeEnum.SYSTEM_ERROR:
+            case RequestCodeEnum.REQUEST_404_ERROR:
                 uni.$u.toast(msg)
                 return Promise.reject(msg)
 
@@ -64,6 +69,12 @@ const requestHooks: RequestHooks = {
             default:
                 return data
         }
+    },
+    async responseInterceptorsCatchHook(options, error) {
+        if (options.method?.toUpperCase() == RequestMethodsEnum.POST) {
+            uni.$u.toast('请求失败，请重试')
+        }
+        return Promise.reject(error)
     }
 }
 
@@ -83,6 +94,8 @@ const defaultOptions: HttpRequestOptions = {
     // 是否携带token
     withToken: true,
     isAuth: false,
+    retryCount: 2,
+    retryTimeout: 1000,
     requestHooks: requestHooks
 }
 

@@ -191,7 +191,7 @@ import { onShow, onUnload } from '@dcloudio/uni-app'
 import { getUserInfo, userEdit, userBindMobile, userMnpMobile } from '@/api/user'
 import { smsSend } from '@/api/app'
 import { FieldType, SMSEnum } from '@/enums/appEnums'
-import { uploadFile } from '@/utils/util'
+import { uploadImage } from '@/api/app'
 
 // 用户信息
 const userInfo = ref<any>({})
@@ -342,7 +342,7 @@ const uploadAvatar = (path: string) => {
         title: '正在上传中...',
         mask: true
     })
-    uploadFile(path)
+    uploadImage(path)
         .then((res) => {
             uni.hideLoading()
             setUserInfoFun(res.url)
