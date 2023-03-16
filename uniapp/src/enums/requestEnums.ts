@@ -26,3 +26,8 @@ export enum RequestCodeEnum {
     REQUEST_404_ERROR = 404, //请求接口不存在
     SYSTEM_ERROR = 500 //系统错误
 }
+
+export enum RequestErrMsgEnum {
+    ABORT = 'request:fail abort',
+    TIMEOUT = 'request:fail timeout'
+}

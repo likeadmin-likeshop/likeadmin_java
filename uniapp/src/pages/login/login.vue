@@ -158,7 +158,7 @@
 </template>
 
 <script setup lang="ts">
-import { login } from '@/api/account'
+import { mobileLogin, accountLogin, mnpLogin } from '@/api/account'
 import { smsSend } from '@/api/app'
 import { SMSEnum } from '@/enums/appEnums'
 import { BACK_URL } from '@/enums/cacheEnums'
@@ -174,8 +174,7 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { computed, reactive, ref, shallowRef, watch } from 'vue'
 enum LoginTypeEnum {
     MOBILE = 'mobile',
-    ACCOUNT = 'account',
-    MNP = 'mnp'
+    ACCOUNT = 'account'
 }
 
 enum LoginWayEnum {
@@ -242,28 +241,34 @@ const isOpenAgreement = computed(() => appStore.getLoginConfig.openAgreement == 
 const isOpenOtherAuth = computed(() => appStore.getLoginConfig.openOtherAuth == 1)
 const isForceBindMobile = computed(() => appStore.getLoginConfig.forceBindMobile == 1)
 
-const loginFun = async (scene: LoginTypeEnum, code?: string) => {
-    if (!isCheckAgreement.value && isOpenAgreement.value)
-        return uni.$u.toast('请勾选已阅读并同意《服务协议》和《隐私协议》')
-    if (scene == LoginTypeEnum.ACCOUNT) {
-        if (!formData.username) return uni.$u.toast('请输入账号/手机号码')
-        if (!formData.password) return uni.$u.toast('请输入密码')
-    }
-    if (scene == LoginTypeEnum.MOBILE) {
-        if (!formData.mobile) return uni.$u.toast('请输入手机号码')
-        if (!formData.code) return uni.$u.toast('请输入验证码')
-    }
-    const params = {
-        ...formData,
-        scene
-    }
-    if (code) params.code = code
-    uni.showLoading({
-        title: '请稍后...'
-    })
+const loginFun = async (scene: LoginTypeEnum) => {
     try {
-        const data = await login(params)
-        loginHandle(data)
+        await checkAgreement()
+        if (scene == LoginTypeEnum.ACCOUNT) {
+            if (!formData.username) return uni.$u.toast('请输入账号/手机号码')
+            if (!formData.password) return uni.$u.toast('请输入密码')
+        }
+        if (scene == LoginTypeEnum.MOBILE) {
+            if (!formData.mobile) return uni.$u.toast('请输入手机号码')
+            if (!formData.code) return uni.$u.toast('请输入验证码')
+        }
+        uni.showLoading({
+            title: '请稍后...'
+        })
+
+        let data
+        switch (scene) {
+            case LoginTypeEnum.ACCOUNT:
+                data = await accountLogin(formData)
+                break
+            case LoginTypeEnum.MOBILE:
+                data = await mobileLogin(formData)
+
+                break
+        }
+        if (data) {
+            loginHandle(data)
+        }
     } catch (error: any) {
         uni.hideLoading()
         uni.$u.toast(error)
@@ -286,7 +291,7 @@ const loginHandle = async (data: any) => {
     uni.hideLoading()
     const pages = getCurrentPages()
     if (pages.length > 1) {
-        const prevPage = pages.at(-2)
+        const prevPage = pages[pages.length - 2]
         uni.navigateBack({
             success: () => {
                 // @ts-ignore
@@ -307,19 +312,34 @@ const loginHandle = async (data: any) => {
 
 const { lockFn: handleLogin } = useLockFn(loginFun)
 
-const wxLogin = async () => {
-    // #ifdef MP-WEIXIN
-    const data: any = await uni.login({
-        provider: 'weixin'
-    })
-    handleLogin(LoginTypeEnum.MNP, data.code)
-    // #endif
-    // #ifdef H5
-    if (isWeixin.value) {
-        wechatOa.getUrl()
-    }
-    // #endif
+const checkAgreement = async () => {
+    if (!isCheckAgreement.value && isOpenAgreement.value)
+        return Promise.reject('请勾选已阅读并同意《服务协议》和《隐私协议》')
 }
+const { lockFn: wxLogin } = useLockFn(async () => {
+    try {
+        await checkAgreement()
+        // #ifdef MP-WEIXIN
+        uni.showLoading({
+            title: '请稍后...'
+        })
+        const { code }: any = await uni.login({
+            provider: 'weixin'
+        })
+        const data = await mnpLogin({
+            code
+        })
+        loginHandle(data)
+        // #endif
+        // #ifdef H5
+        if (isWeixin.value) {
+            wechatOa.getUrl()
+        }
+        // #endif
+    } catch (error) {
+        uni.$u.toast(error)
+    }
+})
 
 watch(
     () => appStore.getLoginConfig,
