@@ -204,14 +204,13 @@ public class UserServiceImpl implements IUserService {
     /**
      * 忘记密码
      *
-     * @param userForgetPwdValidate
+     * @author fzr
+     * @param password 新密码
+     * @param mobile 手机号
+     * @param code 验证码
      */
     @Override
-    public void forgotPwd(UserForgetPwdValidate userForgetPwdValidate) {
-        String mobile = userForgetPwdValidate.getMobile();
-        String code = userForgetPwdValidate.getCode();
-        String password = userForgetPwdValidate.getPassword();
-
+    public void forgotPwd(String password, String mobile, String code) {
         // 校验验证码
         int sceneCode = NoticeEnum.FORGOT_PASSWORD_CODE.getCode();
         if (!NoticeCheck.verify(sceneCode, code)) {

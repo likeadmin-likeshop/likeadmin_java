@@ -15,7 +15,7 @@ public interface IUserService {
      * 个人中心
      *
      * @author fzr
-     * @param userId 用户
+     * @param userId 用户ID
      * @return UserCenterVo
      */
     UserCenterVo center(Integer userId);
@@ -48,7 +48,15 @@ public interface IUserService {
      */
     void changePwd(String password, String oldPassword, Integer userId);
 
-    void forgotPwd(UserForgetPwdValidate userForgetPwdValidate);
+    /**
+     * 忘记密码
+     *
+     * @author fzr
+     * @param password 新密码
+     * @param mobile 手机号
+     * @param code 验证码
+     */
+    void forgotPwd(String password, String mobile, String code);
 
     /**
      * 绑定手机

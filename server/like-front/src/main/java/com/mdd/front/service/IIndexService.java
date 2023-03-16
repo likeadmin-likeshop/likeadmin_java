@@ -24,6 +24,7 @@ public interface IIndexService {
      * 装修
      *
      * @author fzr
+     * @param id 装修ID
      * @return Map<String, Object>
      */
     Map<String, Object> decorate(Integer id);

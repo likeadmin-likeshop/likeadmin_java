@@ -22,13 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 @Api(tags = "上传管理")
 public class UploadController {
 
-    /**
-     * 上传图片
-     *
-     * @author fzr
-     * @param request 请求对象
-     * @return AjaxResult<UploadFilesVo>
-     */
     @NotLogin
     @PostMapping("/image")
     @ApiOperation(value="上传图片")

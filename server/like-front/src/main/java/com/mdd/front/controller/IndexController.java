@@ -3,7 +3,6 @@ package com.mdd.front.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.notice.NoticeRecord;
 import com.mdd.common.enums.NoticeEnum;
 import com.mdd.common.exception.OperateException;
@@ -14,9 +13,7 @@ import com.mdd.common.util.StringUtils;
 import com.mdd.common.util.ToolUtils;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.front.service.IIndexService;
-import com.mdd.front.validate.common.PageValidate;
 import com.mdd.front.validate.common.SmsValidate;
-import com.mdd.front.vo.article.ArticleListedVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
@@ -38,12 +35,6 @@ public class IndexController {
     @Resource
     IIndexService iIndexService;
 
-    /**
-     * 首页
-     *
-     * @author fzr
-     * @return AjaxResult<Map<String, Object>>
-     */
     @NotLogin
     @GetMapping("/index")
     @ApiOperation(value="首页数据")
@@ -52,13 +43,6 @@ public class IndexController {
         return AjaxResult.success(detail);
     }
 
-    /**
-     * 装修
-     *
-     * @author fzr
-     * @param id 主键
-     * @return AjaxResult<Map<String, Object>>
-     */
     @NotLogin
     @GetMapping("/decorate")
     @ApiOperation(value="装修数据")
@@ -67,12 +51,6 @@ public class IndexController {
         return AjaxResult.success(detail);
     }
 
-    /**
-     * 配置
-     *
-     * @author fzr
-     * @return AjaxResult<Map<String, Object>>
-     */
     @NotLogin
     @GetMapping("/config")
     @ApiOperation(value="公共配置")
@@ -81,13 +59,6 @@ public class IndexController {
         return AjaxResult.success(map);
     }
 
-    /**
-     * 协议
-     *
-     * @author fzr
-     * @param type 类型 service=服务协议,privacy=隐私协议
-     * @return AjaxResult<Map<String, String>>
-     */
     @NotLogin
     @GetMapping("/policy")
     @ApiOperation(value="政策协议")
@@ -96,12 +67,6 @@ public class IndexController {
         return AjaxResult.success(map);
     }
 
-    /**
-     * 热搜
-     *
-     * @author fzr
-     * @return AjaxResult<List<String>>
-     */
     @NotLogin
     @GetMapping("/hotSearch")
     @ApiOperation(value="热门搜索")
@@ -110,13 +75,6 @@ public class IndexController {
         return AjaxResult.success(list);
     }
 
-    /**
-     * 发送短信
-     *
-     * @author fzr
-     * @param smsValidate 参数
-     * @return AjaxResult<Object>
-     */
     @NotLogin
     @PostMapping("/sendSms")
     @ApiOperation(value="发送短信")

@@ -27,12 +27,6 @@ public class PcController {
     @Resource
     IPcService iPcService;
 
-    /**
-     * 主页
-     *
-     * @author cjh
-     * @return AjaxResult<Map<String, Object>>
-     */
     @NotLogin
     @GetMapping("/index")
     @ApiOperation(value="主页数据")
@@ -41,11 +35,6 @@ public class PcController {
         return AjaxResult.success(index);
     }
 
-    /**
-     * 配置
-     * @author cjh
-     * @return AjaxResult<Map<String, Object>>
-     */
     @NotLogin
     @GetMapping("/getConfig")
     @ApiOperation(value="公共配置")
@@ -54,12 +43,6 @@ public class PcController {
         return AjaxResult.success(config);
     }
 
-    /**
-     * 资讯中心
-     *
-     * @author fzr
-     * @return AjaxResult<List<PcArticleCenterVo>>
-     */
     @NotLogin
     @GetMapping("/articleCenter")
     @ApiOperation(value="资讯中心")
@@ -68,18 +51,12 @@ public class PcController {
         return AjaxResult.success(list);
     }
 
-    /**
-     * 文章详情
-     *
-     * @author fzr
-     * @param id 文章主键
-     * @return AjaxResult<PcArticleDetailVo>
-     */
     @NotLogin
     @GetMapping("/articleDetail")
     @ApiOperation(value="文章详情")
     public AjaxResult<PcArticleDetailVo> articleDetail(@Validated @IDMust() @RequestParam("id") Integer id) {
         Integer userId = LikeFrontThreadLocal.getUserId();
+
         PcArticleDetailVo vo = iPcService.articleDetail(id, userId);
         return AjaxResult.success(vo);
     }

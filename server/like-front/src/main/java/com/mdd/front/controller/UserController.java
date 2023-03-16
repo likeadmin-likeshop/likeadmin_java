@@ -26,101 +26,63 @@ public class UserController {
     @Resource
     IUserService iUserService;
 
-    /**
-     * 个人中心
-     *
-     * @author fzr
-     * @return AjaxResult<UserCenterVo>
-     */
     @GetMapping("/center")
     @ApiOperation(value="个人中心")
     public AjaxResult<UserCenterVo> center() {
         Integer userId = LikeFrontThreadLocal.getUserId();
+
         UserCenterVo vo = iUserService.center(userId);
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 个人信息
-     *
-     * @author fzr
-     * @return AjaxResult<UserInfoVo>
-     */
     @GetMapping("/info")
     @ApiOperation(value="个人信息")
     public AjaxResult<UserInfoVo> info() {
         Integer userId = LikeFrontThreadLocal.getUserId();
+
         UserInfoVo vo = iUserService.info(userId);
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 编辑信息
-     *
-     * @author fzr
-     * @param updateValidate 参数
-     * @return AjaxResult<Object>
-     */
     @PostMapping("/edit")
     @ApiOperation(value="编辑信息")
     public AjaxResult<Object> edit(@Validated @RequestBody UserUpdateValidate updateValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
+
         iUserService.edit(updateValidate, userId);
         return AjaxResult.success();
     }
 
-    /**
-     * 修改密码
-     *
-     * @author fzr
-     * @param passwordValidate 参数
-     * @return AjaxResult<Object>
-     */
     @PostMapping("/changePwd")
     @ApiOperation(value="修改密码")
     public AjaxResult<Object> changePwd(@Validated @RequestBody UserChangePwdValidate passwordValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
+
         iUserService.changePwd(passwordValidate.getPassword(), passwordValidate.getOldPassword(), userId);
         return AjaxResult.success();
     }
 
-    /**
-     * 忘记密码
-     *
-     * @author fzr
-     * @param userForgetPwdValidate 参数
-     * @return AjaxResult<Object>
-     */
     @NotLogin
     @PostMapping("/forgotPwd")
     @ApiOperation(value="忘记密码")
     public AjaxResult<Object> forgotPwd(@Validated @RequestBody UserForgetPwdValidate userForgetPwdValidate) {
-        iUserService.forgotPwd(userForgetPwdValidate);
+        String password = userForgetPwdValidate.getPassword();
+        String mobile = userForgetPwdValidate.getMobile();
+        String code = userForgetPwdValidate.getCode();
+
+        iUserService.forgotPwd(password, mobile, code);
         return AjaxResult.success();
     }
 
-    /**
-     * 绑定手机号
-     *
-     * @author fzr
-     * @param mobileValidate 参数
-     * @return AjaxResult<Object>
-     */
     @PostMapping("/bindMobile")
     @ApiOperation(value="绑定手机")
     public AjaxResult<Object> bindMobile(@Validated @RequestBody UserPhoneBindValidate mobileValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
+
         iUserService.bindMobile(mobileValidate, userId);
         return AjaxResult.success();
     }
 
-    /**
-     * 微信手机号
-     *
-     * @author fzr
-     * @param mobileValidate 参数
-     * @return AjaxResult<Object>
-     */
     @PostMapping("/mnpMobile")
     @ApiOperation(value="微信手机号")
     public AjaxResult<Object> mnpMobile(@Validated @RequestBody UserPhoneMnpValidate mobileValidate) {

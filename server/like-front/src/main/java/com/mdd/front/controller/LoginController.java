@@ -26,13 +26,6 @@ public class LoginController {
     @Resource
     ILoginService iLoginService;
 
-    /**
-     * 注册账号
-     *
-     * @author fzr
-     * @param registerValidate 注册参数
-     * @return AjaxResult<Object>
-     */
     @NotLogin
     @PostMapping("/register")
     @ApiOperation(value="注册账号")
@@ -45,13 +38,6 @@ public class LoginController {
         return AjaxResult.success();
     }
 
-    /**
-     * 账号登录
-     *
-     * @author fzr
-     * @param loginPwdValidate 登录参数
-     * @return AjaxResult<LoginTokenVo>
-     */
     @NotLogin
     @PostMapping("/accountLogin")
     @ApiOperation(value="账号登录")
@@ -64,13 +50,6 @@ public class LoginController {
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 手机登录
-     *
-     * @author fzr
-     * @param loginPhoneValidate 登录参数
-     * @return AjaxResult<LoginTokenVo>
-     */
     @NotLogin
     @PostMapping("/mobileLogin")
     @ApiOperation(value="手机登录")
@@ -83,13 +62,6 @@ public class LoginController {
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 微信登录
-     *
-     * @author fzr
-     * @param loginCodeValidate 登录参数
-     * @return AjaxResult<LoginTokenVo>
-     */
     @NotLogin
     @PostMapping("/mnpLogin")
     @ApiOperation(value="微信登录")
@@ -101,13 +73,6 @@ public class LoginController {
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 公众号登录
-     *
-     * @author fzr
-     * @param loginCodeValidate 登录参数
-     * @return AjaxResult<LoginTokenVo>
-     */
     @NotLogin
     @PostMapping("/oaLogin")
     @ApiOperation(value="公众号登录")
@@ -119,13 +84,6 @@ public class LoginController {
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 公众号链接
-     *
-     * @author fzr
-     * @param url 跳转链接
-     * @return AjaxResult<LoginCodesVo>
-     */
     @NotLogin
     @GetMapping("/oaCodeUrl")
     @ApiOperation(value="公众号链接")
@@ -135,13 +93,6 @@ public class LoginController {
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 扫码链接
-     *
-     * @author fzr
-     * @param session session
-     * @return AjaxResult<LoginUrlsVo>
-     */
     @NotLogin
     @GetMapping("/scanCodeUrl")
     @ApiOperation(value="PC扫码链接")
@@ -152,13 +103,6 @@ public class LoginController {
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 扫码登录
-     *
-     * @author fzr
-     * @param loginScanValidate 扫码参数
-     * @return AjaxResult<Object>
-     */
     @NotLogin
     @PostMapping("/scanLogin")
     @ApiOperation(value="PC扫码登录")

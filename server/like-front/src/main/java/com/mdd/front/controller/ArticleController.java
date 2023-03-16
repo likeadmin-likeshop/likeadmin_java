@@ -29,12 +29,6 @@ public class ArticleController {
     @Resource
     IArticleService iArticleService;
 
-    /**
-     * 文章分类
-     *
-     * @author fzr
-     * @return AjaxResult<List<ArticleCateVo>>
-     */
     @NotLogin
     @GetMapping("/category")
     @ApiOperation(value="文章分类")
@@ -43,80 +37,52 @@ public class ArticleController {
         return AjaxResult.success(list);
     }
 
-    /**
-     * 文章列表
-     *
-     * @author fzr
-     * @return AjaxResult<PageResult<ArticleListVo>>
-     */
     @NotLogin
     @GetMapping("/list")
     @ApiOperation(value="文章列表")
     public AjaxResult<PageResult<ArticleListedVo>> list(@Validated PageValidate pageValidate,
                                                         @Validated ArticleSearchValidate searchValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
+
         PageResult<ArticleListedVo> list = iArticleService.list(userId, pageValidate, searchValidate);
         return AjaxResult.success(list);
     }
 
-    /**
-     * 文章详情
-     *
-     * @author fzr
-     * @return AjaxResult<ArticleDetailVo>
-     */
     @NotLogin
     @GetMapping("/detail")
     @ApiOperation(value="文章详情")
     public AjaxResult<ArticleDetailVo> detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         Integer userId = LikeFrontThreadLocal.getUserId();
+
         ArticleDetailVo vo = iArticleService.detail(id, userId);
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 收藏列表
-     *
-     * @author fzr
-     * @param pageValidate 分页参数
-     * @return AjaxResult<PageResult<ArticleCollectVo>>
-     */
     @GetMapping("/collectList")
     @ApiOperation(value="收藏列表")
     public AjaxResult<PageResult<ArticleCollectVo>> collect(@Validated PageValidate pageValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
+
         PageResult<ArticleCollectVo> list = iArticleService.collect(pageValidate, userId);
         return AjaxResult.success(list);
     }
 
-    /**
-     * 收藏加入
-     *
-     * @author fzr
-     * @param collectValidate 参数
-     * @return AjaxResult<Object>
-     */
     @PostMapping("/collectAdd")
     @ApiOperation(value="收藏加入")
     public AjaxResult<Object> addCollect(@Validated @RequestBody ArticleCollectValidate collectValidate) {
         Integer articleId = collectValidate.getArticleId();
         Integer userId = LikeFrontThreadLocal.getUserId();
+
         iArticleService.addCollect(articleId, userId);
         return AjaxResult.success();
     }
 
-    /**
-     * 收藏取消
-     *
-     * @author fzr
-     * @param collectValidate 参数
-     * @return AjaxResult<Object>
-     */
     @PostMapping("/collectCancel")
     @ApiOperation(value="收藏取消")
     public AjaxResult<Object> cancelCollect(@Validated @RequestBody ArticleCollectValidate collectValidate) {
         Integer articleId = collectValidate.getArticleId();
         Integer userId = LikeFrontThreadLocal.getUserId();
+
         iArticleService.cancelCollect(articleId, userId);
         return AjaxResult.success();
     }
