@@ -101,7 +101,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                         role.add(d.getName());
                     }
                 }
-                vo.setRole(ListUtils.listToStringByStr(role, "/"));
+                vo.setRole(ListUtils.listToStringByStr(role, ","));
             }
 
             if (StringUtils.isNull(vo.getDept()) || vo.getDept().equals("")) {
@@ -118,7 +118,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                         dept.add(d.getName());
                     }
                 }
-                vo.setDept(ListUtils.listToStringByStr(dept, "/"));
+                vo.setDept(ListUtils.listToStringByStr(dept, ","));
             }
 
             vo.setAvatar(UrlUtils.toAbsoluteUrl(vo.getAvatar()));
