@@ -26,6 +26,7 @@ public class UserController {
     @Resource
     IUserService iUserService;
 
+    @NotLogin
     @GetMapping("/center")
     @ApiOperation(value="个人中心")
     public AjaxResult<UserCenterVo> center() {
