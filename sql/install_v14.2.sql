@@ -61,7 +61,7 @@ CREATE TABLE `la_article`  (
   `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `cid_idx`(`cid`) USING BTREE COMMENT '分类索引'
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章资讯表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章资讯表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for la_article_category
@@ -77,7 +77,7 @@ CREATE TABLE `la_article_category`  (
   `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
   `delete_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章分类表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章分类表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for la_article_collect
@@ -95,6 +95,31 @@ CREATE TABLE `la_article_collect`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章收藏表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for la_crontab
+-- ----------------------------
+DROP TABLE IF EXISTS `la_crontab`;
+CREATE TABLE `la_crontab`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '任务名称',
+  `types` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '任务分组',
+  `command` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '任务命令',
+  `rules` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '任务贵州',
+  `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '备注信息',
+  `error` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '错误信息',
+  `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 2 COMMENT '执行状态: 1=正在运行, 2=任务停止, 3=发生错误',
+  `strategy` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '执行策略: 1=立即执行, 2=执行一次, 3=放弃执行',
+  `concurrent` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '并发执行: 0=否, 1=是',
+  `is_delete` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除: 0=否, 1=是',
+  `start_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '开始时间',
+  `end_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '结束时间',
+  `task_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '任务耗时',
+  `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '计划任务表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for la_decorate_page
 -- ----------------------------
 DROP TABLE IF EXISTS `la_decorate_page`;
@@ -106,7 +131,7 @@ CREATE TABLE `la_decorate_page`  (
   `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
   `update_time` int(10) UNSIGNED NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '页面装修表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '页面装修表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for la_decorate_tabbar
@@ -121,7 +146,7 @@ CREATE TABLE `la_decorate_tabbar`  (
   `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
   `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '底部装修表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '底部装修表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for la_dict_data
@@ -230,6 +255,32 @@ CREATE TABLE `la_hot_search`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '热门搜索配置表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for la_notice_record
+-- ----------------------------
+DROP TABLE IF EXISTS `la_notice_record`;
+CREATE TABLE `la_notice_record`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `scene` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '通知场景',
+  `user_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '接收用户',
+  `account` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '接收账号',
+  `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '通知标题',
+  `code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '验证编码',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '通知内容',
+  `error` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '失败原因',
+  `sender` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '发送类型: [1=系统, 2=短信, 3=公众号, 4=小程序]',
+  `receiver` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '接收对象: [1=用户, 2=平台]',
+  `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '通知状态: [0=等待, 1=成功, 2=失败]',
+  `is_read` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '已读状态: [0=未读, 1=已读]',
+  `is_captcha` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是验证码: [0=否的, 1=是的]',
+  `is_delete` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除: [0=否的, 1=是的]',
+  `expire_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '失效时间',
+  `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '消息通知记录表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for la_notice_setting
 -- ----------------------------
 DROP TABLE IF EXISTS `la_notice_setting`;
@@ -249,7 +300,7 @@ CREATE TABLE `la_notice_setting`  (
   `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
   `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '消息通知设置表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '消息通知设置表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for la_official_reply
@@ -438,21 +489,20 @@ CREATE TABLE `la_system_log_operate`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统操作日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for la_system_log_sms
+-- Table structure for la_test_category
 -- ----------------------------
-DROP TABLE IF EXISTS `la_system_log_sms`;
-CREATE TABLE `la_system_log_sms`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `scene` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '场景编号',
-  `mobile` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '手机号码',
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '发送内容',
-  `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '发送状态：[0=发送中, 1=发送成功, 2=发送失败]',
-  `results` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '短信结果',
-  `send_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '发送时间',
-  `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
-  `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+DROP TABLE IF EXISTS `la_test_category`;
+CREATE TABLE `la_test_category`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '名称',
+  `sort` smallint(5) UNSIGNED NOT NULL DEFAULT 50 COMMENT '排序',
+  `is_show` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否显示: 0=否, 1=是',
+  `is_delete` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除: 0=否, 1=是',
+  `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
+  `delete_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统短信日志表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章分类表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for la_user
@@ -489,37 +539,12 @@ CREATE TABLE `la_user_auth`  (
   `user_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户ID',
   `openid` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'Openid',
   `unionid` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'Unionid',
-  `client` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '客户端类型: [1=微信小程序, 2=微信公众号, 3=手机H5, 4=电脑PC, 5=苹果APP, 6=安卓APP]',
+  `terminal` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '客户端类型: [1=微信小程序, 2=微信公众号, 3=手机H5, 4=电脑PC, 5=苹果APP, 6=安卓APP]',
   `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
   `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `openid`(`openid`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户授权表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for la_crontab
--- ----------------------------
-DROP TABLE IF EXISTS `la_crontab`;
-CREATE TABLE `la_crontab`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '任务名称',
-  `types` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '任务分组',
-  `command` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '任务命令',
-  `rules` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '任务贵州',
-  `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '备注信息',
-  `error` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '错误信息',
-  `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 2 COMMENT '执行状态: 1=正在运行, 2=任务停止, 3=发生错误',
-  `strategy` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '执行策略: 1=立即执行, 2=执行一次, 3=放弃执行',
-  `concurrent` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '并发执行: 0=否, 1=是',
-  `is_delete` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除: 0=否, 1=是',
-  `start_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '开始时间',
-  `end_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '结束时间',
-  `task_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '任务耗时',
-  `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
-  `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
-  `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '计划任务表' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -550,10 +575,15 @@ INSERT INTO `la_system_config` VALUES (13, 'website', 'backdrop', '/api/static/b
 INSERT INTO `la_system_config` VALUES (14, 'website', 'copyright', '[{\"name\":\"LikeAdmin开源系统\",\"link\":\"http://www.beian.gov.cn\"}]', 1660620367, 1660620367);
 INSERT INTO `la_system_config` VALUES (15, 'website', 'shopName', 'LikeAdmin开源系统', 1631255140, 1631255140);
 INSERT INTO `la_system_config` VALUES (16, 'website', 'shopLogo', '/api/static/shop_logo.png', 1631255140, 1631255140);
-INSERT INTO `la_system_config` VALUES (17, 'protocol', 'service', '{\"name\":\"服务协议\",\"content\":\"\"}', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (18, 'protocol', 'privacy', '{\"name\":\"隐私协议\",\"content\":\"\"}', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (19, 'tabbar', 'style', '{\"defaultColor\":\"#4A5DFF\",\"selectedColor\":\"#EA5455\"}', 1660620367, 1662544900);
-INSERT INTO `la_system_config` VALUES (20, 'search', 'isHotSearch', '0', 1660620367, 1662546997);
+INSERT INTO `la_system_config` VALUES (20, 'website', 'pcLogo', '/api/static/pc_logo.png', 1678963763, 1678963817);
+INSERT INTO `la_system_config` VALUES (21, 'website', 'pcIco', '/api/static/pc_favicon.ico', 1678963763, 1678963817);
+INSERT INTO `la_system_config` VALUES (22, 'website', 'pcTitle', 'LikeAdmin开源系统', 1678963763, 1678963817);
+INSERT INTO `la_system_config` VALUES (23, 'website', 'pcDesc', '', 1678963763, 1678963817);
+INSERT INTO `la_system_config` VALUES (24, 'website', 'pcKeywords', '', 1678963763, 1678963817);
+INSERT INTO `la_system_config` VALUES (25, 'protocol', 'service', '{\"name\":\"服务协议\",\"content\":\"\"}', 1660620367, 1660620367);
+INSERT INTO `la_system_config` VALUES (26, 'protocol', 'privacy', '{\"name\":\"隐私协议\",\"content\":\"\"}', 1660620367, 1660620367);
+INSERT INTO `la_system_config` VALUES (27, 'tabbar', 'style', '{\"defaultColor\":\"#4A5DFF\",\"selectedColor\":\"#EA5455\"}', 1660620367, 1662544900);
+INSERT INTO `la_system_config` VALUES (28, 'search', 'isHotSearch', '0', 1660620367, 1662546997);
 INSERT INTO `la_system_config` VALUES (30, 'h5_channel', 'status', '1', 1660620367, 1660620367);
 INSERT INTO `la_system_config` VALUES (31, 'h5_channel', 'close', '0', 1660620367, 1660620367);
 INSERT INTO `la_system_config` VALUES (32, 'h5_channel', 'url', '', 1660620367, 1660620367);
@@ -676,6 +706,7 @@ INSERT INTO `la_system_auth_menu` VALUES (550, 500, 'M', '系统维护', 'el-ico
 INSERT INTO `la_system_auth_menu` VALUES (551, 550, 'C', '系统环境', '', 0, 'monitor:server', 'environment', 'setting/system/environment', '', '', 0, 1, 0, 1650341765, 1650341765);
 INSERT INTO `la_system_auth_menu` VALUES (552, 550, 'C', '系统缓存', '', 0, 'monitor:cache', 'cache', 'setting/system/cache', '', '', 0, 1, 0, 1650341765, 1650341765);
 INSERT INTO `la_system_auth_menu` VALUES (553, 550, 'C', '系统日志', '', 0, 'system:log:operate', 'journal', 'setting/system/journal', '', '', 0, 1, 0, 1650341765, 1650341765);
+INSERT INTO `la_system_auth_menu` VALUES (554, 550, 'C', '登录日志', '', 0, 'system:log:login', 'login_log', 'setting/system/login_log', '', '', 0, 1, 0, 1673942795, 1673942795);
 INSERT INTO `la_system_auth_menu` VALUES (555, 500, 'C', '存储设置', 'el-icon-FolderOpened', 6, 'setting:storage:list', 'storage', 'setting/storage/index', '', '', 0, 1, 0, 1650341765, 1663312996);
 INSERT INTO `la_system_auth_menu` VALUES (556, 555, 'A', '保存配置', '', 0, 'setting:storage:edit', '', '', '', '', 0, 1, 0, 1650341765, 1650341765);
 INSERT INTO `la_system_auth_menu` VALUES (600, 0, 'M', '开发工具', 'el-icon-EditPen', 0, '', 'dev_tools', '', '', '', 0, 1, 0, 1660027606, 1664335701);
