@@ -10,6 +10,7 @@ import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.exception.LoginException;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.util.StringUtils;
+import io.swagger.models.auth.In;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -123,7 +124,15 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
                     Object id = StpUtil.getLoginId();
                     if (StringUtils.isNotNull(id)) {
                         Integer userId = Integer.parseInt(id.toString());
-                        LikeFrontThreadLocal.put("userId", userId);
+                        User user = userMapper.selectOne(new QueryWrapper<User>()
+                                .select("id,sn,username")
+                                .eq("id", userId)
+                                .eq("is_disable", 0)
+                                .eq("is_delete", 0)
+                                .last("limit 1"));
+
+                        Integer uid = StringUtils.isNull(user) ? 0 : userId;
+                        LikeFrontThreadLocal.put("userId", uid);
                     }
                 } catch (Exception ignored) {}
                 break;
