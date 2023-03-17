@@ -1,5 +1,6 @@
 package com.mdd.front.service;
 
+import com.mdd.front.validate.users.NewUserUpdateValidate;
 import com.mdd.front.validate.users.UserForgetPwdValidate;
 import com.mdd.front.validate.users.UserPhoneBindValidate;
 import com.mdd.front.validate.users.UserUpdateValidate;
@@ -75,4 +76,11 @@ public interface IUserService {
      */
     void mnpMobile(String code);
 
+    /**
+     * 更新新用户信息
+     *
+     * @param newUserUpdateValidate 参数
+     * @param userId 用户id
+     */
+    void updateNewUserInfo(NewUserUpdateValidate newUserUpdateValidate, Integer userId);
 }

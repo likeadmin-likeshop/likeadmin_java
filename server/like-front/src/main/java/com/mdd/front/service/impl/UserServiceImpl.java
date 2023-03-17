@@ -17,6 +17,7 @@ import com.mdd.common.plugin.notice.NoticeCheck;
 import com.mdd.common.util.*;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
+import com.mdd.front.validate.users.NewUserUpdateValidate;
 import com.mdd.front.validate.users.UserForgetPwdValidate;
 import com.mdd.front.validate.users.UserPhoneBindValidate;
 import com.mdd.front.validate.users.UserUpdateValidate;
@@ -300,6 +301,24 @@ public class UserServiceImpl implements IUserService {
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
+    }
+
+
+    /**
+     * 更新新用户昵称头像等信息
+     *
+     * @param newUserUpdateValidate 参数
+     * @param userId 用户id
+     */
+    @Override
+    public void updateNewUserInfo(NewUserUpdateValidate newUserUpdateValidate, Integer userId) {
+        User user = new User();
+        user.setId(userId);
+        user.setNickname(newUserUpdateValidate.getNickname());
+        user.setAvatar(UrlUtils.toRelativeUrl(newUserUpdateValidate.getAvatar()));
+        user.setIsNew(0);
+        user.setUpdateTime(System.currentTimeMillis() / 1000);
+        userMapper.updateById(user);
     }
 
 }
