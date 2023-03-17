@@ -16,7 +16,7 @@ public class CrontabDetailVo implements Serializable {
     private Integer id;
 
     @ApiModelProperty(value = "任务分组")
-    private String groups;
+    private String types;
 
     @ApiModelProperty(value = "任务名称")
     private String name;
