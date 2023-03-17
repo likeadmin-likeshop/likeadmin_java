@@ -22,7 +22,7 @@ export function forgotPassword(data: Record<string, any>) {
 
 //向微信请求code的链接
 export function getWxCodeUrl() {
-    return request.get({ url: '/login/codeUrl', data: { url: location.href } })
+    return request.get({ url: '/login/oaCodeUrl', data: { url: location.href } })
 }
 
 // 微信小程序登录
