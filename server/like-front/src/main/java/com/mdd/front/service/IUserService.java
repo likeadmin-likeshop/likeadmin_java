@@ -1,7 +1,8 @@
 package com.mdd.front.service;
 
-import com.mdd.front.validate.UserBindMobileValidate;
-import com.mdd.front.validate.UserUpdateValidate;
+import com.mdd.front.validate.users.UserForgetPwdValidate;
+import com.mdd.front.validate.users.UserPhoneBindValidate;
+import com.mdd.front.validate.users.UserUpdateValidate;
 import com.mdd.front.vo.users.UserCenterVo;
 import com.mdd.front.vo.users.UserInfoVo;
 
@@ -14,7 +15,7 @@ public interface IUserService {
      * 个人中心
      *
      * @author fzr
-     * @param userId 用户
+     * @param userId 用户ID
      * @return UserCenterVo
      */
     UserCenterVo center(Integer userId);
@@ -48,13 +49,23 @@ public interface IUserService {
     void changePwd(String password, String oldPassword, Integer userId);
 
     /**
+     * 忘记密码
+     *
+     * @author fzr
+     * @param password 新密码
+     * @param mobile 手机号
+     * @param code 验证码
+     */
+    void forgotPwd(String password, String mobile, String code);
+
+    /**
      * 绑定手机
      *
      * @author fzr
      * @param mobileValidate 参数
      * @param userId 用户ID
      */
-    void bindMobile(UserBindMobileValidate mobileValidate, Integer userId);
+    void bindMobile(UserPhoneBindValidate mobileValidate, Integer userId);
 
     /**
      * 微信手机

@@ -21,10 +21,10 @@
                         />
                     </div>
                 </el-form-item>
-                <el-form-item label="任务分组" prop="groups">
+                <el-form-item label="任务分组" prop="types">
                     <el-select
                         class="w-80"
-                        v-model="formData.groups"
+                        v-model="formData.types"
                         clearable
                         placeholder="请选择任务分组"
                     >
@@ -60,7 +60,7 @@
                         />
                     </div>
                 </el-form-item>
-                <el-form-item label="执行策略" prop="groups">
+                <el-form-item label="执行策略" prop="strategy">
                     <el-radio-group v-model="formData.strategy">
                         <el-radio :label="1"> 立即执行 </el-radio>
                         <el-radio :label="2"> 执行一次 </el-radio>
@@ -95,7 +95,7 @@ const router = useRouter()
 const formData = reactive({
     id: '',
     name: '',
-    groups: '',
+    types: '',
     command: '',
     rules: '',
     status: 1,

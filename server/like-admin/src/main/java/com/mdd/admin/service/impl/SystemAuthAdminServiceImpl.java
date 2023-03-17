@@ -1,13 +1,11 @@
 package com.mdd.admin.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
-import com.mdd.admin.config.AdminConfig;
 import com.mdd.admin.service.ISystemAuthAdminService;
 import com.mdd.admin.service.ISystemAuthPermService;
 import com.mdd.admin.validate.commons.PageValidate;
@@ -94,7 +92,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 vo.setRole("系统管理员");
             } else {
                 List<String> role = new LinkedList<>();
-                List<Integer> roleIds = ArrayUtils.stringToListAsInt(vo.getRole(), ",");
+                List<Integer> roleIds = ListUtils.stringToListAsInt(vo.getRole(), ",");
                 if (!roleIds.isEmpty()) {
                     List<SystemAuthRole> roleList = systemAuthRoleMapper.selectList(new QueryWrapper<SystemAuthRole>()
                             .select("id,name")
@@ -103,14 +101,14 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                         role.add(d.getName());
                     }
                 }
-                vo.setRole(ArrayUtils.listToStringByStr(role, "/"));
+                vo.setRole(ListUtils.listToStringByStr(role, ","));
             }
 
             if (StringUtils.isNull(vo.getDept()) || vo.getDept().equals("")) {
                 vo.setDept("");
             } else {
                 List<String> dept = new LinkedList<>();
-                List<Integer> deptIds = ArrayUtils.stringToListAsInt(vo.getDept(), ",");
+                List<Integer> deptIds = ListUtils.stringToListAsInt(vo.getDept(), ",");
                 if (!deptIds.isEmpty()) {
                     List<SystemAuthDept> deptList = systemAuthDeptMapper.selectList(new QueryWrapper<SystemAuthDept>()
                             .select("id,name")
@@ -120,7 +118,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                         dept.add(d.getName());
                     }
                 }
-                vo.setDept(ArrayUtils.listToStringByStr(dept, "/"));
+                vo.setDept(ListUtils.listToStringByStr(dept, ","));
             }
 
             vo.setAvatar(UrlUtils.toAbsoluteUrl(vo.getAvatar()));
@@ -162,7 +160,7 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         // 角色权限
         List<String> auths = new LinkedList<>();
         if (adminId > 1) {
-            List<Integer> roleIds = ArrayUtils.stringToListAsInt(sysAdmin.getRoleIds(), ",");
+            List<Integer> roleIds = ListUtils.stringToListAsInt(sysAdmin.getRoleIds(), ",");
             List<Integer> menuIds = iSystemAuthPermService.selectMenuIdsByRoleId(roleIds);
             if (menuIds.size() > 0) {
                 List<SystemAuthMenu> systemAuthMenus = systemAuthMenuMapper.selectList(new QueryWrapper<SystemAuthMenu>()
@@ -217,9 +215,9 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
 
         SystemAuthAdminDetailVo vo = new SystemAuthAdminDetailVo();
         BeanUtils.copyProperties(sysAdmin, vo);
-        vo.setRoleIds(ArrayUtils.stringToListAsInt(sysAdmin.getRoleIds(), ","));
-        vo.setDeptIds(ArrayUtils.stringToListAsInt(sysAdmin.getDeptIds(), ","));
-        vo.setPostIds(ArrayUtils.stringToListAsInt(sysAdmin.getPostIds(), ","));
+        vo.setRoleIds(ListUtils.stringToListAsInt(sysAdmin.getRoleIds(), ","));
+        vo.setDeptIds(ListUtils.stringToListAsInt(sysAdmin.getDeptIds(), ","));
+        vo.setPostIds(ListUtils.stringToListAsInt(sysAdmin.getPostIds(), ","));
         vo.setAvatar(UrlUtils.toAbsoluteUrl(sysAdmin.getAvatar()));
         vo.setCreateTime(TimeUtils.timestampToDate(sysAdmin.getCreateTime()));
         vo.setUpdateTime(TimeUtils.timestampToDate(sysAdmin.getUpdateTime()));
@@ -248,17 +246,17 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
                 .eq("nickname", createValidate.getNickname())
                 .last("limit 1")), "昵称已存在换一个吧！");
 
-        String salt = ToolsUtils.randomString(5);
-        String pwd  = ToolsUtils.makeMd5(createValidate.getPassword().trim() + salt);
+        String salt = ToolUtils.randomString(5);
+        String pwd  = ToolUtils.makeMd5(createValidate.getPassword().trim() + salt);
 
         String createAvatar  = createValidate.getAvatar();
         String defaultAvatar = "/api/static/backend_avatar.png";
         String avatar = StringUtils.isNotEmpty(createValidate.getAvatar()) ? UrlUtils.toRelativeUrl(createAvatar) : defaultAvatar;
 
         SystemAuthAdmin model = new SystemAuthAdmin();
-        model.setRoleIds(ArrayUtils.listToStringByInt(createValidate.getRoleIds(), ","));
-        model.setDeptIds(ArrayUtils.listToStringByInt(createValidate.getDeptIds(), ","));
-        model.setPostIds(ArrayUtils.listToStringByInt(createValidate.getPostIds(), ","));
+        model.setRoleIds(ListUtils.listToStringByInt(createValidate.getRoleIds(), ","));
+        model.setDeptIds(ListUtils.listToStringByInt(createValidate.getDeptIds(), ","));
+        model.setPostIds(ListUtils.listToStringByInt(createValidate.getPostIds(), ","));
         model.setUsername(createValidate.getUsername());
         model.setNickname(createValidate.getNickname());
         model.setAvatar(avatar);
@@ -308,9 +306,9 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
 
         SystemAuthAdmin model = new SystemAuthAdmin();
         model.setId(updateValidate.getId());
-        model.setRoleIds(ArrayUtils.listToStringByInt(updateValidate.getRoleIds(), ","));
-        model.setDeptIds(ArrayUtils.listToStringByInt(updateValidate.getDeptIds(), ","));
-        model.setPostIds(ArrayUtils.listToStringByInt(updateValidate.getPostIds(), ","));
+        model.setRoleIds(ListUtils.listToStringByInt(updateValidate.getRoleIds(), ","));
+        model.setDeptIds(ListUtils.listToStringByInt(updateValidate.getDeptIds(), ","));
+        model.setPostIds(ListUtils.listToStringByInt(updateValidate.getPostIds(), ","));
         model.setNickname(updateValidate.getNickname());
         model.setAvatar(UrlUtils.toRelativeUrl(updateValidate.getAvatar()));
         model.setSort(updateValidate.getSort());
@@ -323,15 +321,13 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         }
 
         if (StringUtils.isNotNull(updateValidate.getPassword()) && StringUtils.isNotEmpty(updateValidate.getPassword())) {
-            String salt   = ToolsUtils.randomString(5);
-            String pwd    = ToolsUtils.makeMd5( updateValidate.getPassword().trim() + salt);
+            String salt   = ToolUtils.randomString(5);
+            String pwd    = ToolUtils.makeMd5( updateValidate.getPassword().trim() + salt);
             model.setPassword(pwd);
             model.setSalt(salt);
         }
 
         systemAuthAdminMapper.updateById(model);
-        this.cacheAdminUserByUid(updateValidate.getId());
-
         if (StringUtils.isNotNull(updateValidate.getPassword()) && StringUtils.isNotEmpty(updateValidate.getPassword())) {
             StpUtil.kickout(updateValidate.getId());
         }
@@ -362,17 +358,15 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         model.setUpdateTime(System.currentTimeMillis() / 1000);
 
         if (StringUtils.isNotNull(upInfoValidate.getPassword()) && StringUtils.isNotEmpty(upInfoValidate.getPassword())) {
-            String currPassword = ToolsUtils.makeMd5(upInfoValidate.getCurrPassword() + model.getSalt());
+            String currPassword = ToolUtils.makeMd5(upInfoValidate.getCurrPassword() + model.getSalt());
             Assert.isFalse(!currPassword.equals(model.getPassword()), "当前密码不正确!");
-            String salt   = ToolsUtils.randomString(5);
-            String pwd    = ToolsUtils.makeMd5( upInfoValidate.getPassword().trim() + salt);
+            String salt   = ToolUtils.randomString(5);
+            String pwd    = ToolUtils.makeMd5( upInfoValidate.getPassword().trim() + salt);
             model.setPassword(pwd);
             model.setSalt(salt);
         }
 
         systemAuthAdminMapper.updateById(model);
-        this.cacheAdminUserByUid(adminId);
-
         if (StringUtils.isNotNull(upInfoValidate.getPassword()) && StringUtils.isNotEmpty(upInfoValidate.getPassword())) {
             StpUtil.kickout(adminId);
         }
@@ -402,7 +396,6 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         model.setIsDelete(1);
         model.setDeleteTime(System.currentTimeMillis() / 1000);
         systemAuthAdminMapper.updateById(model);
-        this.cacheAdminUserByUid(id);
 
         StpUtil.kickout(id);
     }
@@ -429,37 +422,10 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         systemAuthAdmin.setIsDisable(disable);
         systemAuthAdmin.setUpdateTime(TimeUtils.timestamp());
         systemAuthAdminMapper.updateById(systemAuthAdmin);
-        this.cacheAdminUserByUid(id);
 
         if (disable.equals(1)) {
             StpUtil.kickout(id);
         }
-    }
-
-    /**
-     * 缓存管理员
-     */
-    @Override
-    public void cacheAdminUserByUid(Integer id) {
-        SystemAuthAdmin sysAdmin = systemAuthAdminMapper.selectOne(
-                new QueryWrapper<SystemAuthAdmin>()
-                    .select("id,role_ids,username,nickname,is_multipoint,is_disable,is_delete")
-                    .eq("id", id)
-                    .last("limit 1"));
-
-        Map<String, Object> user = new LinkedHashMap<>();
-        user.put("id", sysAdmin.getId());
-        user.put("roleIds", sysAdmin.getRoleIds());
-        user.put("username", sysAdmin.getUsername());
-        user.put("nickname", sysAdmin.getNickname());
-        user.put("isMultipoint", sysAdmin.getIsMultipoint());
-        user.put("isDisable", sysAdmin.getIsDisable());
-        user.put("isDelete", sysAdmin.getIsDelete());
-
-        Map<String, Object> map  = new LinkedHashMap<>();
-        map.put(String.valueOf(sysAdmin.getId()), JSON.toJSONString(user));
-
-        RedisUtils.hmSet(AdminConfig.backstageManageKey, map);
     }
 
 }

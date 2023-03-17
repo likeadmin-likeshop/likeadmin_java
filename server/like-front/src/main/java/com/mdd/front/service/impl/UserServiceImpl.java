@@ -13,11 +13,13 @@ import com.mdd.common.enums.NoticeEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
+import com.mdd.common.plugin.notice.NoticeCheck;
 import com.mdd.common.util.*;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
-import com.mdd.front.validate.UserBindMobileValidate;
-import com.mdd.front.validate.UserUpdateValidate;
+import com.mdd.front.validate.users.UserForgetPwdValidate;
+import com.mdd.front.validate.users.UserPhoneBindValidate;
+import com.mdd.front.validate.users.UserUpdateValidate;
 import com.mdd.front.vo.users.UserCenterVo;
 import com.mdd.front.vo.users.UserInfoVo;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -83,7 +85,6 @@ public class UserServiceImpl implements IUserService {
         UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
                 .select("id,openid")
                 .eq("user_id", userId)
-                .eq("client", ClientEnum.MNP.getCode())
                 .last("limit 1"));
 
         UserInfoVo vo = new UserInfoVo();
@@ -183,14 +184,14 @@ public class UserServiceImpl implements IUserService {
 
         if (!user.getPassword().equals("")) {
             Assert.notNull(oldPassword, "oldPassword参数缺失");
-            String oldPwd = ToolsUtils.makeMd5(oldPassword.trim() + user.getSalt());
+            String oldPwd = ToolUtils.makeMd5(oldPassword.trim() + user.getSalt());
             if (!oldPwd.equals(user.getPassword())) {
                 throw new OperateException("原密码不正确!");
             }
         }
 
-        String salt = ToolsUtils.randomString(5);
-        String pwd  = ToolsUtils.makeMd5(password.trim()+salt);
+        String salt = ToolUtils.randomString(5);
+        String pwd  = ToolUtils.makeMd5(password.trim()+salt);
 
         User u = new User();
         u.setId(userId);
@@ -201,6 +202,42 @@ public class UserServiceImpl implements IUserService {
     }
 
     /**
+     * 忘记密码
+     *
+     * @author fzr
+     * @param password 新密码
+     * @param mobile 手机号
+     * @param code 验证码
+     */
+    @Override
+    public void forgotPwd(String password, String mobile, String code) {
+        // 校验验证码
+        int sceneCode = NoticeEnum.FORGOT_PASSWORD_CODE.getCode();
+        if (!NoticeCheck.verify(sceneCode, code)) {
+            throw new OperateException("验证码错误!");
+        }
+
+        // 查询手机号
+        User user = userMapper.selectOne(new QueryWrapper<User>()
+                .select("id,username,mobile,is_disable")
+                .eq("is_delete", 0)
+                .eq("mobile", mobile)
+                .last("limit 1"));
+
+        // 验证账号
+        com.baomidou.mybatisplus.core.toolkit.Assert.notNull(user, "账号不存在!");
+
+        String salt = ToolUtils.randomString(5);
+        String pwd  = ToolUtils.makeMd5(password.trim()+salt);
+
+        // 更新密码
+        user.setPassword(pwd);
+        user.setSalt(salt);
+        user.setUpdateTime(System.currentTimeMillis() / 1000);
+        userMapper.updateById(user);
+    }
+
+    /**
      * 绑定手机
      *
      * @author fzr
@@ -208,15 +245,14 @@ public class UserServiceImpl implements IUserService {
      * @param userId 用户ID
      */
     @Override
-    public void bindMobile(UserBindMobileValidate mobileValidate, Integer userId) {
+    public void bindMobile(UserPhoneBindValidate mobileValidate, Integer userId) {
         String type   = mobileValidate.getType();
         String mobile = mobileValidate.getMobile();
         String code   = mobileValidate.getCode().toLowerCase();
 
         // 校验验证码
-        int typeCode = type.equals("bind") ? NoticeEnum.SMS_BIND_MOBILE_CODE.getCode() : NoticeEnum.SMS_CHANGE_MOBILE_CODE.getCode() ;
-        Object smsCode = RedisUtils.get(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
-        if (StringUtils.isNull(smsCode) || !smsCode.toString().equals(code)) {
+        int sceneCode = type.equals("bind") ? NoticeEnum.BIND_MOBILE_CODE.getCode() : NoticeEnum.CHANGE_MOBILE_CODE.getCode() ;
+        if (!NoticeCheck.verify(sceneCode, code)) {
             throw new OperateException("验证码错误!");
         }
 

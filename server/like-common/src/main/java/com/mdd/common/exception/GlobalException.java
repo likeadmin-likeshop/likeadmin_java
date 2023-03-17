@@ -33,7 +33,6 @@ public class GlobalException {
     public AjaxResult<Object> handleException(Exception e) {
         if (GlobalConfig.debug) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
         }
         log.error("系统异常 {}", e.getMessage());
         return AjaxResult.failed(HttpEnum.SYSTEM_ERROR.getCode(), e.getMessage());

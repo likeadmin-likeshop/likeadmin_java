@@ -1,5 +1,4 @@
 import { isObject } from '@vue/shared'
-import { getToken } from './auth'
 
 /**
  * @description 获取元素节点信息（在组件中的元素必须要传ctx）
@@ -9,11 +8,11 @@ import { getToken } from './auth'
  */
 export const getRect = (selector: string, all = false, context?: any) => {
     return new Promise((resolve, reject) => {
-        let qurey = uni.createSelectorQuery()
+        let query = uni.createSelectorQuery()
         if (context) {
-            qurey = uni.createSelectorQuery().in(context)
+            query = uni.createSelectorQuery().in(context)
         }
-        qurey[all ? 'selectAll' : 'select'](selector)
+        query[all ? 'selectAll' : 'select'](selector)
             .boundingClientRect(function (rect) {
                 if (all && Array.isArray(rect) && rect.length) {
                     return resolve(rect)
@@ -93,36 +92,4 @@ export function objectToQuery(params: Record<string, any>): string {
         }
     }
     return query.slice(0, -1)
-}
-/**
- * @description 上传图片
- * @param  { String } path 选择的本地地址
- */
-export function uploadFile(path: any) {
-    return new Promise((resolve, reject) => {
-        const token = getToken()
-        uni.uploadFile({
-            url: `${import.meta.env.VITE_APP_BASE_URL}/api/upload/image`,
-            filePath: path,
-            name: 'file',
-            header: {
-                token
-            },
-            fileType: 'image',
-            success: (res) => {
-                console.log('uploadFile res ==> ', res)
-                const data = JSON.parse(res.data)
-                console.log('data.code', data.code)
-                if (data.code == 200) {
-                    resolve(data.data)
-                } else {
-                    reject()
-                }
-            },
-            fail: (err) => {
-                console.log(err)
-                reject()
-            }
-        })
-    })
 }

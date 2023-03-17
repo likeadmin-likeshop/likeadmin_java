@@ -2,9 +2,9 @@ package com.mdd.front.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
-import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
 import com.mdd.common.enums.ClientEnum;
@@ -12,13 +12,11 @@ import com.mdd.common.enums.NoticeEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
+import com.mdd.common.plugin.notice.NoticeCheck;
 import com.mdd.common.util.*;
-import com.mdd.front.config.FrontConfig;
+import com.mdd.front.cache.ScanLoginCache;
 import com.mdd.front.service.ILoginService;
-import com.mdd.front.validate.login.RegisterValidate;
-import com.mdd.front.validate.login.ForgetPwdValidate;
-import com.mdd.front.validate.login.ScanLoginValidate;
-import com.mdd.front.vo.LoginTokenVo;
+import com.mdd.front.vo.login.LoginTokenVo;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
@@ -51,30 +49,32 @@ public class LoginServiceImpl implements ILoginService {
      * 注册账号
      *
      * @author fzr
-     * @param registerValidate 参数
+     * @param username 账号
+     * @param password 密码
+     * @param terminal 总端
      */
     @Override
-    public void register(RegisterValidate registerValidate) {
+    public void register(String username, String password, Integer terminal) {
         User model = userMapper.selectOne(new QueryWrapper<User>()
                 .select("id,sn,username")
-                .eq("username", registerValidate.getUsername())
+                .eq("username", username)
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
         Assert.isNull(model, "账号已存在,换一个吧!");
 
-        Integer sn  = this.randMakeSn();
-        String salt = ToolsUtils.randomString(5);
-        String pwd  = ToolsUtils.makeMd5(registerValidate.getPassword()+salt);
+        Integer sn  = this.__generateSn();
+        String salt = ToolUtils.randomString(5);
+        String pwd  = ToolUtils.makeMd5(password+salt);
 
         User user = new User();
         user.setSn(sn);
         user.setNickname("用户"+sn);
-        user.setUsername(registerValidate.getUsername());
+        user.setUsername(username);
         user.setPassword(pwd);
         user.setSalt(salt);
         user.setAvatar("/api/static/default_avatar.png");
-        user.setChannel(registerValidate.getClient());
+        user.setChannel(terminal);
         user.setCreateTime(System.currentTimeMillis() / 1000);
         user.setUpdateTime(System.currentTimeMillis() / 1000);
         userMapper.insert(user);
@@ -84,16 +84,12 @@ public class LoginServiceImpl implements ILoginService {
      * 账号登录
      *
      * @author fzr
-     * @param params 参数
+     * @param username 账号
+     * @param password 密码
      * @return LoginTokenVo
      */
     @Override
-    public LoginTokenVo accountLogin(Map<String, String> params) {
-        Assert.notNull(params.get("username"), "username参数缺失!");
-        Assert.notNull(params.get("password"), "password参数缺失!");
-        String username = params.get("username");
-        String password = params.get("password");
-
+    public LoginTokenVo accountLogin(String username, String password, Integer terminal) {
         User user = userMapper.selectOne(new QueryWrapper<User>()
                 .select("id,username,password,salt,mobile,is_disable")
                 .eq("username", username)
@@ -101,41 +97,28 @@ public class LoginServiceImpl implements ILoginService {
                 .last("limit 1"));
 
         Assert.notNull(user, "账号不存在!");
-        String pwd = ToolsUtils.makeMd5(password+user.getSalt());
+        String pwd = ToolUtils.makeMd5(password+user.getSalt());
         Assert.isFalse(!pwd.equals(user.getPassword()), "账号或密码错误!");
-        Assert.isFalse(user.getIsDisable() != 0, "账号已被禁用!");
+        Assert.isFalse(!user.getIsDisable().equals(0), "账号已被禁用!");
 
-        // 更新登录信息
-        user.setLastLoginIp(IpUtils.getHostIp());
-        user.setLastLoginTime(System.currentTimeMillis() / 1000);
-        userMapper.updateById(user);
-
-        return this.makeLoginToken(user.getId(), user.getMobile());
+        return this.__loginToken(user.getId(), user.getMobile(), terminal);
     }
 
     /**
      * 手机号登录
      *
      * @author fzr
-     * @param params 参数
+     * @param mobile 手机号
+     * @param code 验证码
      * @return LoginTokenVo
      */
     @Override
-    public LoginTokenVo mobileLogin(Map<String, String> params) {
-        Assert.notNull(params.get("mobile"), "mobile参数缺失!");
-        Assert.notNull(params.get("code"), "code参数缺失!");
-        String mobile = params.get("mobile");
-        String code   = params.get("code").toLowerCase();
-
+    public LoginTokenVo mobileLogin(String mobile, String code, Integer terminal) {
         // 校验验证码
-        int typeCode = NoticeEnum.SMS_LOGIN_CODE.getCode();
-        Object smsCode = RedisUtils.get(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
-        if (StringUtils.isNull(smsCode) || !smsCode.toString().equals(code)) {
+        int sceneCode = NoticeEnum.LOGIN_CODE.getCode();
+        if (!NoticeCheck.verify(sceneCode, code)) {
             throw new OperateException("验证码错误!");
         }
-
-        // 删除验证码
-        RedisUtils.del(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()
@@ -147,25 +130,20 @@ public class LoginServiceImpl implements ILoginService {
         Assert.notNull(user, "账号不存在!");
         Assert.isFalse(user.getIsDisable() != 0, "账号已禁用!");
 
-        // 更新登录信息
-        user.setLastLoginIp(IpUtils.getHostIp());
-        user.setLastLoginTime(System.currentTimeMillis() / 1000);
-        userMapper.updateById(user);
-
-        return this.makeLoginToken(user.getId(), user.getMobile());
+        return this.__loginToken(user.getId(), user.getMobile(), terminal);
     }
 
     /**
      * 微信小程序登录
      *
      * @author fzr
-     * @param code 微信code
-     * @param client 来源客户端
+     * @param code 编码
+     * @param terminal 终端
      * @return LoginTokenVo
      */
     @Override
     @Transactional
-    public LoginTokenVo mnpLogin(String code, Integer client) {
+    public LoginTokenVo mnpLogin(String code, Integer terminal) {
         try {
             WxMaService wxMaService = WeChatUtils.mnp();
             WxMaJscode2SessionResult sessionResult = wxMaService.getUserService().getSessionInfo(code);
@@ -173,7 +151,7 @@ public class LoginServiceImpl implements ILoginService {
             String uniId = sessionResult.getUnionid();
             String unionId = uniId == null ? "0" : uniId;
 
-            return this.userService(openId, unionId, client);
+            return this.__wxLoginHandle(openId, unionId, terminal);
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
@@ -183,17 +161,19 @@ public class LoginServiceImpl implements ILoginService {
      * 公众号登录
      *
      * @author fzr
+     * @param code 编码
+     * @param terminal 终端
      * @return LoginTokenVo
      */
     @Override
-    public LoginTokenVo officeLogin(String code, Integer client) {
+    public LoginTokenVo officeLogin(String code, Integer terminal) {
         try {
             WxMpService wxMpService = WeChatUtils.official();
             WxOAuth2AccessToken wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(code);
             String uniId = wxOAuth2AccessToken.getUnionId();
             String openId  = wxOAuth2AccessToken.getOpenId();
             String unionId = uniId == null ? "0" : uniId;
-            return this.userService(openId, unionId, client);
+            return this.__wxLoginHandle(openId, unionId, terminal);
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
@@ -207,52 +187,10 @@ public class LoginServiceImpl implements ILoginService {
      * @return String
      */
     @Override
-    public String codeUrl(String url) {
+    public String oaCodeUrl(String url) {
         WxMpService wxMpService = WeChatUtils.official();
         WxMpOAuth2ServiceImpl wxMpOAuth2Service = new WxMpOAuth2ServiceImpl(wxMpService);
         return wxMpOAuth2Service.buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
-    }
-
-    /**
-     * 忘记密码
-     *
-     * @author fzr
-     * @param forgetPwdValidate 参数
-     */
-    @Override
-    public void forgotPassword(ForgetPwdValidate forgetPwdValidate) {
-        String mobile = forgetPwdValidate.getMobile();
-        String code = forgetPwdValidate.getCode();
-        String password = forgetPwdValidate.getPassword();
-
-        // 校验验证码
-        int typeCode = NoticeEnum.SMS_FORGOT_PASSWORD_CODE.getCode();
-        Object smsCode = RedisUtils.get(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
-        if (StringUtils.isNull(smsCode) || !smsCode.toString().equals(code)) {
-            throw new OperateException("验证码错误!");
-        }
-
-        // 删除验证码
-        RedisUtils.del(GlobalConfig.redisSmsCode+typeCode+":"+mobile);
-
-        // 查询手机号
-        User user = userMapper.selectOne(new QueryWrapper<User>()
-                .select("id,username,mobile,is_disable")
-                .eq("is_delete", 0)
-                .eq("mobile", mobile)
-                .last("limit 1"));
-
-        // 验证账号
-        Assert.notNull(user, "账号不存在!");
-
-        String salt = ToolsUtils.randomString(5);
-        String pwd  = ToolsUtils.makeMd5(password.trim()+salt);
-
-        // 更新密码
-        user.setPassword(pwd);
-        user.setSalt(salt);
-        user.setUpdateTime(System.currentTimeMillis() / 1000);
-        userMapper.updateById(user);
     }
 
     /**
@@ -263,7 +201,7 @@ public class LoginServiceImpl implements ILoginService {
      * @return String
      */
     @Override
-    public String getScanCode(String url, HttpSession session) {
+    public String scanCodeUrl(String url, HttpSession session) {
         // 获取AppId
         String appId = ConfigUtils.get("op_channel", "appId", "");
 
@@ -285,9 +223,10 @@ public class LoginServiceImpl implements ILoginService {
         }
 
         // 防止csrf攻击
-        String state = ToolsUtils.makeUUID().replaceAll("-", "");
-        RedisUtils.set("wechat-open-state-"+session.getId(), state, 600);
-        //生成qrcodeUrl
+        String state = ToolUtils.makeUUID().replaceAll("-", "");
+        ScanLoginCache.set(session.getId(), state);
+
+        //生成QrcodeUrl
         return String.format(baseUrl, appId, redirectUrl, state);
     }
 
@@ -295,17 +234,18 @@ public class LoginServiceImpl implements ILoginService {
      * 扫码登录
      *
      * @author fzr
-     * @param scanLoginValidate 参数
+     * @param code 编码
+     * @param state 标识
+     * @param terminal 终端
+     * @param session 会话
      */
     @Override
-    public LoginTokenVo scanLogin(ScanLoginValidate scanLoginValidate, HttpSession session) {
-        Object o = RedisUtils.get("wechat-open-state-"+session.getId());
-        if (StringUtils.isNull(o) || !o.toString().equals(scanLoginValidate.getState())) {
+    public LoginTokenVo scanLogin(String code, String state, Integer terminal, HttpSession session) {
+        if (!ScanLoginCache.get(session.getId()).equals(state)) {
             throw new OperateException("二维码已失效或不存在,请重新操作");
         }
 
         // 得到配置和授权临时票据code
-        String code = scanLoginValidate.getCode();
         String appId = ConfigUtils.get("op_channel", "appId", "");
         String appSecret = ConfigUtils.get("op_channel", "appSecret", "");
 
@@ -320,7 +260,7 @@ public class LoginServiceImpl implements ILoginService {
         try {
             String accessTokenUrl = String.format(baseAccessTokenUrl, appId, appSecret, code);
             String result = HttpUtils.sendGet(accessTokenUrl);
-            resultMap = ToolsUtils.jsonToMap(result);
+            resultMap = MapUtils.jsonToMap(result);
         } catch (Exception e) {
             throw new OperateException("获取access_token失败:"+e.getMessage());
         }
@@ -333,7 +273,7 @@ public class LoginServiceImpl implements ILoginService {
         Map<String, String> userinfoMap;
         try {
             String resultUserInfo = HttpUtils.sendGet(userInfoUrl);
-            userinfoMap = ToolsUtils.jsonToMap(resultUserInfo);
+            userinfoMap = MapUtils.jsonToMap(resultUserInfo);
         } catch (Exception e) {
             throw new OperateException("获取用户信息失败:"+e.getMessage());
         }
@@ -341,41 +281,18 @@ public class LoginServiceImpl implements ILoginService {
         String openId  = userinfoMap.get("openid");
         String uniId   = userinfoMap.get("unionid");
         String unionId = uniId == null ? "0" : uniId;
-        RedisUtils.del("wechat-open-state-"+session.getId());
-        return this.userService(openId, unionId, ClientEnum.PC.getCode());
+        return this.__wxLoginHandle(openId, unionId, terminal);
     }
 
     /**
-     * 生成登录Token
+     * 处理微信登录
      *
-     * @author fzr
-     * @param userId 用户ID
-     * @param mobile 用户手机
+     * @param openId   (openId)
+     * @param unionId  (unionId)
+     * @param terminal (terminal)
      * @return LoginTokenVo
      */
-    private LoginTokenVo makeLoginToken(Integer userId, String mobile) {
-        mobile = StringUtils.isNull(mobile) ? "" : mobile;
-
-        String token = ToolsUtils.makeToken();
-        int tokenValidTime = Integer.parseInt(YmlUtils.get("like.token-valid-time"));
-        RedisUtils.set(FrontConfig.frontendTokenKey+token, userId, tokenValidTime);
-
-        LoginTokenVo vo = new LoginTokenVo();
-        vo.setId(userId);
-        vo.setIsBindMobile(!mobile.equals(""));
-        vo.setToken(token);
-        return vo;
-    }
-
-    /**
-     * 用户创建服务
-     *
-     * @param openId  (openId)
-     * @param unionId (unionId)
-     * @param client  (client)
-     * @return LoginTokenVo
-     */
-    private LoginTokenVo userService(String openId, String unionId, Integer client) {
+    private LoginTokenVo __wxLoginHandle(String openId, String unionId, Integer terminal) {
         UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
                 .nested(wq->wq
                     .eq("unionid", unionId).or()
@@ -392,7 +309,7 @@ public class LoginServiceImpl implements ILoginService {
         }
 
         if (StringUtils.isNull(user)) {
-            Integer sn  = this.randMakeSn();
+            Integer sn  = this.__generateSn();
             User model = new User();
             model.setSn(sn);
             model.setAvatar("/api/static/default_avatar.png");
@@ -413,7 +330,7 @@ public class LoginServiceImpl implements ILoginService {
                 auth.setUserId(model.getId());
                 auth.setUnionid(unionId);
                 auth.setOpenid(openId);
-                auth.setClient(client);
+                auth.setTerminal(terminal);
                 auth.setCreateTime(System.currentTimeMillis() / 1000);
                 auth.setUpdateTime(System.currentTimeMillis() / 1000);
                 userAuthMapper.insert(auth);
@@ -425,7 +342,7 @@ public class LoginServiceImpl implements ILoginService {
                     .nested(wq->wq
                             .eq("unionid", unionId).or()
                             .eq("openid", openId)
-                    ).eq("client", client)
+                    ).eq("terminal", terminal)
                     .last("limit 1"));
 
             if (StringUtils.isNull(auth)) {
@@ -433,7 +350,7 @@ public class LoginServiceImpl implements ILoginService {
                 authModel.setUserId(user.getId());
                 authModel.setUnionid(unionId);
                 authModel.setOpenid(openId);
-                authModel.setClient(client);
+                authModel.setTerminal(terminal);
                 authModel.setCreateTime(System.currentTimeMillis() / 1000);
                 authModel.setUpdateTime(System.currentTimeMillis() / 1000);
                 userAuthMapper.insert(authModel);
@@ -441,14 +358,36 @@ public class LoginServiceImpl implements ILoginService {
                 auth.setUnionid(unionId);
                 userAuthMapper.updateById(userAuth);
             }
-
-            // 更新登录信息
-            user.setLastLoginIp(IpUtils.getHostIp());
-            user.setLastLoginTime(System.currentTimeMillis() / 1000);
-            userMapper.updateById(user);
         }
 
-        return this.makeLoginToken(userId, user.getMobile());
+        return this.__loginToken(userId, user.getMobile(), terminal);
+    }
+
+    /**
+     * 处理录令牌
+     *
+     * @author fzr
+     * @param userId 用户ID
+     * @param mobile 用户手机
+     * @param terminal 终端
+     * @return LoginTokenVo
+     */
+    private LoginTokenVo __loginToken(Integer userId, String mobile, Integer terminal) {
+        // 实现账号登录
+        StpUtil.login(userId, String.valueOf(terminal));
+
+        // 更新登录信息
+        User user = new User();
+        user.setLastLoginIp(IpUtils.getHostIp());
+        user.setLastLoginTime(System.currentTimeMillis() / 1000);
+        userMapper.update(user, new QueryWrapper<User>().eq("id", userId));
+
+        // 返回登录信息
+        LoginTokenVo vo = new LoginTokenVo();
+        vo.setId(userId);
+        vo.setIsBindMobile(!StringUtils.isEmpty(mobile));
+        vo.setToken(StpUtil.getTokenValue());
+        return vo;
     }
 
     /**
@@ -457,12 +396,12 @@ public class LoginServiceImpl implements ILoginService {
      * @author fzr
      * @return Integer
      */
-    private Integer randMakeSn() {
+    private Integer __generateSn() {
         Integer sn;
         while (true) {
-            sn = Integer.parseInt(ToolsUtils.randomInt(8));
+            sn = Integer.parseInt(ToolUtils.randomInt(8));
             User snModel = userMapper.selectOne(new QueryWrapper<User>()
-                    .select("id,sn,username")
+                    .select("id,sn")
                     .eq("sn", sn)
                     .last("limit 1"));
             if (snModel == null) {

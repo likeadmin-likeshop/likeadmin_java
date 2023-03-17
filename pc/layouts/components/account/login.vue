@@ -172,7 +172,7 @@ import {
     FormRules
 } from 'element-plus'
 import { useAccount, PopupTypeEnum } from './useAccount'
-import { getWxCodeUrl, login } from '@/api/account'
+import { getWxCodeUrl, mobileLogin, accountLogin } from '@/api/account'
 import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
 import { smsSend } from '~~/api/app'
@@ -266,9 +266,7 @@ const sendSms = async () => {
 
 const handleLogin = async () => {
     await formRef.value?.validate()
-    const params: any = {
-        scene: LoginWayEnum[formData.scene].toLowerCase()
-    }
+    const params: any = {}
     if (isAccountLogin.value) {
         params.username = formData.account
         params.password = formData.password
@@ -277,7 +275,17 @@ const handleLogin = async () => {
         params.mobile = formData.account
         params.code = formData.code
     }
-    const data = await login(params)
+    let data
+    switch (formData.scene) {
+        case LoginWayEnum.ACCOUNT:
+            data = await accountLogin(params)
+            break
+        case LoginWayEnum.MOBILE:
+            data = await mobileLogin(params)
+
+            break
+    }
+    if (!data) return
     if (isForceBindMobile.value && !data.isBindMobile) {
         userStore.temToken = data.token
         setPopupType(PopupTypeEnum.BIND_MOBILE)

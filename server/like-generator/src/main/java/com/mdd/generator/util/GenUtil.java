@@ -28,7 +28,7 @@ public class GenUtil {
         String tableDesc = map.getTableComment();
         table.setTableName(tableName);
         table.setTableComment(tableDesc);
-        table.setAuthorName(map.getAuthorName());
+        table.setAuthorName(StringUtils.isEmpty(map.getAuthorName()) ? "LikeAdmin" : map.getAuthorName());
         table.setEntityName(GenUtil.toClassName(tableName));
         table.setModuleName(GenUtil.toModuleName(tableName));
         table.setFunctionName(GenUtil.replaceText(tableDesc));

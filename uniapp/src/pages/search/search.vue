@@ -45,7 +45,8 @@
 import { ref, reactive, shallowRef } from 'vue'
 import Suggest from './component/suggest.vue'
 import { HISTORY } from '@/enums/cacheEnums'
-import { getHotSearch, getSearch } from '@/api/shop'
+import { getHotSearch } from '@/api/shop'
+import { getArticleList } from '@/api/news'
 import cache from '@/utils/cache'
 
 interface Search {
@@ -98,7 +99,7 @@ const handleClear = async (): Promise<void> => {
 
 const queryList = async (pageNo, pageSize) => {
     try {
-        const { lists } = await getSearch({
+        const { lists } = await getArticleList({
             keyword: keyword.value,
             pageNo,
             pageSize

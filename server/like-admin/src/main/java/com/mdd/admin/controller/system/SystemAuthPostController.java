@@ -1,5 +1,6 @@
 package com.mdd.admin.controller.system;
 
+import com.mdd.common.aop.NotPower;
 import com.mdd.admin.service.ISystemAuthPostService;
 import com.mdd.admin.validate.commons.IdValidate;
 import com.mdd.admin.validate.commons.PageValidate;
@@ -10,94 +11,61 @@ import com.mdd.admin.vo.system.SystemAuthPostVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * 系统岗位管理
- */
 @RestController
 @RequestMapping("api/system/post")
+@Api(tags = "系统岗位管理")
 public class SystemAuthPostController {
 
     @Resource
     ISystemAuthPostService iSystemAuthPostService;
 
-    /**
-     * 岗位所有
-     *
-     * @author fzr
-     * @return AjaxResult<List<SystemAuthPostVo>>
-     */
+    @NotPower
     @GetMapping("/all")
+    @ApiOperation(value="所有岗位")
     public AjaxResult<List<SystemAuthPostVo>> all() {
         List<SystemAuthPostVo> list = iSystemAuthPostService.all();
         return AjaxResult.success(list);
     }
 
-    /**
-     * 岗位列表
-     * @param pageValidate 分页参数
-     * @param searchValidate 搜索参数
-     * @return PageResult<SystemAuthPostVo>
-     */
     @GetMapping("/list")
+    @ApiOperation(value="岗位列表")
     public AjaxResult<PageResult<SystemAuthPostVo>> list(@Validated PageValidate pageValidate,
                                                          @Validated SystemPostSearchValidate searchValidate) {
         PageResult<SystemAuthPostVo> list = iSystemAuthPostService.list(pageValidate, searchValidate);
         return AjaxResult.success(list);
     }
 
-    /**
-     * 岗位详情
-     *
-     * @author fzr
-     * @param id 主键
-     * @return AjaxResult<SystemAuthPostVo>
-     */
     @GetMapping("/detail")
+    @ApiOperation(value="岗位详情")
     public AjaxResult<SystemAuthPostVo> detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         SystemAuthPostVo vo = iSystemAuthPostService.detail(id);
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 岗位新增
-     *
-     * @author fzr
-     * @param createValidate 参数
-     * @return AjaxResult<Object>
-     */
     @PostMapping("/add")
+    @ApiOperation(value="岗位新增")
     public AjaxResult<Object> add(@Validated @RequestBody SystemPostCreateValidate createValidate) {
         iSystemAuthPostService.add(createValidate);
         return AjaxResult.success();
     }
 
-    /**
-     * 岗位编辑
-     *
-     * @author fzr
-     * @param updateValidate 参数
-     * @return AjaxResult<Object>
-     */
     @PostMapping("/edit")
+    @ApiOperation(value="岗位编辑")
     public AjaxResult<Object> edit(@Validated @RequestBody SystemPostUpdateValidate updateValidate) {
         iSystemAuthPostService.edit(updateValidate);
         return AjaxResult.success();
     }
 
-    /**
-     * 岗位删除
-     *
-     * @author fzr
-     * @param idValidate 参数
-     * @return AjaxResult<Object>
-     */
     @PostMapping("/del")
+    @ApiOperation(value="岗位删除")
     public AjaxResult<Object> del(@Validated @RequestBody IdValidate idValidate) {
         iSystemAuthPostService.del(idValidate.getId());
         return AjaxResult.success();

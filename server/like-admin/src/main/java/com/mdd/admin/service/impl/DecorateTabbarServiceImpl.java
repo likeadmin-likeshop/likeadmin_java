@@ -54,7 +54,7 @@ public class DecorateTabbarServiceImpl implements IDecorateTabbarService {
         String tabbar = ConfigUtils.get("tabbar", "style", "{}");
 
         DecorateTabbarVo response = new DecorateTabbarVo();
-        response.setStyle(ToolsUtils.jsonToMap(tabbar));
+        response.setStyle(MapUtils.jsonToMap(tabbar));
         response.setList(tabList);
         return response;
     }

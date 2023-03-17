@@ -4,7 +4,6 @@ import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.admin.LikeAdminThreadLocal;
-import com.mdd.admin.config.AdminConfig;
 import com.mdd.admin.service.ISystemAuthMenuService;
 import com.mdd.admin.service.ISystemAuthPermService;
 import com.mdd.admin.validate.system.SystemMenuCreateValidate;
@@ -12,8 +11,7 @@ import com.mdd.admin.validate.system.SystemMenuUpdateValidate;
 import com.mdd.admin.vo.system.SystemAuthMenuVo;
 import com.mdd.common.entity.system.SystemAuthMenu;
 import com.mdd.common.mapper.system.SystemAuthMenuMapper;
-import com.mdd.common.util.ArrayUtils;
-import com.mdd.common.util.RedisUtils;
+import com.mdd.common.util.ListUtils;
 import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -72,7 +70,7 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         }
 
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(lists));
-        return ArrayUtils.listToTree(jsonArray, "id", "pid", "children");
+        return ListUtils.listToTree(jsonArray, "id", "pid", "children");
     }
 
     /**
@@ -100,7 +98,7 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         }
 
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(lists));
-        return ArrayUtils.listToTree(jsonArray, "id", "pid", "children");
+        return ListUtils.listToTree(jsonArray, "id", "pid", "children");
     }
 
     /**
@@ -148,8 +146,6 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         model.setCreateTime(System.currentTimeMillis() / 1000);
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         systemAuthMenuMapper.insert(model);
-
-        RedisUtils.del(AdminConfig.backstageRolesKey);
     }
 
     /**
@@ -178,8 +174,6 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         model.setIsDisable(updateValidate.getIsDisable());
         model.setUpdateTime(System.currentTimeMillis() / 1000);
         systemAuthMenuMapper.updateById(model);
-
-        RedisUtils.del(AdminConfig.backstageRolesKey);
     }
 
     /**
@@ -205,8 +199,6 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
 
         systemAuthMenuMapper.deleteById(id);
         iSystemAuthPermService.batchDeleteByMenuId(id);
-
-        RedisUtils.del(AdminConfig.backstageRolesKey);
     }
 
 }

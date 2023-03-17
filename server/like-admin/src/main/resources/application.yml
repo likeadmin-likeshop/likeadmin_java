@@ -9,6 +9,12 @@ like:
     expire: 120
     # 验证码缓存键名
     token: "captcha:key:"
+  # Swagger配置
+  swagger:
+    # 是否开启swagger
+    enabled: true
+    # 请求前缀
+    pathMapping: /dev-api
 
 # 服务配置
 server:
@@ -23,6 +29,8 @@ spring:
   mvc:
     static-path-pattern: /api/static/**
     throw-exception-if-no-handler-found: true
+    pathmatch:
+      matching-strategy: ant_path_matcher
   # 数据源配置
   datasource:
     url: jdbc:mysql://localhost:3306/likeadmin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false

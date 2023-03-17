@@ -9,7 +9,6 @@ import com.mdd.admin.vo.system.SystemAuthAdminDetailVo;
 import com.mdd.admin.vo.system.SystemAuthAdminListedVo;
 import com.mdd.admin.vo.system.SystemAuthAdminSelvesVo;
 import com.mdd.common.core.PageResult;
-import com.mdd.common.entity.system.SystemAuthAdmin;
 
 /**
  * 系统管理员服务接口类
@@ -85,10 +84,5 @@ public interface ISystemAuthAdminService {
      * @param id 主键参数
      */
     void disable(Integer id, Integer adminId);
-
-    /**
-     * 缓存管理员
-     */
-    void cacheAdminUserByUid(Integer id);
 
 }

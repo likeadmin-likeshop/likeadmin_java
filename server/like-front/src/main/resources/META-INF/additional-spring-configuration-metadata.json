@@ -6,14 +6,14 @@
       "description": "Description for like.upload-directory."
     },
     {
-      "name": "like.token-valid-time",
+      "name": "like.swagger.enabled",
       "type": "java.lang.String",
-      "description": "Description for like.token-valid-time."
+      "description": "Description for like.swagger.enabled."
     },
     {
-      "name": "like.token-renew-time",
+      "name": "like.swagger.pathMapping",
       "type": "java.lang.String",
-      "description": "Description for like.token-renew-time."
+      "description": "Description for like.swagger.pathMapping."
     }
   ]
 }

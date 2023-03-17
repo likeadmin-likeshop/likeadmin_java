@@ -1,5 +1,7 @@
 package ${packageName}.admin.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,28 +14,22 @@ import java.util.Date;
 #end
 #end
 
-#set($isAuthor = !$authorName.equals(""))
-/**
- * ${EntityName}Vo
-#if($isAuthor)
- * @author ${authorName}
-#end
- */
 @Data
+@ApiModel("${functionName}详情Vo")
 public class ${EntityName}DetailVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
 #foreach ($column in $columns)
 #if($column.isEdit==1 || $column.isPk==1)
-    #if($notesType.equals("top"))
-    // ${column.columnComment}
-    #end
     #if($dateFields.contains($column.columnName))
-    private String ${column.javaField}; // ${column.columnComment}
+    @ApiModelProperty(value = "${column.columnComment}")
+    private String ${column.javaField};
     #else
-    private ${column.javaType} ${column.javaField};  #if($notesType.equals("right"))// ${column.columnComment}#end
+    @ApiModelProperty(value = "${column.columnComment}")
+    private ${column.javaType} ${column.javaField};
     #end
+
 #end
 #end
 

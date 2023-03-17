@@ -1,23 +1,27 @@
 package com.mdd.admin.validate;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * 用户搜索参数
- */
 @Data
+@ApiModel("用户搜索参数")
 public class UsersSearchValidate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "渠道")
     private Integer channel;
 
+    @ApiModelProperty(value = "关键词")
     private String keyword;
 
+    @ApiModelProperty(value = "开始时间")
     private String startTime;
 
+    @ApiModelProperty(value = "结束时间")
     private String endTime;
 
 }

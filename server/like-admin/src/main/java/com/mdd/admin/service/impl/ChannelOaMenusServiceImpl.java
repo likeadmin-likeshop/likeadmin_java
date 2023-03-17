@@ -48,7 +48,7 @@ public class ChannelOaMenusServiceImpl implements IChannelOaMenusService {
 
         List<Map<String, String>> params = new LinkedList<>();
         for (Object o : objs) {
-            params.add(ToolsUtils.objectToMap(o));
+            params.add(MapUtils.objectToMap(o));
         }
 
         List<WxMenuButton> menuButtons = new LinkedList<>();
@@ -79,7 +79,7 @@ public class ChannelOaMenusServiceImpl implements IChannelOaMenusService {
              // 子级菜单
             if (Integer.parseInt(item.get("menuType")) == 2) {
                 Assert.notNull(item.get("subButtons"), "子级菜单不能为空");
-                List<Map<String, String>> subButtons = ArrayUtils.stringToListAsMapStr(item.get("subButtons"));
+                List<Map<String, String>> subButtons = ListUtils.stringToListAsMapStr(item.get("subButtons"));
 
                 if (subButtons.size() > 5) {
                     throw new OperateException("子级菜单超出限制(最多5个)");

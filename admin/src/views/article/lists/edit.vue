@@ -87,7 +87,7 @@
                         </el-form-item>
                         <el-form-item label="初始浏览量" prop="visit">
                             <div>
-                                <el-input-number v-model="formData.visit" />
+                                <el-input-number v-model="formData.visit" :min="0" :max="9999" />
                             </div>
                         </el-form-item>
                         <el-form-item label="文章状态" required prop="isShow">

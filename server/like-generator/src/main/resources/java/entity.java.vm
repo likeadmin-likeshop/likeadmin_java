@@ -2,6 +2,8 @@ package ${packageName}.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,26 +16,18 @@ import java.util.Date;
 #end
 #end
 
-#set($isAuthor = !$authorName.equals(""))
-/**
- * ${functionName}实体
-#if($isAuthor)
- * @author ${authorName}
-#end
- */
 @Data
+@ApiModel("${functionName}实体")
 public class ${EntityName} implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
  #foreach ($column in $columns)
-    #if($notesType.equals("top"))
-    // ${column.columnComment}
-    #end
     #if($column.isPk)
     @TableId(value="${column.columnName}", type= IdType.AUTO)
     #end
-    private ${column.javaType} ${column.javaField}; #if($notesType.equals("right"))// ${column.columnComment}#end
- #end
+    @ApiModelProperty(value = "${column.columnComment}")
+    private ${column.javaType} ${column.javaField};
 
+ #end
 }

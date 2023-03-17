@@ -31,7 +31,7 @@ export function getArticleDetail(data: { id: number }) {
  * @return { Promise }
  */
 export function addCollect(data: { articleId: number }) {
-    return request.post({ url: '/article/addCollect', data: data }, { isAuth: true })
+    return request.post({ url: '/article/collectAdd', data: data }, { isAuth: true })
 }
 
 /**
@@ -40,7 +40,7 @@ export function addCollect(data: { articleId: number }) {
  * @return { Promise }
  */
 export function cancelCollect(data: { articleId: number }) {
-    return request.post({ url: '/article/cancelCollect', data: data }, { isAuth: true })
+    return request.post({ url: '/article/collectCancel', data: data }, { isAuth: true })
 }
 
 /**
@@ -48,5 +48,5 @@ export function cancelCollect(data: { articleId: number }) {
  * @return { Promise }
  */
 export function getCollect() {
-    return request.get({ url: '/article/collect' })
+    return request.get({ url: '/article/collectList' })
 }

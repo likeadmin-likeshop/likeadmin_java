@@ -1,10 +1,15 @@
-import { getClient } from '~~/utils/env'
-
 // 登录
-export function login(params: any) {
+export function mobileLogin(params: any) {
     return $request.post({
-        url: '/login/check',
-        params: { ...params, client: getClient() }
+        url: '/login/mobileLogin',
+        params
+    })
+}
+
+export function accountLogin(params: any) {
+    return $request.post({
+        url: '/login/accountLogin',
+        params
     })
 }
 
@@ -12,14 +17,14 @@ export function login(params: any) {
 export function register(params: any) {
     return $request.post({
         url: '/login/register',
-        params: { ...params, client: getClient() }
+        params
     })
 }
 
 //向微信请求code的链接
 export function getWxCodeUrl() {
     return $request.get({
-        url: '/login/getScanCode',
+        url: '/login/scanCodeUrl',
         params: {
             url: location.href
         }

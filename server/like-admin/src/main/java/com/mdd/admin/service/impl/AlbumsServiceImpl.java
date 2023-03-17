@@ -87,7 +87,7 @@ public class AlbumsServiceImpl implements IAlbumsService {
                 vo.setPath(album.getUri());
             }
             vo.setUri(UrlUtils.toAbsoluteUrl(album.getUri()));
-            vo.setSize(ToolsUtils.storageUnit(album.getSize()));
+            vo.setSize(ToolUtils.storageUnit(album.getSize()));
             vo.setCreateTime(TimeUtils.timestampToDate(album.getCreateTime()));
             vo.setUpdateTime(TimeUtils.timestampToDate(album.getUpdateTime()));
             list.add(vo);
@@ -234,7 +234,7 @@ public class AlbumsServiceImpl implements IAlbumsService {
         }
 
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(lists));
-        return ArrayUtils.listToTree(jsonArray, "id", "pid", "children");
+        return ListUtils.listToTree(jsonArray, "id", "pid", "children");
     }
 
     /**

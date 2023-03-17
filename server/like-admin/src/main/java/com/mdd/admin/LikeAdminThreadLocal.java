@@ -1,10 +1,11 @@
 package com.mdd.admin;
 
-import com.mdd.common.util.ArrayUtils;
+import com.mdd.common.util.ListUtils;
 
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * 本地线程
@@ -19,17 +20,18 @@ public class LikeAdminThreadLocal {
     /**
      * 取得本地线程对象
      */
-    private static final java.lang.ThreadLocal<LinkedHashMap<String, Object>> MY_LOCAL = new java.lang.ThreadLocal<>();
+    private static final java.lang.ThreadLocal<Map<String, Object>> MY_LOCAL = new java.lang.ThreadLocal<>();
 
     /**
      * 写入本地线程
      */
     public static void put(String key, Object val) {
-        LinkedHashMap<String, Object> map = MY_LOCAL.get();
+        Map<String, Object> map = MY_LOCAL.get();
         if (map == null) {
-            map = new LinkedHashMap<>();
+            synchronized (MY_LOCAL) {
+                map = new ConcurrentSkipListMap<>();
+            }
         }
-
         map.put(key, val);
         MY_LOCAL.set(map);
     }
@@ -55,12 +57,12 @@ public class LikeAdminThreadLocal {
     /**
      * 获取角色ID
      */
-    public static List<Integer> getRoleId() {
+    public static List<Integer> getRoleIds() {
         String roleIds = LikeAdminThreadLocal.get("roleIds").toString();
         if (roleIds.equals("") || roleIds.equals("0")) {
             return Collections.emptyList();
         }
-        return ArrayUtils.stringToListAsInt(roleIds, ",");
+        return ListUtils.stringToListAsInt(roleIds, ",");
     }
 
     /**

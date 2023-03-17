@@ -10,7 +10,7 @@ public enum ClientEnum {
     H5(3, "手机H5"),
     PC(4, "电脑PC"),
     IOS(5, "苹果APP"),
-    APK(5, "安卓APP");
+    APK(6, "安卓APP");
 
     /**
      * 构造方法

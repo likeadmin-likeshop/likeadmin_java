@@ -2,16 +2,18 @@
 like:
   # 上传目录
   upload-directory: /www/uploads/likeadmin-java/
-  # 登录有效时间 (单位秒)
-  token-valid-time: 7200
-  # 登录续签时间 (不足以下秒数续签)
-  token-renew-time: 1800
+  # Swagger配置
+  swagger:
+    # 是否开启swagger
+    enabled: true
+    # 请求前缀
+    pathMapping: /dev-api
 
 # 服务配置
 server:
   port: 8084
-  servlet:
-    context-path: /
+#  servlet:
+#    context-path: /
 
 # 框架配置
 spring:
@@ -20,6 +22,8 @@ spring:
   mvc:
     static-path-pattern: /api/static/**
     throw-exception-if-no-handler-found: true
+    pathmatch:
+      matching-strategy: ant_path_matcher
   # 数据源配置
   datasource:
     url: jdbc:mysql://localhost:3306/local_likeadmin?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false
@@ -66,3 +70,14 @@ mybatis-plus:
       table-prefix: la_
   configuration-properties:
     prefix: la_
+
+# Sa-token配置
+sa-token:
+  token-name: like-token  # token的名称
+  timeout: 2592000        # token有效期单位s(默认30天,-1代表永不过期)
+  activity-timeout: -1    # token临时有效期(指定时间无操作掉线)
+  is-concurrent: true     # 是否允许同一账号并发登录
+  is-share: false         # 多人同登账号共用token
+  token-style: random-64  # token生成的风格
+  is-print: false         # 打印版本字符画
+  is-log: false           # 是否输出操作日志

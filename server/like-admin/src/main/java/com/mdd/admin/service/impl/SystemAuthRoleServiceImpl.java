@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mdd.admin.config.AdminConfig;
 import com.mdd.admin.service.ISystemAuthPermService;
 import com.mdd.admin.service.ISystemAuthRoleService;
 import com.mdd.admin.validate.commons.PageValidate;
@@ -16,7 +15,6 @@ import com.mdd.common.entity.system.SystemAuthAdmin;
 import com.mdd.common.entity.system.SystemAuthRole;
 import com.mdd.common.mapper.system.SystemAuthAdminMapper;
 import com.mdd.common.mapper.system.SystemAuthRoleMapper;
-import com.mdd.common.util.RedisUtils;
 import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -192,7 +190,6 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
 
         iSystemAuthPermService.batchDeleteByRoleId(updateValidate.getId());
         iSystemAuthPermService.batchSaveByMenuIds(updateValidate.getId(), updateValidate.getMenuIds());
-        RedisUtils.del(AdminConfig.backstageRolesKey);
     }
 
     /**
@@ -219,7 +216,6 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
 
         systemAuthRoleMapper.deleteById(id);
         iSystemAuthPermService.batchDeleteByRoleId(id);
-        RedisUtils.del(AdminConfig.backstageRolesKey);
     }
 
 }

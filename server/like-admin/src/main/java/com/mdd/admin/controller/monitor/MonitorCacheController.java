@@ -1,9 +1,11 @@
 package com.mdd.admin.controller.monitor;
 
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.admin.aop.Log;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.util.StringUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.data.redis.connection.RedisServerCommands;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,11 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.*;
 
-/**
- * 缓存监控管理
- */
 @RestController
 @RequestMapping("api/monitor")
+@Api(tags = "监控缓存管理")
 public class MonitorCacheController {
 
     @Resource
@@ -32,6 +32,7 @@ public class MonitorCacheController {
      */
     @Log(title = "缓存监控")
     @GetMapping("/cache")
+    @ApiOperation(value="缓存监控")
     public AjaxResult<Object> info() {
         Properties info = (Properties) redisTemplate.execute((RedisCallback<Object>) RedisServerCommands::info);
         Properties commandStats = (Properties) redisTemplate.execute((RedisCallback<Object>) connection -> connection.info("commandstats"));

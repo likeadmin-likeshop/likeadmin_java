@@ -1,11 +1,14 @@
 package com.mdd.front.controller;
 
+import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.AlbumEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.plugin.storage.StorageDriver;
 import com.mdd.common.plugin.storage.UploadFilesVo;
 import com.mdd.common.util.StringUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,21 +17,14 @@ import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * 上传管理
- */
 @RestController
 @RequestMapping("/api/upload")
+@Api(tags = "上传管理")
 public class UploadController {
 
-    /**
-     * 上传图片
-     *
-     * @author fzr
-     * @param request 请求对象
-     * @return AjaxResult<UploadFilesVo>
-     */
+    @NotLogin
     @PostMapping("/image")
+    @ApiOperation(value="上传图片")
     public AjaxResult<UploadFilesVo> image(HttpServletRequest request) {
         MultipartFile multipartFile;
         try {

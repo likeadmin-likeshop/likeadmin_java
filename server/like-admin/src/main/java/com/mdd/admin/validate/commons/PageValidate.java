@@ -1,15 +1,14 @@
 package com.mdd.admin.validate.commons;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import java.io.Serializable;
 
-/**
- * 分页参数
- */
 @Data
+@ApiModel("分页参数")
 public class PageValidate implements Serializable {
 
     private static final long serialVersionUID = 1L;

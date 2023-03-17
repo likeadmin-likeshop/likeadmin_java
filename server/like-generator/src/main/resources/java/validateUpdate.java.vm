@@ -1,5 +1,7 @@
 package ${packageName}.admin.validate;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import java.io.Serializable;
 import javax.validation.constraints.*;
@@ -21,6 +23,7 @@ import ${packageName}.common.validator.annotation.IDMust;
 #end
  */
 @Data
+@ApiModel("${functionName}更新参数")
 public class ${EntityName}UpdateValidate implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,6 +36,7 @@ public class ${EntityName}UpdateValidate implements Serializable {
     #if($column.isPk==1)
     @IDMust(message = "${column.javaField}参数必传且需大于0")
     #end
+    @ApiModelProperty(value = "${column.columnComment}")
     private ${column.javaType} ${column.javaField};
 
 #end

@@ -1,7 +1,7 @@
 package com.mdd.front.service;
 
-import com.mdd.front.vo.PcArticleCenterVo;
-import com.mdd.front.vo.PcArticleDetailVo;
+import com.mdd.front.vo.article.PcArticleCenterVo;
+import com.mdd.front.vo.article.PcArticleDetailVo;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,7 @@ public interface IPcService {
     /**
      * 资讯中心
      *
-     * @authro fzr
+     * @author fzr
      * @return PcArticleCenterVo
      */
     List<PcArticleCenterVo> articleCenter();
@@ -34,7 +34,8 @@ public interface IPcService {
      * 文章详情
      *
      * @author fzr
-     * @param id 文章主键
+     * @param id 文章ID
+     * @param userId 用户ID
      * @return PcArticleDetailVo
      */
     PcArticleDetailVo articleDetail(Integer id, Integer userId);

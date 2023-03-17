@@ -1,5 +1,6 @@
 package com.mdd.admin.controller;
 
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.IUsersService;
 import com.mdd.admin.validate.UsersSearchValidate;
 import com.mdd.admin.validate.UsersUpdateValidate;
@@ -8,57 +9,39 @@ import com.mdd.admin.vo.user.UserVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
-/**
- * 用户管理
- */
 @RestController
 @RequestMapping("api/user")
+@Api(tags = "用户数据管理")
 public class UsersController {
 
     @Resource
     IUsersService iUsersService;
 
-    /**
-     * 用户列表
-     *
-     * @author fzr
-     * @param pageValidate 分页参数
-     * @param searchValidate 搜索参数
-     * @return AjaxResult<PageResult<UserVo>>
-     */
     @GetMapping("/list")
+    @ApiOperation(value="用户列表")
     public AjaxResult<PageResult<UserVo>> list(@Validated PageValidate pageValidate,
                                                @Validated UsersSearchValidate searchValidate) {
         PageResult<UserVo> list = iUsersService.list(pageValidate, searchValidate);
         return AjaxResult.success(list);
     }
 
-    /**
-     * 用户详情
-     *
-     * @author fzr
-     * @param id 主键
-     * @return AjaxResult<UserVo>
-     */
     @GetMapping("/detail")
+    @ApiOperation(value="用户详情")
     public AjaxResult<UserVo> detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         UserVo vo = iUsersService.detail(id);
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 用户编辑
-     *
-     * @author fzr
-     * @param updateValidate 参数
-     * @return AjaxResult<Object>
-     */
+    @Log(title = "用户编辑")
     @PostMapping("/edit")
+    @ApiOperation(value="用户编辑")
     public AjaxResult<Object> edit(@Validated @RequestBody UsersUpdateValidate updateValidate) {
         iUsersService.edit(updateValidate);
         return AjaxResult.success();

@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.mdd.admin.service.ISettingCopyrightService;
 import com.mdd.admin.validate.setting.SettingCopyrightValidate;
 import com.mdd.admin.vo.setting.SettingCopyrightVo;
-import com.mdd.common.util.ArrayUtils;
+import com.mdd.common.util.ListUtils;
 import com.mdd.common.util.ConfigUtils;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class SettingCopyrightServiceImpl implements ISettingCopyrightService {
     @Override
     public List<SettingCopyrightVo> detail() {
         String config = ConfigUtils.get("website", "copyright", "[]");
-        List<Map<String, String>> copyright = ArrayUtils.stringToListAsMapStr(config);
+        List<Map<String, String>> copyright = ListUtils.stringToListAsMapStr(config);
 
         List<SettingCopyrightVo> list = new LinkedList<>();
         for (Map<String, String> map : copyright) {

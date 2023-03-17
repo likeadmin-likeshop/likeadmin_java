@@ -1,12 +1,8 @@
 package com.mdd.front.service;
 
-import com.mdd.front.validate.login.RegisterValidate;
-import com.mdd.front.validate.login.ForgetPwdValidate;
-import com.mdd.front.validate.login.ScanLoginValidate;
-import com.mdd.front.vo.LoginTokenVo;
+import com.mdd.front.vo.login.LoginTokenVo;
 
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 /**
  * 登录服务接口类
@@ -17,47 +13,53 @@ public interface ILoginService {
      * 账号注册
      *
      * @author fzr
-     * @param registerValidate 参数
+     * @param username 账号
+     * @param password 密码
+     * @param terminal 终端
      */
-    void register(RegisterValidate registerValidate);
+    void register(String username, String password, Integer terminal);
 
     /**
      * 账号登录
      *
      * @author fzr
-     * @param params 参数
+     * @param username 账号
+     * @param password 密码
+     * @param terminal 终端
      * @return LoginTokenVo
      */
-    LoginTokenVo accountLogin(Map<String, String> params);
+    LoginTokenVo accountLogin(String username, String password, Integer terminal);
 
     /**
      * 手机登录
      *
      * @author fzr
-     * @param params 参数
+     * @param mobile 手机号
+     * @param code 验证码
+     * @param terminal 终端
      * @return LoginTokenVo
      */
-    LoginTokenVo mobileLogin(Map<String, String> params);
+    LoginTokenVo mobileLogin(String mobile, String code, Integer terminal);
 
     /**
      * 微信登录
      *
      * @author fzr
      * @param code 微信code
-     * @param client 来源客户端
+     * @param terminal 终端
      * @return LoginTokenVo
      */
-    LoginTokenVo mnpLogin(String code, Integer client);
+    LoginTokenVo mnpLogin(String code, Integer terminal);
 
     /**
      * 公众号登录
      *
      * @author fzr
-     * @param code 参数
-     * @param client 参数
+     * @param code 微信Code
+     * @param terminal 终端
      * @return LoginTokenVo
      */
-    LoginTokenVo officeLogin(String code, Integer client);
+    LoginTokenVo officeLogin(String code, Integer terminal);
 
     /**
      * 公众号跳转url
@@ -66,15 +68,7 @@ public interface ILoginService {
      * @param url 连接
      * @return String
      */
-    String codeUrl(String url);
-
-    /**
-     * 忘记密码
-     *
-     * @author fzr
-     * @param forgetPwdValidate 参数
-     */
-    void forgotPassword(ForgetPwdValidate forgetPwdValidate);
+    String oaCodeUrl(String url);
 
     /**
      * 扫码链接
@@ -83,11 +77,17 @@ public interface ILoginService {
      * @param session session
      * @return String
      */
-    String getScanCode(String url, HttpSession session);
+    String scanCodeUrl(String url, HttpSession session);
 
     /**
      * 扫码登录
+     *
+     * @param code 编码
+     * @param state 标识
+     * @param terminal 终端
+     * @param session 会话
+     * @return LoginTokenVo
      */
-    LoginTokenVo scanLogin(ScanLoginValidate scanLoginValidate, HttpSession session);
+    LoginTokenVo scanLogin(String code, String state, Integer terminal, HttpSession session);
 
 }

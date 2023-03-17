@@ -115,7 +115,7 @@ public class CrontabServiceImpl implements ICrontabService {
     public void add(CrontabCreateValidate createValidate) throws SchedulerException {
         Crontab crontab = new Crontab();
         crontab.setName(createValidate.getName());
-        crontab.setTypes(createValidate.getGroups());
+        crontab.setTypes(createValidate.getTypes());
         crontab.setCommand(createValidate.getCommand());
         crontab.setRules(createValidate.getRules());
         crontab.setStatus(createValidate.getStatus());
@@ -148,7 +148,7 @@ public class CrontabServiceImpl implements ICrontabService {
 
         crontab.setName(updateValidate.getName());
         crontab.setCommand(updateValidate.getCommand());
-        crontab.setTypes(updateValidate.getGroups());
+        crontab.setTypes(updateValidate.getTypes());
         crontab.setRules(updateValidate.getRules());
         crontab.setStatus(updateValidate.getStatus());
         crontab.setRemark(updateValidate.getRemark());

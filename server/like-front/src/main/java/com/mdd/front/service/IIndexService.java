@@ -1,7 +1,7 @@
 package com.mdd.front.service;
 
 import com.mdd.common.core.PageResult;
-import com.mdd.front.validate.commons.PageValidate;
+import com.mdd.front.validate.common.PageValidate;
 import com.mdd.front.vo.article.ArticleListedVo;
 
 import java.util.List;
@@ -24,6 +24,7 @@ public interface IIndexService {
      * 装修
      *
      * @author fzr
+     * @param id 装修ID
      * @return Map<String, Object>
      */
     Map<String, Object> decorate(Integer id);
@@ -53,13 +54,4 @@ public interface IIndexService {
      */
     List<String> hotSearch();
 
-    /**
-     * 搜索
-     *
-     * @author fzr
-     * @param pageValidate 分页参数
-     * @param params 搜索参数
-     * @return PageResult<ArticleListVo>
-     */
-    PageResult<ArticleListedVo> search(PageValidate pageValidate, Map<String, String> params);
 }

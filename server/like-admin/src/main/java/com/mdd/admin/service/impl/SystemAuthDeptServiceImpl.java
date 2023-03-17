@@ -12,7 +12,7 @@ import com.mdd.common.entity.system.SystemAuthAdmin;
 import com.mdd.common.entity.system.SystemAuthDept;
 import com.mdd.common.mapper.system.SystemAuthAdminMapper;
 import com.mdd.common.mapper.system.SystemAuthDeptMapper;
-import com.mdd.common.util.ArrayUtils;
+import com.mdd.common.util.ListUtils;
 import com.mdd.common.util.TimeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -92,7 +92,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
         }
 
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(list));
-        return ArrayUtils.listToTree(jsonArray, "id", "pid", "children");
+        return ListUtils.listToTree(jsonArray, "id", "pid", "children");
     }
 
     /**

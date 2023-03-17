@@ -1,5 +1,6 @@
 package com.mdd.admin.controller;
 
+import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.ICrontabService;
 import com.mdd.admin.validate.CrontabCreateValidate;
 import com.mdd.admin.validate.CrontabUpdateValidate;
@@ -10,6 +11,8 @@ import com.mdd.admin.vo.CrontabListedVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.quartz.SchedulerException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,71 +21,45 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("api/crontab")
+@Api(tags = "计划任务管理")
 public class CrontabController {
 
     @Resource
     ICrontabService iCrontabService;
 
-    /**
-     * 计划任务列表
-     *
-     * @author fzr
-     * @param pageValidate 分页参数
-     * @return AjaxResult< PageResult<CrontabListedVo>>
-     */
     @GetMapping("/list")
+    @ApiOperation(value="计划任务列表")
     public AjaxResult< PageResult<CrontabListedVo>> list(@Validated PageValidate pageValidate) {
         PageResult<CrontabListedVo> list = iCrontabService.list(pageValidate);
         return AjaxResult.success(list);
     }
 
-    /**
-     * 计划任务详情
-     *
-     * @author fzr
-     * @param id 主键
-     * @return AjaxResult<Object>
-     */
     @GetMapping("/detail")
+    @ApiOperation(value="计划任务详情")
     public AjaxResult<Object> detail(@Validated @IDMust() @RequestParam("id") Integer id) {
         CrontabDetailVo vo = iCrontabService.detail(id);
         return AjaxResult.success(vo);
     }
 
-    /**
-     * 计划任务新增
-     *
-     * @author fzr
-     * @param createValidate 参数
-     * @return AjaxResult<Object>
-     */
+    @Log(title = "计划任务新增")
     @PostMapping("/add")
+    @ApiOperation(value="计划任务新增")
     public AjaxResult<Object> add(@Validated @RequestBody CrontabCreateValidate createValidate) throws SchedulerException {
         iCrontabService.add(createValidate);
         return AjaxResult.success();
     }
 
-    /**
-     * 计划任务编辑
-     *
-     * @author fzr
-     * @param updateValidate 参数
-     * @return AjaxResult<Object>
-     */
+    @Log(title = "计划任务编辑")
     @PostMapping("/edit")
+    @ApiOperation(value="计划任务编辑")
     public AjaxResult<Object> edit(@Validated @RequestBody CrontabUpdateValidate updateValidate) throws SchedulerException {
         iCrontabService.edit(updateValidate);
         return AjaxResult.success();
     }
 
-    /**
-     * 计划任务删除
-     *
-     * @author fzr
-     * @param idValidate 参数
-     * @return AjaxResult<Object>
-     */
+    @Log(title = "计划任务删除")
     @PostMapping("/del")
+    @ApiOperation(value="计划任务删除")
     public AjaxResult<Object> del(@Validated @RequestBody IdValidate idValidate) throws SchedulerException {
         iCrontabService.del(idValidate.getId());
         return AjaxResult.success();

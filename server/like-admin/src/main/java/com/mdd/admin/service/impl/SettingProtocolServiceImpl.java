@@ -6,7 +6,7 @@ import com.mdd.admin.validate.setting.SettingProtocolValidate;
 import com.mdd.admin.vo.setting.SettingProtocolDetailVo;
 import com.mdd.admin.vo.setting.SettingProtocolObjectVo;
 import com.mdd.common.util.ConfigUtils;
-import com.mdd.common.util.ToolsUtils;
+import com.mdd.common.util.MapUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -27,8 +27,8 @@ public class SettingProtocolServiceImpl implements ISettingProtocolService {
     public SettingProtocolDetailVo detail() {
         String service = ConfigUtils.get("protocol", "service", "{\"name\":\"\",\"content\":\"\"}");
         String privacy = ConfigUtils.get("protocol", "privacy", "{\"name\":\"\",\"content\":\"\"}");
-        Map<String, String> serviceMap = ToolsUtils.jsonToMap(service);
-        Map<String, String> privacyMap = ToolsUtils.jsonToMap(privacy);
+        Map<String, String> serviceMap = MapUtils.jsonToMap(service);
+        Map<String, String> privacyMap = MapUtils.jsonToMap(privacy);
 
         SettingProtocolObjectVo serviceObj = new SettingProtocolObjectVo();
         serviceObj.setName(serviceMap.getOrDefault("name", ""));

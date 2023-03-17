@@ -40,12 +40,4 @@ public interface ISystemAuthPermService {
      */
     void batchDeleteByMenuId(Integer menuId);
 
-    /**
-     * 缓存角色菜单
-     *
-     * @author fzr
-     * @param roleId 角色ID
-     */
-    void cacheRoleMenusByRoleId(Integer roleId);
-
 }

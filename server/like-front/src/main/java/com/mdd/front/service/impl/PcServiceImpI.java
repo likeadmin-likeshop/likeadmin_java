@@ -13,8 +13,8 @@ import com.mdd.common.mapper.article.ArticleCollectMapper;
 import com.mdd.common.mapper.article.ArticleMapper;
 import com.mdd.common.util.*;
 import com.mdd.front.service.IPcService;
-import com.mdd.front.vo.PcArticleCenterVo;
-import com.mdd.front.vo.PcArticleDetailVo;
+import com.mdd.front.vo.article.PcArticleCenterVo;
+import com.mdd.front.vo.article.PcArticleDetailVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -133,17 +133,17 @@ public class PcServiceImpI implements IPcService {
         // 登录配置
         Map<String, Object> loginMap = new LinkedHashMap<>();
         Map<String, String> loginConfig = ConfigUtils.get("login");
-        loginMap.put("loginWay", ArrayUtils.stringToListAsInt(loginConfig.getOrDefault("loginWay", ""), ","));
+        loginMap.put("loginWay", ListUtils.stringToListAsInt(loginConfig.getOrDefault("loginWay", ""), ","));
         loginMap.put("forceBindMobile", Integer.parseInt(loginConfig.getOrDefault("forceBindMobile", "0")));
         loginMap.put("openOtherAuth", Integer.parseInt(loginConfig.getOrDefault("openOtherAuth", "0")));
         loginMap.put("openAgreement", Integer.parseInt(loginConfig.getOrDefault("openAgreement", "0")));
-        loginMap.put("autoLoginAuth", ArrayUtils.stringToListAsInt(loginConfig.getOrDefault("autoLoginAuth", ""), ","));
+        loginMap.put("autoLoginAuth", ListUtils.stringToListAsInt(loginConfig.getOrDefault("autoLoginAuth", ""), ","));
 
         // 网址信息
         Map<String, Object> websiteMap = new LinkedHashMap<>();
         Map<String, String> websiteConfig = ConfigUtils.get("website");
         String copyright = websiteConfig.getOrDefault("copyright", "[]");
-        List<Map<String, String>> copyrightMap = ArrayUtils.stringToListAsMapStr(copyright);
+        List<Map<String, String>> copyrightMap = ListUtils.stringToListAsMapStr(copyright);
 
         websiteMap.put("shopName", websiteConfig.getOrDefault("shopName", "LikeAdmin"));
         websiteMap.put("shopLogo", UrlUtils.toAbsoluteUrl(websiteConfig.getOrDefault("shopLogo", "")));

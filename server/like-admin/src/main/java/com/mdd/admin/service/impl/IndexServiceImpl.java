@@ -77,7 +77,7 @@ public class IndexServiceImpl implements IIndexService {
         map.put("webFavicon", UrlUtils.toAbsoluteUrl(website.getOrDefault("favicon", "")));
         map.put("webBackdrop", UrlUtils.toAbsoluteUrl(website.getOrDefault("backdrop", "")));
         map.put("ossDomain", UrlUtils.domain());
-        map.put("copyright", ArrayUtils.stringToListAsMapStr(copyright));
+        map.put("copyright", ListUtils.stringToListAsMapStr(copyright));
 
         return map;
     }

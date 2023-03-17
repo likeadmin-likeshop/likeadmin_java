@@ -1,24 +1,17 @@
 package com.mdd.common.plugin.sms;
 
 import com.alibaba.fastjson2.JSON;
-import com.mdd.common.entity.system.SystemLogSms;
 import com.mdd.common.exception.OperateException;
-import com.mdd.common.mapper.system.SystemLogSmsMapper;
 import com.mdd.common.plugin.sms.engine.AliSms;
 import com.mdd.common.plugin.sms.engine.TencentSms;
 import com.mdd.common.util.ConfigUtils;
-import com.mdd.common.util.SpringUtils;
 
 import java.util.Map;
 
 public class SmsDriver {
 
-    private final SystemLogSmsMapper systemLogSmsMapper;
-
-    private Integer scene;                      // 场景编码
     private String mobile;                      // 手机号码
     private String templateCode;                // 短信模板
-    private String smsContent = "";             // 短信内容
     private Map<String, String> templateParam;  // 短信参数
     private final String engine;                // 短信引擎
     private final Map<String, String> config;   // 短信配置
@@ -29,7 +22,6 @@ public class SmsDriver {
     public SmsDriver() {
         this.engine = ConfigUtils.get("sms", "default", "");
         this.config = ConfigUtils.getMap("sms", this.engine);
-        this.systemLogSmsMapper = SpringUtils.getBean(SystemLogSmsMapper.class);
     }
 
     /**
@@ -69,37 +61,12 @@ public class SmsDriver {
     }
 
     /**
-     * 设置模板内容
-     *
-     * @author fze
-     * @param content 内容
-     * @return SmsDriver
-     */
-    public SmsDriver setSmsContent(String content) {
-        this.smsContent = content;
-        return this;
-    }
-
-    /**
-     * 设置场景编码
-     *
-     * @author fzr
-     * @param scene 场景编码
-     * @return SmsDriver
-     */
-    public SmsDriver setScene(Integer scene) {
-        this.scene = scene;
-        return this;
-    }
-
-    /**
      * 发送短信
      *
      * @author fzr
      */
     public void sendSms() {
         String templateParam = JSON.toJSONString(this.templateParam);
-        Integer logId = this.writeSmsLog();
         Integer sendResult = 0;
         String results = "";
 
@@ -110,6 +77,7 @@ public class SmsDriver {
                     .setTemplateId(this.templateCode)
                     .setTemplateParams(templateParam)
                     .send();
+
                 sendResult = aliSms.getSendResult();
                 break;
             case "tencent":
@@ -122,47 +90,9 @@ public class SmsDriver {
                 break;
         }
 
-        this.updateSmsLog(logId, sendResult, results);
         if (sendResult == 2) {
-            throw new OperateException("短信发送失败");
+            throw new OperateException(results);
         }
-    }
-
-    /**
-     * 写入短信日志
-     *
-     * @author fzr
-     */
-    private Integer writeSmsLog() {
-        SystemLogSms model = new SystemLogSms();
-        model.setMobile(this.mobile);
-        model.setContent(this.smsContent);
-        model.setResults("");
-        model.setStatus(0);
-        model.setCreateTime(System.currentTimeMillis() / 1000);
-        model.setUpdateTime(System.currentTimeMillis() / 1000);
-        systemLogSmsMapper.insert(model);
-        return model.getId();
-    }
-
-    /**
-     * 更新短信日志
-     *
-     * @author fzr
-     * @param id 主键
-     * @param status 状态
-     * @param result 结果
-     */
-    private void updateSmsLog(Integer id, Integer status, String result) {
-        SystemLogSms model = new SystemLogSms();
-        model.setId(id);
-        model.setScene(String.valueOf(this.scene));
-        model.setMobile(this.mobile);
-        model.setStatus(status);
-        model.setResults(result);
-        model.setSendTime(System.currentTimeMillis() / 1000);
-        model.setUpdateTime(System.currentTimeMillis() / 1000);
-        systemLogSmsMapper.updateById(model);
     }
 
 }

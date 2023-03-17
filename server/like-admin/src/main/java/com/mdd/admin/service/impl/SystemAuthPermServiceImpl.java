@@ -1,22 +1,16 @@
 package com.mdd.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.mdd.admin.config.AdminConfig;
 import com.mdd.admin.service.ISystemAuthPermService;
-import com.mdd.common.entity.system.SystemAuthMenu;
 import com.mdd.common.entity.system.SystemAuthPerm;
 import com.mdd.common.entity.system.SystemAuthRole;
-import com.mdd.common.mapper.system.SystemAuthMenuMapper;
 import com.mdd.common.mapper.system.SystemAuthPermMapper;
 import com.mdd.common.mapper.system.SystemAuthRoleMapper;
-import com.mdd.common.util.ArrayUtils;
-import com.mdd.common.util.RedisUtils;
 import com.mdd.common.util.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,9 +22,6 @@ public class SystemAuthPermServiceImpl implements ISystemAuthPermService {
 
     @Resource
     SystemAuthPermMapper systemAuthPermMapper;
-
-    @Resource
-    SystemAuthMenuMapper systemAuthMenuMapper;
 
     @Resource
     SystemAuthRoleMapper systemAuthRoleMapper;
@@ -109,41 +100,6 @@ public class SystemAuthPermServiceImpl implements ISystemAuthPermService {
     @Override
     public void batchDeleteByMenuId(Integer menuId) {
         systemAuthPermMapper.delete(new QueryWrapper<SystemAuthPerm>().eq("menu_id", menuId));
-    }
-
-    /**
-     * 缓存角色菜单
-     *
-     * @author fzr
-     * @param roleId 角色ID
-     */
-    @Override
-    public void cacheRoleMenusByRoleId(Integer roleId) {
-        List<Integer> menuIds  = new LinkedList<>();
-        List<String> menuArray = new LinkedList<>();
-
-        List<SystemAuthPerm> systemAuthPerms = systemAuthPermMapper.selectList(
-                new QueryWrapper<SystemAuthPerm>().eq("role_id", roleId));
-        for (SystemAuthPerm systemAuthPerm : systemAuthPerms) {
-            menuIds.add(systemAuthPerm.getMenuId());
-        }
-
-        if (menuIds.size() > 0) {
-            List<SystemAuthMenu> systemAuthMenus = systemAuthMenuMapper.selectList(new QueryWrapper<SystemAuthMenu>()
-                    .select("id,perms")
-                    .eq("is_disable", 0)
-                    .in("id", menuIds)
-                    .in("menu_type", Arrays.asList("C", "A"))
-                    .orderByAsc(Arrays.asList("menu_sort", "id")));
-
-            for (SystemAuthMenu item : systemAuthMenus) {
-                if (StringUtils.isNotNull(item.getPerms()) && StringUtils.isNotEmpty(item.getPerms())) {
-                    menuArray.add(item.getPerms().trim());
-                }
-            }
-        }
-
-        RedisUtils.hSet(AdminConfig.backstageRolesKey, String.valueOf(roleId), ArrayUtils.listToStringByStr(menuArray, ","));
     }
 
 }
