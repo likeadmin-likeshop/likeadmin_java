@@ -19,9 +19,9 @@ public class CrontabCreateValidate implements Serializable {
     @ApiModelProperty(value = "任务名称", required = true)
     private String name;
 
-    @NotNull(message = "groups参数缺失")
+    @NotNull(message = "types参数缺失")
     @ApiModelProperty(value = "任务分组", required = true)
-    private String groups;
+    private String types;
 
     @NotNull(message = "command参数缺失")
     @ApiModelProperty(value = "执行指令", required = true)

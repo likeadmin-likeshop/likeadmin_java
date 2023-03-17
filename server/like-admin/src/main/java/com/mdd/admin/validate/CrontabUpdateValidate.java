@@ -20,9 +20,9 @@ public class CrontabUpdateValidate implements Serializable {
     @ApiModelProperty(value = "id", required = true)
     private Integer id;
 
-    @NotNull(message = "groups参数缺失")
+    @NotNull(message = "types参数缺失")
     @ApiModelProperty(value = "任务分组", required = true)
-    private String groups;
+    private String types;
 
     @NotNull(message = "name参数缺失")
     @ApiModelProperty(value = "任务名称", required = true)
