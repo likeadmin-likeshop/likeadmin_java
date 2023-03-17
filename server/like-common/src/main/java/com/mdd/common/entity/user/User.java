@@ -69,4 +69,7 @@ public class User implements Serializable {
     @ApiModelProperty("删除时间")
     private Long deleteTime;
 
+    @ApiModelProperty("是否为新用户: [0=否, 1=是]")
+    private Integer isNew;
+
 }

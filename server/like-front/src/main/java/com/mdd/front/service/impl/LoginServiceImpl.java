@@ -75,6 +75,7 @@ public class LoginServiceImpl implements ILoginService {
         user.setSalt(salt);
         user.setAvatar("/api/static/default_avatar.png");
         user.setChannel(terminal);
+        user.setIsNew(1);
         user.setCreateTime(System.currentTimeMillis() / 1000);
         user.setUpdateTime(System.currentTimeMillis() / 1000);
         userMapper.insert(user);
@@ -321,6 +322,7 @@ public class LoginServiceImpl implements ILoginService {
             model.setLastLoginTime(System.currentTimeMillis() / 1000);
             model.setUpdateTime(System.currentTimeMillis() / 1000);
             model.setCreateTime(System.currentTimeMillis() / 1000);
+            model.setIsNew(1);
             userMapper.insert(model);
             userId = model.getId();
             user = model;

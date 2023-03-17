@@ -33,4 +33,8 @@ public class UserCenterVo implements Serializable {
     @ApiModelProperty(value = "手机号码")
     private String mobile;
 
+    @ApiModelProperty(value = "是否新用户")
+    private Integer isNew;
+
+
 }
