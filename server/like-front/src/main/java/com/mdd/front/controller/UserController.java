@@ -28,14 +28,10 @@ public class UserController {
     @Resource
     IUserService iUserService;
 
-    @NotLogin
     @GetMapping("/center")
     @ApiOperation(value="个人中心")
     public AjaxResult<UserCenterVo> center() {
         Integer userId = LikeFrontThreadLocal.getUserId();
-        if (userId == 0) {
-            throw new OperateException("未登录", 1);
-        }
 
         UserCenterVo vo = iUserService.center(userId);
         return AjaxResult.success(vo);
