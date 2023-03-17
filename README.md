@@ -10,10 +10,14 @@
 
 ## 👀体验
 ### 管理后台
-地址：https://demo-java.likeadmin.cn <br>
+地址：https://java-admin.likeadmin.cn <br>
 账号：admin 密码：123456
 ### 手机端uniapp前台
 <img  width="40%"  src="https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=260c0869d9ba7e692b2db1e216078241" /><br>
+### 手机端网页前台
+https://java-front.likeadmin.cn/mobile
+### PC（电脑）端网页前台
+https://java-front.likeadmin.cn/pc/
 ### 开发文档 
 地址：[https://www.likeadmin.cn](https://www.likeadmin.cn "https://www.likeadmin.cn")
 
