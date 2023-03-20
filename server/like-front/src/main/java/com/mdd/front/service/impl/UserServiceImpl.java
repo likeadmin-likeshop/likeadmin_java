@@ -51,7 +51,7 @@ public class UserServiceImpl implements IUserService {
      * @return UserCenterVo
      */
     @Override
-    public UserCenterVo center(Integer userId) {
+    public UserCenterVo center(Integer userId, Integer terminal) {
         User user = userMapper.selectOne(new QueryWrapper<User>()
                 .select("id,sn,avatar,real_name,nickname,username,mobile,is_new")
                 .eq("id", userId)
@@ -64,6 +64,16 @@ public class UserServiceImpl implements IUserService {
             vo.setAvatar(UrlUtils.toAbsoluteUrl(avatar));
         } else {
             vo.setAvatar(UrlUtils.toAbsoluteUrl(user.getAvatar()));
+        }
+
+        vo.setIsBindWechat(false);
+        if (terminal.equals(ClientEnum.OA.getCode()) || terminal.equals(ClientEnum.MNP.getCode())) {
+            UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
+                    .select("id,openid,terminal")
+                    .eq("user_id", userId)
+                    .eq("terminal", terminal)
+                    .last("limit 1"));
+            vo.setIsBindWechat(userAuth != null);
         }
 
         return vo;

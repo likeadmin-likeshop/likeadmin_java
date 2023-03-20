@@ -36,5 +36,8 @@ public class UserCenterVo implements Serializable {
     @ApiModelProperty(value = "是否新用户")
     private Integer isNew;
 
+    @ApiModelProperty(value = "是否绑定微信")
+    private Boolean isBindWechat;
+
 
 }

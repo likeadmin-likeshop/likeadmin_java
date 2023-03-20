@@ -14,9 +14,10 @@ public interface IUserService {
      *
      * @author fzr
      * @param userId 用户ID
+     * @param terminal 用户终端
      * @return UserCenterVo
      */
-    UserCenterVo center(Integer userId);
+    UserCenterVo center(Integer userId, Integer terminal);
 
     /**
      * 个人信息

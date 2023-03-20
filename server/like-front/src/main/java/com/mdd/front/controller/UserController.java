@@ -26,8 +26,9 @@ public class UserController {
     @ApiOperation(value="个人中心")
     public AjaxResult<UserCenterVo> center() {
         Integer userId = LikeFrontThreadLocal.getUserId();
+        Integer terminal = LikeFrontThreadLocal.getTerminal();
 
-        UserCenterVo vo = iUserService.center(userId);
+        UserCenterVo vo = iUserService.center(userId, terminal);
         return AjaxResult.success(vo);
     }
 
@@ -94,21 +95,20 @@ public class UserController {
         return AjaxResult.success();
     }
 
-
-
     @PostMapping("/bindMnp")
     @ApiOperation(value="绑定小程序")
     public AjaxResult<Object> bindMnp(@Validated @RequestBody UserBindWechatValidate BindMnpValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
+
         iUserService.bindMnp(BindMnpValidate, userId);
         return AjaxResult.success();
     }
-
 
     @PostMapping("/bindOa")
     @ApiOperation(value="绑定微信公众号")
     public AjaxResult<Object> bindOa(@Validated @RequestBody UserBindWechatValidate BindOaValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
+
         iUserService.bindOa(BindOaValidate, userId);
         return AjaxResult.success();
     }
