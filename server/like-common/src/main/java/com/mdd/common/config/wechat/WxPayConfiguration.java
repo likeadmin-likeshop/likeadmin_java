@@ -5,9 +5,12 @@ import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import com.mdd.common.entity.setting.DevPayConfig;
+import com.mdd.common.entity.system.SystemConfig;
 import com.mdd.common.mapper.setting.DevPayConfigMapper;
+import com.mdd.common.mapper.system.SystemConfigMapper;
 import com.mdd.common.util.ConfigUtils;
 import com.mdd.common.util.MapUtils;
+import com.mdd.common.util.StringUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -25,6 +28,9 @@ public class WxPayConfiguration {
     @Resource
     DevPayConfigMapper devPayConfigMapper;
 
+    @Resource
+    SystemConfigMapper systemConfigMapper;
+
     /**
      * 微信小程序支付配置
      *
@@ -39,8 +45,13 @@ public class WxPayConfiguration {
                     .eq("way", 2)
                     .last("limit 1"));
 
+        SystemConfig systemConfig = systemConfigMapper.selectOne(new QueryWrapper<SystemConfig>()
+                .eq("type", "mp_channel")
+                .eq("name", "appId")
+                .last("limit 1"));
+
         Map<String, String> params = MapUtils.jsonToMap(config.getParams().toString());
-        String appId = ConfigUtils.get("mp_channel", "appId", "");
+        String appId = StringUtils.isNull(systemConfig) ? "" : systemConfig.getValue();
         String mchId = params.get("mch_id");
         String paySignKey  = params.get("pay_sign_key");
         byte[] privateKey  = params.getOrDefault("private_key", "").getBytes();
@@ -72,8 +83,13 @@ public class WxPayConfiguration {
                         .eq("way", 2)
                         .last("limit 1"));
 
+        SystemConfig systemConfig = systemConfigMapper.selectOne(new QueryWrapper<SystemConfig>()
+                .eq("type", "oa_channel")
+                .eq("name", "appId")
+                .last("limit 1"));
+
         Map<String, String> params = MapUtils.jsonToMap(config.getParams().toString());
-        String appId = ConfigUtils.get("oa_channel", "appId", "");
+        String appId = StringUtils.isNull(systemConfig) ? "" : systemConfig.getValue();
         String mchId = params.get("mch_id");
         String paySignKey  = params.get("pay_sign_key");
         byte[] privateKey  = params.getOrDefault("private_key", "").getBytes();
