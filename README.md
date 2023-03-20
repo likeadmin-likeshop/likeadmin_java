@@ -1,7 +1,18 @@
  <h1 align="center">likeadmin通用管理后台（Java）</h1>
-<h4 align="center">🚀快速开发、🛠️ 一键生成代码、✅后台多端自适应、📱手机端uniapp前台</h4> 
+<h4 align="center">🚀快速开发、🛠️ 一键生成代码、✅后台多端自适应、📱手机端uniapp前台、🖥️PC（电脑）端前台</h4> 
 <p align="center">
 <a href="https://www.java.com/zh-CN/download/"><img src="https://img.shields.io/badge/JAVA-8-d74f11"> </a><a href="#"> <img src="https://img.shields.io/badge/Spring Boot-2-5ea931"> </a><a href="https://www.tslang.cn/"><img src="https://img.shields.io/badge/TypeScript-3-294e80"></a> <a href="#"><img src="https://img.shields.io/badge/Vue.js-3-4eb883"> </a><a href="#"><img src="https://img.shields.io/badge/vite-2-ffc018"> </a><a href="#"><img src="https://img.shields.io/badge/Element Plus-2-409eff"> </a><a target="_blank" href="https://www.docker.com/"><img src="https://img.shields.io/badge/Docker--139cff"></a>
+</p>
+<p align="center">
+<a href="https://mp.weixin.qq.com/"><img src="https://img.shields.io/badge/微信-公众号-05ce66"></a>
+<a href="https://mp.weixin.qq.com/"><img src="https://img.shields.io/badge/微信-小程序-05ce66"></a>
+<a href="https://open.weixin.qq.com/"><img src="https://img.shields.io/badge/微信-开放平台-05ce66"></a>
+<a href="https://cloud.tencent.com/"><img src="https://img.shields.io/badge/腾讯云-COS-00a3ff"></a>
+<a href="https://cloud.tencent.com/"><img src="https://img.shields.io/badge/腾讯云-短信-00a3ff"></a>
+<a href="https://www.aliyun.com/"><img src="https://img.shields.io/badge/阿里云-OSS-ff6a00"></a>
+<a href="https://www.aliyun.com/"><img src="https://img.shields.io/badge/阿里云-短信-ff6a00"></a>
+<a href="https://www.qiniu.com/"><img src="https://img.shields.io/badge/七牛云-OSS-07beff"></a>
+</p>
 <div align="center">
   <img  width="80%"  src="https://md.likeshop.cn/server/index.php?s=/api/attachment/visitFile&sign=9cf02b831e49d6a411bafbc4d79f51d4" /><br>
 </div>
