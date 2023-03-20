@@ -402,16 +402,17 @@ public class UserServiceImpl implements IUserService {
                 // 该微信已绑定
                 throw new OperateException("该微信已绑定");
             }
-        } else {
-            UserAuth authModel = new UserAuth();
-            authModel.setUserId(userId);
-            authModel.setUnionid(unionId);
-            authModel.setOpenid(openId);
-            authModel.setTerminal(terminal);
-            authModel.setCreateTime(System.currentTimeMillis() / 1000);
-            authModel.setUpdateTime(System.currentTimeMillis() / 1000);
-            userAuthMapper.insert(authModel);
         }
+
+        // 记录微信授权
+        UserAuth authModel = new UserAuth();
+        authModel.setUserId(userId);
+        authModel.setUnionid(unionId);
+        authModel.setOpenid(openId);
+        authModel.setTerminal(terminal);
+        authModel.setCreateTime(System.currentTimeMillis() / 1000);
+        authModel.setUpdateTime(System.currentTimeMillis() / 1000);
+        userAuthMapper.insert(authModel);
     }
 
 }
