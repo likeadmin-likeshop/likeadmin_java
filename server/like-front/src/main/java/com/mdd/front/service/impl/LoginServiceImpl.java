@@ -13,6 +13,7 @@ import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.plugin.notice.NoticeCheck;
+import com.mdd.common.plugin.wechat.WxMnpDriver;
 import com.mdd.common.util.*;
 import com.mdd.front.cache.ScanLoginCache;
 import com.mdd.front.service.ILoginService;
@@ -146,7 +147,7 @@ public class LoginServiceImpl implements ILoginService {
     @Transactional
     public LoginTokenVo mnpLogin(String code, Integer terminal) {
         try {
-            WxMaService wxMaService = WeChatUtils.mnp();
+            WxMaService wxMaService = WxMnpDriver.mnp();
             WxMaJscode2SessionResult sessionResult = wxMaService.getUserService().getSessionInfo(code);
             String openId = sessionResult.getOpenid();
             String uniId = sessionResult.getUnionid();
@@ -169,7 +170,7 @@ public class LoginServiceImpl implements ILoginService {
     @Override
     public LoginTokenVo officeLogin(String code, Integer terminal) {
         try {
-            WxMpService wxMpService = WeChatUtils.official();
+            WxMpService wxMpService = WxMnpDriver.oa();
             WxOAuth2AccessToken wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(code);
             String uniId = wxOAuth2AccessToken.getUnionId();
             String openId  = wxOAuth2AccessToken.getOpenId();
@@ -189,7 +190,7 @@ public class LoginServiceImpl implements ILoginService {
      */
     @Override
     public String oaCodeUrl(String url) {
-        WxMpService wxMpService = WeChatUtils.official();
+        WxMpService wxMpService = WxMnpDriver.oa();
         WxMpOAuth2ServiceImpl wxMpOAuth2Service = new WxMpOAuth2ServiceImpl(wxMpService);
         return wxMpOAuth2Service.buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
     }

@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * 微信支付驱动
+ */
 @Component
 public class WxPayDriver {
 

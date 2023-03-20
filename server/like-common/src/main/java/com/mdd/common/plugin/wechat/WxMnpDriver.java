@@ -1,15 +1,41 @@
-package com.mdd.common.util;
+package com.mdd.common.plugin.wechat;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
-import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
+import com.mdd.common.util.ConfigUtils;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
-public class WeChatUtils {
+/**
+ * 微信基础驱动
+ */
+@Component
+public class WxMnpDriver {
+
+    private static WxMaService wxMaService;
+
+    private static WxMpService wxMpService;
+
+    /**
+     * 微信小程序依赖注入
+     */
+    @Resource
+    public void setWxMaService(WxMaService wxMaService) {
+        WxMnpDriver.wxMaService = wxMaService;
+    }
+
+    /**
+     * 微信公众号依赖注入
+     */
+    @Resource
+    public void setWxOaService(WxMpService wxMpService) {
+        WxMnpDriver.wxMpService = wxMpService;
+    }
+
 
     /**
      * 微信小程序
@@ -20,14 +46,13 @@ public class WeChatUtils {
     public static WxMaService mnp() {
         Map<String, String> config = ConfigUtils.get("mp_channel");
 
-        WxMaService service = new WxMaServiceImpl();
         WxMaDefaultConfigImpl wxConfig = new WxMaDefaultConfigImpl();
         wxConfig.setAppid(config.getOrDefault("appId", ""));
         wxConfig.setSecret(config.getOrDefault("appSecret", ""));
-        service.setWxMaConfig(wxConfig);
-        return service;
-    }
+        wxMaService.setWxMaConfig(wxConfig);
 
+        return wxMaService;
+    }
 
     /**
      * 微信公众号
@@ -35,7 +60,7 @@ public class WeChatUtils {
      * @author fzr
      * @return WxMpService
      */
-    public static WxMpService official() {
+    public static WxMpService oa() {
         Map<String, String> config = ConfigUtils.get("oa_channel");
 
         WxMpDefaultConfigImpl wxMpDefaultConfig = new WxMpDefaultConfigImpl();
@@ -43,10 +68,8 @@ public class WeChatUtils {
         wxMpDefaultConfig.setSecret(config.getOrDefault("appSecret", "").trim());
         wxMpDefaultConfig.setToken(config.getOrDefault("token", "").trim());
         wxMpDefaultConfig.setAesKey(config.getOrDefault("encodingAesKey", "").trim());
+        wxMpService.setWxMpConfigStorage(wxMpDefaultConfig);
 
-        WxMpService service = new WxMpServiceImpl();
-        service.setWxMpConfigStorage(wxMpDefaultConfig);
-        return service;
+        return wxMpService;
     }
-
 }

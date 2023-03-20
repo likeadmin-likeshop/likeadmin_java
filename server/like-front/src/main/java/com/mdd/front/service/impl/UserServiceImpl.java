@@ -15,6 +15,7 @@ import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.plugin.notice.NoticeCheck;
+import com.mdd.common.plugin.wechat.WxMnpDriver;
 import com.mdd.common.util.*;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
@@ -331,19 +332,18 @@ public class UserServiceImpl implements IUserService {
         userMapper.updateById(user);
     }
 
-
     /**
      * 绑定小程序
      *
-     * @param bindMnpValidate
-     * @param userId
+     * @param bindMnpValidate 参数
+     * @param userId 用户ID
      */
     @Override
     public void bindMnp(UserBindWechatValidate bindMnpValidate, Integer userId) {
         try {
             // 通过code获取微信信息
             String code = bindMnpValidate.getCode();
-            WxMaService wxMaService = WeChatUtils.mnp();
+            WxMaService wxMaService = WxMnpDriver.mnp();
             WxMaJscode2SessionResult sessionResult = wxMaService.getUserService().getSessionInfo(code);
             String openId = sessionResult.getOpenid();
             String uniId = sessionResult.getUnionid();
@@ -357,18 +357,17 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
-
     /**
      * 绑定公众号
      *
-     * @param bindOaValidate
-     * @param userId
+     * @param bindOaValidate 参数
+     * @param userId 用户ID
      */
     @Override
     public void bindOa(UserBindWechatValidate bindOaValidate, Integer userId) {
         try {
             // 通过code获取微信信息
-            WxMpService wxMpService = WeChatUtils.official();
+            WxMpService wxMpService = WxMnpDriver.oa();
             WxOAuth2AccessToken wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(bindOaValidate.getCode());
             String uniId = wxOAuth2AccessToken.getUnionId();
             String openId  = wxOAuth2AccessToken.getOpenId();
@@ -382,14 +381,13 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
-
     /**
      * 绑定微信授权
      *
-     * @param openId
-     * @param unionId
-     * @param terminal
-     * @param userId
+     * @param openId openId
+     * @param unionId unionId
+     * @param terminal 客户端端
+     * @param userId 用户ID
      */
     public void bindWechatAuth(String openId, String unionId, Integer terminal, Integer userId) {
         // 授权表中查找授权记录
