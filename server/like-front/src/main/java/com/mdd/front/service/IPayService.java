@@ -5,6 +5,6 @@ package com.mdd.front.service;
  */
 public interface IPayService {
 
-    void prepay() throws Exception;
+    void prepay(String scene, Integer orderId, Integer terminal) throws Exception;
 
 }

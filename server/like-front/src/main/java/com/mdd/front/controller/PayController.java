@@ -2,8 +2,13 @@ package com.mdd.front.controller;
 
 import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
+import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IPayService;
+import com.mdd.front.validate.PayPrepayValidate;
 import io.swagger.annotations.Api;
+import io.swagger.models.auth.In;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,8 +30,12 @@ public class PayController {
      */
     @NotLogin
     @PostMapping("/prepay")
-    public AjaxResult<Object> prepay() throws Exception {
-        iPayService.prepay();
+    public AjaxResult<Object> prepay(@Validated @RequestBody PayPrepayValidate payPrepayValidate) throws Exception {
+        String scene = payPrepayValidate.getScene();
+        Integer orderId = payPrepayValidate.getOrderId();
+        Integer terminal = LikeFrontThreadLocal.getTerminal();
+
+        iPayService.prepay(scene, orderId, terminal);
         return AjaxResult.success();
     }
 
@@ -35,6 +44,8 @@ public class PayController {
      *
      * @return AjaxResult<Object>
      */
+    @NotLogin
+    @PostMapping("/notifyMnp")
     public AjaxResult<Object> notifyMnp() {
         return AjaxResult.success();
     }

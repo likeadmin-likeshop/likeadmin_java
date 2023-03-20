@@ -22,6 +22,15 @@ public class RechargeServiceImpl implements IRechargeService {
     @Resource
     RechargeOrderMapper rechargeOrderMapper;
 
+    /**
+     * 创建充值订单
+     *
+     * @author fzr
+     * @param userId 用户ID
+     * @param terminal 设备端
+     * @param rechargeValidate 参数
+     * @return Map<String, Object>
+     */
     @Override
     public Map<String, Object> placeOrder(Integer userId, Integer terminal, RechargeValidate rechargeValidate) {
         RechargeOrder order = new RechargeOrder();
@@ -38,7 +47,7 @@ public class RechargeServiceImpl implements IRechargeService {
         rechargeOrderMapper.insert(order);
 
         Map<String, Object> response = new LinkedHashMap<>();
-        response.put("id", order.getId());
+        response.put("orderId", order.getId());
         return response;
     }
 
@@ -49,14 +58,14 @@ public class RechargeServiceImpl implements IRechargeService {
      * @return String
      */
     private String randMakeOrderSn() {
-        String date = TimeUtils.timestampToDate(System.currentTimeMillis()/1000, "YmdHis");
+        String date = TimeUtils.timestampToDate(System.currentTimeMillis()/1000, "yyyyMMddHHmmss");
         String sn;
         while (true) {
             sn = date + ToolUtils.randomInt(12);
             RechargeOrder snModel = rechargeOrderMapper.selectOne(
                     new QueryWrapper<RechargeOrder>()
                         .select("id")
-                        .eq("sn", sn)
+                        .eq("order_sn", sn)
                         .last("limit 1"));
             if (snModel == null) {
                 break;

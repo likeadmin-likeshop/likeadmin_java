@@ -40,8 +40,8 @@ public class WxPayDriver {
      * @author fzr
      * @return WxPayService
      */
-    public static WxPayService handler(String terminal) {
-        if (String.valueOf(ClientEnum.OA.getCode()).equalsIgnoreCase(terminal)) {
+    public static WxPayService handler(Integer terminal) {
+        if (ClientEnum.OA.getCode() == terminal) {
             resetConfig("oa");
         } else {
             resetConfig("mnp");

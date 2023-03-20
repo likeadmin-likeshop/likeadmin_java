@@ -10,7 +10,6 @@ import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.exception.LoginException;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.util.StringUtils;
-import io.swagger.models.auth.In;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -46,13 +45,13 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
                              @NonNull Object handler) throws Exception {
 
         // 判断请求接口
+        response.setContentType("application/json;charset=utf-8");
         String reqUri = request.getRequestURI();
         if (!(handler instanceof HandlerMethod) || !reqUri.startsWith("/api")) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
 
         // 记录当前平台
-        response.setContentType("application/json;charset=utf-8");
         String terminal = request.getHeader("terminal");
         LikeFrontThreadLocal.put("terminal", StringUtils.isEmpty(terminal) ? "1" : terminal);
 

@@ -1,8 +1,6 @@
 package com.mdd.front.validate;
 
-
 import io.swagger.annotations.ApiModel;
-import io.swagger.models.auth.In;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
