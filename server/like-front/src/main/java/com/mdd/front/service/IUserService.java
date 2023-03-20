@@ -1,9 +1,6 @@
 package com.mdd.front.service;
 
-import com.mdd.front.validate.users.NewUserUpdateValidate;
-import com.mdd.front.validate.users.UserForgetPwdValidate;
-import com.mdd.front.validate.users.UserPhoneBindValidate;
-import com.mdd.front.validate.users.UserUpdateValidate;
+import com.mdd.front.validate.users.*;
 import com.mdd.front.vo.users.UserCenterVo;
 import com.mdd.front.vo.users.UserInfoVo;
 
@@ -83,4 +80,21 @@ public interface IUserService {
      * @param userId 用户id
      */
     void updateNewUserInfo(NewUserUpdateValidate newUserUpdateValidate, Integer userId);
+
+    /**
+     * 绑定微信小程序
+     *
+     * @param bindMnpValidate
+     * @param userId
+     */
+    void bindMnp(UserBindWechatValidate bindMnpValidate, Integer userId);
+
+
+    /**
+     * 绑定微信公众号
+     *
+     * @param bindOaValidate
+     * @param userId
+     */
+    void bindOa(UserBindWechatValidate bindOaValidate, Integer userId);
 }
