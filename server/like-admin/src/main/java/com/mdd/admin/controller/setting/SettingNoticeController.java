@@ -15,9 +15,6 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 通知设置管理
- */
 @RestController
 @RequestMapping("api/setting/notice")
 @Api(tags = "配置消息通知")
