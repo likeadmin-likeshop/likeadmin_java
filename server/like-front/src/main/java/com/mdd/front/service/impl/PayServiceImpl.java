@@ -1,9 +1,12 @@
 package com.mdd.front.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.binarywang.wxpay.bean.notify.SignatureHeader;
+import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyV3Result;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
+import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.mdd.common.entity.user.UserAuth;
 import com.mdd.common.enums.ClientEnum;
@@ -15,12 +18,14 @@ import com.mdd.common.util.RequestUtils;
 import com.mdd.common.util.StringUtils;
 import com.mdd.front.service.IPayService;
 import com.mdd.front.validate.PaymentValidate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 
+@Slf4j
 @Service
 public class PayServiceImpl implements IPayService {
 
@@ -56,7 +61,7 @@ public class PayServiceImpl implements IPayService {
                 .eq("user_id", userId)
                 .eq("terminal", terminal)
                 .last("limit 1"));
-        System.out.println(userAuth);
+
         if (StringUtils.isNotNull(userAuth)) {
             openId = userAuth.getOpenid();
         }
@@ -97,23 +102,28 @@ public class PayServiceImpl implements IPayService {
         // 发起订单
         WxPayService wxPayService = WxPayDriver.handler(terminal);
         wxPayUnifiedOrderV3Request.setPayer(payer);
-        WxPayUnifiedOrderV3Result.JsapiResult jsapiResult = wxPayService.createOrderV3(TradeTypeEnum.JSAPI, wxPayUnifiedOrderV3Request);
-        return jsapiResult;
-    }
-
-    /**
-     * 支付宝支付
-     */
-    @Override
-    public void aliPay() {
-
+        return wxPayService.createOrderV3(TradeTypeEnum.JSAPI, wxPayUnifiedOrderV3Request);
     }
 
     /**
      * 支付回调处理
      */
-    public void handlePaidNotify() {
+    public void handlePaidNotify(String jsonData, SignatureHeader signatureHeader) throws WxPayException {
+        log.info("微信传来的json-------");
+        log.info(jsonData);
+        log.info("signatureHeader------------");
+        log.info(signatureHeader.toString());
 
+        WxPayService wxPayService = WxPayDriver.handler(ClientEnum.MNP.getCode());
+        WxPayOrderNotifyV3Result.DecryptNotifyResult notifyResult = wxPayService.parseOrderNotifyV3Result(jsonData, signatureHeader).getResult();
+
+        String transactionId = notifyResult.getTransactionId();
+        String outTradeNo = notifyResult.getOutTradeNo();
+
+        log.info("transactionId-------");
+        log.info(transactionId);
+        log.info("outTradeNo-------");
+        log.info(outTradeNo);
     }
 
 }
