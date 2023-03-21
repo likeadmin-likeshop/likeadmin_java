@@ -76,7 +76,7 @@ public class PayServiceImpl implements IPayService {
         wxPayUnifiedOrderV3Request.setOutTradeNo(orderSn);
         wxPayUnifiedOrderV3Request.setDescription(description);
         wxPayUnifiedOrderV3Request.setTimeExpire(timeExpire);
-        wxPayUnifiedOrderV3Request.setNotifyUrl(RequestUtils.uri() + "/api/pay/notifyMnp");
+        wxPayUnifiedOrderV3Request.setNotifyUrl("https://likeadmin-java.yixiangonline.com/api/pay/notifyMnp");
 
         // 订单金额
         WxPayUnifiedOrderV3Request.Amount amount = new WxPayUnifiedOrderV3Request.Amount();
