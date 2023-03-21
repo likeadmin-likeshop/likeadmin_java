@@ -39,7 +39,6 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
     public String checkSignature(String signature, String timestamp, String nonce, String echostr) {
         WxMpService wxMpService = WxMnpDriver.oa();
         if (wxMpService.checkSignature(timestamp, nonce, signature)) {
-            // 消息合法, 原样返回echostr
             return echostr;
         }
         return "非法请求";

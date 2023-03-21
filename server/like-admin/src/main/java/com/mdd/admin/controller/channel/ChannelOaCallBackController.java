@@ -1,15 +1,12 @@
 package com.mdd.admin.controller.channel;
 
-
 import com.mdd.admin.service.IChannelOaCallBackService;
 import io.swagger.annotations.Api;
-import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("api/channel/oa")
 @Api(tags = "公众号服务器验证及消息回复")
