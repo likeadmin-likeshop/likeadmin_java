@@ -32,7 +32,7 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
      * @param timestamp 时间戳
      * @param nonce     随机数
      * @param echostr   随机字符串
-     * @return
+     * @return String
      */
     @Override
     public String checkSignature(String signature, String timestamp, String nonce, String echostr) {
@@ -53,7 +53,7 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
      * @param nonce        随机数
      * @param encType      加密类型
      * @param msgSignature 加密签名
-     * @return
+     * @return String
      */
     @Override
     public String post(String requestBody, String signature, String timestamp, String nonce, String encType, String msgSignature) {
@@ -96,7 +96,7 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
      * 消息处理
      *
      * @param wxMessage 微信回调信息
-     * @return
+     * @return WxMpXmlOutMessage
      */
     private WxMpXmlOutMessage msgHandler(WxMpXmlMessage wxMessage) {
         try {
@@ -125,7 +125,7 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
      *
      * @param content   文本内容
      * @param wxMessage 微信回调信息
-     * @return
+     * @return WxMpXmlOutMessage
      */
     private WxMpXmlOutMessage textBuild(String content, WxMpXmlMessage wxMessage) {
         return WxMpXmlOutMessage.TEXT().content(content)
@@ -137,7 +137,7 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
      * 关键词回复
      *
      * @param wxMessage 微信回调信息
-     * @return
+     * @return String
      */
     private String keyMsg(WxMpXmlMessage wxMessage) {
         List<OfficialReply> oaReplyList = officialReplyMapper.selectList(
@@ -165,7 +165,7 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
     /**
      * 默认回复
      *
-     * @return
+     * @return String
      */
     private String defaultMsg() {
         OfficialReply officialReply = officialReplyMapper.selectOne(new QueryWrapper<OfficialReply>()
@@ -182,7 +182,7 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
     /**
      * 关注回复内容
      *
-     * @return
+     * @return String
      */
     private String subMsg() {
         OfficialReply officialReply = officialReplyMapper.selectOne(new QueryWrapper<OfficialReply>()
