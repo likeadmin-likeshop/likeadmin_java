@@ -1,6 +1,7 @@
 package com.mdd.admin.controller.channel;
 
 import com.mdd.admin.service.IChannelOaCallBackService;
+import com.mdd.common.aop.NotLogin;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ public class ChannelOaCallBackController {
     private IChannelOaCallBackService iChannelOaCallBackService;
 
     // 公众号服务器验证， 消息回复
+    @NotLogin
     @GetMapping(name = "/callback", produces = "text/plain;charset=utf-8")
     public String authGet(@RequestParam(name = "signature", required = false) String signature,
                           @RequestParam(name = "timestamp", required = false) String timestamp,
@@ -27,6 +29,7 @@ public class ChannelOaCallBackController {
 
 
     // 消息回复
+    @NotLogin
     @PostMapping(produces = "application/xml; charset=UTF-8")
     public String post(@RequestBody String requestBody,
                        @RequestParam("signature") String signature,
