@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 
 
 @RestController
-@RequestMapping("api/channel/oa")
+@RequestMapping("api/channel/oa/callback")
 @Api(tags = "公众号服务器验证及消息回复")
 public class ChannelOaCallBackController {
 
@@ -19,7 +19,7 @@ public class ChannelOaCallBackController {
 
     // 公众号服务器验证， 消息回复
     @NotLogin
-    @GetMapping(name = "/callback", produces = "text/plain;charset=utf-8")
+    @GetMapping(produces = "text/plain;charset=utf-8")
     public String authGet(@RequestParam(name = "signature", required = false) String signature,
                           @RequestParam(name = "timestamp", required = false) String timestamp,
                           @RequestParam(name = "nonce", required = false) String nonce,
