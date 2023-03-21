@@ -24,11 +24,17 @@ public class WxPayDriver {
 
     private static WxPayService wxPayService;
 
+    /**
+     * 注入支付配置依赖
+     */
     @Resource
     public void setDevPayConfigMapper(DevPayConfigMapper devPayConfigMapper) {
         WxPayDriver.devPayConfigMapper = devPayConfigMapper;
     }
 
+    /**
+     * 注入微信支付依赖
+     */
     @Resource
     public void setWxPayService(WxPayService wxPayService) {
         WxPayDriver.wxPayService = wxPayService;

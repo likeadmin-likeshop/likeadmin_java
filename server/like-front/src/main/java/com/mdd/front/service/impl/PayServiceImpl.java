@@ -5,12 +5,16 @@ import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
 import com.github.binarywang.wxpay.service.WxPayService;
-import com.mdd.common.entity.RechargeOrder;
-import com.mdd.common.mapper.RechargeOrderMapper;
+import com.mdd.common.entity.user.UserAuth;
+import com.mdd.common.enums.ClientEnum;
+import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.plugin.wechat.WxPayDriver;
+import com.mdd.common.util.AmountUtil;
+import com.mdd.common.util.IpUtils;
 import com.mdd.common.util.RequestUtils;
+import com.mdd.common.util.StringUtils;
 import com.mdd.front.service.IPayService;
-
+import com.mdd.front.validate.PaymentValidate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,18 +25,41 @@ import java.text.SimpleDateFormat;
 public class PayServiceImpl implements IPayService {
 
     @Resource
-    RechargeOrderMapper rechargeOrderMapper;
+    UserAuthMapper userAuthMapper;
 
+    /**
+     * 零钱支付
+     */
     @Override
-    public void prepay(String scene, Integer orderId, Integer terminal) throws Exception {
-        RechargeOrder rechargeOrder = rechargeOrderMapper.selectOne(
-                new QueryWrapper<RechargeOrder>()
-                        .eq("id", orderId)
-                        .last("limit 1"));
+    public void walletPay() {
 
-        String orderSn = rechargeOrder.getOrderSn();
-        Integer orderAmount = 1;
-        String orderDesc = "余额充值";
+    }
+
+    /**
+     * 微信支付
+     *
+     * @param params 支付参数
+     * @param terminal 终端
+     * @throws Exception 异常
+     */
+    @Override
+    public WxPayUnifiedOrderV3Result.JsapiResult wxPay(PaymentValidate params, Integer terminal) throws Exception {
+        // 订单参数
+        Integer userId  = params.getUserId();
+        String orderSn  = params.getOrderSn();
+        BigDecimal orderAmount = params.getOrderAmount();
+        String description = params.getDescription();
+
+        // 查询OpenId
+        String openId = "";
+        UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
+                .eq("user_id", userId)
+                .eq("terminal", terminal)
+                .last("limit 1"));
+        System.out.println(userAuth);
+        if (StringUtils.isNotNull(userAuth)) {
+            openId = userAuth.getOpenid();
+        }
 
         // 失效时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -42,27 +69,51 @@ public class PayServiceImpl implements IPayService {
         // 订单信息
         WxPayUnifiedOrderV3Request wxPayUnifiedOrderV3Request = new WxPayUnifiedOrderV3Request();
         wxPayUnifiedOrderV3Request.setOutTradeNo(orderSn);
-        wxPayUnifiedOrderV3Request.setDescription(orderDesc);
+        wxPayUnifiedOrderV3Request.setDescription(description);
         wxPayUnifiedOrderV3Request.setTimeExpire(timeExpire);
         wxPayUnifiedOrderV3Request.setNotifyUrl(RequestUtils.uri() + "/api/pay/notifyMnp");
 
-
-
         // 订单金额
         WxPayUnifiedOrderV3Request.Amount amount = new WxPayUnifiedOrderV3Request.Amount();
-        amount.setTotal(orderAmount);
+        amount.setTotal(AmountUtil.yuan2Fen(orderAmount.toPlainString()));
         amount.setCurrency("CNY");
         wxPayUnifiedOrderV3Request.setAmount(amount);
 
         // 付款人员
         WxPayUnifiedOrderV3Request.Payer payer = new WxPayUnifiedOrderV3Request.Payer();
-        payer.setOpenid("");
+        payer.setOpenid(openId);
+
+        // H5平台
+        if (terminal == ClientEnum.H5.getCode()) {
+            WxPayUnifiedOrderV3Request.SceneInfo sceneInfo = new WxPayUnifiedOrderV3Request.SceneInfo();
+            WxPayUnifiedOrderV3Request.H5Info h5Info = new WxPayUnifiedOrderV3Request.H5Info();
+            h5Info.setType("android");
+            sceneInfo.setH5Info(h5Info);
+            sceneInfo.setPayerClientIp(IpUtils.getHostIp());
+            sceneInfo.setDeviceId("1");
+            wxPayUnifiedOrderV3Request.setSceneInfo(sceneInfo);
+        }
 
         // 发起订单
         WxPayService wxPayService = WxPayDriver.handler(terminal);
         wxPayUnifiedOrderV3Request.setPayer(payer);
         WxPayUnifiedOrderV3Result.JsapiResult jsapiResult = wxPayService.createOrderV3(TradeTypeEnum.JSAPI, wxPayUnifiedOrderV3Request);
-        System.out.println(jsapiResult);
+        return jsapiResult;
+    }
+
+    /**
+     * 支付宝支付
+     */
+    @Override
+    public void aliPay() {
+
+    }
+
+    /**
+     * 支付回调处理
+     */
+    public void handlePaidNotify() {
+
     }
 
 }
