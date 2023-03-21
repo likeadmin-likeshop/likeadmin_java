@@ -5,12 +5,12 @@ import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.entity.RechargeOrder;
+import com.mdd.common.enums.PaymentEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.RechargeOrderMapper;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IPayService;
 import com.mdd.front.validate.PaymentValidate;
-import com.mdd.front.validate.users.UserUpdateValidate;
 import io.swagger.annotations.Api;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/pay")
@@ -41,8 +39,8 @@ public class PayController {
      */
     @PostMapping("/prepay")
     public AjaxResult<Object> prepay(@Validated @RequestBody PaymentValidate paymentValidate) {
-        String scene     = paymentValidate.getScene();
-        Integer payWay   = paymentValidate.getPayWay();
+        String scene = paymentValidate.getScene();
+        int payWay   = paymentValidate.getPayWay();
         Integer orderId  = paymentValidate.getOrderId();
         Integer terminal = LikeFrontThreadLocal.getTerminal();
 
@@ -75,16 +73,13 @@ public class PayController {
 
         // 发起支付
         try {
-            switch (payWay) {
-                case 1:
-                    iPayService.walletPay();
-                    break;
-                case 2:
-                    WxPayUnifiedOrderV3Result.JsapiResult result = iPayService.wxPay(paymentValidate, terminal);
-                    return AjaxResult.success(result);
-                case 3:
-                    iPayService.aliPay();
-                    break;
+            if (payWay == PaymentEnum.WALLET_PAY.getCode()) {
+                iPayService.walletPay();
+            } else if (payWay == PaymentEnum.WX_PAY.getCode()) {
+                WxPayUnifiedOrderV3Result.JsapiResult result = iPayService.wxPay(paymentValidate, terminal);
+                return AjaxResult.success(result);
+            } else if (payWay == PaymentEnum.ALI_PAY.getCode()) {
+                iPayService.aliPay();
             }
         } catch (Exception e) {
             throw new OperateException(e.getMessage());
