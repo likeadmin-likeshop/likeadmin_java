@@ -13,7 +13,6 @@ import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-
 import java.util.List;
 
 import static me.chanjar.weixin.common.api.WxConsts.EventType.SUBSCRIBE;
@@ -29,10 +28,10 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
     /**
      * 服务器验证
      *
-     * @param signature
-     * @param timestamp
-     * @param nonce
-     * @param echostr
+     * @param signature 微信加密签名
+     * @param timestamp 时间戳
+     * @param nonce     随机数
+     * @param echostr   随机字符串
      * @return
      */
     @Override
@@ -48,12 +47,12 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
     /**
      * 消息回复
      *
-     * @param requestBody
-     * @param signature
-     * @param timestamp
-     * @param nonce
-     * @param encType
-     * @param msgSignature
+     * @param requestBody  请求数据
+     * @param signature    微信加密签名
+     * @param timestamp    时间戳
+     * @param nonce        随机数
+     * @param encType      加密类型
+     * @param msgSignature 加密签名
      * @return
      */
     @Override
@@ -64,7 +63,7 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
             throw new IllegalArgumentException("非法请求，可能属于伪造的请求！");
         }
 
-        String out = null;
+        String outMsg = null;
         if (encType == null) {
             // 明文传输的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(requestBody);
@@ -72,27 +71,31 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
             if (outMessage == null) {
                 return "";
             }
-            out = outMessage.toXml();
+            outMsg = outMessage.toXml();
 
         } else if ("aes".equalsIgnoreCase(encType)) {
             // aes加密的消息
-            WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(requestBody, wxMpService.getWxMpConfigStorage(),
-                    timestamp, nonce, msgSignature);
+            WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(
+                    requestBody,
+                    wxMpService.getWxMpConfigStorage(),
+                    timestamp,
+                    nonce,
+                    msgSignature);
 
             WxMpXmlOutMessage outMessage = this.msgHandler(inMessage);
             if (outMessage == null) {
                 return "";
             }
-            out = outMessage.toEncryptedXml(wxMpService.getWxMpConfigStorage());
+            outMsg = outMessage.toEncryptedXml(wxMpService.getWxMpConfigStorage());
         }
 
-        return out;
+        return outMsg;
     }
 
     /**
      * 消息处理
      *
-     * @param wxMessage
+     * @param wxMessage 微信回调信息
      * @return
      */
     private WxMpXmlOutMessage msgHandler(WxMpXmlMessage wxMessage) {
@@ -112,7 +115,7 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
                 }
             }
         } catch (Exception e) {
-            throw new OperateException("公众号回调错误" + e.getMessage());
+            throw new OperateException("公众号消息回调错误" + e.getMessage());
         }
         return null;
     }
@@ -120,8 +123,8 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
     /**
      * 返回文本消息
      *
-     * @param content
-     * @param wxMessage
+     * @param content   文本内容
+     * @param wxMessage 微信回调信息
      * @return
      */
     private WxMpXmlOutMessage textBuild(String content, WxMpXmlMessage wxMessage) {
@@ -133,7 +136,7 @@ public class ChannelOaCallBackServiceImpl implements IChannelOaCallBackService {
     /**
      * 关键词回复
      *
-     * @param wxMessage
+     * @param wxMessage 微信回调信息
      * @return
      */
     private String keyMsg(WxMpXmlMessage wxMessage) {
