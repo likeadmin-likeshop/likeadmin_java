@@ -3,16 +3,24 @@ package com.mdd.admin.service.impl;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.admin.service.ISettingPaymentService;
-import com.mdd.admin.validate.setting.SettingPaymentValidate;
+import com.mdd.admin.validate.setting.SettingPayConfigValidate;
+import com.mdd.admin.validate.setting.SettingPayMethodValidate;
+import com.mdd.admin.vo.setting.SettingPaymentMethodVo;
 import com.mdd.common.entity.setting.DevPayConfig;
+import com.mdd.common.entity.setting.DevPayWay;
 import com.mdd.common.mapper.setting.DevPayConfigMapper;
+import com.mdd.common.mapper.setting.DevPayWayMapper;
 import com.mdd.common.util.MapUtils;
 import com.mdd.common.util.UrlUtils;
+import io.swagger.models.auth.In;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -24,6 +32,53 @@ public class SettingPaymentServiceImpl implements ISettingPaymentService {
     @Resource
     DevPayConfigMapper devPayConfigMapper;
 
+    @Resource
+    DevPayWayMapper devPayWayMapper;
+
+    public List<List<SettingPaymentMethodVo>> method() {
+        List<DevPayWay> lists = devPayWayMapper.selectList(null);
+
+        List<List<SettingPaymentMethodVo>> result = new LinkedList<>();
+        List<SettingPaymentMethodVo> mnp = new LinkedList<>();
+        List<SettingPaymentMethodVo> oa = new LinkedList<>();
+        List<SettingPaymentMethodVo> h5 = new LinkedList<>();
+
+        for (DevPayWay devPayWay : lists) {
+            DevPayConfig devPayConfig = devPayConfigMapper.selectOne(
+                    new QueryWrapper<DevPayConfig>()
+                        .eq("id", devPayWay.getPayConfigId())
+                        .last("limit 1"));
+
+            SettingPaymentMethodVo vo = new SettingPaymentMethodVo();
+            BeanUtils.copyProperties(devPayWay, vo);
+            vo.setName(devPayConfig.getName());
+            vo.setIcon(UrlUtils.toAbsoluteUrl(devPayConfig.getIcon()));
+
+            switch (devPayWay.getScene()) {
+                case 1: // 微信小程序
+                    mnp.add(vo);
+                    break;
+                case 2: // 微信公众号
+                    oa.add(vo);
+                    break;
+                case 3:
+                    h5.add(vo);
+                    break;
+            }
+        }
+
+        result.add(mnp);
+        result.add(oa);
+        result.add(h5);
+        return result;
+    }
+
+    /**
+     * 支付配置列表
+     *
+     * @author fzr
+     * @return List<DevPayConfig>
+     */
     @Override
     public List<DevPayConfig> list() {
         List<DevPayConfig> devPayConfigs = devPayConfigMapper.selectList(
@@ -38,22 +93,46 @@ public class SettingPaymentServiceImpl implements ISettingPaymentService {
         return devPayConfigs;
     }
 
+    /**
+     * 支付配置编辑
+     *
+     * @author fzr
+     * @param configValidate 参数
+     */
     @Override
-    public void edit(SettingPaymentValidate paymentValidate) {
+    public void editConfig(SettingPayConfigValidate configValidate) {
         DevPayConfig devPayConfig = devPayConfigMapper.selectOne(
                 new QueryWrapper<DevPayConfig>()
-                        .eq("id", paymentValidate.getId())
+                        .eq("id", configValidate.getId())
                         .last("limit 1"));
 
         Assert.notNull(devPayConfig, "数据不存在!");
 
-        devPayConfig.setName(paymentValidate.getName());
-        devPayConfig.setIcon(UrlUtils.toRelativeUrl(paymentValidate.getIcon()));
-        devPayConfig.setSort(paymentValidate.getSort());
-        devPayConfig.setRemark(paymentValidate.getRemark());
-        devPayConfig.setParams(JSON.toJSONString(paymentValidate.getParams()));
+        devPayConfig.setName(configValidate.getName());
+        devPayConfig.setIcon(UrlUtils.toRelativeUrl(configValidate.getIcon()));
+        devPayConfig.setSort(configValidate.getSort());
+        devPayConfig.setRemark(configValidate.getRemark());
+        if (devPayConfig.getWay().equals(1)) {
+            devPayConfig.setParams("{}");
+        } else {
+            devPayConfig.setParams(JSON.toJSONString(configValidate.getParams()));
+        }
         devPayConfigMapper.updateById(devPayConfig);
     }
 
+    @Override
+    @Transactional
+    public void editMethod(SettingPayMethodValidate methodValidate) {
+        List<List<SettingPaymentMethodVo>> data = methodValidate.getData();
+
+        for (List<SettingPaymentMethodVo> list : data) {
+            for (SettingPaymentMethodVo vo : list) {
+                DevPayWay way = new DevPayWay();
+                way.setIsDefault(vo.getIsDefault());
+                way.setStatus(vo.getStatus());
+                devPayWayMapper.update(way, new QueryWrapper<DevPayWay>().eq("id", vo.getId()));
+            }
+        }
+    }
 
 }

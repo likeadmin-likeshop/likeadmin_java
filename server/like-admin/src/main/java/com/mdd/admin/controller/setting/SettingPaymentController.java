@@ -2,8 +2,9 @@ package com.mdd.admin.controller.setting;
 
 
 import com.mdd.admin.service.ISettingPaymentService;
-import com.mdd.admin.validate.setting.SettingPaymentValidate;
-import com.mdd.common.aop.NotLogin;
+import com.mdd.admin.validate.setting.SettingPayConfigValidate;
+import com.mdd.admin.validate.setting.SettingPayMethodValidate;
+import com.mdd.admin.vo.setting.SettingPaymentMethodVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.entity.setting.DevPayConfig;
 import io.swagger.annotations.Api;
@@ -22,23 +23,31 @@ public class SettingPaymentController {
     @Resource
     ISettingPaymentService iSettingPaymentService;
 
-    public AjaxResult<Object> method() {
-        return AjaxResult.success();
+    @GetMapping("/method")
+    @ApiOperation(value="支付方式列表")
+    public AjaxResult<List<List<SettingPaymentMethodVo>>> method() {
+        List<List<SettingPaymentMethodVo>> list = iSettingPaymentService.method();
+        return AjaxResult.success(list);
     }
 
-    @NotLogin
     @GetMapping("/list")
-    @ApiOperation(value="支付渠道列表")
+    @ApiOperation(value="支付配置列表")
     public AjaxResult<Object> list() {
         List<DevPayConfig> list = iSettingPaymentService.list();
         return AjaxResult.success(list);
     }
 
-    @NotLogin
-    @PostMapping("/edit")
-    @ApiOperation(value="支付渠道编辑")
-    public AjaxResult<Object> edit(@Validated @RequestBody SettingPaymentValidate paymentValidate) {
-        iSettingPaymentService.edit(paymentValidate);
+    @PostMapping("/editConfig")
+    @ApiOperation(value="支付配置编辑")
+    public AjaxResult<Object> editConfig(@Validated @RequestBody SettingPayConfigValidate configValidate) {
+        iSettingPaymentService.editConfig(configValidate);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/editMethod")
+    @ApiOperation(value="支付方式编辑")
+    public AjaxResult<Object> editMethod(@Validated @RequestBody SettingPayMethodValidate methodValidate) {
+        iSettingPaymentService.editMethod(methodValidate);
         return AjaxResult.success();
     }
 

@@ -1,6 +1,8 @@
 package com.mdd.admin.service;
 
-import com.mdd.admin.validate.setting.SettingPaymentValidate;
+import com.mdd.admin.validate.setting.SettingPayConfigValidate;
+import com.mdd.admin.validate.setting.SettingPayMethodValidate;
+import com.mdd.admin.vo.setting.SettingPaymentMethodVo;
 import com.mdd.common.entity.setting.DevPayConfig;
 
 import java.util.List;
@@ -10,8 +12,12 @@ import java.util.List;
  */
 public interface ISettingPaymentService {
 
+    List<List<SettingPaymentMethodVo>> method();
+
     List<DevPayConfig> list();
 
-    void edit(SettingPaymentValidate paymentValidate);
+    void editConfig(SettingPayConfigValidate configValidate);
+
+    void editMethod(SettingPayMethodValidate methodValidate);
 
 }

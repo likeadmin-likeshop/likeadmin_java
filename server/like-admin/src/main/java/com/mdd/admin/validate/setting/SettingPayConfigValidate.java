@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Data
 @ApiModel("支付渠道设置参数")
-public class SettingPaymentValidate {
+public class SettingPayConfigValidate {
 
     @IDMust(message = "id参数必传且需大于0")
     @ApiModelProperty(value = "ID", required = true)
