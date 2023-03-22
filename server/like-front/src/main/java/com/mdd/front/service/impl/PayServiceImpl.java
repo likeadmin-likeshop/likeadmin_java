@@ -210,10 +210,10 @@ public class PayServiceImpl implements IPayService {
             rechargeOrder.setUpdateTime(System.currentTimeMillis() / 1000);
             rechargeOrderMapper.updateById(rechargeOrder);
 
-            User user = new User();
-            user.setMoney(rechargeOrder.getOrderAmount());
+            User user = userMapper.selectById(rechargeOrder.getId());
+            user.setMoney(user.getMoney().add(rechargeOrder.getOrderAmount()));
             user.setUpdateTime(System.currentTimeMillis() / 1000);
-            userMapper.update(user, new QueryWrapper<User>().eq("id", rechargeOrder.getUserId()));
+            userMapper.updateById(user);
 
             logMoneyMapper.add(rechargeOrder.getUserId(),
                     LogMoneyEnum.UM_INC_ADMIN.getCode(),
