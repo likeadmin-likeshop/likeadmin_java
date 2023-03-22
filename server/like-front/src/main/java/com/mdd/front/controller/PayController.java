@@ -109,31 +109,25 @@ public class PayController {
     @PostMapping("/notifyMnp")
     @ApiOperation("微信支付回调")
     public AjaxResult<Object> notifyMnp(@RequestBody String jsonData, HttpServletRequest request) throws WxPayException {
-        SignatureHeader signatureHeader = this.getWxRequestHeader(request);
+        // 构建签名
+        SignatureHeader signatureHeader = new SignatureHeader();
+        signatureHeader.setSignature(request.getHeader("wechatpay-signature"));
+        signatureHeader.setNonce(request.getHeader("wechatpay-nonce"));
+        signatureHeader.setSerial(request.getHeader("wechatpay-serial"));
+        signatureHeader.setTimeStamp(request.getHeader("wechatpay-timestamp"));
+
+        // 解密数据
         WxPayService wxPayService = WxPayDriver.handler(ClientEnum.MNP.getCode());
         WxPayOrderNotifyV3Result.DecryptNotifyResult notifyResult = wxPayService.parseOrderNotifyV3Result(jsonData, signatureHeader).getResult();
 
+        // 取出数据
         String transactionId = notifyResult.getTransactionId();
         String outTradeNo = notifyResult.getOutTradeNo();
         String attach =  notifyResult.getAttach();
 
+        // 处理回调
         iPayService.handlePaidNotify(attach, outTradeNo, transactionId);
         return AjaxResult.success();
-    }
-
-    @ApiOperation("微信支付回调签名相关")
-    private SignatureHeader getWxRequestHeader(HttpServletRequest request) {
-        String signature = request.getHeader("wechatpay-signature");
-        String nonce     = request.getHeader("wechatpay-nonce");
-        String serial    = request.getHeader("wechatpay-serial");
-        String timestamp = request.getHeader("wechatpay-timestamp");
-
-        SignatureHeader signatureHeader = new SignatureHeader();
-        signatureHeader.setSignature(signature);
-        signatureHeader.setNonce(nonce);
-        signatureHeader.setSerial(serial);
-        signatureHeader.setTimeStamp(timestamp);
-        return signatureHeader;
     }
 
 }
