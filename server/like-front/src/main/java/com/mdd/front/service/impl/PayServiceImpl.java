@@ -199,7 +199,6 @@ public class PayServiceImpl implements IPayService {
                 break;
             }
 
-            log.error("充值订单来了: {} : {}", rechargeOrder.getPayStatus(), PaymentEnum.OK_PAID.getCode());
             if (rechargeOrder.getPayStatus().equals(PaymentEnum.OK_PAID.getCode())) {
                 log.error("充值订单已支付: {} : {}", outTradeNo, transactionId);
                 break;
