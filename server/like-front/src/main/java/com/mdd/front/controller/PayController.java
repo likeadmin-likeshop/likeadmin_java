@@ -44,7 +44,7 @@ public class PayController {
      * @return AjaxResult<Object>
      */
     @PostMapping("/prepay")
-    public AjaxResult<Object> prepay(@Validated @RequestBody PaymentValidate paymentValidate) {
+    public AjaxResult<Object> prepay(@Validated @RequestBody PaymentValidate paymentValidate) throws Exception {
         String scene = paymentValidate.getScene();
         Integer payWay   = paymentValidate.getPayWay();
         Integer orderId  = paymentValidate.getOrderId();
@@ -78,7 +78,7 @@ public class PayController {
         }
 
         // 发起支付
-        try {
+//        try {
             switch (payWay) {
                 case 1: // 余额支付
                     iPayService.walletPay();
@@ -87,9 +87,9 @@ public class PayController {
                     WxPayUnifiedOrderV3Result.JsapiResult result = iPayService.wxPay(paymentValidate, terminal);
                     return AjaxResult.success(result);
             }
-        } catch (Exception e) {
-            throw new OperateException(e.getMessage());
-        }
+//        } catch (Exception e) {
+//            throw new OperateException(e.getMessage());
+//        }
 
         return AjaxResult.success();
     }
