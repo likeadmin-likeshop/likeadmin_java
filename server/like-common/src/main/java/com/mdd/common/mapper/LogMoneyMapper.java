@@ -55,7 +55,6 @@ public interface LogMoneyMapper extends IBaseMapper<LogMoney> {
             logMoney.setExtra(extra);
             logMoney.setCreateTime(System.currentTimeMillis() / 1000);
             logMoney.setUpdateTime(System.currentTimeMillis() / 1000);
-            System.out.println("呵呵呵呵");
             this.insert(logMoney);
         }
     }

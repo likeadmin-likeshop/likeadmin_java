@@ -77,7 +77,7 @@ public class RechargeServiceImpl implements IRechargeService {
         RechargeOrder order = new RechargeOrder();
         order.setUserId(userId);
         order.setOrderTerminal(terminal);
-        order.setOrderSn(this.randMakeOrderSn());
+        order.setOrderSn(rechargeOrderMapper.randMakeOrderSn("order_sn"));
         order.setPayWay(rechargeValidate.getPayWay());
         order.setPayStatus(0);
         order.setRefundStatus(0);
@@ -90,29 +90,6 @@ public class RechargeServiceImpl implements IRechargeService {
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("orderId", order.getId());
         return response;
-    }
-
-    /**
-     * 生成唯一订单号
-     *
-     * @author fzr
-     * @return String
-     */
-    private String randMakeOrderSn() {
-        String date = TimeUtils.timestampToDate(System.currentTimeMillis()/1000, "yyyyMMddHHmmss");
-        String sn;
-        while (true) {
-            sn = date + ToolUtils.randomInt(12);
-            RechargeOrder snModel = rechargeOrderMapper.selectOne(
-                    new QueryWrapper<RechargeOrder>()
-                        .select("id")
-                        .eq("order_sn", sn)
-                        .last("limit 1"));
-            if (snModel == null) {
-                break;
-            }
-        }
-        return sn;
     }
 
 }
