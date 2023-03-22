@@ -1,6 +1,5 @@
 package com.mdd.front.service;
 
-import com.github.binarywang.wxpay.bean.notify.SignatureHeader;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.mdd.front.validate.PaymentValidate;

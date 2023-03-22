@@ -53,6 +53,14 @@ public class PayServiceImpl implements IPayService {
     @Resource
     DevPayConfigMapper devPayConfigMapper;
 
+    /**
+     * 支付方式
+     *
+     * @author fzr
+     * @param from 场景
+     * @param terminal 总端
+     * @return List<PayWayListedVo>
+     */
     @Override
     public List<PayWayListedVo> payWay(String from, Integer terminal) {
         List<DevPayWay> devPayWays = devPayWayMapper.selectList(
@@ -83,6 +91,7 @@ public class PayServiceImpl implements IPayService {
     /**
      * 微信支付
      *
+     * @author fzr
      * @param params 支付参数
      * @param terminal 终端
      * @throws Exception 异常
@@ -110,7 +119,7 @@ public class PayServiceImpl implements IPayService {
 
         // 失效时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Long expireTime = System.currentTimeMillis() + 60 * 1000;
+        Long expireTime = (System.currentTimeMillis() * 1000) + 1800;
         String timeExpire = format.format(expireTime) + "+08:00";
 
         // 订单信息
