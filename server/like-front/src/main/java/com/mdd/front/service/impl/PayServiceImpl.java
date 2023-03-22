@@ -122,7 +122,7 @@ public class PayServiceImpl implements IPayService {
 
         // 失效时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Long expireTime = (System.currentTimeMillis() * 1000) + 1800;
+        Long expireTime = System.currentTimeMillis() + (30 * 60 * 1000);
         String timeExpire = format.format(expireTime) + "+08:00";
 
         // 订单信息
