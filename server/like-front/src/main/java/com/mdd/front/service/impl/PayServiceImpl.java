@@ -8,13 +8,14 @@ import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import com.mdd.common.entity.RechargeOrder;
 import com.mdd.common.entity.user.UserAuth;
 import com.mdd.common.enums.ClientEnum;
+import com.mdd.common.mapper.RechargeOrderMapper;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.plugin.wechat.WxPayDriver;
 import com.mdd.common.util.AmountUtil;
 import com.mdd.common.util.IpUtils;
-import com.mdd.common.util.RequestUtils;
 import com.mdd.common.util.StringUtils;
 import com.mdd.front.service.IPayService;
 import com.mdd.front.validate.PaymentValidate;
@@ -31,6 +32,9 @@ public class PayServiceImpl implements IPayService {
 
     @Resource
     UserAuthMapper userAuthMapper;
+
+    @Resource
+    RechargeOrderMapper rechargeOrderMapper;
 
     /**
      * 零钱支付
@@ -119,6 +123,21 @@ public class PayServiceImpl implements IPayService {
 
         String transactionId = notifyResult.getTransactionId();
         String outTradeNo = notifyResult.getOutTradeNo();
+
+        RechargeOrder rechargeOrder = rechargeOrderMapper.selectOne(
+                new QueryWrapper<RechargeOrder>()
+                    .eq("order_sn", outTradeNo)
+                    .last("limit 1"));
+
+        if (StringUtils.isNotNull(rechargeOrder)) {
+            rechargeOrder.setPayStatus(1);
+            rechargeOrder.setTransactionId(transactionId);
+            rechargeOrder.setPayTime(System.currentTimeMillis() / 1000);
+            rechargeOrder.setUpdateTime(System.currentTimeMillis() / 1000);
+            rechargeOrderMapper.updateById(rechargeOrder);
+        } else {
+            log.info("订单不存在");
+        }
 
         log.info("transactionId-------");
         log.info(transactionId);
