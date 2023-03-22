@@ -5,8 +5,8 @@ package com.mdd.common.enums;
  */
 public enum PaymentEnum {
 
-    UN_PAID(1, "未支付"),
-    OK_PAID(0, "已支付"),
+    UN_PAID(0, "未支付"),
+    OK_PAID(1, "已支付"),
 
     WALLET_PAY(1, "余额支付"),
     WX_PAY(2, "微信支付"),
