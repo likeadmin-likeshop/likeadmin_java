@@ -113,9 +113,9 @@ public class PayServiceImpl implements IPayService {
      * 支付回调处理
      */
     public void handlePaidNotify(String jsonData, SignatureHeader signatureHeader) throws WxPayException {
-        log.info("微信传来的json-------");
+        log.info("\n\n微信传来的json-------");
         log.info(jsonData);
-        log.info("signatureHeader------------");
+        log.info("\nsignatureHeader------------");
         log.info(signatureHeader.toString());
 
         WxPayService wxPayService = WxPayDriver.handler(ClientEnum.MNP.getCode());
@@ -136,12 +136,12 @@ public class PayServiceImpl implements IPayService {
             rechargeOrder.setUpdateTime(System.currentTimeMillis() / 1000);
             rechargeOrderMapper.updateById(rechargeOrder);
         } else {
-            log.info("订单不存在");
+            log.info("=======###订单不存在#####=====");
         }
 
-        log.info("transactionId-------");
+        log.info("transactionId-------\n");
         log.info(transactionId);
-        log.info("outTradeNo-------");
+        log.info("outTradeNo-------\n");
         log.info(outTradeNo);
     }
 
