@@ -6,25 +6,33 @@ import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.mdd.common.entity.RechargeOrder;
+import com.mdd.common.entity.setting.DevPayConfig;
+import com.mdd.common.entity.setting.DevPayWay;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
 import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.enums.PaymentEnum;
 import com.mdd.common.mapper.RechargeOrderMapper;
+import com.mdd.common.mapper.setting.DevPayConfigMapper;
+import com.mdd.common.mapper.setting.DevPayWayMapper;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.plugin.wechat.WxPayDriver;
 import com.mdd.common.util.AmountUtil;
 import com.mdd.common.util.IpUtils;
 import com.mdd.common.util.StringUtils;
+import com.mdd.common.util.UrlUtils;
 import com.mdd.front.service.IPayService;
 import com.mdd.front.validate.PaymentValidate;
+import com.mdd.front.vo.PayWayListedVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -38,6 +46,39 @@ public class PayServiceImpl implements IPayService {
 
     @Resource
     RechargeOrderMapper rechargeOrderMapper;
+
+    @Resource
+    DevPayWayMapper devPayWayMapper;
+
+    @Resource
+    DevPayConfigMapper devPayConfigMapper;
+
+    @Override
+    public List<PayWayListedVo> payWay(String from, Integer terminal) {
+        List<DevPayWay> devPayWays = devPayWayMapper.selectList(
+                new QueryWrapper<DevPayWay>()
+                    .eq("scene", terminal)
+                    .eq("status", 1));
+
+        Integer walletType = PaymentEnum.WALLET_PAY.getCode();
+        List<PayWayListedVo> list = new LinkedList<>();
+
+        for (DevPayWay way : devPayWays) {
+            if (from.equals("recharge") && way.getPayConfigId().equals(walletType)) {
+                continue;
+            }
+
+            DevPayConfig devPayConfig = devPayConfigMapper.selectById(way.getPayConfigId());
+            PayWayListedVo vo = new PayWayListedVo();
+            vo.setId(devPayConfig.getId());
+            vo.setName(devPayConfig.getName());
+            vo.setIcon(UrlUtils.toAbsoluteUrl(devPayConfig.getIcon()));
+            vo.setIsDefault(way.getIsDefault());
+            list.add(vo);
+        }
+
+        return list;
+    }
 
     /**
      * 微信支付

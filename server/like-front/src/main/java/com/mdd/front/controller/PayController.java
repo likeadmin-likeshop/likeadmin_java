@@ -17,6 +17,7 @@ import com.mdd.common.plugin.wechat.WxPayDriver;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IPayService;
 import com.mdd.front.validate.PaymentValidate;
+import com.mdd.front.vo.PayWayListedVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.util.Assert;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/pay")
@@ -38,8 +41,12 @@ public class PayController {
     IPayService iPayService;
 
     @GetMapping("/payWay")
-    public AjaxResult<Object> payWay() {
-        return AjaxResult.success();
+    @ApiOperation("支付方式")
+    public AjaxResult<List<PayWayListedVo>> payWay(@Validated @NotNull(message = "from参数丢失") @RequestParam String from) {
+        Integer terminal = LikeFrontThreadLocal.getTerminal();
+
+        List<PayWayListedVo> list = iPayService.payWay(from, terminal);
+        return AjaxResult.success(list);
     }
 
     @PostMapping("/prepay")

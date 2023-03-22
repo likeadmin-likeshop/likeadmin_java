@@ -4,11 +4,23 @@ import com.github.binarywang.wxpay.bean.notify.SignatureHeader;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.mdd.front.validate.PaymentValidate;
+import com.mdd.front.vo.PayWayListedVo;
+
+import java.util.List;
 
 /**
  * 支付接口服务类
  */
 public interface IPayService {
+
+    /**
+     * 支付方式
+     *
+     * @param from 场景
+     * @param terminal 总端
+     * @return List<PayWayListedVo>
+     */
+    List<PayWayListedVo> payWay(String from, Integer terminal);
 
     /**
      * 微信支付
