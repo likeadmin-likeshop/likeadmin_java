@@ -65,7 +65,7 @@ public class PayController {
                 RechargeOrder rechargeOrder = rechargeOrderMapper.selectById(orderId);
 
                 Assert.notNull(rechargeOrder, "订单不存在");
-                Assert.isTrue(payWay.equals(PaymentEnum.WALLET_PAY.getCode()), "支付类型不被支持");
+                Assert.isTrue(!payWay.equals(PaymentEnum.WALLET_PAY.getCode()), "支付类型不被支持");
 
                 paymentValidate.setAttach("recharge");
                 paymentValidate.setOrderSn(rechargeOrder.getOrderSn());
