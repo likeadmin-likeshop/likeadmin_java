@@ -6,9 +6,9 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import com.mdd.common.entity.setting.DevPayConfig;
 import com.mdd.common.entity.system.SystemConfig;
+import com.mdd.common.enums.PaymentEnum;
 import com.mdd.common.mapper.setting.DevPayConfigMapper;
 import com.mdd.common.mapper.system.SystemConfigMapper;
-import com.mdd.common.util.ConfigUtils;
 import com.mdd.common.util.MapUtils;
 import com.mdd.common.util.StringUtils;
 import lombok.AllArgsConstructor;
@@ -42,7 +42,7 @@ public class WxPayConfiguration {
     public WxPayService mnpPayService() {
         DevPayConfig config = devPayConfigMapper.selectOne(
                 new QueryWrapper<DevPayConfig>()
-                    .eq("way", 2)
+                    .eq("way", PaymentEnum.WX_PAY.getCode())
                     .last("limit 1"));
 
         SystemConfig systemConfig = systemConfigMapper.selectOne(new QueryWrapper<SystemConfig>()
@@ -50,7 +50,8 @@ public class WxPayConfiguration {
                 .eq("name", "appId")
                 .last("limit 1"));
 
-        Map<String, String> params = MapUtils.jsonToMap(config.getParams().toString());
+        String paramJson = StringUtils.isNull(config.getParams()) ? "{}" : config.getParams().toString();
+        Map<String, String> params = MapUtils.jsonToMap(paramJson);
         String appId = StringUtils.isNull(systemConfig) ? "" : systemConfig.getValue();
         String mchId = params.get("mch_id");
         String paySignKey  = params.get("pay_sign_key");
@@ -80,15 +81,16 @@ public class WxPayConfiguration {
     public WxPayService wxOaService() {
         DevPayConfig config = devPayConfigMapper.selectOne(
                 new QueryWrapper<DevPayConfig>()
-                        .eq("way", 2)
+                        .eq("way", PaymentEnum.WX_PAY.getCode())
                         .last("limit 1"));
 
         SystemConfig systemConfig = systemConfigMapper.selectOne(new QueryWrapper<SystemConfig>()
-                .eq("type", "oa_channel")
                 .eq("name", "appId")
+                .eq("type", "oa_channel")
                 .last("limit 1"));
 
-        Map<String, String> params = MapUtils.jsonToMap(config.getParams().toString());
+        String paramJson = StringUtils.isNull(config.getParams()) ? "{}" : config.getParams().toString();
+        Map<String, String> params = MapUtils.jsonToMap(paramJson);
         String appId = StringUtils.isNull(systemConfig) ? "" : systemConfig.getValue();
         String mchId = params.get("mch_id");
         String paySignKey  = params.get("pay_sign_key");

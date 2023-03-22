@@ -18,10 +18,7 @@ import com.mdd.common.mapper.setting.DevPayWayMapper;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.plugin.wechat.WxPayDriver;
-import com.mdd.common.util.AmountUtil;
-import com.mdd.common.util.IpUtils;
-import com.mdd.common.util.StringUtils;
-import com.mdd.common.util.UrlUtils;
+import com.mdd.common.util.*;
 import com.mdd.front.service.IPayService;
 import com.mdd.front.validate.PaymentValidate;
 import com.mdd.front.vo.PayWayListedVo;
@@ -128,7 +125,7 @@ public class PayServiceImpl implements IPayService {
         wxPayUnifiedOrderV3Request.setDescription(description);
         wxPayUnifiedOrderV3Request.setTimeExpire(timeExpire);
         wxPayUnifiedOrderV3Request.setAttach(attach);
-        wxPayUnifiedOrderV3Request.setNotifyUrl("https://likeadmin-java-api.yixiangonline.com/api/pay/notifyMnp");
+        wxPayUnifiedOrderV3Request.setNotifyUrl(RequestUtils.uri() + "/api/pay/notifyMnp");
 
         // 订单金额
         WxPayUnifiedOrderV3Request.Amount amount = new WxPayUnifiedOrderV3Request.Amount();

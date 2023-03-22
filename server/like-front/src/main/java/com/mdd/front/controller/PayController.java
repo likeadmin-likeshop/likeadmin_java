@@ -73,6 +73,9 @@ public class PayController {
                 paymentValidate.setOrderAmount(rechargeOrder.getOrderAmount());
                 paymentValidate.setDescription("余额充值");
                 payStatus = rechargeOrder.getPayStatus();
+
+                rechargeOrder.setPayWay(payWay);
+                rechargeOrderMapper.updateById(rechargeOrder);
                 break;
             case "order":
                 break;
