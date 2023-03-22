@@ -8,11 +8,10 @@ import com.mdd.common.entity.RechargeOrder;
 import com.mdd.common.enums.PaymentEnum;
 import com.mdd.common.mapper.RechargeOrderMapper;
 import com.mdd.common.util.TimeUtils;
-import com.mdd.common.util.ToolUtils;
 import com.mdd.front.service.IRechargeService;
 import com.mdd.front.validate.RechargeValidate;
 import com.mdd.front.validate.common.PageValidate;
-import com.mdd.front.vo.RechargeRecordVo;
+import com.mdd.front.vo.LogRecordDataVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -39,7 +38,7 @@ public class RechargeServiceImpl implements IRechargeService {
      * @return PageResult<RechargeRecordVo>
      */
     @Override
-    public PageResult<RechargeRecordVo> record(Integer userId, PageValidate pageValidate) {
+    public PageResult<LogRecordDataVo> record(Integer userId, PageValidate pageValidate) {
         Integer pageNo   = pageValidate.getPageNo();
         Integer pageSize = pageValidate.getPageSize();
 
@@ -50,12 +49,13 @@ public class RechargeServiceImpl implements IRechargeService {
 
         IPage<RechargeOrder> iPage = rechargeOrderMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
 
-        List<RechargeRecordVo> list = new LinkedList<>();
+        List<LogRecordDataVo> list = new LinkedList<>();
         for (RechargeOrder rechargeOrder : iPage.getRecords()) {
-            RechargeRecordVo vo = new RechargeRecordVo();
+            LogRecordDataVo vo = new LogRecordDataVo();
             vo.setId(rechargeOrder.getId());
+            vo.setAction(1);
             vo.setOrderAmount(rechargeOrder.getOrderAmount());
-            vo.setPayTime(TimeUtils.timestampToDate(rechargeOrder.getPayTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(rechargeOrder.getPayTime()));
             vo.setTips("充值" + vo.getOrderAmount() + "元");
             list.add(vo);
         }

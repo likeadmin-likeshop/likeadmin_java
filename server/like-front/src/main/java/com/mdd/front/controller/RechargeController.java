@@ -6,7 +6,7 @@ import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IRechargeService;
 import com.mdd.front.validate.RechargeValidate;
 import com.mdd.front.validate.common.PageValidate;
-import com.mdd.front.vo.RechargeRecordVo;
+import com.mdd.front.vo.LogRecordDataVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +28,7 @@ public class RechargeController {
     public AjaxResult<Object> record(@Validated PageValidate pageValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
 
-        PageResult<RechargeRecordVo> list = iRechargeService.record(userId, pageValidate);
+        PageResult<LogRecordDataVo> list = iRechargeService.record(userId, pageValidate);
         return AjaxResult.success(list);
     }
 

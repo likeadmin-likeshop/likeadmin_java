@@ -143,7 +143,7 @@ public class ArticleServiceImpl implements IArticleService {
             }
         }
 
-        return  PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), list);
+        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), list);
     }
 
     /**
