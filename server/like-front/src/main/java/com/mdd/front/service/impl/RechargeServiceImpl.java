@@ -1,16 +1,28 @@
 package com.mdd.front.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.RechargeOrder;
+import com.mdd.common.entity.article.Article;
+import com.mdd.common.enums.PaymentEnum;
 import com.mdd.common.mapper.RechargeOrderMapper;
 import com.mdd.common.util.TimeUtils;
 import com.mdd.common.util.ToolUtils;
+import com.mdd.common.util.UrlUtils;
 import com.mdd.front.service.IRechargeService;
 import com.mdd.front.validate.RechargeValidate;
+import com.mdd.front.validate.common.PageValidate;
+import com.mdd.front.vo.RechargeRecordVo;
+import com.mdd.front.vo.article.ArticleListedVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,6 +33,31 @@ public class RechargeServiceImpl implements IRechargeService {
 
     @Resource
     RechargeOrderMapper rechargeOrderMapper;
+
+    @Override
+    public PageResult<RechargeRecordVo> record(Integer userId, PageValidate pageValidate) {
+        Integer pageNo   = pageValidate.getPageNo();
+        Integer pageSize = pageValidate.getPageSize();
+
+        QueryWrapper<RechargeOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        queryWrapper.eq("pay_status", PaymentEnum.OK_PAID.getCode());
+        queryWrapper.orderByDesc("id");
+
+        IPage<RechargeOrder> iPage = rechargeOrderMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
+
+        List<RechargeRecordVo> list = new LinkedList<>();
+        for (RechargeOrder rechargeOrder : iPage.getRecords()) {
+            RechargeRecordVo vo = new RechargeRecordVo();
+            vo.setId(rechargeOrder.getId());
+            vo.setOrderAmount(rechargeOrder.getOrderAmount());
+            vo.setPayTime(TimeUtils.timestampToDate(rechargeOrder.getPayTime()));
+            vo.setTips("充值" + vo.getOrderAmount() + "元");
+            list.add(vo);
+        }
+
+        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), list);
+    }
 
     /**
      * 创建充值订单
