@@ -15,4 +15,5 @@ public class OperateException extends BaseException {
     public OperateException(String msg, Integer errCode) {
         super(errCode, msg);
     }
+
 }

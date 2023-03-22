@@ -26,12 +26,19 @@ public class PaymentValidate implements Serializable {
     @ApiModelProperty("订单ID")
     private Integer orderId;
 
+    @ApiModelProperty(value = "用户ID", notes = "该参数无需传递")
     private Integer userId;
 
+    @ApiModelProperty(value = "订单类型", notes = "该参数无需传递")
+    private String attach;
+
+    @ApiModelProperty(value = "订单编号", notes = "该参数无需传递")
     private String orderSn;
 
+    @ApiModelProperty(value = "订单金额", notes = "该参数无需传递")
     private BigDecimal orderAmount;
 
+    @ApiModelProperty(value = "用户描述", notes = "该参数无需传递")
     private String description;
 
 }

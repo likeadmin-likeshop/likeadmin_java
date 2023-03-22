@@ -15,6 +15,7 @@ public enum HttpEnum {
     TOKEN_EMPTY(332, "token参数为空"),
     TOKEN_INVALID(333, "token参数无效"),
     CAPTCHA_ERROR(334, "验证码错误"),
+    PAYMENT_ERROR(335, "发起支付失败"),
 
     NO_PERMISSION(403, "无相关权限"),
     REQUEST_404_ERROR(404, "请求接口不存在"),

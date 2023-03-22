@@ -11,11 +11,6 @@ import com.mdd.front.validate.PaymentValidate;
 public interface IPayService {
 
     /**
-     * 余额支付
-     */
-    void walletPay();
-
-    /**
      * 微信支付
      *
      * @param params 参数
@@ -28,9 +23,10 @@ public interface IPayService {
     /**
      * 支付回调处理
      *
-     * @param jsonData 回调数据
-     * @param signatureHeader 请求头
+     * @param attach 场景码
+     * @param outTradeNo 订单编号
+     * @param transactionId 流水号
      */
-    void handlePaidNotify(String jsonData, SignatureHeader signatureHeader) throws WxPayException;
+    void handlePaidNotify(String attach, String outTradeNo, String transactionId) throws WxPayException;
 
 }

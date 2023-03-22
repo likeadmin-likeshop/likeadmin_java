@@ -1,20 +1,24 @@
 package com.mdd.front.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.binarywang.wxpay.bean.notify.SignatureHeader;
+import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyV3Result;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
 import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.entity.RechargeOrder;
+import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.enums.PaymentEnum;
 import com.mdd.common.exception.OperateException;
+import com.mdd.common.exception.PaymentException;
 import com.mdd.common.mapper.RechargeOrderMapper;
+import com.mdd.common.plugin.wechat.WxPayDriver;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IPayService;
 import com.mdd.front.validate.PaymentValidate;
 import io.swagger.annotations.Api;
-import io.swagger.models.auth.In;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,13 +42,10 @@ public class PayController {
         return AjaxResult.success();
     }
 
-    /**
-     * 预支付
-     *
-     * @return AjaxResult<Object>
-     */
     @PostMapping("/prepay")
+    @ApiOperation("发起支付")
     public AjaxResult<Object> prepay(@Validated @RequestBody PaymentValidate paymentValidate) {
+        // 接收参数
         String scene = paymentValidate.getScene();
         Integer payWay   = paymentValidate.getPayWay();
         Integer orderId  = paymentValidate.getOrderId();
@@ -54,13 +55,12 @@ public class PayController {
         int payStatus = 0;
         switch (scene) {
             case "recharge":
-                RechargeOrder rechargeOrder = rechargeOrderMapper.selectOne(
-                        new QueryWrapper<RechargeOrder>()
-                                .eq("id", orderId)
-                                .last("limit 1"));
+                RechargeOrder rechargeOrder = rechargeOrderMapper.selectById(orderId);
 
                 Assert.notNull(rechargeOrder, "订单不存在");
+                Assert.isTrue(payWay.equals(PaymentEnum.WALLET_PAY.getCode()), "支付类型不被支持");
 
+                paymentValidate.setAttach("recharge");
                 paymentValidate.setOrderSn(rechargeOrder.getOrderSn());
                 paymentValidate.setUserId(rechargeOrder.getUserId());
                 paymentValidate.setOrderAmount(rechargeOrder.getOrderAmount());
@@ -68,7 +68,6 @@ public class PayController {
                 payStatus = rechargeOrder.getPayStatus();
                 break;
             case "order":
-                // todo 其它订单处理
                 break;
         }
 
@@ -81,38 +80,38 @@ public class PayController {
         try {
             switch (payWay) {
                 case 1: // 余额支付
-                    iPayService.walletPay();
+                    String attach = paymentValidate.getAttach();
+                    String orderSn = paymentValidate.getOrderSn();
+                    iPayService.handlePaidNotify(attach, orderSn, null);
                     break;
                 case 2: // 微信支付
                     WxPayUnifiedOrderV3Result.JsapiResult result = iPayService.wxPay(paymentValidate, terminal);
                     return AjaxResult.success(result);
             }
         } catch (Exception e) {
-            throw new OperateException(e.getMessage());
+            throw new PaymentException(e.getMessage());
         }
 
-        return AjaxResult.success();
+        throw new PaymentException("发起支付失败");
     }
 
-    /**
-     * 微信支付回调
-     *
-     * @return AjaxResult<Object>
-     */
     @NotLogin
     @PostMapping("/notifyMnp")
+    @ApiOperation("微信支付回调")
     public AjaxResult<Object> notifyMnp(@RequestBody String jsonData, HttpServletRequest request) throws WxPayException {
         SignatureHeader signatureHeader = this.getWxRequestHeader(request);
-        iPayService.handlePaidNotify(jsonData, signatureHeader);
+        WxPayService wxPayService = WxPayDriver.handler(ClientEnum.MNP.getCode());
+        WxPayOrderNotifyV3Result.DecryptNotifyResult notifyResult = wxPayService.parseOrderNotifyV3Result(jsonData, signatureHeader).getResult();
+
+        String transactionId = notifyResult.getTransactionId();
+        String outTradeNo = notifyResult.getOutTradeNo();
+        String attach =  notifyResult.getAttach();
+
+        iPayService.handlePaidNotify(attach, outTradeNo, transactionId);
         return AjaxResult.success();
     }
 
-    /**
-     * 微信支付回调签名相关
-     *
-     * @param request HttpServletRequest
-     * @return SignatureHeader
-     */
+    @ApiOperation("微信支付回调签名相关")
     private SignatureHeader getWxRequestHeader(HttpServletRequest request) {
         String signature = request.getHeader("wechatpay-signature");
         String nonce     = request.getHeader("wechatpay-nonce");

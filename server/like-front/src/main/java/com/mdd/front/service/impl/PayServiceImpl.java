@@ -1,18 +1,18 @@
 package com.mdd.front.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.binarywang.wxpay.bean.notify.SignatureHeader;
-import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyV3Result;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
-import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.mdd.common.entity.RechargeOrder;
+import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
 import com.mdd.common.enums.ClientEnum;
+import com.mdd.common.enums.PaymentEnum;
 import com.mdd.common.mapper.RechargeOrderMapper;
 import com.mdd.common.mapper.user.UserAuthMapper;
+import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.plugin.wechat.WxPayDriver;
 import com.mdd.common.util.AmountUtil;
 import com.mdd.common.util.IpUtils;
@@ -31,18 +31,13 @@ import java.text.SimpleDateFormat;
 public class PayServiceImpl implements IPayService {
 
     @Resource
+    UserMapper userMapper;
+
+    @Resource
     UserAuthMapper userAuthMapper;
 
     @Resource
     RechargeOrderMapper rechargeOrderMapper;
-
-    /**
-     * 零钱支付
-     */
-    @Override
-    public void walletPay() {
-
-    }
 
     /**
      * 微信支付
@@ -55,6 +50,7 @@ public class PayServiceImpl implements IPayService {
     public WxPayUnifiedOrderV3Result.JsapiResult wxPay(PaymentValidate params, Integer terminal) throws Exception {
         // 订单参数
         Integer userId  = params.getUserId();
+        String attach   = params.getAttach();
         String orderSn  = params.getOrderSn();
         BigDecimal orderAmount = params.getOrderAmount();
         String description = params.getDescription();
@@ -66,6 +62,7 @@ public class PayServiceImpl implements IPayService {
                 .eq("terminal", terminal)
                 .last("limit 1"));
 
+        // 设置OpenId
         if (StringUtils.isNotNull(userAuth)) {
             openId = userAuth.getOpenid();
         }
@@ -80,6 +77,7 @@ public class PayServiceImpl implements IPayService {
         wxPayUnifiedOrderV3Request.setOutTradeNo(orderSn);
         wxPayUnifiedOrderV3Request.setDescription(description);
         wxPayUnifiedOrderV3Request.setTimeExpire(timeExpire);
+        wxPayUnifiedOrderV3Request.setAttach(attach);
         wxPayUnifiedOrderV3Request.setNotifyUrl("https://likeadmin-java-api.yixiangonline.com/api/pay/notifyMnp");
 
         // 订单金额
@@ -111,38 +109,58 @@ public class PayServiceImpl implements IPayService {
 
     /**
      * 支付回调处理
+     *
+     * @author fzr
+     * @param attach 场景码
+     * @param outTradeNo 订单编号
+     * @param transactionId 流水号
      */
-    public void handlePaidNotify(String jsonData, SignatureHeader signatureHeader) throws WxPayException {
-        log.info("\n\n微信传来的json-------");
-        log.info(jsonData);
-        log.info("\nsignatureHeader------------");
-        log.info(signatureHeader.toString());
+    @Override
+    public void handlePaidNotify(String attach, String outTradeNo, String transactionId) {
+        switch (attach) {
+            case "order":
+                break;
+            case "recharge":
+                this.rechargeCallback(outTradeNo, transactionId);
+                break;
+        }
+    }
 
-        WxPayService wxPayService = WxPayDriver.handler(ClientEnum.MNP.getCode());
-        WxPayOrderNotifyV3Result.DecryptNotifyResult notifyResult = wxPayService.parseOrderNotifyV3Result(jsonData, signatureHeader).getResult();
+    /**
+     * 余额充值回调
+     *
+     * @author fzr
+     * @param outTradeNo 订单号
+     * @param transactionId 流水号
+     */
+    private void rechargeCallback(String outTradeNo, String transactionId) {
+        for (int i=0; i<=0; i++) {
+            RechargeOrder rechargeOrder = rechargeOrderMapper.selectOne(
+                    new QueryWrapper<RechargeOrder>()
+                            .eq("order_sn", outTradeNo)
+                            .last("limit 1"));
 
-        String transactionId = notifyResult.getTransactionId();
-        String outTradeNo = notifyResult.getOutTradeNo();
+            if (StringUtils.isNull(rechargeOrder)) {
+                log.error("充值订单不存在: {} : {}", outTradeNo, transactionId);
+                break;
+            }
 
-        RechargeOrder rechargeOrder = rechargeOrderMapper.selectOne(
-                new QueryWrapper<RechargeOrder>()
-                    .eq("order_sn", outTradeNo)
-                    .last("limit 1"));
+            if (rechargeOrder.getPayStatus().equals(PaymentEnum.OK_PAID.getCode())) {
+                log.error("充值订单已支付: {} : {}", outTradeNo, transactionId);
+                break;
+            }
 
-        if (StringUtils.isNotNull(rechargeOrder)) {
             rechargeOrder.setPayStatus(1);
             rechargeOrder.setTransactionId(transactionId);
             rechargeOrder.setPayTime(System.currentTimeMillis() / 1000);
             rechargeOrder.setUpdateTime(System.currentTimeMillis() / 1000);
             rechargeOrderMapper.updateById(rechargeOrder);
-        } else {
-            log.info("=======###订单不存在#####=====");
-        }
 
-        log.info("transactionId-------\n");
-        log.info(transactionId);
-        log.info("outTradeNo-------\n");
-        log.info(outTradeNo);
+            User user = new User();
+            user.setMoney(rechargeOrder.getOrderAmount());
+            user.setUpdateTime(System.currentTimeMillis() / 1000);
+            userMapper.update(user, new QueryWrapper<User>().eq("id", rechargeOrder.getUserId()));
+        }
     }
 
 }
