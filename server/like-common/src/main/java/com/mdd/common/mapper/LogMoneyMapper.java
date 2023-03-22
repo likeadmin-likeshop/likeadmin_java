@@ -9,7 +9,6 @@ import com.mdd.common.util.SpringUtils;
 import com.mdd.common.util.StringUtils;
 import com.mdd.common.util.TimeUtils;
 import com.mdd.common.util.ToolUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.math.BigDecimal;
@@ -34,17 +33,15 @@ public interface LogMoneyMapper extends IBaseMapper<LogMoney> {
     default void add(Integer userId, Integer changeType, BigDecimal changeAmount,
                      Integer sourceId, String sourceSn, String remark, String extra) {
 
-        System.out.println("新增进来了~~~" + userId);
         for (int i=0; i<=0; i++) {
             UserMapper userMapper = SpringUtils.getBean(UserMapper.class);
             User user = userMapper.selectById(userId);
-            System.out.println(user);
             if (StringUtils.isNull(user)) {
                 break;
             }
 
             BigDecimal leftAmount = user.getMoney().add(changeAmount);
-            System.out.println("变动后金额:" + leftAmount);
+
             LogMoney logMoney = new LogMoney();
             logMoney.setSn(this.randMakeOrderSn());
             logMoney.setUserId(userId);

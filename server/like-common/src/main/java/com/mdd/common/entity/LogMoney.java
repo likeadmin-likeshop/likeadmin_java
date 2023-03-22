@@ -1,5 +1,7 @@
 package com.mdd.common.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,6 +12,7 @@ import java.math.BigDecimal;
 @ApiModel("账户变动实体")
 public class LogMoney {
 
+    @TableId(value="id", type= IdType.AUTO)
     @ApiModelProperty("主键")
     private Integer id;
 
