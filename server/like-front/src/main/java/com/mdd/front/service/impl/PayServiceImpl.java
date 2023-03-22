@@ -11,7 +11,9 @@ import com.mdd.common.entity.setting.DevPayWay;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
 import com.mdd.common.enums.ClientEnum;
+import com.mdd.common.enums.LogMoneyEnum;
 import com.mdd.common.enums.PaymentEnum;
+import com.mdd.common.mapper.LogMoneyMapper;
 import com.mdd.common.mapper.RechargeOrderMapper;
 import com.mdd.common.mapper.setting.DevPayConfigMapper;
 import com.mdd.common.mapper.setting.DevPayWayMapper;
@@ -24,6 +26,7 @@ import com.mdd.front.validate.PaymentValidate;
 import com.mdd.front.vo.PayWayListedVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -42,13 +45,16 @@ public class PayServiceImpl implements IPayService {
     UserAuthMapper userAuthMapper;
 
     @Resource
-    RechargeOrderMapper rechargeOrderMapper;
-
-    @Resource
     DevPayWayMapper devPayWayMapper;
 
     @Resource
     DevPayConfigMapper devPayConfigMapper;
+
+    @Resource
+    RechargeOrderMapper rechargeOrderMapper;
+
+    @Resource
+    LogMoneyMapper logMoneyMapper;
 
     /**
      * 支付方式
@@ -163,6 +169,7 @@ public class PayServiceImpl implements IPayService {
      * @param transactionId 流水号
      */
     @Override
+    @Transactional
     public void handlePaidNotify(String attach, String outTradeNo, String transactionId) {
         switch (attach) {
             case "order":
@@ -207,6 +214,13 @@ public class PayServiceImpl implements IPayService {
             user.setMoney(rechargeOrder.getOrderAmount());
             user.setUpdateTime(System.currentTimeMillis() / 1000);
             userMapper.update(user, new QueryWrapper<User>().eq("id", rechargeOrder.getUserId()));
+
+            logMoneyMapper.add(user.getId(),
+                    LogMoneyEnum.UM_INC_ADMIN.getCode(),
+                    rechargeOrder.getOrderAmount(),
+                    rechargeOrder.getId(),
+                    rechargeOrder.getOrderSn(),
+                    "用户充值余额", null);
         }
     }
 

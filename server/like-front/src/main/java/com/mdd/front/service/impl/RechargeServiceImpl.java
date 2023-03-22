@@ -5,18 +5,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.RechargeOrder;
-import com.mdd.common.entity.article.Article;
 import com.mdd.common.enums.PaymentEnum;
 import com.mdd.common.mapper.RechargeOrderMapper;
 import com.mdd.common.util.TimeUtils;
 import com.mdd.common.util.ToolUtils;
-import com.mdd.common.util.UrlUtils;
 import com.mdd.front.service.IRechargeService;
 import com.mdd.front.validate.RechargeValidate;
 import com.mdd.front.validate.common.PageValidate;
 import com.mdd.front.vo.RechargeRecordVo;
-import com.mdd.front.vo.article.ArticleListedVo;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,6 +30,14 @@ public class RechargeServiceImpl implements IRechargeService {
     @Resource
     RechargeOrderMapper rechargeOrderMapper;
 
+    /**
+     * 充值记录
+     *
+     * @author fzr
+     * @param userId 用户ID
+     * @param pageValidate 分页参数
+     * @return PageResult<RechargeRecordVo>
+     */
     @Override
     public PageResult<RechargeRecordVo> record(Integer userId, PageValidate pageValidate) {
         Integer pageNo   = pageValidate.getPageNo();
