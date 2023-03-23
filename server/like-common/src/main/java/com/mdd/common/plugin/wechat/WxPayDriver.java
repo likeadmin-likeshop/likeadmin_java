@@ -11,7 +11,6 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import com.mdd.common.entity.setting.DevPayConfig;
-import com.mdd.common.entity.user.UserAuth;
 import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.mapper.setting.DevPayConfigMapper;
 import com.mdd.common.plugin.wechat.request.PaymentRequestV3;
@@ -93,10 +92,9 @@ public class WxPayDriver {
         if (terminal == ClientEnum.H5.getCode()) {
             WxPayUnifiedOrderV3Request.SceneInfo sceneInfo = new WxPayUnifiedOrderV3Request.SceneInfo();
             WxPayUnifiedOrderV3Request.H5Info h5Info = new WxPayUnifiedOrderV3Request.H5Info();
-            h5Info.setType("android");
+            h5Info.setType(RequestUtils.device());
             sceneInfo.setH5Info(h5Info);
             sceneInfo.setPayerClientIp(IpUtils.getHostIp());
-            sceneInfo.setDeviceId("1");
             wxPayUnifiedOrderV3Request.setSceneInfo(sceneInfo);
         }
 

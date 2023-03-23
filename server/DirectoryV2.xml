@@ -37,4 +37,5 @@
     <tree path="/like-front/src/main/java/com/mdd/front/cache" title="缓存层"/>
     <tree path="/like-admin/src/main/java/com/mdd/admin/cache" title="缓存层"/>
     <tree path="/like-admin/src/main/java/com/mdd/admin/aop" title="切面层"/>
+    <tree path="/like-common/src/main/java/com/mdd/common/cache" title="缓存层"/>
 </trees>
