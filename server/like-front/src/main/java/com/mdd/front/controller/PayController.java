@@ -18,6 +18,7 @@ import com.mdd.front.validate.PaymentValidate;
 import com.mdd.front.vo.PayWayListedVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/pay")
 @Api(tags = "支付管理")
@@ -100,10 +102,14 @@ public class PayController {
         signatureHeader.setSerial(request.getHeader("wechatpay-serial"));
         signatureHeader.setTimeStamp(request.getHeader("wechatpay-timestamp"));
 
+        log.error("========================== 回调来了 ====================");
+        log.error("响应的: " + jsonData);
+        log.error("请求的: " + signatureHeader);
+
         // 解密数据
         WxPayService wxPayService = WxPayDriver.handler(ClientEnum.MNP.getCode());
         WxPayOrderNotifyV3Result.DecryptNotifyResult notifyResult = wxPayService.parseOrderNotifyV3Result(jsonData, signatureHeader).getResult();
-
+        log.error("解密的: " + notifyResult);
         // 取出数据
         String transactionId = notifyResult.getTransactionId();
         String outTradeNo = notifyResult.getOutTradeNo();
