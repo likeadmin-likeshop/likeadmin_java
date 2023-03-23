@@ -216,7 +216,7 @@ public class PayServiceImpl implements IPayService {
             userMapper.updateById(user);
 
             logMoneyMapper.add(rechargeOrder.getUserId(),
-                    LogMoneyEnum.UM_INC_ADMIN.getCode(),
+                    LogMoneyEnum.UM_INC_RECHARGE.getCode(),
                     rechargeOrder.getOrderAmount(),
                     rechargeOrder.getId(),
                     rechargeOrder.getOrderSn(),

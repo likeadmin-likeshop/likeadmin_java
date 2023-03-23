@@ -48,7 +48,7 @@ public enum LogMoneyEnum {
      * @return String
      */
     public static String getMsgByCode(Integer code){
-        for(ClientEnum enumItem: ClientEnum.values()) {
+        for(LogMoneyEnum enumItem : LogMoneyEnum.values()) {
             if (enumItem.getCode() == code) {
                 return enumItem.getMsg();
             }
