@@ -1,6 +1,6 @@
 package com.mdd.common.enums;
 
-public enum HttpEnum {
+public enum ErrorEnum {
 
     SUCCESS(200, "成功"),
     FAILED(300, "失败"),
@@ -27,7 +27,7 @@ public enum HttpEnum {
      */
     private final int code;
     private final String msg;
-    HttpEnum(int code, String msg) {
+    ErrorEnum(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }

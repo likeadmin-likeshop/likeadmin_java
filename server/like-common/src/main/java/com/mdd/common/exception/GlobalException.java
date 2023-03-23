@@ -3,7 +3,7 @@ package com.mdd.common.exception;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.enums.HttpEnum;
+import com.mdd.common.enums.ErrorEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -35,7 +35,7 @@ public class GlobalException {
             e.printStackTrace();
         }
         log.error("系统异常 {}", e.getMessage());
-        return AjaxResult.failed(HttpEnum.SYSTEM_ERROR.getCode(), e.getMessage());
+        return AjaxResult.failed(ErrorEnum.SYSTEM_ERROR.getCode(), e.getMessage());
     }
 
     /**
@@ -45,7 +45,7 @@ public class GlobalException {
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseBody
     public AjaxResult<Object> handleNoHandlerFoundException(NoHandlerFoundException e){
-        return AjaxResult.failed(HttpEnum.REQUEST_404_ERROR.getCode(), e.getMessage());
+        return AjaxResult.failed(ErrorEnum.REQUEST_404_ERROR.getCode(), e.getMessage());
     }
 
     /**
@@ -68,7 +68,7 @@ public class GlobalException {
     @ResponseBody
     public AjaxResult<Object> handleBindException(BindException e) {
         BindingResult bindingResult = e.getBindingResult();
-        Integer code = HttpEnum.PARAMS_VALID_ERROR.getCode();
+        Integer code = ErrorEnum.PARAMS_VALID_ERROR.getCode();
         String msg   = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
         return AjaxResult.failed(code, msg);
     }
@@ -80,7 +80,7 @@ public class GlobalException {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseBody
     public AjaxResult<Object> handlePathException(MissingServletRequestParameterException e) {
-        Integer code = HttpEnum.PARAMS_VALID_ERROR.getCode();
+        Integer code = ErrorEnum.PARAMS_VALID_ERROR.getCode();
         String msg   = Objects.requireNonNull(e.getMessage());
         return AjaxResult.failed(code, msg);
     }
@@ -93,7 +93,7 @@ public class GlobalException {
     @ResponseBody
     public AjaxResult<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
-        Integer code = HttpEnum.PARAMS_VALID_ERROR.getCode();
+        Integer code = ErrorEnum.PARAMS_VALID_ERROR.getCode();
         String msg   = Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage();
         return AjaxResult.failed(code, msg);
     }
@@ -105,7 +105,7 @@ public class GlobalException {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseBody
     public AjaxResult<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        Integer code = HttpEnum.PARAMS_TYPE_ERROR.getCode();
+        Integer code = ErrorEnum.PARAMS_TYPE_ERROR.getCode();
         String msg   = Objects.requireNonNull(e.getMessage());
         return AjaxResult.failed(code, msg.split(";")[0]);
     }
@@ -117,7 +117,7 @@ public class GlobalException {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseBody
     public AjaxResult<Object> handleRequestMethodException(HttpRequestMethodNotSupportedException e) {
-        Integer code = HttpEnum.REQUEST_METHOD_ERROR.getCode();
+        Integer code = ErrorEnum.REQUEST_METHOD_ERROR.getCode();
         String msg   = Objects.requireNonNull(e.getMessage());
         return AjaxResult.failed(code, msg);
     }
@@ -129,7 +129,7 @@ public class GlobalException {
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseBody
     public AjaxResult<Object> handleIllegalArgumentException(IllegalArgumentException e) {
-        Integer code = HttpEnum.ASSERT_ARGUMENT_ERROR.getCode();
+        Integer code = ErrorEnum.ASSERT_ARGUMENT_ERROR.getCode();
         String msg   = Objects.requireNonNull(e.getMessage());
         return AjaxResult.failed(code, msg);
     }
@@ -141,7 +141,7 @@ public class GlobalException {
     @ExceptionHandler(MybatisPlusException.class)
     @ResponseBody
     public AjaxResult<Object> handleMybatisPlusException(MybatisPlusException e) {
-        Integer code = HttpEnum.ASSERT_MYBATIS_ERROR.getCode();
+        Integer code = ErrorEnum.ASSERT_MYBATIS_ERROR.getCode();
         String msg   = Objects.requireNonNull(e.getMessage());
         return AjaxResult.failed(code, msg);
     }

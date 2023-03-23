@@ -1,6 +1,6 @@
 package com.mdd.common.core;
 
-import com.mdd.common.enums.HttpEnum;
+import com.mdd.common.enums.ErrorEnum;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static AjaxResult<Object> success() {
-        return new AjaxResult<>(HttpEnum.SUCCESS.getCode(), HttpEnum.SUCCESS.getMsg(), new ArrayList<>());
+        return new AjaxResult<>(ErrorEnum.SUCCESS.getCode(), ErrorEnum.SUCCESS.getMsg(), new ArrayList<>());
     }
 
     /**
@@ -52,7 +52,7 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static AjaxResult<Object> success(Integer code) {
-        return new AjaxResult<>(code, HttpEnum.SUCCESS.getMsg(), new ArrayList<>());
+        return new AjaxResult<>(code, ErrorEnum.SUCCESS.getMsg(), new ArrayList<>());
     }
 
     /**
@@ -63,7 +63,7 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static AjaxResult<Object> success(String msg) {
-        return new AjaxResult<>(HttpEnum.SUCCESS.getCode(), msg, new ArrayList<>());
+        return new AjaxResult<>(ErrorEnum.SUCCESS.getCode(), msg, new ArrayList<>());
     }
 
     /**
@@ -74,7 +74,7 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static <T> AjaxResult<T> success(T data) {
-        return new AjaxResult<>(HttpEnum.SUCCESS.getCode(), HttpEnum.SUCCESS.getMsg(), data);
+        return new AjaxResult<>(ErrorEnum.SUCCESS.getCode(), ErrorEnum.SUCCESS.getMsg(), data);
     }
 
     /**
@@ -98,7 +98,7 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static <T> AjaxResult <T> success(String msg, T data) {
-        return new AjaxResult<>(HttpEnum.SUCCESS.getCode(), msg, data);
+        return new AjaxResult<>(ErrorEnum.SUCCESS.getCode(), msg, data);
     }
 
     /**
@@ -122,7 +122,7 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static AjaxResult<Object> failed(Integer code) {
-        return new AjaxResult<>(code, HttpEnum.FAILED.getMsg(), new ArrayList<>());
+        return new AjaxResult<>(code, ErrorEnum.FAILED.getMsg(), new ArrayList<>());
     }
 
     /**
@@ -133,7 +133,7 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static AjaxResult<Object> failed(String msg) {
-        return new AjaxResult<>(HttpEnum.FAILED.getCode(), msg, new ArrayList<>());
+        return new AjaxResult<>(ErrorEnum.FAILED.getCode(), msg, new ArrayList<>());
     }
 
     /**
@@ -144,7 +144,7 @@ public class AjaxResult<T> {
      * @return AjaxResult
      */
     public static <T> AjaxResult<T> failed(T data) {
-        return new AjaxResult<T>(HttpEnum.FAILED.getCode(), HttpEnum.FAILED.getMsg(), data);
+        return new AjaxResult<T>(ErrorEnum.FAILED.getCode(), ErrorEnum.FAILED.getMsg(), data);
     }
 
     /**

@@ -7,7 +7,7 @@ import com.mdd.common.aop.NotPower;
 import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.entity.system.SystemAuthAdmin;
-import com.mdd.common.enums.HttpEnum;
+import com.mdd.common.enums.ErrorEnum;
 import com.mdd.common.exception.LoginException;
 import com.mdd.common.mapper.system.SystemAuthAdminMapper;
 import com.mdd.common.util.StringUtils;
@@ -73,7 +73,7 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
             List<String> ignoreUrl = Arrays.asList("system:login", "system:logout");
             if (request.getMethod().equals("POST") && !ignoreUrl.contains(auths)) {
                 String message = "演示环境不支持修改数据，请下载源码本地部署体验";
-                AjaxResult<Object> result = AjaxResult.failed(HttpEnum.NO_PERMISSION.getCode(), message);
+                AjaxResult<Object> result = AjaxResult.failed(ErrorEnum.NO_PERMISSION.getCode(), message);
                 response.getWriter().print(JSON.toJSONString(result));
                 return false;
             }
@@ -139,16 +139,16 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
             // 令牌校验
             String token = StpUtil.getTokenValue();
             if (StringUtils.isNull(token) || StringUtils.isBlank(token)) {
-                Integer errCode = HttpEnum.TOKEN_EMPTY.getCode();
-                String errMsg = HttpEnum.TOKEN_EMPTY.getMsg();
+                Integer errCode = ErrorEnum.TOKEN_EMPTY.getCode();
+                String errMsg = ErrorEnum.TOKEN_EMPTY.getMsg();
                 throw new LoginException(errCode, errMsg);
             }
 
             // 登录校验
             Object id = StpUtil.getLoginId();
             if (StringUtils.isNull(id)) {
-                Integer errCode = HttpEnum.TOKEN_INVALID.getCode();
-                String errMsg = HttpEnum.TOKEN_INVALID.getMsg();
+                Integer errCode = ErrorEnum.TOKEN_INVALID.getCode();
+                String errMsg = ErrorEnum.TOKEN_INVALID.getMsg();
                 throw new LoginException(errCode, errMsg);
             }
 
@@ -162,15 +162,15 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
 
             // 删除校验
             if (StringUtils.isNull(adminUser)) {
-                Integer errCode = HttpEnum.TOKEN_INVALID.getCode();
-                String errMsg = HttpEnum.TOKEN_INVALID.getMsg();
+                Integer errCode = ErrorEnum.TOKEN_INVALID.getCode();
+                String errMsg = ErrorEnum.TOKEN_INVALID.getMsg();
                 throw new LoginException(errCode, errMsg);
             }
 
             // 禁用校验
             if (adminUser.getIsDisable().equals(1)) {
-                Integer errCode = HttpEnum.LOGIN_DISABLE_ERROR.getCode();
-                String errMsg = HttpEnum.LOGIN_DISABLE_ERROR.getMsg();
+                Integer errCode = ErrorEnum.LOGIN_DISABLE_ERROR.getCode();
+                String errMsg = ErrorEnum.LOGIN_DISABLE_ERROR.getMsg();
                 throw new LoginException(errCode, errMsg);
             }
 

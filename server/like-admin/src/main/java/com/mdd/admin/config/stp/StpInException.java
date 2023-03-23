@@ -3,7 +3,7 @@ package com.mdd.admin.config.stp;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.enums.HttpEnum;
+import com.mdd.common.enums.ErrorEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,7 +26,7 @@ public class StpInException {
     @ResponseBody
     public AjaxResult<Object> handleNotLoginException(NotLoginException e){
         String msg = e.getMessage().startsWith("Token无效") ? "尚未登录,请先登录!" : e.getMessage();
-        return AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), msg);
+        return AjaxResult.failed(ErrorEnum.TOKEN_INVALID.getCode(), msg);
     }
 
     /**
@@ -36,7 +36,7 @@ public class StpInException {
     @ExceptionHandler(NotPermissionException.class)
     @ResponseBody
     public AjaxResult<Object> handleNotPermissionException(){
-        return AjaxResult.failed(HttpEnum.NO_PERMISSION.getCode(), HttpEnum.NO_PERMISSION.getMsg());
+        return AjaxResult.failed(ErrorEnum.NO_PERMISSION.getCode(), ErrorEnum.NO_PERMISSION.getMsg());
     }
 
 }
