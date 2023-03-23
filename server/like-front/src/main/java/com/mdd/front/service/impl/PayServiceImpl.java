@@ -104,6 +104,16 @@ public class PayServiceImpl implements IPayService {
      */
     public Object prepay(PaymentValidate params, Integer terminal) {
         try {
+            String openId = null;
+            UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
+                    .eq("user_id", params.getUserId())
+                    .eq("terminal", terminal)
+                    .last("limit 1"));
+
+            if (StringUtils.isNotNull(userAuth)) {
+                openId = userAuth.getOpenid();
+            }
+
             switch (params.getPayWay()) {
                 case 1: // 余额支付
                     String attach = params.getAttach();
@@ -113,7 +123,7 @@ public class PayServiceImpl implements IPayService {
                 case 2: // 微信支付
                     PaymentRequestV3 requestV3 = new PaymentRequestV3();
                     requestV3.setTerminal(terminal);
-                    requestV3.setOpenId("");
+                    requestV3.setOpenId(openId);
                     requestV3.setAttach(params.getAttach());
                     requestV3.setOutTradeNo(params.getOutTradeNo());
                     requestV3.setOrderAmount(params.getOrderAmount());

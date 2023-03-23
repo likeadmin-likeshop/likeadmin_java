@@ -15,11 +15,11 @@ public class PaymentValidate implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotNull(message = "scene参数缺失")
-    @ApiModelProperty("支付场景")
+    @ApiModelProperty("支付场景: [recharge=充值,order=普通订单]")
     private String scene;
 
     @NotNull(message = "payWay参数缺失")
-    @ApiModelProperty("支付方式")
+    @ApiModelProperty("支付方式: [1=余额支付,2=微信支付,3=支付宝支付]")
     private Integer payWay;
 
     @NotNull(message = "orderId参数缺失")
