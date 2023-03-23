@@ -22,14 +22,13 @@ public interface IPayService {
     List<PayWayListedVo> payWay(String from, Integer terminal);
 
     /**
-     * 微信支付
+     * 发起支付
      *
      * @param params 参数
      * @param terminal 终端
-     * @return  WxPayUnifiedOrderV3Result.JsapiResult
-     * @throws Exception 异常
+     * @return Object
      */
-    WxPayUnifiedOrderV3Result.JsapiResult wxPay(PaymentValidate params, Integer terminal) throws Exception;
+    Object prepay(PaymentValidate params, Integer terminal);
 
     /**
      * 支付回调处理

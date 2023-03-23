@@ -33,7 +33,7 @@ public class PaymentValidate implements Serializable {
     private String attach;
 
     @ApiModelProperty(value = "订单编号", notes = "该参数无需传递")
-    private String orderSn;
+    private String outTradeNo;
 
     @ApiModelProperty(value = "订单金额", notes = "该参数无需传递")
     private BigDecimal orderAmount;

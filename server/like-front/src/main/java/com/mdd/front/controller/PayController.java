@@ -2,7 +2,6 @@ package com.mdd.front.controller;
 
 import com.github.binarywang.wxpay.bean.notify.SignatureHeader;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyV3Result;
-import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.mdd.common.aop.NotLogin;
@@ -11,7 +10,6 @@ import com.mdd.common.entity.RechargeOrder;
 import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.enums.PaymentEnum;
 import com.mdd.common.exception.OperateException;
-import com.mdd.common.exception.PaymentException;
 import com.mdd.common.mapper.RechargeOrderMapper;
 import com.mdd.common.plugin.wechat.WxPayDriver;
 import com.mdd.front.LikeFrontThreadLocal;
@@ -51,11 +49,11 @@ public class PayController {
 
     @PostMapping("/prepay")
     @ApiOperation("发起支付")
-    public AjaxResult<Object> prepay(@Validated @RequestBody PaymentValidate paymentValidate) {
+    public AjaxResult<Object> prepay(@Validated @RequestBody PaymentValidate requestObj) {
         // 接收参数
-        String scene = paymentValidate.getScene();
-        Integer payWay   = paymentValidate.getPayWay();
-        Integer orderId  = paymentValidate.getOrderId();
+        String scene     = requestObj.getScene();
+        Integer payWay   = requestObj.getPayWay();
+        Integer orderId  = requestObj.getOrderId();
         Integer terminal = LikeFrontThreadLocal.getTerminal();
 
         // 订单处理
@@ -67,11 +65,11 @@ public class PayController {
                 Assert.notNull(rechargeOrder, "订单不存在");
                 Assert.isTrue(!payWay.equals(PaymentEnum.WALLET_PAY.getCode()), "支付类型不被支持");
 
-                paymentValidate.setAttach("recharge");
-                paymentValidate.setOrderSn(rechargeOrder.getOrderSn());
-                paymentValidate.setUserId(rechargeOrder.getUserId());
-                paymentValidate.setOrderAmount(rechargeOrder.getOrderAmount());
-                paymentValidate.setDescription("余额充值");
+                requestObj.setUserId(rechargeOrder.getUserId());
+                requestObj.setOutTradeNo(rechargeOrder.getOrderSn());
+                requestObj.setOrderAmount(rechargeOrder.getOrderAmount());
+                requestObj.setDescription("余额充值");
+                requestObj.setAttach("recharge");
                 payStatus = rechargeOrder.getPayStatus();
 
                 rechargeOrder.setPayWay(payWay);
@@ -87,22 +85,8 @@ public class PayController {
         }
 
         // 发起支付
-        try {
-            switch (payWay) {
-                case 1: // 余额支付
-                    String attach = paymentValidate.getAttach();
-                    String orderSn = paymentValidate.getOrderSn();
-                    iPayService.handlePaidNotify(attach, orderSn, null);
-                    break;
-                case 2: // 微信支付
-                    WxPayUnifiedOrderV3Result.JsapiResult result = iPayService.wxPay(paymentValidate, terminal);
-                    return AjaxResult.success(result);
-            }
-        } catch (Exception e) {
-            throw new PaymentException(e.getMessage());
-        }
-
-        throw new PaymentException("发起支付失败");
+        Object result = iPayService.prepay(requestObj, terminal);
+        return AjaxResult.success(result);
     }
 
     @NotLogin
