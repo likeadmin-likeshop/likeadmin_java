@@ -18,7 +18,6 @@ import com.mdd.front.validate.PaymentValidate;
 import com.mdd.front.vo.PayWayListedVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

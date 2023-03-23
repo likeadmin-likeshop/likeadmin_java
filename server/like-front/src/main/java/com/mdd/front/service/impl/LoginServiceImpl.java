@@ -295,13 +295,14 @@ public class LoginServiceImpl implements ILoginService {
      * @return LoginTokenVo
      */
     private LoginTokenVo __wxLoginHandle(String openId, String unionId, Integer terminal) {
+        // 查询授权
         UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
                 .nested(wq->wq
                     .eq("unionid", unionId).or()
                     .eq("openid", openId)
                 ).last("limit 1"));
 
-        Integer userId;
+        // 查询用户
         User user = null;
         if (StringUtils.isNotNull(userAuth)) {
             user = userMapper.selectOne(new QueryWrapper<User>()
@@ -310,14 +311,15 @@ public class LoginServiceImpl implements ILoginService {
                     .last("limit 1"));
         }
 
+        // 创建用户
         if (StringUtils.isNull(user)) {
-            Integer sn  = this.__generateSn();
+            Integer sn = this.__generateSn();
             User model = new User();
             model.setSn(sn);
             model.setAvatar("/api/static/default_avatar.png");
             model.setNickname("用户" + sn);
             model.setUsername("u" + sn);
-            model.setChannel(ClientEnum.PC.getCode());
+            model.setChannel(terminal);
             model.setSex(0);
             model.setLastLoginIp(IpUtils.getHostIp());
             model.setLastLoginTime(System.currentTimeMillis() / 1000);
@@ -325,45 +327,33 @@ public class LoginServiceImpl implements ILoginService {
             model.setCreateTime(System.currentTimeMillis() / 1000);
             model.setIsNew(1);
             userMapper.insert(model);
-            userId = model.getId();
             user = model;
-
-            if (StringUtils.isNull(userAuth)) {
-                UserAuth auth = new UserAuth();
-                auth.setUserId(model.getId());
-                auth.setUnionid(unionId);
-                auth.setOpenid(openId);
-                auth.setTerminal(terminal);
-                auth.setCreateTime(System.currentTimeMillis() / 1000);
-                auth.setUpdateTime(System.currentTimeMillis() / 1000);
-                userAuthMapper.insert(auth);
-            }
-        } else {
-            // 授权不存在则创建
-            userId = user.getId();
-            UserAuth auth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
-                    .nested(wq->wq
-                            .eq("unionid", unionId).or()
-                            .eq("openid", openId)
-                    ).eq("terminal", terminal)
-                    .last("limit 1"));
-
-            if (StringUtils.isNull(auth)) {
-                UserAuth authModel = new UserAuth();
-                authModel.setUserId(user.getId());
-                authModel.setUnionid(unionId);
-                authModel.setOpenid(openId);
-                authModel.setTerminal(terminal);
-                authModel.setCreateTime(System.currentTimeMillis() / 1000);
-                authModel.setUpdateTime(System.currentTimeMillis() / 1000);
-                userAuthMapper.insert(authModel);
-            } else if(StringUtils.isEmpty(auth.getUnionid()) && StringUtils.isNotEmpty(unionId)) {
-                auth.setUnionid(unionId);
-                userAuthMapper.updateById(userAuth);
-            }
         }
 
-        return this.__loginToken(userId, user.getMobile(), terminal);
+        // 终端授权
+        UserAuth auth = userAuthMapper.selectOne(
+                new QueryWrapper<UserAuth>()
+                        .eq("openid", openId)
+                        .eq("terminal", terminal)
+                        .last("limit 1"));
+
+        // 创建授权
+        if (StringUtils.isNull(auth)) {
+            UserAuth authModel = new UserAuth();
+            authModel.setUserId(user.getId());
+            authModel.setUnionid(unionId);
+            authModel.setOpenid(openId);
+            authModel.setTerminal(terminal);
+            authModel.setCreateTime(System.currentTimeMillis() / 1000);
+            authModel.setUpdateTime(System.currentTimeMillis() / 1000);
+            userAuthMapper.insert(authModel);
+        } else if (StringUtils.isEmpty(auth.getUnionid())) {
+            auth.setUnionid(unionId);
+            auth.setUpdateTime(System.currentTimeMillis() / 1000);
+            userAuthMapper.updateById(auth);
+        }
+
+        return this.__loginToken(user.getId(), user.getMobile(), terminal);
     }
 
     /**

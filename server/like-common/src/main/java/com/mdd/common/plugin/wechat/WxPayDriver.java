@@ -51,7 +51,7 @@ public class WxPayDriver {
     }
 
     /**
-     * 微信支付
+     * 微信统一下单
      *
      * @param requestV3 请求参数
      * @return WxPayUnifiedOrderV3Result.JsapiResult
@@ -107,7 +107,9 @@ public class WxPayDriver {
     }
 
     /**
-     * 发起退款
+     * 微信支付-申请退款
+     * 文档地址: https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_4
+     * 接口链接: https://api.mch.weixin.qq.com/secapi/pay/refund
      *
      * @param request 请求参数
      * @return WxPayRefundV3Result 退款结果
