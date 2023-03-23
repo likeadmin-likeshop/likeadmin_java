@@ -1,6 +1,7 @@
 package com.mdd.common.util;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.mdd.common.cache.ConfigCache;
 import com.mdd.common.entity.system.SystemConfig;
 import com.mdd.common.mapper.system.SystemConfigMapper;
 
@@ -21,6 +22,13 @@ public class ConfigUtils {
      * @return Map<String, String>
      */
     public static Map<String, String> get(String type) {
+
+        // 读取缓存
+        Map<String, String> cache = ConfigCache.get(type);
+        if (!cache.isEmpty()) {
+            return cache;
+        }
+
         SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
 
         List<SystemConfig> configs = model.selectList(
@@ -45,6 +53,12 @@ public class ConfigUtils {
      * @return String
      */
     public static String get(String type, String name) {
+        // 获取缓存配置
+        String cache = ConfigCache.get(type, name);
+        if (!StringUtils.isNull(cache) && !StringUtils.isEmpty(cache)) {
+            return cache;
+        }
+
         SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
 
         SystemConfig config = model.selectOne(
@@ -65,6 +79,13 @@ public class ConfigUtils {
      * @return String
      */
     public static String get(String type, String name, String defaults) {
+
+        // 获取缓存配置
+        String cache = ConfigCache.get(type, name);
+        if (!StringUtils.isNull(cache) && !StringUtils.isEmpty(cache)) {
+            return cache;
+        }
+
         SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
 
         SystemConfig config = model.selectOne(
@@ -89,6 +110,14 @@ public class ConfigUtils {
      * @return String
      */
     public static Map<String, String> getMap(String type, String name) {
+
+        // 获取缓存
+        String cache = ConfigCache.get(type, name);
+        if (!StringUtils.isNull(cache) && !StringUtils.isEmpty(cache)) {
+            System.out.println("获取到缓存了");
+            return MapUtils.jsonToMap(cache);
+        }
+
         SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
 
         SystemConfig config = model.selectOne(
@@ -137,6 +166,8 @@ public class ConfigUtils {
             systemConfig.setUpdateTime(System.currentTimeMillis() / 1000);
             model.insert(systemConfig);
         }
-    }
 
+        // 设置缓存
+        ConfigCache.set();
+    }
 }
