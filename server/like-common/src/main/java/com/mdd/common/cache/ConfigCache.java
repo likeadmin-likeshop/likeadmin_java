@@ -20,7 +20,6 @@ public class ConfigCache {
 
     /**
      * 设置缓存配置
-     *
      */
     public static void set() {
         SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
