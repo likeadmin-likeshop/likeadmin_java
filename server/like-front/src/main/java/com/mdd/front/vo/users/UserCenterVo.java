@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 @ApiModel(value = "个人中心Vo")
@@ -32,6 +33,9 @@ public class UserCenterVo implements Serializable {
 
     @ApiModelProperty(value = "手机号码")
     private String mobile;
+
+    @ApiModelProperty(value = "钱包余额")
+    private BigDecimal money;
 
     @ApiModelProperty(value = "是否新用户")
     private Integer isNew;

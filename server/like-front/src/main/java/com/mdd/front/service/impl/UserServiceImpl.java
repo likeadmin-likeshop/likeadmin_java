@@ -54,7 +54,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserCenterVo center(Integer userId, Integer terminal) {
         User user = userMapper.selectOne(new QueryWrapper<User>()
-                .select("id,sn,avatar,real_name,nickname,username,mobile,is_new")
+                .select("id,sn,avatar,real_name,nickname,username,mobile,money,is_new")
                 .eq("id", userId)
                 .last("limit 1"));
 

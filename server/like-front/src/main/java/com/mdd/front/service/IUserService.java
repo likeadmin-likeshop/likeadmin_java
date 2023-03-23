@@ -85,17 +85,16 @@ public interface IUserService {
     /**
      * 绑定微信小程序
      *
-     * @param bindMnpValidate
-     * @param userId
+     * @param bindMnpValidate 参数
+     * @param userId 用户ID
      */
     void bindMnp(UserBindWechatValidate bindMnpValidate, Integer userId);
-
 
     /**
      * 绑定微信公众号
      *
-     * @param bindOaValidate
-     * @param userId
+     * @param bindOaValidate 参数
+     * @param userId 用户ID
      */
     void bindOa(UserBindWechatValidate bindOaValidate, Integer userId);
 }
