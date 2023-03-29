@@ -21,4 +21,7 @@ public class LoginTokenVo implements Serializable {
     @ApiModelProperty(value = "登录令牌")
     private String token;
 
+    @ApiModelProperty(value = "是否为新用户")
+    private Integer isNew;
+
 }

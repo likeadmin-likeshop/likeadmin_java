@@ -93,7 +93,7 @@ public class LoginServiceImpl implements ILoginService {
     @Override
     public LoginTokenVo accountLogin(String username, String password, Integer terminal) {
         User user = userMapper.selectOne(new QueryWrapper<User>()
-                .select("id,username,password,salt,mobile,is_disable")
+                .select("id,username,password,salt,mobile,is_disable,is_new")
                 .eq("username", username)
                 .eq("is_delete", 0)
                 .last("limit 1"));
@@ -103,7 +103,7 @@ public class LoginServiceImpl implements ILoginService {
         Assert.isFalse(!pwd.equals(user.getPassword()), "账号或密码错误!");
         Assert.isFalse(!user.getIsDisable().equals(0), "账号已被禁用!");
 
-        return this.__loginToken(user.getId(), user.getMobile(), terminal);
+        return this.__loginToken(user.getId(), user.getMobile(), user.getIsNew(), terminal);
     }
 
     /**
@@ -124,7 +124,7 @@ public class LoginServiceImpl implements ILoginService {
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()
-                .select("id,username,mobile,is_disable")
+                .select("id,username,mobile,is_disable,is_new")
                 .eq("mobile", mobile)
                 .eq("is_delete", 0)
                 .last("limit 1"));
@@ -132,7 +132,7 @@ public class LoginServiceImpl implements ILoginService {
         Assert.notNull(user, "账号不存在!");
         Assert.isFalse(user.getIsDisable() != 0, "账号已禁用!");
 
-        return this.__loginToken(user.getId(), user.getMobile(), terminal);
+        return this.__loginToken(user.getId(), user.getMobile(), user.getIsNew(), terminal);
     }
 
     /**
@@ -353,7 +353,7 @@ public class LoginServiceImpl implements ILoginService {
             userAuthMapper.updateById(auth);
         }
 
-        return this.__loginToken(user.getId(), user.getMobile(), terminal);
+        return this.__loginToken(user.getId(), user.getMobile(), user.getIsNew(), terminal);
     }
 
     /**
@@ -365,7 +365,7 @@ public class LoginServiceImpl implements ILoginService {
      * @param terminal 终端
      * @return LoginTokenVo
      */
-    private LoginTokenVo __loginToken(Integer userId, String mobile, Integer terminal) {
+    private LoginTokenVo __loginToken(Integer userId, String mobile, Integer isNew, Integer terminal) {
         // 实现账号登录
         StpUtil.login(userId, String.valueOf(terminal));
 
@@ -380,6 +380,7 @@ public class LoginServiceImpl implements ILoginService {
         vo.setId(userId);
         vo.setIsBindMobile(!StringUtils.isEmpty(mobile));
         vo.setToken(StpUtil.getTokenValue());
+        vo.setIsNew(isNew);
         return vo;
     }
 

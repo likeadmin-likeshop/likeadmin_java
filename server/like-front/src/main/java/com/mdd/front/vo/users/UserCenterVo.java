@@ -43,5 +43,7 @@ public class UserCenterVo implements Serializable {
     @ApiModelProperty(value = "是否绑定微信")
     private Boolean isBindWechat;
 
+    @ApiModelProperty(value = "是否有设置登录密码")
+    private Boolean hasPwd;
 
 }

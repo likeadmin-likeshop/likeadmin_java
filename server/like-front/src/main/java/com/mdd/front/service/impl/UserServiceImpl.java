@@ -54,7 +54,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserCenterVo center(Integer userId, Integer terminal) {
         User user = userMapper.selectOne(new QueryWrapper<User>()
-                .select("id,sn,avatar,real_name,nickname,username,mobile,money,is_new")
+                .select("id,sn,avatar,real_name,nickname,username,mobile,money,is_new,password")
                 .eq("id", userId)
                 .last("limit 1"));
 
@@ -76,6 +76,9 @@ public class UserServiceImpl implements IUserService {
                     .last("limit 1"));
             vo.setIsBindWechat(userAuth != null);
         }
+
+        // 是否有设置登录密码
+        vo.setHasPwd(StringUtils.isNotBlank(user.getPassword()));
 
         return vo;
     }
