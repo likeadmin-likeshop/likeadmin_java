@@ -99,7 +99,9 @@ const handleConfirm = async () => {
     if (formData.password != formData.password2) return uni.$u.toast('两次输入的密码不一致')
     await forgotPassword(formData)
     uni.$u.toast('操作成功')
-    uni.navigateBack()
+    setTimeout(() => {
+    	uni.navigateBack()
+    }, 1000)
 }
 </script>
 
