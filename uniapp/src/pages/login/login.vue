@@ -154,12 +154,19 @@
             </view>
             <!-- #endif -->
         </view>
+        <mplogin-popup
+            v-model:show="showLoginPopup"
+            :logo="websiteConfig.logo"
+            :title="websiteConfig.name"
+            @update="handleUpdateUser"
+        />
     </view>
 </template>
 
 <script setup lang="ts">
 import { mobileLogin, accountLogin, mnpLogin } from '@/api/account'
 import { smsSend } from '@/api/app'
+import { updateUser } from '@/api/user'
 import { SMSEnum } from '@/enums/appEnums'
 import { BACK_URL } from '@/enums/cacheEnums'
 import { useLockFn } from '@/hooks/useLockFn'
@@ -187,6 +194,7 @@ enum LoginAuthEnum {
     QQ = 2
 }
 const isWeixin = ref(true)
+const showLoginPopup = ref(false)
 // #ifdef H5
 isWeixin.value = isWeixinClient()
 // #endif
@@ -194,11 +202,12 @@ isWeixin.value = isWeixinClient()
 const userStore = useUserStore()
 const appStore = useAppStore()
 
+const websiteConfig = computed(() => appStore.getWebsiteConfig)
 const uCodeRef = shallowRef()
 const loginWay = ref<LoginWayEnum>()
 const codeTips = ref('')
 const isCheckAgreement = ref(false)
-
+const loginData = ref<any>({})
 const formData = reactive({
     scene: '',
     username: '',
@@ -329,6 +338,13 @@ const { lockFn: wxLogin } = useLockFn(async () => {
         const data = await mnpLogin({
             code
         })
+        loginData.value = data
+        if (data.isNew) {
+            uni.hideLoading()
+            userStore.temToken = data.token
+            showLoginPopup.value = true
+            return
+        }
         loginHandle(data)
         // #endif
         // #ifdef H5
@@ -340,6 +356,12 @@ const { lockFn: wxLogin } = useLockFn(async () => {
         uni.$u.toast(error)
     }
 })
+
+const handleUpdateUser = async (value: any) => {
+    await updateUser(value, { token: userStore.temToken })
+    showLoginPopup.value = false
+    loginHandle(loginData.value)
+}
 
 watch(
     () => appStore.getLoginConfig,

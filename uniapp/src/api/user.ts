@@ -26,3 +26,18 @@ export function userMnpMobile(data: any) {
 export function userChangePwd(data: any) {
     return request.post({ url: '/user/changePwd', data }, { isAuth: true })
 }
+
+// 绑定小程序
+export function mnpAuthBind(data: any) {
+    return request.post({ url: '/user/bindMnp', data })
+}
+
+// 绑定公众号
+export function oaAuthBind(data: any) {
+    return request.post({ url: '/user/bindOa', data })
+}
+
+//更新微信小程序头像昵称
+export function updateUser(data: Record<string, any>, header: any) {
+    return request.post({ url: '/user/updateUser', data, header })
+}

@@ -93,3 +93,34 @@ export function objectToQuery(params: Record<string, any>): string {
     }
     return query.slice(0, -1)
 }
+
+/**
+ * @description 组合异步任务
+ * @param  { string } task 异步任务
+ */
+
+export function series(...task: Array<(_arg: any) => any>) {
+    return function (): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const iteratorTask = task.values()
+            const next = (res?: any) => {
+                const nextTask = iteratorTask.next()
+                if (nextTask.done) {
+                    resolve(res)
+                } else {
+                    Promise.resolve(nextTask.value(res)).then(next).catch(reject)
+                }
+            }
+            next()
+        })
+    }
+}
+
+/**
+ * @description 添加单位
+ * @param {String | Number} value 值 100
+ * @param {String} unit 单位 px em rem
+ */
+export const addUnit = (value: string | number, unit = 'rpx') => {
+    return !Object.is(Number(value), NaN) ? `${value}${unit}` : value
+}
