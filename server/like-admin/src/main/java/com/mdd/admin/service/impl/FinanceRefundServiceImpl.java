@@ -87,6 +87,13 @@ public class FinanceRefundServiceImpl implements IFinanceRefundService {
         return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), iPage.getRecords(), extend);
     }
 
+    /**
+     * 退款日志
+     *
+     * @author fzr
+     * @param recordId 记录ID
+     * @return List<FinanceRefundLogVo>
+     */
     @Override
     public List<FinanceRefundLogVo> log(Integer recordId) {
         MPJQueryWrapper<RefundLog> mpjQueryWrapper = new MPJQueryWrapper<>();

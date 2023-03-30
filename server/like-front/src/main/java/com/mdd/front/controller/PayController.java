@@ -15,6 +15,7 @@ import com.mdd.common.plugin.wechat.WxPayDriver;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IPayService;
 import com.mdd.front.validate.PaymentValidate;
+import com.mdd.front.vo.pay.PayStatusVo;
 import com.mdd.front.vo.pay.PayWayListVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,11 +41,19 @@ public class PayController {
     @GetMapping("/payWay")
     @ApiOperation("支付方式")
     public AjaxResult<PayWayListVo> payWay(@Validated @NotNull(message = "from参数丢失") @RequestParam String from,
-                                                 @Validated @NotNull(message = "orderId参数丢失") @RequestParam Integer orderId) {
+                                           @Validated @NotNull(message = "orderId参数丢失") @RequestParam Integer orderId) {
         Integer terminal = LikeFrontThreadLocal.getTerminal();
 
         PayWayListVo list = iPayService.payWay(from, orderId, terminal);
         return AjaxResult.success(list);
+    }
+
+    @GetMapping("/payStatus")
+    @ApiOperation(("支付状态"))
+    public AjaxResult<Object> payStatus(@Validated @NotNull(message = "from参数丢失") @RequestParam String from,
+                                        @Validated @NotNull(message = "orderId参数丢失") @RequestParam Integer orderId) {
+        PayStatusVo vo = iPayService.payStatus(from, orderId);
+        return AjaxResult.success(vo);
     }
 
     @PostMapping("/prepay")

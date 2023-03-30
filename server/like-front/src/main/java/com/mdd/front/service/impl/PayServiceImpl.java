@@ -8,6 +8,7 @@ import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
 import com.mdd.common.enums.LogMoneyEnum;
 import com.mdd.common.enums.PaymentEnum;
+import com.mdd.common.exception.OperateException;
 import com.mdd.common.exception.PaymentException;
 import com.mdd.common.mapper.log.LogMoneyMapper;
 import com.mdd.common.mapper.RechargeOrderMapper;
@@ -20,6 +21,7 @@ import com.mdd.common.plugin.wechat.request.PaymentRequestV3;
 import com.mdd.common.util.*;
 import com.mdd.front.service.IPayService;
 import com.mdd.front.validate.PaymentValidate;
+import com.mdd.front.vo.pay.PayStatusVo;
 import com.mdd.front.vo.pay.PayWayInfoVo;
 import com.mdd.front.vo.pay.PayWayListVo;
 import lombok.extern.slf4j.Slf4j;
@@ -92,6 +94,43 @@ public class PayServiceImpl implements IPayService {
         }
 
         vo.setList(list);
+        return vo;
+    }
+
+    /**
+     * 订单状态
+     *
+     * @author fzr
+     * @param from 场景
+     * @param orderId 订单ID
+     * @return PayStatusVo
+     */
+    @Override
+    public PayStatusVo payStatus(String from, Integer orderId) {
+        PayStatusVo vo = new PayStatusVo();
+        boolean orderExist = false;
+
+        switch (from) {
+            case "recharge":
+                RechargeOrder rechargeOrder = rechargeOrderMapper.selectById(orderId);
+                if (StringUtils.isNotNull(rechargeOrder)) {
+                    orderExist = true;
+                    vo.setPayStatus(rechargeOrder.getPayStatus());
+                    vo.setPayWay(PaymentEnum.getMsgByCode(rechargeOrder.getPayWay()));
+                    vo.setOrderId(rechargeOrder.getId());
+                    vo.setOrderSn(rechargeOrder.getOrderSn());
+                    vo.setOrderAmount(rechargeOrder.getOrderAmount());
+                    vo.setPayTime(StringUtils.isNotEmpty(vo.getPayTime()) ? TimeUtils.timestampToDate(vo.getPayTime()) : "");
+                }
+                break;
+            case "order":
+                break;
+        }
+
+        if (!orderExist) {
+            throw new OperateException("订单不存在!");
+        }
+
         return vo;
     }
 

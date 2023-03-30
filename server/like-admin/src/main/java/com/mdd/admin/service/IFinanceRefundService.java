@@ -23,6 +23,12 @@ public interface IFinanceRefundService {
      */
     PageResult<FinanceRefundListVo> list(PageValidate pageValidate, FinanceRefundSearchValidate searchValidate);
 
+    /**
+     * 退款日志
+     *
+     * @param recordId 退款日志ID
+     * @return  List<FinanceRefundLogVo>
+     */
     List<FinanceRefundLogVo> log(Integer recordId);
 
 }
