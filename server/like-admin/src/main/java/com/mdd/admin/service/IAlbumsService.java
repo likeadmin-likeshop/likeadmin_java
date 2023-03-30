@@ -1,8 +1,8 @@
 package com.mdd.admin.service;
 
 import com.alibaba.fastjson2.JSONArray;
-import com.mdd.admin.validate.AlbumCateValidate;
-import com.mdd.admin.validate.AlbumSearchValidate;
+import com.mdd.admin.validate.album.AlbumCateValidate;
+import com.mdd.admin.validate.album.AlbumSearchValidate;
 import com.mdd.admin.validate.commons.PageValidate;
 import com.mdd.admin.vo.album.AlbumVo;
 import com.mdd.common.core.PageResult;

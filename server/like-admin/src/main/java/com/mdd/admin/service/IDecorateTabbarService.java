@@ -1,6 +1,6 @@
 package com.mdd.admin.service;
 
-import com.mdd.admin.validate.DecorateTabsValidate;
+import com.mdd.admin.validate.decorate.DecorateTabsValidate;
 import com.mdd.admin.vo.decorate.DecorateTabbarVo;
 
 /**

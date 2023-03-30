@@ -2,7 +2,7 @@ package com.mdd.admin.controller.decorate;
 
 import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.IDecorateTabbarService;
-import com.mdd.admin.validate.DecorateTabsValidate;
+import com.mdd.admin.validate.decorate.DecorateTabsValidate;
 import com.mdd.admin.vo.decorate.DecorateTabbarVo;
 import com.mdd.common.core.AjaxResult;
 import io.swagger.annotations.Api;

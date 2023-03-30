@@ -2,7 +2,7 @@ package com.mdd.admin.controller.decorate;
 
 import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.IDecoratePageService;
-import com.mdd.admin.validate.DecoratePageValidate;
+import com.mdd.admin.validate.decorate.DecoratePageValidate;
 import com.mdd.admin.vo.decorate.DecoratePageVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.validator.annotation.IDMust;
