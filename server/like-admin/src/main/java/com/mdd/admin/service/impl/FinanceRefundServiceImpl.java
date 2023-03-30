@@ -18,6 +18,7 @@ import com.mdd.common.entity.RefundRecord;
 import com.mdd.common.mapper.RefundLogMapper;
 import com.mdd.common.mapper.RefundRecordMapper;
 import com.mdd.common.util.StringUtils;
+import com.mdd.common.util.TimeUtils;
 import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 
@@ -96,6 +97,10 @@ public class FinanceRefundServiceImpl implements IFinanceRefundService {
                 .orderByDesc("t.id");
 
         List<FinanceRefundLogVo> list = refundLogMapper.selectJoinList(FinanceRefundLogVo.class, mpjQueryWrapper);
+
+        for (FinanceRefundLogVo vo : list) {
+            vo.setCreateTime(TimeUtils.timestampToDate(vo.getCreateTime()));
+        }
 
         return list;
     }
