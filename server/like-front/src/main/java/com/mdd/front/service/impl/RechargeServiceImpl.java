@@ -5,16 +5,22 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.RechargeOrder;
+import com.mdd.common.entity.user.User;
 import com.mdd.common.enums.PaymentEnum;
+import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.RechargeOrderMapper;
+import com.mdd.common.mapper.user.UserMapper;
+import com.mdd.common.util.ConfigUtils;
 import com.mdd.common.util.TimeUtils;
 import com.mdd.front.service.IRechargeService;
 import com.mdd.front.validate.RechargeValidate;
 import com.mdd.front.validate.common.PageValidate;
-import com.mdd.front.vo.LogRecordDataVo;
+import com.mdd.front.vo.RechargeConfigVo;
+import com.mdd.front.vo.RechargeRecordVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +35,28 @@ public class RechargeServiceImpl implements IRechargeService {
     @Resource
     RechargeOrderMapper rechargeOrderMapper;
 
+    @Resource
+    UserMapper userMapper;
+
+    /**
+     * 充值配置
+     *
+     * @author fzr
+     *  @param userId 用户ID
+     * @return RechargeConfigVo
+     */
+    @Override
+    public RechargeConfigVo config(Integer userId) {
+        User user = userMapper.selectById(userId);
+        Map<String, String> config = ConfigUtils.get("recharge");
+
+        RechargeConfigVo vo = new RechargeConfigVo();
+        vo.setOpenRecharge(Integer.parseInt(config.getOrDefault("openRecharge", "0")));
+        vo.setMinRechargeMoney(new BigDecimal(config.getOrDefault("minRechargeMoney", "0")));
+        vo.setUserMoney(user.getMoney());
+        return vo;
+    }
+
     /**
      * 充值记录
      *
@@ -38,7 +66,7 @@ public class RechargeServiceImpl implements IRechargeService {
      * @return PageResult<RechargeRecordVo>
      */
     @Override
-    public PageResult<LogRecordDataVo> record(Integer userId, PageValidate pageValidate) {
+    public PageResult<RechargeRecordVo> record(Integer userId, PageValidate pageValidate) {
         Integer pageNo   = pageValidate.getPageNo();
         Integer pageSize = pageValidate.getPageSize();
 
@@ -49,9 +77,9 @@ public class RechargeServiceImpl implements IRechargeService {
 
         IPage<RechargeOrder> iPage = rechargeOrderMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
 
-        List<LogRecordDataVo> list = new LinkedList<>();
+        List<RechargeRecordVo> list = new LinkedList<>();
         for (RechargeOrder rechargeOrder : iPage.getRecords()) {
-            LogRecordDataVo vo = new LogRecordDataVo();
+            RechargeRecordVo vo = new RechargeRecordVo();
             vo.setId(rechargeOrder.getId());
             vo.setAction(1);
             vo.setOrderAmount(rechargeOrder.getOrderAmount());
@@ -74,6 +102,15 @@ public class RechargeServiceImpl implements IRechargeService {
      */
     @Override
     public Map<String, Object> placeOrder(Integer userId, Integer terminal, RechargeValidate rechargeValidate) {
+        RechargeConfigVo config = this.config(userId);
+        if (config.getOpenRecharge().equals(0)) {
+            throw new OperateException("充值功能已关闭");
+        }
+
+        if (rechargeValidate.getOrderAmount().compareTo(config.getMinRechargeMoney()) < 0) {
+            throw new OperateException("充值金额不能少于" + config.getMinRechargeMoney());
+        }
+
         RechargeOrder order = new RechargeOrder();
         order.setUserId(userId);
         order.setOrderTerminal(terminal);

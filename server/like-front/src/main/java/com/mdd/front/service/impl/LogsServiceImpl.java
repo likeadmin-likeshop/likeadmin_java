@@ -10,7 +10,7 @@ import com.mdd.common.mapper.log.LogMoneyMapper;
 import com.mdd.common.util.TimeUtils;
 import com.mdd.front.service.ILogsService;
 import com.mdd.front.validate.common.PageValidate;
-import com.mdd.front.vo.LogRecordDataVo;
+import com.mdd.front.vo.RechargeRecordVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,7 +24,7 @@ public class LogsServiceImpl implements ILogsService {
     LogMoneyMapper logMoneyMapper;
 
     @Override
-    public PageResult<LogRecordDataVo> userMoney(PageValidate pageValidate, Integer type) {
+    public PageResult<RechargeRecordVo> userMoney(PageValidate pageValidate, Integer type) {
         Integer pageNo   = pageValidate.getPageNo();
         Integer pageSize = pageValidate.getPageSize();
 
@@ -36,9 +36,9 @@ public class LogsServiceImpl implements ILogsService {
 
         IPage<LogMoney> iPage = logMoneyMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
 
-        List<LogRecordDataVo> list = new LinkedList<>();
+        List<RechargeRecordVo> list = new LinkedList<>();
         for (LogMoney logMoney : iPage.getRecords()) {
-            LogRecordDataVo vo = new LogRecordDataVo();
+            RechargeRecordVo vo = new RechargeRecordVo();
 
             vo.setId(logMoney.getId());
             vo.setAction(logMoney.getAction());

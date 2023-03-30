@@ -8,8 +8,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
-@ApiModel(value = "日志记录Vo")
-public class LogRecordDataVo implements Serializable {
+@ApiModel(value = "充值记录Vo")
+public class RechargeRecordVo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "ID")
     private Integer id;

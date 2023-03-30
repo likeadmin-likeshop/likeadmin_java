@@ -3,7 +3,8 @@ package com.mdd.front.service;
 import com.mdd.common.core.PageResult;
 import com.mdd.front.validate.RechargeValidate;
 import com.mdd.front.validate.common.PageValidate;
-import com.mdd.front.vo.LogRecordDataVo;
+import com.mdd.front.vo.RechargeConfigVo;
+import com.mdd.front.vo.RechargeRecordVo;
 
 import java.util.Map;
 
@@ -13,13 +14,23 @@ import java.util.Map;
 public interface IRechargeService {
 
     /**
+     * 充值配置
+     *
+     * @author fzr
+     * @param userId 用户ID
+     * @return RechargeConfigVo
+     */
+    RechargeConfigVo config(Integer userId);
+
+    /**
      * 充值记录
      *
+     * @author fzr
      * @param userId 用户ID
      * @param pageValidate 分页参数
      * @return PageResult<RechargeRecordVo>
      */
-    PageResult<LogRecordDataVo> record(Integer userId, PageValidate pageValidate);
+    PageResult<RechargeRecordVo> record(Integer userId, PageValidate pageValidate);
 
     /**
      * 充值下单

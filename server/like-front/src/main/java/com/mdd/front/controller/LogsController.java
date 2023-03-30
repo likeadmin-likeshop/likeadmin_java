@@ -4,7 +4,7 @@ import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.front.service.ILogsService;
 import com.mdd.front.validate.common.PageValidate;
-import com.mdd.front.vo.LogRecordDataVo;
+import com.mdd.front.vo.RechargeRecordVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +28,7 @@ public class LogsController {
     public AjaxResult<Object> userMoney(@Validated PageValidate pageValidate,
                                         @RequestParam(defaultValue = "0") Integer type) {
 
-        PageResult<LogRecordDataVo> list = iLogsService.userMoney(pageValidate, type);
+        PageResult<RechargeRecordVo> list = iLogsService.userMoney(pageValidate, type);
         return AjaxResult.success(list);
     }
 

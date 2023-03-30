@@ -6,7 +6,8 @@ import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IRechargeService;
 import com.mdd.front.validate.RechargeValidate;
 import com.mdd.front.validate.common.PageValidate;
-import com.mdd.front.vo.LogRecordDataVo;
+import com.mdd.front.vo.RechargeConfigVo;
+import com.mdd.front.vo.RechargeRecordVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
@@ -23,12 +24,21 @@ public class RechargeController {
     @Resource
     IRechargeService iRechargeService;
 
+    @GetMapping("/config")
+    @ApiOperation(value = "充值配置")
+    public AjaxResult<Object> config() {
+        Integer userId = LikeFrontThreadLocal.getUserId();
+
+        RechargeConfigVo vo = iRechargeService.config(userId);
+        return AjaxResult.success(vo);
+    }
+
     @GetMapping("/record")
     @ApiOperation(value = "充值记录")
     public AjaxResult<Object> record(@Validated PageValidate pageValidate) {
         Integer userId = LikeFrontThreadLocal.getUserId();
 
-        PageResult<LogRecordDataVo> list = iRechargeService.record(userId, pageValidate);
+        PageResult<RechargeRecordVo> list = iRechargeService.record(userId, pageValidate);
         return AjaxResult.success(list);
     }
 
