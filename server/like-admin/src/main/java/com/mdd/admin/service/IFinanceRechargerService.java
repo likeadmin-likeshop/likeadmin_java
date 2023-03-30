@@ -11,7 +11,7 @@ import com.mdd.common.core.PageResult;
 public interface IFinanceRechargerService {
 
     /**
-     * 充值记录列表
+     * 充值记录
      *
      * @author fzr
      * @param pageValidate 分页参数
@@ -19,5 +19,7 @@ public interface IFinanceRechargerService {
      * @return PageResult<FinanceRechargeListVo>
      */
     PageResult<FinanceRechargeListVo> list(PageValidate pageValidate, FinanceRechargeSearchValidate searchValidate);
+
+    void refund();
 
 }

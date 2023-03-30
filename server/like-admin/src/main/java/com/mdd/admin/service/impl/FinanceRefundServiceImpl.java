@@ -1,17 +1,42 @@
 package com.mdd.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.admin.service.IFinanceRefundService;
 import com.mdd.admin.validate.commons.PageValidate;
 import com.mdd.admin.validate.finance.FinanceRefundSearchValidate;
+import com.mdd.admin.vo.finance.FinanceRechargeListVo;
 import com.mdd.admin.vo.finance.FinanceRefundListVo;
+import com.mdd.admin.vo.finance.FinanceRefundLogVo;
+import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.PageResult;
+import com.mdd.common.entity.RechargeOrder;
+import com.mdd.common.entity.RefundLog;
+import com.mdd.common.entity.RefundRecord;
+import com.mdd.common.mapper.RefundLogMapper;
+import com.mdd.common.mapper.RefundRecordMapper;
+import com.mdd.common.util.StringUtils;
+import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 退款记录服务实现类
  */
 @Service
 public class FinanceRefundServiceImpl implements IFinanceRefundService {
+
+    @Resource
+    RefundRecordMapper refundRecordMapper;
+
+    @Resource
+    RefundLogMapper refundLogMapper;
 
     /**
      * 退款记录列表
@@ -23,7 +48,56 @@ public class FinanceRefundServiceImpl implements IFinanceRefundService {
      */
     @Override
     public PageResult<FinanceRefundListVo> list(PageValidate pageValidate, FinanceRefundSearchValidate searchValidate) {
-        return null;
+        Integer pageNo = pageValidate.getPageNo();
+        Integer pageSize = pageValidate.getPageSize();
+
+        MPJQueryWrapper<RefundRecord> mpjQueryWrapper = new MPJQueryWrapper<>();
+        mpjQueryWrapper.selectAll(RefundRecord.class)
+                .select("U.id as user_id,U.nickname,U.avatar")
+                .leftJoin("?_user U ON U.id=t.user_id".replace("?_", GlobalConfig.tablePrefix))
+                .orderByDesc("id");
+
+        refundRecordMapper.setSearch(mpjQueryWrapper, searchValidate, new String[]{
+                "like:sn@t.sn:str",
+                "like:orderSn@t.t.order_sn:str",
+                "=:refundType@t.refund_type:int",
+                "datetime:startTime-endTime@create_time:long",
+        });
+
+        if (StringUtils.isNotEmpty(searchValidate.getKeyword())) {
+            String keyword = searchValidate.getKeyword();
+            mpjQueryWrapper.nested(wq->wq
+                    .like("U.nickname", keyword).or()
+                    .like("U.sn", keyword).or()
+                    .like("U.mobile", keyword));
+        }
+
+        IPage<FinanceRefundListVo> iPage = refundRecordMapper.selectJoinPage(
+                new Page<>(pageNo, pageSize),
+                FinanceRefundListVo.class,
+                mpjQueryWrapper);
+
+        Map<String, Object> extend = new LinkedHashMap<>();
+        extend.put("total", refundRecordMapper.selectCount(null));
+        extend.put("ing", refundRecordMapper.selectCount(new QueryWrapper<RefundRecord>().eq("refund_status", 0)));
+        extend.put("success", refundRecordMapper.selectCount(new QueryWrapper<RefundRecord>().eq("refund_status", 1)));
+        extend.put("error", refundRecordMapper.selectCount(new QueryWrapper<RefundRecord>().eq("refund_status", 2)));
+
+        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), iPage.getRecords(), extend);
+    }
+
+    @Override
+    public List<FinanceRefundLogVo> log(Integer recordId) {
+        MPJQueryWrapper<RefundLog> mpjQueryWrapper = new MPJQueryWrapper<>();
+        mpjQueryWrapper.selectAll(RefundLog.class)
+                .select("sa.nickname as handler")
+                .eq("t.record_id", recordId)
+                .innerJoin("?_system_auth_admin sa ON sa.id=t.handle_id".replace("?_", GlobalConfig.tablePrefix))
+                .orderByDesc("t.id");
+
+        List<FinanceRefundLogVo> list = refundLogMapper.selectJoinList(FinanceRefundLogVo.class, mpjQueryWrapper);
+
+        return list;
     }
 
 }

@@ -29,7 +29,7 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
     RechargeOrderMapper rechargeOrderMapper;
 
     /**
-     * 充值记录列表
+     * 充值记录
      *
      * @author fzr
      * @param pageValidate 分页参数
@@ -75,6 +75,14 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
         }
 
         return PageResult.iPageHandle(iPage);
+    }
+
+    /**
+     * 发起退款
+     */
+    @Override
+    public void refund() {
+
     }
 
 }

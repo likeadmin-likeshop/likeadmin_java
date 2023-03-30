@@ -3,7 +3,10 @@ package com.mdd.admin.service;
 import com.mdd.admin.validate.commons.PageValidate;
 import com.mdd.admin.validate.finance.FinanceRefundSearchValidate;
 import com.mdd.admin.vo.finance.FinanceRefundListVo;
+import com.mdd.admin.vo.finance.FinanceRefundLogVo;
 import com.mdd.common.core.PageResult;
+
+import java.util.List;
 
 /**
  * 退款记录服务接口类
@@ -19,5 +22,7 @@ public interface IFinanceRefundService {
      * @return PageResult<FinanceRechargeListVo>
      */
     PageResult<FinanceRefundListVo> list(PageValidate pageValidate, FinanceRefundSearchValidate searchValidate);
+
+    List<FinanceRefundLogVo> log(Integer recordId);
 
 }

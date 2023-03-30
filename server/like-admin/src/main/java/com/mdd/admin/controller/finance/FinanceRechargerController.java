@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,11 +25,18 @@ public class FinanceRechargerController {
     IFinanceRechargerService iFinanceRechargerService;
 
     @GetMapping("/list")
-    @ApiOperation("记录列表")
-    public AjaxResult<Object> list(@Validated PageValidate pageValidate,
+    @ApiOperation("充值记录")
+    public AjaxResult<PageResult<FinanceRechargeListVo>> list(@Validated PageValidate pageValidate,
                                    @Validated FinanceRechargeSearchValidate searchValidate) {
         PageResult<FinanceRechargeListVo> list = iFinanceRechargerService.list(pageValidate, searchValidate);
         return AjaxResult.success(list);
+    }
+
+    @PostMapping("/refund")
+    @ApiOperation("发起退款")
+    public AjaxResult<Object> refund() {
+        iFinanceRechargerService.refund();
+        return AjaxResult.success();
     }
 
 }
