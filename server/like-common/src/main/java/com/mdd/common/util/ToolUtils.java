@@ -3,6 +3,7 @@ package com.mdd.common.util;
 import com.mdd.common.config.GlobalConfig;
 
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -130,30 +131,61 @@ public class ToolUtils {
      * 下载文件
      *
      * @author fzr
-     * @param urlString (文件网址)
-     * @param savePath (保存路径,如: /www/uploads)
-     * @param filename (保存名称,如: aa.png)
+     * @param urlStr   (文件网址)
+     * @param savePath (保存路径,如: /www/uploads/aa.png)
      * @throws IOException IO异常
      */
-    public static void download(String urlString, String savePath, String filename) throws IOException {
-        URL url = new URL(urlString);
-        URLConnection con = url.openConnection();
-        con.setConnectTimeout(20 * 1000);
-        File sf = new File(savePath);
-        if (!sf.exists()) {
-            if (sf.mkdirs()) {
-                throw new IOException("创建目录失败");
+    public static void download(String urlStr, String savePath) throws IOException {
+        ByteArrayOutputStream bos = null;
+        FileOutputStream fos = null;
+        InputStream inputStream = null;
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(5*1000);
+            conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
+            inputStream = conn.getInputStream();
+
+            // 获取数组数据
+            byte[] buffer = new byte[4*1024];
+            int len;
+            bos = new ByteArrayOutputStream();
+            while((len = inputStream.read(buffer)) != -1) {
+                bos.write(buffer, 0, len);
             }
-        }
-        try (InputStream in = con.getInputStream();
-             OutputStream out = new FileOutputStream(sf.getPath() + "\\" + filename)) {
-            byte[] buff = new byte[1024];
-            int n;
-            while ((n = in.read(buff)) >= 0) {
-                out.write(buff, 0, n);
+            byte[] getData = bos.toByteArray();
+
+            // 新创建文件夹
+            String fileName = StringUtils.substringAfterLast(savePath, "/");
+            String path = savePath.replace("/"+fileName, "");
+            File saveDir = new File(path);
+            if(!saveDir.exists()) {
+                if (!saveDir.mkdirs()) {
+                    throw new IOException("创建存储文件夹失败");
+                }
             }
+            // 保存文件数据
+            File file = new File(savePath);
+            fos = new FileOutputStream(file);
+            fos.write(getData);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        } finally {
+            if (bos != null) {
+                try {
+                    bos.close();
+                } catch (IOException ignored) {}
+            }
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException ignored) {}
+            }
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException ignored) {}
+            }
         }
     }
 

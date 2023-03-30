@@ -341,7 +341,8 @@ public class LoginServiceImpl implements ILoginService {
                     String date = TimeUtils.millisecondToDate(time, "yyyyMMdd");
                     String name = ToolUtils.makeMd5(ToolUtils.makeUUID()+time) + ".jpg";
                     String path = "avatar" + date + "/" + name;
-                    ToolUtils.download(avatar, YmlUtils.get("like.upload-directory"), path);
+                    String savePath = YmlUtils.get("like.upload-directory") + path;
+                    ToolUtils.download(avatar, savePath);
                     defaultAvatar = path;
                 } catch (IOException ignored) {}
             }
