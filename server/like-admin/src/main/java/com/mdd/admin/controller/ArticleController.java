@@ -2,9 +2,9 @@ package com.mdd.admin.controller;
 
 import com.mdd.admin.aop.Log;
 import com.mdd.admin.service.IArticleService;
-import com.mdd.admin.validate.ArticleCreateValidate;
-import com.mdd.admin.validate.ArticleSearchValidate;
-import com.mdd.admin.validate.ArticleUpdateValidate;
+import com.mdd.admin.validate.article.ArticleCreateValidate;
+import com.mdd.admin.validate.article.ArticleSearchValidate;
+import com.mdd.admin.validate.article.ArticleUpdateValidate;
 
 import com.mdd.admin.validate.commons.IdValidate;
 import com.mdd.admin.validate.commons.PageValidate;

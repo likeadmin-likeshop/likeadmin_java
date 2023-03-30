@@ -1,8 +1,8 @@
 package com.mdd.admin.service;
 
-import com.mdd.admin.validate.ArticleCreateValidate;
-import com.mdd.admin.validate.ArticleSearchValidate;
-import com.mdd.admin.validate.ArticleUpdateValidate;
+import com.mdd.admin.validate.article.ArticleCreateValidate;
+import com.mdd.admin.validate.article.ArticleSearchValidate;
+import com.mdd.admin.validate.article.ArticleUpdateValidate;
 import com.mdd.admin.validate.commons.PageValidate;
 import com.mdd.admin.vo.article.ArticleDetailVo;
 import com.mdd.admin.vo.article.ArticleListedVo;

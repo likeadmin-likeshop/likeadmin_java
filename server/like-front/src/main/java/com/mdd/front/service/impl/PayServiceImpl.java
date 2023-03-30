@@ -1,21 +1,15 @@
 package com.mdd.front.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
-import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
-import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
-import com.github.binarywang.wxpay.service.WxPayService;
-import com.mdd.common.core.AjaxResult;
 import com.mdd.common.entity.RechargeOrder;
 import com.mdd.common.entity.setting.DevPayConfig;
 import com.mdd.common.entity.setting.DevPayWay;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
-import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.enums.LogMoneyEnum;
 import com.mdd.common.enums.PaymentEnum;
 import com.mdd.common.exception.PaymentException;
-import com.mdd.common.mapper.LogMoneyMapper;
+import com.mdd.common.mapper.log.LogMoneyMapper;
 import com.mdd.common.mapper.RechargeOrderMapper;
 import com.mdd.common.mapper.setting.DevPayConfigMapper;
 import com.mdd.common.mapper.setting.DevPayWayMapper;
@@ -32,8 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;

@@ -42,4 +42,20 @@ public enum PaymentEnum {
         return this.msg;
     }
 
+    /**
+     * 根据编码获取Msg
+     *
+     * @author fzr
+     * @param code 类型
+     * @return String
+     */
+    public static String getMsgByCode(Integer code){
+        for(PaymentEnum enumItem: PaymentEnum.values()) {
+            if (enumItem.getCode() == code) {
+                return enumItem.getMsg();
+            }
+        }
+        return null;
+    }
+
 }

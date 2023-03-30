@@ -1,8 +1,8 @@
 package com.mdd.admin.service;
 
-import com.mdd.admin.validate.ArtCateCreateValidate;
-import com.mdd.admin.validate.ArtCateUpdateValidate;
-import com.mdd.admin.validate.ArtCateSearchValidate;
+import com.mdd.admin.validate.article.ArtCateCreateValidate;
+import com.mdd.admin.validate.article.ArtCateUpdateValidate;
+import com.mdd.admin.validate.article.ArtCateSearchValidate;
 import com.mdd.admin.validate.commons.PageValidate;
 import com.mdd.admin.vo.article.ArticleCateVo;
 import com.mdd.common.core.PageResult;
