@@ -2,7 +2,8 @@ package com.mdd.front.service;
 
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.mdd.front.validate.PaymentValidate;
-import com.mdd.front.vo.PayWayListedVo;
+import com.mdd.front.vo.pay.PayWayInfoVo;
+import com.mdd.front.vo.pay.PayWayListVo;
 
 import java.util.List;
 
@@ -15,10 +16,11 @@ public interface IPayService {
      * 支付方式
      *
      * @param from 场景
+     * @param orderId 订单ID
      * @param terminal 终端
      * @return List<PayWayListedVo>
      */
-    List<PayWayListedVo> payWay(String from, Integer terminal);
+    PayWayListVo payWay(String from, Integer orderId, Integer terminal);
 
     /**
      * 发起支付

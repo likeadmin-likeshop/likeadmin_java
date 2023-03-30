@@ -20,7 +20,8 @@ import com.mdd.common.plugin.wechat.request.PaymentRequestV3;
 import com.mdd.common.util.*;
 import com.mdd.front.service.IPayService;
 import com.mdd.front.validate.PaymentValidate;
-import com.mdd.front.vo.PayWayListedVo;
+import com.mdd.front.vo.pay.PayWayInfoVo;
+import com.mdd.front.vo.pay.PayWayListVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,34 +58,41 @@ public class PayServiceImpl implements IPayService {
      *
      * @author fzr
      * @param from 场景
-     * @param terminal 总端
+     * @param orderId 订单ID
+     * @param terminal 终端
      * @return List<PayWayListedVo>
      */
     @Override
-    public List<PayWayListedVo> payWay(String from, Integer terminal) {
+    public PayWayListVo payWay(String from, Integer orderId, Integer terminal) {
         List<DevPayWay> devPayWays = devPayWayMapper.selectList(
                 new QueryWrapper<DevPayWay>()
                     .eq("scene", terminal)
                     .eq("status", 1));
 
-        Integer walletType = PaymentEnum.WALLET_PAY.getCode();
-        List<PayWayListedVo> list = new LinkedList<>();
+        PayWayListVo vo = new PayWayListVo();
+        if (from.equals("recharge")) {
+            RechargeOrder rechargeOrder = rechargeOrderMapper.selectById(orderId);
+            vo.setOrderAmount(rechargeOrder.getOrderAmount());
+        }
 
+        Integer walletType = PaymentEnum.WALLET_PAY.getCode();
+        List<PayWayInfoVo> list = new LinkedList<>();
         for (DevPayWay way : devPayWays) {
             if (from.equals("recharge") && way.getPayConfigId().equals(walletType)) {
                 continue;
             }
 
             DevPayConfig devPayConfig = devPayConfigMapper.selectById(way.getPayConfigId());
-            PayWayListedVo vo = new PayWayListedVo();
-            vo.setId(devPayConfig.getId());
-            vo.setName(devPayConfig.getName());
-            vo.setIcon(UrlUtils.toAbsoluteUrl(devPayConfig.getIcon()));
-            vo.setIsDefault(way.getIsDefault());
-            list.add(vo);
+            PayWayInfoVo infoVo = new PayWayInfoVo();
+            infoVo.setId(devPayConfig.getId());
+            infoVo.setName(devPayConfig.getName());
+            infoVo.setIcon(UrlUtils.toAbsoluteUrl(devPayConfig.getIcon()));
+            infoVo.setIsDefault(way.getIsDefault());
+            list.add(infoVo);
         }
 
-        return list;
+        vo.setList(list);
+        return vo;
     }
 
     /**

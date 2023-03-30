@@ -1,8 +1,8 @@
 package com.mdd.front.service;
 
 import com.mdd.front.validate.users.*;
-import com.mdd.front.vo.users.UserCenterVo;
-import com.mdd.front.vo.users.UserInfoVo;
+import com.mdd.front.vo.user.UserCenterVo;
+import com.mdd.front.vo.user.UserInfoVo;
 
 /**
  * 用户服务接口类

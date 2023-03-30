@@ -1,4 +1,4 @@
-package com.mdd.front.vo.users;
+package com.mdd.front.vo.user;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
