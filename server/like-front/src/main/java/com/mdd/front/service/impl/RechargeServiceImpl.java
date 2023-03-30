@@ -78,7 +78,6 @@ public class RechargeServiceImpl implements IRechargeService {
         order.setUserId(userId);
         order.setOrderTerminal(terminal);
         order.setOrderSn(rechargeOrderMapper.randMakeOrderSn("order_sn"));
-        order.setPayWay(rechargeValidate.getPayWay());
         order.setPayStatus(0);
         order.setRefundStatus(0);
         order.setOrderAmount(rechargeValidate.getOrderAmount());

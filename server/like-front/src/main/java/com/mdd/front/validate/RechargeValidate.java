@@ -13,9 +13,6 @@ public class RechargeValidate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull(message = "payWay参数缺失")
-    private Integer payWay;
-
     @NotNull(message = "orderAmount参数缺失")
     private BigDecimal orderAmount;
 
