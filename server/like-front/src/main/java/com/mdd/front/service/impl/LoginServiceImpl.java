@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
-import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.enums.NoticeEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.user.UserAuthMapper;
@@ -29,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -153,7 +153,7 @@ public class LoginServiceImpl implements ILoginService {
             String uniId = sessionResult.getUnionid();
             String unionId = uniId == null ? "0" : uniId;
 
-            return this.__wxLoginHandle(openId, unionId, terminal);
+            return this.__wxLoginHandle(openId, unionId, "", "", terminal);
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
@@ -175,7 +175,20 @@ public class LoginServiceImpl implements ILoginService {
             String uniId = wxOAuth2AccessToken.getUnionId();
             String openId  = wxOAuth2AccessToken.getOpenId();
             String unionId = uniId == null ? "0" : uniId;
-            return this.__wxLoginHandle(openId, unionId, terminal);
+
+            String avatar = "";
+            String nickname = "";
+            try {
+                String accessToken = wxOAuth2AccessToken.getAccessToken();
+                String userInfoUri = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s";
+                String userInfoUrl = String.format(userInfoUri, accessToken, openId);
+                String resultInfo = HttpUtils.sendGet(userInfoUrl);
+                Map<String, String> resultMap = MapUtils.jsonToMap(resultInfo);
+                avatar   = resultMap.get("headimgurl");
+                nickname = resultMap.get("nickname");
+            } catch (Exception ignored) {}
+
+            return this.__wxLoginHandle(openId, unionId, avatar, nickname, terminal);
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
@@ -283,7 +296,10 @@ public class LoginServiceImpl implements ILoginService {
         String openId  = userinfoMap.get("openid");
         String uniId   = userinfoMap.get("unionid");
         String unionId = uniId == null ? "0" : uniId;
-        return this.__wxLoginHandle(openId, unionId, terminal);
+        String avatar   = resultMap.getOrDefault("headimgurl", "");
+        String nickname = resultMap.getOrDefault("nickname", "");
+
+        return this.__wxLoginHandle(openId, unionId, avatar, nickname, terminal);
     }
 
     /**
@@ -292,9 +308,11 @@ public class LoginServiceImpl implements ILoginService {
      * @param openId   (openId)
      * @param unionId  (unionId)
      * @param terminal (terminal)
+     * @param avatar   (用户头像)
+     * @param nickname (用户昵称)
      * @return LoginTokenVo
      */
-    private LoginTokenVo __wxLoginHandle(String openId, String unionId, Integer terminal) {
+    private LoginTokenVo __wxLoginHandle(String openId, String unionId, String avatar, String nickname, Integer terminal) {
         // 查询授权
         UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
                 .nested(wq->wq
@@ -314,10 +332,28 @@ public class LoginServiceImpl implements ILoginService {
         // 创建用户
         if (StringUtils.isNull(user)) {
             Integer sn = this.__generateSn();
+            String defaultAvatar = "/api/static/default_avatar.png";
+            String defaultNickname = "用户" + sn;
+
+            if (StringUtils.isNotEmpty(avatar)) {
+                try {
+                    Long time = System.currentTimeMillis();
+                    String date = TimeUtils.millisecondToDate(time, "yyyyMMdd");
+                    String name = ToolUtils.makeMd5(ToolUtils.makeUUID()+time) + ".jpg";
+                    String path = "avatar" + date + "/" + name;
+                    ToolUtils.download(avatar, YmlUtils.get("like.upload-directory"), path);
+                    defaultAvatar = path;
+                } catch (IOException ignored) {}
+            }
+
+            if (StringUtils.isNotEmpty(nickname)) {
+                defaultNickname = nickname;
+            }
+
             User model = new User();
             model.setSn(sn);
-            model.setAvatar("/api/static/default_avatar.png");
-            model.setNickname("用户" + sn);
+            model.setAvatar(defaultAvatar);
+            model.setNickname(defaultNickname);
             model.setUsername("u" + sn);
             model.setChannel(terminal);
             model.setSex(0);
