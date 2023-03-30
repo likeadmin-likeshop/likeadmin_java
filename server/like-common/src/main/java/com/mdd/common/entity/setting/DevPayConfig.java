@@ -1,6 +1,7 @@
 package com.mdd.common.entity.setting;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,6 +21,10 @@ public class DevPayConfig implements Serializable {
 
     @ApiModelProperty("模版名称")
     private String name;
+
+    @TableField(exist = false)
+    @ApiModelProperty("显示名称")
+    private String showName;
 
     @ApiModelProperty("渠道图标")
     private String icon;

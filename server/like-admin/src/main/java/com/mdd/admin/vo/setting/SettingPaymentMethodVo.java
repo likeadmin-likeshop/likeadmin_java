@@ -9,6 +9,8 @@ public class SettingPaymentMethodVo {
 
     private String name;
 
+    private String showName;
+
     private String icon;
 
     private Integer isDefault;

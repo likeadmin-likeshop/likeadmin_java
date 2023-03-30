@@ -71,7 +71,7 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
             vo.setCreateTime(TimeUtils.timestampToDate(vo.getCreateTime()));
             vo.setPayTime(TimeUtils.timestampToDate(vo.getPayTime()));
             vo.setAvatar(UrlUtils.toAbsoluteUrl(vo.getAvatar()));
-            vo.setPayWay(PaymentEnum.getMsgByCode(Integer.parseInt(vo.getPayWay())));
+            vo.setPayWay(PaymentEnum.getPayWayMsg(Integer.parseInt(vo.getPayWay())));
         }
 
         return PageResult.iPageHandle(iPage);

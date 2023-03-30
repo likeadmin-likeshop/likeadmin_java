@@ -49,13 +49,16 @@ public enum PaymentEnum {
      * @param code 类型
      * @return String
      */
-    public static String getMsgByCode(Integer code){
-        for(PaymentEnum enumItem: PaymentEnum.values()) {
-            if (enumItem.getCode() == code) {
-                return enumItem.getMsg();
-            }
+    public static String getPayWayMsg(Integer code){
+        switch (code) {
+            case 1:
+                return "余额支付";
+            case 2:
+                return "微信支付";
+            case 3:
+                return "支付宝支付";
         }
-        return null;
+        return "未知";
     }
 
 }

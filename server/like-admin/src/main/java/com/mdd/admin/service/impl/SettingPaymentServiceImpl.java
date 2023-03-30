@@ -8,6 +8,7 @@ import com.mdd.admin.validate.setting.SettingPayMethodValidate;
 import com.mdd.admin.vo.setting.SettingPaymentMethodVo;
 import com.mdd.common.entity.setting.DevPayConfig;
 import com.mdd.common.entity.setting.DevPayWay;
+import com.mdd.common.enums.PaymentEnum;
 import com.mdd.common.mapper.setting.DevPayConfigMapper;
 import com.mdd.common.mapper.setting.DevPayWayMapper;
 import com.mdd.common.util.MapUtils;
@@ -51,7 +52,8 @@ public class SettingPaymentServiceImpl implements ISettingPaymentService {
 
             SettingPaymentMethodVo vo = new SettingPaymentMethodVo();
             BeanUtils.copyProperties(devPayWay, vo);
-            vo.setName(devPayConfig.getName());
+            vo.setName(PaymentEnum.getPayWayMsg(devPayConfig.getWay()));
+            vo.setShowName(devPayConfig.getName());
             vo.setIcon(UrlUtils.toAbsoluteUrl(devPayConfig.getIcon()));
 
             switch (devPayWay.getScene()) {
@@ -86,6 +88,8 @@ public class SettingPaymentServiceImpl implements ISettingPaymentService {
                     .orderByDesc(Arrays.asList("sort", "id")));
 
         for (DevPayConfig dev : devPayConfigs) {
+            dev.setShowName(dev.getName());
+            dev.setName(PaymentEnum.getPayWayMsg(dev.getWay()));
             dev.setParams(MapUtils.jsonToMap(dev.getParams().toString()));
             dev.setIcon(UrlUtils.toAbsoluteUrl(dev.getIcon()));
         }
