@@ -22,18 +22,15 @@ public class ConfigUtils {
      * @return Map<String, String>
      */
     public static Map<String, String> get(String type) {
-
-        // 读取缓存
         Map<String, String> cache = ConfigCache.get(type);
         if (!cache.isEmpty()) {
             return cache;
         }
 
         SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
-
         List<SystemConfig> configs = model.selectList(
                 new QueryWrapper<SystemConfig>()
-                        .select("id", "type", "name", "value")
+                        .select("id", "type"+"", "name", "value")
                         .eq("type", type));
 
         Map<String, String> map = new LinkedHashMap<>();
@@ -53,19 +50,17 @@ public class ConfigUtils {
      * @return String
      */
     public static String get(String type, String name) {
-        // 获取缓存配置
         String cache = ConfigCache.get(type, name);
         if (!StringUtils.isNull(cache) && !StringUtils.isEmpty(cache)) {
             return cache;
         }
 
         SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
-
         SystemConfig config = model.selectOne(
                 new QueryWrapper<SystemConfig>()
                         .select("id", "type", "name", "value")
-                        .eq("type", type)
-                        .eq("name", name));
+                        .eq("name", name)
+                        .eq("type", type));
 
         return config.getValue();
     }
@@ -79,15 +74,12 @@ public class ConfigUtils {
      * @return String
      */
     public static String get(String type, String name, String defaults) {
-
-        // 获取缓存配置
         String cache = ConfigCache.get(type, name);
         if (!StringUtils.isNull(cache) && !StringUtils.isEmpty(cache)) {
             return cache;
         }
 
         SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
-
         SystemConfig config = model.selectOne(
                 new QueryWrapper<SystemConfig>()
                         .select("id", "type", "name", "value")
@@ -110,11 +102,8 @@ public class ConfigUtils {
      * @return String
      */
     public static Map<String, String> getMap(String type, String name) {
-
-        // 获取缓存
         String cache = ConfigCache.get(type, name);
         if (!StringUtils.isNull(cache) && !StringUtils.isEmpty(cache)) {
-            System.out.println("获取到缓存了");
             return MapUtils.jsonToMap(cache);
         }
 
@@ -147,7 +136,6 @@ public class ConfigUtils {
      */
     public static void set(String type, String name, String val) {
         SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
-
         SystemConfig config = model.selectOne(
                 new QueryWrapper<SystemConfig>()
                         .eq("type", type)
@@ -167,7 +155,7 @@ public class ConfigUtils {
             model.insert(systemConfig);
         }
 
-        // 设置缓存
         ConfigCache.set();
     }
+
 }

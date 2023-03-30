@@ -39,7 +39,8 @@ public class MarketingRechargeServiceImpl implements IMarketingRechargeService {
      */
     @Override
     public void save(MarketingRechargeValidate rechargeValidate) {
-
+        ConfigUtils.set("recharge", "openRecharge", rechargeValidate.getOpenRecharge().toString());
+        ConfigUtils.set("recharge", "minRechargeMoney", rechargeValidate.getMinRechargeMoney().toString());
     }
 
 }
