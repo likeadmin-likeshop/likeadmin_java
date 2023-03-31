@@ -55,7 +55,7 @@ public class WxPayDriver {
      * @return WxPayUnifiedOrderV3Result.JsapiResult
      * @throws Exception 异常
      */
-    public static WxPayUnifiedOrderV3Result.JsapiResult unifiedOrder(PaymentRequestV3 requestV3) throws Exception {
+    public static Object unifiedOrder(PaymentRequestV3 requestV3) throws Exception {
         // 订单参数
         Integer terminal       = requestV3.getTerminal();
         String openId          = requestV3.getOpenId();
@@ -88,7 +88,10 @@ public class WxPayDriver {
         payer.setOpenid(openId);
 
         // H5平台
+        TradeTypeEnum tradeTypeEnum = TradeTypeEnum.JSAPI;
+
         if (terminal == ClientEnum.H5.getCode()) {
+            tradeTypeEnum = TradeTypeEnum.H5;
             WxPayUnifiedOrderV3Request.SceneInfo sceneInfo = new WxPayUnifiedOrderV3Request.SceneInfo();
             WxPayUnifiedOrderV3Request.H5Info h5Info = new WxPayUnifiedOrderV3Request.H5Info();
             h5Info.setType(RequestUtils.device());
@@ -100,7 +103,7 @@ public class WxPayDriver {
         // 发起订单
         WxPayService wxPayService = WxPayDriver.handler(terminal);
         wxPayUnifiedOrderV3Request.setPayer(payer);
-        return wxPayService.createOrderV3(TradeTypeEnum.JSAPI, wxPayUnifiedOrderV3Request);
+        return wxPayService.createOrderV3(tradeTypeEnum, wxPayUnifiedOrderV3Request);
     }
 
     /**

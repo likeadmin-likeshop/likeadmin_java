@@ -1,6 +1,7 @@
 package com.mdd.front.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.mdd.common.entity.RechargeOrder;
 import com.mdd.common.entity.setting.DevPayConfig;
 import com.mdd.common.entity.setting.DevPayWay;

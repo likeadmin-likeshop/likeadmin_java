@@ -50,8 +50,8 @@ public class PayController {
 
     @GetMapping("/payStatus")
     @ApiOperation(("支付状态"))
-    public AjaxResult<Object> payStatus(@Validated @NotNull(message = "from参数丢失") @RequestParam String from,
-                                        @Validated @NotNull(message = "orderId参数丢失") @RequestParam Integer orderId) {
+    public AjaxResult<PayStatusVo> payStatus(@Validated @NotNull(message = "from参数丢失") @RequestParam String from,
+                                             @Validated @NotNull(message = "orderId参数丢失") @RequestParam Integer orderId) {
         PayStatusVo vo = iPayService.payStatus(from, orderId);
         return AjaxResult.success(vo);
     }
