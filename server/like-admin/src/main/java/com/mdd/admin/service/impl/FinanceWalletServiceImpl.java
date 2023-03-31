@@ -18,6 +18,8 @@ import com.mdd.common.util.UrlUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 用户余额记录服务实现类
@@ -63,7 +65,10 @@ public class FinanceWalletServiceImpl implements IFinanceWalletService {
             vo.setAvatar(UrlUtils.toAbsoluteUrl(vo.getAvatar()));
         }
 
-        return PageResult.iPageHandle(iPage);
+        Map<String, Object> extend = new LinkedHashMap<>();
+        extend.put("changeType", LogMoneyEnum.getTypeList());
+
+        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), iPage.getRecords(), extend);
     }
 
 }

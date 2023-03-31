@@ -1,5 +1,10 @@
 package com.mdd.common.enums;
 
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 public enum LogMoneyEnum {
 
     /**
@@ -54,6 +59,22 @@ public enum LogMoneyEnum {
             }
         }
         return null;
+    }
+
+    /**
+     * 根据编码获取Msg
+     *
+     * @author fzr
+     * @return String
+     */
+    public static List<Map<Integer, String>> getTypeList(){
+        List<Map<Integer, String>> list = new LinkedList<>();
+        for(LogMoneyEnum enumItem : LogMoneyEnum.values()) {
+            Map<Integer, String> map = new LinkedHashMap<>();
+            map.put(enumItem.getCode(), enumItem.getMsg());
+            list.add(map);
+        }
+        return list;
     }
 
 }
