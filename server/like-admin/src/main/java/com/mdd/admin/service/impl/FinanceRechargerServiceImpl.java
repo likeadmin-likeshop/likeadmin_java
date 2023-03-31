@@ -87,7 +87,7 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
                 "like:sn@t.order_sn:str",
                 "=:payWay@t.pay_way:int",
                 "=:payStatus@t.pay_status:int",
-                ">=:payTime@pay_time:long"
+                "datetime:startTime-endTime@create_time:long",
         });
 
         if (StringUtils.isNotEmpty(searchValidate.getKeyword())) {

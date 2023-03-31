@@ -9,6 +9,7 @@ import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.notice.NoticeRecordMapper;
 import com.mdd.common.plugin.notice.NoticeDriver;
 import com.mdd.common.plugin.notice.vo.NoticeSmsVo;
+import com.mdd.common.plugin.wechat.WxMnpDriver;
 import com.mdd.common.util.StringUtils;
 import com.mdd.common.util.ToolUtils;
 import com.mdd.common.validator.annotation.IDMust;
@@ -55,6 +56,7 @@ public class IndexController {
     @GetMapping("/config")
     @ApiOperation(value="公共配置")
     public AjaxResult<Map<String, Object>> config() {
+        System.out.println(WxMnpDriver.mnp().getWxMaConfig());
         Map<String, Object> map = iIndexService.config();
         return AjaxResult.success(map);
     }

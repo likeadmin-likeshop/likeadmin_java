@@ -175,7 +175,6 @@ public class WxPayDriver {
         payConfig.setPrivateKeyContent(privateKey);
         payConfig.setPrivateCertContent(privateCert);
         payConfig.setUseSandboxEnv(false);
-        WxPayService wxPayService = new WxPayServiceImpl();
         wxPayService.setConfig(payConfig);
     }
 
