@@ -9,7 +9,6 @@ import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
-import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import com.mdd.common.entity.setting.DevPayConfig;
 import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.mapper.setting.DevPayConfigMapper;
@@ -175,7 +174,6 @@ public class WxPayDriver {
         payConfig.setPrivateKeyContent(privateKey);
         payConfig.setPrivateCertContent(privateCert);
         payConfig.setUseSandboxEnv(false);
-        WxPayService wxPayService = new WxPayServiceImpl();
         wxPayService.setConfig(payConfig);
     }
 

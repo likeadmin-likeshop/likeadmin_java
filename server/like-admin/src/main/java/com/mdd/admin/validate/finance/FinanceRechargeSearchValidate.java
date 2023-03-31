@@ -24,7 +24,10 @@ public class FinanceRechargeSearchValidate implements Serializable {
     @ApiModelProperty(value = "支付状态")
     private Integer payStatus;
 
-    @ApiModelProperty(value = "支付时间")
-    private Integer payTime;
+    @ApiModelProperty(value = "开始时间")
+    private Integer startTime;
+
+    @ApiModelProperty(value = "结束时间")
+    private Integer endTime;
 
 }
