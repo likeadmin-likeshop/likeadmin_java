@@ -173,7 +173,7 @@ public class PayServiceImpl implements IPayService {
                         Map<String, String> map = new LinkedHashMap<>();
                         String h5Url = result.toString();
                         String redirectUrl = RequestUtils.uri() + params.getRedirectUrl();
-                        redirectUrl += "?showCheck=true&scene="+params.getAttach()+"&orderId="+params.getOrderId();
+                        redirectUrl += "?checkPay=true&scene="+params.getAttach()+"&orderId="+params.getOrderId();
                         h5Url += "&redirect_url="+redirectUrl;
                         map.put("url", h5Url);
                         return map;
