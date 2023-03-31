@@ -1,5 +1,6 @@
 package com.mdd.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
@@ -10,12 +11,30 @@ import com.mdd.admin.vo.finance.FinanceRechargeListVo;
 import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.RechargeOrder;
+import com.mdd.common.entity.RefundLog;
+import com.mdd.common.entity.RefundRecord;
+import com.mdd.common.entity.user.User;
+import com.mdd.common.enums.LogMoneyEnum;
 import com.mdd.common.enums.PaymentEnum;
+import com.mdd.common.enums.RefundEnum;
+import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.RechargeOrderMapper;
+import com.mdd.common.mapper.RefundLogMapper;
+import com.mdd.common.mapper.RefundRecordMapper;
+import com.mdd.common.mapper.log.LogMoneyMapper;
+import com.mdd.common.mapper.user.UserMapper;
+import com.mdd.common.plugin.wechat.WxPayDriver;
+import com.mdd.common.plugin.wechat.request.RefundRequestV3;
+import com.mdd.common.util.AmountUtil;
 import com.mdd.common.util.StringUtils;
 import com.mdd.common.util.TimeUtils;
 import com.mdd.common.util.UrlUtils;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 
@@ -27,6 +46,24 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
 
     @Resource
     RechargeOrderMapper rechargeOrderMapper;
+
+    @Resource
+    UserMapper userMapper;
+
+    @Resource
+    LogMoneyMapper logMoneyMapper;
+
+    @Resource
+    RefundRecordMapper refundRecordMapper;
+
+    @Resource
+    RefundLogMapper refundLogMapper;
+
+    @Resource
+    DataSourceTransactionManager transactionManager ;
+
+    @Resource
+    TransactionDefinition transactionDefinition;
 
     /**
      * 充值记录
@@ -79,10 +116,147 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
 
     /**
      * 发起退款
+     *
+     * @author fzr
+     * @param orderId 订单ID
+     * @param adminId 管理员ID
      */
     @Override
-    public void refund() {
+    public void refund(Integer orderId, Integer adminId) {
+        RechargeOrder rechargeOrder = rechargeOrderMapper.selectById(orderId);
 
+        Assert.notNull(rechargeOrder, "充值订单不存在!");
+        if (!rechargeOrder.getPayStatus().equals(PaymentEnum.OK_PAID.getCode())) {
+            throw new OperateException("当前订单不可退款!");
+        }
+
+        if (rechargeOrder.getRefundStatus().equals(1)) {
+            throw new OperateException("订单已发起退款,退款失败请到退款记录重新退款!");
+        }
+
+        User user = userMapper.selectById(rechargeOrder.getUserId());
+        if (user.getMoney().compareTo(rechargeOrder.getOrderAmount()) < 0) {
+            throw new OperateException("退款失败:用户余额已不足退款金额!");
+        }
+
+        // 开启事务
+        TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+
+        RefundLog log = null;
+        try {
+            // 标记退款状态
+            rechargeOrder.setRefundStatus(1);
+            rechargeOrderMapper.updateById(rechargeOrder);
+
+            // 更新用户余额
+            user.setMoney(user.getMoney().subtract(rechargeOrder.getOrderAmount()));
+            userMapper.updateById(user);
+
+            // 记录余额日志
+            logMoneyMapper.dec(
+                    user.getId(),
+                    LogMoneyEnum.UM_DEC_RECHARGE.getCode(),
+                    rechargeOrder.getOrderAmount(),
+                    rechargeOrder.getId(),
+                    rechargeOrder.getOrderSn(),
+                    "充值订单退款",
+                    null
+            );
+
+            // 生成退款记录
+            String refundSn = refundRecordMapper.randMakeOrderSn("sn");
+            RefundRecord refundRecord = new RefundRecord();
+            refundRecord.setSn(refundSn);
+            refundRecord.setUserId(rechargeOrder.getUserId());
+            refundRecord.setOrderId(rechargeOrder.getId());
+            refundRecord.setOrderSn(rechargeOrder.getOrderSn());
+            refundRecord.setOrderType(RefundEnum.getOrderType(RefundEnum.ORDER_TYPE_RECHARGE.getCode()));
+            refundRecord.setOrderAmount(rechargeOrder.getOrderAmount());
+            refundRecord.setRefundAmount(rechargeOrder.getOrderAmount());
+            refundRecord.setRefundType(RefundEnum.TYPE_ADMIN.getCode());
+            refundRecord.setTransactionId(refundRecord.getTransactionId());
+            refundRecord.setRefundWay(rechargeOrder.getPayWay());
+            refundRecordMapper.insert(refundRecord);
+
+            // 生成退款日志
+            log = new RefundLog();
+            log.setSn(refundLogMapper.randMakeOrderSn("sn"));
+            log.setRecordId(refundRecord.getId());
+            log.setUserId(rechargeOrder.getUserId());
+            log.setHandleId(adminId);
+            log.setOrderAmount(rechargeOrder.getOrderAmount());
+            log.setRefundAmount(refundRecord.getRefundAmount());
+            log.setRefundStatus(RefundEnum.REFUND_ING.getCode());
+            refundLogMapper.insert(log);
+
+            // 发起退款请求
+            RefundRequestV3 requestV3 = new RefundRequestV3();
+            requestV3.setTransactionId(rechargeOrder.getTransactionId());
+            requestV3.setOutTradeNo(rechargeOrder.getOrderSn());
+            requestV3.setOutRefundNo(refundSn);
+            requestV3.setTotalAmount(AmountUtil.yuan2Fen(rechargeOrder.getOrderAmount().toString()));
+            requestV3.setRefundAmount(AmountUtil.yuan2Fen(rechargeOrder.getOrderAmount().toString()));
+            WxPayDriver.refund(requestV3);
+
+
+            log.setRefundStatus(RefundEnum.REFUND_SUCCESS.getCode());
+            refundLogMapper.updateById(log);
+            transactionManager.commit(transactionStatus);
+        } catch (Exception e) {
+            // 事务回滚
+            transactionManager.rollback(transactionStatus);
+
+            if (StringUtils.isNotNull(log)) {
+                log.setRefundStatus(RefundEnum.REFUND_ERROR.getCode());
+                refundLogMapper.updateById(log);
+            }
+            throw new OperateException(e.getMessage());
+        }
     }
 
+    /**
+     * 重新退款
+     *
+     * @author fzr
+     * @param recordId 记录ID
+     * @param adminId 管理员ID
+     */
+    @Override
+    public void refundAgain(Integer recordId, Integer adminId) {
+        // 开启事务
+        TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+
+        RefundLog log = null;
+        try {
+            RefundRecord refundRecord = refundRecordMapper.selectById(recordId);
+            RechargeOrder rechargeOrder = rechargeOrderMapper.selectById(refundRecord.getOrderId());
+
+            log = refundLogMapper.selectOne(new QueryWrapper<RefundLog>()
+                    .eq("record_id", recordId)
+                    .last("limit 1"));
+
+            log.setRefundStatus(RefundEnum.REFUND_ING.getCode());
+            refundLogMapper.updateById(log);
+
+            // 发起退款请求
+            RefundRequestV3 requestV3 = new RefundRequestV3();
+            requestV3.setTransactionId(refundRecord.getTransactionId());
+            requestV3.setOutTradeNo(refundRecord.getOrderSn());
+            requestV3.setOutRefundNo(refundRecord.getSn());
+            requestV3.setTotalAmount(AmountUtil.yuan2Fen(rechargeOrder.getOrderAmount().toString()));
+            requestV3.setRefundAmount(AmountUtil.yuan2Fen(refundRecord.getOrderAmount().toString()));
+            WxPayDriver.refund(requestV3);
+
+            log.setRefundStatus(RefundEnum.REFUND_SUCCESS.getCode());
+            refundLogMapper.updateById(log);
+            transactionManager.commit(transactionStatus);
+        } catch (Exception e) {
+            transactionManager.rollback(transactionStatus);
+            if (StringUtils.isNotNull(log)) {
+                log.setRefundStatus(RefundEnum.REFUND_ERROR.getCode());
+                refundLogMapper.updateById(log);
+            }
+            throw new OperateException(e.getMessage());
+        }
+    }
 }

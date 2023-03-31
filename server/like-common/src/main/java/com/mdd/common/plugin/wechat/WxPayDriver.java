@@ -115,18 +115,19 @@ public class WxPayDriver {
      */
     public static WxPayRefundV3Result refund(RefundRequestV3 request) throws WxPayException {
         WxPayRefundV3Request requestObj = new WxPayRefundV3Request();
-        request.setTransactionId(request.getTransactionId());
-        request.setOutTradeNo(request.getOutRefundNo());
-        request.setOutRefundNo(request.getOutRefundNo());
-        request.setReason(request.getReason());
-        request.setNotifyUrl(request.getNotifyUrl());
-        request.setSubMchid(request.getSubMchid());
-        request.setGoodsDetails(request.getGoodsDetails());
+        requestObj.setTransactionId(request.getTransactionId());
+        requestObj.setOutTradeNo(request.getOutTradeNo());
+        requestObj.setOutRefundNo(request.getOutRefundNo());
+        requestObj.setReason(request.getReason());
+        requestObj.setNotifyUrl(request.getNotifyUrl());
+        requestObj.setSubMchid(request.getSubMchid());
+        requestObj.setGoodsDetails(request.getGoodsDetails());
 
         WxPayRefundV3Request.Amount amount = new WxPayRefundV3Request.Amount();
         amount.setRefund(request.getRefundAmount());
         amount.setTotal(request.getTotalAmount());
         amount.setCurrency(StringUtils.isEmpty(request.getCurrency()) ? "CNY" : request.getCurrency());
+        requestObj.setAmount(amount);
 
         return wxPayService.refundV3(requestObj);
     }

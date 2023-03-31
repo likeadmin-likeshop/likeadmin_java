@@ -20,6 +20,22 @@ public interface IFinanceRechargerService {
      */
     PageResult<FinanceRechargeListVo> list(PageValidate pageValidate, FinanceRechargeSearchValidate searchValidate);
 
-    void refund();
+    /**
+     * 发起退款
+     *
+     * @author fzr
+     * @param orderId 订单ID
+     * @param adminId 管理员ID
+     */
+    void refund(Integer orderId, Integer adminId);
+
+    /**
+     * 重新退款
+     *
+     * @author fzr
+     * @param recordId 记录ID
+     * @param adminId 管理员ID
+     */
+    void refundAgain(Integer recordId, Integer adminId);
 
 }

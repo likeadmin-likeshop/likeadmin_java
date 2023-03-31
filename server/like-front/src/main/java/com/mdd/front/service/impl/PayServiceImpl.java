@@ -116,7 +116,7 @@ public class PayServiceImpl implements IPayService {
                 if (StringUtils.isNotNull(rechargeOrder)) {
                     orderExist = true;
                     vo.setPayStatus(rechargeOrder.getPayStatus());
-                    vo.setPayWay(PaymentEnum.getMsgByCode(rechargeOrder.getPayWay()));
+                    vo.setPayWay(PaymentEnum.getPayWayMsg(rechargeOrder.getPayWay()));
                     vo.setOrderId(rechargeOrder.getId());
                     vo.setOrderSn(rechargeOrder.getOrderSn());
                     vo.setOrderAmount(rechargeOrder.getOrderAmount());

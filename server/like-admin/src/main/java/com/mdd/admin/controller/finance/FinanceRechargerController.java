@@ -1,18 +1,18 @@
 package com.mdd.admin.controller.finance;
 
+import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.service.IFinanceRechargerService;
+import com.mdd.admin.validate.commons.IdValidate;
 import com.mdd.admin.validate.commons.PageValidate;
 import com.mdd.admin.validate.finance.FinanceRechargeSearchValidate;
 import com.mdd.admin.vo.finance.FinanceRechargeListVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -34,8 +34,19 @@ public class FinanceRechargerController {
 
     @PostMapping("/refund")
     @ApiOperation("发起退款")
-    public AjaxResult<Object> refund() {
-        iFinanceRechargerService.refund();
+    public AjaxResult<Object> refund(@Validated @RequestBody IdValidate idValidate) {
+        Integer adminId = LikeAdminThreadLocal.getAdminId();
+
+        iFinanceRechargerService.refund(idValidate.getId(), adminId);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/refundAgain")
+    @ApiModelProperty("重新退款")
+    public AjaxResult<Object> refundAgain(@Validated @RequestBody IdValidate idValidate) {
+        Integer adminId = LikeAdminThreadLocal.getAdminId();
+
+        iFinanceRechargerService.refundAgain(idValidate.getId(), adminId);
         return AjaxResult.success();
     }
 
