@@ -13,7 +13,6 @@ import com.mdd.common.mapper.setting.DevPayConfigMapper;
 import com.mdd.common.mapper.setting.DevPayWayMapper;
 import com.mdd.common.util.MapUtils;
 import com.mdd.common.util.UrlUtils;
-import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +35,12 @@ public class SettingPaymentServiceImpl implements ISettingPaymentService {
     @Resource
     DevPayWayMapper devPayWayMapper;
 
+    /**
+     * 支付配置方式
+     *
+     * @author fzr
+     * @return List<List<SettingPaymentMethodVo>>
+     */
     public List<List<SettingPaymentMethodVo>> method() {
         List<DevPayWay> lists = devPayWayMapper.selectList(null);
 
@@ -98,6 +103,27 @@ public class SettingPaymentServiceImpl implements ISettingPaymentService {
     }
 
     /**
+     * 支付配置详情
+     *
+     * @author fzr
+     * @param id 主键
+     * @return DevPayConfig
+     */
+    @Override
+    public DevPayConfig detail(Integer id) {
+        DevPayConfig devPayConfig = devPayConfigMapper.selectOne(
+                new QueryWrapper<DevPayConfig>()
+                        .eq("id", id)
+                        .last("limit 1"));
+
+        devPayConfig.setName(PaymentEnum.getPayWayMsg(devPayConfig.getWay()));
+        devPayConfig.setShowName(devPayConfig.getName());
+        devPayConfig.setParams(MapUtils.jsonToMap(devPayConfig.getParams().toString()));
+        devPayConfig.setIcon(UrlUtils.toAbsoluteUrl(devPayConfig.getIcon()));
+        return devPayConfig;
+    }
+
+    /**
      * 支付配置编辑
      *
      * @author fzr
@@ -124,6 +150,12 @@ public class SettingPaymentServiceImpl implements ISettingPaymentService {
         devPayConfigMapper.updateById(devPayConfig);
     }
 
+    /**
+     * 支付方式编辑
+     *
+     * @author fzr
+     * @param methodValidate 参数
+     */
     @Override
     @Transactional
     public void editMethod(SettingPayMethodValidate methodValidate) {

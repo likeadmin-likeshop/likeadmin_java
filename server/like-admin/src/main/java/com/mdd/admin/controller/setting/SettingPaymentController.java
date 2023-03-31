@@ -7,6 +7,7 @@ import com.mdd.admin.validate.setting.SettingPayMethodValidate;
 import com.mdd.admin.vo.setting.SettingPaymentMethodVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.entity.setting.DevPayConfig;
+import com.mdd.common.validator.annotation.IDMust;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
@@ -32,9 +33,16 @@ public class SettingPaymentController {
 
     @GetMapping("/list")
     @ApiOperation(value="支付配置列表")
-    public AjaxResult<Object> list() {
+    public AjaxResult<List<DevPayConfig>> list() {
         List<DevPayConfig> list = iSettingPaymentService.list();
         return AjaxResult.success(list);
+    }
+
+    @GetMapping("/detail")
+    @ApiOperation(value="支付配置详情")
+    public AjaxResult<Object> detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+        DevPayConfig vo = iSettingPaymentService.detail(id);
+        return AjaxResult.success(vo);
     }
 
     @PostMapping("/editConfig")
