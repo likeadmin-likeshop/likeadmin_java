@@ -62,7 +62,7 @@ public enum LogMoneyEnum {
     }
 
     /**
-     * 根据编码获取Msg
+     * 获取所有类型
      *
      * @author fzr
      * @return String
