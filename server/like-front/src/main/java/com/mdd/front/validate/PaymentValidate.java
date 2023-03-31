@@ -26,6 +26,9 @@ public class PaymentValidate implements Serializable {
     @ApiModelProperty("订单ID")
     private Integer orderId;
 
+    @ApiModelProperty(value = "重定向链接: H5端需要")
+    private String redirectUrl;
+
     @ApiModelProperty(value = "用户ID", notes = "该参数无需传递")
     private Integer userId;
 
