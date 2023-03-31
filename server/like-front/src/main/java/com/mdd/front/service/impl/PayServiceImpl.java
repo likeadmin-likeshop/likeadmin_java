@@ -7,6 +7,7 @@ import com.mdd.common.entity.setting.DevPayConfig;
 import com.mdd.common.entity.setting.DevPayWay;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
+import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.enums.LogMoneyEnum;
 import com.mdd.common.enums.PaymentEnum;
 import com.mdd.common.exception.OperateException;
@@ -28,11 +29,10 @@ import com.mdd.front.vo.pay.PayWayListVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -168,6 +168,15 @@ public class PayServiceImpl implements IPayService {
                     requestV3.setOutTradeNo(params.getOutTradeNo());
                     requestV3.setOrderAmount(params.getOrderAmount());
                     requestV3.setDescription(params.getDescription());
+                    Object result = WxPayDriver.unifiedOrder(requestV3);
+                    if (terminal == ClientEnum.H5.getCode()) {
+                        Assert.notNull(params.getRedirectUrl(), "redirectUrl参数缺失");
+                        Map<String, String> map = new LinkedHashMap<>();
+                        String h5Url = result.toString();
+                        h5Url += "&showCheck=true&scene="+params.getAttach()+"&redirect_url="+params.getRedirectUrl();
+                        map.put("url", h5Url);
+                        return map;
+                    }
                     return WxPayDriver.unifiedOrder(requestV3);
             }
         } catch (Exception e) {
