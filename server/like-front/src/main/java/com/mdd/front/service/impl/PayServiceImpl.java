@@ -1,7 +1,6 @@
 package com.mdd.front.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.mdd.common.entity.RechargeOrder;
 import com.mdd.common.entity.setting.DevPayConfig;
 import com.mdd.common.entity.setting.DevPayWay;
@@ -174,7 +173,8 @@ public class PayServiceImpl implements IPayService {
                         Map<String, String> map = new LinkedHashMap<>();
                         String h5Url = result.toString();
                         String redirectUrl = RequestUtils.uri() + params.getRedirectUrl();
-                        h5Url += "&showCheck=true&scene="+params.getAttach()+"&redirect_url="+redirectUrl;
+                        redirectUrl += "?showCheck=true&scene="+params.getAttach()+"&orderId="+params.getOrderId();
+                        h5Url += "&redirect_url="+redirectUrl;
                         map.put("url", h5Url);
                         return map;
                     }
