@@ -10,6 +10,14 @@ import com.mdd.common.core.PageResult;
  */
 public interface IFinanceWalletService {
 
+    /**
+     * 余额明细列表
+     *
+     * @author fzr
+     * @param pageValidate 分页参数
+     * @param searchValidate 搜索参数
+     * @return PageResult<FinanceWalletListVo>
+     */
     PageResult<FinanceWalletListVo> list(PageValidate pageValidate, FinanceWalletSearchValidate searchValidate);
 
 }
