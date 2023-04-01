@@ -95,7 +95,7 @@ public class SettingPaymentServiceImpl implements ISettingPaymentService {
         for (DevPayConfig dev : devPayConfigs) {
             dev.setShowName(dev.getName());
             dev.setName(PaymentEnum.getPayWayMsg(dev.getWay()));
-            dev.setParams(MapUtils.jsonToMap(dev.getParams().toString()));
+            dev.setParams(MapUtils.jsonToMap("{}"));
             dev.setIcon(UrlUtils.toAbsoluteUrl(dev.getIcon()));
         }
 
