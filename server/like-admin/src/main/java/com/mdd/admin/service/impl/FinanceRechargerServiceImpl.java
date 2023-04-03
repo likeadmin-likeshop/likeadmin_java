@@ -230,6 +230,8 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
             RefundRecord refundRecord = refundRecordMapper.selectById(recordId);
             RechargeOrder rechargeOrder = rechargeOrderMapper.selectById(refundRecord.getOrderId());
 
+            Assert.notNull(rechargeOrder, "充值订单丢失!");
+
             log = refundLogMapper.selectOne(new QueryWrapper<RefundLog>()
                     .eq("record_id", recordId)
                     .last("limit 1"));
