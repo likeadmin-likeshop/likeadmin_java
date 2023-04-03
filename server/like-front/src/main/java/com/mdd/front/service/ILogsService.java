@@ -9,6 +9,6 @@ import com.mdd.front.vo.RechargeRecordVo;
  */
 public interface ILogsService {
 
-    PageResult<RechargeRecordVo> userMoney(PageValidate pageValidate, Integer type);
+    PageResult<RechargeRecordVo> userMoney(PageValidate pageValidate, Integer userId, Integer type);
 
 }

@@ -53,8 +53,8 @@ public class WxPayConfiguration {
         String paramJson = StringUtils.isNull(config.getParams()) ? "{}" : config.getParams().toString();
         Map<String, String> params = MapUtils.jsonToMap(paramJson);
         String appId = StringUtils.isNull(systemConfig) ? "" : systemConfig.getValue();
-        String mchId = params.get("mch_id");
-        String paySignKey  = params.get("pay_sign_key");
+        String mchId = params.getOrDefault("mch_id", "");
+        String paySignKey  = params.getOrDefault("pay_sign_key", "");
         byte[] privateKey  = params.getOrDefault("private_key", "").getBytes();
         byte[] privateCert = params.getOrDefault("private_cert", "").getBytes();
 
@@ -92,8 +92,8 @@ public class WxPayConfiguration {
         String paramJson = StringUtils.isNull(config.getParams()) ? "{}" : config.getParams().toString();
         Map<String, String> params = MapUtils.jsonToMap(paramJson);
         String appId = StringUtils.isNull(systemConfig) ? "" : systemConfig.getValue();
-        String mchId = params.get("mch_id");
-        String paySignKey  = params.get("pay_sign_key");
+        String mchId = params.getOrDefault("mch_id", "");
+        String paySignKey  = params.getOrDefault("pay_sign_key", "");
         byte[] privateKey  = params.getOrDefault("private_key", "").getBytes();
         byte[] privateCert = params.getOrDefault("private_cert", "").getBytes();
 

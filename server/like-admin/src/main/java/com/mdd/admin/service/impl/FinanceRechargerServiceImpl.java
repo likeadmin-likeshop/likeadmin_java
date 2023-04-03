@@ -108,6 +108,19 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
             vo.setPayTime(TimeUtils.timestampToDate(vo.getPayTime()));
             vo.setAvatar(UrlUtils.toAbsoluteUrl(vo.getAvatar()));
             vo.setPayWay(PaymentEnum.getPayWayMsg(Integer.parseInt(vo.getPayWay())));
+
+            vo.setIsRefund(0);
+            if (vo.getPayStatus().equals(1)) {
+                RefundRecord refundRecord = refundRecordMapper.selectOne(
+                        new QueryWrapper<RefundRecord>()
+                                .eq("order_type", "recharge")
+                                .eq("order_id", vo.getId())
+                                .last("limit 1"));
+                if (StringUtils.isNotNull(refundRecord)) {
+                    vo.setIsRefund(1);
+                    vo.setRefundStatusMsg(RefundEnum.getRefundStatusMsg(refundRecord.getRefundStatus()));
+                }
+            }
         }
 
         return PageResult.iPageHandle(iPage);
@@ -141,6 +154,7 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
         // 开启事务
         TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
 
+        RefundRecord refundRecord = null;
         RefundLog log = null;
         try {
             // 标记退款状态
@@ -164,7 +178,7 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
 
             // 生成退款记录
             String refundSn = refundRecordMapper.randMakeOrderSn("sn");
-            RefundRecord refundRecord = new RefundRecord();
+            refundRecord = new RefundRecord();
             refundRecord.setSn(refundSn);
             refundRecord.setUserId(rechargeOrder.getUserId());
             refundRecord.setOrderId(rechargeOrder.getId());
@@ -197,13 +211,22 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
             requestV3.setRefundAmount(AmountUtil.yuan2Fen(rechargeOrder.getOrderAmount().toString()));
             WxPayDriver.refund(requestV3);
 
+            // 退款记录更新
+            refundRecord.setRefundStatus(RefundEnum.REFUND_SUCCESS.getCode());
+            refundRecordMapper.updateById(refundRecord);
 
+            // 退款日志更新
             log.setRefundStatus(RefundEnum.REFUND_SUCCESS.getCode());
             refundLogMapper.updateById(log);
             transactionManager.commit(transactionStatus);
         } catch (Exception e) {
             // 事务回滚
             transactionManager.rollback(transactionStatus);
+
+            if (StringUtils.isNotNull(refundRecord)) {
+                refundRecord.setRefundStatus(RefundEnum.REFUND_ERROR.getCode());
+                refundRecordMapper.updateById(refundRecord);
+            }
 
             if (StringUtils.isNotNull(log)) {
                 log.setRefundStatus(RefundEnum.REFUND_ERROR.getCode());
@@ -229,6 +252,8 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
         try {
             RefundRecord refundRecord = refundRecordMapper.selectById(recordId);
             RechargeOrder rechargeOrder = rechargeOrderMapper.selectById(refundRecord.getOrderId());
+
+            Assert.notNull(rechargeOrder, "充值订单丢失!");
 
             log = refundLogMapper.selectOne(new QueryWrapper<RefundLog>()
                     .eq("record_id", recordId)

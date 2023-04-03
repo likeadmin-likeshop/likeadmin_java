@@ -149,6 +149,34 @@ CREATE TABLE `la_decorate_tabbar`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '底部装修表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for la_dev_pay_config
+-- ----------------------------
+DROP TABLE IF EXISTS `la_dev_pay_config`;
+CREATE TABLE `la_dev_pay_config`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '模版名称',
+  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '渠道图标',
+  `way` tinyint(1) NOT NULL COMMENT '支付方式: [1=余额支付, 2=微信支付, 3=支付宝支付]',
+  `sort` int(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序编号',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '备注信息',
+  `params` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '配置参数',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付配置表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for la_dev_pay_way
+-- ----------------------------
+DROP TABLE IF EXISTS `la_dev_pay_way`;
+CREATE TABLE `la_dev_pay_way`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `pay_config_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '支付配置ID',
+  `scene` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '场景编码: [1=微信小程序, 2=微信公众号, 3=H5, 4=PC, 5=APP]',
+  `is_default` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '默认支付: [0=否的, 1=是的]',
+  `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '方式状态: [0=关闭, 1=开启]',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付方式表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for la_dict_data
 -- ----------------------------
 DROP TABLE IF EXISTS `la_dict_data`;
@@ -255,6 +283,28 @@ CREATE TABLE `la_hot_search`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '热门搜索配置表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for la_log_money
+-- ----------------------------
+DROP TABLE IF EXISTS `la_log_money`;
+CREATE TABLE `la_log_money`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `sn` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '流水号',
+  `user_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户ID',
+  `source_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '关联ID',
+  `source_sn` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '关联单号',
+  `change_type` smallint(5) UNSIGNED NOT NULL COMMENT '变动类型',
+  `change_amount` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '变动的数量',
+  `left_amount` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '变动后数量',
+  `action` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '变动的动作: 1=增加, 2=减少',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '备注信息',
+  `extra` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '预留字段',
+  `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '账户变动日志表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for la_notice_record
 -- ----------------------------
 DROP TABLE IF EXISTS `la_notice_record`;
@@ -322,6 +372,69 @@ CREATE TABLE `la_official_reply`  (
   `delete_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '公众号的回复表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for la_recharge_order
+-- ----------------------------
+DROP TABLE IF EXISTS `la_recharge_order`;
+CREATE TABLE `la_recharge_order`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户ID',
+  `order_sn` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '订单编号',
+  `pay_sn` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '支付编号',
+  `pay_way` tinyint(2) UNSIGNED NOT NULL DEFAULT 2 COMMENT '支付方式: [2=微信支付, 3=支付宝支付]',
+  `pay_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '支付状态: [0=待支付, 1=已支付]',
+  `pay_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '支付时间',
+  `order_amount` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '充值金额',
+  `order_terminal` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '下单终端',
+  `transaction_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '交易流水',
+  `refund_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '退款状态: [0=未退款 , 1=已退款]',
+  `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '充值余额订单表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for la_refund_log
+-- ----------------------------
+DROP TABLE IF EXISTS `la_refund_log`;
+CREATE TABLE `la_refund_log`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `sn` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编号',
+  `record_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '退款记录ID',
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '关联用户ID',
+  `handle_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '处理管理ID',
+  `order_amount` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '总应付的金额',
+  `refund_amount` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '本次退款金额',
+  `refund_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '退款状态: [0=退款中, 1=退款成功, 2=退款失败]',
+  `refund_msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '退款信息',
+  `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '退款日志表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for la_refund_record
+-- ----------------------------
+DROP TABLE IF EXISTS `la_refund_record`;
+CREATE TABLE `la_refund_record`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `sn` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '退款编号',
+  `user_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '关联用户ID',
+  `order_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '来源订单ID',
+  `order_sn` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '来源单号SN',
+  `order_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'order' COMMENT '订单类型: [order=商品订单, recharge=充值订单]',
+  `order_amount` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '总应付款金额',
+  `refund_amount` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '本次退款金额',
+  `transaction_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '平台交易流水号',
+  `refund_way` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '退款方式: 1=线上退款, 2=线下退款',
+  `refund_type` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '退款类型: 1=后台退款',
+  `refund_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '退款状态: 0=退款中, 1=退款成功, 2=退款失败',
+  `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '退款记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for la_system_auth_admin
@@ -489,22 +602,6 @@ CREATE TABLE `la_system_log_operate`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统操作日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for la_test_category
--- ----------------------------
-DROP TABLE IF EXISTS `la_test_category`;
-CREATE TABLE `la_test_category`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '名称',
-  `sort` smallint(5) UNSIGNED NOT NULL DEFAULT 50 COMMENT '排序',
-  `is_show` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '是否显示: 0=否, 1=是',
-  `is_delete` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除: 0=否, 1=是',
-  `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '创建时间',
-  `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
-  `delete_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '删除时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章分类表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
 -- Table structure for la_user
 -- ----------------------------
 DROP TABLE IF EXISTS `la_user`;
@@ -517,11 +614,13 @@ CREATE TABLE `la_user`  (
   `username` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户账号',
   `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户密码',
   `mobile` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户电话',
+  `money` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '用户钱包',
   `salt` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '加密盐巴',
   `sex` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户性别: [1=男, 2=女]',
   `channel` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '注册渠道: [1=微信小程序, 2=微信公众号, 3=手机H5, 4=电脑PC, 5=苹果APP, 6=安卓APP]',
   `is_disable` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否禁用: [0=否, 1=是]',
   `is_delete` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除: [0=否, 1=是]',
+  `is_new` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否是新注册用户: [1-是, 0-否]',
   `last_login_ip` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '最后登录IP',
   `last_login_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '最后登录时间',
   `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
@@ -582,7 +681,7 @@ INSERT INTO `la_system_config` VALUES (23, 'website', 'pcDesc', '', 1678963763, 
 INSERT INTO `la_system_config` VALUES (24, 'website', 'pcKeywords', '', 1678963763, 1678963817);
 INSERT INTO `la_system_config` VALUES (25, 'protocol', 'service', '{\"name\":\"服务协议\",\"content\":\"\"}', 1660620367, 1660620367);
 INSERT INTO `la_system_config` VALUES (26, 'protocol', 'privacy', '{\"name\":\"隐私协议\",\"content\":\"\"}', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (27, 'tabbar', 'style', '{\"defaultColor\":\"#4A5DFF\",\"selectedColor\":\"#EA5455\"}', 1660620367, 1662544900);
+INSERT INTO `la_system_config` VALUES (27, 'tabbar', 'style', '{\"defaultColor\":\"#999999\",\"selectedColor\":\"#4173ff\"}', 1660620367, 1662544900);
 INSERT INTO `la_system_config` VALUES (28, 'search', 'isHotSearch', '0', 1660620367, 1662546997);
 INSERT INTO `la_system_config` VALUES (30, 'h5_channel', 'status', '1', 1660620367, 1660620367);
 INSERT INTO `la_system_config` VALUES (31, 'h5_channel', 'close', '0', 1660620367, 1660620367);
@@ -610,6 +709,22 @@ INSERT INTO `la_system_config` VALUES (72, 'login', 'openAgreement', '1', 166062
 INSERT INTO `la_system_config` VALUES (73, 'login', 'openOtherAuth', '1', 1660620367, 1662538771);
 INSERT INTO `la_system_config` VALUES (74, 'login', 'autoLoginAuth', '1,2', 1660620367, 1662538771);
 INSERT INTO `la_system_config` VALUES (80, 'user', 'defaultAvatar', '/api/static/default_avatar.png', 1660620367, 1662535156);
+INSERT INTO `la_system_config` VALUES (200, 'recharge', 'openRecharge', '1', 1680160044, 1680166680);
+INSERT INTO `la_system_config` VALUES (201, 'recharge', 'minRechargeMoney', '0.01', 1680160044, 1680166680);
+COMMIT;
+
+BEGIN;
+INSERT INTO `la_dev_pay_config` VALUES (1, '余额支付', '/api/static/balance_pay.png', 1, 0, '余额支付', '{}');
+INSERT INTO `la_dev_pay_config` VALUES (2, '微信支付', '/api/static/wechat_pay.png', 2, 0, '微信支付', '{}');
+COMMIT;
+
+BEGIN;
+INSERT INTO `la_dev_pay_way` VALUES (1, 1, 1, 0, 1);
+INSERT INTO `la_dev_pay_way` VALUES (2, 2, 1, 1, 1);
+INSERT INTO `la_dev_pay_way` VALUES (3, 1, 2, 0, 1);
+INSERT INTO `la_dev_pay_way` VALUES (4, 2, 2, 1, 1);
+INSERT INTO `la_dev_pay_way` VALUES (5, 1, 3, 0, 1);
+INSERT INTO `la_dev_pay_way` VALUES (6, 2, 3, 1, 1);
 COMMIT;
 
 BEGIN;
@@ -657,7 +772,7 @@ INSERT INTO `la_system_auth_menu` VALUES (111, 110, 'A', '角色详情', '', 0, 
 INSERT INTO `la_system_auth_menu` VALUES (112, 110, 'A', '角色新增', '', 0, 'system:role:add', '', '', '', '', 0, 1, 0, 1650341765, 1650341765);
 INSERT INTO `la_system_auth_menu` VALUES (113, 110, 'A', '角色编辑', '', 0, 'system:role:edit', '', '', '', '', 0, 1, 0, 1650341765, 1650341765);
 INSERT INTO `la_system_auth_menu` VALUES (114, 110, 'A', '角色删除', '', 0, 'system:role:del', '', '', '', '', 0, 1, 0, 1650341765, 1650341765);
-INSERT INTO `la_system_auth_menu` VALUES (120, 100, 'C', '菜单管理', 'el-icon-Operation', 0, 'system:menu:list', 'menu', 'permission/menu/index', '', '', 1, 1, 0, 1650341765, 1663301388);
+INSERT INTO `la_system_auth_menu` VALUES (120, 100, 'C', '菜单管理', 'el-icon-Operation', 0, 'system:menu:list', 'menu', 'permission/menu/index', '', '', 1, 1, 0, 1650341765, 1680340798);
 INSERT INTO `la_system_auth_menu` VALUES (121, 120, 'A', '菜单详情', '', 0, 'system:menu:detail', '', '', '', '', 0, 1, 0, 1650341765, 1650341765);
 INSERT INTO `la_system_auth_menu` VALUES (122, 120, 'A', '菜单新增', '', 0, 'system:menu:add', '', '', '', '', 0, 1, 0, 1650341765, 1650341765);
 INSERT INTO `la_system_auth_menu` VALUES (123, 120, 'A', '菜单编辑', '', 0, 'system:menu:edit', '', '', '', '', 0, 1, 0, 1650341765, 1650341765);
@@ -737,7 +852,7 @@ INSERT INTO `la_system_auth_menu` VALUES (716, 705, 'A', '栏目详情', '', 0, 
 INSERT INTO `la_system_auth_menu` VALUES (717, 0, 'M', '装修管理', 'el-icon-Brush', 47, '', 'decoration', '', '', '', 0, 1, 0, 1661845634, 1664416675);
 INSERT INTO `la_system_auth_menu` VALUES (718, 717, 'C', '页面装修', 'el-icon-CopyDocument', 0, 'decorate:pages:detail', 'pages', 'decoration/pages/index', '', '', 0, 1, 0, 1661845678, 1663294313);
 INSERT INTO `la_system_auth_menu` VALUES (719, 717, 'C', '底部导航', 'el-icon-Position', 0, 'decorate:tabbar:detail', 'tabbar', 'decoration/tabbar', '', '', 0, 1, 0, 1661845811, 1663294354);
-INSERT INTO `la_system_auth_menu` VALUES (720, 500, 'M', '消息通知', 'el-icon-Message', 9, '', 'message', '', '', '', 0, 1, 0, 1661848742, 1662626364);
+INSERT INTO `la_system_auth_menu` VALUES (720, 794, 'M', '消息通知', 'el-icon-Message', 9, '', 'message', '', '', '', 0, 1, 0, 1661848742, 1680157682);
 INSERT INTO `la_system_auth_menu` VALUES (721, 720, 'C', '通知设置', '', 0, 'setting:notice:list', 'notice', 'message/notice/index', '', '', 0, 1, 0, 1661848772, 1662638112);
 INSERT INTO `la_system_auth_menu` VALUES (722, 720, 'C', '通知详情', '', 0, 'setting:notice:detail', 'notice/edit', 'message/notice/edit', '/setting/message/notice', '', 0, 0, 0, 1661848944, 1663142853);
 INSERT INTO `la_system_auth_menu` VALUES (723, 720, 'C', '短信设置', '', 0, 'setting:sms:list', 'short_letter', 'message/short_letter/index', '', '', 0, 1, 0, 1661848995, 1662638165);
@@ -800,4 +915,19 @@ INSERT INTO `la_system_auth_menu` VALUES (785, 781, 'C', '文件选择器', '', 
 INSERT INTO `la_system_auth_menu` VALUES (786, 781, 'C', '链接选择器', '', 0, '', 'link', 'template/component/link', '', '', 0, 1, 0, 1673319997, 1673319997);
 INSERT INTO `la_system_auth_menu` VALUES (787, 781, 'C', '超出自动打点', '', 0, '', 'overflow', 'template/component/overflow', '', '', 0, 1, 0, 1673320021, 1673320021);
 INSERT INTO `la_system_auth_menu` VALUES (788, 781, 'C', '悬浮input', '', 0, '', 'popover_input', 'template/component/popover_input', '', '', 0, 1, 0, 1673320046, 1673320046);
+INSERT INTO `la_system_auth_menu` VALUES (789, 500, 'M', '支付设置', 'local-icon-fukuan', 0, '', 'pay', '', '', '', 0, 1, 0, 1680082358, 1680082358);
+INSERT INTO `la_system_auth_menu` VALUES (790, 789, 'C', '支付方式', '', 0, 'setting:payment:method', 'method', 'setting/pay/method/index', '', '', 0, 1, 0, 1680082434, 1680082434);
+INSERT INTO `la_system_auth_menu` VALUES (791, 790, 'A', '保存', '', 0, 'setting:payment:editMethod', '', '', '', '', 0, 1, 0, 1680082473, 1680082473);
+INSERT INTO `la_system_auth_menu` VALUES (792, 789, 'C', '支付配置', '', 0, 'setting:payment:list', 'config', 'setting/pay/config/index', '', '', 0, 1, 0, 1680083681, 1680083681);
+INSERT INTO `la_system_auth_menu` VALUES (793, 792, 'A', '配置', '', 0, 'setting:payment:editConfig', '', '', '', '', 0, 1, 0, 1680083734, 1680083734);
+INSERT INTO `la_system_auth_menu` VALUES (794, 0, 'M', '应用管理', 'el-icon-Postcard', 0, '', 'app', '', '', '', 0, 1, 0, 1680157467, 1680157467);
+INSERT INTO `la_system_auth_menu` VALUES (795, 794, 'C', '用户充值', 'local-icon-caiwu', 0, 'marketing:recharge:detail', 'recharge', 'app/recharge/index', '', '', 0, 1, 0, 1680158031, 1680158031);
+INSERT INTO `la_system_auth_menu` VALUES (796, 795, 'A', '保存', '', 0, 'marketing:recharge:save', '', '', '', '', 0, 1, 0, 1680158056, 1680158056);
+INSERT INTO `la_system_auth_menu` VALUES (797, 0, 'M', '财务管理', 'local-icon-user_gaikuang', 0, '', 'finance', '', '', '', 0, 1, 0, 1680169445, 1680169445);
+INSERT INTO `la_system_auth_menu` VALUES (798, 797, 'C', '充值记录', 'el-icon-Wallet', 0, 'finance:recharger:list', 'recharge_record', 'finance/recharge_record', '', '', 0, 1, 0, 1680169574, 1680169574);
+INSERT INTO `la_system_auth_menu` VALUES (799, 797, 'C', '余额明细', 'local-icon-qianbao', 0, 'finance:wallet:list', 'balance_details', 'finance/balance_details', '', '', 0, 1, 0, 1680169658, 1680169658);
+INSERT INTO `la_system_auth_menu` VALUES (800, 797, 'C', '退款记录', 'local-icon-heshoujilu', 0, 'finance:refund:list', 'refund_record', 'refund_record', '', '', 0, 1, 0, 1680171454, 1680171454);
+INSERT INTO `la_system_auth_menu` VALUES (801, 798, 'A', '退款', '', 0, 'finance:recharger:refund', '', '', '', '', 0, 1, 0, 1680486780, 1680486780);
+INSERT INTO `la_system_auth_menu` VALUES (802, 800, 'A', '退款日志', '', 0, 'finance:refund:log', '', '', '', '', 0, 1, 0, 1680486899, 1680486899);
+INSERT INTO `la_system_auth_menu` VALUES (803, 800, 'A', '重新退款', '', 0, 'finance:recharger:refundAgain', '', '', '', '', 0, 1, 0, 1680486916, 1680486916);
 COMMIT;
