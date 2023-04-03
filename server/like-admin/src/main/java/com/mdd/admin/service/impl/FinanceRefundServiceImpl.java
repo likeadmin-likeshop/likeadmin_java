@@ -84,6 +84,13 @@ public class FinanceRefundServiceImpl implements IFinanceRefundService {
         extend.put("success", refundRecordMapper.selectCount(new QueryWrapper<RefundRecord>().eq("refund_status", 1)));
         extend.put("error", refundRecordMapper.selectCount(new QueryWrapper<RefundRecord>().eq("refund_status", 2)));
 
+        Map<String, Object> stat = new LinkedHashMap<>();
+        stat.put("totalRefundAmount", refundRecordMapper.sum("order_amount", new QueryWrapper<>()));
+        stat.put("ingRefundAmount", refundRecordMapper.sum("order_amount", new QueryWrapper<RefundRecord>().eq("refund_status", 0)));
+        stat.put("successRefundAmount", refundRecordMapper.sum("order_amount", new QueryWrapper<RefundRecord>().eq("refund_status", 1)));
+        stat.put("errorRefundAmount", refundRecordMapper.sum("order_amount", new QueryWrapper<RefundRecord>().eq("refund_status", 2)));
+        extend.put("stat", stat);
+
         return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), iPage.getRecords(), extend);
     }
 
