@@ -1,1 +1,0 @@
-import{r as t}from"./index.0abf9e5c.js";function s(){return t.get({url:"/setting/payment/method"})}function r(e){return t.post({url:"/setting/payment/editMethod",params:e})}function a(){return t.get({url:"/setting/payment/list"})}function i(e){return t.post({url:"/setting/payment/editConfig",params:e})}export{s as a,r as b,a as g,i as s};
