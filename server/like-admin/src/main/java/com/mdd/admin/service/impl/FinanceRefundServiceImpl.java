@@ -15,6 +15,7 @@ import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.RechargeOrder;
 import com.mdd.common.entity.RefundLog;
 import com.mdd.common.entity.RefundRecord;
+import com.mdd.common.enums.RefundEnum;
 import com.mdd.common.mapper.RefundLogMapper;
 import com.mdd.common.mapper.RefundRecordMapper;
 import com.mdd.common.util.StringUtils;
@@ -77,6 +78,12 @@ public class FinanceRefundServiceImpl implements IFinanceRefundService {
                 new Page<>(pageNo, pageSize),
                 FinanceRefundListVo.class,
                 mpjQueryWrapper);
+
+        for (FinanceRefundListVo vo : iPage.getRecords()) {
+            vo.setRefundTypeMsg(RefundEnum.getRefundTypeMsg(vo.getRefundType()));
+            vo.setRefundStatusMsg(RefundEnum.getRefundStatusMsg(vo.getRefundStatus()));
+            vo.setCreateTime(TimeUtils.timestampToDate(vo.getCreateTime()));
+        }
 
         Map<String, Object> extend = new LinkedHashMap<>();
         extend.put("total", refundRecordMapper.selectCount(null));

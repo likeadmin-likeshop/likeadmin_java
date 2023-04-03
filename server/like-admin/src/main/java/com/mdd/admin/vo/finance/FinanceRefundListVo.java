@@ -35,10 +35,16 @@ public class FinanceRefundListVo implements Serializable {
     private BigDecimal refundAmount;
 
     @ApiModelProperty("退款类型: 1=后台退款")
-    private String refundType;
+    private Integer refundType;
 
-    @ApiModelProperty("款状态: 0=退款中, 1=退款成功, 2=退款失败")
+    @ApiModelProperty("退款状态: 0=退款中, 1=退款成功, 2=退款失败")
     private Integer refundStatus;
+
+    @ApiModelProperty("退款类型描述")
+    private String refundTypeMsg;
+
+    @ApiModelProperty("退款状态描述")
+    private String refundStatusMsg;
 
     @ApiModelProperty("记录时间")
     private String createTime;

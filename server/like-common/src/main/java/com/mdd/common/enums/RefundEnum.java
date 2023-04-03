@@ -45,10 +45,10 @@ public enum RefundEnum {
     }
 
     /**
-     * 根据编码获取Msg
+     * 订单类型标识
      *
      * @author fzr
-     * @param code 类型
+     * @param code 编码
      * @return String
      */
     public static String getOrderType(Integer code){
@@ -57,6 +57,40 @@ public enum RefundEnum {
                 return "order";
             case 2:
                 return "recharge";
+        }
+        return "未知";
+    }
+
+    /**
+     * 退款类型描述
+     *
+     * @author fzr
+     * @param code 编码
+     * @return String
+     */
+    public static String getRefundTypeMsg(Integer code)
+    {
+        if (code == 1) {
+            return RefundEnum.TYPE_ADMIN.getMsg();
+        }
+        return "未知";
+    }
+
+    /**
+     * 退款状态描述
+     *
+     * @author fzr
+     * @param code 编码
+     * @return String
+     */
+    public static String getRefundStatusMsg(Integer code){
+        switch (code) {
+            case 0:
+                return RefundEnum.REFUND_ING.getMsg();
+            case 1:
+                return RefundEnum.REFUND_SUCCESS.getMsg();
+            case 2:
+                return RefundEnum.REFUND_ERROR.getMsg();
         }
         return "未知";
     }
