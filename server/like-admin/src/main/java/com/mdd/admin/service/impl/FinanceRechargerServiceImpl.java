@@ -108,6 +108,17 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
             vo.setPayTime(TimeUtils.timestampToDate(vo.getPayTime()));
             vo.setAvatar(UrlUtils.toAbsoluteUrl(vo.getAvatar()));
             vo.setPayWay(PaymentEnum.getPayWayMsg(Integer.parseInt(vo.getPayWay())));
+
+            if (vo.getPayStatus().equals(1)) {
+                RefundRecord refundRecord = refundRecordMapper.selectOne(
+                        new QueryWrapper<RefundRecord>()
+                                .eq("order_type", "recharge")
+                                .eq("order_id", vo.getId())
+                                .last("limit 1"));
+                if (StringUtils.isNotNull(refundRecord)) {
+                    vo.setRefundStatusMsg(RefundEnum.getRefundStatusMsg(refundRecord.getRefundStatus()));
+                }
+            }
         }
 
         return PageResult.iPageHandle(iPage);

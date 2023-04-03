@@ -34,6 +34,12 @@ public class FinanceRechargeListVo implements Serializable {
     @ApiModelProperty("支付状态: [0=待支付, 1=已支付]")
     private Integer payStatus;
 
+    @ApiModelProperty("退款状态: [0=未退款 , 1=已退款]")
+    private Integer refundStatus;
+
+    @ApiModelProperty("退款状态描述")
+    private String refundStatusMsg;
+
     @ApiModelProperty("支付金额")
     private BigDecimal orderAmount;
 
