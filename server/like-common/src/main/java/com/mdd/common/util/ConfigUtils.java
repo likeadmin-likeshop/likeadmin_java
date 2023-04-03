@@ -38,6 +38,7 @@ public class ConfigUtils {
             map.put(config.getName(), config.getValue());
         }
 
+        ConfigCache.set();
         return map;
     }
 
@@ -62,6 +63,7 @@ public class ConfigUtils {
                         .eq("name", name)
                         .eq("type", type));
 
+        ConfigCache.set();
         return config.getValue();
     }
 
@@ -90,6 +92,7 @@ public class ConfigUtils {
             return defaults;
         }
 
+        ConfigCache.set();
         return config.getValue();
     }
 
@@ -123,6 +126,7 @@ public class ConfigUtils {
             return new LinkedHashMap<>();
         }
 
+        ConfigCache.set();
         return MapUtils.jsonToMap(config.getValue());
     }
 
