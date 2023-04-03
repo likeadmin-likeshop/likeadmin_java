@@ -152,6 +152,7 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
         // 开启事务
         TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
 
+        RefundRecord refundRecord = null;
         RefundLog log = null;
         try {
             // 标记退款状态
@@ -175,7 +176,7 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
 
             // 生成退款记录
             String refundSn = refundRecordMapper.randMakeOrderSn("sn");
-            RefundRecord refundRecord = new RefundRecord();
+            refundRecord = new RefundRecord();
             refundRecord.setSn(refundSn);
             refundRecord.setUserId(rechargeOrder.getUserId());
             refundRecord.setOrderId(rechargeOrder.getId());
@@ -208,13 +209,22 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
             requestV3.setRefundAmount(AmountUtil.yuan2Fen(rechargeOrder.getOrderAmount().toString()));
             WxPayDriver.refund(requestV3);
 
+            // 退款记录更新
+            refundRecord.setRefundStatus(RefundEnum.REFUND_SUCCESS.getCode());
+            refundRecordMapper.updateById(refundRecord);
 
+            // 退款日志更新
             log.setRefundStatus(RefundEnum.REFUND_SUCCESS.getCode());
             refundLogMapper.updateById(log);
             transactionManager.commit(transactionStatus);
         } catch (Exception e) {
             // 事务回滚
             transactionManager.rollback(transactionStatus);
+
+            if (StringUtils.isNotNull(refundRecord)) {
+                refundRecord.setRefundStatus(RefundEnum.REFUND_ERROR.getCode());
+                refundRecordMapper.updateById(refundRecord);
+            }
 
             if (StringUtils.isNotNull(log)) {
                 log.setRefundStatus(RefundEnum.REFUND_ERROR.getCode());
