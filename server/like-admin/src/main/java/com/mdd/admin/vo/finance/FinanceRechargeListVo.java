@@ -37,6 +37,9 @@ public class FinanceRechargeListVo implements Serializable {
     @ApiModelProperty("退款状态: [0=未退款 , 1=已退款]")
     private Integer refundStatus;
 
+    @ApiModelProperty("是否有退款: [0=否 , 1=是]")
+    private Integer isRefund;
+
     @ApiModelProperty("退款状态描述")
     private String refundStatusMsg;
 

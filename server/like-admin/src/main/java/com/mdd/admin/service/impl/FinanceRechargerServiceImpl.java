@@ -109,6 +109,7 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
             vo.setAvatar(UrlUtils.toAbsoluteUrl(vo.getAvatar()));
             vo.setPayWay(PaymentEnum.getPayWayMsg(Integer.parseInt(vo.getPayWay())));
 
+            vo.setIsRefund(0);
             if (vo.getPayStatus().equals(1)) {
                 RefundRecord refundRecord = refundRecordMapper.selectOne(
                         new QueryWrapper<RefundRecord>()
@@ -116,6 +117,7 @@ public class FinanceRechargerServiceImpl implements IFinanceRechargerService {
                                 .eq("order_id", vo.getId())
                                 .last("limit 1"));
                 if (StringUtils.isNotNull(refundRecord)) {
+                    vo.setIsRefund(1);
                     vo.setRefundStatusMsg(RefundEnum.getRefundStatusMsg(refundRecord.getRefundStatus()));
                 }
             }
