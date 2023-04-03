@@ -95,6 +95,33 @@ export function objectToQuery(params: Record<string, any>): string {
 }
 
 /**
+ * @description 格式化输出价格
+ * @param  { string } price 价格
+ * @param  { string } take 小数点操作
+ * @param  { string } prec 小数位补
+ */
+export function formatPrice({ price, take = 'all', prec = undefined }: any) {
+    let [integer, decimals = ''] = (price + '').split('.')
+
+    // 小数位补
+    if (prec !== undefined) {
+        const LEN = decimals.length
+        for (let i = prec - LEN; i > 0; --i) decimals += '0'
+        decimals = decimals.substr(0, prec)
+    }
+
+    switch (take) {
+        case 'int':
+            return integer
+        case 'dec':
+            return decimals
+        case 'all':
+            return integer + '.' + decimals
+    }
+}
+
+
+/**
  * @description 组合异步任务
  * @param  { string } task 异步任务
  */

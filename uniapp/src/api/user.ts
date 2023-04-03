@@ -41,3 +41,8 @@ export function oaAuthBind(data: any) {
 export function updateUser(data: Record<string, any>, header: any) {
     return request.post({ url: '/user/updateUser', data, header })
 }
+
+//余额明细
+export function accountLog(data: any) {
+    return request.get({ url: '/logs/userMoney', data })
+}

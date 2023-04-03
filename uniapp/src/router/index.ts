@@ -1,7 +1,12 @@
+import { ClientEnum } from '@/enums/appEnums'
 import { BACK_URL } from '@/enums/cacheEnums'
 import { useUserStore } from '@/stores/user'
 import { getToken } from '@/utils/auth'
 import cache from '@/utils/cache'
+import { client } from '@/utils/client'
+// #ifdef H5
+import wechatOa from '@/utils/wechat'
+// #endif
 import { routes } from './routes'
 
 const whiteList = ['register', 'login', 'forget_pwd']
@@ -41,6 +46,11 @@ export function setupRouter() {
             cache.set(BACK_URL, from.fullPath)
         }
     })
-
+    setTimeout(async () => {
+        if (client == ClientEnum.OA_WEIXIN) {
+            // jssdk配置
+            await wechatOa.config()
+        }
+    })
     // #endif
 }

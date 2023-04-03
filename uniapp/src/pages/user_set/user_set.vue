@@ -145,13 +145,14 @@ const bindWechat = async () => {
         await mnpAuthBind({
             code: code
         })
+
+        uni.$u.toast('绑定成功')
         //#endif
         // #ifdef H5
         if (isWeixin.value) {
             wechatOa.getUrl()
         }
         // #endif
-        uni.$u.toast('绑定成功')
         await userStore.getUser()
         uni.hideLoading()
     } catch (e) {

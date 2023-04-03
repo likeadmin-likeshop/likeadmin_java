@@ -1,3 +1,4 @@
+import { isFunction } from 'lodash'
 import { reactive, toRaw } from 'vue'
 
 // 分页钩子函数
@@ -7,10 +8,20 @@ interface Options {
     fetchFun: (_arg: any) => Promise<any>
     params?: Record<any, any>
     firstLoading?: boolean
+    beforeRequest?(params: Record<any, any>): Record<any, any>
+    afterRequest?(res: Record<any, any>): void
 }
 
 export function usePaging(options: Options) {
-    const { page = 1, size = 15, fetchFun, params = {}, firstLoading = false } = options
+    const {
+        page = 1,
+        size = 15,
+        fetchFun,
+        params = {},
+        firstLoading = false,
+        beforeRequest,
+        afterRequest
+    } = options
     // 记录分页初始参数
     const paramsInit: Record<any, any> = Object.assign({}, toRaw(params))
     // 分页数据
@@ -19,19 +30,28 @@ export function usePaging(options: Options) {
         size,
         loading: firstLoading,
         count: 0,
-        lists: [] as any[]
+        lists: [] as any[],
+        extend: {} as Record<any, any>
     })
     // 请求分页接口
     const getLists = () => {
         pager.loading = true
+        let requestParams = params
+        if (isFunction(beforeRequest)) {
+            requestParams = beforeRequest(params)
+        }
         return fetchFun({
             pageNo: pager.page,
             pageSize: pager.size,
-            ...params
+            ...requestParams
         })
             .then((res: any) => {
                 pager.count = res?.count
                 pager.lists = res?.lists
+                pager.extend = res?.extend
+                if (isFunction(afterRequest)) {
+                    afterRequest(res)
+                }
                 return Promise.resolve(res)
             })
             .catch((err: any) => {
