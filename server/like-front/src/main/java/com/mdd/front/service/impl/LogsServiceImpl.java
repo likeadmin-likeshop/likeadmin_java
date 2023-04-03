@@ -24,7 +24,7 @@ public class LogsServiceImpl implements ILogsService {
     LogMoneyMapper logMoneyMapper;
 
     @Override
-    public PageResult<RechargeRecordVo> userMoney(PageValidate pageValidate, Integer type) {
+    public PageResult<RechargeRecordVo> userMoney(PageValidate pageValidate, Integer userId, Integer type) {
         Integer pageNo   = pageValidate.getPageNo();
         Integer pageSize = pageValidate.getPageSize();
 
@@ -44,7 +44,7 @@ public class LogsServiceImpl implements ILogsService {
             vo.setAction(logMoney.getAction());
             vo.setOrderAmount(logMoney.getChangeAmount());
             vo.setTips(LogMoneyEnum.getMsgByCode(logMoney.getChangeType()));
-            vo.setCreateTime(TimeUtils.timestampToDate(vo.getCreateTime()));
+            vo.setCreateTime(TimeUtils.timestampToDate(logMoney.getCreateTime()));
             list.add(vo);
         }
 
