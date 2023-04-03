@@ -12,6 +12,9 @@ public class FinanceRefundSearchValidate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty("筛选类型: -1=全部, 0=退款中, 1=退款成功, 2=退款失败")
+    private Integer type;
+
     @ApiModelProperty("用户信息")
     private String keyword;
 
