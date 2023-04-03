@@ -67,14 +67,12 @@ public enum LogMoneyEnum {
      * @author fzr
      * @return String
      */
-    public static List<Map<Integer, String>> getTypeList(){
-        List<Map<Integer, String>> list = new LinkedList<>();
+    public static Map<Integer, String> getTypeList(){
+        Map<Integer, String> map = new LinkedHashMap<>();
         for(LogMoneyEnum enumItem : LogMoneyEnum.values()) {
-            Map<Integer, String> map = new LinkedHashMap<>();
             map.put(enumItem.getCode(), enumItem.getMsg());
-            list.add(map);
         }
-        return list;
+        return map;
     }
 
 }
