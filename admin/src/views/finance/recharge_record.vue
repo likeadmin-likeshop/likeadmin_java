@@ -94,13 +94,16 @@
                 <el-table-column label="操作" width="120" fixed="right">
                     <template #default="{ row }">
                         <el-button
-                            v-if="row.payStatus == 1"
+                            v-if="row.payStatus == 1 && row.isRefund == 0"
                             v-perms="['finance:recharger:refund']"
                             type="primary"
                             link
                             @click="handleRefund(row.id)"
                         >
                             退款
+                        </el-button>
+                        <el-button v-if="row.payStatus == 1 && row.isRefund == 1" link>
+                            {{ row.refundStatusMsg }}
                         </el-button>
                     </template>
                 </el-table-column>
