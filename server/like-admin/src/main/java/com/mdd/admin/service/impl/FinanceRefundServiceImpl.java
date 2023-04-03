@@ -63,6 +63,7 @@ public class FinanceRefundServiceImpl implements IFinanceRefundService {
                 "like:sn@t.sn:str",
                 "like:orderSn@t.t.order_sn:str",
                 "=:refundType@t.refund_type:int",
+                "=:refundStatus@t.refund_status:int",
                 "datetime:startTime-endTime@create_time:long",
         });
 
