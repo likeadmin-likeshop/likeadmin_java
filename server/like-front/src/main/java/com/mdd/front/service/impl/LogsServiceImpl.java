@@ -29,6 +29,7 @@ public class LogsServiceImpl implements ILogsService {
         Integer pageSize = pageValidate.getPageSize();
 
         QueryWrapper<LogMoney> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
         queryWrapper.orderByDesc("id");
         if (type > 0) {
             queryWrapper.eq("action", type);
