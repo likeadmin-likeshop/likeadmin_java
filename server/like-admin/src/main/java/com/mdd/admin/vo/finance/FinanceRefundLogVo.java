@@ -28,6 +28,9 @@ public class FinanceRefundLogVo implements Serializable {
     @ApiModelProperty("退款状态: [0=退款中, 1=退款成功, 2=退款失败]")
     private Integer refundStatus;
 
+    @ApiModelProperty("退款状态描述")
+    private String refundStatusMsg;
+
     @ApiModelProperty("退款信息")
     private String refundMsg;
 

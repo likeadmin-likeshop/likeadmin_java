@@ -122,6 +122,7 @@ public class FinanceRefundServiceImpl implements IFinanceRefundService {
         List<FinanceRefundLogVo> list = refundLogMapper.selectJoinList(FinanceRefundLogVo.class, mpjQueryWrapper);
 
         for (FinanceRefundLogVo vo : list) {
+            vo.setRefundStatusMsg(RefundEnum.getRefundStatusMsg(vo.getRefundStatus()));
             vo.setCreateTime(TimeUtils.timestampToDate(vo.getCreateTime()));
         }
 
