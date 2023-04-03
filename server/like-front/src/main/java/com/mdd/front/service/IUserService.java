@@ -1,10 +1,8 @@
 package com.mdd.front.service;
 
-import com.mdd.front.validate.users.UserForgetPwdValidate;
-import com.mdd.front.validate.users.UserPhoneBindValidate;
-import com.mdd.front.validate.users.UserUpdateValidate;
-import com.mdd.front.vo.users.UserCenterVo;
-import com.mdd.front.vo.users.UserInfoVo;
+import com.mdd.front.validate.users.*;
+import com.mdd.front.vo.user.UserCenterVo;
+import com.mdd.front.vo.user.UserInfoVo;
 
 /**
  * 用户服务接口类
@@ -16,9 +14,10 @@ public interface IUserService {
      *
      * @author fzr
      * @param userId 用户ID
+     * @param terminal 用户终端
      * @return UserCenterVo
      */
-    UserCenterVo center(Integer userId);
+    UserCenterVo center(Integer userId, Integer terminal);
 
     /**
      * 个人信息
@@ -75,4 +74,27 @@ public interface IUserService {
      */
     void mnpMobile(String code);
 
+    /**
+     * 更新新用户信息
+     *
+     * @param newUserUpdateValidate 参数
+     * @param userId 用户id
+     */
+    void updateNewUserInfo(NewUserUpdateValidate newUserUpdateValidate, Integer userId);
+
+    /**
+     * 绑定微信小程序
+     *
+     * @param bindMnpValidate 参数
+     * @param userId 用户ID
+     */
+    void bindMnp(UserBindWechatValidate bindMnpValidate, Integer userId);
+
+    /**
+     * 绑定微信公众号
+     *
+     * @param bindOaValidate 参数
+     * @param userId 用户ID
+     */
+    void bindOa(UserBindWechatValidate bindOaValidate, Integer userId);
 }

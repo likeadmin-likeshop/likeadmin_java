@@ -111,6 +111,28 @@ public class RequestUtils {
     }
 
     /**
+     * 获取设备标识
+     *
+     * @author fzr
+     * @return String
+     */
+    public static String device() {
+        HttpServletRequest request = RequestUtils.handler();
+        if (request != null) {
+            String userAgent = request.getHeader("User-Agent");
+            if(userAgent.contains("Android")) {
+                return "Android";
+            }else if(userAgent.contains("iPhone") || userAgent.contains("iPod") || userAgent.contains("iPad")) {
+                return "IOS";
+            } else {
+                return "wap";
+            }
+        }
+
+        return "wap";
+    }
+
+    /**
      * 判断是否是GET请求
      *
      * @author fzr

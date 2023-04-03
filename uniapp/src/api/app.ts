@@ -1,3 +1,4 @@
+import wechatOa from '@/utils/wechat'
 import request from '@/utils/request'
 
 //发送短信
@@ -23,4 +24,8 @@ export function uploadImage(file: any, token?: string) {
         },
         fileType: 'image'
     })
+}
+
+export function wxJsConfig(data: any) {
+    return request.get({ url: '/wechat/jsConfig', data })
 }

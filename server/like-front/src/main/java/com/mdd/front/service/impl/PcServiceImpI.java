@@ -2,12 +2,12 @@ package com.mdd.front.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.common.config.GlobalConfig;
-import com.mdd.common.entity.DecoratePage;
+import com.mdd.common.entity.decorate.DecoratePage;
 import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.article.ArticleCategory;
 import com.mdd.common.entity.article.ArticleCollect;
 import com.mdd.common.exception.OperateException;
-import com.mdd.common.mapper.DecoratePageMapper;
+import com.mdd.common.mapper.decorate.DecoratePageMapper;
 import com.mdd.common.mapper.article.ArticleCategoryMapper;
 import com.mdd.common.mapper.article.ArticleCollectMapper;
 import com.mdd.common.mapper.article.ArticleMapper;

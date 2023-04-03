@@ -186,6 +186,12 @@
             <artifactId>oshi-core</artifactId>
         </dependency>
 
+        <!-- Swagger3 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+        </dependency>
+
         <!-- 微信小程序 -->
         <dependency>
             <groupId>com.github.binarywang</groupId>
@@ -198,9 +204,10 @@
             <artifactId>weixin-java-mp</artifactId>
         </dependency>
 
+        <!-- 微信支付 -->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
         </dependency>
     </dependencies>
 

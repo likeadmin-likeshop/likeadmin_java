@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.admin.service.IChannelOaMenusService;
 import com.mdd.common.exception.OperateException;
+import com.mdd.common.plugin.wechat.WxMnpDriver;
 import com.mdd.common.util.*;
 import me.chanjar.weixin.common.bean.menu.WxMenu;
 import me.chanjar.weixin.common.bean.menu.WxMenuButton;
@@ -112,7 +113,7 @@ public class ChannelOaMenusServiceImpl implements IChannelOaMenusService {
                 WxMenu wxMenu = new WxMenu();
                 wxMenu.setButtons(menuButtons);
 
-                WxMpService wxMpService = WeChatUtils.official();
+                WxMpService wxMpService = WxMnpDriver.oa();
                 WxMpMenuService wxMpMenuService = new WxMpMenuServiceImpl(wxMpService);
                 wxMpMenuService.menuCreate(wxMenu);
             } catch (WxErrorException e) {

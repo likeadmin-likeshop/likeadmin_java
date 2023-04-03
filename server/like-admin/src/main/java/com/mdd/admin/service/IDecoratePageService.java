@@ -1,6 +1,6 @@
 package com.mdd.admin.service;
 
-import com.mdd.admin.validate.DecoratePageValidate;
+import com.mdd.admin.validate.decorate.DecoratePageValidate;
 import com.mdd.admin.vo.decorate.DecoratePageVo;
 
 public interface IDecoratePageService {

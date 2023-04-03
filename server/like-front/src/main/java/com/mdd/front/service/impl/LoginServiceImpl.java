@@ -7,12 +7,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.entity.user.User;
 import com.mdd.common.entity.user.UserAuth;
-import com.mdd.common.enums.ClientEnum;
 import com.mdd.common.enums.NoticeEnum;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.plugin.notice.NoticeCheck;
+import com.mdd.common.plugin.wechat.WxMnpDriver;
 import com.mdd.common.util.*;
 import com.mdd.front.cache.ScanLoginCache;
 import com.mdd.front.service.ILoginService;
@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -75,6 +76,7 @@ public class LoginServiceImpl implements ILoginService {
         user.setSalt(salt);
         user.setAvatar("/api/static/default_avatar.png");
         user.setChannel(terminal);
+        user.setIsNew(1);
         user.setCreateTime(System.currentTimeMillis() / 1000);
         user.setUpdateTime(System.currentTimeMillis() / 1000);
         userMapper.insert(user);
@@ -91,7 +93,7 @@ public class LoginServiceImpl implements ILoginService {
     @Override
     public LoginTokenVo accountLogin(String username, String password, Integer terminal) {
         User user = userMapper.selectOne(new QueryWrapper<User>()
-                .select("id,username,password,salt,mobile,is_disable")
+                .select("id,username,password,salt,mobile,is_disable,is_new")
                 .eq("username", username)
                 .eq("is_delete", 0)
                 .last("limit 1"));
@@ -101,7 +103,7 @@ public class LoginServiceImpl implements ILoginService {
         Assert.isFalse(!pwd.equals(user.getPassword()), "账号或密码错误!");
         Assert.isFalse(!user.getIsDisable().equals(0), "账号已被禁用!");
 
-        return this.__loginToken(user.getId(), user.getMobile(), terminal);
+        return this.__loginToken(user.getId(), user.getMobile(), user.getIsNew(), terminal);
     }
 
     /**
@@ -122,7 +124,7 @@ public class LoginServiceImpl implements ILoginService {
 
         // 查询手机号
         User user = userMapper.selectOne(new QueryWrapper<User>()
-                .select("id,username,mobile,is_disable")
+                .select("id,username,mobile,is_disable,is_new")
                 .eq("mobile", mobile)
                 .eq("is_delete", 0)
                 .last("limit 1"));
@@ -130,7 +132,7 @@ public class LoginServiceImpl implements ILoginService {
         Assert.notNull(user, "账号不存在!");
         Assert.isFalse(user.getIsDisable() != 0, "账号已禁用!");
 
-        return this.__loginToken(user.getId(), user.getMobile(), terminal);
+        return this.__loginToken(user.getId(), user.getMobile(), user.getIsNew(), terminal);
     }
 
     /**
@@ -145,13 +147,13 @@ public class LoginServiceImpl implements ILoginService {
     @Transactional
     public LoginTokenVo mnpLogin(String code, Integer terminal) {
         try {
-            WxMaService wxMaService = WeChatUtils.mnp();
+            WxMaService wxMaService = WxMnpDriver.mnp();
             WxMaJscode2SessionResult sessionResult = wxMaService.getUserService().getSessionInfo(code);
             String openId = sessionResult.getOpenid();
             String uniId = sessionResult.getUnionid();
             String unionId = uniId == null ? "0" : uniId;
 
-            return this.__wxLoginHandle(openId, unionId, terminal);
+            return this.__wxLoginHandle(openId, unionId, "", "", terminal);
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
@@ -168,12 +170,25 @@ public class LoginServiceImpl implements ILoginService {
     @Override
     public LoginTokenVo officeLogin(String code, Integer terminal) {
         try {
-            WxMpService wxMpService = WeChatUtils.official();
+            WxMpService wxMpService = WxMnpDriver.oa();
             WxOAuth2AccessToken wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(code);
             String uniId = wxOAuth2AccessToken.getUnionId();
             String openId  = wxOAuth2AccessToken.getOpenId();
             String unionId = uniId == null ? "0" : uniId;
-            return this.__wxLoginHandle(openId, unionId, terminal);
+
+            String avatar = "";
+            String nickname = "";
+            try {
+                String accessToken = wxOAuth2AccessToken.getAccessToken();
+                String userInfoUri = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s";
+                String userInfoUrl = String.format(userInfoUri, accessToken, openId);
+                String resultInfo = HttpUtils.sendGet(userInfoUrl);
+                Map<String, String> resultMap = MapUtils.jsonToMap(resultInfo);
+                avatar   = resultMap.get("headimgurl");
+                nickname = resultMap.get("nickname");
+            } catch (Exception ignored) {}
+
+            return this.__wxLoginHandle(openId, unionId, avatar, nickname, terminal);
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
@@ -188,7 +203,7 @@ public class LoginServiceImpl implements ILoginService {
      */
     @Override
     public String oaCodeUrl(String url) {
-        WxMpService wxMpService = WeChatUtils.official();
+        WxMpService wxMpService = WxMnpDriver.oa();
         WxMpOAuth2ServiceImpl wxMpOAuth2Service = new WxMpOAuth2ServiceImpl(wxMpService);
         return wxMpOAuth2Service.buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
     }
@@ -281,7 +296,10 @@ public class LoginServiceImpl implements ILoginService {
         String openId  = userinfoMap.get("openid");
         String uniId   = userinfoMap.get("unionid");
         String unionId = uniId == null ? "0" : uniId;
-        return this.__wxLoginHandle(openId, unionId, terminal);
+        String avatar   = resultMap.getOrDefault("headimgurl", "");
+        String nickname = resultMap.getOrDefault("nickname", "");
+
+        return this.__wxLoginHandle(openId, unionId, avatar, nickname, terminal);
     }
 
     /**
@@ -290,16 +308,19 @@ public class LoginServiceImpl implements ILoginService {
      * @param openId   (openId)
      * @param unionId  (unionId)
      * @param terminal (terminal)
+     * @param avatar   (用户头像)
+     * @param nickname (用户昵称)
      * @return LoginTokenVo
      */
-    private LoginTokenVo __wxLoginHandle(String openId, String unionId, Integer terminal) {
+    private LoginTokenVo __wxLoginHandle(String openId, String unionId, String avatar, String nickname, Integer terminal) {
+        // 查询授权
         UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
                 .nested(wq->wq
                     .eq("unionid", unionId).or()
                     .eq("openid", openId)
                 ).last("limit 1"));
 
-        Integer userId;
+        // 查询用户
         User user = null;
         if (StringUtils.isNotNull(userAuth)) {
             user = userMapper.selectOne(new QueryWrapper<User>()
@@ -308,59 +329,68 @@ public class LoginServiceImpl implements ILoginService {
                     .last("limit 1"));
         }
 
+        // 创建用户
         if (StringUtils.isNull(user)) {
-            Integer sn  = this.__generateSn();
+            Integer sn = this.__generateSn();
+            String defaultAvatar = "/api/static/default_avatar.png";
+            String defaultNickname = "用户" + sn;
+
+            if (StringUtils.isNotEmpty(avatar)) {
+                try {
+                    Long time = System.currentTimeMillis();
+                    String date = TimeUtils.millisecondToDate(time, "yyyyMMdd");
+                    String name = ToolUtils.makeMd5(ToolUtils.makeUUID()+time) + ".jpg";
+                    String path = "avatar" + date + "/" + name;
+                    String savePath = YmlUtils.get("like.upload-directory") + path;
+                    ToolUtils.download(avatar, savePath);
+                    defaultAvatar = path;
+                } catch (IOException ignored) {}
+            }
+
+            if (StringUtils.isNotEmpty(nickname)) {
+                defaultNickname = nickname;
+            }
+
             User model = new User();
             model.setSn(sn);
-            model.setAvatar("/api/static/default_avatar.png");
-            model.setNickname("用户" + sn);
+            model.setAvatar(defaultAvatar);
+            model.setNickname(defaultNickname);
             model.setUsername("u" + sn);
-            model.setChannel(ClientEnum.PC.getCode());
+            model.setChannel(terminal);
             model.setSex(0);
             model.setLastLoginIp(IpUtils.getHostIp());
             model.setLastLoginTime(System.currentTimeMillis() / 1000);
             model.setUpdateTime(System.currentTimeMillis() / 1000);
             model.setCreateTime(System.currentTimeMillis() / 1000);
+            model.setIsNew(1);
             userMapper.insert(model);
-            userId = model.getId();
             user = model;
-
-            if (StringUtils.isNull(userAuth)) {
-                UserAuth auth = new UserAuth();
-                auth.setUserId(model.getId());
-                auth.setUnionid(unionId);
-                auth.setOpenid(openId);
-                auth.setTerminal(terminal);
-                auth.setCreateTime(System.currentTimeMillis() / 1000);
-                auth.setUpdateTime(System.currentTimeMillis() / 1000);
-                userAuthMapper.insert(auth);
-            }
-        } else {
-            // 授权不存在则创建
-            userId = user.getId();
-            UserAuth auth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
-                    .nested(wq->wq
-                            .eq("unionid", unionId).or()
-                            .eq("openid", openId)
-                    ).eq("terminal", terminal)
-                    .last("limit 1"));
-
-            if (StringUtils.isNull(auth)) {
-                UserAuth authModel = new UserAuth();
-                authModel.setUserId(user.getId());
-                authModel.setUnionid(unionId);
-                authModel.setOpenid(openId);
-                authModel.setTerminal(terminal);
-                authModel.setCreateTime(System.currentTimeMillis() / 1000);
-                authModel.setUpdateTime(System.currentTimeMillis() / 1000);
-                userAuthMapper.insert(authModel);
-            } else if(StringUtils.isEmpty(auth.getUnionid()) && StringUtils.isNotEmpty(unionId)) {
-                auth.setUnionid(unionId);
-                userAuthMapper.updateById(userAuth);
-            }
         }
 
-        return this.__loginToken(userId, user.getMobile(), terminal);
+        // 终端授权
+        UserAuth auth = userAuthMapper.selectOne(
+                new QueryWrapper<UserAuth>()
+                        .eq("openid", openId)
+                        .eq("terminal", terminal)
+                        .last("limit 1"));
+
+        // 创建授权
+        if (StringUtils.isNull(auth)) {
+            UserAuth authModel = new UserAuth();
+            authModel.setUserId(user.getId());
+            authModel.setUnionid(unionId);
+            authModel.setOpenid(openId);
+            authModel.setTerminal(terminal);
+            authModel.setCreateTime(System.currentTimeMillis() / 1000);
+            authModel.setUpdateTime(System.currentTimeMillis() / 1000);
+            userAuthMapper.insert(authModel);
+        } else if (StringUtils.isEmpty(auth.getUnionid())) {
+            auth.setUnionid(unionId);
+            auth.setUpdateTime(System.currentTimeMillis() / 1000);
+            userAuthMapper.updateById(auth);
+        }
+
+        return this.__loginToken(user.getId(), user.getMobile(), user.getIsNew(), terminal);
     }
 
     /**
@@ -372,7 +402,7 @@ public class LoginServiceImpl implements ILoginService {
      * @param terminal 终端
      * @return LoginTokenVo
      */
-    private LoginTokenVo __loginToken(Integer userId, String mobile, Integer terminal) {
+    private LoginTokenVo __loginToken(Integer userId, String mobile, Integer isNew, Integer terminal) {
         // 实现账号登录
         StpUtil.login(userId, String.valueOf(terminal));
 
@@ -387,6 +417,7 @@ public class LoginServiceImpl implements ILoginService {
         vo.setId(userId);
         vo.setIsBindMobile(!StringUtils.isEmpty(mobile));
         vo.setToken(StpUtil.getTokenValue());
+        vo.setIsNew(isNew);
         return vo;
     }
 

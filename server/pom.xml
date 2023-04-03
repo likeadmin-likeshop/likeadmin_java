@@ -222,6 +222,13 @@
                 <version>${oshi-core.version}</version>
             </dependency>
 
+            <!-- Swagger3 -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>3.0.0</version>
+            </dependency>
+
             <!-- 微信小程序 -->
             <dependency>
                 <groupId>com.github.binarywang</groupId>
@@ -236,17 +243,18 @@
                 <version>${weixin.version}</version>
             </dependency>
 
+            <!-- 微信支付 -->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-pay</artifactId>
+                <version>${weixin.version}</version>
+            </dependency>
+
             <!-- 全局工具 -->
             <dependency>
                 <groupId>org.mdd</groupId>
                 <artifactId>like-common</artifactId>
                 <version>${like.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-boot-starter</artifactId>
-                <version>3.0.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -93,3 +93,61 @@ export function objectToQuery(params: Record<string, any>): string {
     }
     return query.slice(0, -1)
 }
+
+/**
+ * @description 格式化输出价格
+ * @param  { string } price 价格
+ * @param  { string } take 小数点操作
+ * @param  { string } prec 小数位补
+ */
+export function formatPrice({ price, take = 'all', prec = undefined }: any) {
+    let [integer, decimals = ''] = (price + '').split('.')
+
+    // 小数位补
+    if (prec !== undefined) {
+        const LEN = decimals.length
+        for (let i = prec - LEN; i > 0; --i) decimals += '0'
+        decimals = decimals.substr(0, prec)
+    }
+
+    switch (take) {
+        case 'int':
+            return integer
+        case 'dec':
+            return decimals
+        case 'all':
+            return integer + '.' + decimals
+    }
+}
+
+
+/**
+ * @description 组合异步任务
+ * @param  { string } task 异步任务
+ */
+
+export function series(...task: Array<(_arg: any) => any>) {
+    return function (): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const iteratorTask = task.values()
+            const next = (res?: any) => {
+                const nextTask = iteratorTask.next()
+                if (nextTask.done) {
+                    resolve(res)
+                } else {
+                    Promise.resolve(nextTask.value(res)).then(next).catch(reject)
+                }
+            }
+            next()
+        })
+    }
+}
+
+/**
+ * @description 添加单位
+ * @param {String | Number} value 值 100
+ * @param {String} unit 单位 px em rem
+ */
+export const addUnit = (value: string | number, unit = 'rpx') => {
+    return !Object.is(Number(value), NaN) ? `${value}${unit}` : value
+}

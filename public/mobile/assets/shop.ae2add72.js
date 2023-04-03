@@ -1,1 +1,0 @@
-import{H as e}from"./index.c8b9a6e8.js";function n(){return e.get({url:"/index/index"})}function r(n){return e.get({url:"/index/decorate",data:n})}function t(){return e.get({url:"/index/hotSearch"})}export{r as a,t as b,n as g};

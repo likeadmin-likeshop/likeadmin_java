@@ -9,7 +9,7 @@ import com.mdd.admin.vo.system.SystemCaptchaVo;
 import com.mdd.admin.vo.system.SystemLoginVo;
 import com.mdd.common.entity.system.SystemAuthAdmin;
 import com.mdd.common.entity.system.SystemLogLogin;
-import com.mdd.common.enums.HttpEnum;
+import com.mdd.common.enums.ErrorEnum;
 import com.mdd.common.exception.LoginException;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.system.SystemAuthAdminMapper;
@@ -101,7 +101,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
 
             String code = CaptchaCache.get(loginsValidate.getUuid());
             if (!loginsValidate.getCode().equals(code)) {
-                throw new LoginException(HttpEnum.CAPTCHA_ERROR.getCode(), HttpEnum.CAPTCHA_ERROR.getMsg());
+                throw new LoginException(ErrorEnum.CAPTCHA_ERROR.getCode(), ErrorEnum.CAPTCHA_ERROR.getMsg());
             }
         }
 
@@ -110,20 +110,20 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
                 .last("limit 1"));
 
         if (StringUtils.isNull(sysAdmin) || sysAdmin.getIsDelete().equals(1)) {
-            this.recordLoginLog(0, loginsValidate.getUsername(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
-            throw new LoginException(HttpEnum.LOGIN_ACCOUNT_ERROR.getCode(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
+            this.recordLoginLog(0, loginsValidate.getUsername(), ErrorEnum.LOGIN_ACCOUNT_ERROR.getMsg());
+            throw new LoginException(ErrorEnum.LOGIN_ACCOUNT_ERROR.getCode(), ErrorEnum.LOGIN_ACCOUNT_ERROR.getMsg());
         }
 
         if (sysAdmin.getIsDisable().equals(1)) {
-            this.recordLoginLog(sysAdmin.getId(), loginsValidate.getUsername(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
-            throw new LoginException(HttpEnum.LOGIN_DISABLE_ERROR.getCode(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
+            this.recordLoginLog(sysAdmin.getId(), loginsValidate.getUsername(), ErrorEnum.LOGIN_DISABLE_ERROR.getMsg());
+            throw new LoginException(ErrorEnum.LOGIN_DISABLE_ERROR.getCode(), ErrorEnum.LOGIN_DISABLE_ERROR.getMsg());
         }
 
         String newPWd = password + sysAdmin.getSalt();
         String md5Pwd = ToolUtils.makeMd5(newPWd);
         if (!md5Pwd.equals(sysAdmin.getPassword())) {
-            this.recordLoginLog(sysAdmin.getId(), loginsValidate.getUsername(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
-            throw new LoginException(HttpEnum.LOGIN_ACCOUNT_ERROR.getCode(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
+            this.recordLoginLog(sysAdmin.getId(), loginsValidate.getUsername(), ErrorEnum.LOGIN_ACCOUNT_ERROR.getMsg());
+            throw new LoginException(ErrorEnum.LOGIN_ACCOUNT_ERROR.getCode(), ErrorEnum.LOGIN_ACCOUNT_ERROR.getMsg());
         }
 
         try {

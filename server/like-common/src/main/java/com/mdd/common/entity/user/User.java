@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 @ApiModel("用户信息实体")
@@ -39,6 +40,9 @@ public class User implements Serializable {
     @ApiModelProperty("用户电话")
     private String mobile;
 
+    @ApiModelProperty("用户钱包")
+    private BigDecimal money;
+
     @ApiModelProperty("注册渠道")
     private Integer channel;
 
@@ -68,5 +72,8 @@ public class User implements Serializable {
 
     @ApiModelProperty("删除时间")
     private Long deleteTime;
+
+    @ApiModelProperty("是否为新用户: [0=否, 1=是]")
+    private Integer isNew;
 
 }

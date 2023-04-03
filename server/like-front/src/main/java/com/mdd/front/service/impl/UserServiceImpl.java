@@ -2,6 +2,7 @@ package com.mdd.front.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
+import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -14,15 +15,16 @@ import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.user.UserAuthMapper;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.plugin.notice.NoticeCheck;
+import com.mdd.common.plugin.wechat.WxMnpDriver;
 import com.mdd.common.util.*;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
-import com.mdd.front.validate.users.UserForgetPwdValidate;
-import com.mdd.front.validate.users.UserPhoneBindValidate;
-import com.mdd.front.validate.users.UserUpdateValidate;
-import com.mdd.front.vo.users.UserCenterVo;
-import com.mdd.front.vo.users.UserInfoVo;
+import com.mdd.front.validate.users.*;
+import com.mdd.front.vo.user.UserCenterVo;
+import com.mdd.front.vo.user.UserInfoVo;
+import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
 import me.chanjar.weixin.common.error.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -50,9 +52,9 @@ public class UserServiceImpl implements IUserService {
      * @return UserCenterVo
      */
     @Override
-    public UserCenterVo center(Integer userId) {
+    public UserCenterVo center(Integer userId, Integer terminal) {
         User user = userMapper.selectOne(new QueryWrapper<User>()
-                .select("id,sn,avatar,real_name,nickname,username,mobile")
+                .select("id,sn,avatar,real_name,nickname,username,mobile,money,is_new,password")
                 .eq("id", userId)
                 .last("limit 1"));
 
@@ -64,6 +66,19 @@ public class UserServiceImpl implements IUserService {
         } else {
             vo.setAvatar(UrlUtils.toAbsoluteUrl(user.getAvatar()));
         }
+
+        vo.setIsBindWechat(false);
+        if (terminal.equals(ClientEnum.OA.getCode()) || terminal.equals(ClientEnum.MNP.getCode())) {
+            UserAuth userAuth = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
+                    .select("id,openid,terminal")
+                    .eq("user_id", userId)
+                    .eq("terminal", terminal)
+                    .last("limit 1"));
+            vo.setIsBindWechat(userAuth != null);
+        }
+
+        // 是否有设置登录密码
+        vo.setHasPwd(StringUtils.isNotBlank(user.getPassword()));
 
         return vo;
     }
@@ -300,6 +315,115 @@ public class UserServiceImpl implements IUserService {
         } catch (WxErrorException e) {
             throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
         }
+    }
+
+
+    /**
+     * 更新新用户昵称头像等信息
+     *
+     * @param newUserUpdateValidate 参数
+     * @param userId 用户id
+     */
+    @Override
+    public void updateNewUserInfo(NewUserUpdateValidate newUserUpdateValidate, Integer userId) {
+        User user = new User();
+        user.setId(userId);
+        user.setNickname(newUserUpdateValidate.getNickname());
+        user.setAvatar(UrlUtils.toRelativeUrl(newUserUpdateValidate.getAvatar()));
+        user.setIsNew(0);
+        user.setUpdateTime(System.currentTimeMillis() / 1000);
+        userMapper.updateById(user);
+    }
+
+    /**
+     * 绑定小程序
+     *
+     * @param bindMnpValidate 参数
+     * @param userId 用户ID
+     */
+    @Override
+    public void bindMnp(UserBindWechatValidate bindMnpValidate, Integer userId) {
+        try {
+            // 通过code获取微信信息
+            String code = bindMnpValidate.getCode();
+            WxMaService wxMaService = WxMnpDriver.mnp();
+            WxMaJscode2SessionResult sessionResult = wxMaService.getUserService().getSessionInfo(code);
+            String openId = sessionResult.getOpenid();
+            String uniId = sessionResult.getUnionid();
+            String unionId = uniId == null ? "0" : uniId;
+
+            // 授权校验,未授权创建授权，已授权返回
+            bindWechatAuth(openId, unionId, ClientEnum.MNP.getCode(), userId);
+
+        } catch (WxErrorException e) {
+            throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
+        }
+    }
+
+    /**
+     * 绑定公众号
+     *
+     * @param bindOaValidate 参数
+     * @param userId 用户ID
+     */
+    @Override
+    public void bindOa(UserBindWechatValidate bindOaValidate, Integer userId) {
+        try {
+            // 通过code获取微信信息
+            WxMpService wxMpService = WxMnpDriver.oa();
+            WxOAuth2AccessToken wxOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(bindOaValidate.getCode());
+            String uniId = wxOAuth2AccessToken.getUnionId();
+            String openId  = wxOAuth2AccessToken.getOpenId();
+            String unionId = uniId == null ? "0" : uniId;
+
+            // 授权校验,未授权创建授权，已授权返回
+            bindWechatAuth(openId, unionId, ClientEnum.OA.getCode(), userId);
+
+        } catch (WxErrorException e) {
+            throw new OperateException(e.getError().getErrorCode() + ", " + e.getError().getErrorMsg());
+        }
+    }
+
+    /**
+     * 绑定微信授权
+     *
+     * @param openId openId
+     * @param unionId unionId
+     * @param terminal 客户端端
+     * @param userId 用户ID
+     */
+    public void bindWechatAuth(String openId, String unionId, Integer terminal, Integer userId) {
+        // 授权表中查找授权记录
+        UserAuth userAuthOpenId = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
+                .eq("openid", openId)
+                .last("limit 1"));
+
+        if (userAuthOpenId != null) {
+            // 该微信已绑定
+            throw new OperateException("该微信已绑定");
+        }
+
+        // 已有授权，返回已绑定微信。 没有授权，绑定微信
+        if (!StringUtils.isBlank(unionId)) {
+            UserAuth userAuthUnionId = userAuthMapper.selectOne(new QueryWrapper<UserAuth>()
+                    .eq("unionid", unionId)
+                    .last("limit 1"));
+
+            if (userAuthUnionId != null && !userId.equals(userAuthUnionId.getUserId())) {
+                // 该微信已绑定
+                throw new OperateException("该微信已绑定");
+            }
+        }
+
+        // 记录微信授权
+        UserAuth authModel = new UserAuth();
+        authModel.setUserId(userId);
+        authModel.setUnionid(unionId);
+        authModel.setOpenid(openId);
+        authModel.setTerminal(terminal);
+        authModel.setCreateTime(System.currentTimeMillis() / 1000);
+        authModel.setUpdateTime(System.currentTimeMillis() / 1000);
+        userAuthMapper.insert(authModel);
     }
 
 }

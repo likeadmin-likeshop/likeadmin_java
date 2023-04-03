@@ -70,9 +70,6 @@ public enum ClientEnum {
         return null;
     }
 
-
-
-
     /**
      * 获取状态码
      *

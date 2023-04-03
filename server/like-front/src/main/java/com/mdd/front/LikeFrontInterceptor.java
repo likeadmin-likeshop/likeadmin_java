@@ -6,11 +6,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.entity.user.User;
-import com.mdd.common.enums.HttpEnum;
+import com.mdd.common.enums.ErrorEnum;
 import com.mdd.common.exception.LoginException;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.util.StringUtils;
-import io.swagger.models.auth.In;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -46,13 +45,13 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
                              @NonNull Object handler) throws Exception {
 
         // 判断请求接口
+        response.setContentType("application/json;charset=utf-8");
         String reqUri = request.getRequestURI();
         if (!(handler instanceof HandlerMethod) || !reqUri.startsWith("/api")) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
 
         // 记录当前平台
-        response.setContentType("application/json;charset=utf-8");
         String terminal = request.getHeader("terminal");
         LikeFrontThreadLocal.put("terminal", StringUtils.isEmpty(terminal) ? "1" : terminal);
 
@@ -141,16 +140,16 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
             // 令牌校验
             String token = StpUtil.getTokenValue();
             if (StringUtils.isNull(token) || StringUtils.isBlank(token)) {
-                Integer errCode = HttpEnum.TOKEN_EMPTY.getCode();
-                String errMsg = HttpEnum.TOKEN_EMPTY.getMsg();
+                Integer errCode = ErrorEnum.TOKEN_EMPTY.getCode();
+                String errMsg = ErrorEnum.TOKEN_EMPTY.getMsg();
                 throw new LoginException(errCode, errMsg);
             }
 
             // 登录校验
             Object id = StpUtil.getLoginId();
             if (StringUtils.isNull(id)) {
-                Integer errCode = HttpEnum.TOKEN_INVALID.getCode();
-                String errMsg = HttpEnum.TOKEN_INVALID.getMsg();
+                Integer errCode = ErrorEnum.TOKEN_INVALID.getCode();
+                String errMsg = ErrorEnum.TOKEN_INVALID.getMsg();
                 throw new LoginException(errCode, errMsg);
             }
 
@@ -164,15 +163,15 @@ public class LikeFrontInterceptor implements HandlerInterceptor {
 
             // 删除校验
             if (StringUtils.isNull(user)) {
-                Integer errCode = HttpEnum.TOKEN_INVALID.getCode();
-                String errMsg = HttpEnum.TOKEN_INVALID.getMsg();
+                Integer errCode = ErrorEnum.TOKEN_INVALID.getCode();
+                String errMsg = ErrorEnum.TOKEN_INVALID.getMsg();
                 throw new LoginException(errCode, errMsg);
             }
 
             // 禁用校验
             if (user.getIsDisable().equals(1)) {
-                Integer errCode = HttpEnum.LOGIN_DISABLE_ERROR.getCode();
-                String errMsg = HttpEnum.LOGIN_DISABLE_ERROR.getMsg();
+                Integer errCode = ErrorEnum.LOGIN_DISABLE_ERROR.getCode();
+                String errMsg = ErrorEnum.LOGIN_DISABLE_ERROR.getMsg();
                 throw new LoginException(errCode, errMsg);
             }
 

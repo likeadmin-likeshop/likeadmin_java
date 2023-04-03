@@ -88,7 +88,9 @@ const accountRegister = async () => {
     if (formData.password != formData.password2) return uni.$u.toast('两次输入的密码不一致')
     await register(formData)
     uni.$u.toast('注册成功')
-    uni.navigateBack()
+	setTimeout(() => {
+		uni.navigateBack()
+	}, 1000)
 }
 </script>
 

@@ -1,6 +1,7 @@
 package com.mdd.common.util;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.mdd.common.cache.ConfigCache;
 import com.mdd.common.entity.system.SystemConfig;
 import com.mdd.common.mapper.system.SystemConfigMapper;
 
@@ -21,11 +22,15 @@ public class ConfigUtils {
      * @return Map<String, String>
      */
     public static Map<String, String> get(String type) {
-        SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
+        Map<String, String> cache = ConfigCache.get(type);
+        if (!cache.isEmpty()) {
+            return cache;
+        }
 
+        SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
         List<SystemConfig> configs = model.selectList(
                 new QueryWrapper<SystemConfig>()
-                        .select("id", "type", "name", "value")
+                        .select("id", "type"+"", "name", "value")
                         .eq("type", type));
 
         Map<String, String> map = new LinkedHashMap<>();
@@ -45,13 +50,17 @@ public class ConfigUtils {
      * @return String
      */
     public static String get(String type, String name) {
-        SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
+        String cache = ConfigCache.get(type, name);
+        if (!StringUtils.isNull(cache) && !StringUtils.isEmpty(cache)) {
+            return cache;
+        }
 
+        SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
         SystemConfig config = model.selectOne(
                 new QueryWrapper<SystemConfig>()
                         .select("id", "type", "name", "value")
-                        .eq("type", type)
-                        .eq("name", name));
+                        .eq("name", name)
+                        .eq("type", type));
 
         return config.getValue();
     }
@@ -65,8 +74,12 @@ public class ConfigUtils {
      * @return String
      */
     public static String get(String type, String name, String defaults) {
-        SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
+        String cache = ConfigCache.get(type, name);
+        if (!StringUtils.isNull(cache) && !StringUtils.isEmpty(cache)) {
+            return cache;
+        }
 
+        SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
         SystemConfig config = model.selectOne(
                 new QueryWrapper<SystemConfig>()
                         .select("id", "type", "name", "value")
@@ -89,6 +102,11 @@ public class ConfigUtils {
      * @return String
      */
     public static Map<String, String> getMap(String type, String name) {
+        String cache = ConfigCache.get(type, name);
+        if (!StringUtils.isNull(cache) && !StringUtils.isEmpty(cache)) {
+            return MapUtils.jsonToMap(cache);
+        }
+
         SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
 
         SystemConfig config = model.selectOne(
@@ -118,7 +136,6 @@ public class ConfigUtils {
      */
     public static void set(String type, String name, String val) {
         SystemConfigMapper model = SpringUtils.getBean(SystemConfigMapper.class);
-
         SystemConfig config = model.selectOne(
                 new QueryWrapper<SystemConfig>()
                         .eq("type", type)
@@ -137,6 +154,8 @@ public class ConfigUtils {
             systemConfig.setUpdateTime(System.currentTimeMillis() / 1000);
             model.insert(systemConfig);
         }
+
+        ConfigCache.set();
     }
 
 }

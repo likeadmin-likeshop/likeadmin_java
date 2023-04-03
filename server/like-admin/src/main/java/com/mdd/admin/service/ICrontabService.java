@@ -1,7 +1,7 @@
 package com.mdd.admin.service;
 
-import com.mdd.admin.validate.CrontabCreateValidate;
-import com.mdd.admin.validate.CrontabUpdateValidate;
+import com.mdd.admin.validate.crontab.CrontabCreateValidate;
+import com.mdd.admin.validate.crontab.CrontabUpdateValidate;
 import com.mdd.admin.validate.commons.PageValidate;
 import com.mdd.admin.vo.CrontabDetailVo;
 import com.mdd.admin.vo.CrontabListedVo;

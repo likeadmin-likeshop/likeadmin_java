@@ -1,7 +1,6 @@
 package com.mdd.common.exception;
 
-import com.mdd.common.enums.HttpEnum;
-import io.swagger.models.auth.In;
+import com.mdd.common.enums.ErrorEnum;
 
 /**
  * 操作系统异常
@@ -9,10 +8,11 @@ import io.swagger.models.auth.In;
 public class OperateException extends BaseException {
 
     public OperateException(String msg) {
-        super(HttpEnum.FAILED.getCode(), msg);
+        super(ErrorEnum.FAILED.getCode(), msg);
     }
 
     public OperateException(String msg, Integer errCode) {
         super(errCode, msg);
     }
+
 }

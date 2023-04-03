@@ -2,17 +2,11 @@ package com.mdd.front.controller;
 
 import com.mdd.common.aop.NotLogin;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.exception.LoginException;
-import com.mdd.common.exception.OperateException;
 import com.mdd.front.LikeFrontThreadLocal;
 import com.mdd.front.service.IUserService;
-import com.mdd.front.validate.users.UserForgetPwdValidate;
-import com.mdd.front.validate.users.UserPhoneBindValidate;
-import com.mdd.front.validate.users.UserPhoneMnpValidate;
-import com.mdd.front.validate.users.UserChangePwdValidate;
-import com.mdd.front.validate.users.UserUpdateValidate;
-import com.mdd.front.vo.users.UserCenterVo;
-import com.mdd.front.vo.users.UserInfoVo;
+import com.mdd.front.validate.users.*;
+import com.mdd.front.vo.user.UserCenterVo;
+import com.mdd.front.vo.user.UserInfoVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
@@ -32,8 +26,9 @@ public class UserController {
     @ApiOperation(value="个人中心")
     public AjaxResult<UserCenterVo> center() {
         Integer userId = LikeFrontThreadLocal.getUserId();
+        Integer terminal = LikeFrontThreadLocal.getTerminal();
 
-        UserCenterVo vo = iUserService.center(userId);
+        UserCenterVo vo = iUserService.center(userId, terminal);
         return AjaxResult.success(vo);
     }
 
@@ -89,6 +84,32 @@ public class UserController {
     @ApiOperation(value="微信手机号")
     public AjaxResult<Object> mnpMobile(@Validated @RequestBody UserPhoneMnpValidate mobileValidate) {
         iUserService.mnpMobile(mobileValidate.getCode().trim());
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/updateUser")
+    @ApiOperation(value="更新新用户信息")
+    public AjaxResult<Object> updateData(@Validated @RequestBody NewUserUpdateValidate newUserUpdateValidate) {
+        Integer userId = LikeFrontThreadLocal.getUserId();
+        iUserService.updateNewUserInfo(newUserUpdateValidate, userId);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/bindMnp")
+    @ApiOperation(value="绑定小程序")
+    public AjaxResult<Object> bindMnp(@Validated @RequestBody UserBindWechatValidate BindMnpValidate) {
+        Integer userId = LikeFrontThreadLocal.getUserId();
+
+        iUserService.bindMnp(BindMnpValidate, userId);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/bindOa")
+    @ApiOperation(value="绑定微信公众号")
+    public AjaxResult<Object> bindOa(@Validated @RequestBody UserBindWechatValidate BindOaValidate) {
+        Integer userId = LikeFrontThreadLocal.getUserId();
+
+        iUserService.bindOa(BindOaValidate, userId);
         return AjaxResult.success();
     }
 

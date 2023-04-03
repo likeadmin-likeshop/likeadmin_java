@@ -2,10 +2,10 @@ package com.mdd.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.admin.service.IDecoratePageService;
-import com.mdd.admin.validate.DecoratePageValidate;
+import com.mdd.admin.validate.decorate.DecoratePageValidate;
 import com.mdd.admin.vo.decorate.DecoratePageVo;
-import com.mdd.common.entity.DecoratePage;
-import com.mdd.common.mapper.DecoratePageMapper;
+import com.mdd.common.entity.decorate.DecoratePage;
+import com.mdd.common.mapper.decorate.DecoratePageMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

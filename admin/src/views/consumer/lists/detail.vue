@@ -5,9 +5,25 @@
         </el-card>
         <el-card class="mt-4 !border-none" header="基本资料" shadow="never">
             <el-form ref="formRef" class="ls-form" :model="formData" label-width="120px">
-                <div class="bg-page py-5 pl-20 mb-10">
-                    <div class="mb-3 text-tx-regular">用户头像</div>
-                    <el-avatar :src="formData.avatar" :size="58" />
+                <div class="bg-page flex py-5 mb-10 items-center">
+                    <div class="basis-40 flex flex-col justify-center items-center">
+                        <div class="mb-2 text-tx-regular">用户头像</div>
+                        <el-avatar :src="formData.avatar" :size="58" />
+                    </div>
+                    <div class="basis-40 flex flex-col justify-center items-center">
+                        <div class="text-tx-regular">账户余额</div>
+                        <div class="mt-2 flex items-center">
+                            ¥{{ formData.user_money }}
+                            <el-button
+                                v-perms="['user.user/adjustMoney']"
+                                type="primary"
+                                link
+                                @click="handleAdjust(formData.user_money)"
+                            >
+                                调整
+                            </el-button>
+                        </div>
+                    </div>
                 </div>
                 <el-form-item label="用户编号："> {{ formData.sn }} </el-form-item>
                 <el-form-item label="用户昵称：">
@@ -80,6 +96,11 @@
                 <el-form-item label="最近登录时间："> {{ formData.lastLoginTime }} </el-form-item>
             </el-form>
         </el-card>
+        <account-adjust
+            v-model:show="adjustState.show"
+            :value="adjustState.value"
+            @confirm="handleConfirmAdjust"
+        />
     </div>
 </template>
 
@@ -88,7 +109,7 @@ import type { FormInstance } from 'element-plus'
 import { getUserDetail, userEdit } from '@/api/consumer'
 import feedback from '@/utils/feedback'
 import { isEmpty } from '@/utils/util'
-
+import AccountAdjust from '../components/account-adjust.vue'
 const route = useRoute()
 const formData = reactive({
     avatar: '',
@@ -105,7 +126,10 @@ const formData = reactive({
 })
 
 const formRef = shallowRef<FormInstance>()
-
+const adjustState = reactive({
+    show: false,
+    value: ''
+})
 const getDetails = async () => {
     const data = await getUserDetail({
         id: route.query.id
@@ -124,6 +148,15 @@ const handleEdit = async (value: string, field: string) => {
         value
     })
     feedback.msgSuccess('编辑成功')
+    getDetails()
+}
+const handleAdjust = (value: string) => {
+    adjustState.show = true
+    adjustState.value = value
+}
+const handleConfirmAdjust = async (value: any) => {
+    await adjustMoney({ user_id: route.query.id, ...value })
+    adjustState.show = false
     getDetails()
 }
 
