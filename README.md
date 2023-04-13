@@ -20,7 +20,7 @@
 
 ## 🚀🚀🚀docker本地一句命令快速部署体验
 ### 快速部署
-1.安装启动 [docker](https://www.docker.com/) 之后，在终端运行以下命令即可体验。<br>
+1.安装启动 [docker](https://www.docker.com/) 之后，在终端运行以下命令，等待程序启动完毕即可体验。<br>
   ```shell
   docker run -it --name likeadmin_java -p 20222:20222 -p 20223:20223 likeshop/likeadmin_java:1.5.0
   ```
@@ -28,7 +28,7 @@
 
 ### 本地访问
 命令运行完毕以后，请等待程序启动完毕再访问。由于谷歌浏览器对本地部署不友好原因，访问的链接下面尾部有/就带上/。PC端管理后台帐号为admin，密码为123456 。<br>
-PC端管理后台：http://127.0.0.1:20222/admin/login
+PC端管理后台：http://127.0.0.1:20222/
 <br>PC端前台：http://127.0.0.1:20223/pc/
 <br>手机端前台：http://127.0.0.1:20223/mobile/
 ### ⚠️注意
