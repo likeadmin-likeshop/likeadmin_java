@@ -209,7 +209,7 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
                 "角色已不存在!");
 
         Assert.isNull(systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
-                .select("id", "role", "nickname")
+                .select("id", "role_ids", "nickname")
                 .apply("find_in_set({0}, role_ids)", id)
                 .eq("is_delete", 0)),
                 "角色已被管理员使用,请先移除");
