@@ -210,7 +210,7 @@ public class SystemAuthRoleServiceImpl implements ISystemAuthRoleService {
 
         Assert.isNull(systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select("id", "role", "nickname")
-                .eq("role", id)
+                .apply("find_in_set({0}, role_ids)", id)
                 .eq("is_delete", 0)),
                 "角色已被管理员使用,请先移除");
 

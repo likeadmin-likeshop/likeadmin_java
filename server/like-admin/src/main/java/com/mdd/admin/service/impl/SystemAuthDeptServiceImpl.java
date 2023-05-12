@@ -214,7 +214,7 @@ class SystemAuthDeptServiceImpl implements ISystemAuthDeptService {
 
         SystemAuthAdmin systemAuthAdmin = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select("id,nickname")
-                .eq("dept_id", id)
+                .apply("find_in_set({0}, dept_ids)", id)
                 .eq("is_delete", 0)
                 .last("limit 1"));
 

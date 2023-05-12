@@ -214,7 +214,7 @@ public class SystemAuthPostServiceImpl implements ISystemAuthPostService {
 
         SystemAuthAdmin systemAuthAdmin = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select("id,nickname")
-                .eq("post_id", id)
+                .apply("find_in_set({0}, post_ids)", id)
                 .eq("is_delete", 0)
                 .last("limit 1"));
 
