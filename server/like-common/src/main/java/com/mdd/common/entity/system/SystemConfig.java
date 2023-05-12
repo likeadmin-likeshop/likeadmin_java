@@ -27,6 +27,9 @@ public class SystemConfig implements Serializable {
     @ApiModelProperty("值")
     private String value;
 
+    @ApiModelProperty("备注信息")
+    private String remarks;
+
     @ApiModelProperty("创建时间")
     private Long createTime;
 

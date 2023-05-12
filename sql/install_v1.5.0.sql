@@ -553,15 +553,16 @@ CREATE TABLE `la_system_auth_role`  (
 -- Table structure for la_system_config
 -- ----------------------------
 DROP TABLE IF EXISTS `la_system_config`;
-CREATE TABLE `la_system_config`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '类型',
-  `name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '键',
-  `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '值',
-  `create_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '创建时间',
-  `update_time` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '更新时间',
+CREATE TABLE `la_system_config` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `type` varchar(30) DEFAULT '' COMMENT '类型',
+  `name` varchar(60) NOT NULL DEFAULT '' COMMENT '键',
+  `value` text COMMENT '值',
+  `remarks` varchar(200) NOT NULL DEFAULT '' COMMENT '备注信息',
+  `create_time` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统全局配置表' ROW_FORMAT = Dynamic;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='系统全局配置表';
 
 -- ----------------------------
 -- Table structure for la_system_log_login
@@ -658,59 +659,60 @@ INSERT INTO `la_crontab` VALUES (1, '有参数任务', 'default', 'myJob.handle(
 COMMIT;
 
 BEGIN;
-INSERT INTO `la_system_config` VALUES (1, 'storage', 'default', 'local', 1660620367, 1662620927);
-INSERT INTO `la_system_config` VALUES (2, 'storage', 'local', '{\"name\":\"本地存储\"}', 1660620367, 1662620927);
-INSERT INTO `la_system_config` VALUES (3, 'storage', 'qiniu', '{\"name\":\"七牛云存储\",\"bucket\":\"\",\"secretKey\":\"\",\"accessKey\":\"\",\"domain\":\"\"}', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (4, 'storage', 'aliyun', '{\"name\":\"阿里云OSS\",\"bucket\":\"\",\"secretKey\":\"\",\"accessKey\":\"\",\"domain\":\"\"}', 1660620367, 1662620071);
-INSERT INTO `la_system_config` VALUES (5, 'storage', 'qcloud', '{\"name\":\"腾讯云COS\",\"bucket\":\"\",\"secretKey\":\"\",\"accessKey\":\"\",\"domain\":\"\",\"region\":\"\"}', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (6, 'sms', 'default', 'aliyun', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (7, 'sms', 'aliyun', '{\"name\":\"阿里云短信\",\"alias\":\"aliyun\",\"sign\":\"\",\"appKey\":\"\",\"secretKey\":\"\"}', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (8, 'sms', 'tencent', '{\"name\":\"腾讯云短信\",\"alias\":\"tencent\",\"sign\":\"\",\"appId\":\"\",\"secretId\":\"\",\"secretKey\":\"\"}', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (9, 'sms', 'huawei', '{\"name\":\"华为云短信\",\"alias\":\"huawei\"}', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (10, 'website', 'name', 'LikeAdmin开源后台', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (11, 'website', 'logo', '/api/static/backend_logo.png', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (12, 'website', 'favicon', '/api/static/backend_favicon.ico', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (13, 'website', 'backdrop', '/api/static/backend_backdrop.png', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (14, 'website', 'copyright', '[{\"name\":\"LikeAdmin开源系统\",\"link\":\"http://www.beian.gov.cn\"}]', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (15, 'website', 'shopName', 'LikeAdmin开源系统', 1631255140, 1631255140);
-INSERT INTO `la_system_config` VALUES (16, 'website', 'shopLogo', '/api/static/shop_logo.png', 1631255140, 1631255140);
-INSERT INTO `la_system_config` VALUES (20, 'website', 'pcLogo', '/api/static/pc_logo.png', 1678963763, 1678963817);
-INSERT INTO `la_system_config` VALUES (21, 'website', 'pcIco', '/api/static/pc_favicon.ico', 1678963763, 1678963817);
-INSERT INTO `la_system_config` VALUES (22, 'website', 'pcTitle', 'LikeAdmin开源系统', 1678963763, 1678963817);
-INSERT INTO `la_system_config` VALUES (23, 'website', 'pcDesc', '', 1678963763, 1678963817);
-INSERT INTO `la_system_config` VALUES (24, 'website', 'pcKeywords', '', 1678963763, 1678963817);
-INSERT INTO `la_system_config` VALUES (25, 'protocol', 'service', '{\"name\":\"服务协议\",\"content\":\"\"}', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (26, 'protocol', 'privacy', '{\"name\":\"隐私协议\",\"content\":\"\"}', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (27, 'tabbar', 'style', '{\"defaultColor\":\"#999999\",\"selectedColor\":\"#4173ff\"}', 1660620367, 1662544900);
-INSERT INTO `la_system_config` VALUES (28, 'search', 'isHotSearch', '0', 1660620367, 1662546997);
-INSERT INTO `la_system_config` VALUES (30, 'h5_channel', 'status', '1', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (31, 'h5_channel', 'close', '0', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (32, 'h5_channel', 'url', '', 1660620367, 1660620367);
-INSERT INTO `la_system_config` VALUES (40, 'mp_channel', 'name', '', 1660620367, 1662551403);
-INSERT INTO `la_system_config` VALUES (41, 'mp_channel', 'primaryId', '', 1660620367, 1662551403);
-INSERT INTO `la_system_config` VALUES (42, 'mp_channel', 'appId', '', 1660620367, 1662551403);
-INSERT INTO `la_system_config` VALUES (43, 'mp_channel', 'appSecret', '', 1660620367, 1662551403);
-INSERT INTO `la_system_config` VALUES (44, 'mp_channel', 'qrCode', '', 1660620367, 1662551403);
-INSERT INTO `la_system_config` VALUES (55, 'oa_channel', 'name', '', 1660620367, 1662551337);
-INSERT INTO `la_system_config` VALUES (56, 'oa_channel', 'primaryId', ' ', 1660620367, 1662551337);
-INSERT INTO `la_system_config` VALUES (57, 'oa_channel', 'qrCode', '', 1662551337, 1662551337);
-INSERT INTO `la_system_config` VALUES (58, 'oa_channel', 'appId', '', 1660620367, 1662551337);
-INSERT INTO `la_system_config` VALUES (59, 'oa_channel', 'appSecret', '', 1660620367, 1662551337);
-INSERT INTO `la_system_config` VALUES (60, 'oa_channel', 'url', '', 1660620367, 1662551337);
-INSERT INTO `la_system_config` VALUES (61, 'oa_channel', 'token', '', 1660620367, 1662551337);
-INSERT INTO `la_system_config` VALUES (62, 'oa_channel', 'encodingAesKey', '', 1660620367, 1662551337);
-INSERT INTO `la_system_config` VALUES (63, 'oa_channel', 'encryptionType', '1', 1660620367, 1662551337);
-INSERT INTO `la_system_config` VALUES (64, 'oa_channel', 'menus', '[]', 1631255140, 1663118712);
-INSERT INTO `la_system_config` VALUES (68, 'op_channel', 'appId', '', 0, 0);
-INSERT INTO `la_system_config` VALUES (69, 'op_channel', 'appSecret', '', 0, 0);
-INSERT INTO `la_system_config` VALUES (70, 'login', 'loginWay', '1,2', 1660620367, 1662538771);
-INSERT INTO `la_system_config` VALUES (71, 'login', 'forceBindMobile', '0', 1660620367, 1662538771);
-INSERT INTO `la_system_config` VALUES (72, 'login', 'openAgreement', '1', 1660620367, 1662538771);
-INSERT INTO `la_system_config` VALUES (73, 'login', 'openOtherAuth', '1', 1660620367, 1662538771);
-INSERT INTO `la_system_config` VALUES (74, 'login', 'autoLoginAuth', '1,2', 1660620367, 1662538771);
-INSERT INTO `la_system_config` VALUES (80, 'user', 'defaultAvatar', '/api/static/default_avatar.png', 1660620367, 1662535156);
-INSERT INTO `la_system_config` VALUES (200, 'recharge', 'openRecharge', '1', 1680160044, 1680166680);
-INSERT INTO `la_system_config` VALUES (201, 'recharge', 'minRechargeMoney', '0.01', 1680160044, 1680166680);
+INSERT INTO `la_system_config` VALUES (1, 'storage', 'default', 'local', '默认存储', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (2, 'storage', 'local', '{\"name\":\"本地存储\"}', '本地存储', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (3, 'storage', 'qiniu', '{\"name\":\"七牛云存储\",\"bucket\":\"\",\"secretKey\":\"\",\"accessKey\":\"\",\"domain\":\"\"}', '七牛存储', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (4, 'storage', 'aliyun', '{\"name\":\"阿里云OSS\",\"bucket\":\"\",\"secretKey\":\"\",\"accessKey\":\"\",\"domain\":\"\"}', '阿里存储', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (5, 'storage', 'qcloud', '{\"name\":\"腾讯云COS\",\"bucket\":\"\",\"secretKey\":\"\",\"accessKey\":\"\",\"domain\":\"\",\"region\":\"\"}', '腾讯存储', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (6, 'sms', 'default', 'aliyun', '默认短信', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (7, 'sms', 'aliyun', '{\"name\":\"阿里云短信\",\"alias\":\"aliyun\",\"sign\":\"\",\"appKey\":\"\",\"secretKey\":\"\"}', '阿里短信', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (8, 'sms', 'tencent', '{\"name\":\"腾讯云短信\",\"alias\":\"tencent\",\"sign\":\"\",\"appId\":\"\",\"secretId\":\"\",\"secretKey\":\"\"}', '腾讯短信', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (9, 'sms', 'huawei', '{\"name\":\"华为云短信\",\"alias\":\"huawei\"}', '华为短信', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (10, 'website', 'name', 'LikeAdmin开源后台', '网站名称', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (11, 'website', 'logo', '/api/static/backend_logo.png', '后台图标', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (12, 'website', 'favicon', '/api/static/backend_favicon.ico', '网站图标', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (13, 'website', 'backdrop', '/api/static/backend_backdrop.png', '后台海报', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (14, 'website', 'copyright', '[{\"name\":\"LikeAdmin开源系统\",\"link\":\"http://www.beian.gov.cn\"}]', '版权信息', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (15, 'website', 'shopName', 'LikeAdmin开源系统', '商城名称', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (16, 'website', 'shopLogo', '/api/static/shop_logo.png', '商城图标', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (20, 'website', 'pcLogo', '/api/static/pc_logo.png', 'PC图标', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (21, 'website', 'pcIco', '/api/static/pc_favicon.ico', 'PC图标', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (22, 'website', 'pcTitle', 'LikeAdmin开源系统', 'PC网站标题', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (23, 'website', 'pcDesc', '', 'PC网站描述', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (24, 'website', 'pcKeywords', '', 'PC网站关键词', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (25, 'protocol', 'service', '{\"name\":\"服务协议\",\"content\":\"\"}', '服务协议', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (26, 'protocol', 'privacy', '{\"name\":\"隐私协议\",\"content\":\"\"}', '隐私协议', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (27, 'tabbar', 'style', '{\"defaultColor\":\"#999999\",\"selectedColor\":\"#4173ff\"}', '底部样式', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (28, 'search', 'isHotSearch', '0', '是否开启热搜', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (30, 'h5_channel', 'status', '1', 'H5是否开启', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (31, 'h5_channel', 'close', '0', 'H5关闭类型', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (32, 'h5_channel', 'url', '', 'H5关闭跳转', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (40, 'mp_channel', 'name', '', '微信小程序名称', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (41, 'mp_channel', 'primaryId', '', '微信小程序原始ID', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (42, 'mp_channel', 'appId', '', '微信小程序APPID', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (43, 'mp_channel', 'appSecret', '', '微信小程序Secret', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (44, 'mp_channel', 'qrCode', '', '微信小程序二维码', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (55, 'oa_channel', 'name', '', '微信公众号名称', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (56, 'oa_channel', 'primaryId', ' ', '微信公众号原始ID', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (57, 'oa_channel', 'qrCode', '', '微信公众号二维码', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (58, 'oa_channel', 'appId', '', '微信公众号APPID', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (59, 'oa_channel', 'appSecret', '', '微信公众号Secret', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (60, 'oa_channel', 'url', '', '微信公众号授权链接', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (61, 'oa_channel', 'token', '', '微信公众号授权Token', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (62, 'oa_channel', 'encodingAesKey', '', '微信公众号授权', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (63, 'oa_channel', 'encryptionType', '1', '微信公众号授权', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (64, 'oa_channel', 'menus', '[]', '微信公众号菜单', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (68, 'op_channel', 'appId', '', '微信开放平台APPID', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (69, 'op_channel', 'appSecret', '', '微信开放平台Sercet', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (70, 'login', 'loginWay', '1,2', '登录方式', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (71, 'login', 'forceBindMobile', '0', '登录强制绑定手机', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (72, 'login', 'openAgreement', '1', '是否开启同意协议', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (73, 'login', 'openOtherAuth', '1', '是否开启第三方登录', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (74, 'login', 'autoLoginAuth', '1,2', '第三方授权登录', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (80, 'user', 'defaultAvatar', '/api/static/default_avatar.png', '用户默认头像', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (200, 'recharge', 'openRecharge', '1', '是否开启充值', 1631255140, 1631255140);
+INSERT INTO `la_system_config` VALUES (201, 'recharge', 'minRechargeMoney', '0.01', '最低充值金额', 1631255140, 1631255140);
+
 COMMIT;
 
 BEGIN;
