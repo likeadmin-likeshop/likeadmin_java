@@ -360,6 +360,9 @@ public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
         if (StringUtils.isNotNull(upInfoValidate.getPassword()) && StringUtils.isNotEmpty(upInfoValidate.getPassword())) {
             String currPassword = ToolUtils.makeMd5(upInfoValidate.getCurrPassword() + model.getSalt());
             Assert.isFalse(!currPassword.equals(model.getPassword()), "当前密码不正确!");
+            if (upInfoValidate.getPassword().length() > 64) {
+                throw new OperateException("密码不能超出64个字符");
+            }
             String salt   = ToolUtils.randomString(5);
             String pwd    = ToolUtils.makeMd5( upInfoValidate.getPassword().trim() + salt);
             model.setPassword(pwd);

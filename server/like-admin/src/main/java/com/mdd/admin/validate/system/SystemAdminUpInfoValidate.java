@@ -19,10 +19,10 @@ public class SystemAdminUpInfoValidate implements Serializable {
     @ApiModelProperty(value = "用户昵称")
     private String nickname;
 
-    @Length(max = 32, message = "密码必须在6~32个字符内")
+    @Length(max = 64, message = "密码必须在6~32个字符内")
     private String password="";
 
-    @Length(max = 32, message = "当前密码错误")
+    @Length(max = 64, message = "当前密码错误")
     private String currPassword="";
 
     @Length(max = 200, message = "头像不能超出200个字符")

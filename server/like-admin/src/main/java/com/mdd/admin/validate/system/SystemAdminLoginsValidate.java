@@ -20,7 +20,7 @@ public class SystemAdminLoginsValidate implements Serializable {
     private String username;
 
     @NotEmpty(message = "密码不能为空")
-    @Length(min = 6, max = 18, message = "账号或密码错误")
+    @Length(min = 6, max = 64, message = "账号或密码错误")
     @ApiModelProperty(value = "登录密码", required = true)
     private String password;
 
