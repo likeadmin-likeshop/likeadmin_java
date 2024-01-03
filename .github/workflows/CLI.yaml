@@ -1,0 +1,44 @@
+name: CI PR Merged
+# 该脚本仅在 PR MERGE 的时候进行测试，不建议 将测试结果上传到 github
+# 可以通过变量来判断，比如 PR close 的时候 发布 github release & tag
+on:
+  pull_request:
+    # types:
+      # - opened
+      # - review_requested
+      # - closed
+    branches:
+      - master # 正式版本
+      - priview # 预览标签
+  workflow_dispatch: # 手动触发
+
+jobs:
+  job1:
+    name: 测试
+    runs-on: ubuntu-latest
+    steps:
+      - name: 打印
+        run: echo "ok"
+  job2:
+    name: 测试2
+    runs-on: ubuntu-latest
+    steps:
+      - name: 打印2
+        run: echo "ok2"
+
+  job3:
+  # 该任务可在 merge 也就是 pr clone 的时候 进行上传任务 当然也可以合并成一个 cli
+    name: merge test
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo The PR was merged
+  job4:
+  # 该任务可在 merge 也就是 pr clone 的时候 进行上传任务 当然也可以合并成一个 cli
+    name: review test
+    if: github.event.pull_request.review == true
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo The PR 回退
